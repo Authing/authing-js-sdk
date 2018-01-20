@@ -528,7 +528,9 @@ Authing.prototype = {
 		});
 	},
 
-	remove: function(_id) {
+	remove: function(_id, operator) {
+
+		var self = this;
 
 		this.haveAccess();
 
@@ -538,14 +540,16 @@ Authing.prototype = {
 
 		return this.UserClient.mutate({
 			mutation: gql `
-				mutation removeUsers($ids: [String]){
-				  removeUsers(ids: $ids) {
+				mutation removeUsers($ids: [String], $registerInClient: String, $operator: String){
+				  removeUsers(ids: $ids, registerInClient: $registerInClient, operator: $operator) {
 				    _id
 				  }
 				}
 			`,
 			variables: {
-				ids: [_id]
+				ids: [_id],
+				registerInClient: self.opts.clientId,
+				operator
 			}
 		}).then(function(res) {
 			return res.data.removeUsers;
