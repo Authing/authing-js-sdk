@@ -54,44 +54,40 @@ var Authing = function(opts) {
 	}
 
 	this.opts = opts;
-	this.authed = false;
-	this.authSuccess = false;
-	this.logined = false;
 
-	if(configs.inBrowser) {
-		var _authing_token = localStorage.getItem('_authing_token');
-		if(_authing_token) {
-			self.authed = true;
-			self.authSuccess = true;
-			self.logined = true;
-			self.accessToken = _authing_token;
-			self.initUserClient({
-				login: false,
-				token: _authing_token
-			});
-			self.initOAuthClient();
-			return Promise.resolve(self);
-		}
+	this.owerAuth = {
+		authed: false,
+		authSuccess: false,
+		token: null
+	}
+	this.userAuth = {
+		authed: false,
+		authSuccess: false,
+		token: null
 	}
 
 	this.initUserClient();
+	this.initOwerClient();
 	this.initOAuthClient();
 
 	return this._auth().then(function(token) {
 		if(token) {
-			self.authed = true;
-			self.authSuccess = true;
-			self.accessToken = token;
-			
+			self.owerAuth = {
+				authed: true,
+				authSuccess: true,
+				token: token
+			};
+			this.initOwerClient(token);
+			self._loginFromLocalStorage();
 		}else {
-			self.authed = true;
-			self.authSuccess = false;
+			self.owerAuth.authed = true;
+			self.owerAuth.authSuccess = false;
 			throw 'auth failed, please check your secret and client ID.';			
 		}
 		return self;
 	}).catch(function(error) {
-		self.authed = true;
-		self.authSuccess = false;
+		self.owerAuth.authed = true;
+		self.owerAuth.authSuccess = false;
 		throw 'auth failed: ' + error.message;
 	});	
 }
@@ -100,39 +96,43 @@ Authing.prototype = {
 
 	constructor: Authing,
 
-	initUserClient: function(token) {
-		if(token && token.token) {
-
-			if(token.login) {
-				this.logined = true;
-				if(configs.inBrowser) {
-					localStorage.setItem('_authing_token', token.token);
-				}
-			}
+	_initClient: function(token) {
+		if(token) {
 
 			var httpLink = new HttpLink({ 
 		  		uri: configs.services.user.host, 
 		  		fetch: nodeFetch
 		  	});
 			var authMiddleware = new ApolloLink((operation, forward) => {
-			  operation.setContext({
-			    headers: {
-			      authorization: 'Bearer ' + token.token,
-			    } 
-			  });
+				operation.setContext({
+					headers: {
+					authorization: 'Bearer ' + token,
+					} 
+				});
 
-			  return forward(operation);
+				return forward(operation);
 			});			
-			this.UserClient = new ApolloClient({
+			return new ApolloClient({
 			  	link: concat(authMiddleware, httpLink),
 			  	cache: new InMemoryCache()
 			});
 		}else {
-			this.UserClient = new ApolloClient({
+			return new ApolloClient({
 			  	link: new HttpLink({ uri: configs.services.user.host, fetch: nodeFetch }),
 			  	cache: new InMemoryCache()
 			});
 		}
+	},
+
+	initUserClient: function(token) {
+		if(token && configs.inBrowser) {
+			localStorage.setItem('_authing_token', token);
+		}
+		this.UserClient = _initClient(token);
+	},
+
+	initOwerClient: function(token) {
+		this.OwerClient = _initClient(token);
 	},
 
 	initOAuthClient: function() {
@@ -168,9 +168,24 @@ Authing.prototype = {
 	  	});
 	},
 
+	_loginFromLocalStorage: function() {
+		var self = this;
+		if(configs.inBrowser) {
+			var _authing_token = localStorage.getItem('_authing_token');
+			if(_authing_token) {
+				self.userAuth = {
+					authed: true,
+					authSuccess: true,
+					token: _authing_token
+				}
+				self.initUserClient(_authing_token);
+			}
+		}
+	},
+
 	checkLoginStatus: function() {
 		var self = this;
-		if(!self.logined) {
+		if(!self.userAuth.authSuccess) {
 			return Promise.resolve({
                 code: 2020,
                 status: false,
@@ -206,7 +221,7 @@ Authing.prototype = {
 			var authMiddleware = new ApolloLink((operation, forward) => {
 			  operation.setContext({
 			    headers: {
-			      authorization: 'Bearer ' + self.accessToken,
+			      authorization: 'Bearer ' + self.owerAuth.token,
 			    } 
 			  });
 
@@ -247,9 +262,16 @@ Authing.prototype = {
 	},
 
 	haveAccess: function() {
-		if(!this.authSuccess) {
+		if(!this.owerAuth.authSuccess) {
 			throw 'have no access, please check your secret and client ID.';
 		}
+	},
+
+	_chooseClient: function() {
+		if(this.userAuth.authSuccess) {
+			return this.UserClient;
+		}
+		return this.OwerClient;
 	},
 
 	_login: function(options) {
@@ -302,13 +324,12 @@ Authing.prototype = {
 		let self = this;
 		return this._login(options).then(function(user) {
 			if(user) {
-				self.initUserClient({
-					login: true,
-					token: user.token
-				});				
+				self.initUserClient(user.token);				
 			}
 			return user;
-		})
+		}).catch(function(error) {
+			throw error.graphQLErrors[0];
+		});
 	},
 
 	register: function(options) {
@@ -389,7 +410,11 @@ Authing.prototype = {
 
 		var self = this;
 
-		this.logined = false;
+		this.userAuth = {
+			authed: false,
+			authSuccess: false,
+			token: null
+		};
 		if(configs.inBrowser) {
 			localStorage.removeItem('_authing_token');
 		}
@@ -412,7 +437,10 @@ Authing.prototype = {
 			throw 'id in options is not provided';
 		}
 		options.registerInClient = this.opts.clientId;
-		return this.UserClient.query({
+		
+		var client = this._chooseClient();
+		
+		return client.query({
 			query: gql`query user($id: String!, $registerInClient: String!){
 				user(id: $id, registerInClient: $registerInClient) {
 					_id
@@ -459,7 +487,7 @@ Authing.prototype = {
 			count: count
 		}
 
-		return this.UserClient.query({
+		return this.OwerClient.query({
 			query: gql`query users($registerInClient: String, $page: Int, $count: Int){
 				  users(registerInClient: $registerInClient, page: $page, count: $count) {
 				    totalCount
@@ -538,7 +566,7 @@ Authing.prototype = {
 			throw '_id is not provided';
 		}
 
-		return this.UserClient.mutate({
+		return this.OwerClient.mutate({
 			mutation: gql `
 				mutation removeUsers($ids: [String], $registerInClient: String, $operator: String){
 				  removeUsers(ids: $ids, registerInClient: $registerInClient, operator: $operator) {
@@ -560,7 +588,8 @@ Authing.prototype = {
 	},
 
 	_uploadAvatar: function(options) {
-		return this.UserClient.query({
+		var client = this._chooseClient();
+		return client.query({
 			query: gql`query qiNiuUploadToken {
 				qiNiuUploadToken
 			}`
@@ -689,12 +718,14 @@ Authing.prototype = {
 			}
 		}
 
+		var client = this._chooseClient();
+
 		if(options.photo) {
 			var photo = options.photo;
 			if(typeof photo !== 'string') {
 				return this._uploadAvatar(options).then(function(options) {
 					var _arg = generateArgs(options);
-					return self.UserClient.mutate({
+					return client.mutate({
 						mutation: gql`
 							mutation UpdateUser(${_arg._argsString}){
 							  updateUser(options: {
@@ -714,7 +745,7 @@ Authing.prototype = {
 			}
 		}
 		var _arg = generateArgs(options);
-		return this.UserClient.mutate({
+		return client.mutate({
 			mutation: gql`
 				mutation UpdateUser(${_arg._argsString}){
 				  updateUser(options: {
