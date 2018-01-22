@@ -130,7 +130,7 @@ Authing.prototype = {
 				localStorage.setItem('_authing_token', token);
 			}
 		}
-		this.UserClient = _initClient(token);
+		this.UserClient = this._initClient(token);
 	},
 
 	initOwerClient: function(token) {
@@ -141,7 +141,7 @@ Authing.prototype = {
 				token: token
 			};
 		}
-		this.OwerClient = _initClient(token);
+		this.OwerClient = this._initClient(token);
 	},
 
 	initOAuthClient: function() {
