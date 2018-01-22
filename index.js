@@ -72,7 +72,7 @@ var Authing = function(opts) {
 
 	return this._auth().then(function(token) {
 		if(token) {
-			this.initOwerClient(token);
+			self.initOwerClient(token);
 			self._loginFromLocalStorage();
 		}else {
 			self.owerAuth.authed = true;
@@ -124,7 +124,7 @@ Authing.prototype = {
 			this.userAuth = {
 				authed: true,
 				authSuccess: true,
-				token: _authing_token
+				token: token
 			};
 			if(configs.inBrowser) {
 				localStorage.setItem('_authing_token', token);
@@ -318,8 +318,6 @@ Authing.prototype = {
 			variables: options
 		}).then(function(res) {
 			return res.data.login;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
 		});
 
 	},
