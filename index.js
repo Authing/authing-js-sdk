@@ -72,11 +72,6 @@ var Authing = function(opts) {
 
 	return this._auth().then(function(token) {
 		if(token) {
-			self.owerAuth = {
-				authed: true,
-				authSuccess: true,
-				token: token
-			};
 			this.initOwerClient(token);
 			self._loginFromLocalStorage();
 		}else {
@@ -125,13 +120,27 @@ Authing.prototype = {
 	},
 
 	initUserClient: function(token) {
-		if(token && configs.inBrowser) {
-			localStorage.setItem('_authing_token', token);
+		if(token) {
+			this.userAuth = {
+				authed: true,
+				authSuccess: true,
+				token: _authing_token
+			};
+			if(configs.inBrowser) {
+				localStorage.setItem('_authing_token', token);
+			}
 		}
 		this.UserClient = _initClient(token);
 	},
 
 	initOwerClient: function(token) {
+		if(token) {
+			this.owerAuth = {
+				authed: true,
+				authSuccess: true,
+				token: token
+			};
+		}
 		this.OwerClient = _initClient(token);
 	},
 
@@ -173,11 +182,6 @@ Authing.prototype = {
 		if(configs.inBrowser) {
 			var _authing_token = localStorage.getItem('_authing_token');
 			if(_authing_token) {
-				self.userAuth = {
-					authed: true,
-					authSuccess: true,
-					token: _authing_token
-				}
 				self.initUserClient(_authing_token);
 			}
 		}
