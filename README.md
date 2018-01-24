@@ -56,7 +56,7 @@ auth.then(function(validAuth) {
 
 ```
 
-[怎样获取client ID ?](http://docs.authing.cn/#/quick_start/howto)。
+[怎样获取client ID ?](https://docs.authing.cn/#/quick_start/howto)。
 
 
 ##### ES6+
