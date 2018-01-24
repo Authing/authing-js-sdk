@@ -110,7 +110,7 @@ main();
 
 当在浏览器使用时，我们会将用户token以'_authing_token'字段存在localStorage中，后面都会从localStorage中读取并进行验证。
 
-了解更多报错的详情，请查看[错误代码](http://docs.authing.cn/#/quick_start/error_code)。
+了解更多报错的详情，请查看[错误代码](https://docs.authing.cn/#/quick_start/error_code)。
 
-获取Client ID和Client Secret，请[点击这里](http://docs.authing.cn/#/quick_start/howto)。
+获取Client ID和Client Secret，请[点击这里](https://docs.authing.cn/#/quick_start/howto)。
 
