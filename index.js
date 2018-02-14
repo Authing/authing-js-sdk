@@ -250,7 +250,7 @@ Authing.prototype = {
 					    enabled
 					    client
 					    user
-					    oAuthUrl
+					    url
 					}
 				}
 			`,
@@ -778,39 +778,43 @@ Authing.prototype = {
 					message: '获取OAuth列表失败，原因未知'
 				}
 			}
-		}).then(function(list) {
-			var promises = [];
-			if(configs.inBrowser) {
-				promises = list.map(function(item){
-					return fetch(`${configs.services.oauth.host.replace('/graphql', '')}/oauth/${item.name}/url/${self.opts.clientId}`).then(function(data){
-						return data.json();
-					});
-				})
-			}else {
-				var http = require('http');
-				promises = list.map(function(item){
-					return new Promise(function(resolve, reject){
-						http.get(`${configs.services.oauth.host.replace('/graphql', '')}/oauth/${item.name}/url/${self.opts.clientId}`, function(response) {
-							var str = '';
-							response.setEncoding('utf8');
-							response.on('data', function (chunk) { str += chunk });
-							response.on('end', function () {
-								resolve(JSON.parse(str));
-							});
-							response.on('error', function(e) {
-								reject(e);
-							})
-						})
-					});
-				});
-
-			}
-
-			return Promise.all(promises);
-			
-		}).then(function(list) {
-			return list;
 		});
+
+		/*
+			.then(function(list) {
+				var promises = [];
+				if(configs.inBrowser) {
+					promises = list.map(function(item){
+						return fetch(`${configs.services.oauth.host.replace('/graphql', '')}/oauth/${item.alias}/url/${self.opts.clientId}`).then(function(data){
+							return data.json();
+						});
+					})
+				}else {
+					var http = require('http');
+					promises = list.map(function(item){
+						return new Promise(function(resolve, reject){
+							http.get(`${configs.services.oauth.host.replace('/graphql', '')}/oauth/${item.alias}/url/${self.opts.clientId}`, function(response) {
+								var str = '';
+								response.setEncoding('utf8');
+								response.on('data', function (chunk) { str += chunk });
+								response.on('end', function () {
+									resolve(JSON.parse(str));
+								});
+								response.on('error', function(e) {
+									reject(e);
+								})
+							})
+						});
+					});
+
+				}
+
+				return Promise.all(promises);
+				
+			}).then(function(list) {
+				return list;
+			});
+		*/
 	},
 	
 	sendResetPasswordEmail: function(options) {
