@@ -4,7 +4,9 @@ var ApolloLinkPreset = require('apollo-link');
 
 var ApolloCacheInmemory = require('apollo-cache-inmemory');
 var gql = require('graphql-tag');
+
 var nodeFetch = require('node-fetch');
+var unfetch = require('unfetch');
 
 var ApolloClient = ApolloClientPreset.ApolloClient;
 var HttpLink = ApolloLinkHttp.HttpLink;
@@ -24,6 +26,7 @@ if(configs.inBrowser) {
 		var encryptoPasswd = encrypt.encrypt(paw); // 加密明文
 		return encryptoPasswd;
 	};
+	nodeFetch = unfetch;
 }else {
 	var crypto = require('crypto');
 	_encryption = function(paw) {
