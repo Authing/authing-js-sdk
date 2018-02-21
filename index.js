@@ -297,8 +297,8 @@ Authing.prototype = {
 
 		return this.UserClient.mutate({
 			mutation: gql`
-				mutation login($unionid: String, $email: String, $password: String, $lastIP: String, $registerInClient: String!) {
-				    login(unionid: $unionid, email: $email, password: $password, lastIP: $lastIP, registerInClient: $registerInClient) {
+				mutation login($unionid: String, $email: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String) {
+				    login(unionid: $unionid, email: $email, password: $password, lastIP: $lastIP, registerInClient: $registerInClient, verifyCode: $verifyCode) {
 					    _id
 					    email
 					    emailVerified
