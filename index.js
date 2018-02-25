@@ -58,7 +58,7 @@ var Authing = function(opts) {
 
 	this.opts = opts;
 
-	this.owerAuth = {
+	this.ownerAuth = {
 		authed: false,
 		authSuccess: false,
 		token: null
@@ -70,22 +70,22 @@ var Authing = function(opts) {
 	}
 
 	this.initUserClient();
-	this.initOwerClient();
+	this.initownerClient();
 	this.initOAuthClient();
 
 	return this._auth().then(function(token) {
 		if(token) {
-			self.initOwerClient(token);
+			self.initownerClient(token);
 			self._loginFromLocalStorage();
 		}else {
-			self.owerAuth.authed = true;
-			self.owerAuth.authSuccess = false;
+			self.ownerAuth.authed = true;
+			self.ownerAuth.authSuccess = false;
 			throw 'auth failed, please check your secret and client ID.';			
 		}
 		return self;
 	}).catch(function(error) {
-		self.owerAuth.authed = true;
-		self.owerAuth.authSuccess = false;
+		self.ownerAuth.authed = true;
+		self.ownerAuth.authSuccess = false;
 		throw 'auth failed: ' + error.message;
 	});	
 }
@@ -136,15 +136,15 @@ Authing.prototype = {
 		this.UserClient = this._initClient(token);
 	},
 
-	initOwerClient: function(token) {
+	initownerClient: function(token) {
 		if(token) {
-			this.owerAuth = {
+			this.ownerAuth = {
 				authed: true,
 				authSuccess: true,
 				token: token
 			};
 		}
-		this.OwerClient = this._initClient(token);
+		this.ownerClient = this._initClient(token);
 	},
 
 	initOAuthClient: function() {
@@ -228,7 +228,7 @@ Authing.prototype = {
 			var authMiddleware = new ApolloLink((operation, forward) => {
 			  operation.setContext({
 			    headers: {
-			      authorization: 'Bearer ' + self.owerAuth.token,
+			      authorization: 'Bearer ' + self.ownerAuth.token,
 			    } 
 			  });
 
@@ -269,7 +269,7 @@ Authing.prototype = {
 	},
 
 	haveAccess: function() {
-		if(!this.owerAuth.authSuccess) {
+		if(!this.ownerAuth.authSuccess) {
 			throw 'have no access, please check your secret and client ID.';
 		}
 	},
@@ -278,7 +278,7 @@ Authing.prototype = {
 		if(this.userAuth.authSuccess) {
 			return this.UserClient;
 		}
-		return this.OwerClient;
+		return this.ownerClient;
 	},
 
 	_login: function(options) {
@@ -492,7 +492,7 @@ Authing.prototype = {
 			count: count
 		}
 
-		return this.OwerClient.query({
+		return this.ownerClient.query({
 			query: gql`query users($registerInClient: String, $page: Int, $count: Int){
 				  users(registerInClient: $registerInClient, page: $page, count: $count) {
 				    totalCount
@@ -571,7 +571,7 @@ Authing.prototype = {
 			throw '_id is not provided';
 		}
 
-		return this.OwerClient.mutate({
+		return this.ownerClient.mutate({
 			mutation: gql `
 				mutation removeUsers($ids: [String], $registerInClient: String, $operator: String){
 				  removeUsers(ids: $ids, registerInClient: $registerInClient, operator: $operator) {
