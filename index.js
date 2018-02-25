@@ -70,12 +70,12 @@ var Authing = function(opts) {
 	}
 
 	this.initUserClient();
-	this.initownerClient();
+	this.initOwnerClient();
 	this.initOAuthClient();
 
 	return this._auth().then(function(token) {
 		if(token) {
-			self.initownerClient(token);
+			self.initOwnerClient(token);
 			self._loginFromLocalStorage();
 		}else {
 			self.ownerAuth.authed = true;
@@ -136,7 +136,7 @@ Authing.prototype = {
 		this.UserClient = this._initClient(token);
 	},
 
-	initownerClient: function(token) {
+	initOwnerClient: function(token) {
 		if(token) {
 			this.ownerAuth = {
 				authed: true,
