@@ -26,7 +26,7 @@ if(configs.inBrowser) {
 		var encryptoPasswd = encrypt.encrypt(paw); // 加密明文
 		return encryptoPasswd;
 	};
-	nodeFetch = unfetch;
+	nodeFetch = unfetch.default || unfetch;
 }else {
 	var crypto = require('crypto');
 	_encryption = function(paw) {
