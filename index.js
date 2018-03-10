@@ -4,7 +4,9 @@ var ApolloLinkPreset = require('apollo-link');
 
 var ApolloCacheInmemory = require('apollo-cache-inmemory');
 var gql = require('graphql-tag');
+
 var nodeFetch = require('node-fetch');
+var unfetch = require('unfetch');
 
 var ApolloClient = ApolloClientPreset.ApolloClient;
 var HttpLink = ApolloLinkHttp.HttpLink;
@@ -24,6 +26,7 @@ if(configs.inBrowser) {
 		var encryptoPasswd = encrypt.encrypt(paw); // 加密明文
 		return encryptoPasswd;
 	};
+	nodeFetch = unfetch.default || unfetch;
 }else {
 	var crypto = require('crypto');
 	_encryption = function(paw) {
@@ -54,44 +57,35 @@ var Authing = function(opts) {
 	}
 
 	this.opts = opts;
-	this.authed = false;
-	this.authSuccess = false;
-	this.logined = false;
 
-	if(configs.inBrowser) {
-		var _authing_token = localStorage.getItem('_authing_token');
-		if(_authing_token) {
-			self.authed = true;
-			self.authSuccess = true;
-			self.logined = true;
-			self.accessToken = _authing_token;
-			self.initUserClient({
-				login: false,
-				token: _authing_token
-			});
-			self.initOAuthClient();
-			return Promise.resolve(self);
-		}
+	this.ownerAuth = {
+		authed: false,
+		authSuccess: false,
+		token: null
+	}
+	this.userAuth = {
+		authed: false,
+		authSuccess: false,
+		token: null
 	}
 
 	this.initUserClient();
+	this.initOwnerClient();
 	this.initOAuthClient();
 
 	return this._auth().then(function(token) {
 		if(token) {
-			self.authed = true;
-			self.authSuccess = true;
-			self.accessToken = token;
-			
+			self.initOwnerClient(token);
+			self._loginFromLocalStorage();
 		}else {
-			self.authed = true;
-			self.authSuccess = false;
+			self.ownerAuth.authed = true;
+			self.ownerAuth.authSuccess = false;
 			throw 'auth failed, please check your secret and client ID.';			
 		}
 		return self;
 	}).catch(function(error) {
-		self.authed = true;
-		self.authSuccess = false;
+		self.ownerAuth.authed = true;
+		self.ownerAuth.authSuccess = false;
 		throw 'auth failed: ' + error.message;
 	});
 }
@@ -100,39 +94,57 @@ Authing.prototype = {
 
 	constructor: Authing,
 
-	initUserClient: function(token) {
-		if(token && token.token) {
-
-			if(token.login) {
-				this.logined = true;
-				if(configs.inBrowser) {
-					localStorage.setItem('_authing_token', token.token);
-				}
-			}
+	_initClient: function(token) {
+		if(token) {
 
 			var httpLink = new HttpLink({ 
 		  		uri: configs.services.user.host, 
 		  		fetch: nodeFetch
 		  	});
 			var authMiddleware = new ApolloLink((operation, forward) => {
-			  operation.setContext({
-			    headers: {
-			      authorization: 'Bearer ' + token.token,
-			    } 
-			  });
+				operation.setContext({
+					headers: {
+					authorization: 'Bearer ' + token,
+					} 
+				});
 
-			  return forward(operation);
+				return forward(operation);
 			});			
-			this.UserClient = new ApolloClient({
+			return new ApolloClient({
 			  	link: concat(authMiddleware, httpLink),
 			  	cache: new InMemoryCache()
 			});
 		}else {
-			this.UserClient = new ApolloClient({
+			return new ApolloClient({
 			  	link: new HttpLink({ uri: configs.services.user.host, fetch: nodeFetch }),
 			  	cache: new InMemoryCache()
 			});
 		}
+	},
+
+	initUserClient: function(token) {
+		if(token) {
+			this.userAuth = {
+				authed: true,
+				authSuccess: true,
+				token: token
+			};
+			if(configs.inBrowser) {
+				localStorage.setItem('_authing_token', token);
+			}
+		}
+		this.UserClient = this._initClient(token);
+	},
+
+	initOwnerClient: function(token) {
+		if(token) {
+			this.ownerAuth = {
+				authed: true,
+				authSuccess: true,
+				token: token
+			};
+		}
+		this.ownerClient = this._initClient(token);
 	},
 
 	initOAuthClient: function() {
@@ -155,6 +167,8 @@ Authing.prototype = {
 			secret: this.opts.secret,
 			clientId: this.opts.clientId,
 		}
+
+		var self = this;
 
 		return this._AuthService.query({
 		  query: gql`
@@ -180,9 +194,7 @@ Authing.prototype = {
 			  return forward(operation);
 			});			
 
-			console.log(data.data.getAccessTokenByAppSecret)
-
-			this._AuthService = new ApolloClient({
+			self._AuthService = new ApolloClient({
 			  	link: concat(authMiddleware, httpLink),
 			  	cache: new InMemoryCache()
 			});	  		
@@ -190,9 +202,19 @@ Authing.prototype = {
 	  	});
 	},
 
+	_loginFromLocalStorage: function() {
+		var self = this;
+		if(configs.inBrowser) {
+			var _authing_token = localStorage.getItem('_authing_token');
+			if(_authing_token) {
+				self.initUserClient(_authing_token);
+			}
+		}
+	},
+
 	checkLoginStatus: function() {
 		var self = this;
-		if(!self.logined) {
+		if(!self.userAuth.authSuccess) {
 			return Promise.resolve({
                 code: 2020,
                 status: false,
@@ -228,7 +250,7 @@ Authing.prototype = {
 			var authMiddleware = new ApolloLink((operation, forward) => {
 			  operation.setContext({
 			    headers: {
-			      authorization: 'Bearer ' + self.accessToken,
+			      authorization: 'Bearer ' + self.ownerAuth.token,
 			    } 
 			  });
 
@@ -253,7 +275,7 @@ Authing.prototype = {
 					    enabled
 					    client
 					    user
-					    oAuthUrl
+					    url
 					}
 				}
 			`,
@@ -269,9 +291,16 @@ Authing.prototype = {
 	},
 
 	haveAccess: function() {
-		if(!this.authSuccess) {
+		if(!this.ownerAuth.authSuccess) {
 			throw 'have no access, please check your secret and client ID.';
 		}
+	},
+
+	_chooseClient: function() {
+		if(this.userAuth.authSuccess) {
+			return this.UserClient;
+		}
+		return this.ownerClient;
 	},
 
 	_login: function(options) {
@@ -290,8 +319,8 @@ Authing.prototype = {
 
 		return this.UserClient.mutate({
 			mutation: gql`
-				mutation login($unionid: String, $email: String, $password: String, $lastIP: String, $registerInClient: String!) {
-				    login(unionid: $unionid, email: $email, password: $password, lastIP: $lastIP, registerInClient: $registerInClient) {
+				mutation login($unionid: String, $email: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String) {
+				    login(unionid: $unionid, email: $email, password: $password, lastIP: $lastIP, registerInClient: $registerInClient, verifyCode: $verifyCode) {
 					    _id
 					    email
 					    emailVerified
@@ -314,8 +343,6 @@ Authing.prototype = {
 			variables: options
 		}).then(function(res) {
 			return res.data.login;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
 		});
 
 	},
@@ -324,13 +351,12 @@ Authing.prototype = {
 		let self = this;
 		return this._login(options).then(function(user) {
 			if(user) {
-				self.initUserClient({
-					login: true,
-					token: user.token
-				});				
+				self.initUserClient(user.token);				
 			}
 			return user;
-		})
+		}).catch(function(error) {
+			throw error.graphQLErrors[0];
+		});
 	},
 
 	register: function(options) {
@@ -411,7 +437,11 @@ Authing.prototype = {
 
 		var self = this;
 
-		this.logined = false;
+		this.userAuth = {
+			authed: false,
+			authSuccess: false,
+			token: null
+		};
 		if(configs.inBrowser) {
 			localStorage.removeItem('_authing_token');
 		}
@@ -434,7 +464,10 @@ Authing.prototype = {
 			throw 'id in options is not provided';
 		}
 		options.registerInClient = this.opts.clientId;
-		return this.UserClient.query({
+		
+		var client = this._chooseClient();
+		
+		return client.query({
 			query: gql`query user($id: String!, $registerInClient: String!){
 				user(id: $id, registerInClient: $registerInClient) {
 					_id
@@ -481,7 +514,7 @@ Authing.prototype = {
 			count: count
 		}
 
-		return this.UserClient.query({
+		return this.ownerClient.query({
 			query: gql`query users($registerInClient: String, $page: Int, $count: Int){
 				  users(registerInClient: $registerInClient, page: $page, count: $count) {
 				    totalCount
@@ -560,7 +593,7 @@ Authing.prototype = {
 			throw '_id is not provided';
 		}
 
-		return this.UserClient.mutate({
+		return this.ownerClient.mutate({
 			mutation: gql `
 				mutation removeUsers($ids: [String], $registerInClient: String, $operator: String){
 				  removeUsers(ids: $ids, registerInClient: $registerInClient, operator: $operator) {
@@ -582,7 +615,8 @@ Authing.prototype = {
 	},
 
 	_uploadAvatar: function(options) {
-		return this.UserClient.query({
+		var client = this._chooseClient();
+		return client.query({
 			query: gql`query qiNiuUploadToken {
 				qiNiuUploadToken
 			}`
@@ -711,12 +745,14 @@ Authing.prototype = {
 			}
 		}
 
+		var client = this._chooseClient();
+
 		if(options.photo) {
 			var photo = options.photo;
 			if(typeof photo !== 'string') {
 				return this._uploadAvatar(options).then(function(options) {
 					var _arg = generateArgs(options);
-					return self.UserClient.mutate({
+					return client.mutate({
 						mutation: gql`
 							mutation UpdateUser(${_arg._argsString}){
 							  updateUser(options: {
@@ -736,7 +772,7 @@ Authing.prototype = {
 			}
 		}
 		var _arg = generateArgs(options);
-		return this.UserClient.mutate({
+		return client.mutate({
 			mutation: gql`
 				mutation UpdateUser(${_arg._argsString}){
 				  updateUser(options: {
@@ -767,39 +803,43 @@ Authing.prototype = {
 					message: '获取OAuth列表失败，原因未知'
 				}
 			}
-		}).then(function(list) {
-			var promises = [];
-			if(configs.inBrowser) {
-				promises = list.map(function(item){
-					return fetch(`${configs.services.oauth.host.replace('/graphql', '')}/oauth/${item.name}/url/${self.opts.clientId}`).then(function(data){
-						return data.json();
-					});
-				})
-			}else {
-				var http = require('http');
-				promises = list.map(function(item){
-					return new Promise(function(resolve, reject){
-						http.get(`${configs.services.oauth.host.replace('/graphql', '')}/oauth/${item.name}/url/${self.opts.clientId}`, function(response) {
-							var str = '';
-							response.setEncoding('utf8');
-							response.on('data', function (chunk) { str += chunk });
-							response.on('end', function () {
-								resolve(JSON.parse(str));
-							});
-							response.on('error', function(e) {
-								reject(e);
-							})
-						})
-					});
-				});
-
-			}
-
-			return Promise.all(promises);
-			
-		}).then(function(list) {
-			return list;
 		});
+
+		/*
+			.then(function(list) {
+				var promises = [];
+				if(configs.inBrowser) {
+					promises = list.map(function(item){
+						return fetch(`${configs.services.oauth.host.replace('/graphql', '')}/oauth/${item.alias}/url/${self.opts.clientId}`).then(function(data){
+							return data.json();
+						});
+					})
+				}else {
+					var http = require('http');
+					promises = list.map(function(item){
+						return new Promise(function(resolve, reject){
+							http.get(`${configs.services.oauth.host.replace('/graphql', '')}/oauth/${item.alias}/url/${self.opts.clientId}`, function(response) {
+								var str = '';
+								response.setEncoding('utf8');
+								response.on('data', function (chunk) { str += chunk });
+								response.on('end', function () {
+									resolve(JSON.parse(str));
+								});
+								response.on('error', function(e) {
+									reject(e);
+								})
+							})
+						});
+					});
+
+				}
+
+				return Promise.all(promises);
+				
+			}).then(function(list) {
+				return list;
+			});
+		*/
 	},
 	
 	sendResetPasswordEmail: function(options) {
