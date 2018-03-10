@@ -93,7 +93,7 @@ var Authing = function(opts) {
 		self.authed = true;
 		self.authSuccess = false;
 		throw 'auth failed: ' + error.message;
-	});	
+	});
 }
 
 Authing.prototype = {
@@ -164,6 +164,28 @@ Authing.prototype = {
 		  `,
 		})
 	  	.then(function(data) {
+
+			var httpLink = new HttpLink({ 
+		  		uri: configs.services.user.host, 
+		  		fetch: nodeFetch
+		  	});
+
+			var authMiddleware = new ApolloLink((operation, forward) => {
+			  operation.setContext({
+			    headers: {
+			      authorization: 'Bearer ' + data.data.getAccessTokenByAppSecret,
+			    } 
+			  });
+
+			  return forward(operation);
+			});			
+
+			console.log(data.data.getAccessTokenByAppSecret)
+
+			this._AuthService = new ApolloClient({
+			  	link: concat(authMiddleware, httpLink),
+			  	cache: new InMemoryCache()
+			});	  		
 	  		return data.data.getAccessTokenByAppSecret;
 	  	});
 	},
@@ -913,7 +935,39 @@ Authing.prototype = {
 		});
 	},
 
-	selectAvatarFile(cb) {
+	sendVerifyEmail: function(options) {
+		if(!options.email) {
+			throw 'email in options is not provided';
+		}
+
+		options.client = this.opts.clientId;
+		options.token = this.accessToken;
+
+		return this._AuthService.mutate({
+			mutation: gql`
+				mutation sendVerifyEmail(
+					$email: String!,
+					$client: String!
+				){
+					sendVerifyEmail(
+						email: $email,
+						client: $client
+					) {
+						message,
+						code,
+						status
+					}
+				}
+			`,
+			variables: options
+		}).then(function(res) {
+			return res.data.sendVerifyEmail;
+		}).catch(function(error) {
+			throw error.graphQLErrors[0];
+		});
+	},
+
+	selectAvatarFile: function(cb) {
 		if(!configs.inBrowser) {
 			throw '当前不是浏览器环境，无法选取文件';
 		}

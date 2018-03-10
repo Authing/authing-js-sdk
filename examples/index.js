@@ -16,8 +16,6 @@ var auth = new Authing({
 
 auth.then(function(auth) {
 
-	// console.log(auth);
-
 	email = "597055914@qq.com";
 	password = "123456";
 

@@ -4,6 +4,10 @@
 
 JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以及 **Node.js**.我们提供了完全一致的接口.
 
+[VueDemo](http://sample.authing.cn)
+
+![cmd-markdown-logo](http://p57u1eyo1.bkt.clouddn.com/vue-demo.png)
+
 ## 安装
 
 ----------
