@@ -1,0 +1,44 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/xieyang/.nvm/versions/node/v6.7.0/bin/node',
+1 verbose cli   '/Users/xieyang/.nvm/versions/node/v6.7.0/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.3
+3 info using node@v6.7.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Volumes/mnt/www/authing/sdk/authing-js-sdk/examples',
+7 silly cache add   type: 'local' }
+8 silly addLocalTarball shasum (computed) 1bcca7b04bcf75144f4ee82d5498219020c959dd
+9 verbose addTmpTarball /Volumes/mnt/www/authing/sdk/authing-js-sdk/examples not in flight; adding
+10 verbose correctMkdir /Users/xieyang/.npm correctMkdir not in flight; initializing
+11 verbose addTmpTarball validating metadata from /Volumes/mnt/www/authing/sdk/authing-js-sdk/examples
+12 verbose tar unpack /Volumes/mnt/www/authing/sdk/authing-js-sdk/examples
+13 verbose tar unpacking to /var/folders/04/wqt2c0nn2610vbd_z9l46zzc0000gn/T/npm-11414-4e2eebaf/unpack-14cef249
+14 silly gentlyRm /var/folders/04/wqt2c0nn2610vbd_z9l46zzc0000gn/T/npm-11414-4e2eebaf/unpack-14cef249 is being purged
+15 verbose gentlyRm don't care about contents; nuking /var/folders/04/wqt2c0nn2610vbd_z9l46zzc0000gn/T/npm-11414-4e2eebaf/unpack-14cef249
+16 silly gunzTarPerm modes [ '755', '644' ]
+17 error not a package /Volumes/mnt/www/authing/sdk/authing-js-sdk/examples
+18 error addLocal Could not install /Volumes/mnt/www/authing/sdk/authing-js-sdk/examples
+19 verbose stack Error: ENOENT: no such file or directory, open '/var/folders/04/wqt2c0nn2610vbd_z9l46zzc0000gn/T/npm-11414-4e2eebaf/unpack-14cef249/package.json'
+19 verbose stack     at Error (native)
+20 verbose cwd /Volumes/mnt/www/authing/sdk/authing-js-sdk/examples
+21 error Darwin 15.4.0
+22 error argv "/Users/xieyang/.nvm/versions/node/v6.7.0/bin/node" "/Users/xieyang/.nvm/versions/node/v6.7.0/bin/npm" "publish"
+23 error node v6.7.0
+24 error npm  v3.10.3
+25 error path /var/folders/04/wqt2c0nn2610vbd_z9l46zzc0000gn/T/npm-11414-4e2eebaf/unpack-14cef249/package.json
+26 error code ENOENT
+27 error errno -2
+28 error syscall open
+29 error enoent ENOENT: no such file or directory, open '/var/folders/04/wqt2c0nn2610vbd_z9l46zzc0000gn/T/npm-11414-4e2eebaf/unpack-14cef249/package.json'
+30 error enoent ENOENT: no such file or directory, open '/var/folders/04/wqt2c0nn2610vbd_z9l46zzc0000gn/T/npm-11414-4e2eebaf/unpack-14cef249/package.json'
+30 error enoent This is most likely not a problem with npm itself
+30 error enoent and is related to npm not being able to find a file.
+31 verbose exit [ -2, true ]
