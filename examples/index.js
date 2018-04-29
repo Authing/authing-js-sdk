@@ -1,17 +1,12 @@
 var Authing = require('../index.js');
 
-var email = "xxx@memect.co";
-var password = "123456";
-var secret = '5cf63e2b82f2d6b41bdcfec8b483b740';
-var clientId = '5a48b6ae863b3b0001893bbc';
+var email = "", password = "";
+var secret = '72a1fb8db40ed68a8e643853590fb2a8';
+var clientId = '5ae595f9f0db4b000117a986';
 
 var auth = new Authing({
 	clientId: clientId,
-	secret: secret,
-	host: {
-		user: 'http://users.authing.dodora.cn/graphql',
-		oauth: 'http://oauth.authing.dodora.cn/graphql'
-	}
+	secret: secret
 });
 
 auth.then(function(auth) {
@@ -48,10 +43,21 @@ auth.then(function(auth) {
 			username: 'xxxxxxxxx'
 		})
 		.then(function(res) {
-			console.log('修改资料成功!')
+			console.log('修改资料成功!');
 			console.log(res);
+
+			auth.remove(res._id)
+			.then(function(res) {
+				console.log('删除用户成功')
+				console.log(res);
+			})
+			.catch(function(error) {
+				console.log('删除用户失败')
+				console.log(error);
+			})
+
 		}).catch(function(error) {
-			console.log('修改资料失败!')
+			console.log('修改资料失败!');
 			console.log(error);
 		});
 
@@ -59,9 +65,6 @@ auth.then(function(auth) {
 		console.log('登录失败!')
 		console.log(error);
 	});
-
-	email = "xxxxx@qqm";
-	password = "123456";
 
 	auth.register({
 		email: email,
@@ -73,7 +76,6 @@ auth.then(function(auth) {
 		console.log('注册失败!')
 		console.log(error);
 	});
-
 
 });
 
