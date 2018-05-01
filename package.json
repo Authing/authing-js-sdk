@@ -1,6 +1,6 @@
 {
   "name": "authing-js-sdk",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "authing js offical sdk",
   "main": "index.js",
   "scripts": {
