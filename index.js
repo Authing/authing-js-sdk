@@ -644,7 +644,7 @@ Authing.prototype = {
 			return data.json();
 		}).then(function(data) {
 			if(data.key) {
-				options.photo = 'http://oxacbp94f.bkt.clouddn.com/' + data.key
+				options.photo = 'https://usercontents.authing.cn/' + data.key
 			}
 			return options;
 		}).catch(function(e) {
