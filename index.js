@@ -981,7 +981,6 @@ Authing.prototype = {
 		}
 
 		options.client = this.opts.clientId;
-		options.token = this.accessToken;
 
 		return this._AuthService.mutate({
 			mutation: gql`
