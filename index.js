@@ -636,7 +636,7 @@ Authing.prototype = {
 			var formData = new FormData();
 			formData.append('file', options.photo);
 			formData.append('token', token);
-			return fetch('https://upload-z1.qiniup.com/" enctype="multipart/form-data', {
+			return fetch('https://upload.qiniup.com/" enctype="multipart/form-data', {
 				method: 'post',
 				body: formData
 			});
