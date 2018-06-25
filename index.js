@@ -920,9 +920,6 @@ Authing.prototype = {
 		if(!options.email) {
 			throw 'email in options is not provided';
 		}
-		if(!options.client) {
-			throw 'client in options is not provided';
-		}
 		if(!options.password) {
 			throw 'password in options is not provided';
 		}
