@@ -1,8 +1,8 @@
 var Authing = require('../index.js');
 
 var email = "", password = "";
-var secret = '72a1fb8db40ed68a8e643853590fb2a8';
-var clientId = '5ae595f9f0db4b000117a986';
+var secret = '42aa3deba3b2c35aaf018acafdf503f8';
+var clientId = '5b0dfcff82f4ce00014fdcd4';
 
 var auth = new Authing({
 	clientId: clientId,
