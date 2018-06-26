@@ -8,6 +8,10 @@ JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以及 **Node.js*
 
 ![cmd-markdown-logo](https://usercontents.authing.cn/vue-demo.png)
 
+## node.js生态库
+
+1. [express-middleware](https://github.com/Authing/express-middleware)
+
 ## 安装
 
 ----------
