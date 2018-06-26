@@ -6,10 +6,6 @@ JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以及 **Node.js*
 
 [VueDemo](http://sample.authing.cn)
 
-## node.js生态库
-
-1. [express-middleware](https://github.com/Authing/express-middleware)
-
 ![cmd-markdown-logo](https://usercontents.authing.cn/vue-demo.png)
 
 ## 安装
@@ -115,6 +111,10 @@ const main = async () => {
 main();
 
 ```
+
+##### Node.js其他生态中间件
+
+1. [express-middleware](https://github.com/Authing/express-middleware)
 
 当在浏览器使用时，我们会将用户token以'_authing_token'字段存在localStorage中，后面都会从localStorage中读取并进行验证。
 
