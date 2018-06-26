@@ -63,7 +63,7 @@ auth.then(function(validAuth) {
 [怎样获取client ID ?](https://docs.authing.cn/#/quick_start/howto)。
 
 
-##### ES6+
+### ES6+
 
 在```ES6+```中，我们使用 **async 函数** 和 **await 关键字** 处理异步编程。
 
@@ -112,7 +112,7 @@ main();
 
 ```
 
-##### Node.js其他生态中间件
+## Node.js其他生态中间件
 
 1. [express-middleware](https://github.com/Authing/express-middleware)
 
