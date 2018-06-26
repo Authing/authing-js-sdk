@@ -8,6 +8,8 @@ var gql = require('graphql-tag');
 var nodeFetch = require('node-fetch');
 var unfetch = require('unfetch');
 
+var jsonwebtoken = require('jsonwebtoken');
+
 var ApolloClient = ApolloClientPreset.ApolloClient;
 var HttpLink = ApolloLinkHttp.HttpLink;
 var InMemoryCache = ApolloCacheInmemory.InMemoryCache;
@@ -1014,6 +1016,15 @@ Authing.prototype = {
 			cb(inputElem.files[0]);
 		}
 		inputElem.click()
+	},
+
+	decodeToken: function(token) {
+		try {
+		  	var decoded = jwt.verify(token, 'root');
+		  	return decoded;
+		} catch(err) {
+		  	throw err;
+		}
 	}
 
 }
