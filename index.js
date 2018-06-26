@@ -1020,7 +1020,7 @@ Authing.prototype = {
 
 	decodeToken: function(token) {
 		try {
-		  	var decoded = jwt.verify(token, 'root');
+		  	var decoded = jsonwebtoken.verify(token, 'root');
 		  	return decoded;
 		} catch(err) {
 		  	throw err;
