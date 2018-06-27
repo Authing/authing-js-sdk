@@ -63,7 +63,7 @@ auth.then(function(validAuth) {
 [怎样获取client ID ?](https://docs.authing.cn/#/quick_start/howto)。
 
 
-##### ES6+
+### ES6+
 
 在```ES6+```中，我们使用 **async 函数** 和 **await 关键字** 处理异步编程。
 
@@ -111,6 +111,10 @@ const main = async () => {
 main();
 
 ```
+
+## Node.js其他生态中间件
+
+1. [express-middleware](https://github.com/Authing/express-middleware)
 
 当在浏览器使用时，我们会将用户token以'_authing_token'字段存在localStorage中，后面都会从localStorage中读取并进行验证。
 
