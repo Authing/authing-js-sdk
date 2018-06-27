@@ -104,7 +104,7 @@ Authing.prototype = {
 			var authMiddleware = new ApolloLink((operation, forward) => {
 				operation.setContext({
 					headers: {
-					authorization: 'Bearer ' + token,
+						authorization: 'Bearer ' + token
 					} 
 				});
 
@@ -212,15 +212,8 @@ Authing.prototype = {
 		}
 	},
 
-	checkLoginStatus: function() {
+	checkLoginStatus: function(token) {
 		var self = this;
-		if(!self.userAuth.authSuccess) {
-			return Promise.resolve({
-                code: 2020,
-                status: false,
-                message: '未登录'
-            });
-		}
 		return this.UserClient.query({
 			query: gql`query checkLoginStatus {
 				checkLoginStatus {
@@ -228,7 +221,10 @@ Authing.prototype = {
 					code
 					message
 				}
-			}`
+			}`,
+			variables: {
+				token
+			}
 		}).then(function(res) {
 			return res.data.checkLoginStatus;
 		}).catch(function(error) {
