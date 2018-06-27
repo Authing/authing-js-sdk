@@ -29,6 +29,12 @@ auth.then(function(auth) {
 		console.log('登录成功!');
 		console.log(user);
 
+		auth.checkLoginStatus(user.token).then(function(res) {
+			console.log(res);
+		}).catch(function(error) {
+			console.log(error);
+		});
+
 		auth.list().then(function(res) {
 			console.log('获取用户列表成功!');
 			console.log(res);

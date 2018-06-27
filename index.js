@@ -217,15 +217,17 @@ Authing.prototype = {
 	checkLoginStatus: function(token) {
 		var self = this;
 		return this.UserClient.query({
-			query: gql`query checkLoginStatus {
-				checkLoginStatus {
-					status
-					code
-					message
+			query: gql`
+				query checkLoginStatus($token: String) {
+					checkLoginStatus(token: $token) {
+						status
+						code
+						message
+					}
 				}
-			}`,
+			`,
 			variables: {
-				token
+				token: token
 			}
 		}).then(function(res) {
 			return res.data.checkLoginStatus;
