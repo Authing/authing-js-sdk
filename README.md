@@ -6,7 +6,7 @@ JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以及 **Node.js*
 
 [VueDemo](http://sample.authing.cn)
 
-![cmd-markdown-logo](https://usercontents.authing.cn/vue-demo.png)
+![cmd-markdown-logo](https://usercontents.authing.cn/authing-demo-login.png)
 
 ## 安装
 
@@ -136,7 +136,7 @@ var auth = new Authing({
 auth.then(function(validAuth) {
 
 	validAuth.startWXAppScaning({
-      mount: 'qrcode-node', //二维码挂载点，如不写则默认漂浮在文档中间
+    	mount: 'qrcode-node', //二维码挂载点，如不写则默认漂浮在文档中间
 	});
 	
 })
