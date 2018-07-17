@@ -23,14 +23,13 @@
   "homepage": "https://github.com/Authing/authing-js-sdk#readme",
   "dependencies": {
     "apollo-client-preset": "^1.0.5",
+    "axios": "^0.18.0",
     "crypto": "^1.0.1",
     "graphql": "^0.12.3",
     "graphql-tag": "^2.6.1",
     "jsencrypt": "^2.3.1",
     "jsonwebtoken": "^8.3.0",
     "node-fetch": "^1.7.3",
-    "request": "^2.83.0",
-    "request-promise": "^4.2.2",
     "unfetch": "^3.0.0"
   }
 }

@@ -112,6 +112,54 @@ main();
 
 ```
 
+## 小程序扫码登录
+
+小程序扫码登录指使用Authing小程序``身份管家``执行微信登录。
+示例：[小程序扫码登录](http://sample.authing.cn)
+
+![小程序扫码登录实例图片](https://usercontents.authing.cn/wxapp-sacan.png)
+
+### 基础用法
+
+使用``startWXAppScaning``方法： 
+
+``` javascript
+
+var Authing = require('authing-js-sdk');
+
+// 对Client ID和Client Secret进行验证，获取Access Token
+var auth = new Authing({
+	clientId: 'your_client_id',
+	secret: 'your_app_secret'
+});
+
+auth.then(function(validAuth) {
+
+	validAuth.startWXAppScaning({
+      mount: 'qrcode-node', //二维码挂载点，如不写则默认漂浮在文档中间
+	});
+	
+})
+
+```
+
+扫码完成后会自动跳到用户配置的URL上。
+
+### 参数说明
+
+``` javascript
+
+validAuth.startWXAppScaning({
+  	mount: 'qrcode-node', // 二维码挂载点，如不写则默认漂浮在文档中间
+  	redirect: true, // 是否执行跳转（在用户后台配置的URL），默认为true，相关用户信息回传至url上
+  	onSuccess: function(res) {}, // 登录成功后回调函数，redirect为true时不回调此函数
+  	onError: function(error) {}, // 登录失败后回调函数，一般为网络问题
+  	interval: 1500, // 每隔多少秒检查一次，默认1500
+  	tips: '搜索小程序 <strong>身份管家</strong> 扫码登录', // 提示信息，可写HTML
+});
+
+```
+
 ## Node.js其他生态中间件
 
 1. [express-middleware](https://github.com/Authing/express-middleware)
