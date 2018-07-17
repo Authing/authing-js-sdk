@@ -117,7 +117,7 @@ main();
 小程序扫码登录指使用Authing小程序``身份管家``执行微信登录。
 示例：[小程序扫码登录](http://sample.authing.cn)
 
-![小程序扫码登录实例图片](https://usercontents.authing.cn/wxapp-sacan.png)
+![扫码demo](https://usercontents.authing.cn/wxapp-scaning-demo.gif)
 
 ### 基础用法
 
