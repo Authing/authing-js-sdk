@@ -1197,7 +1197,7 @@ Authing.prototype = {
                 }, interval);
               }
 
-              var tip = genTip(tips || "搜索小程序 <strong>身份管家</strong> 扫码登录");
+              var tip = genTip(tips || "使用 <strong>微信</strong> 或小程序 <strong>身份管家</strong> 扫码登录");
 
               qrcodeWrapper.appendChild(qrcodeImage);
               qrcodeWrapper.appendChild(tip);
