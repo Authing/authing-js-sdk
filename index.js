@@ -1120,7 +1120,7 @@ Authing.prototype = {
       var genShadow = function(text, aOnClick) {
         var shadow = document.createElement('div');
         shadow.id = "authing__retry";
-        shadow.style = "width: 240px;height: 240px;position: absolute;left: 50%;top: 2;top: 12px;margin-left: -120px;background-color: rgba(0,0,0, 0.5);line-height:240px;color:#fff;font-weight:600;";
+        shadow.style = "text-align:center;width: 240px;height: 240px;position: absolute;left: 50%;top: 2;top: 12px;margin-left: -120px;background-color: rgba(0,0,0, 0.5);line-height:240px;color:#fff;font-weight:600;";
 
         var shadowA = document.createElement('a');
         shadowA.innerHTML = text;
