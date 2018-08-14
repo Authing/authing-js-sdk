@@ -1131,9 +1131,14 @@ Authing.prototype = {
       }
 
       var genRetry = function(qrcodeNode, tipText) {
-        var tip = genTip(tipText); 
+		var tip = genTip(tipText); 
+		
+		var qrcodeWrapper = document.createElement("div");
+		qrcodeWrapper.id = 'authing__qrcode-wrapper';
+		qrcodeWrapper.style = "text-align: center";
 
-        var qrcodeImage = genImage('https://usercontents.authing.cn/authing_user_manager_wxapp_qrcode.jpg');
+		var qrcodeImage = genImage('https://usercontents.authing.cn/authing_user_manager_wxapp_qrcode.jpg');
+		qrcodeImage.style = "margin-top: 12px;"
 
         qrcodeImage.onload = function() {
           unloading();
@@ -1143,9 +1148,10 @@ Authing.prototype = {
           start();          
         });
 
-        qrcodeNode.appendChild(qrcodeImage);
-        qrcodeNode.appendChild(shadow);
-        qrcodeNode.appendChild(tip);        
+        qrcodeWrapper.appendChild(qrcodeImage);
+        qrcodeWrapper.appendChild(shadow);
+		qrcodeWrapper.appendChild(tip);  
+		qrcodeNode.appendChild(qrcodeWrapper);      
       }
 
       var start = function() {
