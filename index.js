@@ -1240,4 +1240,8 @@ Authing.prototype = {
 
 }
 
+if(typeof window === 'object') {
+	window.Authing = Authing;
+}
+
 module.exports = Authing;
