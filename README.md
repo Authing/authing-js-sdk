@@ -154,6 +154,7 @@ validAuth.startWXAppScaning({
   	redirect: true, // 是否执行跳转（在用户后台配置的URL），默认为true，相关用户信息回传至url上
   	onSuccess: function(res) {}, // 登录成功后回调函数，redirect为true时不回调此函数
   	onError: function(error) {}, // 登录失败后回调函数，一般为网络问题
+  	onIntervalStarting: function(intervalNum) {}, // 轮询时的回调函数，intervalNum 为 setInterval 返回的数值，可使用 clearInterval 停止轮询
   	interval: 1500, // 每隔多少秒检查一次，默认1500
   	tips: '搜索小程序 <strong>身份管家</strong> 扫码登录', // 提示信息，可写HTML
 });

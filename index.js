@@ -1069,6 +1069,7 @@ Authing.prototype = {
 
       var onError = opts.onError;
       var onSuccess = opts.onSuccess;
+      var onIntervalStarting = opts.onIntervalStarting;
 
 	  var qrcodeNode = document.getElementById(mountNode);
 	  
@@ -1193,6 +1194,9 @@ Authing.prototype = {
                 unloading();
                 var inter = 0;
                 inter = setInterval(function() {
+                 if(onIntervalStarting) {
+                 	onIntervalStarting(inter);
+                 }
                  self.checkQR().then(function(checkRes) {
                   var checkResult = checkRes.data.data;
                   if(checkResult.code === 200) {
