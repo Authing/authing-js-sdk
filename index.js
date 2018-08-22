@@ -1107,11 +1107,10 @@ Authing.prototype = {
         var tip = document.createElement('span')
 		tip.class = 'authing__heading-subtitle';
 		if(!needGenerate) {
-			tip.style = 'display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;';
+			tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;';
 		}else {
-			tip.style = 'display: block;font-weight: 400;font-size: 12px;color: #888;';
+			tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 12px;color: #888;';
 		}
-		console.log(tip.style);
         tip.innerHTML = text;
         return tip;
       }
@@ -1146,8 +1145,6 @@ Authing.prototype = {
 		qrcodeWrapper.style = "text-align: center";
 
 		var qrcodeImage = genImage('https://usercontents.authing.cn/authing_user_manager_wxapp_qrcode.jpg');
-
-		console.log(qrcodeNode);
 
 		if(!needGenerate) {
 			qrcodeImage.style = "margin-top: 12px;"
