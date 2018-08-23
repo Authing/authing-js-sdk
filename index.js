@@ -277,6 +277,7 @@ Authing.prototype = {
 					    client
 					    user
 					    url
+					    alias
 					}
 				}
 			`,
@@ -797,7 +798,7 @@ Authing.prototype = {
 		.then(function(list) {
 			if(list) {
 				return list.filter(function(item) {
-					return item.enabled;
+					return item.enabled && item.alias != 'wxapp';
 				});
 			}else {
 				throw {
@@ -805,42 +806,6 @@ Authing.prototype = {
 				}
 			}
 		});
-
-		/*
-			.then(function(list) {
-				var promises = [];
-				if(configs.inBrowser) {
-					promises = list.map(function(item){
-						return fetch(`${configs.services.oauth.host.replace('/graphql', '')}/oauth/${item.alias}/url/${self.opts.clientId}`).then(function(data){
-							return data.json();
-						});
-					})
-				}else {
-					var http = require('http');
-					promises = list.map(function(item){
-						return new Promise(function(resolve, reject){
-							http.get(`${configs.services.oauth.host.replace('/graphql', '')}/oauth/${item.alias}/url/${self.opts.clientId}`, function(response) {
-								var str = '';
-								response.setEncoding('utf8');
-								response.on('data', function (chunk) { str += chunk });
-								response.on('end', function () {
-									resolve(JSON.parse(str));
-								});
-								response.on('error', function(e) {
-									reject(e);
-								})
-							})
-						});
-					});
-
-				}
-
-				return Promise.all(promises);
-				
-			}).then(function(list) {
-				return list;
-			});
-		*/
 	},
 	
 	sendResetPasswordEmail: function(options) {

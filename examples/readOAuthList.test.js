@@ -2,8 +2,8 @@ var Authing = require('../index.js');
 
 var email = "xxx@memect.co";
 var password = "123456";
-var secret = 'xxxxxxxxxxxxxxxxxxxxxx';
-var clientId = 'xxxxxxxxxxxxxxxxxxxxxx';
+var secret = '427e24d3b7e289ae9469ab6724dc7ff0';
+var clientId = '5a9fa26cf8635a000185528c';
 
 var auth = new Authing({
 	clientId: clientId,
