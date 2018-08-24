@@ -798,7 +798,7 @@ Authing.prototype = {
 		.then(function(list) {
 			if(list) {
 				return list.filter(function(item) {
-					return item.enabled && item.alias != 'wxapp';
+					return item.enabled;
 				});
 			}else {
 				throw {
