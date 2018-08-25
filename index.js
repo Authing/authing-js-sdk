@@ -1027,10 +1027,21 @@ Authing.prototype = {
 
       var self = this;
 
+      if(!opts) {
+      	opts = {};
+      }
+
       var mountNode = opts.mount || 'authing__qrcode-root-node';
       var interval = opts.interval || 1500;
       var tips = opts.tips;
-      var redirect = opts.redirect == null || opts.redirect == undefined ? true : false;
+
+      var redirect = true;
+
+      if(opts.hasOwnProperty('redirect')) {
+      	if(!opts.redirect) {
+      		redirect = false;
+      	}
+      }
 
       var onError = opts.onError;
       var onSuccess = opts.onSuccess;
@@ -1175,6 +1186,9 @@ Authing.prototype = {
                       }, 600);
                       qrcodeNode.appendChild(shadow);                      
                     }else {
+                      var shadow = genShadow('验证成功', function() {
+                        window.location.href = checkResult.redirect + '?code=200&data=' + (JSON.stringify(checkResult.data));
+                      });                    	
                       if(onSuccess) {
                         onSuccess(checkResult);
                       }
