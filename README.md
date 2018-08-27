@@ -161,7 +161,7 @@ validAuth.startWXAppScaning({
 
 ```
 
-了解更多，请查看：[使用小程序扫码登录](http://localhost:3000/#/quick_start/wxapp_scan_login)
+了解更多，请查看：[使用小程序扫码登录](https://docs.authing.cn/#/quick_start/wxapp_scan_login)
 
 ## Node.js其他生态中间件
 
