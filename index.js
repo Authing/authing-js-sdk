@@ -104,7 +104,7 @@ Authing.prototype = {
 		  		uri: configs.services.user.host, 
 		  		fetch: nodeFetch
 		  	});
-			var authMiddleware = new ApolloLink((operation, forward) => {
+			var authMiddleware = new ApolloLink(function (operation, forward) {
 				operation.setContext({
 					headers: {
 						authorization: 'Bearer ' + token
@@ -187,7 +187,7 @@ Authing.prototype = {
 		  		fetch: nodeFetch
 		  	});
 
-			var authMiddleware = new ApolloLink((operation, forward) => {
+			var authMiddleware = new ApolloLink(function (operation, forward) {
 			  operation.setContext({
 			    headers: {
 			      authorization: 'Bearer ' + data.data.getAccessTokenByAppSecret,
@@ -248,7 +248,7 @@ Authing.prototype = {
 		  		uri: configs.services.oauth.host, 
 		  		fetch: nodeFetch
 		  	});
-			var authMiddleware = new ApolloLink((operation, forward) => {
+			var authMiddleware = new ApolloLink(function (operation, forward) {
 			  operation.setContext({
 			    headers: {
 			      authorization: 'Bearer ' + self.ownerAuth.token,
