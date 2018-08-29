@@ -10,7 +10,7 @@ var auth = new Authing({
 
 auth.then(function(auth) {
 
-    let result = auth.decodeToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiIiwidW5pb25pZCI6Im9lU0RUNUxiZ2k3R3Nud3hIS2tpc3BtWFpxRXMiLCJpZCI6IjViMmY3ZTNlZjc5ZGUyMDAwMWJlZjllNyIsImNsaWVudElkIjoiNWIwMTNkMGIwOTZhYTYwMDAxY2IyNmY2In0sImlhdCI6MTUyOTgzOTE2NiwiZXhwIjoxNTMxMTM1MTY2fQ.Y-29y6rPNUhexw9Z07qOMkSbzyMNOFvTB7YTb4lJUNA');
+    let result = auth.decodeToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoieGlleWFuZ0Bkb2RvcmEuY24iLCJpZCI6IjVhNTk3ZjM1MDg1YTIwMDAxNDRhMTBlZCIsImNsaWVudElkIjoiNTlmODZiNDgzMmViMjgwNzFiZGQ5MjE0In0sImlhdCI6MTUzNTUxNjk0OSwiZXhwIjoxNTM2ODEyOTQ5fQ.Fl800nI8-hIqmtq7UKv6N5YfqGRul_A0SirNlFnVTtM');
     console.log(result);
 
 });

@@ -14,7 +14,7 @@ JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以及 **Node.js*
 
 #### NPM
 
-当构建大规模应用时，我们推荐使用```npm```进行安装， 它可以与一些模块打包工具很好地配合使用，如 ```Webpack```， ```Browserify。```
+当构建大规模应用时，我们推荐使用 ```npm``` 进行安装， 它可以与一些模块打包工具很好地配合使用，如 ```Webpack```， ```Browserify。```
 
 ``` shell
 # latest stable
@@ -114,10 +114,10 @@ main();
 
 ## 小程序扫码登录
 
-小程序扫码登录指使用Authing小程序``身份管家``执行微信登录。
+小程序扫码登录指使用Authing小程序 ``身份管家`` 执行微信登录。
 示例：[小程序扫码登录](http://sample.authing.cn)
 
-![扫码demo](https://usercontents.authing.cn/wxapp-scaning-demo.gif)
+![扫码 demo](https://usercontents.authing.cn/wxapp-scaning-demo.gif)
 
 ### 基础用法
 

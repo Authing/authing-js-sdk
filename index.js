@@ -4,6 +4,7 @@ var SHA256 = require('crypto-js/hmac-sha256');
 var Base64 = require('crypto-js/enc-base64');
 var UTF8 = require('crypto-js/enc-utf8');
 var configs = require('./src/configs');
+
 class GraphQLClient {
 
 	constructor(options) {
@@ -94,7 +95,7 @@ var Authing = function(opts) {
 	}).catch(function(error) {
 		self.ownerAuth.authed = true;
 		self.ownerAuth.authSuccess = false;
-		throw 'auth failed: ' + error;
+		throw 'auth failed: ' + error.message.message;
 	});
 }
 
@@ -911,11 +912,13 @@ Authing.prototype = {
 
 	decodeToken: function(token) {
 		if (typeof token !== 'string') {
-			throw 'jwt must be a string';
+			// throw 'jwt must be a string';
+			return null;
 		}
 		var tokens = token.split('.');
 		if (tokens.length !== 3) {
-			throw 'jwt malformed';
+			// throw 'jwt malformed';
+			return null;
 		}
 		var header;
 		var payload;
@@ -928,17 +931,20 @@ Authing.prototype = {
 			payload = UTF8.stringify(Base64.parse(payloadBase64));
 			payload = JSON.parse(payload);
 		} catch (error) {
-			throw 'jwt malformed';
+			// throw 'jwt malformed';
+			return null;
 		}
 		var signatureNowBinary = SHA256(`${headerBase64}.${payloadBase64}`, 'root');
 		var signatureNowBase64 = Base64.stringify(signatureNowBinary);
 		signatureNowBase64 = signatureNowBase64.replace(/\//g, '_')
 				.replace(/\+/g, '-').replace(/=/g, ''); // 转换为适用于URL的base64
 		if (signatureNowBase64 !== signature) {
-			throw 'invalid signature';
+			return null;
+			// throw 'invalid signature';
 		}
 		if (Math.floor(Date.now() / 1000) > payload.exp) {
-			throw 'jwt expired';
+			// throw 'jwt expired';
+			return null;
 		}
 		return payload;
 	},

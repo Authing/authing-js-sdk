@@ -10,7 +10,7 @@ var auth = new Authing({
 
 auth.then(function(auth) {
 	auth.login({
-		unionid: 'unionidsample2'
+		unionid: 'unionidsample4'
 	}).then(function(data) {
 		console.log(data);
 	}).catch(function(error) {
