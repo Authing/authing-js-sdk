@@ -166,7 +166,7 @@ Authing.prototype = {
 			});
 		}
 
-		let options = {
+		var options = {
 			secret: this.opts.secret,
 			clientId: this.opts.clientId,
 		}
@@ -350,7 +350,7 @@ Authing.prototype = {
 	},
 
 	login: function(options) {
-		let self = this;
+		var self = this;
 		return this._login(options).then(function(user) {
 			if(user) {
 				self.initUserClient(user.token);				
@@ -992,7 +992,7 @@ Authing.prototype = {
 	},
 
 	randomWord: function(randomFlag, min, max) {
-	  let str = "",
+	  var str = "",
 	    range = min,
 	    arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 	      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
@@ -1004,8 +1004,8 @@ Authing.prototype = {
 	    	range = Math.round(Math.random() * (max - min)) + min;// 任意长度
 	  	}
 
-	  	for (let i = 0; i < range; i++) {
-	    	let pos = Math.round(Math.random() * (arr.length - 1));
+	  	for (var i = 0; i < range; i++) {
+	    	var pos = Math.round(Math.random() * (arr.length - 1));
 	    	str += arr[pos];
 	  	}
 	  	
