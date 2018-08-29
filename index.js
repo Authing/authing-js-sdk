@@ -1,44 +1,49 @@
-var ApolloClientPreset = require('apollo-client-preset');
-var ApolloLinkHttp = require('apollo-link-http');
-var ApolloLinkPreset = require('apollo-link');
-
-var ApolloCacheInmemory = require('apollo-cache-inmemory');
-var gql = require('graphql-tag');
-
-var nodeFetch = require('node-fetch');
-var unfetch = require('unfetch');
-
-var jsonwebtoken = require('jsonwebtoken');
-
-var ApolloClient = ApolloClientPreset.ApolloClient;
-var HttpLink = ApolloLinkHttp.HttpLink;
-var InMemoryCache = ApolloCacheInmemory.InMemoryCache;
-
-var ApolloLink = ApolloLinkPreset.ApolloLink;
-var concat = ApolloLinkPreset.concat;
-
-var configs = require('./src/configs');
+const TIMEOUT = 20000;
 var axios = require('axios');
+var SHA256 = require('crypto-js/hmac-sha256');
+var Base64 = require('crypto-js/enc-base64');
+var UTF8 = require('crypto-js/enc-utf8');
+var configs = require('./src/configs');
+class GraphQLClient {
+
+	constructor(options) {
+		const defaultOpt = {
+			timeout: TIMEOUT,
+			method: 'POST'
+		};
+		this.options = { ...defaultOpt, ...options };
+	}
+
+	request(data) {
+		this.options.data = data;
+		return axios(this.options).then(res => {
+			const d = res.data;
+			if (d.errors) {
+				throw d.errors[0];
+			}
+			return d.data;
+		});
+	}
+
+}
 
 var _encryption;
+var cryptoPolyfill = require('./src/crypto-polyfill');
 if(configs.inBrowser) {
-	var JSEncrypt = require('jsencrypt');
 	_encryption = function(paw) {
-		var encrypt = new JSEncrypt.JSEncrypt(); // 实例化加密对象
+		var encrypt = new cryptoPolyfill.JSEncrypt(); // 实例化加密对象
 		encrypt.setPublicKey(configs.openSSLSecret); // 设置公钥
 		var encryptoPasswd = encrypt.encrypt(paw); // 加密明文
 		return encryptoPasswd;
 	};
-	nodeFetch = unfetch.default || unfetch;
-}else {
-	var crypto = require('crypto');
+} else {
 	_encryption = function(paw) {
 		var publicKey = configs.openSSLSecret;
 		var pawBuffer, encryptText;
 		pawBuffer = new Buffer(paw); // jsencrypt 库在加密后使用了base64编码,所以这里要先将base64编码后的密文转成buffer
-		encryptText = crypto.publicEncrypt({
+		encryptText = cryptoPolyfill.publicEncrypt({
 			key: new Buffer(publicKey), // 如果通过文件方式读入就不必转成Buffer
-			padding: crypto.constants.RSA_PKCS1_PADDING
+			padding: cryptoPolyfill.constants.RSA_PKCS1_PADDING
 		}, pawBuffer).toString('base64');
 		return encryptText;
 	}
@@ -89,7 +94,7 @@ var Authing = function(opts) {
 	}).catch(function(error) {
 		self.ownerAuth.authed = true;
 		self.ownerAuth.authSuccess = false;
-		throw 'auth failed: ' + error.message;
+		throw 'auth failed: ' + error;
 	});
 }
 
@@ -98,31 +103,15 @@ Authing.prototype = {
 	constructor: Authing,
 
 	_initClient: function(token) {
+		const conf = {
+			baseURL: configs.services.user.host
+		};
 		if(token) {
-
-			var httpLink = new HttpLink({ 
-		  		uri: configs.services.user.host, 
-		  		fetch: nodeFetch
-		  	});
-			var authMiddleware = new ApolloLink((operation, forward) => {
-				operation.setContext({
-					headers: {
-						authorization: 'Bearer ' + token
-					} 
-				});
-
-				return forward(operation);
-			});			
-			return new ApolloClient({
-			  	link: concat(authMiddleware, httpLink),
-			  	cache: new InMemoryCache()
-			});
-		}else {
-			return new ApolloClient({
-			  	link: new HttpLink({ uri: configs.services.user.host, fetch: nodeFetch }),
-			  	cache: new InMemoryCache()
-			});
+			conf.headers = {
+				'Authorization': `Bearer ${token}`
+			};
 		}
+		return new GraphQLClient(conf);
 	},
 
 	initUserClient: function(token) {
@@ -151,18 +140,16 @@ Authing.prototype = {
 	},
 
 	initOAuthClient: function() {
-		this.OAuthClient = new ApolloClient({
-		  link: new HttpLink({ uri: configs.services.oauth.host, fetch: nodeFetch }),
-		  cache: new InMemoryCache()
+		this.OAuthClient = new GraphQLClient({
+			baseURL: configs.services.oauth.host
 		});
 	},
 
 	_auth: function() {
 
 		if(!this._AuthService) {
-			this._AuthService = new ApolloClient({
-		  		link: new HttpLink({ uri: configs.services.user.host, fetch: nodeFetch }),
-		  		cache: new InMemoryCache()
+			this._AuthService = new GraphQLClient({
+				baseURL: configs.services.user.host
 			});
 		}
 
@@ -173,35 +160,19 @@ Authing.prototype = {
 
 		var self = this;
 
-		return this._AuthService.query({
-		  query: gql`
-		  	query {
- 	 			getAccessTokenByAppSecret(secret: "${options.secret}", clientId: "${options.clientId}")
-		   	}
-		  `,
-		})
+		return this._AuthService.request({
+			query: `query {
+					getAccessTokenByAppSecret(secret: "${options.secret}", clientId: "${options.clientId}")
+				}`
+			})
 	  	.then(function(data) {
-
-			var httpLink = new HttpLink({ 
-		  		uri: configs.services.user.host, 
-		  		fetch: nodeFetch
-		  	});
-
-			var authMiddleware = new ApolloLink((operation, forward) => {
-			  operation.setContext({
-			    headers: {
-			      authorization: 'Bearer ' + data.data.getAccessTokenByAppSecret,
-			    } 
-			  });
-
-			  return forward(operation);
-			});			
-
-			self._AuthService = new ApolloClient({
-			  	link: concat(authMiddleware, httpLink),
-			  	cache: new InMemoryCache()
-			});	  		
-	  		return data.data.getAccessTokenByAppSecret;
+			self._AuthService = new GraphQLClient({
+				baseURL: configs.services.user.host,
+				headers: {
+					Authorization: `Bearer ${data.getAccessTokenByAppSecret}`,
+				}
+			});	
+	  		return data.getAccessTokenByAppSecret;
 	  	});
 	},
 
@@ -216,24 +187,20 @@ Authing.prototype = {
 	},
 
 	checkLoginStatus: function(token) {
-		var self = this;
-		return this.UserClient.query({
-			query: gql`
-				query checkLoginStatus($token: String) {
+		return this.UserClient.request({
+			operationName: 'checkLoginStatus',
+			query: `query checkLoginStatus($token: String) {
 					checkLoginStatus(token: $token) {
 						status
 						code
 						message
 					}
-				}
-			`,
+				}`, 
 			variables: {
 				token: token
 			}
 		}).then(function(res) {
-			return res.data.checkLoginStatus;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.checkLoginStatus;
 		});
 	},
 
@@ -244,30 +211,16 @@ Authing.prototype = {
 		this.haveAccess();
 
 		if(!this._OAuthService) {
-			var httpLink = new HttpLink({ 
-		  		uri: configs.services.oauth.host, 
-		  		fetch: nodeFetch
-		  	});
-			var authMiddleware = new ApolloLink((operation, forward) => {
-			  operation.setContext({
-			    headers: {
-			      authorization: 'Bearer ' + self.ownerAuth.token,
-			    } 
-			  });
-
-			  return forward(operation);
-			});			
-			this._OAuthService = new ApolloClient({
-			  	link: concat(authMiddleware, httpLink),
-			  	cache: new InMemoryCache()
+			this._OAuthService = new GraphQLClient({
+				baseURL: configs.services.oauth.host,
+				headers: {
+					Authorization: `Bearer ${self.ownerAuth.token}`,
+				}
 			});			
 		}
-
-		var self = this;
-
-		return this._OAuthService.query({
-			query: gql`
-				query getOAuthList($clientId: String!) {
+		return this._OAuthService.request({
+			operationName: 'getOAuthList',
+			query: `query getOAuthList($clientId: String!) {
 					ReadOauthList(clientId: $clientId) {
 					    _id
 					    name
@@ -279,16 +232,13 @@ Authing.prototype = {
 					    url
 					    alias
 					}
-				}
-			`,
+				}`, 
 			variables: {
 				clientId: self.opts.clientId				
 			}
 		})
 		.then(function(res) {
-			return res.data.ReadOauthList;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.ReadOauthList;
 		});
 	},
 
@@ -319,9 +269,9 @@ Authing.prototype = {
 
 		this.haveAccess();
 
-		return this.UserClient.mutate({
-			mutation: gql`
-				mutation login($unionid: String, $email: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String) {
+		return this.UserClient.request({
+			operationName: 'login',
+			query: `mutation login($unionid: String, $email: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String) {
 				    login(unionid: $unionid, email: $email, password: $password, lastIP: $lastIP, registerInClient: $registerInClient, verifyCode: $verifyCode) {
 					    _id
 					    email
@@ -340,11 +290,10 @@ Authing.prototype = {
 					    blocked
 					    isDeleted
 				    }
-				}
-			`,
+				}`,
 			variables: options
 		}).then(function(res) {
-			return res.data.login;
+			return res.login;
 		});
 
 	},
@@ -356,8 +305,6 @@ Authing.prototype = {
 				self.initUserClient(user.token);				
 			}
 			return user;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
 		});
 	},
 
@@ -375,8 +322,9 @@ Authing.prototype = {
 			options.password = _encryption(options.password);
 		}
 
-		return this.UserClient.mutate({
-			mutation: gql`
+		return this.UserClient.request({
+			operationName: 'register',
+			query: `
 				mutation register(
 					$unionid: String,
 				    $email: String, 
@@ -418,14 +366,11 @@ Authing.prototype = {
 				        },
 				        blocked
 				    }
-				}
-			`,
+				}`,
 			variables: options
 		})
 		.then(function(res) {
-			return res.data.register;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.register;
 		});
 	},
 
@@ -451,8 +396,6 @@ Authing.prototype = {
 		return this.update({
 			_id: _id,
 			tokenExpiredAt: 0
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
 		});
 
 	},
@@ -469,8 +412,9 @@ Authing.prototype = {
 		
 		var client = this._chooseClient();
 		
-		return client.query({
-			query: gql`query user($id: String!, $registerInClient: String!){
+		return client.request({
+			operationName: 'user',
+			query: `query user($id: String!, $registerInClient: String!){
 				user(id: $id, registerInClient: $registerInClient) {
 					_id
 					email
@@ -493,13 +437,10 @@ Authing.prototype = {
 					isDeleted
 				}
 				
-			}
-			`,
+			}`,
 			variables: options
 		}).then(function(res) {
-			return res.data.user;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.user;
 		});
 	},
 
@@ -516,72 +457,70 @@ Authing.prototype = {
 			count: count
 		}
 
-		return this.ownerClient.query({
-			query: gql`query users($registerInClient: String, $page: Int, $count: Int){
-				  users(registerInClient: $registerInClient, page: $page, count: $count) {
+		return this.ownerClient.request({
+			operationName: 'users',
+			query: `query users($registerInClient: String, $page: Int, $count: Int){
+				users(registerInClient: $registerInClient, page: $page, count: $count) {
 				    totalCount
 				    list {
-				      _id
-				      email
-				      emailVerified
-				      username
-				      nickname
-				      company
-				      photo
-				      browser
-				      password
-				      registerInClient
-				      token
-				      tokenExpiredAt
-				      loginsCount
-				      lastLogin
-				      lastIP
-				      signedUp
-				      blocked
-				      isDeleted
-				      group {
-				        _id
-				        name
-				        descriptions
-				        createdAt
-				      }
-				      clientType {
-				        _id
-				        name
-				        description
-				        image
-				        example
-				      }
-				      userLocation {
-				        _id
-				        when
-				        where
-				      }
-				      userLoginHistory {
-				        totalCount
-				        list{
-				          _id
-				          when
-				          success
-				          ip
-				          result
-				        }
-				      }
-				      systemApplicationType {
-				        _id
-				        name
-				        descriptions
-				        price
-				      }
-				    }
-				  }
+						_id
+						email
+						emailVerified
+						username
+						nickname
+						company
+						photo
+						browser
+						password
+						registerInClient
+						token
+						tokenExpiredAt
+						loginsCount
+						lastLogin
+						lastIP
+						signedUp
+						blocked
+						isDeleted
+						group {
+							_id
+							name
+							descriptions
+							createdAt
+						}
+						clientType {
+							_id
+							name
+							description
+							image
+							example
+						}
+						userLocation {
+							_id
+							when
+							where
+						}
+						userLoginHistory {
+							totalCount
+							list{
+								_id
+								when
+								success
+								ip
+								result
+							}
+						}
+						systemApplicationType {
+							_id
+							name
+							descriptions
+							price
+						}
+					}
 				}
-			`,
+			}`,
 			variables: options
 		}).then(function(res) {
-			return res.data.users;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.users;
 		});
 	},
 
@@ -595,35 +534,32 @@ Authing.prototype = {
 			throw '_id is not provided';
 		}
 
-		return this.ownerClient.mutate({
-			mutation: gql `
-				mutation removeUsers($ids: [String], $registerInClient: String, $operator: String){
+		return this.ownerClient.request({
+			query: `mutation removeUsers($ids: [String], $registerInClient: String, $operator: String){
 				  removeUsers(ids: $ids, registerInClient: $registerInClient, operator: $operator) {
 				    _id
 				  }
-				}
-			`,
+				}`,
 			variables: {
 				ids: [_id],
 				registerInClient: self.opts.clientId,
 				operator
 			}
 		}).then(function(res) {
-			return res.data.removeUsers;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.removeUsers;
 		});	
 
 	},
 
 	_uploadAvatar: function(options) {
 		var client = this._chooseClient();
-		return client.query({
-			query: gql`query qiNiuUploadToken {
+		return client.request({
+			operationName: 'qiNiuUploadToken',
+			query: `query qiNiuUploadToken {
 				qiNiuUploadToken
 			}`
 		}).then(function(data) {
-			return data.data.qiNiuUploadToken;
+			return data.qiNiuUploadToken;
 		}).then(function(token) {
 			if(!token) {
 				throw {
@@ -638,12 +574,12 @@ Authing.prototype = {
 			var formData = new FormData();
 			formData.append('file', options.photo);
 			formData.append('token', token);
-			return fetch('https://upload.qiniup.com/" enctype="multipart/form-data', {
+			return axios.post('https://upload.qiniup.com/', formData, {
 				method: 'post',
-				body: formData
+				headers: {'Content-Type': 'multipart/form-data'}
 			});
 		}).then(function(data){
-			return data.json();
+			return data.data;
 		}).then(function(data) {
 			if(data.key) {
 				options.photo = 'https://usercontents.authing.cn/' + data.key
@@ -651,14 +587,12 @@ Authing.prototype = {
 			return options;
 		}).catch(function(e) {
 			if(e.graphQLErrors) {
-				throw e;
+				throw e.graphQLErrors[0];
 			}
 			throw {
-				graphQLErrors:[{
-					message: {
-						message: e
-					}
-				}]
+				message: {
+					message: e
+				}
 			};
 		})
 	},
@@ -754,8 +688,9 @@ Authing.prototype = {
 			if(typeof photo !== 'string') {
 				return this._uploadAvatar(options).then(function(options) {
 					var _arg = generateArgs(options);
-					return client.mutate({
-						mutation: gql`
+					return client.request({
+						operationName: 'UpdateUser',
+						query: `
 							mutation UpdateUser(${_arg._argsString}){
 							  updateUser(options: {
 								  ${_arg._argsFiller.join(', ')}
@@ -767,15 +702,14 @@ Authing.prototype = {
 						variables: options
 					})
 				}).then(function(res) {
-					return res.data.updateUser;
-				}).catch(function(error) {
-					throw error.graphQLErrors[0];
+					return res.updateUser;
 				});
 			}
 		}
 		var _arg = generateArgs(options);
-		return client.mutate({
-			mutation: gql`
+		return client.request({
+			operationName: 'UpdateUser',
+			query: `
 				mutation UpdateUser(${_arg._argsString}){
 				  updateUser(options: {
 				  	${_arg._argsFiller.join(', ')}
@@ -786,14 +720,11 @@ Authing.prototype = {
 			`,
 			variables: options
 		}).then(function(res) {
-			return res.data.updateUser;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.updateUser;
 		});	
 	},
 
 	readOAuthList: function() {
-		var self = this;
 		return this._readOAuthList()
 		.then(function(list) {
 			if(list) {
@@ -817,8 +748,9 @@ Authing.prototype = {
 		}
 	
 		options.client = this.opts.clientId;
-		return this.UserClient.mutate({
-			mutation: gql`
+		return this.UserClient.request({
+			operationName: 'sendResetPasswordEmail',
+			query: `
 				mutation sendResetPasswordEmail(
 					$email: String!,
 					$client: String!
@@ -834,9 +766,7 @@ Authing.prototype = {
 			`,
 			variables: options
 		}).then(function(res) {
-			return res.data.sendResetPasswordEmail;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.sendResetPasswordEmail;
 		});
 		
 	},
@@ -853,8 +783,9 @@ Authing.prototype = {
 			throw 'verifyCode in options is not provided';
 		}
 		options.client = this.opts.clientId;
-		return this.UserClient.mutate({
-			mutation: gql`
+		return this.UserClient.request({
+			operationName: 'verifyResetPasswordVerifyCode',
+			query: `
 				mutation verifyResetPasswordVerifyCode(
 					$email: String!,
 					$client: String!,
@@ -872,9 +803,7 @@ Authing.prototype = {
 			`,
 			variables: options
 		}).then(function(res) {
-			return res.data.verifyResetPasswordVerifyCode;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.verifyResetPasswordVerifyCode;
 		});
 		
 	},
@@ -894,8 +823,9 @@ Authing.prototype = {
 		}
 		options.client = this.opts.clientId;
 		options.password = _encryption(options.password)
-		return this.UserClient.mutate({
-			mutation: gql`
+		return this.UserClient.request({
+			operationName: 'changePassword',
+			query: `
 				mutation changePassword(
 					$email: String!,
 					$client: String!,
@@ -932,9 +862,7 @@ Authing.prototype = {
 			`,
 			variables: options
 		}).then(function(res) {
-			return res.data.changePassword;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.changePassword;
 		});
 	},
 
@@ -945,8 +873,9 @@ Authing.prototype = {
 
 		options.client = this.opts.clientId;
 
-		return this._AuthService.mutate({
-			mutation: gql`
+		return this._AuthService.request({
+			operationName: 'sendVerifyEmail',
+			query: `
 				mutation sendVerifyEmail(
 					$email: String!,
 					$client: String!
@@ -963,9 +892,7 @@ Authing.prototype = {
 			`,
 			variables: options
 		}).then(function(res) {
-			return res.data.sendVerifyEmail;
-		}).catch(function(error) {
-			throw error.graphQLErrors[0];
+			return res.sendVerifyEmail;
 		});
 	},
 
@@ -983,12 +910,37 @@ Authing.prototype = {
 	},
 
 	decodeToken: function(token) {
-		try {
-		  	var decoded = jsonwebtoken.verify(token, 'root');
-		  	return decoded;
-		} catch(err) {
-		  	throw err;
+		if (typeof token !== 'string') {
+			throw 'jwt must be a string';
 		}
+		var tokens = token.split('.');
+		if (tokens.length !== 3) {
+			throw 'jwt malformed';
+		}
+		var header;
+		var payload;
+		var headerBase64 = tokens[0];
+		var payloadBase64 = tokens[1];
+		var signature = tokens[2];
+		try {
+			header = UTF8.stringify(Base64.parse(headerBase64));
+			header = JSON.parse(header);
+			payload = UTF8.stringify(Base64.parse(payloadBase64));
+			payload = JSON.parse(payload);
+		} catch (error) {
+			throw 'jwt malformed';
+		}
+		var signatureNowBinary = SHA256(`${headerBase64}.${payloadBase64}`, 'root');
+		var signatureNowBase64 = Base64.stringify(signatureNowBinary);
+		signatureNowBase64 = signatureNowBase64.replace(/\//g, '_')
+				.replace(/\+/g, '-').replace(/=/g, ''); // 转换为适用于URL的base64
+		if (signatureNowBase64 !== signature) {
+			throw 'invalid signature';
+		}
+		if (Math.floor(Date.now() / 1000) > payload.exp) {
+			throw 'jwt expired';
+		}
+		return payload;
 	},
 
 	randomWord: function(randomFlag, min, max) {

@@ -84,4 +84,3 @@ auth.then(function(auth) {
 	});
 
 });
-
