@@ -1,8 +1,8 @@
 {
   "name": "authing-js-sdk",
-  "version": "1.0.0-alpha",
-  "description": "authing js offical sdk",
-  "main": "index.js",
+  "version": "1.0.0-alpha.1",
+  "description": "Official sdk of Authing",
+  "main": "dist/index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js"
   },
