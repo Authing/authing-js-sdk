@@ -1,4 +1,4 @@
-var Authing = require('../index.js');
+var Authing = require('../dist/authing-js-sdk');
 
 var email = "", password = "";
 var secret = '42aa3deba3b2c35aaf018acafdf503f8';

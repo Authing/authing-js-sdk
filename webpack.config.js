@@ -1,31 +1,84 @@
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-module.exports = {
-	mode: 'production',
-    entry: './index.js',
-    output: {
-        path: __dirname + '/dist',
-        filename: 'authing-js-sdk.js'
-    },
-  	module: {
-    	rules: [
-      		{
-        		test: /\.json$/,
+const nodeConfig = {
+	target: 'node',
+	mode: 'development',
+	entry: './index.js',
+	output: {
+		libraryTarget: 'umd',
+		path: __dirname + '/dist',
+		filename: 'authing-js-sdk.js'
+	},
+	module: {
+		rules: [{
+			test: /\.js$/,
+			use: {
+				loader: 'babel-loader',
+				options: {
+					presets: ["env", "stage-0"] // env --> es6, stage-0 --> es7, react --> react
+				}
+			},
+			exclude: /node_modules/
+		}]
+	}
+};
+
+const webConfig = {
+	target: 'web',
+	mode: 'development',
+	entry: './index.js',
+	output: {
+		libraryTarget: 'umd',
+		path: __dirname + '/dist',
+		filename: 'authing-js-sdk-browser.js'
+	},
+	module: {
+		rules: [{
+				test: /\.json$/,
 				use: 'json-loader',
 				exclude: /node_modules/
-			  },
-			  {
-				test:/\.js$/,
+			},
+			{
+				test: /\.js$/,
 				use: {
 					loader: 'babel-loader',
 					options: {
-						presets: ["env","stage-0"]// env --> es6, stage-0 --> es7, react --> react
+						presets: ["env", "stage-0"] // env --> es6, stage-0 --> es7, react --> react
 					}
 				},
-				exclude:/node_modules/
+				exclude: /node_modules/
 			}
-    	]
+		]
+	}
+};
+
+const webMinConfig = {
+	target: 'web',
+	mode: 'production',
+	entry: './index.js',
+	output: {
+		libraryTarget: 'umd',
+		path: __dirname + '/dist',
+		filename: 'authing-js-sdk-browser.min.js'
+	},
+	module: {
+		rules: [{
+				test: /\.json$/,
+				use: 'json-loader',
+				exclude: /node_modules/
+			},
+			{
+				test: /\.js$/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: ["env", "stage-0"] // env --> es6, stage-0 --> es7, react --> react
+					}
+				},
+				exclude: /node_modules/
+			}
+		]
 	},
 	optimization: {
 		minimizer: [
@@ -49,8 +102,10 @@ module.exports = {
 						comments: false,
 					}
 				}
-				
+
 			})
 		]
 	}
-}
+};
+
+module.exports = [nodeConfig, webConfig, webMinConfig];
