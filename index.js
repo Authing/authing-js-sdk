@@ -1146,9 +1146,8 @@ Authing.prototype = {
                       }, 600);
                       qrcodeNode.appendChild(shadow);                      
                     }else {
-                      var shadow = genShadow('验证成功', function() {
-                        window.location.href = checkResult.redirect + '?code=200&data=' + (JSON.stringify(checkResult.data));
-                      });                    	
+					  var shadow = genShadow('验证成功');
+                      qrcodeNode.appendChild(shadow);					  
                       if(onSuccess) {
                         onSuccess(checkResult);
                       }
