@@ -1066,7 +1066,7 @@ Authing.prototype = {
 
         var shadowA = document.createElement('a');
         shadowA.innerHTML = text;
-        shadowA.style = "border-bottom: 1px solid #fff;cursor: pointer;"
+        shadowA.style = "color:#fff;border-bottom: 1px solid #fff;cursor: pointer;"
         shadowA.onclick = aOnClick;
         shadow.appendChild(shadowA);
         return shadow;      
