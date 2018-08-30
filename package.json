@@ -1,9 +1,9 @@
 {
   "name": "authing-js-sdk",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Official sdk of Authing",
   "main": "dist/authing-js-sdk.js",
-  "browser": "dist/authing-js-sdk-browser.js",
+  "browser": "dist/authing-js-sdk-browser.min.js",
   "unpkg": "dist/authing-js-sdk-browser.min.js",
   "prepublishOnly": "npm run build",
   "scripts": {
