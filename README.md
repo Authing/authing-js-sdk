@@ -6,7 +6,7 @@ JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以及 **Node.js*
 
 [点击体验](http://sample.authing.cn)
 
-![cmd-markdown-logo](https://cdn.authing.cn/sdk/guide/image/authing-login-form.png)
+<img width="300" height="300" src="https://cdn.authing.cn/sdk/guide/image/authing-login-form.png"/>
 
 ## 安装
 
