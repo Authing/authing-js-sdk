@@ -163,6 +163,28 @@ validAuth.startWXAppScaning({
 
 了解更多，请查看：[使用小程序扫码登录](https://docs.authing.cn/#/quick_start/wxapp_scan_login)
 
+## 自定义请求链接
+
+```Authing``` 构造函数包含一个名为 ```host``` 对象，可接收自定义的请求链接（适合私有部署 Authing 的用户使用），使用方法如下：
+
+``` javascript
+
+const authing = new Authing({
+	clientId: 'xxxx',
+	secret: 'xxxxxx',
+	host: {
+		user: 'https://users.authing.cn/graphql',
+		oauth: 'https://oauth.authing.cn/graphql'
+	}
+});
+
+```
+
+```host``` 对象中 ```user``` 和 ```oauth``` 的默认值是 Authing 官方的请求链接：
+
+- [https://users.authing.cn/graphql](https://users.authing.cn/graphql)
+- [https://oauth.authing.cn/graphql](https://oauth.authing.cn/graphql)
+
 ## Node.js其他生态中间件
 
 1. [express-middleware](https://github.com/Authing/express-middleware)
