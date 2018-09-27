@@ -9,8 +9,12 @@ var auth = new Authing({
 });
 
 auth.then(function(auth) {
-
-    let result = auth.decodeToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoieGlleWFuZ0Bkb2RvcmEuY24iLCJpZCI6IjVhNTk3ZjM1MDg1YTIwMDAxNDRhMTBlZCIsImNsaWVudElkIjoiNTlmODZiNDgzMmViMjgwNzFiZGQ5MjE0In0sImlhdCI6MTUzNTUxNjk0OSwiZXhwIjoxNTM2ODEyOTQ5fQ.Fl800nI8-hIqmtq7UKv6N5YfqGRul_A0SirNlFnVTtM');
-    console.log(result);
-
+    auth.decodeToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoieGlleWFuZ0Bkb2RvcmEuY24iLCJpZCI6IjVhNTk3ZjM1MDg1YTIwMDAxNDRhMTBlZCIsImNsaWVudElkIjoiNTlmODZiNDgzMmViMjgwNzFiZGQ5MjE0In0sImlhdCI6MTUzNTUxNjk0OSwiZXhwIjoxNTM2ODEyOTQ5fQ.Fl800nI8-hIqmtq7UKv6N5YfqGRul_A0SirNlFnVTtM')
+        .then(result => {
+            console.log(result);
+        }).catch(e => {
+            console.log(e);
+        });
+}).catch(e => {
+    console.log(e);
 });
