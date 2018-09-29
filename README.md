@@ -34,7 +34,7 @@ $ npm install authing-js-sdk --save
 ``` javascript
 var Authing = require('authing-js-sdk');
 
-// 对Client ID和Client Secret进行验证，获取Access Token
+// 对 Client ID 和 Client Secret 进行验证，获取 Access Token
 var auth = new Authing({
 	clientId: 'your_client_id',
 	secret: 'your_app_secret'
@@ -42,7 +42,7 @@ var auth = new Authing({
 
 auth.then(function(validAuth) {
 
-	//验证成功后返回新的authing-js-sdk实例(validAuth)，可以将此实例挂在全局
+	//验证成功后返回新的 authing-js-sdk 实例(validAuth)，可以将此实例挂在全局
 
 	validAuth.login({
 		email: 'test@testmail.com',
@@ -60,7 +60,7 @@ auth.then(function(validAuth) {
 
 ```
 
-[怎样获取client ID ?](https://docs.authing.cn/#/quick_start/howto)。
+[怎样获取 Client ID ?](https://docs.authing.cn/#/quick_start/howto)。
 
 
 ### ES6+
@@ -72,7 +72,7 @@ import Authing from 'authing-js-sdk';
 
 const main = async () => {
 
-	//使用async时需要使用try...catch...捕捉错误
+	//使用async时需要使用 try...catch... 捕捉错误
 
 	let auth;
 
@@ -82,7 +82,7 @@ const main = async () => {
 			secret: 'your_app_secret'
 		});
 	}catch(error) {
-		console.log('Authing验证失败:', error);
+		console.log('Authing 验证失败:', error);
 	}
 
 	if(auth) {
@@ -114,20 +114,20 @@ main();
 
 ## 小程序扫码登录
 
-小程序扫码登录指使用Authing小程序 ``身份管家`` 执行微信登录。
+小程序扫码登录指使用 Authing 小程序 ``身份管家`` 执行微信登录。
 示例：[小程序扫码登录](http://sample.authing.cn)
 
 ![扫码 demo](https://usercontents.authing.cn/wxapp-scaning-demo.gif)
 
 ### 基础用法
 
-使用``startWXAppScaning``方法： 
+使用 ``startWXAppScaning`` 方法： 
 
 ``` javascript
 
 var Authing = require('authing-js-sdk');
 
-// 对Client ID和Client Secret进行验证，获取Access Token
+// 对 Client ID 和 Client Secret 进行验证，获取 Access Token
 var auth = new Authing({
 	clientId: 'your_client_id',
 	secret: 'your_app_secret'
@@ -136,7 +136,7 @@ var auth = new Authing({
 auth.then(function(validAuth) {
 
 	validAuth.startWXAppScaning({
-    	mount: 'qrcode-node', //二维码挂载点的HTML元素ID，如不写则默认漂浮在文档中间
+    	mount: 'qrcode-node', //二维码挂载点的 HTML 元素 ID，如不写则默认漂浮在文档中间
 	});
 	
 })
@@ -151,12 +151,12 @@ auth.then(function(validAuth) {
 
 validAuth.startWXAppScaning({
   	mount: 'qrcode-node', // 二维码挂载点，如不写则默认漂浮在文档中间
-  	redirect: true, // 是否执行跳转（在用户后台配置的URL），默认为true，相关用户信息回传至url上
-  	onSuccess: function(res) {}, // 登录成功后回调函数，redirect为true时不回调此函数
+  	redirect: true, // 是否执行跳转（在用户后台配置的 URL），默认为 true，相关用户信息回传至 url 上
+  	onSuccess: function(res) {}, // 登录成功后回调函数，redirect 为 true 时不回调此函数
   	onError: function(error) {}, // 登录失败后回调函数，一般为网络问题
   	onIntervalStarting: function(intervalNum) {}, // 轮询时的回调函数，intervalNum 为 setInterval 返回的数值，可使用 clearInterval 停止轮询
-  	interval: 1500, // 每隔多少秒检查一次，默认1500
-  	tips: '搜索小程序 <strong>身份管家</strong> 扫码登录', // 提示信息，可写HTML
+  	interval: 1500, // 每隔多少秒检查一次，默认 1500
+  	tips: '搜索小程序 <strong>身份管家</strong> 扫码登录', // 提示信息，可写 HTML
 });
 
 ```
@@ -189,7 +189,7 @@ const authing = new Authing({
 
 1. [express-middleware](https://github.com/Authing/express-middleware)
 
-当在浏览器使用时，我们会将用户token以'_authing_token'字段存在localStorage中，后面都会从localStorage中读取并进行验证。
+当在浏览器使用时，我们会将用户 token 以 '_authing_token' 字段存在 localStorage 中，后面都会从 localStorage 中读取并进行验证。
 
 了解更多报错的详情，请查看[错误代码](https://docs.authing.cn/#/quick_start/error_code)。
 
