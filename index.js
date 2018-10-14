@@ -436,6 +436,21 @@ Authing.prototype = {
 					signedUp
 					blocked
 					isDeleted
+					userLocation {
+						_id
+						when
+						where
+					}
+					userLoginHistory {
+						totalCount
+						list {
+							_id
+							when
+							success
+							ip
+							result
+						}
+					}					
 				}
 				
 			}`,
