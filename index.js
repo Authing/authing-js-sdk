@@ -112,6 +112,20 @@ Authing.prototype = {
 		return new GraphQLClient(conf);
 	},
 
+	oAuthClientByUserToken() {
+		this.haveLogined();
+		let token = this.userAuth.token;
+		if(!this._oAuthClientByUserToken) {
+			this._oAuthClientByUserToken = new GraphQLClient({
+				baseURL: configs.services.oauth.host,
+				headers: {
+					'Authorization': `Bearer ${token}`
+				}
+			});
+		}
+		return this._oAuthClientByUserToken;
+	},
+
 	initUserClient: function(token) {
 		if(token) {
 			this.userAuth = {
@@ -243,6 +257,12 @@ Authing.prototype = {
 	haveAccess: function() {
 		if(!this.ownerAuth.authSuccess) {
 			throw 'have no access, please check your secret and client ID.';
+		}
+	},
+
+	haveLogined: function() {
+		if(!this.userAuth.authSuccess) {
+			throw 'not logined yet, please login first.';
 		}
 	},
 
@@ -945,6 +965,152 @@ Authing.prototype = {
 			}
 		}).then(function(res) {
 			return res.decodeJwtToken;
+		});
+	},
+
+	readUserOAuthList(variables) {
+		let client = this.oAuthClientByUserToken();
+		return client.request({
+			operationName: 'notBindOAuthList',
+			query: `query notBindOAuthList($user: String!, $client: String!) {
+				notBindOAuthList(user: $user, client: $client) {
+					type
+					oAuthUrl
+					image
+					name
+					binded
+				}
+			}`, 
+			variables
+		}).then(function(res) {
+			return res.notBindOAuthList;
+		});
+	},
+
+	bindOAuth(variables) {
+		if(!variables) {
+			throw 'options is not provided';
+		}
+		if(!variables.type) {
+			throw 'type in options is not provided';
+		}
+		if(!variables.unionid) {
+			throw 'unionid in options is not provided';
+		}
+		if(!variables.userInfo) {
+			throw 'userInfo in options is not provided';
+		}
+		
+		return this.UserClient.request({
+			operationName: 'bindOtherOAuth',
+			query: `mutation bindOtherOAuth(
+				$user: String!, 
+				$client: String!, 
+				$type: String!, 
+				$unionid: String!, 
+				$userInfo: String!
+			) {
+				bindOtherOAuth (
+					user: $user, 
+					client: $client, 
+					type: $type, 
+					unionid: $unionid, 
+					userInfo: $userInfo
+				) {
+					_id
+					user
+					client
+					type
+					userInfo
+					unionid
+					createdAt
+				}
+			}`,
+			variables
+		});
+	},
+
+	unbindOAuth(variables) {
+		if(!variables) {
+			throw 'options is not provided';
+		}
+		if(!variables.type) {
+			throw 'type in options is not provided';
+		}
+		
+		return this.UserClient.request({
+			operationName: 'unbindOtherOAuth',
+			query: `mutation unbindOtherOAuth(
+				$user: String, 
+				$client: String,
+				$type: String!
+			){
+				unbindOtherOAuth(
+					user: $user,
+					client: $client,
+					type: $type
+				) {
+					_id
+					user
+					client
+					type
+					userInfo
+					unionid
+					createdAt
+				}
+			}`,
+			variables
+		});
+	},
+
+	unbindEmail(variables) {
+		return this.UserClient.request({
+			operationName: 'unbindEmail',
+			query: `mutation unbindEmail(
+				$user: String, 
+				$client: String,
+			){
+				unbindEmail(
+					user: $user,
+					client: $client,
+				) {
+					_id
+					email
+					emailVerified
+					username
+					nickname
+					company
+					photo
+					browser
+					registerInClient
+					registerMethod
+					oauth
+					token
+					tokenExpiredAt
+					loginsCount
+					lastLogin
+					lastIP
+					signedUp
+					blocked
+					isDeleted
+					userLocation {
+						_id
+						when
+						where
+					}
+					userLoginHistory {
+						totalCount
+						list {
+							_id
+							when
+							success
+							ip
+							result
+						}
+					}
+				}
+			}`,
+			variables
 		});
 	},
 
