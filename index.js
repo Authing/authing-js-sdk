@@ -1,8 +1,5 @@
 const TIMEOUT = 20000;
 var axios = require('axios');
-var SHA256 = require('crypto-js/hmac-sha256');
-var Base64 = require('crypto-js/enc-base64');
-var UTF8 = require('crypto-js/enc-utf8');
 var configs = require('./src/configs');
 
 class GraphQLClient {
@@ -926,42 +923,29 @@ Authing.prototype = {
 	},
 
 	decodeToken: function(token) {
-		if (typeof token !== 'string') {
-			// throw 'jwt must be a string';
-			return null;
-		}
-		var tokens = token.split('.');
-		if (tokens.length !== 3) {
-			// throw 'jwt malformed';
-			return null;
-		}
-		var header;
-		var payload;
-		var headerBase64 = tokens[0];
-		var payloadBase64 = tokens[1];
-		var signature = tokens[2];
-		try {
-			header = UTF8.stringify(Base64.parse(headerBase64));
-			header = JSON.parse(header);
-			payload = UTF8.stringify(Base64.parse(payloadBase64));
-			payload = JSON.parse(payload);
-		} catch (error) {
-			// throw 'jwt malformed';
-			return null;
-		}
-		var signatureNowBinary = SHA256(`${headerBase64}.${payloadBase64}`, 'root');
-		var signatureNowBase64 = Base64.stringify(signatureNowBinary);
-		signatureNowBase64 = signatureNowBase64.replace(/\//g, '_')
-				.replace(/\+/g, '-').replace(/=/g, ''); // 转换为适用于URL的base64
-		if (signatureNowBase64 !== signature) {
-			return null;
-			// throw 'invalid signature';
-		}
-		if (Math.floor(Date.now() / 1000) > payload.exp) {
-			// throw 'jwt expired';
-			return null;
-		}
-		return payload;
+		return this.UserClient.request({
+			operationName: 'decodeJwtToken',
+			query: `query decodeJwtToken($token: String) {
+				decodeJwtToken(token: $token) {
+						data {
+							email
+							id
+							clientId
+						}
+						status {
+							code
+							message
+						}
+						iat
+						exp
+					}
+				}`, 
+			variables: {
+				token: token
+			}
+		}).then(function(res) {
+			return res.decodeJwtToken;
+		});
 	},
 
 	randomWord: function(randomFlag, min, max) {

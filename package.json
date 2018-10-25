@@ -26,7 +26,6 @@
   "homepage": "https://github.com/Authing/authing-js-sdk#readme",
   "dependencies": {
     "axios": "^0.18.0",
-    "crypto-js": "^3.1.9-1",
     "jsencrypt": "^2.3.1"
   },
   "devDependencies": {
