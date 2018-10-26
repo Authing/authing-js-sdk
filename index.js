@@ -972,7 +972,7 @@ Authing.prototype = {
 		let client = this.oAuthClientByUserToken();
 		return client.request({
 			operationName: 'notBindOAuthList',
-			query: `query notBindOAuthList($user: String!, $client: String!) {
+			query: `query notBindOAuthList($user: String, $client: String) {
 				notBindOAuthList(user: $user, client: $client) {
 					type
 					oAuthUrl
@@ -1004,8 +1004,8 @@ Authing.prototype = {
 		return this.UserClient.request({
 			operationName: 'bindOtherOAuth',
 			query: `mutation bindOtherOAuth(
-				$user: String!, 
-				$client: String!, 
+				$user: String, 
+				$client: String, 
 				$type: String!, 
 				$unionid: String!, 
 				$userInfo: String!
@@ -1093,21 +1093,6 @@ Authing.prototype = {
 					signedUp
 					blocked
 					isDeleted
-					userLocation {
-						_id
-						when
-						where
-					}
-					userLoginHistory {
-						totalCount
-						list {
-							_id
-							when
-							success
-							ip
-							result
-						}
-					}
 				}
 			}`,
 			variables
