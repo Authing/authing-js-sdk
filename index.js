@@ -663,6 +663,7 @@ Authing.prototype = {
 				nickname: 'String',
 				company: 'String',
 				photo: 'String',
+				oauth: 'String',
 				browser: 'String',
 				password: 'String',
 				oldPassword: 'String',
