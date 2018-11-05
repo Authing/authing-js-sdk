@@ -354,7 +354,8 @@ Authing.prototype = {
 				    $username: String,
 				    $nickname: String,
 				    $registerMethod: String,
-				    $photo: String
+						$photo: String,
+						$company: String
 				) {
 				    register(userInfo: {
 				    	unionid: $unionid,
@@ -367,7 +368,8 @@ Authing.prototype = {
 				        registerMethod: $registerMethod,
 				        photo: $photo,
 				        username: $username,
-				        nickname: $nickname
+								nickname: $nickname,
+								company: $company
 				    }) {
 				        _id,
 				        email,
@@ -435,6 +437,7 @@ Authing.prototype = {
 			query: `query user($id: String!, $registerInClient: String!){
 				user(id: $id, registerInClient: $registerInClient) {
 					_id
+					unionid
 					email
 					emailVerified
 					username
