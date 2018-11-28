@@ -188,6 +188,7 @@ const authing = new Authing({
 ## Node.js其他生态中间件
 
 1. [express-middleware](https://github.com/Authing/express-middleware)
+2. [vue-authing](https://github.com/Authing/vue-authing)
 
 当在浏览器使用时，我们会将用户 token 以 '_authing_token' 字段存在 localStorage 中，后面都会从 localStorage 中读取并进行验证。
 
