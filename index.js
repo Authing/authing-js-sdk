@@ -480,6 +480,69 @@ Authing.prototype = {
 		});
 	},
 
+	userPatch: function(options) {
+		this.haveAccess();
+		if(!options) {
+			throw 'options is not provided';
+		}
+		if(!options.ids) {
+			throw 'ids in options is not provided';
+		}
+		options.registerInClient = this.opts.clientId;
+		
+		var client = this._chooseClient();
+		
+		return client.request({
+			operationName: 'userPatch',
+			query: `query userPatch($ids: String!){
+				userPatch(ids: $ids) {
+					list {
+						_id
+						unionid
+						email
+						emailVerified
+						username
+						nickname
+						company
+						photo
+						browser
+						registerInClient
+						registerMethod
+						oauth
+						token
+						tokenExpiredAt
+						loginsCount
+						lastLogin
+						lastIP
+						signedUp
+						blocked
+						isDeleted
+						userLocation {
+							_id
+							when
+							where
+						}
+						userLoginHistory {
+							totalCount
+							list {
+								_id
+								when
+								success
+								ip
+								result
+							}
+						}
+					}
+					totalCount
+				}
+				
+			}`,
+			variables: options
+		}).then(function(res) {
+			return res.userPatch;
+		});
+	},	
+
 	list: function(page, count) {
 
 		this.haveAccess();
