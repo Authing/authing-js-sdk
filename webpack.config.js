@@ -31,7 +31,8 @@ const webConfig = {
 	output: {
 		libraryTarget: 'umd',
 		path: __dirname + '/dist',
-		filename: 'authing-js-sdk-browser.js'
+		filename: 'authing-js-sdk-browser.js',
+		library: 'Authing'
 	},
 	module: {
 		rules: [{
@@ -60,7 +61,8 @@ const webMinConfig = {
 	output: {
 		libraryTarget: 'umd',
 		path: __dirname + '/dist',
-		filename: 'authing-js-sdk-browser.min.js'
+		filename: 'authing-js-sdk-browser.min.js',
+		library: 'Authing'
 	},
 	module: {
 		rules: [{

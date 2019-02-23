@@ -1,54 +1,13 @@
-const TIMEOUT = 20000;
-var axios = require('axios');
-var configs = require('./src/configs');
+/* jshint esversion: 6 */
 
-class GraphQLClient {
-
-	constructor(options) {
-		const defaultOpt = {
-			timeout: TIMEOUT,
-			method: 'POST'
-		};
-		this.options = { ...defaultOpt, ...options };
-	}
-
-	request(data) {
-		this.options.data = data;
-		return axios(this.options).then(res => {
-			const d = res.data;
-			if (d.errors) {
-				throw d.errors[0];
-			}
-			return d.data;
-		});
-	}
-
-}
-
-var _encryption;
-var cryptoPolyfill = require('./src/crypto-polyfill');
-if(configs.inBrowser) {
-	_encryption = function(paw) {
-		var encrypt = new cryptoPolyfill.JSEncrypt(); // 实例化加密对象
-		encrypt.setPublicKey(configs.openSSLSecret); // 设置公钥
-		var encryptoPasswd = encrypt.encrypt(paw); // 加密明文
-		return encryptoPasswd;
-	};
-} else {
-	_encryption = function(paw) {
-		var publicKey = configs.openSSLSecret;
-		var pawBuffer, encryptText;
-		pawBuffer = new Buffer(paw); // jsencrypt 库在加密后使用了base64编码,所以这里要先将base64编码后的密文转成buffer
-		encryptText = cryptoPolyfill.publicEncrypt({
-			key: new Buffer(publicKey), // 如果通过文件方式读入就不必转成Buffer
-			padding: cryptoPolyfill.constants.RSA_PKCS1_PADDING
-		}, pawBuffer).toString('base64');
-		return encryptText;
-	}
-}
+const axios = require('axios');
+const configs = require('./src/configs');
+const GraphQLClient = require('./src/graphql');
+const _encryption = require('./src/_encryption');
 
 var Authing = function(opts) {
 	var self = this;
+
 	if(!opts.clientId) {
 		throw 'clientId is not provided';
 	}
@@ -68,12 +27,13 @@ var Authing = function(opts) {
 		authed: false,
 		authSuccess: false,
 		token: null
-	}
+	};
+
 	this.userAuth = {
 		authed: false,
 		authSuccess: false,
 		token: null
-	}
+	};
 
 	this.initUserClient();
 	this.initOwnerClient();
@@ -1005,8 +965,8 @@ Authing.prototype = {
 		inputElem.accept = "image/*";             
 		inputElem.onchange = function() {
 			cb(inputElem.files[0]);
-		}
-		inputElem.click()
+		};
+		inputElem.click();
 	},
 
 	decodeToken: function(token) {
@@ -1230,11 +1190,11 @@ Authing.prototype = {
         qrcodeNode = document.createElement('div');
         qrcodeNode.id = mountNode;
         qrcodeNode.style = "z-index: 65535;position: fixed;background: #fff;width: 300px;height: 300px;left: 50%;margin-left: -150px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -150px;border: 1px solid #ccc;"        
-		document.getElementsByTagName('body')[0].appendChild(qrcodeNode);
-		needGenerate = true;
+				document.getElementsByTagName('body')[0].appendChild(qrcodeNode);
+				needGenerate = true;
       }else {
-		  qrcodeNode.style="position:relative";
-	  }
+		  	qrcodeNode.style = 'position:relative';
+	  	}
 
       var styleNode = document.createElement('style'), style = '#authing__retry a:hover{outline:0px;text-decoration:none;}#authing__spinner{position:absolute;left:50%;margin-left:-6px;}.spinner{margin:100px auto;width:20px;height:20px;position:relative}.container1>div,.container2>div,.container3>div{width:6px;height:6px;background-color:#00a1ea;border-radius:100%;position:absolute;-webkit-animation:bouncedelay 1.2s infinite ease-in-out;animation:bouncedelay 1.2s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}.spinner .spinner-container{position:absolute;width:100%;height:100%}.container2{-webkit-transform:rotateZ(45deg);transform:rotateZ(45deg)}.container3{-webkit-transform:rotateZ(90deg);transform:rotateZ(90deg)}.circle1{top:0;left:0}.circle2{top:0;right:0}.circle3{right:0;bottom:0}.circle4{left:0;bottom:0}.container2 .circle1{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.container3 .circle1{-webkit-animation-delay:-1.0s;animation-delay:-1.0s}.container1 .circle2{-webkit-animation-delay:-0.9s;animation-delay:-0.9s}.container2 .circle2{-webkit-animation-delay:-0.8s;animation-delay:-0.8s}.container3 .circle2{-webkit-animation-delay:-0.7s;animation-delay:-0.7s}.container1 .circle3{-webkit-animation-delay:-0.6s;animation-delay:-0.6s}.container2 .circle3{-webkit-animation-delay:-0.5s;animation-delay:-0.5s}.container3 .circle3{-webkit-animation-delay:-0.4s;animation-delay:-0.4s}.container1 .circle4{-webkit-animation-delay:-0.3s;animation-delay:-0.3s}.container2 .circle4{-webkit-animation-delay:-0.2s;animation-delay:-0.2s}.container3 .circle4{-webkit-animation-delay:-0.1s;animation-delay:-0.1s}@-webkit-keyframes bouncedelay{0%,80%,100%{-webkit-transform:scale(0.0)}40%{-webkit-transform:scale(1.0)}}@keyframes bouncedelay{0%,80%,100%{transform:scale(0.0);-webkit-transform:scale(0.0)}40%{transform:scale(1.0);-webkit-transform:scale(1.0)}}';
 
@@ -1242,7 +1202,7 @@ Authing.prototype = {
 
       if(styleNode.styleSheet) {
         styleNode.styleSheet.cssText = style;
-      }else{
+      }else {
         styleNode.innerHTML = style;
       }
 
@@ -1250,24 +1210,24 @@ Authing.prototype = {
 
       var loading = function() {
         qrcodeNode.innerHTML = '<div id="authing__spinner" class="spinner"><div class="spinner-container container1"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container2"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container3"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div></div>';
-      }
+      };
 
       var unloading = function() {
         var child = document.getElementById("authing__spinner");
         qrcodeNode.removeChild(child);
-      }      
+      };
 
       var genTip = function(text) {
         var tip = document.createElement('span');
-		tip.class = 'authing__heading-subtitle';
-		if(!needGenerate) {
-			tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;';
-		}else {
-			tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 12px;color: #888;';
-		}
+				tip.class = 'authing__heading-subtitle';
+				if(!needGenerate) {
+					tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;';
+				}else {
+					tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 12px;color: #888;';
+				}
         tip.innerHTML = text;
         return tip;
-      }
+      };
 
       var genImage = function(src) {
         var qrcodeImage = document.createElement('img');
@@ -1276,7 +1236,7 @@ Authing.prototype = {
         qrcodeImage.width = 240;
         qrcodeImage.height = 240;
         return qrcodeImage;
-      }
+      };
 
       var genShadow = function(text, aOnClick) {
         var shadow = document.createElement('div');
@@ -1289,26 +1249,26 @@ Authing.prototype = {
         shadowA.onclick = aOnClick;
         shadow.appendChild(shadowA);
         return shadow;      
-      }
+      };
 
       var genRetry = function(qrcodeNode, tipText) {
-		var tip = genTip(tipText); 
-		
-		var qrcodeWrapper = document.createElement("div");
-		qrcodeWrapper.id = 'authing__qrcode-wrapper';
-		qrcodeWrapper.style = "text-align: center";
+				var tip = genTip(tipText); 
+				
+				var qrcodeWrapper = document.createElement("div");
+				qrcodeWrapper.id = 'authing__qrcode-wrapper';
+				qrcodeWrapper.style = "text-align: center";
 
-		var qrcodeImage = genImage('https://usercontents.authing.cn/authing_user_manager_wxapp_qrcode.jpg');
+				var qrcodeImage = genImage('https://usercontents.authing.cn/authing_user_manager_wxapp_qrcode.jpg');
 
-		if(!needGenerate) {
-			qrcodeImage.style = "margin-top: 12px;"
-		}else {
-			qrcodeImage.style = "margin-top: 16px;"
-		}
+				if(!needGenerate) {
+					qrcodeImage.style = "margin-top: 12px;"
+				}else {
+					qrcodeImage.style = "margin-top: 16px;"
+				}
 
         qrcodeImage.onload = function() {
           unloading();
-        }
+        };
 
         var shadow = genShadow('点击重试', function() {
           start();          
@@ -1316,9 +1276,9 @@ Authing.prototype = {
 
         qrcodeWrapper.appendChild(qrcodeImage);
         qrcodeWrapper.appendChild(shadow);
-		qrcodeWrapper.appendChild(tip);  
-		qrcodeNode.appendChild(qrcodeWrapper);      
-      }
+				qrcodeWrapper.appendChild(tip);  
+				qrcodeNode.appendChild(qrcodeWrapper);      
+      };
 
       var start = function() {
         loading();
@@ -1363,7 +1323,7 @@ Authing.prototype = {
                       }, 600);
                       qrcodeNode.appendChild(shadow);                      
                     }else {
-					  var shadow = genShadow('扫码成功');
+					  					var shadow = genShadow('扫码成功');
                       qrcodeNode.appendChild(shadow);					  
                       if(onSuccess) {
                         onSuccess(checkResult);
@@ -1388,16 +1348,12 @@ Authing.prototype = {
             onError(error);
           }
         });
-      }
+      };
 
       start();
 
     }
 
-}
-
-if(typeof window === 'object') {
-	window.Authing = Authing;
-}
+};
 
 module.exports = Authing;

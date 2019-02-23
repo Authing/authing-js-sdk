@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>test authing-js-sdk</title>
+</head>
+<body>
+
+    <script src="/dist/authing-js-sdk-browser.min.js"></script>
+
+    <script>
+        
+        var secret = '42aa3deba3b2c35aaf018acafdf503f8';
+        var clientId = '5b0dfcff82f4ce00014fdcd4';
+
+        var auth = new Authing({
+            clientId: clientId,
+            secret: secret
+        });
+
+    </script>
+    
+</body>
+</html>
