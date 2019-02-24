@@ -30,4 +30,4 @@ class GraphQLClient {
 
 }
 
-module.exports =  GraphQLClient;
+module.exports = GraphQLClient;

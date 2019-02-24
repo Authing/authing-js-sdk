@@ -4,6 +4,7 @@ const axios = require('axios');
 const configs = require('./src/configs');
 const GraphQLClient = require('./src/graphql');
 const _encryption = require('./src/_encryption');
+const SSO = require('./src/sso');
 
 var Authing = function(opts) {
 	var self = this;

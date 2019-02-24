@@ -25,6 +25,14 @@ $ npm install authing-js-sdk --save
 
 ----------
 
+### 初始化
+
+``` javascript
+var authing = new Authing({
+	clientId: 'your_client_id',
+});
+```
+
 ##### 使用方法
 
 ##### ES5
