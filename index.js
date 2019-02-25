@@ -5,24 +5,40 @@ const configs = require('./src/configs');
 const GraphQLClient = require('./src/graphql');
 const _encryption = require('./src/_encryption');
 const SSO = require('./src/sso');
+const sha1 = require('js-sha1');
 
 var Authing = function(opts) {
 	var self = this;
+	this.opts = opts;
 
 	if(!opts.clientId) {
 		throw 'clientId is not provided';
 	}
 
-	if(!opts.secret) {
-		throw 'app secret is not provided';
+	if(configs.inBrowser) {
+		if (opts.secret) {
+			throw '检测到你处于浏览器环境，当前已不推荐在浏览器环境中暴露 secret，请到 https://docs.authing.cn/#/quick_start/javascript 查看最新的初始化方式';
+		}
+
+		if (!opts.timestamp) {
+			throw 'timestamp is not provided';
+		}
+
+		if (!opts.nonce) {
+			throw 'nonce is not provided';
+		}
+		
+		this.opts.signature = sha1(opts.timestamp + opts.nonce);
+	} else {
+		if(!opts.secret) {
+			throw 'app secret is not provided';
+		}	
 	}
 
 	if(opts.host) {
 		configs.services.user.host = opts.host.user || configs.services.user.host;
 		configs.services.oauth.host = opts.host.oauth || configs.services.oauth.host;
 	}
-
-	this.opts = opts;
 
 	this.ownerAuth = {
 		authed: false,
@@ -133,10 +149,26 @@ Authing.prototype = {
 
 		var self = this;
 
+		let query = '';
+
+		if (configs.inBrowser) {
+			options = {
+				clientId: this.opts.clientId,
+				timestamp: this.opts.timestamp,
+				nonce: this.opts.nonce,
+				signature: this.opts.signature,
+			}
+			query = `query {
+				getAccessTokenByAppSecret(timestamp: "${options.timestamp}", clientId: "${options.clientId}", nonce: ${options.nonce}, signature: "${options.signature}")
+			}`;
+		} else {
+			query = `query {
+				getAccessTokenByAppSecret(secret: "${options.secret}", clientId: "${options.clientId}")
+			}`;
+		}
+
 		return this._AuthService.request({
-			query: `query {
-					getAccessTokenByAppSecret(secret: "${options.secret}", clientId: "${options.clientId}")
-				}`
+			query,
 			})
 	  	.then(function(data) {
 			self._AuthService = new GraphQLClient({
