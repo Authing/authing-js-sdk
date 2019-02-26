@@ -16,7 +16,7 @@
 
         var auth = new Authing({
             clientId: clientId,
-            timestamp: new Date().getTime(),
+            timestamp: Math.round(new Date() / 1000) + 6000,
             nonce: 13233,
         });
 

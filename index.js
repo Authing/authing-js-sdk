@@ -4,7 +4,6 @@ const axios = require('axios');
 const configs = require('./src/configs');
 const GraphQLClient = require('./src/graphql');
 const _encryption = require('./src/_encryption');
-const SSO = require('./src/sso');
 const sha1 = require('js-sha1');
 
 var Authing = function(opts) {
@@ -28,7 +27,7 @@ var Authing = function(opts) {
 			throw 'nonce is not provided';
 		}
 		
-		this.opts.signature = sha1(opts.timestamp + opts.nonce);
+		this.opts.signature = sha1(opts.timestamp + opts.nonce.toString());
 	} else {
 		if(!opts.secret) {
 			throw 'app secret is not provided';
