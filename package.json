@@ -1,6 +1,6 @@
 {
   "name": "authing-js-sdk",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Official sdk of Authing",
   "main": "dist/authing-js-sdk.js",
   "browser": "dist/authing-js-sdk-browser.min.js",
@@ -26,6 +26,7 @@
   "homepage": "https://github.com/Authing/authing-js-sdk#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "js-sha1": "^0.6.0",
     "jsencrypt": "^2.3.1"
   },
   "devDependencies": {
