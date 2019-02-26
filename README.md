@@ -20,32 +20,58 @@ JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以及 **Node.js*
 # latest stable
 $ npm install authing-js-sdk --save
 ```
-
-## 开始使用
-
 ----------
 
-### 初始化
+## 初始化
+
+先从 [Authing 控制台](https://authing.cn/dashboard) 中[获取 Client ID](https://docs.authing.cn/#/quick_start/howto)。
+
+为保证 secret 安全，在服务端的初始化和客户端的初始化有所不同。
+
+### 服务端
+
+服务端可直接传入 `clientId` 和 `secret`。
 
 ``` javascript
 var authing = new Authing({
 	clientId: 'your_client_id',
+	secret: 'your_client_secret'
 });
 ```
 
-##### 使用方法
+### 客户端
 
-##### ES5
+#### 客户端需传入三个参数
 
-在```ES5```中我们使用 **Promise** 处理异步编程。
+- **clientId**
+	- 应用 ID，可从 [Authing 控制台](https://authing.cn/dashboard)中[获取](https://docs.authing.cn/#/quick_start/howto)。
+- **timestamp**
+    - 当前时间戳
+- **nonce**
+	- 一个随机数字，不要超过十位数
+
+#### 示例
+
+``` javascript
+var auth = new Authing({
+	clientId: 'your_client_id',
+	timestamp: Math.round(new Date() / 1000),
+	nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
+});
+```
+
+### 使用方法
+
+Authing SDK 的所有 API 都支持 **Promise**。
 
 ``` javascript
 var Authing = require('authing-js-sdk');
 
 // 对 Client ID 和 Client Secret 进行验证，获取 Access Token
 var auth = new Authing({
+	// 若在浏览器端请使用 timestamp + nonce + clientId 的形式	
 	clientId: 'your_client_id',
-	secret: 'your_app_secret'
+	secret: 'your_app_secret' 
 });
 
 auth.then(function(validAuth) {
@@ -68,12 +94,7 @@ auth.then(function(validAuth) {
 
 ```
 
-[怎样获取 Client ID ?](https://docs.authing.cn/#/quick_start/howto)。
-
-
-### ES6+
-
-在```ES6+```中，我们使用 **async 函数** 和 **await 关键字** 处理异步编程。
+如果你使用 `ES6+` 推荐用 `await` 处理异步，示例如下：
 
 ``` javascript
 import Authing from 'authing-js-sdk';
@@ -86,6 +107,7 @@ const main = async () => {
 
 	try{
 		auth = await new Authing({
+			// 若在浏览器端请使用 timestamp + nonce + clientId 的形式			
 			clientId: 'your_client_id',
 			secret: 'your_app_secret'
 		});
@@ -120,6 +142,10 @@ main();
 
 ```
 
+## API
+
+全部 API 请参考：[用户接口](https://docs.authing.cn/#/user_service/add_user)。
+
 ## 小程序扫码登录
 
 小程序扫码登录指使用 Authing 小程序 ``身份管家`` 执行微信登录。
@@ -135,8 +161,8 @@ main();
 
 var Authing = require('authing-js-sdk');
 
-// 对 Client ID 和 Client Secret 进行验证，获取 Access Token
 var auth = new Authing({
+	// 若在浏览器端请使用 timestamp + nonce + clientId 的形式
 	clientId: 'your_client_id',
 	secret: 'your_app_secret'
 });
@@ -202,5 +228,5 @@ const authing = new Authing({
 
 了解更多报错的详情，请查看[错误代码](https://docs.authing.cn/#/quick_start/error_code)。
 
-获取Client ID和Client Secret，请[点击这里](https://docs.authing.cn/#/quick_start/howto)。
+获取 Client ID 和 Client Secret，请[点击这里](https://docs.authing.cn/#/quick_start/howto)。
 
