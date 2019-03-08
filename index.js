@@ -10,30 +10,6 @@ var Authing = function(opts) {
 	var self = this;
 	this.opts = opts;
 
-	if(!opts.clientId) {
-		throw 'clientId is not provided';
-	}
-
-	if(configs.inBrowser) {
-		if (opts.secret) {
-			throw '检测到你处于浏览器环境，当前已不推荐在浏览器环境中暴露 secret，请到 https://docs.authing.cn/#/quick_start/javascript 查看最新的初始化方式';
-		}
-
-		if (!opts.timestamp) {
-			throw 'timestamp is not provided';
-		}
-
-		if (!opts.nonce) {
-			throw 'nonce is not provided';
-		}
-		
-		this.opts.signature = sha1(opts.timestamp + opts.nonce.toString());
-	} else {
-		if(!opts.secret) {
-			throw 'app secret is not provided';
-		}	
-	}
-
 	if(opts.host) {
 		configs.services.user.host = opts.host.user || configs.services.user.host;
 		configs.services.oauth.host = opts.host.oauth || configs.services.oauth.host;
@@ -49,11 +25,37 @@ var Authing = function(opts) {
 		authed: false,
 		authSuccess: false,
 		token: null
-	};
+	};	
 
 	this.initUserClient();
 	this.initOwnerClient();
 	this.initOAuthClient();
+
+	if (!opts.accessToken) {
+		if(!opts.clientId) {
+			throw 'clientId is not provided';
+		}
+	
+		if(configs.inBrowser) {
+			if (opts.secret) {
+				throw '检测到你处于浏览器环境，当前已不推荐在浏览器环境中暴露 secret，请到 https://docs.authing.cn/#/quick_start/javascript 查看最新的初始化方式';
+			}
+	
+			if (!opts.timestamp) {
+				throw 'timestamp is not provided';
+			}
+	
+			if (!opts.nonce) {
+				throw 'nonce is not provided';
+			}
+			
+			this.opts.signature = sha1(opts.timestamp + opts.nonce.toString());
+		} else {
+			if(!opts.secret) {
+				throw 'app secret is not provided';
+			}	
+		}
+	}
 
 	return this._auth().then(function(token) {
 		if(token) {
@@ -135,9 +137,23 @@ Authing.prototype = {
 
 	_auth: function() {
 
+		let authOpts = {
+			baseURL: configs.services.user.host,
+		};
+
+		if (this.opts.accessToken) {
+			authOpts['headers'] = {
+				Authorization: `Bearer ${this.opts.accessToken}`,
+			};
+		}
+
 		if(!this._AuthService) {
-			this._AuthService = new GraphQLClient({
-				baseURL: configs.services.user.host
+			this._AuthService = new GraphQLClient(authOpts);
+		}
+
+		if (this.opts.accessToken && this._AuthService) {
+			return new Promise((resolve) => {
+				resolve(this.opts.accessToken);
 			});
 		}
 
@@ -168,16 +184,16 @@ Authing.prototype = {
 
 		return this._AuthService.request({
 			query,
-			})
-	  	.then(function(data) {
+		})
+		.then(function(data) {
 			self._AuthService = new GraphQLClient({
 				baseURL: configs.services.user.host,
 				headers: {
 					Authorization: `Bearer ${data.getAccessTokenByAppSecret}`,
 				}
 			});	
-	  		return data.getAccessTokenByAppSecret;
-	  	});
+			return data.getAccessTokenByAppSecret;
+		});
 	},
 
 	_loginFromLocalStorage: function() {
