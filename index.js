@@ -72,6 +72,8 @@ var Authing = function(opts) {
 		token: null
 	}
 
+	this.userServerUrl = 'https://oauth.authing.cn';
+
 	this.initUserClient();
 	this.initOwnerClient();
 	this.initOAuthClient();
@@ -83,7 +85,7 @@ var Authing = function(opts) {
 		}else {
 			self.ownerAuth.authed = true;
 			self.ownerAuth.authSuccess = false;
-			throw 'auth failed, please check your secret and client ID.';			
+			throw 'auth failed, please check your secret and client ID.';
 		}
 		return self;
 	}).catch(function(error) {
@@ -100,19 +102,19 @@ Authing.prototype = {
 	_initClient: function(token) {
 		if(token) {
 
-			var httpLink = new HttpLink({ 
-		  		uri: configs.services.user.host, 
+			var httpLink = new HttpLink({
+		  		uri: configs.services.user.host,
 		  		fetch: nodeFetch
 		  	});
 			var authMiddleware = new ApolloLink(function (operation, forward) {
 				operation.setContext({
 					headers: {
 						authorization: 'Bearer ' + token
-					} 
+					}
 				});
 
 				return forward(operation);
-			});			
+			});
 			return new ApolloClient({
 			  	link: concat(authMiddleware, httpLink),
 			  	cache: new InMemoryCache()
@@ -182,8 +184,8 @@ Authing.prototype = {
 		})
 	  	.then(function(data) {
 
-			var httpLink = new HttpLink({ 
-		  		uri: configs.services.user.host, 
+			var httpLink = new HttpLink({
+		  		uri: configs.services.user.host,
 		  		fetch: nodeFetch
 		  	});
 
@@ -191,16 +193,16 @@ Authing.prototype = {
 			  operation.setContext({
 			    headers: {
 			      authorization: 'Bearer ' + data.data.getAccessTokenByAppSecret,
-			    } 
+			    }
 			  });
 
 			  return forward(operation);
-			});			
+			});
 
 			self._AuthService = new ApolloClient({
 			  	link: concat(authMiddleware, httpLink),
 			  	cache: new InMemoryCache()
-			});	  		
+			});
 	  		return data.data.getAccessTokenByAppSecret;
 	  	});
 	},
@@ -244,23 +246,23 @@ Authing.prototype = {
 		this.haveAccess();
 
 		if(!this._OAuthService) {
-			var httpLink = new HttpLink({ 
-		  		uri: configs.services.oauth.host, 
+			var httpLink = new HttpLink({
+		  		uri: configs.services.oauth.host,
 		  		fetch: nodeFetch
 		  	});
 			var authMiddleware = new ApolloLink(function (operation, forward) {
 			  operation.setContext({
 			    headers: {
 			      authorization: 'Bearer ' + self.ownerAuth.token,
-			    } 
+			    }
 			  });
 
 			  return forward(operation);
-			});			
+			});
 			this._OAuthService = new ApolloClient({
 			  	link: concat(authMiddleware, httpLink),
 			  	cache: new InMemoryCache()
-			});			
+			});
 		}
 
 		var self = this;
@@ -282,7 +284,7 @@ Authing.prototype = {
 				}
 			`,
 			variables: {
-				clientId: self.opts.clientId				
+				clientId: self.opts.clientId
 			}
 		})
 		.then(function(res) {
@@ -353,7 +355,7 @@ Authing.prototype = {
 		var self = this;
 		return this._login(options).then(function(user) {
 			if(user) {
-				self.initUserClient(user.token);				
+				self.initUserClient(user.token);
 			}
 			return user;
 		}).catch(function(error) {
@@ -379,9 +381,9 @@ Authing.prototype = {
 			mutation: gql`
 				mutation register(
 					$unionid: String,
-				    $email: String, 
-				    $password: String, 
-				    $lastIP: String, 
+				    $email: String,
+				    $password: String,
+				    $lastIP: String,
 				    $forceLogin: Boolean,
 				    $registerInClient: String!,
 				    $oauth: String,
@@ -466,9 +468,9 @@ Authing.prototype = {
 			throw 'id in options is not provided';
 		}
 		options.registerInClient = this.opts.clientId;
-		
+
 		var client = this._chooseClient();
-		
+
 		return client.query({
 			query: gql`query user($id: String!, $registerInClient: String!){
 				user(id: $id, registerInClient: $registerInClient) {
@@ -492,7 +494,7 @@ Authing.prototype = {
 					blocked
 					isDeleted
 				}
-				
+
 			}
 			`,
 			variables: options
@@ -612,7 +614,7 @@ Authing.prototype = {
 			return res.data.removeUsers;
 		}).catch(function(error) {
 			throw error.graphQLErrors[0];
-		});	
+		});
 
 	},
 
@@ -687,7 +689,7 @@ Authing.prototype = {
 
 		options['registerInClient'] = self.opts.clientId;
 
-		var 
+		var
 			keyTypeList = {
 				_id: 'String!',
 				email: 'String',
@@ -789,7 +791,7 @@ Authing.prototype = {
 			return res.data.updateUser;
 		}).catch(function(error) {
 			throw error.graphQLErrors[0];
-		});	
+		});
 	},
 
 	readOAuthList: function() {
@@ -807,7 +809,7 @@ Authing.prototype = {
 			}
 		});
 	},
-	
+
 	sendResetPasswordEmail: function(options) {
 		if(!options) {
 			throw 'options is not provided';
@@ -815,7 +817,7 @@ Authing.prototype = {
 		if(!options.email) {
 			throw 'email in options is not provided';
 		}
-	
+
 		options.client = this.opts.clientId;
 		return this.UserClient.mutate({
 			mutation: gql`
@@ -838,11 +840,11 @@ Authing.prototype = {
 		}).catch(function(error) {
 			throw error.graphQLErrors[0];
 		});
-		
+
 	},
 
 	verifyResetPasswordVerifyCode: function(options) {
-		
+
 		if(!options) {
 			throw 'options is not provided';
 		}
@@ -876,7 +878,7 @@ Authing.prototype = {
 		}).catch(function(error) {
 			throw error.graphQLErrors[0];
 		});
-		
+
 	},
 
 	changePassword: function(options) {
@@ -973,9 +975,9 @@ Authing.prototype = {
 		if(!configs.inBrowser) {
 			throw '当前不是浏览器环境，无法选取文件';
 		}
-		var inputElem =  document.createElement("input");  
-		inputElem.type = "file"; 
-		inputElem.accept = "image/*";             
+		var inputElem =  document.createElement("input");
+		inputElem.type = "file";
+		inputElem.accept = "image/*";
 		inputElem.onchange = function() {
 			cb(inputElem.files[0]);
 		}
@@ -1008,7 +1010,7 @@ Authing.prototype = {
 	    	var pos = Math.round(Math.random() * (arr.length - 1));
 	    	str += arr[pos];
 	  	}
-	  	
+
 	  	return str;
 	},
 
@@ -1048,13 +1050,13 @@ Authing.prototype = {
       var onIntervalStarting = opts.onIntervalStarting;
 
 	  var qrcodeNode = document.getElementById(mountNode);
-	  
+
 	  var needGenerate = false;
 
       if(!qrcodeNode) {
         qrcodeNode = document.createElement('div');
         qrcodeNode.id = mountNode;
-        qrcodeNode.style = "z-index: 65535;position: fixed;background: #fff;width: 300px;height: 300px;left: 50%;margin-left: -150px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -150px;border: 1px solid #ccc;"        
+        qrcodeNode.style = "z-index: 65535;position: fixed;background: #fff;width: 300px;height: 300px;left: 50%;margin-left: -150px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -150px;border: 1px solid #ccc;"
 		document.getElementsByTagName('body')[0].appendChild(qrcodeNode);
 		needGenerate = true;
       }
@@ -1069,7 +1071,7 @@ Authing.prototype = {
         styleNode.innerHTML = style;
       }
 
-      document.getElementsByTagName("head")[0].appendChild(styleNode);      
+      document.getElementsByTagName("head")[0].appendChild(styleNode);
 
       var loading = function() {
         qrcodeNode.innerHTML = '<div id="authing__spinner" class="spinner"><div class="spinner-container container1"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container2"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container3"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div></div>';
@@ -1078,7 +1080,7 @@ Authing.prototype = {
       var unloading = function() {
         var child = document.getElementById("authing__spinner");
         qrcodeNode.removeChild(child);
-      }      
+      }
 
       var genTip = function(text) {
         var tip = document.createElement('span')
@@ -1111,12 +1113,12 @@ Authing.prototype = {
         shadowA.style = "border-bottom: 1px solid #fff;cursor: pointer;"
         shadowA.onclick = aOnClick;
         shadow.appendChild(shadowA);
-        return shadow;      
+        return shadow;
       }
 
       var genRetry = function(qrcodeNode, tipText) {
-		var tip = genTip(tipText); 
-		
+		var tip = genTip(tipText);
+
 		var qrcodeWrapper = document.createElement("div");
 		qrcodeWrapper.id = 'authing__qrcode-wrapper';
 		qrcodeWrapper.style = "text-align: center";
@@ -1134,13 +1136,13 @@ Authing.prototype = {
         }
 
         var shadow = genShadow('点击重试', function() {
-          start();          
+          start();
         });
 
         qrcodeWrapper.appendChild(qrcodeImage);
         qrcodeWrapper.appendChild(shadow);
-		qrcodeWrapper.appendChild(tip);  
-		qrcodeNode.appendChild(qrcodeWrapper);      
+		qrcodeWrapper.appendChild(tip);
+		qrcodeNode.appendChild(qrcodeWrapper);
       }
 
       var start = function() {
@@ -1162,7 +1164,7 @@ Authing.prototype = {
             if(qrcodeNode) {
               var qrcodeWrapper = document.createElement("div");
               qrcodeWrapper.id = 'authing__qrcode-wrapper';
-              qrcodeWrapper.style = "text-align: center";              
+              qrcodeWrapper.style = "text-align: center";
 
               var qrcodeImage = genImage(qrcode.qrcode);
 
@@ -1184,11 +1186,11 @@ Authing.prototype = {
                       setTimeout(function() {
                         window.location.href = checkResult.redirect + '?code=200&data=' + (JSON.stringify(checkResult.data));
                       }, 600);
-                      qrcodeNode.appendChild(shadow);                      
+                      qrcodeNode.appendChild(shadow);
                     }else {
                       var shadow = genShadow('验证成功', function() {
                         window.location.href = checkResult.redirect + '?code=200&data=' + (JSON.stringify(checkResult.data));
-                      });                    	
+                      });
                       if(onSuccess) {
                         onSuccess(checkResult);
                       }
@@ -1216,7 +1218,49 @@ Authing.prototype = {
 
       start();
 
-    }
+	},
+
+	getVerificationCode(phone, clientId) {
+		// this.userServerUrl
+		// const url = `http://localhost:5555/send_smscode/${phone}/${clientId}`;
+		const url = this.userServerUrl;
+		return axios.get(url);
+	},
+
+	verifyMessage(clientId, phone, phoneCode) {
+		const variables = {
+			clientId,
+			phone,
+			phoneCode,
+		};
+		return this.UserClient.mutate({
+			mutation: gql`
+				mutation login($registerInClient: String, $phone: String, $phoneCode: Number) {
+				    login(registerInClient: $clientId, phone: $phone, phoneCode: $phoneCode) {
+					    _id
+					    email
+					    emailVerified
+					    username
+					    nickname
+					    company
+					    photo
+					    browser
+					    token
+					    tokenExpiredAt
+					    loginsCount
+					    lastLogin
+					    lastIP
+					    signedUp
+					    blocked
+					    isDeleted
+				    }
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.data.login;
+		});
+	}
 
 }
 
