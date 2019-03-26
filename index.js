@@ -72,7 +72,7 @@ var Authing = function(opts) {
 		token: null
 	}
 
-	this.userServerUrl = 'https://oauth.authing.cn';
+	this.userServerUrl = configs.services.user.host;
 
 	this.initUserClient();
 	this.initOwnerClient();
