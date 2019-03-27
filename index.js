@@ -72,8 +72,6 @@ var Authing = function(opts) {
 		token: null
 	}
 
-	this.userServerUrl = configs.services.user.host;
-
 	this.initUserClient();
 	this.initOwnerClient();
 	this.initOAuthClient();
@@ -1223,7 +1221,7 @@ Authing.prototype = {
 	getVerificationCode(phone, clientId) {
 		// this.userServerUrl
 		// const url = `http://localhost:5555/send_smscode/${phone}/${clientId}`;
-		const url = this.userServerUrl;
+		const url = `${configs.services.user.host.replace('/graphql')}/send_smscode/${phone}/${clientId}`;
 		return axios.get(url);
 	},
 
