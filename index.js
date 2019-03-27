@@ -1221,9 +1221,7 @@ Authing.prototype = {
 	},
 
 	getVerificationCode(phone, clientId) {
-		// this.userServerUrl
-		// const url = `http://localhost:5555/send_smscode/${phone}/${clientId}`;
-		const url = this.userServerUrl;
+		const url = `${this.userServerUrl.replace('/graphql', '')}/send_smscode/${phone}/${clientId}`;
 		return axios.get(url);
 	},
 
