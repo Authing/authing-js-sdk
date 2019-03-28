@@ -1216,8 +1216,7 @@ Authing.prototype = {
         });
       }
 
-      start();
-
+    	start();
 	},
 
 	async getVerificationCode(phone) {
