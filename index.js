@@ -1402,14 +1402,21 @@ Authing.prototype = {
 
 		},
 		
-		async getVerificationCode(phone) {
-			const url = `${this.opts.host.user.replace('/graphql', '')}/send_smscode/${phone}/${this.opts.clientId}`;
-			const result = await axios.get(url);
-			if (result.data.code !== 200) {
-				throw result.data;
-			}else {
-				return result.data;
+		getVerificationCode(phone) {
+			if (!phone) {
+				throw 'phone is not provided';
 			}
+
+			const url = `${configs.services.user.host.replace('/graphql', '')}/send_smscode/${phone}/${this.opts.clientId}`;
+			return axios.get(url).then((result) => {
+				if (result.data.code !== 200) {
+					throw result.data;
+				}else {
+					return result.data;
+				}	
+			}).catch((error) => {
+				throw error;
+			});
 		},
 	
 		loginByPhoneCode(options) {
