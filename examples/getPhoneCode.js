@@ -1,4 +1,4 @@
-var Authing = require('../index.js');
+var Authing = require('../dist/authing-js-sdk');
 
 const secret = '2bc1c6e3c9c0a707095f764ede2a9e61';
 const clientId = '5c9c659cb9440b05cb2570e6';
