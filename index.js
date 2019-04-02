@@ -1417,6 +1417,38 @@ Authing.prototype = {
 		});
 	},
 
+	permissions(userId) {
+		if(!userId) {
+			throw 'userId is not provided.';
+		}
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			user: userId,
+		};
+
+		return this.UserClient.request({
+			operationName: 'queryRoleByUserId',
+			query: `query QueryRoleByUserId($user: String, $client: String!){
+				queryRoleByUserId(user: $user, client: $client) {
+					totalCount
+					list {
+						group {
+							name
+							permissions
+						}
+					}
+				}
+			}`,
+			variables,
+		}).then(function(res) {
+			return res.queryRoleByUserId;
+		});
+	},
+
 	loginByPhoneCode(options) {
 		if(!options) {
 			throw 'options is not provided.';
@@ -1463,7 +1495,7 @@ Authing.prototype = {
 				self.initUserClient(user.token);				
 			}
 			return user;
-		});;
+		});
 	}
 
 };
