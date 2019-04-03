@@ -1417,38 +1417,6 @@ Authing.prototype = {
 		});
 	},
 
-	permissions(userId) {
-		if(!userId) {
-			throw 'userId is not provided.';
-		}
-		let self = this;
-
-		this.haveAccess();
-
-		const variables = {
-			client: this.opts.clientId,
-			user: userId,
-		};
-
-		return this.UserClient.request({
-			operationName: 'queryRoleByUserId',
-			query: `query QueryRoleByUserId($user: String, $client: String!){
-				queryRoleByUserId(user: $user, client: $client) {
-					totalCount
-					list {
-						group {
-							name
-							permissions
-						}
-					}
-				}
-			}`,
-			variables,
-		}).then(function(res) {
-			return res.queryRoleByUserId;
-		});
-	},
-
 	loginByPhoneCode(options) {
 		if(!options) {
 			throw 'options is not provided.';
@@ -1496,7 +1464,265 @@ Authing.prototype = {
 			}
 			return user;
 		});
-	}
+	},
+
+	queryPermissions(userId) {
+		if(!userId) {
+			throw 'userId is not provided.';
+		}
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			user: userId,
+		};
+
+		return this.UserClient.request({
+			operationName: 'QueryRoleByUserId',
+			query: `query QueryRoleByUserId($user: String, $client: String!){
+				queryRoleByUserId(user: $user, client: $client) {
+					totalCount
+					list {
+						group {
+							name
+							permissions
+						}
+					}
+				}
+			}`,
+			variables,
+		}).then(function(res) {
+			return res.QueryRoleByUserId;
+		});
+	},
+
+	queryRoles(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			page: options.page,
+			count: options.count,
+		};
+
+		return this.UserClient.request({
+			operationName: 'ClientRoles',
+			query: `
+				query ClientRoles(
+					$clientId: String!
+					$page: Int
+					$count: Int
+				) {
+					clientRoles(
+						client: $clientId
+						page: $page
+						count: $count
+					) {
+						totalCount
+						list {
+							_id
+							name
+							descriptions
+							client
+							createdAt
+							permissions
+						}
+					}
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.ClientRoles;
+		});
+	},
+
+	createRole(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			name: options.name,
+			descriptions: options.descriptions,
+		};
+
+		return this.UserClient.request({
+			operationName: 'CreateRole',
+			query: `
+				mutation CreateRole(
+					$name: String!
+					$client: String!
+					$descriptions: String
+				) {
+					createRole(
+						name: $name
+						client: $client
+						descriptions: $descriptions
+					) {
+						_id,
+						name,
+						client,
+						descriptions
+					}
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.CreateRole;
+		});
+	},
+
+	updateRolePermissions(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			name: options.name,
+			permissions: options.permissions,
+			_id: options.roleId,
+		};
+
+		return this.UserClient.request({
+			operationName: 'login',
+			query: `
+				mutation UpdateRole(
+					$_id: String!
+					$name: String!
+					$client: String!
+					$descriptions: String
+					$permissions: String
+				) {
+					updateRole(
+						_id: $_id
+						name: $name
+						client: $client
+						descriptions: $descriptions
+						permissions: $permissions
+					) {
+						_id,
+						name,
+						client,
+						descriptions,
+						permissions
+					}
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.UpdateRole;
+		});
+	},
+
+	assignUserToRole(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			registerInClient: this.opts.clientId,
+			phone: options.phone,
+			phoneCode: parseInt(options.phoneCode),
+		};
+
+		return this.UserClient.request({
+			operationName: 'login',
+			query: `
+				mutation AssignUserToRole(
+					$group: String!
+					$client: String!
+					$user: String!
+				) {
+					assignUserToRole(
+						group: $group
+						client: $client
+						user: $user
+					) {
+						totalCount,
+						list {
+							_id,
+							client {
+								_id
+							},
+							user {
+								_id
+							},
+							createdAt
+						}
+					}
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.login;
+		});
+	},
+
+	removeUserFromRole(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			user: options.user,
+			group: options.roleId,
+		};
+
+		return this.UserClient.request({
+			operationName: 'RemoveUserFromGroup',
+			query: `
+				mutation RemoveUserFromGroup(
+					$group: String!
+					$client: String!
+					$user: String!
+				) {
+					removeUserFromGroup(
+						group: $group
+						client: $client
+						user: $user
+					) {
+						_id,
+						group {
+							_id
+						},
+						client {
+							_id
+						},
+						user {
+							_id
+						}
+					}
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.RemoveUserFromGroup;
+		});
+	},	
 
 };
 
