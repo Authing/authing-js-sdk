@@ -172,7 +172,7 @@ main();
 
 ## API
 
-全部 API 请参考：[用户接口](https://docs.authing.cn/#/user_service)。
+全部 API 请参考：[用户接口](https://docs.authing.cn/#/user_service/user_service)。
 
 ## 小程序扫码登录
 
