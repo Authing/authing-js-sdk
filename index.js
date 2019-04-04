@@ -1479,9 +1479,9 @@ Authing.prototype = {
 			user: userId,
 		};
 
-		return this.UserClient.request({
+		return this.ownerClient.request({
 			operationName: 'QueryRoleByUserId',
-			query: `query QueryRoleByUserId($user: String, $client: String!){
+			query: `query QueryRoleByUserId($user: String!, $client: String!){
 				queryRoleByUserId(user: $user, client: $client) {
 					totalCount
 					list {
@@ -1494,7 +1494,7 @@ Authing.prototype = {
 			}`,
 			variables,
 		}).then(function(res) {
-			return res.QueryRoleByUserId;
+			return res.queryRoleByUserId;
 		});
 	},
 
@@ -1507,12 +1507,12 @@ Authing.prototype = {
 		this.haveAccess();
 
 		const variables = {
-			client: this.opts.clientId,
+			clientId: this.opts.clientId,
 			page: options.page,
 			count: options.count,
 		};
 
-		return this.UserClient.request({
+		return this.ownerClient.request({
 			operationName: 'ClientRoles',
 			query: `
 				query ClientRoles(
@@ -1539,7 +1539,7 @@ Authing.prototype = {
 			`,
 			variables,
 		}).then(function(res) {
-			return res.ClientRoles;
+			return res.clientRoles;
 		});
 	},
 
@@ -1556,7 +1556,7 @@ Authing.prototype = {
 			descriptions: options.descriptions,
 		};
 
-		return this.UserClient.request({
+		return this.ownerClient.request({
 			operationName: 'CreateRole',
 			query: `
 				mutation CreateRole(
@@ -1578,7 +1578,7 @@ Authing.prototype = {
 			`,
 			variables,
 		}).then(function(res) {
-			return res.CreateRole;
+			return res.createRole;
 		});
 	},
 
@@ -1598,8 +1598,8 @@ Authing.prototype = {
 			_id: options.roleId,
 		};
 
-		return this.UserClient.request({
-			operationName: 'login',
+		return this.ownerClient.request({
+			operationName: 'UpdateRole',
 			query: `
 				mutation UpdateRole(
 					$_id: String!
@@ -1625,7 +1625,7 @@ Authing.prototype = {
 			`,
 			variables,
 		}).then(function(res) {
-			return res.UpdateRole;
+			return res.updateRole;
 		});
 	},
 
@@ -1639,13 +1639,13 @@ Authing.prototype = {
 		this.haveAccess();
 
 		const variables = {
-			registerInClient: this.opts.clientId,
-			phone: options.phone,
-			phoneCode: parseInt(options.phoneCode),
+			client: this.opts.clientId,
+			group: options.roleId,
+			user: options.user,
 		};
 
-		return this.UserClient.request({
-			operationName: 'login',
+		return this.ownerClient.request({
+			operationName: 'AssignUserToRole',
 			query: `
 				mutation AssignUserToRole(
 					$group: String!
@@ -1673,7 +1673,7 @@ Authing.prototype = {
 			`,
 			variables,
 		}).then(function(res) {
-			return res.login;
+			return res.assignUserToRole;
 		});
 	},
 
@@ -1692,7 +1692,7 @@ Authing.prototype = {
 			group: options.roleId,
 		};
 
-		return this.UserClient.request({
+		return this.ownerClient.request({
 			operationName: 'RemoveUserFromGroup',
 			query: `
 				mutation RemoveUserFromGroup(
@@ -1720,7 +1720,7 @@ Authing.prototype = {
 			`,
 			variables,
 		}).then(function(res) {
-			return res.RemoveUserFromGroup;
+			return res.removeUserFromGroup;
 		});
 	},	
 
