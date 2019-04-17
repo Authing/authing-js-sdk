@@ -1,4 +1,4 @@
-# authing-js-sdk
+# authing.js
 
 ----------
 
