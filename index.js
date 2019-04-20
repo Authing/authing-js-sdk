@@ -165,6 +165,28 @@ Authing.prototype = {
 		var self = this;
 
 		let query = '';
+		const queryField = `{
+			accessToken
+			clientInfo {
+				_id
+				name
+				descriptions
+				jwtExpired
+				createdAt
+				isDeleted
+				logo
+				emailVerifiedDefault
+				registerDisabled
+				allowedOrigins
+				clientType {
+					_id
+					name
+					description
+					image
+					example
+				}
+			}
+		}`
 
 		if (configs.inBrowser) {
 			options = {
@@ -174,11 +196,11 @@ Authing.prototype = {
 				signature: this.opts.signature,
 			}
 			query = `query {
-				getAccessTokenByAppSecret(timestamp: "${options.timestamp}", clientId: "${options.clientId}", nonce: ${options.nonce}, signature: "${options.signature}")
+				getClientWhenSdkInit(timestamp: "${options.timestamp}", clientId: "${options.clientId}", nonce: ${options.nonce}, signature: "${options.signature}")${queryField}
 			}`;
 		} else {
 			query = `query {
-				getAccessTokenByAppSecret(secret: "${options.secret}", clientId: "${options.clientId}")
+				getClientWhenSdkInit(secret: "${options.secret}", clientId: "${options.clientId}")${queryField}
 			}`;
 		}
 
@@ -186,13 +208,18 @@ Authing.prototype = {
 			query,
 		})
 		.then(function(data) {
+			let accessToken = ''
+			if (data.getClientWhenSdkInit) {
+				accessToken = data.getClientWhenSdkInit.accessToken
+				self.clientInfo = data.getClientWhenSdkInit.clientInfo
+			}
 			self._AuthService = new GraphQLClient({
 				baseURL: configs.services.user.host,
 				headers: {
-					Authorization: `Bearer ${data.getAccessTokenByAppSecret}`,
+					Authorization: `Bearer ${accessToken}`,
 				}
 			});	
-			return data.getAccessTokenByAppSecret;
+			return accessToken;
 		});
 	},
 
