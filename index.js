@@ -293,7 +293,10 @@ Authing.prototype = {
 				    login(unionid: $unionid, email: $email, password: $password, lastIP: $lastIP, registerInClient: $registerInClient, verifyCode: $verifyCode) {
 					    _id
 					    email
-					    emailVerified
+							emailVerified
+							unionid
+							oauth
+							registerMethod
 					    username
 					    nickname
 					    company
@@ -373,7 +376,10 @@ Authing.prototype = {
 				    }) {
 				        _id,
 				        email,
-				        emailVerified,
+								emailVerified,
+								unionid,
+								oauth,
+								registerMethod,								
 				        username,
 				        nickname,
 				        company,
@@ -382,7 +388,7 @@ Authing.prototype = {
 				        password,
 				        token,
 				        group {
-				            name
+				          name
 				        },
 				        blocked
 				    }
