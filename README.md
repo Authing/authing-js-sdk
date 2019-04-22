@@ -1,8 +1,8 @@
-# authing-js-sdk
+# authing.js
 
 ----------
 
-JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以及 **Node.js**.我们提供了完全一致的接口.
+Authing 的 JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以及 **Node.js**.我们提供了完全一致的接口.
 
 [点击体验](http://sample.authing.cn)
 
@@ -20,31 +20,93 @@ JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以及 **Node.js*
 # latest stable
 $ npm install authing-js-sdk --save
 ```
-
-## 开始使用
-
 ----------
 
-##### 使用方法
+## 初始化
 
-##### ES5
+先从 [Authing 控制台](https://authing.cn/dashboard) 中[获取 Client ID](https://docs.authing.cn/#/quick_start/howto)。
 
-在```ES5```中我们使用 **Promise** 处理异步编程。
+为保证 secret 安全，在服务端的初始化和客户端的初始化有所不同。
+
+### 服务端
+
+服务端可直接传入 `clientId` 和 `secret`。
 
 ``` javascript
-var Authing = require('authing-js-sdk');
-
-// 对 Client ID 和 Client Secret 进行验证，获取 Access Token
-var auth = new Authing({
+const auth = new Authing({
 	clientId: 'your_client_id',
-	secret: 'your_app_secret'
+	secret: 'your_client_secret'
 });
 
-auth.then(function(validAuth) {
+auth.then((authing) => {
+	// authing.login
+	// authing.register
+	// ...
+});
+```
 
-	//验证成功后返回新的 authing-js-sdk 实例(validAuth)，可以将此实例挂在全局
+### 客户端
 
-	validAuth.login({
+#### 客户端需传入三个参数
+
+- **clientId**
+	- 应用 ID，可从 [Authing 控制台](https://authing.cn/dashboard)中[获取](https://docs.authing.cn/#/quick_start/howto)。
+- **timestamp**
+    - 当前时间戳
+- **nonce**
+	- 一个随机数字，不要超过十位数
+
+#### 示例
+
+``` javascript
+const auth = new Authing({
+	clientId: 'your_client_id',
+	timestamp: Math.round(new Date() / 1000),
+	nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
+});
+auth.then((authing) => {
+	// authing.login
+	// authing.register
+	// ...
+});
+```
+
+### 使用 accessToken
+
+除了使用 clientId 和 secret 外，我们还支持传入 accessToken（需要 v1.5.0 版本及以上），示例如下：
+
+``` javascript
+  const auth = new Authing({
+    accessToken: '71fc55de0fccba1b3f7feb68277e4f379a1019e5'
+  });
+  auth.then((authing) => {
+		// authing.login
+		// authing.register
+		// ...
+  });
+```
+
+使用 accessToken 适用于 OAuth 场景，获取 accessToken 的方法请参考 [OAuth 授权流程](https://docs.authing.cn/#/oauthProvider/authorize)。
+
+### 使用方法
+
+Authing SDK 的所有 API 都支持 **Promise**。
+
+``` javascript
+const Authing = require('authing-js-sdk');
+
+// 对 Client ID 和 Client Secret 进行验证，获取 Access Token
+const auth = new Authing({
+	// 若在浏览器端请使用 timestamp + nonce + clientId 的形式	
+	clientId: 'your_client_id',
+	secret: 'your_app_secret' 
+});
+
+auth.then(function(authing) {
+
+	//验证成功后返回新的 authing-js-sdk 实例(authing)，可以将此实例挂在全局
+
+	authing.login({
 		email: 'test@testmail.com',
 		password: 'testpassword'
 	}).then(function(user) {
@@ -60,12 +122,7 @@ auth.then(function(validAuth) {
 
 ```
 
-[怎样获取 Client ID ?](https://docs.authing.cn/#/quick_start/howto)。
-
-
-### ES6+
-
-在```ES6+```中，我们使用 **async 函数** 和 **await 关键字** 处理异步编程。
+如果你使用 `ES6+` 推荐用 `await` 处理异步，示例如下：
 
 ``` javascript
 import Authing from 'authing-js-sdk';
@@ -78,6 +135,7 @@ const main = async () => {
 
 	try{
 		auth = await new Authing({
+			// 若在浏览器端请使用 timestamp + nonce + clientId 的形式			
 			clientId: 'your_client_id',
 			secret: 'your_app_secret'
 		});
@@ -112,6 +170,10 @@ main();
 
 ```
 
+## API
+
+全部 API 请参考：[用户接口](https://docs.authing.cn/#/user_service/user_service)。
+
 ## 小程序扫码登录
 
 小程序扫码登录指使用 Authing 小程序 ``身份管家`` 执行微信登录。
@@ -125,18 +187,18 @@ main();
 
 ``` javascript
 
-var Authing = require('authing-js-sdk');
+const Authing = require('authing-js-sdk');
 
-// 对 Client ID 和 Client Secret 进行验证，获取 Access Token
-var auth = new Authing({
+const auth = new Authing({
 	clientId: 'your_client_id',
-	secret: 'your_app_secret'
+	timestamp: Math.round(new Date() / 1000),
+	nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
 });
 
-auth.then(function(validAuth) {
+auth.then(function(authing) {
 
-	validAuth.startWXAppScaning({
-    	mount: 'qrcode-node', //二维码挂载点的 HTML 元素 ID，如不写则默认漂浮在文档中间
+	authing.startWXAppScaning({
+  	mount: 'qrcode-node', //二维码挂载点的 HTML 元素 ID，如不写则默认漂浮在文档中间
 	});
 	
 })
@@ -149,7 +211,7 @@ auth.then(function(validAuth) {
 
 ``` javascript
 
-validAuth.startWXAppScaning({
+authing.startWXAppScaning({
   	mount: 'qrcode-node', // 二维码挂载点，如不写则默认漂浮在文档中间
   	redirect: true, // 是否执行跳转（在用户后台配置的 URL），默认为 true，相关用户信息回传至 url 上
   	onSuccess: function(res) {}, // 登录成功后回调函数，redirect 为 true 时不回调此函数
@@ -169,7 +231,7 @@ validAuth.startWXAppScaning({
 
 ``` javascript
 
-const authing = new Authing({
+const auth = new Authing({
 	clientId: 'xxxx',
 	secret: 'xxxxxx',
 	host: {
@@ -188,10 +250,10 @@ const authing = new Authing({
 ## Node.js其他生态中间件
 
 1. [express-middleware](https://github.com/Authing/express-middleware)
+2. [vue-authing](https://github.com/Authing/vue-authing)
 
 当在浏览器使用时，我们会将用户 token 以 '_authing_token' 字段存在 localStorage 中，后面都会从 localStorage 中读取并进行验证。
 
 了解更多报错的详情，请查看[错误代码](https://docs.authing.cn/#/quick_start/error_code)。
 
-获取Client ID和Client Secret，请[点击这里](https://docs.authing.cn/#/quick_start/howto)。
-
+获取 Client ID 和 Client Secret，请[点击这里](https://docs.authing.cn/#/quick_start/howto)。

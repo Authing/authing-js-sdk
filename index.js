@@ -1,83 +1,61 @@
-const TIMEOUT = 20000;
-var axios = require('axios');
-var configs = require('./src/configs');
+/* jshint esversion: 6 */
 
-class GraphQLClient {
-
-	constructor(options) {
-		const defaultOpt = {
-			timeout: TIMEOUT,
-			method: 'POST'
-		};
-		this.options = { ...defaultOpt, ...options };
-	}
-
-	request(data) {
-		this.options.data = data;
-		return axios(this.options).then(res => {
-			const d = res.data;
-			if (d.errors) {
-				throw d.errors[0];
-			}
-			return d.data;
-		});
-	}
-
-}
-
-var _encryption;
-var cryptoPolyfill = require('./src/crypto-polyfill');
-if(configs.inBrowser) {
-	_encryption = function(paw) {
-		var encrypt = new cryptoPolyfill.JSEncrypt(); // 实例化加密对象
-		encrypt.setPublicKey(configs.openSSLSecret); // 设置公钥
-		var encryptoPasswd = encrypt.encrypt(paw); // 加密明文
-		return encryptoPasswd;
-	};
-} else {
-	_encryption = function(paw) {
-		var publicKey = configs.openSSLSecret;
-		var pawBuffer, encryptText;
-		pawBuffer = new Buffer(paw); // jsencrypt 库在加密后使用了base64编码,所以这里要先将base64编码后的密文转成buffer
-		encryptText = cryptoPolyfill.publicEncrypt({
-			key: new Buffer(publicKey), // 如果通过文件方式读入就不必转成Buffer
-			padding: cryptoPolyfill.constants.RSA_PKCS1_PADDING
-		}, pawBuffer).toString('base64');
-		return encryptText;
-	}
-}
+const axios = require('axios');
+const configs = require('./src/configs');
+const GraphQLClient = require('./src/graphql');
+const _encryption = require('./src/_encryption');
+const sha1 = require('js-sha1');
 
 var Authing = function(opts) {
 	var self = this;
-	if(!opts.clientId) {
-		throw 'clientId is not provided';
-	}
-
-	if(!opts.secret) {
-		throw 'app secret is not provided';
-	}
+	this.opts = opts;
 
 	if(opts.host) {
 		configs.services.user.host = opts.host.user || configs.services.user.host;
 		configs.services.oauth.host = opts.host.oauth || configs.services.oauth.host;
 	}
 
-	this.opts = opts;
-
 	this.ownerAuth = {
 		authed: false,
 		authSuccess: false,
 		token: null
-	}
+	};
+
 	this.userAuth = {
 		authed: false,
 		authSuccess: false,
 		token: null
-	}
+	};	
 
 	this.initUserClient();
 	this.initOwnerClient();
 	this.initOAuthClient();
+
+	if (!opts.accessToken) {
+		if(!opts.clientId) {
+			throw 'clientId is not provided';
+		}
+	
+		if(configs.inBrowser) {
+			if (opts.secret) {
+				throw '检测到你处于浏览器环境，当前已不推荐在浏览器环境中暴露 secret，请到 https://docs.authing.cn/#/quick_start/javascript 查看最新的初始化方式';
+			}
+	
+			if (!opts.timestamp) {
+				throw 'timestamp is not provided';
+			}
+	
+			if (!opts.nonce) {
+				throw 'nonce is not provided';
+			}
+			
+			this.opts.signature = sha1(opts.timestamp + opts.nonce.toString());
+		} else {
+			if(!opts.secret) {
+				throw 'app secret is not provided';
+			}	
+		}
+	}
 
 	return this._auth().then(function(token) {
 		if(token) {
@@ -159,9 +137,23 @@ Authing.prototype = {
 
 	_auth: function() {
 
+		let authOpts = {
+			baseURL: configs.services.user.host,
+		};
+
+		if (this.opts.accessToken) {
+			authOpts['headers'] = {
+				Authorization: `Bearer ${this.opts.accessToken}`,
+			};
+		}
+
 		if(!this._AuthService) {
-			this._AuthService = new GraphQLClient({
-				baseURL: configs.services.user.host
+			this._AuthService = new GraphQLClient(authOpts);
+		}
+
+		if (this.opts.accessToken && this._AuthService) {
+			return new Promise((resolve) => {
+				resolve(this.opts.accessToken);
 			});
 		}
 
@@ -172,20 +164,63 @@ Authing.prototype = {
 
 		var self = this;
 
+		let query = '';
+		const queryField = `{
+			accessToken
+			clientInfo {
+				_id
+				name
+				descriptions
+				jwtExpired
+				createdAt
+				isDeleted
+				logo
+				emailVerifiedDefault
+				registerDisabled
+				allowedOrigins
+				clientType {
+					_id
+					name
+					description
+					image
+					example
+				}
+			}
+		}`
+
+		if (configs.inBrowser) {
+			options = {
+				clientId: this.opts.clientId,
+				timestamp: this.opts.timestamp,
+				nonce: this.opts.nonce,
+				signature: this.opts.signature,
+			}
+			query = `query {
+				getClientWhenSdkInit(timestamp: "${options.timestamp}", clientId: "${options.clientId}", nonce: ${options.nonce}, signature: "${options.signature}")${queryField}
+			}`;
+		} else {
+			query = `query {
+				getClientWhenSdkInit(secret: "${options.secret}", clientId: "${options.clientId}")${queryField}
+			}`;
+		}
+
 		return this._AuthService.request({
-			query: `query {
-					getAccessTokenByAppSecret(secret: "${options.secret}", clientId: "${options.clientId}")
-				}`
-			})
-	  	.then(function(data) {
+			query,
+		})
+		.then(function(data) {
+			let accessToken = ''
+			if (data.getClientWhenSdkInit) {
+				accessToken = data.getClientWhenSdkInit.accessToken
+				self.clientInfo = data.getClientWhenSdkInit.clientInfo
+			}
 			self._AuthService = new GraphQLClient({
 				baseURL: configs.services.user.host,
 				headers: {
-					Authorization: `Bearer ${data.getAccessTokenByAppSecret}`,
+					Authorization: `Bearer ${accessToken}`,
 				}
 			});	
-	  		return data.getAccessTokenByAppSecret;
-	  	});
+			return accessToken;
+		});
 	},
 
 	_loginFromLocalStorage: function() {
@@ -485,6 +520,69 @@ Authing.prototype = {
 			return res.user;
 		});
 	},
+
+	userPatch: function(options) {
+		this.haveAccess();
+		if(!options) {
+			throw 'options is not provided';
+		}
+		if(!options.ids) {
+			throw 'ids in options is not provided';
+		}
+		options.registerInClient = this.opts.clientId;
+		
+		var client = this._chooseClient();
+		
+		return client.request({
+			operationName: 'userPatch',
+			query: `query userPatch($ids: String!){
+				userPatch(ids: $ids) {
+					list {
+						_id
+						unionid
+						email
+						emailVerified
+						username
+						nickname
+						company
+						photo
+						browser
+						registerInClient
+						registerMethod
+						oauth
+						token
+						tokenExpiredAt
+						loginsCount
+						lastLogin
+						lastIP
+						signedUp
+						blocked
+						isDeleted
+						userLocation {
+							_id
+							when
+							where
+						}
+						userLoginHistory {
+							totalCount
+							list {
+								_id
+								when
+								success
+								ip
+								result
+							}
+						}
+					}
+					totalCount
+				}
+				
+			}`,
+			variables: options
+		}).then(function(res) {
+			return res.userPatch;
+		});
+	},	
 
 	list: function(page, count) {
 
@@ -948,8 +1046,8 @@ Authing.prototype = {
 		inputElem.accept = "image/*";             
 		inputElem.onchange = function() {
 			cb(inputElem.files[0]);
-		}
-		inputElem.click()
+		};
+		inputElem.click();
 	},
 
 	decodeToken: function(token) {
@@ -1130,217 +1228,535 @@ Authing.prototype = {
 	  	return str;
 	},
 
-    genQRCode: function(clientId) {
-      var random = this.randomWord(true, 12, 24);
-      sessionStorage.randomWord = random;
-      return axios.get('https://oauth.authing.cn/oauth/wxapp/qrcode/' + clientId + '?random=' + random);
-    },
+	genQRCode: function(clientId) {
+		var random = this.randomWord(true, 12, 24);
+		sessionStorage.randomWord = random;
+		return axios.get('https://oauth.authing.cn/oauth/wxapp/qrcode/' + clientId + '?random=' + random);
+	},
 
-    checkQR: function() {
-      var random = sessionStorage.randomWord || '';
-      return axios.post('https://oauth.authing.cn/oauth/wxapp/confirm/qr?random=' + random);
-    },
+	checkQR: function() {
+		var random = sessionStorage.randomWord || '';
+		return axios.post('https://oauth.authing.cn/oauth/wxapp/confirm/qr?random=' + random);
+	},
 
-    startWXAppScaning: function(opts) {
+	startWXAppScaning: function(opts) {
 
-      var self = this;
+		var self = this;
 
-      if(!opts) {
-      	opts = {};
-      }
-
-      var mountNode = opts.mount || 'authing__qrcode-root-node';
-      var interval = opts.interval || 1500;
-      var tips = opts.tips;
-
-      var redirect = true;
-
-      if(opts.hasOwnProperty('redirect')) {
-      	if(!opts.redirect) {
-      		redirect = false;
-      	}
-      }
-
-      var onError = opts.onError;
-      var onSuccess = opts.onSuccess;
-      var onIntervalStarting = opts.onIntervalStarting;
-
-	  var qrcodeNode = document.getElementById(mountNode);
-	  
-	  var needGenerate = false;
-
-      if(!qrcodeNode) {
-        qrcodeNode = document.createElement('div');
-        qrcodeNode.id = mountNode;
-        qrcodeNode.style = "z-index: 65535;position: fixed;background: #fff;width: 300px;height: 300px;left: 50%;margin-left: -150px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -150px;border: 1px solid #ccc;"        
-		document.getElementsByTagName('body')[0].appendChild(qrcodeNode);
-		needGenerate = true;
-      }else {
-		  qrcodeNode.style="position:relative";
-	  }
-
-      var styleNode = document.createElement('style'), style = '#authing__retry a:hover{outline:0px;text-decoration:none;}#authing__spinner{position:absolute;left:50%;margin-left:-6px;}.spinner{margin:100px auto;width:20px;height:20px;position:relative}.container1>div,.container2>div,.container3>div{width:6px;height:6px;background-color:#00a1ea;border-radius:100%;position:absolute;-webkit-animation:bouncedelay 1.2s infinite ease-in-out;animation:bouncedelay 1.2s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}.spinner .spinner-container{position:absolute;width:100%;height:100%}.container2{-webkit-transform:rotateZ(45deg);transform:rotateZ(45deg)}.container3{-webkit-transform:rotateZ(90deg);transform:rotateZ(90deg)}.circle1{top:0;left:0}.circle2{top:0;right:0}.circle3{right:0;bottom:0}.circle4{left:0;bottom:0}.container2 .circle1{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.container3 .circle1{-webkit-animation-delay:-1.0s;animation-delay:-1.0s}.container1 .circle2{-webkit-animation-delay:-0.9s;animation-delay:-0.9s}.container2 .circle2{-webkit-animation-delay:-0.8s;animation-delay:-0.8s}.container3 .circle2{-webkit-animation-delay:-0.7s;animation-delay:-0.7s}.container1 .circle3{-webkit-animation-delay:-0.6s;animation-delay:-0.6s}.container2 .circle3{-webkit-animation-delay:-0.5s;animation-delay:-0.5s}.container3 .circle3{-webkit-animation-delay:-0.4s;animation-delay:-0.4s}.container1 .circle4{-webkit-animation-delay:-0.3s;animation-delay:-0.3s}.container2 .circle4{-webkit-animation-delay:-0.2s;animation-delay:-0.2s}.container3 .circle4{-webkit-animation-delay:-0.1s;animation-delay:-0.1s}@-webkit-keyframes bouncedelay{0%,80%,100%{-webkit-transform:scale(0.0)}40%{-webkit-transform:scale(1.0)}}@keyframes bouncedelay{0%,80%,100%{transform:scale(0.0);-webkit-transform:scale(0.0)}40%{transform:scale(1.0);-webkit-transform:scale(1.0)}}';
-
-      styleNode.type = "text/css";
-
-      if(styleNode.styleSheet) {
-        styleNode.styleSheet.cssText = style;
-      }else{
-        styleNode.innerHTML = style;
-      }
-
-      document.getElementsByTagName("head")[0].appendChild(styleNode);      
-
-      var loading = function() {
-        qrcodeNode.innerHTML = '<div id="authing__spinner" class="spinner"><div class="spinner-container container1"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container2"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container3"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div></div>';
-      }
-
-      var unloading = function() {
-        var child = document.getElementById("authing__spinner");
-        qrcodeNode.removeChild(child);
-      }      
-
-      var genTip = function(text) {
-        var tip = document.createElement('span');
-		tip.class = 'authing__heading-subtitle';
-		if(!needGenerate) {
-			tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;';
-		}else {
-			tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 12px;color: #888;';
-		}
-        tip.innerHTML = text;
-        return tip;
-      }
-
-      var genImage = function(src) {
-        var qrcodeImage = document.createElement('img');
-        qrcodeImage.class = 'authing__qrcode';
-        qrcodeImage.src = src;
-        qrcodeImage.width = 240;
-        qrcodeImage.height = 240;
-        return qrcodeImage;
-      }
-
-      var genShadow = function(text, aOnClick) {
-        var shadow = document.createElement('div');
-        shadow.id = "authing__retry";
-        shadow.style = "text-align:center;width: 240px;height: 240px;position: absolute;left: 50%;top: 0px;margin-left: -120px;background-color: rgba(0,0,0, 0.5);line-height:240px;color:#fff;font-weight:600;";
-
-        var shadowA = document.createElement('a');
-        shadowA.innerHTML = text;
-        shadowA.style = "color:#fff;border-bottom: 1px solid #fff;cursor: pointer;"
-        shadowA.onclick = aOnClick;
-        shadow.appendChild(shadowA);
-        return shadow;      
-      }
-
-      var genRetry = function(qrcodeNode, tipText) {
-		var tip = genTip(tipText); 
-		
-		var qrcodeWrapper = document.createElement("div");
-		qrcodeWrapper.id = 'authing__qrcode-wrapper';
-		qrcodeWrapper.style = "text-align: center";
-
-		var qrcodeImage = genImage('https://usercontents.authing.cn/authing_user_manager_wxapp_qrcode.jpg');
-
-		if(!needGenerate) {
-			qrcodeImage.style = "margin-top: 12px;"
-		}else {
-			qrcodeImage.style = "margin-top: 16px;"
+		if(!opts) {
+			opts = {};
 		}
 
-        qrcodeImage.onload = function() {
-          unloading();
-        }
+		var mountNode = opts.mount || 'authing__qrcode-root-node';
+		var interval = opts.interval || 1500;
+		var tips = opts.tips;
 
-        var shadow = genShadow('点击重试', function() {
-          start();          
-        });
+		var redirect = true;
 
-        qrcodeWrapper.appendChild(qrcodeImage);
-        qrcodeWrapper.appendChild(shadow);
-		qrcodeWrapper.appendChild(tip);  
-		qrcodeNode.appendChild(qrcodeWrapper);      
-      }
+		if(opts.hasOwnProperty('redirect')) {
+			if(!opts.redirect) {
+				redirect = false;
+			}
+		}
 
-      var start = function() {
-        loading();
-        self.genQRCode(self.opts.clientId).then(function(qrRes) {
+		var onError = opts.onError;
+		var onSuccess = opts.onSuccess;
+		var onIntervalStarting = opts.onIntervalStarting;
 
-          qrRes = qrRes.data;
+	var qrcodeNode = document.getElementById(mountNode);
+	
+	var needGenerate = false;
 
-          if(qrRes.code != 200) {
-            genRetry(qrcodeNode, qrRes.message);
-            if(onError) {
-              onError(qrRes);
-            }
-          }else {
-            var qrcode = qrRes.data;
-            sessionStorage.qrcodeUrl = qrcode.qrcode;
-            sessionStorage.qrcode = JSON.stringify(qrcode);
+		if(!qrcodeNode) {
+			qrcodeNode = document.createElement('div');
+			qrcodeNode.id = mountNode;
+			qrcodeNode.style = "z-index: 65535;position: fixed;background: #fff;width: 300px;height: 300px;left: 50%;margin-left: -150px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -150px;border: 1px solid #ccc;"        
+			document.getElementsByTagName('body')[0].appendChild(qrcodeNode);
+			needGenerate = true;
+		}else {
+			qrcodeNode.style = 'position:relative';
+		}
 
-            if(qrcodeNode) {
-              var qrcodeWrapper = document.createElement("div");
-              qrcodeWrapper.id = 'authing__qrcode-wrapper';
-              qrcodeWrapper.style = "text-align: center";              
+		var styleNode = document.createElement('style'), style = '#authing__retry a:hover{outline:0px;text-decoration:none;}#authing__spinner{position:absolute;left:50%;margin-left:-6px;}.spinner{margin:100px auto;width:20px;height:20px;position:relative}.container1>div,.container2>div,.container3>div{width:6px;height:6px;background-color:#00a1ea;border-radius:100%;position:absolute;-webkit-animation:bouncedelay 1.2s infinite ease-in-out;animation:bouncedelay 1.2s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}.spinner .spinner-container{position:absolute;width:100%;height:100%}.container2{-webkit-transform:rotateZ(45deg);transform:rotateZ(45deg)}.container3{-webkit-transform:rotateZ(90deg);transform:rotateZ(90deg)}.circle1{top:0;left:0}.circle2{top:0;right:0}.circle3{right:0;bottom:0}.circle4{left:0;bottom:0}.container2 .circle1{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.container3 .circle1{-webkit-animation-delay:-1.0s;animation-delay:-1.0s}.container1 .circle2{-webkit-animation-delay:-0.9s;animation-delay:-0.9s}.container2 .circle2{-webkit-animation-delay:-0.8s;animation-delay:-0.8s}.container3 .circle2{-webkit-animation-delay:-0.7s;animation-delay:-0.7s}.container1 .circle3{-webkit-animation-delay:-0.6s;animation-delay:-0.6s}.container2 .circle3{-webkit-animation-delay:-0.5s;animation-delay:-0.5s}.container3 .circle3{-webkit-animation-delay:-0.4s;animation-delay:-0.4s}.container1 .circle4{-webkit-animation-delay:-0.3s;animation-delay:-0.3s}.container2 .circle4{-webkit-animation-delay:-0.2s;animation-delay:-0.2s}.container3 .circle4{-webkit-animation-delay:-0.1s;animation-delay:-0.1s}@-webkit-keyframes bouncedelay{0%,80%,100%{-webkit-transform:scale(0.0)}40%{-webkit-transform:scale(1.0)}}@keyframes bouncedelay{0%,80%,100%{transform:scale(0.0);-webkit-transform:scale(0.0)}40%{transform:scale(1.0);-webkit-transform:scale(1.0)}}';
 
-              var qrcodeImage = genImage(qrcode.qrcode);
+		styleNode.type = "text/css";
 
-              qrcodeImage.onload = function() {
-                unloading();
-                var inter = 0;
-                inter = setInterval(function() {
-                 if(onIntervalStarting) {
-                 	onIntervalStarting(inter);
-                 }
-                 self.checkQR().then(function(checkRes) {
-                  var checkResult = checkRes.data.data;
-                  if(checkResult.code === 200) {
-                    clearInterval(inter);
-                    if(redirect) {
-                      var shadow = genShadow('扫码成功，即将跳转', function() {
-                        window.location.href = checkResult.redirect + '?code=200&data=' + (JSON.stringify(checkResult.data));
-                      });
-                      setTimeout(function() {
-                        window.location.href = checkResult.redirect + '?code=200&data=' + (JSON.stringify(checkResult.data));
-                      }, 600);
-                      qrcodeNode.appendChild(shadow);                      
-                    }else {
-					  var shadow = genShadow('扫码成功');
-                      qrcodeNode.appendChild(shadow);					  
-                      if(onSuccess) {
-                        onSuccess(checkResult);
-                      }
-                    }
-                  }
-                 });
-                }, interval);
-              }
+		if(styleNode.styleSheet) {
+			styleNode.styleSheet.cssText = style;
+		}else {
+			styleNode.innerHTML = style;
+		}
 
-              var tip = genTip(tips || "使用 <strong>微信</strong> 或小程序 <strong>身份管家</strong> 扫码登录");
+		document.getElementsByTagName("head")[0].appendChild(styleNode);      
 
-              qrcodeWrapper.appendChild(qrcodeImage);
-              qrcodeWrapper.appendChild(tip);
-              qrcodeNode.appendChild(qrcodeWrapper);
-            }
-          }
+		var loading = function() {
+			qrcodeNode.innerHTML = '<div id="authing__spinner" class="spinner"><div class="spinner-container container1"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container2"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container3"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div></div>';
+		};
 
-        }).catch(function(error) {
-          genRetry(qrcodeNode, '网络出错，请重试');
-          if(onError) {
-            onError(error);
-          }
-        });
-      }
+		var unloading = function() {
+			var child = document.getElementById("authing__spinner");
+			qrcodeNode.removeChild(child);
+		};
 
-      start();
+		var genTip = function(text) {
+			var tip = document.createElement('span');
+			tip.class = 'authing__heading-subtitle';
+			if(!needGenerate) {
+				tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;';
+			}else {
+				tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 12px;color: #888;';
+			}
+			tip.innerHTML = text;
+			return tip;
+		};
 
-    }
+		var genImage = function(src) {
+			var qrcodeImage = document.createElement('img');
+			qrcodeImage.class = 'authing__qrcode';
+			qrcodeImage.src = src;
+			qrcodeImage.width = 240;
+			qrcodeImage.height = 240;
+			return qrcodeImage;
+		};
 
-}
+		var genShadow = function(text, aOnClick) {
+			var shadow = document.createElement('div');
+			shadow.id = "authing__retry";
+			shadow.style = "text-align:center;width: 240px;height: 240px;position: absolute;left: 50%;top: 0px;margin-left: -120px;background-color: rgba(0,0,0, 0.5);line-height:240px;color:#fff;font-weight:600;";
 
-if(typeof window === 'object') {
-	window.Authing = Authing;
-}
+			var shadowA = document.createElement('a');
+			shadowA.innerHTML = text;
+			shadowA.style = "color:#fff;border-bottom: 1px solid #fff;cursor: pointer;"
+			shadowA.onclick = aOnClick;
+			shadow.appendChild(shadowA);
+			return shadow;      
+		};
+
+		var genRetry = function(qrcodeNode, tipText) {
+			var tip = genTip(tipText); 
+			
+			var qrcodeWrapper = document.createElement("div");
+			qrcodeWrapper.id = 'authing__qrcode-wrapper';
+			qrcodeWrapper.style = "text-align: center";
+
+			var qrcodeImage = genImage('https://usercontents.authing.cn/authing_user_manager_wxapp_qrcode.jpg');
+
+			if(!needGenerate) {
+				qrcodeImage.style = "margin-top: 12px;"
+			}else {
+				qrcodeImage.style = "margin-top: 16px;"
+			}
+
+			qrcodeImage.onload = function() {
+				unloading();
+			};
+
+			var shadow = genShadow('点击重试', function() {
+				start();          
+			});
+
+			qrcodeWrapper.appendChild(qrcodeImage);
+			qrcodeWrapper.appendChild(shadow);
+			qrcodeWrapper.appendChild(tip);  
+			qrcodeNode.appendChild(qrcodeWrapper);      
+		};
+
+		var start = function() {
+			loading();
+			self.genQRCode(self.opts.clientId).then(function(qrRes) {
+
+				qrRes = qrRes.data;
+
+				if(qrRes.code != 200) {
+					genRetry(qrcodeNode, qrRes.message);
+					if(onError) {
+						onError(qrRes);
+					}
+				}else {
+					var qrcode = qrRes.data;
+					sessionStorage.qrcodeUrl = qrcode.qrcode;
+					sessionStorage.qrcode = JSON.stringify(qrcode);
+
+					if(qrcodeNode) {
+						var qrcodeWrapper = document.createElement("div");
+						qrcodeWrapper.id = 'authing__qrcode-wrapper';
+						qrcodeWrapper.style = "text-align: center";              
+
+						var qrcodeImage = genImage(qrcode.qrcode);
+
+						qrcodeImage.onload = function() {
+							unloading();
+							var inter = 0;
+							inter = setInterval(function() {
+								if(onIntervalStarting) {
+								onIntervalStarting(inter);
+								}
+								self.checkQR().then(function(checkRes) {
+								var checkResult = checkRes.data.data;
+								if(checkResult.code === 200) {
+									clearInterval(inter);
+									if(redirect) {
+										var shadow = genShadow('扫码成功，即将跳转', function() {
+											window.location.href = checkResult.redirect + '?code=200&data=' + (JSON.stringify(checkResult.data));
+										});
+										setTimeout(function() {
+											window.location.href = checkResult.redirect + '?code=200&data=' + (JSON.stringify(checkResult.data));
+										}, 600);
+										qrcodeNode.appendChild(shadow);                      
+									}else {
+										var shadow = genShadow('扫码成功');
+										qrcodeNode.appendChild(shadow);					  
+										if(onSuccess) {
+											onSuccess(checkResult);
+										}
+									}
+								}
+								});
+							}, interval);
+						}
+
+						var tip = genTip(tips || "使用 <strong>微信</strong> 或小程序 <strong>身份管家</strong> 扫码登录");
+
+						qrcodeWrapper.appendChild(qrcodeImage);
+						qrcodeWrapper.appendChild(tip);
+						qrcodeNode.appendChild(qrcodeWrapper);
+					}
+				}
+
+			}).catch(function(error) {
+				genRetry(qrcodeNode, '网络出错，请重试');
+				if(onError) {
+					onError(error);
+				}
+			});
+		};
+
+		start();
+
+	},
+	
+	getVerificationCode(phone) {
+		if (!phone) {
+			throw 'phone is not provided';
+		}
+
+		const url = `${configs.services.user.host.replace('/graphql', '')}/send_smscode/${phone}/${this.opts.clientId}`;
+		return axios.get(url).then((result) => {
+			if (result.data.code !== 200) {
+				throw result.data;
+			}else {
+				return result.data;
+			}	
+		});
+	},
+
+	loginByPhoneCode(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			registerInClient: this.opts.clientId,
+			phone: options.phone,
+			phoneCode: parseInt(options.phoneCode),
+		};
+
+		return this.UserClient.request({
+			operationName: 'login',
+			query: `mutation login($phone: String, $phoneCode: Int, $registerInClient: String!) {
+						login(phone: $phone, phoneCode: $phoneCode, registerInClient: $registerInClient) {
+							_id
+							email
+							emailVerified
+							username
+							nickname
+							phone
+							company
+							photo
+							browser
+							token
+							tokenExpiredAt
+							loginsCount
+							lastLogin
+							lastIP
+							signedUp
+							blocked
+							isDeleted
+						}
+				}`,
+			variables,
+		}).then(function(res) {
+			return res.login;
+		}).then(function(user) {
+			if(user) {
+				self.initUserClient(user.token);				
+			}
+			return user;
+		});
+	},
+
+	queryPermissions(userId) {
+		if(!userId) {
+			throw 'userId is not provided.';
+		}
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			user: userId,
+		};
+
+		return this.ownerClient.request({
+			operationName: 'QueryRoleByUserId',
+			query: `query QueryRoleByUserId($user: String!, $client: String!){
+				queryRoleByUserId(user: $user, client: $client) {
+					totalCount
+					list {
+						group {
+							name
+							permissions
+						}
+					}
+				}
+			}`,
+			variables,
+		}).then(function(res) {
+			return res.queryRoleByUserId;
+		});
+	},
+
+	queryRoles(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			clientId: this.opts.clientId,
+			page: options.page,
+			count: options.count,
+		};
+
+		return this.ownerClient.request({
+			operationName: 'ClientRoles',
+			query: `
+				query ClientRoles(
+					$clientId: String!
+					$page: Int
+					$count: Int
+				) {
+					clientRoles(
+						client: $clientId
+						page: $page
+						count: $count
+					) {
+						totalCount
+						list {
+							_id
+							name
+							descriptions
+							client
+							createdAt
+							permissions
+						}
+					}
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.clientRoles;
+		});
+	},
+
+	createRole(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			name: options.name,
+			descriptions: options.descriptions,
+		};
+
+		return this.ownerClient.request({
+			operationName: 'CreateRole',
+			query: `
+				mutation CreateRole(
+					$name: String!
+					$client: String!
+					$descriptions: String
+				) {
+					createRole(
+						name: $name
+						client: $client
+						descriptions: $descriptions
+					) {
+						_id,
+						name,
+						client,
+						descriptions
+					}
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.createRole;
+		});
+	},
+
+	updateRolePermissions(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			name: options.name,
+			permissions: options.permissions,
+			_id: options.roleId,
+		};
+
+		return this.ownerClient.request({
+			operationName: 'UpdateRole',
+			query: `
+				mutation UpdateRole(
+					$_id: String!
+					$name: String!
+					$client: String!
+					$descriptions: String
+					$permissions: String
+				) {
+					updateRole(
+						_id: $_id
+						name: $name
+						client: $client
+						descriptions: $descriptions
+						permissions: $permissions
+					) {
+						_id,
+						name,
+						client,
+						descriptions,
+						permissions
+					}
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.updateRole;
+		});
+	},
+
+	assignUserToRole(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			group: options.roleId,
+			user: options.user,
+		};
+
+		return this.ownerClient.request({
+			operationName: 'AssignUserToRole',
+			query: `
+				mutation AssignUserToRole(
+					$group: String!
+					$client: String!
+					$user: String!
+				) {
+					assignUserToRole(
+						group: $group
+						client: $client
+						user: $user
+					) {
+						totalCount,
+						list {
+							_id,
+							client {
+								_id
+							},
+							user {
+								_id
+							},
+							createdAt
+						}
+					}
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.assignUserToRole;
+		});
+	},
+
+	removeUserFromRole(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+
+		let self = this;
+
+		this.haveAccess();
+
+		const variables = {
+			client: this.opts.clientId,
+			user: options.user,
+			group: options.roleId,
+		};
+
+		return this.ownerClient.request({
+			operationName: 'RemoveUserFromGroup',
+			query: `
+				mutation RemoveUserFromGroup(
+					$group: String!
+					$client: String!
+					$user: String!
+				) {
+					removeUserFromGroup(
+						group: $group
+						client: $client
+						user: $user
+					) {
+						_id,
+						group {
+							_id
+						},
+						client {
+							_id
+						},
+						user {
+							_id
+						}
+					}
+				}
+			`,
+			variables,
+		}).then(function(res) {
+			return res.removeUserFromGroup;
+		});
+	},	
+
+};
 
 module.exports = Authing;
