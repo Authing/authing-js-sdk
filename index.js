@@ -354,6 +354,63 @@ Authing.prototype = {
 
 	},
 
+	_loginByLDAP: function(options) {
+		if(!options) {
+			throw 'options is not provided.';
+		}
+
+		options['clientId'] = this.opts.clientId;
+
+		if(!options.password) {
+			throw 'password is not provided.';
+		}
+
+		if(!options.username) {
+			throw 'username is not provided.';
+		}
+
+		this.haveAccess();
+
+		return this.OAuthClient.request({
+			operationName: 'LoginByLDAP',
+			query: `mutation LoginByLDAP($username: String!, $password: String!, $clientId: String!) {
+				LoginByLDAP(username: $username, clientId: $clientId, password: $password) {
+					    _id
+					    email
+							emailVerified
+							unionid
+							oauth
+							registerMethod
+					    username
+					    nickname
+					    company
+					    photo
+					    browser
+					    token
+					    tokenExpiredAt
+					    loginsCount
+					    lastLogin
+					    lastIP
+					    signedUp
+					    blocked
+				    }
+				}`,
+			variables: options
+		}).then(function(res) {
+			return res.LoginByLDAP;
+		});
+	},
+
+	loginByLDAP: function(options) {
+		let self = this;
+		return this._loginByLDAP(options).then(function(user) {
+			if(user) {
+				self.initUserClient(user.token);				
+			}
+			return user;
+		});
+	},
+
 	login: function(options) {
 		let self = this;
 		return this._login(options).then(function(user) {
