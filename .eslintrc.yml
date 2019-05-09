@@ -1,0 +1,7 @@
+root: true
+extends: willin
+env:
+  browser: true
+rules:
+  no-throw-literal: 0
+  max-len: 0
