@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 const test = require('ava');
-const Authing = require('../index');
+const Authing = require('../src');
 
 test('config:missing clientId', (t) => {
   t.throws(() => {

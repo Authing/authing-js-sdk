@@ -2,9 +2,9 @@
 
 const axios = require('axios');
 const sha1 = require('js-sha1');
-const configs = require('./src/configs');
-const GraphQLClient = require('./src/graphql');
-const encryption = require('./src/_encryption');
+const configs = require('./configs');
+const GraphQLClient = require('./graphql');
+const encryption = require('./_encryption');
 
 function Authing(opts) {
   const self = this;
