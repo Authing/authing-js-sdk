@@ -1,86 +1,84 @@
-var Authing = require('../dist/authing-js-sdk');
+/* eslint-disable no-underscore-dangle */
+const Authing = require('../');
 
-var email = "", password = "";
-var secret = '42aa3deba3b2c35aaf018acafdf503f8';
-var clientId = '5b0dfcff82f4ce00014fdcd4';
+let email = '';
+let password = '';
+const secret = '42aa3deba3b2c35aaf018acafdf503f8';
+const clientId = '5b0dfcff82f4ce00014fdcd4';
 
-var auth = new Authing({
-	clientId: clientId,
-	secret: secret
+const auth = new Authing({
+  clientId,
+  secret
 });
 
-auth.then(function(auth) {
+auth.then((validAuth) => {
+  email = '597055914@qq.com';
+  password = '123456';
 
-	email = "597055914@qq.com";
-	password = "123456";
+  validAuth.readOAuthList().then((list) => {
+    console.log('获取OAuth列表成功!');
+    console.log(list);
+  }).catch((error) => {
+    console.log('获取OAuth列表失败!');
+    console.log(error);
+  });
 
-	auth.readOAuthList().then(function(list) {
-		console.log('获取OAuth列表成功!');
-		console.log(list);
-	}).catch(function(error) {
-		console.log('获取OAuth列表失败!');
-		console.log(error);
-	});
+  validAuth.login({
+    email,
+    password
+  }).then((user) => {
+    console.log('登录成功!');
+    console.log(user);
 
-	auth.login({
-		email: email,
-		password: password
-	}).then(function(user) {
-		console.log('登录成功!');
-		console.log(user);
+    validAuth.checkLoginStatus(user.token).then((res) => {
+      console.log(res);
+    }).catch((error) => {
+      console.log(error);
+    });
 
-		auth.checkLoginStatus(user.token).then(function(res) {
-			console.log(res);
-		}).catch(function(error) {
-			console.log(error);
-		});
+    validAuth.list().then((res) => {
+      console.log('获取用户列表成功!');
+      console.log(res);
+    }).catch((error) => {
+      console.log('获取用户列表失败!');
+      console.log(error);
+    });
 
-		auth.list().then(function(res) {
-			console.log('获取用户列表成功!');
-			console.log(res);
-		}).catch(function(error) {
-			console.log('获取用户列表失败!');
-			console.log(error);
-		});
+    validAuth.update({
+      _id: user._id,
+      nickname: 'fuckuaxxa',
+      username: 'xxxxxxxxx'
+    })
+      .then((res) => {
+        console.log('修改资料成功!');
+        console.log(res);
 
-		auth.update({
-			_id: user._id,
-			nickname: 'fuckuaxxa',
-			username: 'xxxxxxxxx'
-		})
-		.then(function(res) {
-			console.log('修改资料成功!');
-			console.log(res);
+        validAuth.remove(res._id)
+          .then((res2) => {
+            console.log('删除用户成功');
+            console.log(res2);
+          })
+          .catch((error) => {
+            console.log('删除用户失败');
+            console.log(error);
+          });
+      }).catch((error) => {
+        console.log('修改资料失败!');
+        console.log(error);
+      });
+  }).catch((error) => {
+    console.log('登录失败!');
+    console.log(error);
+  });
 
-			auth.remove(res._id)
-			.then(function(res) {
-				console.log('删除用户成功')
-				console.log(res);
-			})
-			.catch(function(error) {
-				console.log('删除用户失败')
-				console.log(error);
-			})
-
-		}).catch(function(error) {
-			console.log('修改资料失败!');
-			console.log(error);
-		});
-
-	}).catch(function(error) {
-		console.log('登录失败!')
-		console.log(error);
-	});
-
-	auth.register({
-		email: email,
-		password: password
-	}).then(function(res) {
-		console.log('注册成功!')
-		console.log(res);
-	}).catch(function(error) {
-		console.log('注册失败!')
-		console.log(error);
-	});
-
+  validAuth.register({
+    email,
+    password
+  }).then((res) => {
+    console.log('注册成功!');
+    console.log(res);
+  }).catch((error) => {
+    console.log('注册失败!');
+    console.log(error);
+  });
 });
