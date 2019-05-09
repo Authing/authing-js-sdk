@@ -12,6 +12,8 @@ Authing 的 JavaScript SDK 支持 **Angular.js**, **React.js**, **Vue.js** 以�
 
 ----------
 
+[![Build Status](https://travis-ci.org/Authing/authing.js.svg?branch=next)](https://travis-ci.org/Authing/authing.js) [![codebeat badge](https://codebeat.co/badges/428bd4ce-0ad9-43c4-9c88-b8037a483cfa)](https://codebeat.co/projects/github-com-authing-authing-js-next) [![codecov](https://codecov.io/gh/Authing/authing.js/branch/next/graph/badge.svg)](https://codecov.io/gh/Authing/authing.js)
+
 #### NPM
 
 当构建大规模应用时，我们推荐使用 ```npm``` 进行安装， 它可以与一些模块打包工具很好地配合使用，如 ```Webpack```， ```Browserify。```
@@ -97,9 +99,9 @@ const Authing = require('authing-js-sdk');
 
 // 对 Client ID 和 Client Secret 进行验证，获取 Access Token
 const auth = new Authing({
-	// 若在浏览器端请使用 timestamp + nonce + clientId 的形式	
+	// 若在浏览器端请使用 timestamp + nonce + clientId 的形式
 	clientId: 'your_client_id',
-	secret: 'your_app_secret' 
+	secret: 'your_app_secret'
 });
 
 auth.then(function(authing) {
@@ -110,11 +112,11 @@ auth.then(function(authing) {
 		email: 'test@testmail.com',
 		password: 'testpassword'
 	}).then(function(user) {
-		console.log(user);	
+		console.log(user);
 	}).catch(function(error) {
-		console.log(error);	
+		console.log(error);
 	});
-	
+
 }).catch(function(error) {
 	//验证失败
 	console.log(error);
@@ -135,7 +137,7 @@ const main = async () => {
 
 	try{
 		auth = await new Authing({
-			// 若在浏览器端请使用 timestamp + nonce + clientId 的形式			
+			// 若在浏览器端请使用 timestamp + nonce + clientId 的形式
 			clientId: 'your_client_id',
 			secret: 'your_app_secret'
 		});
@@ -183,7 +185,7 @@ main();
 
 ### 基础用法
 
-使用 ``startWXAppScaning`` 方法： 
+使用 ``startWXAppScaning`` 方法：
 
 ``` javascript
 
@@ -200,7 +202,7 @@ auth.then(function(authing) {
 	authing.startWXAppScaning({
   	mount: 'qrcode-node', //二维码挂载点的 HTML 元素 ID，如不写则默认漂浮在文档中间
 	});
-	
+
 })
 
 ```

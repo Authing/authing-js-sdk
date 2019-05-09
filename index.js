@@ -33,7 +33,7 @@ function Authing(opts) {
 
   if (!opts.accessToken) {
     if (!opts.clientId) {
-      throw 'clientId is not provided';
+      throw new Error('clientId is not provided');
     }
 
     if (configs.inBrowser) {
@@ -51,7 +51,7 @@ function Authing(opts) {
 
       this.opts.signature = sha1(opts.timestamp + opts.nonce.toString());
     } else if (!opts.secret) {
-      throw 'app secret is not provided';
+      throw new Error('app secret is not provided');
     }
   }
 
