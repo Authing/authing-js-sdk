@@ -1,7 +1,5 @@
 const Authing = require('../dist/authing-js-sdk.js');
 
-// const email = 'xxx@memect.co';
-// const password = '123456';
 const secret = '427e24d3b7e289ae9469ab6724dc7ff0';
 const clientId = '5a9fa26cf8635a000185528c';
 
