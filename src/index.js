@@ -1235,7 +1235,7 @@ Authing.prototype = {
     let url = this.opts.host.oauth;
     url = url.replace('/graphql', '');
 
-    return axios.get(`${url}/wxapp/qrcode/${clientId}?random=${random}`);
+    return axios.get(`${url}/oauth/wxapp/qrcode/${clientId}?random=${random}`);
   },
 
   checkQR() {
@@ -1243,7 +1243,7 @@ Authing.prototype = {
     let url = this.opts.host.oauth;
     url = url.replace('/graphql', '');
 
-    return axios.post(`${url}/wxapp/confirm/qr?random=${random}`);
+    return axios.post(`${url}/oauth/wxapp/confirm/qr?random=${random}`);
   },
 
   startWXAppScaning(opts) {
