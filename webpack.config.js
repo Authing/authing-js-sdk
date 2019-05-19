@@ -4,7 +4,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const nodeConfig = {
   target: 'node',
   mode: 'development',
-  entry: './index.js',
+  entry: './src/index.js',
   output: {
     libraryTarget: 'umd',
     path: `${__dirname}/dist`,
@@ -27,7 +27,7 @@ const nodeConfig = {
 const webConfig = {
   target: 'web',
   mode: 'development',
-  entry: './index.js',
+  entry: './src/index.js',
   output: {
     libraryTarget: 'umd',
     path: `${__dirname}/dist`,
@@ -57,7 +57,7 @@ const webConfig = {
 const webMinConfig = {
   target: 'web',
   mode: 'production',
-  entry: './index.js',
+  entry: './src/index.js',
   output: {
     libraryTarget: 'umd',
     path: `${__dirname}/dist`,
