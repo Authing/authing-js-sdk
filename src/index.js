@@ -1231,12 +1231,19 @@ Authing.prototype = {
   genQRCode(clientId) {
     const random = this.randomWord(true, 12, 24);
     sessionStorage.randomWord = random;
-    return axios.get(`https://oauth.authing.cn/oauth/wxapp/qrcode/${clientId}?random=${random}`);
+
+    let url = this.opts.host.oauth;
+    url = url.replace('/graphql', '');
+
+    return axios.get(`${url}/wxapp/qrcode/${clientId}?random=${random}`);
   },
 
   checkQR() {
     const random = sessionStorage.randomWord || '';
-    return axios.post(`https://oauth.authing.cn/oauth/wxapp/confirm/qr?random=${random}`);
+    let url = this.opts.host.oauth;
+    url = url.replace('/graphql', '');
+
+    return axios.post(`${url}/wxapp/confirm/qr?random=${random}`);
   },
 
   startWXAppScaning(opts) {
