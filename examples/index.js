@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-const Authing = require('../index');
+const Authing = require('../dist/authing-js-sdk.js');
 
 let email = '';
 let password = '';
