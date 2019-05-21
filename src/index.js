@@ -1311,9 +1311,9 @@ Authing.prototype = {
       const tip = document.createElement('span');
       tip.class = 'authing__heading-subtitle';
       if (!needGenerate) {
-        tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;';
+        tip.style = 'display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;';
       } else {
-        tip.style = 'margin-top:11px;display: block;font-weight: 400;font-size: 12px;color: #888;';
+        tip.style = 'display: block;font-weight: 400;font-size: 12px;color: #888;';
       }
       tip.innerHTML = text;
       return tip;
@@ -1331,7 +1331,7 @@ Authing.prototype = {
     const genShadow = (text, aOnClick) => {
       const shadow = document.createElement('div');
       shadow.id = 'authing__retry';
-      shadow.style = 'text-align:center;width: 240px;height: 240px;position: absolute;left: 50%;top: 0px;margin-left: -120px;background-color: rgba(0,0,0, 0.5);line-height:240px;color:#fff;font-weight:600;';
+      shadow.style = 'margin-top:16px;text-align:center;width: 240px;height: 240px;position: absolute;left: 50%;top: 0px;margin-left: -120px;background-color: rgba(0,0,0, 0.5);line-height:240px;color:#fff;font-weight:600;';
 
       const shadowA = document.createElement('a');
       shadowA.innerHTML = text;
