@@ -4,7 +4,7 @@ const axios = require('axios');
 class GraphQLClient {
   constructor(options) {
     const defaultOpt = {
-      timeout: 2000,
+      timeout: 5000,
       method: 'POST'
     };
     this.options = {
