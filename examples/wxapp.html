@@ -8,17 +8,17 @@
 </head>
 <body>
 
-    <script src="/dist/authing-js-sdk-browser.min.js?v=2"></script>
+    <script src="/dist/authing-js-sdk-browser.min.js?v=3"></script>
 
     <script>
         
         var auth = new Authing({
-            clientId: '5ca4027c8a362c822e26d04f',
+            clientId: '5c668c712e450b00017af455',
             timestamp: Math.round(new Date() / 1000),
             nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
             host: {
-                user: 'http://localhost:5555/graphql',
-                oauth: 'http://localhost:5556/graphql'
+                // user: 'http://localhost:5555/graphql',
+                // oauth: 'http://localhost:5556/graphql'
             }
         });
 

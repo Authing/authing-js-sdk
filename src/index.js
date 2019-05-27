@@ -1232,7 +1232,7 @@ Authing.prototype = {
     const random = this.randomWord(true, 12, 24);
     sessionStorage.randomWord = random;
 
-    let url = this.opts.host.oauth;
+    let url = configs.services.oauth.host;
     url = url.replace('/graphql', '');
 
     return axios.get(`${url}/oauth/wxapp/qrcode/${clientId}?random=${random}`);
@@ -1240,7 +1240,7 @@ Authing.prototype = {
 
   checkQR() {
     const random = sessionStorage.randomWord || '';
-    let url = this.opts.host.oauth;
+    let url = configs.services.oauth.host;
     url = url.replace('/graphql', '');
 
     return axios.post(`${url}/oauth/wxapp/confirm/qr?random=${random}`);
