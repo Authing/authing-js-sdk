@@ -796,6 +796,7 @@ Authing.prototype = {
         password: 'String',
         oldPassword: 'String',
         registerInClient: 'String!',
+        phone: 'String',
         token: 'String',
         tokenExpiredAt: 'String',
         loginsCount: 'Int',
@@ -816,6 +817,7 @@ Authing.prototype = {
       registerInClient
       registerMethod
       oauth
+      phone
       token
       tokenExpiredAt
       loginsCount
