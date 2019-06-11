@@ -73,23 +73,6 @@ auth.then((authing) => {
 });
 ```
 
-### 使用 accessToken
-
-除了使用 clientId 和 secret 外，我们还支持传入 accessToken（需要 v1.5.0 版本及以上），示例如下：
-
-``` javascript
-  const auth = new Authing({
-    accessToken: '71fc55de0fccba1b3f7feb68277e4f379a1019e5'
-  });
-  auth.then((authing) => {
-		// authing.login
-		// authing.register
-		// ...
-  });
-```
-
-使用 accessToken 适用于 OAuth 场景，获取 accessToken 的方法请参考 [OAuth 授权流程](https://docs.authing.cn/#/oauthProvider/authorize)。
-
 ### 使用方法
 
 Authing SDK 的所有 API 都支持 **Promise**。
@@ -174,7 +157,7 @@ main();
 
 ## API
 
-全部 API 请参考：[用户接口](https://docs.authing.cn/#/user_service/user_service)。
+全部 API 请参考：[用户接口](https://docs.authing.cn/authing/sdk/authing-sdk-for-web)。
 
 ## 小程序扫码登录
 
@@ -225,7 +208,7 @@ authing.startWXAppScaning({
 
 ```
 
-了解更多，请查看：[使用小程序扫码登录](https://docs.authing.cn/#/quick_start/wxapp_scan_login)
+了解更多，请查看：[使用小程序扫码登录](https://docs.authing.cn/authing/advanced/wxapp-qrcode)
 
 ## 自定义请求链接
 
@@ -258,4 +241,4 @@ const auth = new Authing({
 
 了解更多报错的详情，请查看[错误代码](https://docs.authing.cn/#/quick_start/error_code)。
 
-获取 Client ID 和 Client Secret，请[点击这里](https://docs.authing.cn/#/quick_start/howto)。
+获取 Client ID 和 Client Secret，请[点击这里](https://learn.authing.cn/authing/others/faq#ru-he-huo-qu-client-id-he-client-secret)。
