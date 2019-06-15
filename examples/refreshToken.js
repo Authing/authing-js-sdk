@@ -23,6 +23,10 @@ auth.then(async (authing) => {
       user: user._id
     }).then((token) => {
         console.log(token);
+        // eslint-disable-next-line no-underscore-dangle
+        authing.user({
+            id: user._id
+        }).then(newUser => console.log(newUser));
     }).catch(error => console.log(error));
   }).catch((err) => {
     console.log('err', err);
