@@ -1740,6 +1740,39 @@ Authing.prototype = {
       `,
       variables
     }).then(res => res.removeUserFromGroup);
+  },
+
+  refreshToken(options) {
+    if (!options) {
+      throw 'options is not provided.';
+    }
+
+    this.haveAccess();
+
+    const variables = {
+      client: this.opts.clientId,
+      user: options.user
+    };
+
+    return this.UserClient.request({
+      operationName: 'RefreshToken',
+      query: `
+        mutation RefreshToken(
+          $client: String!
+          $user: String!
+        ) {
+          refreshToken(
+            client: $client
+            user: $user
+          ) {
+            token
+            iat
+            exp
+          }
+        }
+      `,
+      variables
+    }).then(res => res.refreshToken);
   }
 
 };
