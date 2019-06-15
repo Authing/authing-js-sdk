@@ -1754,7 +1754,7 @@ Authing.prototype = {
       user: options.user
     };
 
-    return this.UserClient.request({
+    return this.ownerClient.request({
       operationName: 'RefreshToken',
       query: `
         mutation RefreshToken(
