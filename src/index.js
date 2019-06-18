@@ -9,6 +9,7 @@ const encryption = require('./_encryption');
 function Authing(opts) {
   const self = this;
   this.opts = opts;
+  this.opts.useSelfWxapp = opts.useSelfWxapp || false;
 
   if (opts.host) {
     configs.services.user.host = opts.host.user || configs.services.user.host;
@@ -38,7 +39,7 @@ function Authing(opts) {
 
     if (configs.inBrowser) {
       if (opts.secret) {
-        throw '检测到你处于浏览器环境，当前已不推荐在浏览器环境中暴露 secret，请到 https://docs.authing.cn/#/quick_start/javascript 查看最新的初始化方式';
+        throw '检测到你处于浏览器环境，当前已不推荐在浏览器环境中暴露 secret，请到 https://docs.authing.cn/authing/sdk/authing-sdk-for-web#chu-shi-hua 查看最新的初始化方式';
       }
 
       if (!opts.timestamp) {
@@ -1237,7 +1238,7 @@ Authing.prototype = {
     let url = configs.services.oauth.host;
     url = url.replace('/graphql', '');
 
-    return axios.get(`${url}/oauth/wxapp/qrcode/${clientId}?random=${random}`);
+    return axios.get(`${url}/oauth/wxapp/qrcode/${clientId}?random=${random}&useSelfWxapp=${this.opts.useSelfWxapp}`);
   },
 
   checkQR() {
@@ -1245,7 +1246,7 @@ Authing.prototype = {
     let url = configs.services.oauth.host;
     url = url.replace('/graphql', '');
 
-    return axios.post(`${url}/oauth/wxapp/confirm/qr?random=${random}`);
+    return axios.post(`${url}/oauth/wxapp/confirm/qr?random=${random}&useSelfWxapp=${this.opts.useSelfWxapp}`);
   },
 
   startWXAppScaning(opts) {
