@@ -8,15 +8,17 @@
 </head>
 <body>
 
-    <script src="/dist/authing-js-sdk-browser.min.js?v=2"></script>
+    <script src="/dist/authing-js-sdk-browser.min.js?v=5"></script>
 
     <script>
         
         var auth = new Authing({
-            clientId: '5b0dfcff82f4ce00014fdcd4',
+            clientId: '5d04639787d6e90496a710b8',
             timestamp: Math.round(new Date() / 1000),
             nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
-            // accessToken: '71fc55de0fccba1b3f7feb68277e4f379a1019e5'
+            host: {
+                user: 'http://localhost:5555/graphql',
+            }
         });
 
         auth.then((authing) => {
@@ -27,6 +29,13 @@
                 console.log('获取OAuth列表失败!');
                 console.log(error);
             });
+
+            authing.login({
+                username: 'fuck',
+                password: 'shitfucku'
+            }).then((userInfo) => {
+                console.log(userInfo);
+            }).catch(err => console.log(err))
         });
 
     </script>

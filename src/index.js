@@ -316,10 +316,14 @@ Authing.prototype = {
 
     this.haveAccess();
 
+    if (configs.inBrowser) {
+      options.browser = window.navigator.userAgent;
+    }
+
     return this.UserClient.request({
       operationName: 'login',
-      query: `mutation login($unionid: String, $email: String, $username: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String) {
-          login(unionid: $unionid, email: $email, username: $username, password: $password, lastIP: $lastIP, registerInClient: $registerInClient, verifyCode: $verifyCode) {
+      query: `mutation login($unionid: String, $email: String, $username: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String, $browser: String) {
+          login(unionid: $unionid, email: $email, username: $username, password: $password, lastIP: $lastIP, registerInClient: $registerInClient, verifyCode: $verifyCode, browser: $browser) {
             _id
             email
             emailVerified
@@ -330,7 +334,6 @@ Authing.prototype = {
             nickname
             company
             photo
-            browser
             token
             tokenExpiredAt
             loginsCount
@@ -362,10 +365,14 @@ Authing.prototype = {
 
     this.haveAccess();
 
+    if (configs.inBrowser) {
+      options.browser = window.navigator.userAgent;
+    }
+
     return this.OAuthClient.request({
       operationName: 'LoginByLDAP',
-      query: `mutation LoginByLDAP($username: String!, $password: String!, $clientId: String!) {
-      LoginByLDAP(username: $username, clientId: $clientId, password: $password) {
+      query: `mutation LoginByLDAP($username: String!, $password: String!, $clientId: String!, browser: String) {
+      LoginByLDAP(username: $username, clientId: $clientId, password: $password, browser: $browser) {
             _id
             email
             emailVerified
@@ -423,36 +430,42 @@ Authing.prototype = {
       options.password = encryption(options.password);
     }
 
+    if (configs.inBrowser) {
+      options.browser = window.navigator.userAgent;
+    }
+
     return this.UserClient.request({
       operationName: 'register',
       query: `
       mutation register(
         $unionid: String,
-          $email: String,
-          $password: String,
-          $lastIP: String,
-          $forceLogin: Boolean,
-          $registerInClient: String!,
-          $oauth: String,
-          $username: String,
-          $nickname: String,
-          $registerMethod: String,
-          $photo: String,
-          $company: String
+        $email: String,
+        $password: String,
+        $lastIP: String,
+        $forceLogin: Boolean,
+        $registerInClient: String!,
+        $oauth: String,
+        $username: String,
+        $nickname: String,
+        $registerMethod: String,
+        $photo: String,
+        $company: String,
+        $browser: String,
       ) {
           register(userInfo: {
             unionid: $unionid,
-              email: $email,
-              password: $password,
-              lastIP: $lastIP,
-              forceLogin: $forceLogin,
-              registerInClient: $registerInClient,
-              oauth: $oauth,
-              registerMethod: $registerMethod,
-              photo: $photo,
-              username: $username,
-              nickname: $nickname,
-              company: $company
+            email: $email,
+            password: $password,
+            lastIP: $lastIP,
+            forceLogin: $forceLogin,
+            registerInClient: $registerInClient,
+            oauth: $oauth,
+            registerMethod: $registerMethod,
+            photo: $photo,
+            username: $username,
+            nickname: $nickname,
+            company: $company,
+            browser: $browser,
           }) {
               _id,
               email,
@@ -470,7 +483,8 @@ Authing.prototype = {
               group {
                 name
               },
-              blocked
+              blocked,
+              device
           }
       }`,
       variables: options
@@ -1474,10 +1488,14 @@ Authing.prototype = {
       phoneCode: parseInt(options.phoneCode, 10)
     };
 
+    if (configs.inBrowser) {
+      variables.browser = window.navigator.userAgent;
+    }
+
     return this.UserClient.request({
       operationName: 'login',
-      query: `mutation login($phone: String, $phoneCode: Int, $registerInClient: String!) {
-          login(phone: $phone, phoneCode: $phoneCode, registerInClient: $registerInClient) {
+      query: `mutation login($phone: String, $phoneCode: Int, $registerInClient: String!, browser: String) {
+          login(phone: $phone, phoneCode: $phoneCode, registerInClient: $registerInClient, browser: $browser) {
             _id
             email
             emailVerified
