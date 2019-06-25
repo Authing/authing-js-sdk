@@ -1288,6 +1288,7 @@ Authing.prototype = {
     const { onIntervalStarting } = opts;
 
     let qrcodeNode = document.getElementById(mountNode);
+    let qrcodeWrapper;
 
     let needGenerate = false;
     let start = () => { };
@@ -1361,9 +1362,9 @@ Authing.prototype = {
     function genRetry(qrcodeElm, tipText) {
       const tip = genTip(tipText);
 
-      const qrcodeWrapper = document.createElement('div');
+      qrcodeWrapper = document.createElement('div');
       qrcodeWrapper.id = 'authing__qrcode-wrapper';
-      qrcodeWrapper.style = 'text-align: center';
+      qrcodeWrapper.style = 'text-align: center;position: relative;';
 
       const qrcodeImage = genImage('https://usercontents.authing.cn/authing_user_manager_wxapp_qrcode.jpg');
 
@@ -1403,9 +1404,9 @@ Authing.prototype = {
           sessionStorage.qrcode = JSON.stringify(qrcode);
 
           if (qrcodeNode) {
-            const qrcodeWrapper = document.createElement('div');
+            qrcodeWrapper = document.createElement('div');
             qrcodeWrapper.id = 'authing__qrcode-wrapper';
-            qrcodeWrapper.style = 'text-align: center';
+            qrcodeWrapper.style = 'text-align: center;position: relative;';
 
             const qrcodeImage = genImage(qrcode.qrcode);
 
@@ -1427,10 +1428,10 @@ Authing.prototype = {
                       setTimeout(() => {
                         window.location.href = `${checkResult.redirect}?code=200&data=${JSON.stringify(checkResult.data)}`;
                       }, 600);
-                      qrcodeNode.appendChild(shadowX);
+                      qrcodeWrapper.appendChild(shadowX);
                     } else {
                       const shadow = genShadow('扫码成功');
-                      qrcodeNode.appendChild(shadow);
+                      qrcodeWrapper.appendChild(shadow);
                       if (onSuccess) {
                         onSuccess(checkResult);
                       }
