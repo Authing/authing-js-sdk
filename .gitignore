@@ -6,3 +6,5 @@ package-lock.json
 *.log
 *.log.*
 coverage.lcov
+examples/hep/*
+examples/import.js

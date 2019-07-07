@@ -1283,9 +1283,7 @@ Authing.prototype = {
       }
     }
 
-    const { onError } = opts;
-    const { onSuccess } = opts;
-    const { onIntervalStarting } = opts;
+    const { onError, onSuccess, onIntervalStarting, onQRCodeShow, onQRCodeLoad } = opts;
 
     let qrcodeNode = document.getElementById(mountNode);
     let qrcodeWrapper;
@@ -1399,6 +1397,9 @@ Authing.prototype = {
             onError(qrRes);
           }
         } else {
+          if (onQRCodeLoad) {
+            onQRCodeLoad(qrcode);
+          }
           const qrcode = qrRes.data;
           sessionStorage.qrcodeUrl = qrcode.qrcode;
           sessionStorage.qrcode = JSON.stringify(qrcode);
@@ -1412,6 +1413,9 @@ Authing.prototype = {
 
             qrcodeImage.onload = () => {
               unloading();
+              if (onQRCodeShow) {
+                onQRCodeShow(qrcode);
+              }
               let inter = 0;
               inter = setInterval(() => {
                 if (onIntervalStarting) {
