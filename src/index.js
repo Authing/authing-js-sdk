@@ -1397,10 +1397,10 @@ Authing.prototype = {
             onError(qrRes);
           }
         } else {
+          const qrcode = qrRes.data;
           if (onQRCodeLoad) {
             onQRCodeLoad(qrcode);
-          }
-          const qrcode = qrRes.data;
+          }          
           sessionStorage.qrcodeUrl = qrcode.qrcode;
           sessionStorage.qrcode = JSON.stringify(qrcode);
 

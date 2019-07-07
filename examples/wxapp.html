@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <script src="/dist/authing-js-sdk-browser.min.js?v=3"></script>
+    <script src="/dist/authing-js-sdk-browser.min.js?v=41"></script>
 
     <script>
         
@@ -27,6 +27,12 @@
                 redirect: false,
                 onSuccess(userInfo) {
                     console.log(userInfo);
+                },
+                onQRCodeLoad(qrcode) {
+                    console.log('load', qrcode);
+                },
+                onQRCodeShow(qrcode) {
+                    console.log('show', qrcode);
                 }
             })
         });
