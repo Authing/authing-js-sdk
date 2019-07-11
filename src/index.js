@@ -789,7 +789,7 @@ Authing.prototype = {
 
     if (options.password) {
       if (!options.oldPassword) {
-        throw 'oldPasswordin options is not provided';
+        throw 'oldPassword in options is not provided';
       }
       options.password = encryption(options.password);
       options.oldPassword = encryption(options.oldPassword);
