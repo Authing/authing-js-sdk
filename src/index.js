@@ -10,6 +10,7 @@ function Authing(opts) {
   const self = this;
   this.opts = opts;
   this.opts.useSelfWxapp = opts.useSelfWxapp || false;
+  this.opts.timeout = opts.timeout || 8000;
 
   if (opts.host) {
     configs.services.user.host = opts.host.user || configs.services.user.host;
@@ -79,7 +80,8 @@ Authing.prototype = {
 
   _initClient(token) {
     const conf = {
-      baseURL: configs.services.user.host
+      baseURL: configs.services.user.host,
+      timeout: this.opts.timeout
     };
     if (token) {
       conf.headers = {
@@ -97,7 +99,8 @@ Authing.prototype = {
         baseURL: configs.services.oauth.host,
         headers: {
           Authorization: `Bearer ${token}`
-        }
+        },
+        timeout: this.opts.timeout
       });
     }
     return this._oAuthClientByUserToken;
@@ -130,13 +133,15 @@ Authing.prototype = {
 
   initOAuthClient() {
     this.OAuthClient = new GraphQLClient({
-      baseURL: configs.services.oauth.host
+      baseURL: configs.services.oauth.host,
+      timeout: this.opts.timeout
     });
   },
 
   _auth() {
     const authOpts = {
-      baseURL: configs.services.user.host
+      baseURL: configs.services.user.host,
+      timeout: this.opts.timeout
     };
 
     if (this.opts.accessToken) {
