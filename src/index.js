@@ -253,7 +253,7 @@ Authing.prototype = {
     }).then(res => res.checkLoginStatus);
   },
 
-  _readOAuthList() {
+  _readOAuthList(params) {
     const self = this;
 
     this.haveAccess();
@@ -268,8 +268,8 @@ Authing.prototype = {
     }
     return this._OAuthService.request({
       operationName: 'getOAuthList',
-      query: `query getOAuthList($clientId: String!) {
-        ReadOauthList(clientId: $clientId) {
+      query: `query getOAuthList($clientId: String!, $useGuard: Boolean) {
+        ReadOauthList(clientId: $clientId, useGuard: $useGuard) {
             _id
             name
             image
@@ -282,7 +282,8 @@ Authing.prototype = {
         }
       }`,
       variables: {
-        clientId: self.opts.clientId
+        clientId: self.opts.clientId,
+        useGuard: params.useGuard
       }
     })
       .then(res => res.ReadOauthList);
@@ -942,9 +943,14 @@ Authing.prototype = {
       variables: options
     }).then(res => res.updateUser);
   },
-
-  readOAuthList() {
-    return this._readOAuthList()
+  /**
+   * 
+   * @param {Object} params 获取社会化登录时可以加选项
+   * @param {Boolean} params.useGuard 是否使用 Guard
+   */
+  readOAuthList(params) {
+    if(!params || typeof params !== 'object') {
+      return this._readOAuthList()
       .then((list) => {
         if (list) {
           return list.filter(item => item.enabled);
@@ -953,6 +959,18 @@ Authing.prototype = {
           message: '获取OAuth列表失败，原因未知'
         };
       });
+    } else {
+      return this._readOAuthList(params)
+      .then((list) => {
+        if (list) {
+          return list.filter(item => item.enabled);
+        }
+        throw {
+          message: '获取OAuth列表失败，原因未知'
+        };
+      });
+    }
+
   },
 
   sendResetPasswordEmail(options) {
