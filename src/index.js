@@ -1560,7 +1560,7 @@ Authing.prototype = {
 
     return this.UserClient.request({
       operationName: 'login',
-      query: `mutation login($phone: String, $phoneCode: Int, $registerInClient: String!, browser: String) {
+      query: `mutation login($phone: String, $phoneCode: Int, $registerInClient: String!, $browser: String) {
           login(phone: $phone, phoneCode: $phoneCode, registerInClient: $registerInClient, browser: $browser) {
             _id
             email
