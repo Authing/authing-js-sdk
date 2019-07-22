@@ -377,7 +377,7 @@ Authing.prototype = {
 
     return this.OAuthClient.request({
       operationName: 'LoginByLDAP',
-      query: `mutation LoginByLDAP($username: String!, $password: String!, $clientId: String!, browser: String) {
+      query: `mutation LoginByLDAP($username: String!, $password: String!, $clientId: String!, $browser: String) {
       LoginByLDAP(username: $username, clientId: $clientId, password: $password, browser: $browser) {
             _id
             email
