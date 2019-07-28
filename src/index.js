@@ -253,7 +253,7 @@ Authing.prototype = {
     }).then(res => res.checkLoginStatus);
   },
 
-  _readOAuthList() {
+  _readOAuthList(params) {
     const self = this;
 
     this.haveAccess();
@@ -268,8 +268,8 @@ Authing.prototype = {
     }
     return this._OAuthService.request({
       operationName: 'getOAuthList',
-      query: `query getOAuthList($clientId: String!) {
-        ReadOauthList(clientId: $clientId) {
+      query: `query getOAuthList($clientId: String!, $useGuard: Boolean) {
+        ReadOauthList(clientId: $clientId, useGuard: $useGuard) {
             _id
             name
             image
@@ -282,7 +282,8 @@ Authing.prototype = {
         }
       }`,
       variables: {
-        clientId: self.opts.clientId
+        clientId: self.opts.clientId,
+        useGuard: params.useGuard
       }
     })
       .then(res => res.ReadOauthList);
@@ -377,7 +378,7 @@ Authing.prototype = {
 
     return this.OAuthClient.request({
       operationName: 'LoginByLDAP',
-      query: `mutation LoginByLDAP($username: String!, $password: String!, $clientId: String!, browser: String) {
+      query: `mutation LoginByLDAP($username: String!, $password: String!, $clientId: String!, $browser: String) {
       LoginByLDAP(username: $username, clientId: $clientId, password: $password, browser: $browser) {
             _id
             email
@@ -450,6 +451,25 @@ Authing.prototype = {
         $email: String,
         $password: String,
         $lastIP: String,
+        $gender: String,
+        $birthdate: String,
+        $region: String,
+        $locality: String,
+        $name: String,
+        $givenName: String,
+        $familyName: String,
+        $middleName: String,
+        $profile: String,
+        $preferredUsername: String,
+        $website: String,
+        $zoneinfo: String,
+        $locale: String,
+        $address: String,
+        $formatted: String,
+        $streetAddress: String,
+        $postalCode: String,
+        $country: String,
+        $updatedAt: String,
         $forceLogin: Boolean,
         $registerInClient: String!,
         $oauth: String,
@@ -470,6 +490,25 @@ Authing.prototype = {
             registerInClient: $registerInClient,
             oauth: $oauth,
             registerMethod: $registerMethod,
+            name: $name,
+            givenName: $givenName,
+            familyName: $familyName,
+            middleName: $middleName,
+            profile: $profile,
+            preferredUsername: $preferredUsername,
+            website: $website,
+            zoneinfo: $zoneinfo,
+            locale: $locale,
+            address: $address,
+            formatted: $formatted,
+            streetAddress: $streetAddress,
+            postalCode: $postalCode,
+            country: $country,
+            updatedAt: $updatedAt,
+            gender: $gender,
+            birthdate: $birthdate,
+            region: $region,
+            locality: $locality,
             photo: $photo,
             username: $username,
             nickname: $nickname,
@@ -909,9 +948,14 @@ Authing.prototype = {
       variables: options
     }).then(res => res.updateUser);
   },
-
-  readOAuthList() {
-    return this._readOAuthList()
+  /**
+   * 
+   * @param {Object} params 获取社会化登录时可以加选项
+   * @param {Boolean} params.useGuard 是否使用 Guard
+   */
+  readOAuthList(params) {
+    if(!params || typeof params !== 'object') {
+      return this._readOAuthList()
       .then((list) => {
         if (list) {
           return list.filter(item => item.enabled);
@@ -920,6 +964,18 @@ Authing.prototype = {
           message: '获取OAuth列表失败，原因未知'
         };
       });
+    } else {
+      return this._readOAuthList(params)
+      .then((list) => {
+        if (list) {
+          return list.filter(item => item.enabled);
+        }
+        throw {
+          message: '获取OAuth列表失败，原因未知'
+        };
+      });
+    }
+
   },
 
   sendResetPasswordEmail(options) {
