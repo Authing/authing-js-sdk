@@ -327,12 +327,13 @@ Authing.prototype = {
 
     return this.UserClient.request({
       operationName: 'login',
-      query: `mutation login($unionid: String, $email: String, $username: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String, $browser: String) {
-          login(unionid: $unionid, email: $email, username: $username, password: $password, lastIP: $lastIP, registerInClient: $registerInClient, verifyCode: $verifyCode, browser: $browser) {
+      query: `mutation login($unionid: String, $email: String, $username: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String, $browser: String, $openid: String) {
+          login(unionid: $unionid, email: $email, username: $username, password: $password, lastIP: $lastIP, registerInClient: $registerInClient, verifyCode: $verifyCode, browser: $browser, openid: $openid) {
             _id
             email
             emailVerified
             unionid
+            openid
             oauth
             registerMethod
             username
@@ -382,6 +383,7 @@ Authing.prototype = {
             email
             emailVerified
             unionid
+            openid
             oauth
             registerMethod
             username
@@ -444,6 +446,7 @@ Authing.prototype = {
       query: `
       mutation register(
         $unionid: String,
+        $openid: String,
         $email: String,
         $password: String,
         $lastIP: String,
@@ -459,6 +462,7 @@ Authing.prototype = {
       ) {
           register(userInfo: {
             unionid: $unionid,
+            openid: $openid,
             email: $email,
             password: $password,
             lastIP: $lastIP,
@@ -476,6 +480,7 @@ Authing.prototype = {
               email,
               emailVerified,
               unionid,
+              openid,
               oauth,
               registerMethod,
               username,
@@ -1504,10 +1509,12 @@ Authing.prototype = {
 
     return this.UserClient.request({
       operationName: 'login',
-      query: `mutation login($phone: String, $phoneCode: Int, $registerInClient: String!, browser: String) {
+      query: `mutation login($phone: String, $phoneCode: Int, $registerInClient: String!, $browser: String) {
           login(phone: $phone, phoneCode: $phoneCode, registerInClient: $registerInClient, browser: $browser) {
             _id
             email
+            unionid
+            openid
             emailVerified
             username
             nickname
