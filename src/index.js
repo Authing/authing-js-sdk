@@ -254,6 +254,10 @@ Authing.prototype = {
   },
 
   _readOAuthList(params) {
+    let variables = {}
+    if (params) {
+      variables = params
+    }
     const self = this;
 
     this.haveAccess();
@@ -283,7 +287,7 @@ Authing.prototype = {
       }`,
       variables: {
         clientId: self.opts.clientId,
-        useGuard: params.useGuard
+        ...variables
       }
     })
       .then(res => res.ReadOauthList);
