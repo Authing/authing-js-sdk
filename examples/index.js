@@ -3,12 +3,16 @@ const Authing = require('../dist/authing-js-sdk.js');
 
 let email = '';
 let password = '';
-const secret = '42aa3deba3b2c35aaf018acafdf503f8';
-const clientId = '5b0dfcff82f4ce00014fdcd4';
+const secret = '84f722faeb08e6a1f00c505b96092706';
+const clientId = '5d3d38c7fbf29055ce45c0b4';
 
 const auth = new Authing({
   clientId,
-  secret
+  secret,
+  host: {
+    user: 'http://localhost:5555/graphql',
+    oauth: 'http://localhost:5556/graphql'
+  }
 });
 
 auth.then((validAuth) => {

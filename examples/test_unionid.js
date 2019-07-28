@@ -1,25 +1,32 @@
 const Authing = require('../dist/authing-js-sdk');
 
-const secret = 'b41a29583618d8e9de201d5e80db7056';
-const clientId = '5a97ede6f8635a00018551a1';
+const secret = '84f722faeb08e6a1f00c505b96092706';
+const clientId = '5d3d38c7fbf29055ce45c0b4';
 
 const auth = new Authing({
   clientId,
-  secret
+  secret,
+  host: {
+    user: 'http://localhost:5555/graphql',
+    oauth: 'http://localhost:5556/graphql'
+  }
 });
 
 auth.then((validAuth) => {
   validAuth.login({
-    unionid: 'unionidsample4'
+    unionid: 'unionidsample45',
+    openid: 'unionidsample44'
   }).then((data) => {
     console.log(data);
   }).catch((error) => {
+    console.log(error);
     if (error.message.code === 2004) {
       // 用户不存在
       validAuth.register({
-        unionid: 'unionidsample2',
-        username: 'unionidsample2',
-        registerMethod: 'oauth:wechat'
+        unionid: 'unionidsample44',
+        openid: 'unionidsample44',
+        username: 'unionidsample44',
+        registerMethod: 'oauth:wxapp'
       }).then((data) => {
         console.log(data);
       }).catch((e) => {

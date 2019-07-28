@@ -9,3 +9,4 @@ yarn.lock
 coverage.lcov
 examples/hep/*
 examples/import.js
+examples/fccc.js
