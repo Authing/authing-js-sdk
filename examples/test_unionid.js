@@ -14,8 +14,8 @@ const auth = new Authing({
 
 auth.then((validAuth) => {
   validAuth.login({
-    unionid: 'unionidsample33',
-    openid: 'unionidsample33'
+    unionid: 'unionidsample45',
+    openid: 'unionidsample44'
   }).then((data) => {
     console.log(data);
   }).catch((error) => {
@@ -23,10 +23,10 @@ auth.then((validAuth) => {
     if (error.message.code === 2004) {
       // 用户不存在
       validAuth.register({
-        unionid: 'unionidsample33',
-        openid: 'unionidsample33',
-        username: 'unionidsample33',
-        registerMethod: 'oauth:wechat'
+        unionid: 'unionidsample44',
+        openid: 'unionidsample44',
+        username: 'unionidsample44',
+        registerMethod: 'oauth:wxapp'
       }).then((data) => {
         console.log(data);
       }).catch((e) => {
