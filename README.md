@@ -178,12 +178,13 @@ const auth = new Authing({
 	clientId: 'your_client_id',
 	timestamp: Math.round(new Date() / 1000),
 	nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
+	enableFetchPhone: true // 启用获取手机号
 });
 
 auth.then(function(authing) {
 
 	authing.startWXAppScaning({
-  	mount: 'qrcode-node', //二维码挂载点的 HTML 元素 ID，如不写则默认漂浮在文档中间
+  		mount: 'qrcode-node', //二维码挂载点的 HTML 元素 ID，如不写则默认漂浮在文档中间
 	});
 
 })
