@@ -10,6 +10,7 @@ function Authing(opts) {
   const self = this;
   this.opts = opts;
   this.opts.useSelfWxapp = opts.useSelfWxapp || false;
+  this.opts.enableFetchPhone = opts.enableFetchPhone || false;
   this.opts.timeout = opts.timeout || 8000;
 
   if (opts.host) {
@@ -1322,7 +1323,7 @@ Authing.prototype = {
     let url = configs.services.oauth.host;
     url = url.replace('/graphql', '');
 
-    return axios.get(`${url}/oauth/wxapp/qrcode/${clientId}?random=${random}&useSelfWxapp=${this.opts.useSelfWxapp}`);
+    return axios.get(`${url}/oauth/wxapp/qrcode/${clientId}?random=${random}&useSelfWxapp=${this.opts.useSelfWxapp}&enableFetchPhone=${this.opts.enableFetchPhone}`);
   },
 
   checkQR() {
