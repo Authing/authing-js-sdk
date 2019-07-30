@@ -454,6 +454,7 @@ Authing.prototype = {
         $unionid: String,
         $openid: String,
         $email: String,
+        $phone: String,
         $password: String,
         $lastIP: String,
         $gender: String,
@@ -489,6 +490,7 @@ Authing.prototype = {
             unionid: $unionid,
             openid: $openid,
             email: $email,
+            phone: $phone,
             password: $password,
             lastIP: $lastIP,
             forceLogin: $forceLogin,
@@ -522,6 +524,7 @@ Authing.prototype = {
           }) {
               _id,
               email,
+              phone,
               emailVerified,
               unionid,
               openid,

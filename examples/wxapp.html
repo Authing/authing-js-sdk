@@ -8,19 +8,19 @@
 </head>
 <body>
 
-    <script src="/dist/authing-js-sdk-browser.min.js?v=42"></script>
+    <script src="/dist/authing-js-sdk-browser.min.js?v=43"></script>
 
     <script>
         
         var auth = new Authing({
-            clientId: '5d04639787d6e90496a710b8',
+            clientId: '5cc2a350e056c76eea71db8a',
             timestamp: Math.round(new Date() / 1000),
             nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
-            host: {
-                user: 'http://localhost:5555/graphql',
-                oauth: 'http://localhost:5556/graphql'
-            },
-            // enableFetchPhone: true,
+            // host: {
+            //     user: 'http://localhost:5555/graphql',
+            //     oauth: 'http://localhost:5556/graphql'
+            // },
+            enableFetchPhone: true,
             // useSelfWxapp: true,
         });
 
