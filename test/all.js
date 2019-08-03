@@ -298,7 +298,7 @@ test("user:sendVerifyEmail 发送验证邮件", async t => {
   t.assert(res.status === true);
 });
 
-test("user:checkLoginStatus 检查登录状态", async t => {
+test.only("user:checkLoginStatus 检查登录状态", async t => {
   const validAuth = await auth;
   let email = randomEmail();
   let user = await validAuth.register({
