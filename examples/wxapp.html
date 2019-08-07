@@ -16,29 +16,21 @@
             clientId: '5cc2a350e056c76eea71db8a',
             timestamp: Math.round(new Date() / 1000),
             nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
-            // host: {
-            //   user: 'https://users.celebes.live/graphql',
-            //   oauth: 'https://oauth.celebes.live/graphql'
-            // },
-            enableFetchPhone: true,
             noSecurityChecking: true,
-            // useSelfWxapp: true,
+            useSelfWxapp: true,
         });
-
-        // auth.then((authing) => {
-            authing.startWXAppScaning({
-                redirect: false,
-                onSuccess(userInfo) {
-                    console.log(userInfo);
-                },
-                onQRCodeLoad(qrcode) {
-                    console.log('load', qrcode);
-                },
-                onQRCodeShow(qrcode) {
-                    console.log('show', qrcode);
-                }
-            })
-        // });
+        authing.startWXAppScaning({
+            redirect: false,
+            onSuccess(userInfo) {
+                console.log(userInfo);
+            },
+            onQRCodeLoad(qrcode) {
+                console.log('load', qrcode);
+            },
+            onQRCodeShow(qrcode) {
+                console.log('show', qrcode);
+            }
+        })
 
     </script>
     

@@ -11,7 +11,7 @@ function Authing(opts) {
   this.opts = opts;
   this.opts.useSelfWxapp = opts.useSelfWxapp || false;
   this.opts.enableFetchPhone = opts.enableFetchPhone || false;
-  this.opts.timeout = opts.timeout || 8000;
+  this.opts.timeout = opts.timeout || 10000;
   this.opts.noSecurityChecking = opts.noSecurityChecking || false;
 
   if (opts.host) {
@@ -691,22 +691,26 @@ Authing.prototype = {
     }).then(res => res.userPatch);
   },
 
-  list(page, count) {
+  list(page, count, queryOptions) {
     this.haveAccess();
 
     page = page || 1;
     count = count || 10;
+    queryOptions = queryOptions || {
+      populate: false
+    };
 
     const options = {
       registerInClient: this.opts.clientId,
       page,
-      count
+      count,
+      populate: queryOptions.populate
     };
 
     return this.ownerClient.request({
       operationName: 'users',
-      query: `query users($registerInClient: String, $page: Int, $count: Int){
-        users(registerInClient: $registerInClient, page: $page, count: $count) {
+      query: `query users($registerInClient: String, $page: Int, $count: Int, $populate: Boolean){
+        users(registerInClient: $registerInClient, page: $page, count: $count, populate: $populate) {
             totalCount
             list {
             _id
@@ -727,19 +731,6 @@ Authing.prototype = {
             signedUp
             blocked
             isDeleted
-            group {
-              _id
-              name
-              descriptions
-              createdAt
-            }
-            clientType {
-              _id
-              name
-              description
-              image
-              example
-            }
             userLocation {
               _id
               when
@@ -754,12 +745,6 @@ Authing.prototype = {
                 ip
                 result
               }
-            }
-            systemApplicationType {
-              _id
-              name
-              descriptions
-              price
             }
           }
         }
