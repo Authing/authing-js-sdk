@@ -12,6 +12,7 @@ function Authing(opts) {
   this.opts.useSelfWxapp = opts.useSelfWxapp || false;
   this.opts.enableFetchPhone = opts.enableFetchPhone || false;
   this.opts.timeout = opts.timeout || 8000;
+  this.opts.noSecurityChecking = opts.noSecurityChecking || false;
 
   if (opts.host) {
     configs.services.user.host = opts.host.user || configs.services.user.host;
@@ -58,21 +59,23 @@ function Authing(opts) {
     }
   }
 
-  return this._auth().then((token) => {
-    if (token) {
-      self.initOwnerClient(token);
-      self.loginFromLocalStorage();
-    } else {
+  if (!this.opts.noSecurityChecking) {
+    return this._auth().then((token) => {
+      if (token) {
+        self.initOwnerClient(token);
+        self.loginFromLocalStorage();
+      } else {
+        self.ownerAuth.authed = true;
+        self.ownerAuth.authSuccess = false;
+        throw 'auth failed, please check your secret and client ID.';
+      }
+      return self;
+    }).catch((error) => {
       self.ownerAuth.authed = true;
       self.ownerAuth.authSuccess = false;
-      throw 'auth failed, please check your secret and client ID.';
-    }
-    return self;
-  }).catch((error) => {
-    self.ownerAuth.authed = true;
-    self.ownerAuth.authSuccess = false;
-    throw `auth failed: ${error.message.message}`;
-  });
+      throw `auth failed: ${error.message.message}`;
+    });
+  }
 }
 
 Authing.prototype = {
