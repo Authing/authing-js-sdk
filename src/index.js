@@ -1324,7 +1324,8 @@ Authing.prototype = {
 
   genQRCode(clientId) {
     const random = this.randomWord(true, 12, 24);
-    sessionStorage.randomWord = random;
+    if(typeof sessionStorage !== 'undefined')
+      sessionStorage.randomWord = random;
 
     let url = configs.services.oauth.host;
     url = url.replace('/graphql', '');
