@@ -164,7 +164,7 @@ const auth = new Authing({
 	clientId: 'your_client_id',
 	timestamp: Math.round(new Date() / 1000),
 	nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
-	timeout: 200000 // 20 秒超时
+	timeout: 20000 // 20 秒超时
 });
 auth.then((authing) => {
 	// authing.login
@@ -178,7 +178,7 @@ auth.then((authing) => {
 - **preflight**
 	- 是否开启网络状况预检，默认为 false，此参数适用于检查用户的网络是否屏蔽了 authing.cn 这个域名（某些企业的内网会屏蔽这个域名），若检查失败会抛出错误，开发者可在 `promise` 的 `catch` 或 `try...catch...` 中捕获错误。
 - **timeout**
-    - 超时时间，默认为 false。
+    - 超时时间，默认为 10000（10 秒）。
 
 ## API
 
