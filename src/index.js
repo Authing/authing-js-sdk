@@ -17,6 +17,7 @@ function Authing(opts) {
   this.opts.timeout = opts.timeout || 10000;
   this.opts.noSecurityChecking = opts.noSecurityChecking || false;
   this.opts.preflight = opts.preflight || false;
+  this.opts.cdnPreflight = opts.cdnPreflight || false;
 
   axios.defaults.timeout = this.opts.timeout;
 
@@ -29,6 +30,8 @@ function Authing(opts) {
     users: configs.services.user.host.replace('/graphql', '/system/status'),
     oauth: configs.services.oauth.host.replace('/graphql', '/system/status')
   };
+
+  this.opts.cdnPreflightUrl = 'https://usercontents.authing.cn';
 
   this.ownerAuth = {
     authed: false,
@@ -169,6 +172,16 @@ Authing.prototype = {
     });
   },
 
+  cdnPreflightFun() {
+    return new Promise((resolve, reject) => {
+      axios.get(this.opts.cdnPreflightUrl)
+        .then(res => resolve(res))
+        .catch((error) => {
+          reject(new Error(`CDN 服务预检失败：${error}`));
+        });
+    });
+  },
+
   async _auth() {
     if (this.opts.preflight) {
       try {
@@ -177,6 +190,14 @@ Authing.prototype = {
         throw error;
       }
     }
+
+    if (this.opts.cdnPreflightFun) {
+      try {
+        await this.cdnPreflightFun();
+      } catch (error) {
+        throw error;
+      }
+    }    
 
     const authOpts = {
       baseURL: configs.services.user.host,
