@@ -30,23 +30,6 @@ function Authing(opts) {
     oauth: configs.services.oauth.host.replace('/graphql', '/system/status')
   };
 
-  if (this.opts.preflight) {
-    const preflightFun = async () => {
-      await axios.get(this.opts.preflightUrl.users)
-        .catch((error) => {
-          throw (new Error(`用户服务预检失败：${error}`));
-          process && process.exit();
-        });
-
-      await axios.get(this.opts.preflightUrl.oauth)
-        .catch((error) => {
-          throw (new Error(`用户服务预检失败：${error}`));
-          process && process.exit();
-        });
-    };
-    preflightFun();
-  }
-
   this.ownerAuth = {
     authed: false,
     authSuccess: false,
@@ -170,7 +153,31 @@ Authing.prototype = {
     });
   },
 
-  _auth() {
+  preflightFun() {
+    return new Promise((resolve, reject) => {
+      axios.get(this.opts.preflightUrl.users)
+        .then(() => {
+          axios.get(this.opts.preflightUrl.oauth)
+            .then(res => resolve(res))
+            .catch((error) => {
+              reject(new Error(`认证服务预检失败：${error}`));
+            });
+        })
+        .catch((error) => {
+          reject(new Error(`用户服务预检失败：${error}`));
+        });
+    });
+  },
+
+  async _auth() {
+    if (this.opts.preflight) {
+      try {
+        await this.preflightFun();
+      } catch (error) {
+        throw error;
+      }
+    }
+
     const authOpts = {
       baseURL: configs.services.user.host,
       timeout: this.opts.timeout
@@ -239,9 +246,7 @@ Authing.prototype = {
       }`;
     }
 
-    return this.AuthService.request({
-      query
-    })
+    return this.AuthService.request({ query })
       .then((data) => {
         let accessToken = '';
         if (data.getClientWhenSdkInit) {
