@@ -11,7 +11,8 @@ const auth = new Authing({
   //     user: 'http://localhost:5555/graphql',
   //     oauth: 'http://localhost:5556/graphql'
   //   },
-  preflight: true
+//   preflight: true,
+  cdnPreflight: true
 });
 
 

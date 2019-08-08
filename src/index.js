@@ -89,6 +89,8 @@ function Authing(opts) {
       self.ownerAuth.authSuccess = false;
       throw `认证失败: ${error.message.message || error}`;
     });
+  }else {
+    this.checkPreflight();
   }
 }
 
@@ -182,7 +184,7 @@ Authing.prototype = {
     });
   },
 
-  async _auth() {
+  async checkPreflight() {
     if (this.opts.preflight) {
       try {
         await this.preflightFun();
@@ -191,13 +193,18 @@ Authing.prototype = {
       }
     }
 
-    if (this.opts.cdnPreflightFun) {
+    if (this.opts.cdnPreflight) {
       try {
         await this.cdnPreflightFun();
       } catch (error) {
         throw error;
       }
-    }    
+    }
+  },
+
+  async _auth() {
+
+    this.checkPreflight();
 
     const authOpts = {
       baseURL: configs.services.user.host,
