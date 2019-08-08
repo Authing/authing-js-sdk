@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+/* eslint-disable no-unreachable */
+/* eslint-disable no-unused-expressions */
 /* jshint esversion: 6 */
 
 const axios = require('axios');
@@ -13,10 +16,35 @@ function Authing(opts) {
   this.opts.enableFetchPhone = opts.enableFetchPhone || false;
   this.opts.timeout = opts.timeout || 10000;
   this.opts.noSecurityChecking = opts.noSecurityChecking || false;
+  this.opts.preflight = opts.preflight || false;
+
+  axios.defaults.timeout = this.opts.timeout;
 
   if (opts.host) {
     configs.services.user.host = opts.host.user || configs.services.user.host;
     configs.services.oauth.host = opts.host.oauth || configs.services.oauth.host;
+  }
+
+  this.opts.preflightUrl = {
+    users: configs.services.user.host.replace('/graphql', '/system/status'),
+    oauth: configs.services.oauth.host.replace('/graphql', '/system/status')
+  };
+
+  if (this.opts.preflight) {
+    const preflightFun = async () => {
+      await axios.get(this.opts.preflightUrl.users)
+        .catch((error) => {
+          throw (new Error(`用户服务预检失败：${error}`));
+          process && process.exit();
+        });
+
+      await axios.get(this.opts.preflightUrl.oauth)
+        .catch((error) => {
+          throw (new Error(`用户服务预检失败：${error}`));
+          process && process.exit();
+        });
+    };
+    preflightFun();
   }
 
   this.ownerAuth = {
@@ -50,12 +78,12 @@ function Authing(opts) {
       }
 
       if (!opts.nonce) {
-        throw 'nonce is not provided';
+        throw 'nonce（随机值） is not provided';
       }
 
       this.opts.signature = sha1(opts.timestamp + opts.nonce.toString());
     } else if (!opts.secret) {
-      throw new Error('app secret is not provided');
+      throw new Error('请提供用户池 Secret');
     }
   }
 
@@ -73,7 +101,7 @@ function Authing(opts) {
     }).catch((error) => {
       self.ownerAuth.authed = true;
       self.ownerAuth.authSuccess = false;
-      throw `auth failed: ${error.message.message}`;
+      throw `认证失败: ${error.message.message || error}`;
     });
   }
 }
@@ -952,24 +980,24 @@ Authing.prototype = {
   readOAuthList(params) {
     if(!params || typeof params !== 'object') {
       return this._readOAuthList()
-      .then((list) => {
-        if (list) {
-          return list.filter(item => item.enabled);
-        }
-        throw {
-          message: '获取OAuth列表失败，原因未知'
-        };
-      });
+        .then((list) => {
+          if (list) {
+            return list.filter(item => item.enabled);
+          }
+          throw {
+            message: '获取OAuth列表失败，原因未知'
+          };
+        });
     } else {
       return this._readOAuthList(params)
-      .then((list) => {
-        if (list) {
-          return list.filter(item => item.enabled);
-        }
-        throw {
-          message: '获取OAuth列表失败，原因未知'
-        };
-      });
+        .then((list) => {
+          if (list) {
+            return list.filter(item => item.enabled);
+          }
+          throw {
+            message: '获取OAuth列表失败，原因未知'
+          };
+        });
     }
 
   },

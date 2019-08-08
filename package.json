@@ -1,6 +1,6 @@
 {
   "name": "authing-js-sdk",
-  "version": "2.14.0",
+  "version": "2.15.0",
   "description": "Official sdk of Authing",
   "main": "dist/authing-js-sdk.js",
   "browser": "dist/authing-js-sdk-browser.min.js",
@@ -37,6 +37,7 @@
     "ava": "^1.4.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
