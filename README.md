@@ -155,6 +155,24 @@ main();
 
 ```
 
+### 超时说明
+
+Authing SDK 的默认请求超时时间是 10s，如果想加大或减小超时时间，请在 SDK 中指定 `timeout` 参数，以下以在浏览器中初始化为例：
+
+``` javascript
+const auth = new Authing({
+	clientId: 'your_client_id',
+	timestamp: Math.round(new Date() / 1000),
+	nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
+	timeout: 200000 // 20 秒超时
+});
+auth.then((authing) => {
+	// authing.login
+	// authing.register
+	// ...
+});
+```
+
 ## API
 
 全部 API 请参考：[用户接口](https://docs.authing.cn/authing/sdk/authing-sdk-for-web)。
@@ -178,6 +196,7 @@ const auth = new Authing({
 	clientId: 'your_client_id',
 	timestamp: Math.round(new Date() / 1000),
 	nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
+	noSecurityCheck: true, // 关闭安全检测，网络安全预检在某些特殊网络环境下可能导致 SDK 无法正常初始化
 	enableFetchPhone: true // 启用获取手机号
 });
 
