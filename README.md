@@ -173,6 +173,13 @@ auth.then((authing) => {
 });
 ```
 
+### 其他参数
+
+- **preflight**
+	- 是否开启网络状况预检，默认为 false，此参数适用于检查用户的网络是否屏蔽了 authing.cn 这个域名（某些企业的内网会屏蔽这个域名），若检查失败会抛出错误，开发者可在 `promise` 的 `catch` 或 `try...catch...` 中捕获错误。
+- **timeout**
+    - 超时时间，默认为 false。
+
 ## API
 
 全部 API 请参考：[用户接口](https://docs.authing.cn/authing/sdk/authing-sdk-for-web)。
