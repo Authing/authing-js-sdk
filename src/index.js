@@ -1482,7 +1482,7 @@ Authing.prototype = {
       return shadow;
     };
 
-    function genRetry(qrcodeElm, tipText) {
+    function genRetry(qrcodeElm, tipText, retryId) {
       const tip = genTip(tipText);
 
       qrcodeWrapper = document.createElement('div');
@@ -1503,7 +1503,7 @@ Authing.prototype = {
 
       const shadow = genShadow(retryTips || '点击重试', () => {
         start();
-      }, '__authing_retry_btn');
+      }, retryId || '__authing_retry_btn');
 
       qrcodeWrapper.appendChild(qrcodeImage);
       qrcodeWrapper.appendChild(shadow);
@@ -1578,7 +1578,7 @@ Authing.prototype = {
           }
         }
       }).catch((error) => {
-        genRetry(qrcodeNode, failedTips || '网络出错，请重试');
+        genRetry(qrcodeNode, failedTips || '网络出错，请重试', '__authing_failed_tip');
         if (onError) {
           onError(error);
         }
@@ -1586,6 +1586,21 @@ Authing.prototype = {
     };
 
     start();
+  },
+
+  updateRetryTips(tips) {
+    document.getElementById('__authing_retry_btn').innerHTML = tips;
+  },
+
+  updateFailedTips(tips) {
+    document.getElementById('__authing_failed_tip').innerHTML = tips;
+  },
+
+  updateSuccessTips(tips) {
+    document.getElementById('__authing_success_tip').innerHTML = tips;
+  },
+  updateSuccessRedirectTips(tips) {
+    document.getElementById('__authing_success_redirect_tip').innerHTML = tips;
   },
 
   getVerificationCode(phone) {
