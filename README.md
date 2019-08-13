@@ -236,7 +236,11 @@ authing.startWXAppScaning({
 	onQRCodeLoad: function(qRcode) {}, // 小程序码获取成功后的回调函数，qRcode 为小程序码的相关信息，是一个对象
 	onQRCodeShow: function(qRcode) {}, // 小程序码图片加载完成后的回调函数，qRcode 为小程序码的相关信息，是一个对象
   	interval: 1500, // 每隔多少秒检查一次，默认 1500
-  	tips: '搜索小程序 <strong>身份管家</strong> 扫码登录', // 提示信息，可写 HTML
+	tips: '搜索小程序 <strong>身份管家</strong> 扫码登录', // 提示信息，可写 HTML
+	successTips: '', // 扫码成功的提示信息，默认：扫码成功
+	successRedirectTips: '', // 扫码失败的提示信息，默认：扫码成功，即将跳转
+	retryTips: '', // 重试扫码的提示信息，默认：重试
+	failedTips: '',  // 扫码失败的提示信息，默认：网络出错，请重试
 });
 
 ```
