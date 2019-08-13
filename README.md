@@ -235,14 +235,31 @@ authing.startWXAppScaning({
 	onIntervalStarting: function(intervalNum) {}, // 轮询时的回调函数，intervalNum 为 setInterval 返回的数值，可使用 clearInterval 停止轮询
 	onQRCodeLoad: function(qRcode) {}, // 小程序码获取成功后的回调函数，qRcode 为小程序码的相关信息，是一个对象
 	onQRCodeShow: function(qRcode) {}, // 小程序码图片加载完成后的回调函数，qRcode 为小程序码的相关信息，是一个对象
-  	interval: 1500, // 每隔多少秒检查一次，默认 1500
-	tips: '搜索小程序 <strong>身份管家</strong> 扫码登录', // 提示信息，可写 HTML
-	successTips: '', // 扫码成功的提示信息，默认：扫码成功
-	successRedirectTips: '', // 扫码失败的提示信息，默认：扫码成功，即将跳转
-	retryTips: '', // 重试扫码的提示信息，默认：重试
-	failedTips: '',  // 扫码失败的提示信息，默认：网络出错，请重试
+	interval: 1500, // 每隔多少秒检查一次，默认 1500
+	  
+	tips: '使用微信扫码登录', // 提示信息，可写 HTML
+	successTips: '扫码成功', // 扫码成功的提示信息，默认：扫码成功
+	successRedirectTips: '扫码成功，即将跳转', // 扫码成功后跳转前的提示信息，默认：扫码成功，即将跳转
+	retryTips: '重试', // 重试扫码的提示信息，默认：重试
+	failedTips: '网络出错，请重试',  // 扫码失败的提示信息，默认：网络出错，请重试
 });
 
+```
+
+若想动态修改提示信息，请使用以下四个方法：
+
+``` javascript
+  // 修改重试扫码的提示信息
+  authing.updateRetryTips(tips: string)
+
+  // 修改扫码失败的提示信息
+  authing.updateFailedTips(tips: string)
+
+  // 修改扫码成功的提示信息
+  authing.updateSuccessTips(tips: string)
+
+  // 修改扫码成功后跳转前的提示信息
+  authing.updateSuccessRedirectTips(tips: string)
 ```
 
 了解更多，请查看：[使用小程序扫码登录](https://docs.authing.cn/authing/advanced/wxapp-qrcode)
