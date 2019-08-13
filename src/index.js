@@ -1468,7 +1468,7 @@ Authing.prototype = {
       return qrcodeImage;
     };
 
-    const genShadow = (text, aOnClick) => {
+    const genShadow = (text, aOnClick, shadowAId) => {
       const shadow = document.createElement('div');
       shadow.id = 'authing__retry';
       shadow.style = 'text-align:center;width: 240px;height: 240px;position: absolute;left: 50%;top: 0px;margin-left: -120px;background-color: rgba(0,0,0, 0.5);line-height:240px;color:#fff;font-weight:600;';
@@ -1477,6 +1477,7 @@ Authing.prototype = {
       shadowA.innerHTML = text;
       shadowA.style = 'color:#fff;border-bottom: 1px solid #fff;cursor: pointer;';
       shadowA.onclick = aOnClick;
+      shadowA.id = shadowAId;
       shadow.appendChild(shadowA);
       return shadow;
     };
@@ -1502,7 +1503,7 @@ Authing.prototype = {
 
       const shadow = genShadow(retryTips || '点击重试', () => {
         start();
-      });
+      }, '__authing_retry_btn');
 
       qrcodeWrapper.appendChild(qrcodeImage);
       qrcodeWrapper.appendChild(shadow);
@@ -1552,13 +1553,13 @@ Authing.prototype = {
                     if (redirect) {
                       const shadowX = genShadow(successRedirectTips || '扫码成功，即将跳转', () => {
                         window.location.href = `${checkResult.redirect}?code=200&data=${JSON.stringify(checkResult.data)}`;
-                      });
+                      }, '__authing_success_redirect_tip');
                       setTimeout(() => {
                         window.location.href = `${checkResult.redirect}?code=200&data=${JSON.stringify(checkResult.data)}`;
                       }, 600);
                       qrcodeWrapper.appendChild(shadowX);
                     } else {
-                      const shadow = genShadow(successTips || '扫码成功');
+                      const shadow = genShadow(successTips || '扫码成功', null, '__authing_success_tip');
                       qrcodeWrapper.appendChild(shadow);
                       if (onSuccess) {
                         onSuccess(checkResult);
