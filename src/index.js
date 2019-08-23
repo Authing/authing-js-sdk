@@ -631,7 +631,7 @@ Authing.prototype = {
 
     return this.update({
       _id,
-      tokenExpiredAt: 0
+      tokenExpiredAt: '0'
     });
   },
 
