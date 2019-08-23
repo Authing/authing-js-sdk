@@ -8,22 +8,23 @@
 </head>
 <body>
 
-    <script src="/dist/authing-js-sdk-browser.min.js?v=561111"></script>
+    <script src="/dist/authing-js-sdk-browser.min.js?v=5611111"></script>
 
     <script>
     
         var authing = new Authing({
-            clientId: '5cc2a350e056c76eea71db8a',
+            clientId: '5d5e3ac347a7f2541adbe3c3',
             timestamp: Math.round(new Date() / 1000),
             nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
             noSecurityChecking: true,
             useSelfWxapp: true,
-            cdnPreflight: true,
-            preflight: true,
+            cdnPreflight: false,
+            preflight: false,
         });
 
         authing.startWXAppScaning({
             redirect: false,
+            successTips: 'yes',
             onSuccess(userInfo) {
                 console.log(userInfo);
             },

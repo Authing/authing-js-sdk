@@ -89,9 +89,9 @@ function Authing(opts) {
       self.ownerAuth.authSuccess = false;
       throw `认证失败: ${error.message.message || error}`;
     });
-  }else {
-    this.checkPreflight();
   }
+
+  this.checkPreflight();
 }
 
 Authing.prototype = {
@@ -894,9 +894,6 @@ Authing.prototype = {
     }
 
     if (options.password) {
-      if (!options.oldPassword) {
-        throw 'oldPassword in options is not provided';
-      }
       options.password = encryption(options.password);
       options.oldPassword = encryption(options.oldPassword);
     }
@@ -1011,18 +1008,8 @@ Authing.prototype = {
    * @param {Boolean} params.useGuard 是否使用 Guard
    */
   readOAuthList(params) {
-    if(!params || typeof params !== 'object') {
+    if (!params || typeof params !== 'object') {
       return this._readOAuthList()
-        .then((list) => {
-          if (list) {
-            return list.filter(item => item.enabled);
-          }
-          throw {
-            message: '获取OAuth列表失败，原因未知'
-          };
-        });
-    } else {
-      return this._readOAuthList(params)
         .then((list) => {
           if (list) {
             return list.filter(item => item.enabled);
@@ -1033,6 +1020,15 @@ Authing.prototype = {
         });
     }
 
+    return this._readOAuthList(params)
+      .then((list) => {
+        if (list) {
+          return list.filter(item => item.enabled);
+        }
+        throw {
+          message: '获取OAuth列表失败，原因未知'
+        };
+      });
   },
 
   sendResetPasswordEmail(options) {
@@ -1370,8 +1366,9 @@ Authing.prototype = {
 
   genQRCode(clientId) {
     const random = this.randomWord(true, 12, 24);
-    if(typeof sessionStorage !== 'undefined')
+    if (typeof sessionStorage !== 'undefined') {
       sessionStorage.randomWord = random;
+    }
 
     let url = configs.services.oauth.host;
     url = url.replace('/graphql', '');
@@ -1396,7 +1393,7 @@ Authing.prototype = {
 
     const mountNode = opts.mount || 'authing__qrcode-root-node';
     const interval = opts.interval || 1500;
-    const { tips } = opts;
+    const { tips, successTips, successRedirectTips, retryTips, failedTips } = opts;
 
     let redirect = true;
 
@@ -1468,7 +1465,7 @@ Authing.prototype = {
       return qrcodeImage;
     };
 
-    const genShadow = (text, aOnClick) => {
+    const genShadow = (text, aOnClick, shadowAId) => {
       const shadow = document.createElement('div');
       shadow.id = 'authing__retry';
       shadow.style = 'text-align:center;width: 240px;height: 240px;position: absolute;left: 50%;top: 0px;margin-left: -120px;background-color: rgba(0,0,0, 0.5);line-height:240px;color:#fff;font-weight:600;';
@@ -1477,11 +1474,12 @@ Authing.prototype = {
       shadowA.innerHTML = text;
       shadowA.style = 'color:#fff;border-bottom: 1px solid #fff;cursor: pointer;';
       shadowA.onclick = aOnClick;
+      shadowA.id = shadowAId;
       shadow.appendChild(shadowA);
       return shadow;
     };
 
-    function genRetry(qrcodeElm, tipText) {
+    function genRetry(qrcodeElm, tipText, retryId) {
       const tip = genTip(tipText);
 
       qrcodeWrapper = document.createElement('div');
@@ -1500,9 +1498,9 @@ Authing.prototype = {
         unloading();
       };
 
-      const shadow = genShadow('点击重试', () => {
+      const shadow = genShadow(retryTips || '点击重试', () => {
         start();
-      });
+      }, retryId || '__authing_retry_btn');
 
       qrcodeWrapper.appendChild(qrcodeImage);
       qrcodeWrapper.appendChild(shadow);
@@ -1524,7 +1522,7 @@ Authing.prototype = {
           const qrcode = qrRes.data;
           if (onQRCodeLoad) {
             onQRCodeLoad(qrcode);
-          }          
+          }        
           sessionStorage.qrcodeUrl = qrcode.qrcode;
           sessionStorage.qrcode = JSON.stringify(qrcode);
 
@@ -1550,15 +1548,15 @@ Authing.prototype = {
                   if (checkResult.code === 200) {
                     clearInterval(inter);
                     if (redirect) {
-                      const shadowX = genShadow('扫码成功，即将跳转', () => {
+                      const shadowX = genShadow(successRedirectTips || '扫码成功，即将跳转', () => {
                         window.location.href = `${checkResult.redirect}?code=200&data=${JSON.stringify(checkResult.data)}`;
-                      });
+                      }, '__authing_success_redirect_tip');
                       setTimeout(() => {
                         window.location.href = `${checkResult.redirect}?code=200&data=${JSON.stringify(checkResult.data)}`;
                       }, 600);
                       qrcodeWrapper.appendChild(shadowX);
                     } else {
-                      const shadow = genShadow('扫码成功');
+                      const shadow = genShadow(successTips || '扫码成功', null, '__authing_success_tip');
                       qrcodeWrapper.appendChild(shadow);
                       if (onSuccess) {
                         onSuccess(checkResult);
@@ -1577,7 +1575,7 @@ Authing.prototype = {
           }
         }
       }).catch((error) => {
-        genRetry(qrcodeNode, '网络出错，请重试');
+        genRetry(qrcodeNode, failedTips || '网络出错，请重试', '__authing_failed_tip');
         if (onError) {
           onError(error);
         }
@@ -1585,6 +1583,21 @@ Authing.prototype = {
     };
 
     start();
+  },
+
+  updateRetryTips(tips) {
+    document.getElementById('__authing_retry_btn').innerHTML = tips;
+  },
+
+  updateFailedTips(tips) {
+    document.getElementById('__authing_failed_tip').innerHTML = tips;
+  },
+
+  updateSuccessTips(tips) {
+    document.getElementById('__authing_success_tip').innerHTML = tips;
+  },
+  updateSuccessRedirectTips(tips) {
+    document.getElementById('__authing_success_redirect_tip').innerHTML = tips;
   },
 
   getVerificationCode(phone) {
