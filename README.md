@@ -208,12 +208,12 @@ const auth = new Authing({
 	timestamp: Math.round(new Date() / 1000),
 	nonce: Math.ceil(Math.random() * Math.pow(10, 6)),
 	noSecurityCheck: true, // 关闭安全检测，网络安全预检在某些特殊网络环境下可能导致 SDK 无法正常初始化
-	enableFetchPhone: true // 启用获取手机号
 });
 
 auth.then(function(authing) {
 
 	authing.startWXAppScaning({
+			enableFetchPhone: true // 启用获取手机号
   		mount: 'qrcode-node', //二维码挂载点的 HTML 元素 ID，如不写则默认漂浮在文档中间
 	});
 
@@ -228,15 +228,18 @@ auth.then(function(authing) {
 ``` javascript
 
 authing.startWXAppScaning({
-  	mount: 'qrcode-node', // 二维码挂载点，如不写则默认漂浮在文档中间
-  	redirect: true, // 是否执行跳转（在用户后台配置的 URL），默认为 true，相关用户信息回传至 url 上
-  	onSuccess: function(res) {}, // 登录成功后回调函数，redirect 为 true 时不回调此函数
-  	onError: function(error) {}, // 登录失败后回调函数，一般为网络问题
+  mount: 'qrcode-node', // 二维码挂载点，如不写则默认漂浮在文档中间
+  redirect: true, // 是否执行跳转（在用户后台配置的 URL），默认为 true，相关用户信息回传至 url 上
+  onSuccess: function(res) {}, // 登录成功后回调函数，redirect 为 true 时不回调此函数
+  onError: function(error) {}, // 登录失败后回调函数，一般为网络问题
 	onIntervalStarting: function(intervalNum) {}, // 轮询时的回调函数，intervalNum 为 setInterval 返回的数值，可使用 clearInterval 停止轮询
 	onQRCodeLoad: function(qRcode) {}, // 小程序码获取成功后的回调函数，qRcode 为小程序码的相关信息，是一个对象
 	onQRCodeShow: function(qRcode) {}, // 小程序码图片加载完成后的回调函数，qRcode 为小程序码的相关信息，是一个对象
 	interval: 1500, // 每隔多少秒检查一次，默认 1500
-	  
+	
+	enableFetchPhone: false, // 是否支持获取手机号（使用小登录扫码）
+	useSelfWxapp: false, // 私有化部署了小程序的用户请将此参数设置为 true
+	
 	tips: '使用微信扫码登录', // 提示信息，可写 HTML
 	successTips: '扫码成功', // 扫码成功的提示信息，默认：扫码成功
 	successRedirectTips: '扫码成功，即将跳转', // 扫码成功后跳转前的提示信息，默认：扫码成功，即将跳转
