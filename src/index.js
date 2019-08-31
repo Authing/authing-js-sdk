@@ -1395,6 +1395,9 @@ Authing.prototype = {
     const interval = opts.interval || 1500;
     const { tips, successTips, successRedirectTips, retryTips, failedTips } = opts;
 
+    this.opts.enableFetchPhone = opts.enableFetchPhone || this.opts.enableFetchPhone;
+    this.opts.useSelfWxapp = opts.useSelfWxapp || this.opts.useSelfWxapp;
+
     let redirect = true;
 
     // eslint-disable-next-line no-prototype-builtins
