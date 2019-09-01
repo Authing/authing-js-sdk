@@ -1,6 +1,6 @@
 {
   "name": "authing-js-sdk",
-  "version": "2.19.0",
+  "version": "2.20.0-alpha",
   "description": "Official sdk of Authing",
   "main": "dist/authing-js-sdk.js",
   "browser": "dist/authing-js-sdk-browser.min.js",
