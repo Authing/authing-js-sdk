@@ -304,6 +304,8 @@ Authing.prototype = {
     }
   },
 
+
+
   checkLoginStatus(token) {
     return this.UserClient.request({
       operationName: 'checkLoginStatus',
@@ -1941,6 +1943,34 @@ Authing.prototype = {
       `,
       variables
     }).then(res => res.refreshToken);
+  },
+
+  //MFA相关
+
+  changeMFA(options) {  //用于修改某一用户池（应用）的 MFA 状态
+    if (!options) {
+      throw 'options is not provided.';
+    }
+
+    const variables = {
+      userPoolId: this.opts.clientId,
+      userId: options.userId,
+      enable: options.enable,
+    };
+
+    return this.ownerClient.request({
+      operationName: 'changeMFA',
+      mutations: `
+        mutation changeMFA($_id: String,$userId: String,$userPoolId: String,$enable: Boolean!, $refreshKey: Boolean) {
+          changeMFA(_id: $_id, userId: $userId, userPoolId: $userPoolId, enable: $enable, refreshKey: $refreshKey) {
+              _id
+              userId
+              userPoolId
+              enable
+          }
+      }`,
+      variables: variables
+    })
   }
 
 };
