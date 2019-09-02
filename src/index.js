@@ -1958,7 +1958,7 @@ Authing.prototype = {
       enable: options.enable,
     };
 
-    return this.ownerClient.request({
+    return this.userClient.request({
       operationName: 'changeMFA',
       query: `
         mutation changeMFA($_id: String,$userId: String,$userPoolId: String,$enable: Boolean!, $refreshKey: Boolean) {
