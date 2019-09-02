@@ -1951,14 +1951,14 @@ Authing.prototype = {
     }
 
     const variables = {
-      userPoolId: this.opts.clientId,
+      userPoolId: options.userPoolId,
       userId: options.userId,
       enable: options.enable,
     };
 
     return this.ownerClient.request({
       operationName: 'changeMFA',
-      mutations: `
+      query: `
         mutation changeMFA($_id: String,$userId: String,$userPoolId: String,$enable: Boolean!, $refreshKey: Boolean) {
           changeMFA(_id: $_id, userId: $userId, userPoolId: $userPoolId, enable: $enable, refreshKey: $refreshKey) {
               _id
