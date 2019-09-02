@@ -1942,12 +1942,12 @@ Authing.prototype = {
         }
       `,
       variables
-    }).then(res => res.refreshToken);
+    }).then((res) => res.refreshToken);
   },
 
-  //MFA相关
+  // MFA相关
 
-  changeMFA(options) {  //用于修改某一用户池（应用）的 MFA 状态
+  changeMFA(options) { // 用于修改某一用户池（应用）的 MFA 状态
     if (!options) {
       throw 'options is not provided.';
     }
@@ -1955,7 +1955,7 @@ Authing.prototype = {
     const variables = {
       userPoolId: options.userPoolId,
       userId: options.userId,
-      enable: options.enable,
+      enable: options.enable
     };
 
     return this.UserClient.request({
@@ -1969,10 +1969,35 @@ Authing.prototype = {
               enable
           }
       }`,
-      variables: variables
-    })
-  }
+      variables
+    });
+  },
 
+  queryMFA(options) {
+    if (!options) {
+      throw 'options is not provided.';
+    }
+
+    const variables = {
+      userPoolId: options.userPoolId,
+      userId: options.userId
+    };
+
+    return this.UserClient.request({
+      operationName: 'changeMFA',
+      query: `
+        query queryMFA($_id: String,$userId: String,$userPoolId: String) {
+          queryMFA(_id: $_id, userId: $userId, userPoolId: $userPoolId) {
+            _id
+            userId
+            userPoolId
+            enable
+            shareKey
+          }
+        }`,
+      variables
+    });
+  }
 };
 
 module.exports = Authing;
