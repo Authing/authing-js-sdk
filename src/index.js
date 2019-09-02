@@ -1984,7 +1984,7 @@ Authing.prototype = {
     };
 
     return this.UserClient.request({
-      operationName: 'changeMFA',
+      operationName: 'queryMFA',
       query: `
         query queryMFA($_id: String,$userId: String,$userPoolId: String) {
           queryMFA(_id: $_id, userId: $userId, userPoolId: $userPoolId) {
