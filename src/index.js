@@ -247,6 +247,8 @@ Authing.prototype = {
         logo
         emailVerifiedDefault
         registerDisabled
+        showWXMPQRCode
+        useMiniLogin
         allowedOrigins
         clientType {
           _id
@@ -399,8 +401,8 @@ Authing.prototype = {
 
     return this.UserClient.request({
       operationName: 'login',
-      query: `mutation login($unionid: String, $email: String, $username: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String, $browser: String, $openid: String) {
-          login(unionid: $unionid, email: $email, username: $username, password: $password, lastIP: $lastIP, registerInClient: $registerInClient, verifyCode: $verifyCode, browser: $browser, openid: $openid) {
+      query: `mutation login($unionid: String, $email: String, $username: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String, $browser: String, $openid: String, $MFACode: String) {
+          login(unionid: $unionid, email: $email, username: $username, password: $password, lastIP: $lastIP, registerInClient: $registerInClient, verifyCode: $verifyCode, browser: $browser, openid: $openid, MFACode: $MFACode) {
             _id
             email
             emailVerified
