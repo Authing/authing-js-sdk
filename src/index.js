@@ -1966,11 +1966,12 @@ Authing.prototype = {
               _id
               userId
               userPoolId
+              shareKey
               enable
           }
       }`,
       variables
-    });
+    }).then(res => res.changeMFA);
   },
 
   queryMFA(options) {
@@ -1996,7 +1997,7 @@ Authing.prototype = {
           }
         }`,
       variables
-    });
+    }).then(res => res.queryMFA);
   }
 };
 
