@@ -299,3 +299,7 @@ const auth = new Authing({
 了解更多报错的详情，请查看[错误代码](https://docs.authing.cn/#/quick_start/error_code)。
 
 获取 Client ID 和 Client Secret，请[点击这里](https://learn.authing.cn/authing/others/faq#ru-he-huo-qu-client-id-he-client-secret)。
+
+## Get Help
+
+1. Join us on Gitter: [#authing-chat](https://gitter.im/authing-chat/community)
