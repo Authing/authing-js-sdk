@@ -2031,6 +2031,10 @@ Authing.prototype = {
             isRevoked
             _id
             scope
+            appId
+            userId
+            type
+            when
         }
       }`,
       variables
