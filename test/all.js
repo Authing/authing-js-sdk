@@ -1,8 +1,8 @@
 const test = require("ava");
 const Authing = require("../src");
 
-const clientId = "5d4295b4f9ee1719a9a77d56";
-const secret = "ae10498551d99763fb3ea66f96b8764c";
+const clientId = "5d5921ffaa016518f658498d";
+const secret = "ada050cb682af5b3ce09acc6988a4950";
 
 //线上
 // const secret = 'b41a29583618d8e9de201d5e80db7056';
@@ -362,7 +362,7 @@ test("user:getVerificationCode 获取短信验证码", async t => {
   }
 });
 
-test.only("oauth:loginByLDAP 使用 LDAP 登录", async t => {
+test("oauth:loginByLDAP 使用 LDAP 登录", async t => {
   const validAuth = await auth;
   try {
     let res = await validAuth.loginByLDAP({
@@ -490,3 +490,14 @@ test("user:updateRolePermissions 修改角色权限", async t => {
   t.is(updated.name, 'myRole updated')
   t.is(updated.permissions, 'permission updated')
 })
+
+// test.only("撤回用户对某个 SSO 应用的授权", async t => {
+//   const validAuth = await auth;
+  
+//   let res = await validAuth.revokeAuthedApp({
+//     "userPoolId": clientId,
+//     "userId": "5d765d4013d73a5e90b7857a",
+//     "appId": "5d5a8a7bbc7275af2cb71920"
+//   })
+//   console.log(res)
+// })

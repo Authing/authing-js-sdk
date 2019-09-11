@@ -125,7 +125,19 @@ Authing.prototype = {
     }
     return this._oAuthClientByUserToken;
   },
-
+  oAuthClientByOwnerToken() {
+    const { token } = this.ownerAuth;
+    if (!this._oAuthClientByOwnerToken) {
+      this._oAuthClientByOwnerToken = new GraphQLClient({
+        baseURL: configs.services.oauth.host,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        timeout: this.opts.timeout
+      });
+    }
+    return this._oAuthClientByOwnerToken;
+  },
   initUserClient(token) {
     if (token) {
       this.userAuth = {
@@ -1998,6 +2010,31 @@ Authing.prototype = {
         }`,
       variables
     }).then(res => res.queryMFA);
+  },
+  revokeAuthedApp(options) {
+    if (!options) {
+      throw 'options is not provided.';
+    }
+    const client = this.oAuthClientByOwnerToken();
+
+    const variables = {
+      userPoolId: options.userPoolId,
+      userId: options.userId,
+      appId: options.appId
+    };
+
+    return client.request({
+      operationName: 'RevokeUserAuthorizedApp',
+      query: `
+      mutation RevokeUserAuthorizedApp($userPoolId: String, $userId: String, $appId: String) {
+        RevokeUserAuthorizedApp(userPoolId: $userPoolId, userId: $userId, appId: $appId) {
+            isRevoked
+            _id
+            scope
+        }
+      }`,
+      variables
+    }).then(res => res.RevokeUserAuthorizedApp);
   }
 };
 
