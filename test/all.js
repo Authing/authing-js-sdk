@@ -501,3 +501,14 @@ test("user:updateRolePermissions 修改角色权限", async t => {
 //   })
 //   console.log(res)
 // })
+
+// test.only("用户在用户池内授权的 SSO 应用列表", async t => {
+//   const validAuth = await auth;
+  
+//   let res = await validAuth.getAuthedAppList({
+//     clientId,
+//     "userId": "5d765d4013d73a5e90b7857a",
+//     "appId": "5d5a8a7bbc7275af2cb71920"
+//   })
+//   console.log(res)
+// })
