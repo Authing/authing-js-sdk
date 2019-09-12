@@ -795,6 +795,7 @@ Authing.prototype = {
             emailVerified
             username
             nickname
+            phone
             company
             photo
             browser
