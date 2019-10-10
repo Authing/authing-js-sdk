@@ -30,7 +30,6 @@
   "homepage": "https://github.com/Authing/authing-js-sdk#readme",
   "dependencies": {
     "axios": "^0.19.0",
-    "js-sha1": "^0.6.0",
     "jsencrypt": "^3.0.0-rc.1"
   },
   "devDependencies": {
