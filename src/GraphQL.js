@@ -1,5 +1,5 @@
 /* jshint esversion: 6 */
-import { TokenManager } from './TokenManager';
+import TokenManager from './TokenManager';
 import axios from 'axios';
 export class GraphQLClient {
   constructor(options) {

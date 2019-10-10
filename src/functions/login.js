@@ -1,6 +1,6 @@
 import encryption from "../utils/_encryption";
 import configs from "../configs";
-import { TokenMananger } from "../TokenManager";
+import TokenMananger from "../TokenManager";
 export function login(options) {
   if (!options) {
     throw Error("options is not provided.");

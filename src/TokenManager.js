@@ -1,5 +1,5 @@
 // Token 状态管理，单例
-export class TokenManager {
+export default class TokenManager {
   static getInstance() {
     if (!TokenManager.instance) {
       TokenManager.instance = new TokenManager();

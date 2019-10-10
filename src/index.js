@@ -1,4 +1,4 @@
-import { TokenManager } from './TokenManager';
+import TokenManager from './TokenManager';
 import { GraphQLClient } from './GraphQL';
 import { configs } from './configs';
 import mods from './functions';

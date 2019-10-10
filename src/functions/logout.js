@@ -1,5 +1,5 @@
 import configs from "../configs";
-import { TokenMananger } from "../TokenManager";
+import TokenMananger from "../TokenManager";
 export function logout(_id) {
   if (!_id) {
     throw Error("_id is not provided");
