@@ -19,6 +19,7 @@ const webConfig = {
 };
 const nodeConfig = {
   entry: './src/index.js',
+  mode: 'production',
   target: 'node',
   output: {
     filename: 'authing-js-sdk-node.js',
