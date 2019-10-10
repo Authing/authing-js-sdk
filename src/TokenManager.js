@@ -16,15 +16,15 @@ export class TokenManager {
     TokenManager.instance.ownerToken = ownerToken;
   }
   setToken(token) {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return (TokenManager.instance.ownerToken = token);
     } else {
       return (TokenManager.instance.userToken = token);
     }
   }
   getToken(type) {
-    if (typeof type === "undefined") {
-      if (typeof window === "undefined") {
+    if (typeof type === 'undefined') {
+      if (typeof window === 'undefined') {
         return `Bearer ${TokenManager.instance.ownerToken}`;
       } else {
         return `Bearer ${TokenManager.instance.userToken}`;
@@ -38,14 +38,14 @@ function test() {
   let tm = TokenManager.getInstance();
   let tm2 = TokenManager.getInstance();
   console.log(tm === tm2);
-  let a = "";
-  tm.setUserToken("11111");
-  tm.setOwnerToken("22222");
+  let a = '';
+  tm.setUserToken('11111');
+  tm.setOwnerToken('22222');
   a = tm.getToken();
   console.log(a);
-  a = tm.getToken("userToken");
+  a = tm.getToken('userToken');
   console.log(a);
-  a = tm.getToken("ownerToken");
+  a = tm.getToken('ownerToken');
   console.log(a);
 }
 // test();

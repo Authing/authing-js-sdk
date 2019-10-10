@@ -1,11 +1,11 @@
 /* jshint esversion: 6 */
-import { TokenManager } from "./TokenManager";
-import axios from 'axios'
+import { TokenManager } from './TokenManager';
+import axios from 'axios';
 export class GraphQLClient {
   constructor(options) {
     const defaultOpt = {
       timeout: options.timeout || 8000,
-      method: "POST"
+      method: 'POST'
     };
     this.options = {
       ...defaultOpt,
