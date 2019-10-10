@@ -1,4 +1,4 @@
-export const configs = {
+export default {
   services: {
     user: {
       host: 'https://users.authing.cn/graphql'
