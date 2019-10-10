@@ -34,6 +34,7 @@ export class TokenManager {
     }
   }
 }
+
 function test() {
   let tm = TokenManager.getInstance();
   let tm2 = TokenManager.getInstance();
