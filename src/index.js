@@ -11,28 +11,45 @@ class Authing {
     this.opts.noSecurityChecking = options.noSecurityChecking || false;
     this.opts.preflight = options.preflight || false;
     this.opts.cdnPreflight = options.cdnPreflight || false;
+
+    // @TODO axios timeout
+
+    if (options.host) {
+      configs.services.user.host = options.host.user || configs.services.user.host;
+      configs.services.oauth.host = options.host.oauth || configs.services.oauth.host;
+    }
+
+    this.opts.preflightUrl = {
+      users: configs.services.user.host.replace('/graphql', '/system/status'),
+      oauth: configs.services.oauth.host.replace('/graphql', '/system/status')
+    };
+
+    this.opts.cdnPreflightUrl = 'https://usercontents.authing.cn';
+
     if (!options.accessToken) {
-      if (!options.clientId) {
+      if (!options.userPoolId) {
         throw new Error('clientId is not provided');
       }
     }
-  
+
     if (!this.opts.noSecurityChecking) {
-      return this._auth().then((token) => {
-        if (token) {
-          self.initOwnerClient(token);
-          self.loginFromLocalStorage();
-        } else {
+      return this._auth()
+        .then(token => {
+          if (token) {
+            self.initOwnerClient(token);
+            self.loginFromLocalStorage();
+          } else {
+            self.ownerAuth.authed = true;
+            self.ownerAuth.authSuccess = false;
+            throw 'auth failed, please check your secret and client ID.';
+          }
+          return self;
+        })
+        .catch(error => {
           self.ownerAuth.authed = true;
           self.ownerAuth.authSuccess = false;
-          throw 'auth failed, please check your secret and client ID.';
-        }
-        return self;
-      }).catch((error) => {
-        self.ownerAuth.authed = true;
-        self.ownerAuth.authSuccess = false;
-        throw `认证失败: ${error.message.message || error}`;
-      });
+          throw `认证失败: ${error.message.message || error}`;
+        });
     }
     this.UserServiceGql = new GraphQLClient({
       // baseURL: configs.services.user.host,
