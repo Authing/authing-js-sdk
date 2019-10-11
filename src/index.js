@@ -20,7 +20,7 @@ export default class Authing {
       }
     });
     this.userPoolId = options.userPoolId;
-    if (typeof window === 'undefined') {
+    if (process.env.BUILD_TARGET === 'node') {
       // NodeJS 环境初始化 sdk 经过网络请求
       this.secret = options.secret;
       // @TODO 调用初始化接口
