@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-const configs = require('../configs');
+const configs = require('../configs').default;
 const cryptoPolyfill = require('./crypto-polyfill');
 
 let encryption;

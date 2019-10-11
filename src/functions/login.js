@@ -7,7 +7,7 @@ export function login(options) {
   }
   /* eslint-disable no-param-reassign */
 
-  options.registerInClient = this.opts.clientId;
+  options.registerInClient = this.opts.userPoolId;
 
   if (options.password) {
     options.password = encryption(options.password);
