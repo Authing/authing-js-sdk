@@ -23,7 +23,6 @@ export class Authing {
     if (process.env.BUILD_TARGET === 'node') {
       // NodeJS 环境初始化 sdk 经过网络请求
       this.secret = options.secret;
-      // @TODO 调用初始化接口
       const queryField = `{
         accessToken
         clientInfo {
@@ -50,19 +49,15 @@ export class Authing {
       }`;
       this.UserServiceGql.request({
         operationName: 'getClientWhenSdkInit',
-        query: `query {
+        query: `query getClientWhenSdkInit {
           getClientWhenSdkInit(secret: "${options.secret}", clientId: "${options.userPoolId}")${queryField}
         }`
       }).then(res => {
         TokenManager.getInstance().setToken(res.accessToken);
-      });
+      })
     }
   }
 }
 Authing.prototype = {
   ...mods
 };
-function test() {
-  let auth = new Authing({ userPoolId: '5d9d5d3a24430c6897929544' });
-  auth.checkLoginStatus('aaa');
-}
