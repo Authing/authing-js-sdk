@@ -2,27 +2,34 @@ const TokenManager = require('./TokenManager').default;
 const { GraphQLClient } = require('./GraphQL');
 const configs = require('./configs').default;
 const mods = require('./functions').default;
+// sdk 的所有参数
+const defaultOpts = {
+  useSelfWxapp: false,
+  enableFetchPhone: false,
+  timeout: 10000,
+  preflight: false,
+  cdnPreflight: false,
+  host: {
+    user: 'https://users.authing.cn/graphql',
+    oauth: 'https://oauth.authing.cn/graphql'
+  },
+  preflightUrl: {
+    users: 'https://users.authing.cn/system/status',
+    oauth: 'https://oauth.authing.cn/system/status'
+  },
+  cdnPreflightUrl: 'https://usercontents.authing.cn',
+  accessToken: '',
+  userPoolId: '',
+  secret: ''
+};
 class Authing {
   constructor(options) {
-    this.opts = options || {};
-    this.opts.useSelfWxapp = options.useSelfWxapp || false;
-    this.opts.enableFetchPhone = options.enableFetchPhone || false;
-    // 设置 axios 的超时时间
-    this.opts.timeout = options.timeout || 10000;
-    this.opts.preflight = options.preflight || false;
-    this.opts.cdnPreflight = options.cdnPreflight || false;
+    this.opts = Object.assign({}, defaultOpts, options)
 
     if (options.host) {
       configs.services.user.host = options.host.user || configs.services.user.host;
       configs.services.oauth.host = options.host.oauth || configs.services.oauth.host;
     }
-
-    this.opts.preflightUrl = {
-      users: configs.services.user.host.replace('/graphql', '/system/status'),
-      oauth: configs.services.oauth.host.replace('/graphql', '/system/status')
-    };
-
-    this.opts.cdnPreflightUrl = 'https://usercontents.authing.cn';
 
     if (!options.accessToken) {
       if (!options.userPoolId) {
@@ -30,7 +37,7 @@ class Authing {
       }
     } else {
       // 直接拿 token 初始化
-      TokenManager.getInstance().setToken(options.accessToken)
+      TokenManager.getInstance().setToken(options.accessToken);
     }
 
     this.UserServiceGql = new GraphQLClient({
