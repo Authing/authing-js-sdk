@@ -2,7 +2,7 @@ import TokenManager from './TokenManager';
 import { GraphQLClient } from './GraphQL';
 import { configs } from './configs';
 import mods from './functions';
-export default class Authing {
+export class Authing {
   constructor(options) {
     this.opts = options;
     this.UserServiceGql = new GraphQLClient({
