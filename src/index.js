@@ -1,7 +1,7 @@
-import TokenManager from './TokenManager';
-import { GraphQLClient } from './GraphQL';
-import { configs } from './configs';
-import mods from './functions';
+const TokenManager = require('./TokenManager').default;
+const { GraphQLClient } = require('./GraphQL');
+const configs = require('./configs').default;
+const mods = require('./functions').default;
 class Authing {
   constructor(options) {
     this.opts = options;
@@ -54,12 +54,11 @@ class Authing {
         }`
       }).then(res => {
         TokenManager.getInstance().setToken(res.accessToken);
-      })
+      });
     }
   }
 }
 Authing.prototype = {
   ...mods
 };
-
-export default Authing
+module.exports = Authing;
