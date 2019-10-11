@@ -45,11 +45,27 @@ const nodeDevConfig = {
   output: {
     filename: 'authing-js-sdk-node.js',
     path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'umd',
+    libraryTarget: 'commonjs2',
     library: 'Authing'
   },
   module: {
-    rules: [{ test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }]
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                modules: 'commonjs'
+              }
+            ]
+          ]
+        }
+      }
+    ]
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -64,11 +80,27 @@ const nodeConfig = {
   output: {
     filename: 'authing-js-sdk-node.min.js',
     path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'umd',
+    libraryTarget: 'commonjs2',
     library: 'Authing'
   },
   module: {
-    rules: [{ test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }]
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                modules: 'commonjs'
+              }
+            ]
+          ]
+        }
+      }
+    ]
   },
   plugins: [
     new webpack.DefinePlugin({

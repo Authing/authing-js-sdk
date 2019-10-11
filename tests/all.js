@@ -1,8 +1,8 @@
-const test = require('ava');
+import test from 'ava'
 const Authing = require('../src');
 
-const clientId = '5d5921ffaa016518f658498d';
-const secret = 'ada050cb682af5b3ce09acc6988a4950';
+const clientId = '5d9d5d3a24430c6897929544';
+const secret = '697c4e81e4aa786d16ba07fbe4f14076';
 
 //线上
 // const secret = 'b41a29583618d8e9de201d5e80db7056';
