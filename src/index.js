@@ -4,15 +4,13 @@ const configs = require('./configs').default;
 const mods = require('./functions').default;
 class Authing {
   constructor(options) {
-    this.opts = options;
+    this.opts = options || {};
     this.opts.useSelfWxapp = options.useSelfWxapp || false;
     this.opts.enableFetchPhone = options.enableFetchPhone || false;
+    // 设置 axios 的超时时间
     this.opts.timeout = options.timeout || 10000;
-    this.opts.noSecurityChecking = options.noSecurityChecking || false;
     this.opts.preflight = options.preflight || false;
     this.opts.cdnPreflight = options.cdnPreflight || false;
-
-    // @TODO axios timeout
 
     if (options.host) {
       configs.services.user.host = options.host.user || configs.services.user.host;
@@ -28,42 +26,28 @@ class Authing {
 
     if (!options.accessToken) {
       if (!options.userPoolId) {
-        throw new Error('clientId is not provided');
+        throw new Error('userPoolId is not provided');
       }
+    } else {
+      // 直接拿 token 初始化
+      TokenManager.getInstance().setToken(options.accessToken)
     }
 
-    if (!this.opts.noSecurityChecking) {
-      return this._auth()
-        .then(token => {
-          if (token) {
-            self.initOwnerClient(token);
-            self.loginFromLocalStorage();
-          } else {
-            self.ownerAuth.authed = true;
-            self.ownerAuth.authSuccess = false;
-            throw 'auth failed, please check your secret and client ID.';
-          }
-          return self;
-        })
-        .catch(error => {
-          self.ownerAuth.authed = true;
-          self.ownerAuth.authSuccess = false;
-          throw `认证失败: ${error.message.message || error}`;
-        });
-    }
     this.UserServiceGql = new GraphQLClient({
       // baseURL: configs.services.user.host,
       baseURL: 'http://localhost:5555/graphql',
       headers: {
         Authorization: TokenManager.getInstance().getToken()
-      }
+      },
+      timeout: this.opts.timeout
     });
     this.OAuthServiceGql = new GraphQLClient({
       // baseURL: configs.services.oauth.host,
       baseURL: 'http://localhost:5556/graphql',
       headers: {
         Authorization: TokenManager.getInstance().getToken()
-      }
+      },
+      timeout: this.opts.timeout
     });
     this.userPoolId = options.userPoolId;
     if (process.env.BUILD_TARGET === 'node') {
