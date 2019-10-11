@@ -24,6 +24,38 @@ export default class Authing {
       // NodeJS 环境初始化 sdk 经过网络请求
       this.secret = options.secret;
       // @TODO 调用初始化接口
+      const queryField = `{
+        accessToken
+        clientInfo {
+          _id
+          name
+          descriptions
+          jwtExpired
+          createdAt
+          isDeleted
+          logo
+          emailVerifiedDefault
+          registerDisabled
+          showWXMPQRCode
+          useMiniLogin
+          allowedOrigins
+          clientType {
+            _id
+            name
+            description
+            image
+            example
+          }
+        }
+      }`;
+      this.UserServiceGql.request({
+        operationName: 'getClientWhenSdkInit',
+        query: `query {
+          getClientWhenSdkInit(secret: "${options.secret}", clientId: "${options.userPoolId}")${queryField}
+        }`
+      }).then(res => {
+        TokenManager.getInstance().setToken(res.accessToken);
+      });
     }
   }
 }
