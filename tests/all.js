@@ -317,7 +317,7 @@ test.skip('user:changePassord 用户自己修改密码', async t => {
   });
 });
 
-test.only('user:sendVerifyEmail 发送验证邮件', async t => {
+test('user:sendVerifyEmail 发送验证邮件', async t => {
   const validAuth = auth;
   let email = randomEmail();
   // let email = 'yezuwei@authing.cn';

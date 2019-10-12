@@ -1,4 +1,4 @@
-export default function decodeToken(token) {
+export function decodeToken(token) {
   return this.UserServiceGql.request({
     operationName: "decodeJwtToken",
     query: `query decodeJwtToken($token: String) {
