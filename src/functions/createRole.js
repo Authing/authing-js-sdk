@@ -30,6 +30,6 @@ export function createRole(options) {
         }
       `,
       variables
-    });
+    }, 'ownerToken');
   });
 }

@@ -16,6 +16,6 @@ export function remove(_id, operator) {
         registerInClient: this.userPoolId,
         operator
       }
-    });
+    }, 'ownerToken');
   });
 }

@@ -49,6 +49,6 @@ export function user(options) {
       }
     }`,
       variables: options
-    });
+    }, 'ownerToken');
   });
 }

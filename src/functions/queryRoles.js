@@ -36,6 +36,6 @@ export function queryRoles(options) {
       }
     `,
       variables
-    });
+    }, 'ownerToken');
   });
 }

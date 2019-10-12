@@ -10,7 +10,7 @@ export function removeUserFromRole(options) {
 
   return this.FetchToken.then(() => {
     return this.UserServiceGql.request({
-      operationName: 'removeUserFromGroup',
+      operationName: 'RemoveUserFromGroup',
       query: `
       mutation RemoveUserFromGroup(
         $group: String!
@@ -36,6 +36,6 @@ export function removeUserFromRole(options) {
       }
     `,
       variables
-    });
+    }, 'ownerToken');
   });
 }

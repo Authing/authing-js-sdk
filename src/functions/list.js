@@ -59,6 +59,6 @@ export function list(page, count, queryOptions) {
       }
     }`,
       variables: options
-    });
+    }, 'ownerToken');
   });
 }

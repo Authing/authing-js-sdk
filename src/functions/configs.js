@@ -59,7 +59,6 @@ export default {
     "queryMFA",
     "readOAuthList",
     "readUserOAuthList",
-    "refreshToken",
     "register",
     "revokeAuthedApp",
     "selectAvatarFile",

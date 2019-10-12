@@ -9,7 +9,7 @@ export function refreshToken(options) {
   };
 
   return this.UserServiceGql.request({
-    operationName: "refreshToken",
+    operationName: "RefreshToken",
     query: `
       mutation RefreshToken(
         $client: String!
@@ -26,5 +26,5 @@ export function refreshToken(options) {
       }
     `,
     variables
-  });
+  }, 'ownerToken');
 }

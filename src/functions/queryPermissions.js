@@ -23,6 +23,6 @@ export function queryPermissions(userId) {
       }
     }`,
       variables
-    });
+    }, 'ownerToken');
   });
 }

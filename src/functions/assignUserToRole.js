@@ -38,6 +38,6 @@ export function assignUserToRole(options) {
       }
     `,
       variables
-    });
+    }, 'ownerToken');
   });
 }

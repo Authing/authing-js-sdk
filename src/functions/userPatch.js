@@ -52,6 +52,6 @@ export function userPatch(options) {
       }
     }`,
       variables: options
-    });
+    }, 'ownerToken');
   });
 }

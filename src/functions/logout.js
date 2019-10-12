@@ -12,7 +12,7 @@ export function logout(_id) {
     _id,
     tokenExpiredAt: '0'
   }).then(res => {
-    TokenMananger.destroy();
+    TokenMananger.getInstance().setUserToken(null);
     return res;
   });
 }

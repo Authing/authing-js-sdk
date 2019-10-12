@@ -36,6 +36,7 @@
     "@babel/core": "^7.6.3",
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.6.2",
     "ava": "^2.4.0",
     "babel-loader": "^8.0.6",
     "eslint": "^6.5.1",
@@ -49,8 +50,9 @@
       "!**/_*.js"
     ],
     "require": [
-			"@babel/polyfill"
-		],
+      "@babel/register",
+      "@babel/polyfill"
+    ],
     "babel": {
       "testOptions": {
         "presets": [

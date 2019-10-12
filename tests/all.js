@@ -1,4 +1,5 @@
 import test from 'ava';
+import { formatError } from '../src/utils/formatError';
 const Authing = require('../dist/authing-js-sdk-node');
 
 const clientId = '5d9d5d3a24430c6897929544';
@@ -34,7 +35,8 @@ test('users:register 用户密码注册', async t => {
     t.assert(res.email);
     t.pass();
   } catch (err) {
-    t.fail(JSON.stringify(err));
+    t.log(formatError(err));
+    t.fail(formatError(err));
   }
 });
 test('users:register 用户密码注册，保留原始密码字段内容', async t => {
@@ -49,7 +51,8 @@ test('users:register 用户密码注册，保留原始密码字段内容', async
     t.assert(res.password === '123456a');
     t.pass();
   } catch (err) {
-    t.fail(JSON.stringify(err));
+    t.log(formatError(err));
+    t.fail(formatError(err));
   }
 });
 test('users:list 用户池用户列表', async t => {
@@ -59,6 +62,7 @@ test('users:list 用户池用户列表', async t => {
     t.is(Array.isArray(list.list), true);
     t.pass();
   } catch (err) {
+    t.log(formatError(err));
     t.fail(JSON.stringify(err));
   }
 });
@@ -76,6 +80,7 @@ test('users:login 用户密码登录', async t => {
     t.assert(user.email);
     t.pass();
   } catch (err) {
+    t.log(formatError(err));
     t.fail(JSON.stringify(err));
   }
 });
@@ -96,7 +101,7 @@ test('users:queryPermissions 查询用户权限', async t => {
     t.assert(Array.isArray(permission.list));
     t.pass();
   } catch (err) {
-    t.log(err.message);
+    t.log(formatError(err));
     t.fail(JSON.stringify(err));
   }
 });
@@ -108,7 +113,7 @@ test('users:queryRoles 查询角色列表', async t => {
     t.assert(Array.isArray(roles.list));
     t.pass();
   } catch (err) {
-    t.log(err.message);
+    t.log(formatError(err));
     t.fail(JSON.stringify(err));
   }
 });
@@ -133,7 +138,7 @@ test('oauth:readUserOAuthList', async t => {
   t.pass();
 });
 
-test.only('user:logout 登出', async t => {
+test('user:logout 登出', async t => {
   const validAuth = auth;
   let email = randomEmail();
 
@@ -149,7 +154,7 @@ test.only('user:logout 登出', async t => {
     let res2 = await validAuth.logout(user._id);
     t.is(res2.tokenExpiredAt, '2000-1-1 00:00:00');
   } catch (err) {
-    t.log(JSON.stringify(err.response.data));
+    t.log(formatError(err));
     t.fail();
   }
 });
@@ -181,8 +186,8 @@ test('user:createRole 创建角色组', async t => {
     });
     t.assert(res._id);
   } catch (err) {
-    console.log(JSON.stringify(err.response.data.errors));
-    t.fail()
+    t.log(formatError(err));
+    t.fail();
   }
 });
 
@@ -213,7 +218,7 @@ test('user:assignUserToRole 把用户指派到角色组', async t => {
     t.assert(res2.list.length);
     t.assert(res2.list[0]._id);
   } catch (err) {
-    t.log(err.response.data.errors[0]);
+    t.log(formatError(err));
     t.fail('assignUserToRole 请求错误');
   }
 });
@@ -247,12 +252,12 @@ test('user:removeUserFromRole 把用户从角色组移除', async t => {
     });
     t.assert(res3._id);
   } catch (err) {
-    t.log(err.response.data.errors[0]);
+    t.log(formatError(err));
     t.fail('assignUserToRole 请求错误');
   }
 });
 
-test('user:refreshToken 刷新 Token', async t => {
+test.only('user:refreshToken 刷新 Token', async t => {
   const validAuth = auth;
   let email = randomEmail();
 
@@ -264,10 +269,15 @@ test('user:refreshToken 刷新 Token', async t => {
   let user = await validAuth.login({ email, password: '123456a' });
   t.assert(user.email);
   t.assert(user._id);
-  let refreshed = await validAuth.refreshToken({ user: user._id });
-  t.assert(refreshed.token);
-  t.assert(refreshed.iat);
-  t.assert(refreshed.exp);
+  try {
+    let refreshed = await validAuth.refreshToken({ user: user._id });
+    t.assert(refreshed.token);
+    t.assert(refreshed.iat);
+    t.assert(refreshed.exp);
+  } catch (err) {
+    t.log(formatError(err));
+    t.fail('刷新 token 出错')
+  }
 });
 
 test('user:sendResetPasswordEmail 发送重置密码邮件', async t => {
@@ -316,7 +326,7 @@ test('user:sendVerifyEmail 发送验证邮件', async t => {
       password: '123456a'
     });
   } catch (err) {
-    console.log(err);
+    t.log(formatError(err));
     t.assert(err.message.code === 2026 || err.message.code === 500);
     t.assert(err.message.message === '用户已存在，请不要重复注册');
   }
@@ -365,7 +375,7 @@ test.skip('oauth:genQRCode 生成 QRCode', async t => {
   t.log(res);
 });
 
-test('user:getVerificationCode 获取短信验证码', async t => {
+test.skip('user:getVerificationCode 获取短信验证码', async t => {
   const validAuth = auth;
   let phone = '18000179176';
   let res = await validAuth.getVerificationCode(phone);
@@ -389,11 +399,7 @@ test('oauth:loginByLDAP 使用 LDAP 登录', async t => {
     t.assert(res.email === 'tesla@ldap.forumsys.com');
   } catch (err) {
     t.fail('需要先在用户池创建 LDAP 服务再测试');
-    try {
-      t.log(err.response.data.errors[0]);
-    } catch (e) {
-      t.log(err);
-    }
+    t.log(formatError(err));
   }
 });
 
