@@ -1,17 +1,9 @@
-export async function checkPreflight() {
+export function checkPreflight() {
   if (this.opts.preflight) {
-    try {
-      await this.preflightFun();
-    } catch (error) {
-      throw error;
-    }
+    return this.preflightFun();
   }
 
   if (this.opts.cdnPreflight) {
-    try {
-      await this.cdnPreflightFun();
-    } catch (error) {
-      throw error;
-    }
+    return this.cdnPreflightFun();
   }
 }

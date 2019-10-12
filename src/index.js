@@ -95,8 +95,8 @@ class Authing {
     } else {
       this.FetchToken = Promise.resolve()
     }
-    // @TODO checkPreflight
-    // this.checkPreflight()
+    // 预检 oauth users 服务 或 cdn
+    this.checkPreflight()
   }
 }
 Authing.prototype = {
