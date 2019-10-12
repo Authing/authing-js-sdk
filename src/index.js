@@ -25,7 +25,7 @@ const defaultOpts = {
 class Authing {
   constructor(options) {
     this.opts = Object.assign({}, defaultOpts, options)
-
+    this.tokenManager = TokenManager.getInstance()
     if (options.host) {
       configs.services.user.host = options.host.user || configs.services.user.host;
       configs.services.oauth.host = options.host.oauth || configs.services.oauth.host;
@@ -84,7 +84,7 @@ class Authing {
           }
         }
       }`;
-      this.UserServiceGql.request({
+      this.FetchToken = this.UserServiceGql.request({
         operationName: 'getClientWhenSdkInit',
         query: `query getClientWhenSdkInit {
           getClientWhenSdkInit(secret: "${options.secret}", clientId: "${options.userPoolId}")${queryField}
@@ -92,6 +92,8 @@ class Authing {
       }).then(res => {
         TokenManager.getInstance().setToken(res.accessToken);
       });
+    } else {
+      this.FetchToken = Promise.resolve()
     }
   }
 }

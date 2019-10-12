@@ -8,7 +8,7 @@
   "prepublishOnly": "npm run build",
   "scripts": {
     "lint": "eslint --fix .",
-    "test": "nyc ava -vs",
+    "test": "ava -vs",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov | codecov",
     "start": "nyc --reporter html ava -vs && open ./.nyc_output/index.html",
     "build": "webpack --config webpack.config.js"
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.6.3",
+    "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.3",
     "ava": "^2.4.0",
     "babel-loader": "^8.0.6",
@@ -46,7 +47,17 @@
       "test/**/*.js",
       "!**/_*/*.js",
       "!**/_*.js"
-    ]
+    ],
+    "require": [
+			"@babel/polyfill"
+		],
+    "babel": {
+      "testOptions": {
+        "presets": [
+          "@babel/preset-env"
+        ]
+      }
+    }
   },
   "nyc": {
     "lines": 10,

@@ -1,6 +1,6 @@
 export function createRole(options) {
   if (!options) {
-    throw Error("options is not provided.");
+    throw Error('options is not provided.');
   }
 
   const variables = {
@@ -8,27 +8,28 @@ export function createRole(options) {
     name: options.name,
     descriptions: options.descriptions
   };
-
-  return this.UserServiceGql.request({
-    operationName: "CreateRole",
-    query: `
-      mutation CreateRole(
-        $name: String!
-        $client: String!
-        $descriptions: String
-      ) {
-        createRole(
-          name: $name
-          client: $client
-          descriptions: $descriptions
+  return this.FetchToken.then(() => {
+    return this.UserServiceGql.request({
+      operationName: 'CreateRole',
+      query: `
+        mutation CreateRole(
+          $name: String!
+          $client: String!
+          $descriptions: String
         ) {
-          _id,
-          name,
-          client,
-          descriptions
+          createRole(
+            name: $name
+            client: $client
+            descriptions: $descriptions
+          ) {
+            _id,
+            name,
+            client,
+            descriptions
+          }
         }
-      }
-    `,
-    variables
+      `,
+      variables
+    });
   });
 }

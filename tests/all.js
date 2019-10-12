@@ -1,5 +1,5 @@
-import test from 'ava'
-const Authing = require('../src');
+import test from 'ava';
+const Authing = require('../dist/authing-js-sdk-node');
 
 const clientId = '5d9d5d3a24430c6897929544';
 const secret = '697c4e81e4aa786d16ba07fbe4f14076';
@@ -15,7 +15,7 @@ function randomEmail() {
   return email;
 }
 let auth = new Authing({
-  clientId,
+  userPoolId: clientId,
   secret,
   host: {
     user: 'http://localhost:5555/graphql',
@@ -24,7 +24,7 @@ let auth = new Authing({
 });
 
 test('users:register 用户密码注册', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
   try {
     let res = await validAuth.register({
@@ -38,7 +38,7 @@ test('users:register 用户密码注册', async t => {
   }
 });
 test('users:register 用户密码注册，保留原始密码字段内容', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
   try {
     let res = await validAuth.register({
@@ -53,7 +53,7 @@ test('users:register 用户密码注册，保留原始密码字段内容', async
   }
 });
 test('users:list 用户池用户列表', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   try {
     let list = await validAuth.list();
     t.is(Array.isArray(list.list), true);
@@ -64,7 +64,7 @@ test('users:list 用户池用户列表', async t => {
 });
 
 test('users:login 用户密码登录', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   try {
     let email = randomEmail();
     let res = await validAuth.register({
@@ -82,7 +82,7 @@ test('users:login 用户密码登录', async t => {
 
 test('users:queryPermissions 查询用户权限', async t => {
   try {
-    const validAuth = await auth;
+    const validAuth = auth;
     let email = randomEmail();
     let res = await validAuth.register({
       email,
@@ -103,7 +103,7 @@ test('users:queryPermissions 查询用户权限', async t => {
 
 test('users:queryRoles 查询角色列表', async t => {
   try {
-    const validAuth = await auth;
+    const validAuth = auth;
     let roles = await validAuth.queryRoles({ clientId, page: 1, count: 10 });
     t.assert(Array.isArray(roles.list));
     t.pass();
@@ -114,7 +114,7 @@ test('users:queryRoles 查询角色列表', async t => {
 });
 
 test('oauth:readUserOAuthList', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
 
   let res = await validAuth.register({
@@ -134,7 +134,7 @@ test('oauth:readUserOAuthList', async t => {
 });
 
 test('user:logout 登出', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
 
   let res = await validAuth.register({
@@ -155,7 +155,7 @@ test('user:logout 登出', async t => {
 });
 
 test('user:remove 删除用户', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
 
   let res = await validAuth.register({
@@ -171,18 +171,26 @@ test('user:remove 删除用户', async t => {
   res2.map(item => t.assert(item._id));
 });
 
-test('user:createRole 创建角色组', async t => {
-  const validAuth = await auth;
-  let res = await validAuth.createRole({
-    clientId,
-    name: 'myRole',
-    descriptions: 'ava test role'
-  });
-  t.assert(res._id);
+test.only('user:createRole 创建角色组', async t => {
+  const validAuth = auth;
+  console.log('validAuthrewqrqewr');
+  console.log(validAuth);
+  try {
+    let res = await validAuth.createRole({
+      clientId,
+      name: 'myRole',
+      descriptions: 'ava test role'
+    });
+    console.log('res1235234624');
+    console.log(res);
+    t.assert(res._id);
+  } catch (err) {
+    console.log(JSON.stringify(err.response.data.errors));
+  }
 });
 
 test('user:assignUserToRole 把用户指派到角色组', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
 
   let res = await validAuth.register({
@@ -214,7 +222,7 @@ test('user:assignUserToRole 把用户指派到角色组', async t => {
 });
 
 test('user:removeUserFromRole 把用户从角色组移除', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
 
   let res = await validAuth.register({
@@ -248,7 +256,7 @@ test('user:removeUserFromRole 把用户从角色组移除', async t => {
 });
 
 test('user:refreshToken 刷新 Token', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
 
   let res = await validAuth.register({
@@ -266,7 +274,7 @@ test('user:refreshToken 刷新 Token', async t => {
 });
 
 test('user:sendResetPasswordEmail 发送重置密码邮件', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = 'something@authing.cn';
   try {
     let user = await validAuth.register({
@@ -284,7 +292,7 @@ test('user:sendResetPasswordEmail 发送重置密码邮件', async t => {
 });
 
 test.skip('user:changePassord 用户自己修改密码', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
 
   let res = await validAuth.register({
@@ -303,7 +311,7 @@ test.skip('user:changePassord 用户自己修改密码', async t => {
 });
 
 test('user:sendVerifyEmail 发送验证邮件', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = 'yezuwei@authing.cn';
   try {
     let user = await validAuth.register({
@@ -323,7 +331,7 @@ test('user:sendVerifyEmail 发送验证邮件', async t => {
 });
 
 test('user:checkLoginStatus 检查登录状态', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
   let user = await validAuth.register({
     email,
@@ -341,7 +349,7 @@ test('user:checkLoginStatus 检查登录状态', async t => {
 });
 
 test('user:decodeToken 解析 jwt token', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
   let user = await validAuth.register({
     email,
@@ -355,13 +363,13 @@ test('user:decodeToken 解析 jwt token', async t => {
 });
 
 test.skip('oauth:genQRCode 生成 QRCode', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let res = await validAuth.genQRCode(clientId);
   t.log(res);
 });
 
 test('user:getVerificationCode 获取短信验证码', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let phone = '18000179176';
   let res = await validAuth.getVerificationCode(phone);
   t.assert(res.code === 200);
@@ -375,7 +383,7 @@ test('user:getVerificationCode 获取短信验证码', async t => {
 });
 
 test('oauth:loginByLDAP 使用 LDAP 登录', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   try {
     let res = await validAuth.loginByLDAP({
       username: 'tesla',
@@ -393,7 +401,7 @@ test('oauth:loginByLDAP 使用 LDAP 登录', async t => {
 });
 
 test('user:bindOAuth 绑定 OAuth 登录方式', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
   let user = await validAuth.register({
     email,
@@ -413,7 +421,7 @@ test('user:bindOAuth 绑定 OAuth 登录方式', async t => {
 });
 
 test('user:unbindOAuth 解绑 OAuth 登录方式', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
   let user = await validAuth.register({
     email,
@@ -440,7 +448,7 @@ test('user:unbindOAuth 解绑 OAuth 登录方式', async t => {
 });
 
 test('user:unbindEmail 解绑 email', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
   let user = await validAuth.register({
     email,
@@ -478,7 +486,7 @@ test('user:unbindEmail 解绑 email', async t => {
 });
 
 test('user:update 修改用户资料', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let email = randomEmail();
   let user = await validAuth.register({
     email,
@@ -493,7 +501,7 @@ test('user:update 修改用户资料', async t => {
 });
 
 test('user:updateRolePermissions 修改角色权限', async t => {
-  const validAuth = await auth;
+  const validAuth = auth;
   let res = await validAuth.createRole({
     clientId,
     name: 'myRole',
@@ -511,7 +519,7 @@ test('user:updateRolePermissions 修改角色权限', async t => {
 });
 
 // test.only("撤回用户对某个 SSO 应用的授权", async t => {
-//   const validAuth = await auth;
+//   const validAuth = auth;
 
 //   let res = await validAuth.revokeAuthedApp({
 //     "userPoolId": clientId,
@@ -522,7 +530,7 @@ test('user:updateRolePermissions 修改角色权限', async t => {
 // })
 
 // test.only("用户在用户池内授权的 SSO 应用列表", async t => {
-//   const validAuth = await auth;
+//   const validAuth = auth;
 
 //   let res = await validAuth.getAuthedAppList({
 //     clientId,

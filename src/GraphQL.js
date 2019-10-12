@@ -27,7 +27,9 @@ export class GraphQLClient {
       if (d.errors) {
         throw d.errors[0];
       }
-      return d.data[data.operationName];
+      let first = Object.keys(d.data)[0]
+      // return d.data[data.operationName];
+      return d.data[first];
     });
   }
 }
