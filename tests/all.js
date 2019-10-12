@@ -37,7 +37,7 @@ test('users:register 用户密码注册', async t => {
     t.fail(JSON.stringify(err));
   }
 });
-test('users:register 用户密码注册，保留原始密码字段内容', async t => {
+test.only('users:register 用户密码注册，保留原始密码字段内容', async t => {
   const validAuth = auth;
   let email = randomEmail();
   try {
@@ -46,7 +46,7 @@ test('users:register 用户密码注册，保留原始密码字段内容', async
       password: '123456a',
       keepPassword: true
     });
-    t.assert(res.passowrd === '123456a');
+    t.assert(res.password === '123456a');
     t.pass();
   } catch (err) {
     t.fail(JSON.stringify(err));
@@ -171,21 +171,18 @@ test('user:remove 删除用户', async t => {
   res2.map(item => t.assert(item._id));
 });
 
-test.only('user:createRole 创建角色组', async t => {
+test('user:createRole 创建角色组', async t => {
   const validAuth = auth;
-  console.log('validAuthrewqrqewr');
-  console.log(validAuth);
   try {
     let res = await validAuth.createRole({
       clientId,
       name: 'myRole',
       descriptions: 'ava test role'
     });
-    console.log('res1235234624');
-    console.log(res);
     t.assert(res._id);
   } catch (err) {
     console.log(JSON.stringify(err.response.data.errors));
+    t.fail()
   }
 });
 
