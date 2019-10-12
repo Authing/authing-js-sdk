@@ -257,7 +257,7 @@ test('user:removeUserFromRole 把用户从角色组移除', async t => {
   }
 });
 
-test.only('user:refreshToken 刷新 Token', async t => {
+test('user:refreshToken 刷新 Token', async t => {
   const validAuth = auth;
   let email = randomEmail();
 
@@ -317,9 +317,10 @@ test.skip('user:changePassord 用户自己修改密码', async t => {
   });
 });
 
-test('user:sendVerifyEmail 发送验证邮件', async t => {
+test.only('user:sendVerifyEmail 发送验证邮件', async t => {
   const validAuth = auth;
-  let email = 'yezuwei@authing.cn';
+  let email = randomEmail();
+  // let email = 'yezuwei@authing.cn';
   try {
     let user = await validAuth.register({
       email,
@@ -344,12 +345,14 @@ test('user:checkLoginStatus 检查登录状态', async t => {
     email,
     password: '123456a'
   });
+  /*
   let res = await validAuth.checkLoginStatus(user.token);
   t.assert(res.status === false);
   t.assert(res.code === 2020);
   t.assert(res.message === '未登录');
+  */
   let loggedIn = await validAuth.login({ email, password: '123456a' });
-  res = await validAuth.checkLoginStatus(loggedIn.token);
+  let res = await validAuth.checkLoginStatus(loggedIn.token);
   t.assert(res.status === true);
   t.assert(res.code === 200);
   t.assert(res.message === '已登录');
@@ -420,7 +423,7 @@ test('user:bindOAuth 绑定 OAuth 登录方式', async t => {
     unionid: Math.random().toString(),
     userInfo: '{"uniondid":"12345678","username":"demo"}'
   });
-  t.assert(bind.bindOtherOAuth.user);
+  t.assert(bind.unionid);
 });
 
 test('user:unbindOAuth 解绑 OAuth 登录方式', async t => {
@@ -440,14 +443,14 @@ test('user:unbindOAuth 解绑 OAuth 登录方式', async t => {
     unionid: Math.random().toString(),
     userInfo: '{"uniondid":"12345678","username":"demo"}'
   });
-  t.assert(bind.bindOtherOAuth.user);
+  t.assert(bind.unionid);
 
   let unbind = await validAuth.unbindOAuth({
     user: loggedIn._id,
     client: loggedIn.registerInClient,
     type: 'github'
   });
-  t.assert(unbind.unbindOtherOAuth._id);
+  t.assert(unbind._id);
 });
 
 test('user:unbindEmail 解绑 email', async t => {
@@ -478,14 +481,14 @@ test('user:unbindEmail 解绑 email', async t => {
     userInfo: '{"uniondid":"12345678","username":"demo"}'
   });
 
-  t.assert(bind.bindOtherOAuth.user);
+  t.assert(bind.user);
 
   let res = await validAuth.unbindEmail({
     user: user._id,
     client: user.registerInClient
   });
-  t.assert(res.unbindEmail._id);
-  t.assert(res.unbindEmail.email === '');
+  t.assert(res._id);
+  t.assert(res.email === '');
 });
 
 test('user:update 修改用户资料', async t => {

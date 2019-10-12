@@ -11,5 +11,5 @@ export function checkLoginStatus(token) {
     variables: {
       token
     }
-  });
+  }, 'userToken');
 }
