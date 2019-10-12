@@ -95,9 +95,12 @@ class Authing {
     } else {
       this.FetchToken = Promise.resolve()
     }
+    // @TODO checkPreflight
+    // this.checkPreflight()
   }
 }
 Authing.prototype = {
+  constructor: Authing,
   ...mods
 };
 module.exports = Authing;

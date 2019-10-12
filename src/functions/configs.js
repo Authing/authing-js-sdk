@@ -34,7 +34,8 @@ export default {
     "update",
     "user",
     "userPatch",
-    "verifyResetPasswordVerifyCode"
+    "verifyResetPasswordVerifyCode",
+    "updateRolePermissions"
   ],
   web: [
     "_uploadAvatar",
