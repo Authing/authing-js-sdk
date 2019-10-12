@@ -24,10 +24,19 @@ export default class TokenManager {
   }
   getToken(type) {
     if (typeof type === 'undefined') {
+      /*
       if (typeof window === 'undefined') {
         return `Bearer ${TokenManager.instance.ownerToken}`;
       } else {
         return `Bearer ${TokenManager.instance.userToken}`;
+      }
+      */
+      if (TokenManager.instance.userToken) {
+        return `Bearer ${TokenManager.instance.userToken}`;
+      } else if (TokenManager.instance.ownerToken) {
+        return `Bearer ${TokenManager.instance.ownerToken}`;
+      } else {
+        return null
       }
     } else {
       return `Bearer ${TokenManager.instance[type]}`;

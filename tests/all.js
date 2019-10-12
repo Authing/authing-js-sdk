@@ -37,7 +37,7 @@ test('users:register 用户密码注册', async t => {
     t.fail(JSON.stringify(err));
   }
 });
-test.only('users:register 用户密码注册，保留原始密码字段内容', async t => {
+test('users:register 用户密码注册，保留原始密码字段内容', async t => {
   const validAuth = auth;
   let email = randomEmail();
   try {
@@ -133,7 +133,7 @@ test('oauth:readUserOAuthList', async t => {
   t.pass();
 });
 
-test('user:logout 登出', async t => {
+test.only('user:logout 登出', async t => {
   const validAuth = auth;
   let email = randomEmail();
 
@@ -147,7 +147,7 @@ test('user:logout 登出', async t => {
   t.assert(user._id);
   try {
     let res2 = await validAuth.logout(user._id);
-    t.is(res2.tokenExpiredAt, 'Sat Jan 01 2000 00:00:00 GMT+0800 (CST)');
+    t.is(res2.tokenExpiredAt, '2000-1-1 00:00:00');
   } catch (err) {
     t.log(JSON.stringify(err.response.data));
     t.fail();

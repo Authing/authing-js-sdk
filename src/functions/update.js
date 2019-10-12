@@ -1,4 +1,4 @@
-import encryption from '../utils/_encryption'
+import encryption from '../utils/_encryption';
 export function update(options) {
   const self = this;
   if (!options) {
@@ -17,30 +17,29 @@ export function update(options) {
 
   options.registerInClient = self.userPoolId;
 
-  const
-    keyTypeList = {
-      _id: 'String!',
-      email: 'String',
-      emailVerified: 'Boolean',
-      username: 'String',
-      nickname: 'String',
-      company: 'String',
-      photo: 'String',
-      oauth: 'String',
-      browser: 'String',
-      password: 'String',
-      oldPassword: 'String',
-      registerInClient: 'String!',
-      phone: 'String',
-      token: 'String',
-      tokenExpiredAt: 'String',
-      loginsCount: 'Int',
-      lastLogin: 'String',
-      lastIP: 'String',
-      signedUp: 'String',
-      blocked: 'Boolean',
-      isDeleted: 'Boolean'
-    };
+  const keyTypeList = {
+    _id: 'String!',
+    email: 'String',
+    emailVerified: 'Boolean',
+    username: 'String',
+    nickname: 'String',
+    company: 'String',
+    photo: 'String',
+    oauth: 'String',
+    browser: 'String',
+    password: 'String',
+    oldPassword: 'String',
+    registerInClient: 'String!',
+    phone: 'String',
+    token: 'String',
+    tokenExpiredAt: 'String',
+    loginsCount: 'Int',
+    lastLogin: 'String',
+    lastIP: 'String',
+    signedUp: 'String',
+    blocked: 'Boolean',
+    isDeleted: 'Boolean'
+  };
   const returnFields = `_id
     email
     emailVerified
@@ -81,14 +80,13 @@ export function update(options) {
     };
   }
 
-
   if (options.photo) {
     const { photo } = options;
     if (typeof photo !== 'string') {
-      return this._uploadAvatar(options).then((opts) => {
+      return this._uploadAvatar(options).then(opts => {
         const arg = generateArgs(opts);
         return this.UserServiceGql.request({
-          operationName: 'updateUser',
+          operationName: 'UpdateUser',
           query: `
             mutation UpdateUser(${arg.argsString}){
               updateUser(options: {
@@ -104,9 +102,10 @@ export function update(options) {
     }
   }
   const args = generateArgs(options);
-  return this.UserServiceGql.request({
-    operationName: 'updateUser',
-    query: `
+  return this.FetchToken.then(() => {
+    return this.UserServiceGql.request({
+      operationName: 'UpdateUser',
+      query: `
       mutation UpdateUser(${args.argsString}){
         updateUser(options: {
           ${args.argsFiller.join(', ')}
@@ -115,6 +114,7 @@ export function update(options) {
         }
       }
     `,
-    variables: options
+      variables: options
+    });
   });
 }
