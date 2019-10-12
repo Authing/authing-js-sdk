@@ -5,7 +5,7 @@ export function loginByLDAP(options) {
     throw Error("options is not provided.");
   }
 
-  options.clientId = this.opts.clientId;
+  options.clientId = this.userPoolId;
 
   if (!options.password) {
     throw Error("password is not provided.");
