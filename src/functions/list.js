@@ -11,10 +11,10 @@ export function list(page, count, queryOptions) {
     count,
     populate: queryOptions.populate
   };
-
-  return this.UserServiceGql.request({
-    operationName: "users",
-    query: `query users($registerInClient: String, $page: Int, $count: Int, $populate: Boolean){
+  return this.FetchToken.then(() => {
+    return this.UserServiceGql.request({
+      operationName: 'users',
+      query: `query users($registerInClient: String, $page: Int, $count: Int, $populate: Boolean){
       users(registerInClient: $registerInClient, page: $page, count: $count, populate: $populate) {
           totalCount
           list {
@@ -58,6 +58,7 @@ export function list(page, count, queryOptions) {
         }
       }
     }`,
-    variables: options
+      variables: options
+    });
   });
 }

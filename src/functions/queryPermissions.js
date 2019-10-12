@@ -1,6 +1,6 @@
 export function queryPermissions(userId) {
   if (!userId) {
-    throw Error("userId is not provided.");
+    throw Error('userId is not provided.');
   }
 
   const variables = {
@@ -8,9 +8,10 @@ export function queryPermissions(userId) {
     user: userId
   };
 
-  return this.UserServiceGql.request({
-    operationName: "QueryRoleByUserId",
-    query: `query QueryRoleByUserId($user: String!, $client: String!){
+  return this.FetchToken.then(() => {
+    return this.UserServiceGql.request({
+      operationName: 'QueryRoleByUserId',
+      query: `query QueryRoleByUserId($user: String!, $client: String!){
       queryRoleByUserId(user: $user, client: $client) {
         totalCount
         list {
@@ -21,6 +22,7 @@ export function queryPermissions(userId) {
         }
       }
     }`,
-    variables
+      variables
+    });
   });
 }

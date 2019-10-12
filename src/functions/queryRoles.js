@@ -9,9 +9,10 @@ export function queryRoles(options) {
     count: options.count
   };
 
-  return this.UserServiceGql.request({
-    operationName: 'ClientRoles',
-    query: `
+  return this.FetchToken.then(() => {
+    return this.UserServiceGql.request({
+      operationName: 'ClientRoles',
+      query: `
       query ClientRoles(
         $clientId: String!
         $page: Int
@@ -34,6 +35,7 @@ export function queryRoles(options) {
         }
       }
     `,
-    variables
-  })
+      variables
+    });
+  });
 }

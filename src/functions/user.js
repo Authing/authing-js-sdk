@@ -1,15 +1,15 @@
 export function user(options) {
   if (!options) {
-    throw Error("options is not provided");
+    throw Error('options is not provided');
   }
   if (!options.id) {
-    throw Error("id in options is not provided");
+    throw Error('id in options is not provided');
   }
   options.registerInClient = this.userPoolId;
-
-  return this.UserServiceGql.request({
-    operationName: "user",
-    query: `query user($id: String!, $registerInClient: String!){
+  return this.FetchToken.then(() => {
+    return this.UserServiceGql.request({
+      operationName: 'user',
+      query: `query user($id: String!, $registerInClient: String!){
       user(id: $id, registerInClient: $registerInClient) {
         _id
         unionid
@@ -48,6 +48,7 @@ export function user(options) {
         }
       }
     }`,
-    variables: options
+      variables: options
+    });
   });
 }

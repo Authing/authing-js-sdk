@@ -1,6 +1,6 @@
 export function removeUserFromRole(options) {
   if (!options) {
-    throw Error("options is not provided.");
+    throw Error('options is not provided.');
   }
   const variables = {
     client: this.userPoolId,
@@ -8,9 +8,10 @@ export function removeUserFromRole(options) {
     group: options.roleId
   };
 
-  return this.UserServiceGql.request({
-    operationName: "removeUserFromGroup",
-    query: `
+  return this.FetchToken.then(() => {
+    return this.UserServiceGql.request({
+      operationName: 'removeUserFromGroup',
+      query: `
       mutation RemoveUserFromGroup(
         $group: String!
         $client: String!
@@ -34,6 +35,7 @@ export function removeUserFromRole(options) {
         }
       }
     `,
-    variables
+      variables
+    });
   });
 }

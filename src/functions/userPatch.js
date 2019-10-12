@@ -1,15 +1,15 @@
 export function userPatch(options) {
   if (!options) {
-    throw Error("options is not provided");
+    throw Error('options is not provided');
   }
   if (!options.ids) {
-    throw Error("ids in options is not provided");
+    throw Error('ids in options is not provided');
   }
   options.registerInClient = this.userPoolId;
-
-  return this.UserServiceGql.request({
-    operationName: "userPatch",
-    query: `query userPatch($ids: String!){
+  return this.FetchToken.then(() => {
+    return this.UserServiceGql.request({
+      operationName: 'userPatch',
+      query: `query userPatch($ids: String!){
       userPatch(ids: $ids) {
         list {
           _id
@@ -51,6 +51,7 @@ export function userPatch(options) {
         totalCount
       }
     }`,
-    variables: options
+      variables: options
+    });
   });
 }
