@@ -2,8 +2,8 @@ import test from 'ava';
 import { formatError } from '../src/utils/formatError';
 const Authing = require('../dist/authing-js-sdk-node');
 
-const clientId = '5d9d5d3a24430c6897929544';
-const secret = '697c4e81e4aa786d16ba07fbe4f14076';
+const clientId = '5da3fe0411e283f7ddf500bc';
+const secret = '35e69529d9b2626496bf9f4686799524';
 
 //线上
 // const secret = 'b41a29583618d8e9de201d5e80db7056';
@@ -276,7 +276,7 @@ test('user:refreshToken 刷新 Token', async t => {
     t.assert(refreshed.exp);
   } catch (err) {
     t.log(formatError(err));
-    t.fail('刷新 token 出错')
+    t.fail('刷新 token 出错');
   }
 });
 
@@ -378,17 +378,18 @@ test.skip('oauth:genQRCode 生成 QRCode', async t => {
   t.log(res);
 });
 
-test.skip('user:getVerificationCode 获取短信验证码', async t => {
+test('user:getVerificationCode 获取短信验证码', async t => {
   const validAuth = auth;
-  let phone = '18000179176';
+  let phone = '13116172397';
   let res = await validAuth.getVerificationCode(phone);
   t.assert(res.code === 200);
   t.assert(res.message === '发送成功');
   try {
     res = await validAuth.getVerificationCode(phone);
   } catch (err) {
-    t.assert(err.code === 500);
-    t.assert(err.message === '已发送验证码，还未失效');
+    let msg = JSON.parse(err.message);
+    t.assert(msg.code === 500);
+    t.assert(msg.message === '已发送验证码，还未失效');
   }
 });
 
@@ -545,3 +546,54 @@ test('user:updateRolePermissions 修改角色权限', async t => {
 //   })
 //   console.log(res)
 // })
+
+test('cdnPreflight 函数', async t => {
+  const validAuth = auth;
+  let res = await validAuth.cdnPreflightFun();
+  t.is(res.status, 200);
+});
+
+test('用户和认证服务预检函数', async t => {
+  const validAuth = auth;
+  let res = await validAuth.preflightFun();
+  t.is(res[0].data.ok, 1);
+  t.is(res[1].data.ok, 1);
+});
+
+test('根据参数决定是否进行用户和认证服务预检和 cdn 预检', async t => {
+  let auth = new Authing({
+    userPoolId: clientId,
+    secret,
+    host: {
+      user: 'http://localhost:5555/graphql',
+      oauth: 'http://localhost:5556/graphql'
+    },
+    preflight: true
+  });
+  let validAuth = auth;
+  let res = await validAuth.checkPreflight();
+  t.is(res[0].data.ok, 1);
+  t.is(res[1].data.ok, 1);
+
+  auth = new Authing({
+    userPoolId: clientId,
+    secret,
+    host: {
+      user: 'http://localhost:5555/graphql',
+      oauth: 'http://localhost:5556/graphql'
+    },
+    cdnPreflight: true
+  });
+  validAuth = auth;
+  res = await validAuth.checkPreflight();
+  t.is(res.data, 'a\n');
+});
+
+test.only('readOAuthList', async t => {
+  let validAuth = auth;
+  let list = await validAuth.readOAuthList();
+  t.is(Array.isArray(list), true);
+  if (list.length > 0) {
+    t.is(list.every(v => v.hasOwnProperty('_id') && v.hasOwnProperty('alias')), true);
+  }
+});

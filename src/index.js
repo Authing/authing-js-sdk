@@ -41,16 +41,16 @@ class Authing {
     }
 
     this.UserServiceGql = new GraphQLClient({
-      // baseURL: configs.services.user.host,
-      baseURL: 'http://localhost:5555/graphql',
+      baseURL: configs.services.user.host,
+      // baseURL: 'http://localhost:5555/graphql',
       headers: {
         Authorization: TokenManager.getInstance().getToken()
       },
       timeout: this.opts.timeout
     });
     this.OAuthServiceGql = new GraphQLClient({
-      // baseURL: configs.services.oauth.host,
-      baseURL: 'http://localhost:5556/graphql',
+      baseURL: configs.services.oauth.host,
+      // baseURL: 'http://localhost:5556/graphql',
       headers: {
         Authorization: TokenManager.getInstance().getToken()
       },
