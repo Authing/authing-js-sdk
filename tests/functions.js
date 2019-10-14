@@ -298,7 +298,7 @@ test('user:sendResetPasswordEmail 发送重置密码邮件', async t => {
   t.assert(res.code === 200);
 });
 
-test.skip('user:changePassord 用户自己修改密码', async t => {
+test.skip('user:changePassord 用户通过找回密码邮件的验证码修改密码', async t => {
   const validAuth = auth;
   let email = randomEmail();
 
@@ -667,4 +667,13 @@ test('查询用户 MFA 状态', async t => {
   t.assert(res.userPoolId);
   t.assert(res.shareKey);
   t.true(res.enable);
+});
+
+test.only('检查微信二维码是否被扫描', async t => {
+  const validAuth = auth;
+  let res = await validAuth.genQRCode(clientId);
+  let status = await validAuth.checkQR();
+  t.is(status.data.data.code, 500);
+  t.is(status.data.data.message, 'have not been authed');
+  //@TODO 给 checkQR 传入正确地参数，进行测试
 });

@@ -8,6 +8,7 @@ export default {
     "changePassword",
     "checkLoginStatus",
     "checkPreflight",
+    "checkQR",
     "createRole",
     "decodeToken",
     "getAuthedAppList",
