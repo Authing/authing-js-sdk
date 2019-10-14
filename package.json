@@ -2,7 +2,7 @@
   "name": "authing-js-sdk",
   "version": "3.0.0",
   "description": "Official sdk of Authing",
-  "main": "dist/authing-js-sdk.js",
+  "main": "dist/authing-js-sdk-node.js",
   "browser": "dist/authing-js-sdk-browser.min.js",
   "unpkg": "dist/authing-js-sdk-browser.min.js",
   "prepublishOnly": "npm run build",
@@ -45,7 +45,7 @@
   },
   "ava": {
     "files": [
-      "test/**/*.js",
+      "tests/**/*.js",
       "!**/_*/*.js",
       "!**/_*.js"
     ],
