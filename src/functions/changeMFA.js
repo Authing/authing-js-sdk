@@ -23,5 +23,5 @@ export function changeMFA(options) {
         }
     }`,
     variables
-  });
+  }, 'userToken');
 }

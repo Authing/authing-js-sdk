@@ -609,7 +609,7 @@ test('根据 id 查询单个用户', async t => {
   t.assert(user._id);
 });
 
-test.only('根据 id 批量查询多个个用户', async t => {
+test('根据 id 批量查询多个个用户', async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res1 = await validAuth.register({
@@ -627,4 +627,39 @@ test.only('根据 id 批量查询多个个用户', async t => {
     console.log(JSON.stringify(err));
   }
   t.assert(users.list.every(v => v._id && v.registerInClient === clientId));
+});
+
+test('变更用户 MFA 状态', async t => {
+  let validAuth = auth;
+  let email = randomEmail();
+  let res = await validAuth.register({
+    email,
+    password: '123456a'
+  });
+  let logined = await validAuth.login({ email, password: '123456a' });
+  res = await validAuth.changeMFA({ userPoolId: clientId, userId: res._id, enable: true });
+  t.assert(res._id);
+  t.assert(res.userId);
+  t.assert(res.userPoolId);
+  t.assert(res.shareKey);
+  t.true(res.enable);
+});
+
+test.only('查询用户 MFA 状态', async t => {
+  let validAuth = auth;
+  let email = randomEmail();
+  let res = await validAuth.register({
+    email,
+    password: '123456a'
+  });
+  let loggedIn = await validAuth.login({ email, password: '123456a' });
+  let mfa = await validAuth.queryMFA({ userPoolId: clientId, userId: res._id });
+  t.is(mfa, null);
+  res = await validAuth.changeMFA({ userPoolId: clientId, userId: res._id, enable: true });
+  mfa = await validAuth.queryMFA({ userPoolId: clientId, userId: loggedIn._id });
+  t.assert(res._id);
+  t.assert(res.userId);
+  t.assert(res.userPoolId);
+  t.assert(res.shareKey);
+  t.true(res.enable);
 });
