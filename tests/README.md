@@ -1,5 +1,6 @@
-无法测试的函数：
+无法自动测试的函数：
 loginByPhoneCode.js
+verifyResetPasswordVerifyCode.js
 
 无需测试的函数：
 updateFailedTips.js

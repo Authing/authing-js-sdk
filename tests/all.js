@@ -589,11 +589,42 @@ test('根据参数决定是否进行用户和认证服务预检和 cdn 预检', 
   t.is(res.data, 'a\n');
 });
 
-test.only('readOAuthList', async t => {
+test('readOAuthList', async t => {
   let validAuth = auth;
   let list = await validAuth.readOAuthList();
   t.is(Array.isArray(list), true);
   if (list.length > 0) {
     t.is(list.every(v => v.hasOwnProperty('_id') && v.hasOwnProperty('alias')), true);
   }
+});
+
+test('根据 id 查询单个用户', async t => {
+  let validAuth = auth;
+  let email = randomEmail();
+  let res = await validAuth.register({
+    email,
+    password: '123456a'
+  });
+  let user = await validAuth.user({ id: res._id });
+  t.assert(user._id);
+});
+
+test.only('根据 id 批量查询多个个用户', async t => {
+  let validAuth = auth;
+  let email = randomEmail();
+  let res1 = await validAuth.register({
+    email,
+    password: '123456a'
+  });
+  let res2 = await validAuth.register({
+    email: randomEmail(),
+    password: '123456a'
+  });
+  let users;
+  try {
+    users = await validAuth.userPatch({ ids: `${res1._id},${res2._id}` });
+  } catch (err) {
+    console.log(JSON.stringify(err));
+  }
+  t.assert(users.list.every(v => v._id && v.registerInClient === clientId));
 });
