@@ -25,6 +25,7 @@ const defaultOpts = {
 class Authing {
   constructor(options) {
     this.opts = Object.assign({}, defaultOpts, options)
+    this.version = process.env.VERSION
     this.tokenManager = TokenManager.getInstance()
     if (options.host) {
       configs.services.user.host = options.host.user || configs.services.user.host;

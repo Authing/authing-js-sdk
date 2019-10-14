@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const packageJson = require('./package.json');
 const webConfig = {
   entry: './src/index.js',
   mode: 'production',
@@ -15,7 +16,8 @@ const webConfig = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.BUILD_TARGET': JSON.stringify('web')
+      'process.env.BUILD_TARGET': JSON.stringify('web'),
+      'process.env.VERSION': JSON.stringify(packageJson.version)
     })
   ]
 };
@@ -34,7 +36,8 @@ const webDevConfig = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.BUILD_TARGET': JSON.stringify('web')
+      'process.env.BUILD_TARGET': JSON.stringify('web'),
+      'process.env.VERSION': JSON.stringify(packageJson.version)
     })
   ]
 };
@@ -69,7 +72,8 @@ const nodeDevConfig = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.BUILD_TARGET': JSON.stringify('node')
+      'process.env.BUILD_TARGET': JSON.stringify('node'),
+      'process.env.VERSION': JSON.stringify(packageJson.version)
     })
   ]
 };
@@ -104,7 +108,8 @@ const nodeConfig = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.BUILD_TARGET': JSON.stringify('node')
+      'process.env.BUILD_TARGET': JSON.stringify('node'),
+      'process.env.VERSION': JSON.stringify(packageJson.version)
     })
   ]
 };
