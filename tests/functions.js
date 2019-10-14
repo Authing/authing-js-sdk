@@ -669,11 +669,26 @@ test('查询用户 MFA 状态', async t => {
   t.true(res.enable);
 });
 
-test.only('检查微信二维码是否被扫描', async t => {
+test('检查微信二维码是否被扫描', async t => {
   const validAuth = auth;
   let res = await validAuth.genQRCode(clientId);
   let status = await validAuth.checkQR();
   t.is(status.data.data.code, 500);
   t.is(status.data.data.message, 'have not been authed');
   //@TODO 给 checkQR 传入正确地参数，进行测试
+});
+
+test.only('获取用户池基础设置', async t => {
+  const validAuth = auth;
+  let res = await validAuth.getUserPoolSettings(clientId);
+  t.assert(res.hasOwnProperty('name'));
+  t.assert(res.hasOwnProperty('logo'));
+  t.assert(res.hasOwnProperty('descriptions'));
+  t.assert(res.hasOwnProperty('allowedOrigins'));
+  t.assert(res.hasOwnProperty('emailVerifiedDefault'));
+  t.assert(res.hasOwnProperty('useMiniLogin'));
+  t.assert(res.hasOwnProperty('registerDisabled'));
+  t.assert(res.hasOwnProperty('showWXMPQRCode'));
+  t.assert(res.hasOwnProperty('enableEmail'));
+  t.assert(res.hasOwnProperty('jwtExpired'));
 });
