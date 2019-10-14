@@ -1,3 +1,4 @@
+// 条目为文件名
 export default {
   node: [
     "assignUserToRole",
@@ -11,6 +12,7 @@ export default {
     "decodeToken",
     "getAuthedAppList",
     "getVerificationCode",
+    "genQRCode",
     "list",
     "login",
     "loginByLDAP",
