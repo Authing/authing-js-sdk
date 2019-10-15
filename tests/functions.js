@@ -23,24 +23,21 @@ let auth = new Authing({
     oauth: 'http://localhost:5556/graphql'
   }
 });
-test.only('初始化', async t => {
-  let email = randomEmail();
-  try {
-    let fault = new Authing({
-      userPoolId: clientId,
-      secret: '1',
-      host: {
-        user: 'http://localhost:5555/graphql',
-        oauth: 'http://localhost:5556/graphql'
-      }
-    });
-    
-    // let user = await fault.list();
-    // console.log(user);
-  } catch (err) {
-    console.log('err124124');
-    console.log(err);
-  }
+test('初始化', async t => {
+  let fault = new Authing({
+    userPoolId: clientId,
+    secret: '1',
+    host: {
+      user: 'http://localhost:5555/graphql',
+      oauth: 'http://localhost:5556/graphql'
+    },
+    onInitError: function(err) {
+      t.assert(err);
+    }
+  });
+  await new Promise(resolve => {
+    setTimeout(resolve, 2000)
+  })
 });
 test('users:register 用户密码注册', async t => {
   const validAuth = auth;

@@ -20,7 +20,8 @@ const defaultOpts = {
   cdnPreflightUrl: 'https://usercontents.authing.cn',
   accessToken: '',
   userPoolId: '',
-  secret: ''
+  secret: '',
+  onInitError: function(err) { throw err; }
 };
 class Authing {
   constructor(options) {
@@ -92,12 +93,12 @@ class Authing {
         }`
       }).then(res => {
         TokenManager.getInstance().setToken(res.accessToken);
-      });
+      }).catch(this.opts.onInitError);
     } else {
       this.FetchToken = Promise.resolve()
     }
     // 预检 oauth users 服务 或 cdn
-    this.checkPreflight()
+    this.checkPreflight().catch(this.opts.onInitError)
   }
 }
 Authing.prototype = {
