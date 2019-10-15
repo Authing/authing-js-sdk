@@ -23,7 +23,25 @@ let auth = new Authing({
     oauth: 'http://localhost:5556/graphql'
   }
 });
-
+test.only('初始化', async t => {
+  let email = randomEmail();
+  try {
+    let fault = new Authing({
+      userPoolId: clientId,
+      secret: '1',
+      host: {
+        user: 'http://localhost:5555/graphql',
+        oauth: 'http://localhost:5556/graphql'
+      }
+    });
+    
+    // let user = await fault.list();
+    // console.log(user);
+  } catch (err) {
+    console.log('err124124');
+    console.log(err);
+  }
+});
 test('users:register 用户密码注册', async t => {
   const validAuth = auth;
   let email = randomEmail();
@@ -678,7 +696,7 @@ test('检查微信二维码是否被扫描', async t => {
   //@TODO 给 checkQR 传入正确地参数，进行测试
 });
 
-test.only('获取用户池基础设置', async t => {
+test('获取用户池基础设置', async t => {
   const validAuth = auth;
   let res = await validAuth.getUserPoolSettings(clientId);
   t.assert(res.hasOwnProperty('name'));
