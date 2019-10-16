@@ -47,6 +47,8 @@ export function login(options) {
     // 登录成功记录 token
     if (res && res.token) {
       TokenMananger.getInstance().setUserToken(res.token);
+      if(configs.inBrowser)
+        localStorage.setItem('_authing_token', res.token)
     }
     return res;
   });
