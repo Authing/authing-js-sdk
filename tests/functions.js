@@ -353,7 +353,7 @@ test('user:sendVerifyEmail 发送验证邮件', async t => {
   t.assert(res.status === true);
 });
 
-test.only('user:checkLoginStatus 检查登录状态', async t => {
+test('user:checkLoginStatus 检查登录状态', async t => {
   const validAuth = auth;
   let email = randomEmail();
   let user = await validAuth.register({
