@@ -6,8 +6,8 @@ const Authing = require('../dist/authing-js-sdk-node');
 // const secret = '35e69529d9b2626496bf9f4686799524';
 
 //线上
-const secret = 'b41a29583618d8e9de201d5e80db7056';
-const clientId = '5a97ede6f8635a00018551a1';
+const secret = 'bb278212d520fc19f169e361179ea690';
+const clientId = '5c95905578fce5000166f853';
 function randomEmail() {
   let rand = Math.random()
     .toString(36)
