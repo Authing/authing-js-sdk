@@ -152,7 +152,7 @@ auth.login({...}).then(info => {})
 ## API
 
 全部 API 请参考：[Javascript 版用户接口](https://docs.authing.cn/authing/sdk/authing-sdk-for-javascript)，
-[Node.js 版用户接口](https://docs.authing.cn/authing/sdk/authing-sdk-for-javascript)。
+[Node.js 版用户接口](https://docs.authing.cn/authing/sdk/authing-sdk-for-node)。
 
 ## 小程序扫码登录
 
@@ -252,7 +252,7 @@ const auth = new Authing({
 
 当在浏览器使用时，我们会将用户 token 以 '\_authing_token' 字段存在 localStorage 中，后面都会从 localStorage 中读取并进行验证。
 
-了解更多报错的详情，请查看[错误代码](https://docs.authing.cn/#/quick_start/error_code)。
+了解更多报错的详情，请查看[错误代码](https://learn.authing.cn/authing/advanced/error-code)。
 
 获取用户池 ID 和用户池 Secret，请[点击这里](https://learn.authing.cn/authing/others/faq#ru-he-huo-qu-client-id-he-client-secret)。
 
