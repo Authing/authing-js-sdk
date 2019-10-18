@@ -3,7 +3,7 @@ export function getAuthedAppList(options) {
     throw Error("options is not provided.");
   }
   const variables = {
-    clientId: options.clientId,
+    clientId: this.userPoolId,
     userId: options.userId,
     page: options.page,
     count: options.count

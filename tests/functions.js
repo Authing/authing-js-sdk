@@ -353,7 +353,7 @@ test('user:sendVerifyEmail 发送验证邮件', async t => {
   t.assert(res.status === true);
 });
 
-test('user:checkLoginStatus 检查登录状态', async t => {
+test.only('user:checkLoginStatus 检查登录状态', async t => {
   const validAuth = auth;
   let email = randomEmail();
   let user = await validAuth.register({
@@ -371,6 +371,11 @@ test('user:checkLoginStatus 检查登录状态', async t => {
   t.assert(res.status === true);
   t.assert(res.code === 200);
   t.assert(res.message === '已登录');
+  t.assert(res.token.data.email)
+  t.assert(res.token.data.id)
+  t.assert(res.token.data.clientId)
+  t.assert(res.token.iat)
+  t.assert(res.token.exp)
 });
 
 test('user:decodeToken 解析 jwt token', async t => {
@@ -580,7 +585,7 @@ test('用户和认证服务预检函数', async t => {
   t.is(res[1].data.ok, 1);
 });
 
-test.only('根据参数决定是否进行用户和认证服务预检和 cdn 预检', async t => {
+test('根据参数决定是否进行用户和认证服务预检和 cdn 预检', async t => {
   let auth = new Authing({
     userPoolId: clientId,
     secret,
