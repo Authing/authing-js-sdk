@@ -1,10 +1,11 @@
 export function checkPreflight() {
+  let p = Promise.resolve()
   if (this.opts.preflight) {
-    return this.preflightFun();
+    p = p.then(() => this.preflightFun());
   }
 
   if (this.opts.cdnPreflight) {
-    return this.cdnPreflightFun();
+    p = p.then(() => this.cdnPreflightFun())
   }
-  return Promise.resolve()
+  return p
 }
