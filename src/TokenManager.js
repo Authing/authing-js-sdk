@@ -16,14 +16,14 @@ export default class TokenManager {
     TokenManager.instance.ownerToken = ownerToken;
   }
   setToken(token) {
-    if (typeof window === 'undefined') {
+    if (typeof window === 'undefined' && typeof document === 'undefined') {
       return (TokenManager.instance.ownerToken = token);
     } else {
       return (TokenManager.instance.userToken = token);
     }
   }
   getToken(type) {
-    if (typeof type === 'undefined') {
+    if (!type) {
       /*
       if (typeof window === 'undefined') {
         return `Bearer ${TokenManager.instance.ownerToken}`;
