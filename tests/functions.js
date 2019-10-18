@@ -18,19 +18,19 @@ function randomEmail() {
 let auth = new Authing({
   userPoolId: clientId,
   secret,
-  host: {
-    user: 'http://localhost:5555/graphql',
-    oauth: 'http://localhost:5556/graphql'
-  }
+  // host: {
+  //   user: 'http://localhost:5555/graphql',
+  //   oauth: 'http://localhost:5556/graphql'
+  // }
 });
 test('初始化', async t => {
   let fault = new Authing({
     userPoolId: clientId,
     secret: '1',
-    host: {
-      user: 'http://localhost:5555/graphql',
-      oauth: 'http://localhost:5556/graphql'
-    },
+    // host: {
+    //   user: 'http://localhost:5555/graphql',
+    //   oauth: 'http://localhost:5556/graphql'
+    // },
     onInitError: function(err) {
       t.assert(err);
     }
@@ -589,10 +589,10 @@ test('根据参数决定是否进行用户和认证服务预检和 cdn 预检', 
   let auth = new Authing({
     userPoolId: clientId,
     secret,
-    host: {
-      user: 'http://localhost:5555/graphql',
-      oauth: 'http://localhost:5556/graphql'
-    },
+    // host: {
+    //   user: 'http://localhost:5555/graphql',
+    //   oauth: 'http://localhost:5556/graphql'
+    // },
     preflight: true
   });
   let validAuth = auth;
@@ -605,10 +605,10 @@ test('根据参数决定是否进行用户和认证服务预检和 cdn 预检', 
   auth = new Authing({
     userPoolId: clientId,
     secret,
-    host: {
-      user: 'http://localhost:5555/graphql',
-      oauth: 'http://localhost:5556/graphql'
-    },
+    // host: {
+    //   user: 'http://localhost:5555/graphql',
+    //   oauth: 'http://localhost:5556/graphql'
+    // },
     cdnPreflight: true
   });
   validAuth = auth;
@@ -622,10 +622,10 @@ test('根据参数决定是否进行用户和认证服务预检和 cdn 预检', 
   auth = new Authing({
     userPoolId: clientId,
     secret,
-    host: {
-      user: 'http://localhost:5555/graphql',
-      oauth: 'http://localhost:5556/graphql'
-    },
+    // host: {
+    //   user: 'http://localhost:5555/graphql',
+    //   oauth: 'http://localhost:5556/graphql'
+    // },
     cdnPreflight: true,
     preflight: true
   });
