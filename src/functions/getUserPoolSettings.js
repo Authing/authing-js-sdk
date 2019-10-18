@@ -1,4 +1,5 @@
 export function getUserPoolSettings() {
+  let that = this
   return this.UserServiceGql.request({
     operationName: "getUserPoolSettings",
     query: `query getUserPoolSettings($userPoolId: String!) {
@@ -18,5 +19,10 @@ export function getUserPoolSettings() {
     variables: {
       userPoolId: this.userPoolId
     }
+  }).then(res => {
+    // 兼容以前的版本
+    that.clientInfo = res
+    that.userPoolSettings = res
+    return res
   });
 }

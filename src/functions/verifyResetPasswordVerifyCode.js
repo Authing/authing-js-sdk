@@ -9,7 +9,7 @@ export function verifyResetPasswordVerifyCode(options) {
     throw Error("verifyCode in options is not provided");
   }
   options.client = this.userPoolId;
-  return this.UserClient.request({
+  return this.UserServiceGql.request({
     operationName: "verifyResetPasswordVerifyCode",
     query: `
       mutation verifyResetPasswordVerifyCode(
