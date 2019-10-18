@@ -1,11 +1,12 @@
 export function checkPreflight() {
-  let p = Promise.resolve()
+  let service = Promise.resolve('ok')
+  let cdn = Promise.resolve('ok')
   if (this.opts.preflight) {
-    p = p.then(() => this.preflightFun());
+    service = this.preflightFun().catch(this.opts.onInitError)
   }
 
   if (this.opts.cdnPreflight) {
-    p = p.then(() => this.cdnPreflightFun())
+    cdn = this.cdnPreflightFun().catch(this.opts.onInitError)
   }
-  return p
+  return [service, cdn]
 }

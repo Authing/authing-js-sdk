@@ -103,7 +103,7 @@ class Authing {
       this.FetchToken = Promise.resolve();
     }
     // 预检 oauth users 服务 或 cdn
-    this.checkPreflight().catch(this.opts.onInitError);
+    this.checkPreflight();
   }
 }
 Authing.prototype = {

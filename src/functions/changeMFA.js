@@ -5,7 +5,7 @@ export function changeMFA(options) {
   }
 
   const variables = {
-    userPoolId: options.userPoolId,
+    userPoolId: this.opts.userPoolId,
     userId: options.userId,
     enable: options.enable
   };

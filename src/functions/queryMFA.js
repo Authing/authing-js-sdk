@@ -4,7 +4,7 @@ export function queryMFA(options) {
   }
 
   const variables = {
-    userPoolId: options.userPoolId,
+    userPoolId: this.opts.userPoolId,
     userId: options.userId
   };
 

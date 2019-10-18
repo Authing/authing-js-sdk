@@ -580,7 +580,7 @@ test('用户和认证服务预检函数', async t => {
   t.is(res[1].data.ok, 1);
 });
 
-test('根据参数决定是否进行用户和认证服务预检和 cdn 预检', async t => {
+test.only('根据参数决定是否进行用户和认证服务预检和 cdn 预检', async t => {
   let auth = new Authing({
     userPoolId: clientId,
     secret,
@@ -592,9 +592,11 @@ test('根据参数决定是否进行用户和认证服务预检和 cdn 预检', 
   });
   let validAuth = auth;
   let res = await validAuth.checkPreflight();
-  t.is(res[0].data.ok, 1);
-  t.is(res[1].data.ok, 1);
-
+  let service = await res[0]
+  let cdn = await res[1]
+  t.is(service[0].data.ok, 1);
+  t.is(service[1].data.ok, 1);
+  t.is(cdn, 'ok')
   auth = new Authing({
     userPoolId: clientId,
     secret,
@@ -606,7 +608,29 @@ test('根据参数决定是否进行用户和认证服务预检和 cdn 预检', 
   });
   validAuth = auth;
   res = await validAuth.checkPreflight();
-  t.is(res.data, 'a\n');
+  service = await res[0]
+  cdn = await res[1]
+  t.is(service, 'ok');
+  t.is(cdn.data, 'a\n')
+
+  // 两个 preflight 都打开
+  auth = new Authing({
+    userPoolId: clientId,
+    secret,
+    host: {
+      user: 'http://localhost:5555/graphql',
+      oauth: 'http://localhost:5556/graphql'
+    },
+    cdnPreflight: true,
+    preflight: true
+  });
+  validAuth = auth;
+  res = await validAuth.checkPreflight();
+  service = await res[0]
+  cdn = await res[1]
+  t.is(service[0].data.ok, 1);
+  t.is(service[1].data.ok, 1);
+  t.is(cdn.data, 'a\n')
 });
 
 test('readOAuthList', async t => {

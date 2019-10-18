@@ -1,11 +1,6 @@
-import axios from 'axios'
+import axios from 'axios';
 export function cdnPreflightFun() {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(this.opts.cdnPreflightUrl)
-      .then(res => resolve(res))
-      .catch(error => {
-        reject(new Error(`CDN 服务预检失败：${error}`));
-      });
+  return axios.get(this.opts.cdnPreflightUrl).catch(error => {
+    throw Error(`CDN 服务预检失败`);
   });
 }

@@ -1,4 +1,4 @@
-export function getUserPoolSettings(userPoolId) {
+export function getUserPoolSettings() {
   return this.UserServiceGql.request({
     operationName: "getUserPoolSettings",
     query: `query getUserPoolSettings($userPoolId: String!) {
@@ -16,7 +16,7 @@ export function getUserPoolSettings(userPoolId) {
         }
       }`,
     variables: {
-      userPoolId
+      userPoolId: this.userPoolId
     }
   });
 }
