@@ -4,7 +4,7 @@ export function revokeAuthedApp(options) {
   }
 
   const variables = {
-    userPoolId: options.userPoolId,
+    userPoolId: this.userPoolId,
     userId: options.userId,
     appId: options.appId
   };
