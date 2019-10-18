@@ -2,12 +2,12 @@ import test from 'ava';
 import { formatError } from '../src/utils/formatError';
 const Authing = require('../dist/authing-js-sdk-node');
 
-const clientId = '5da3fe0411e283f7ddf500bc';
-const secret = '35e69529d9b2626496bf9f4686799524';
+// const clientId = '5da3fe0411e283f7ddf500bc';
+// const secret = '35e69529d9b2626496bf9f4686799524';
 
 //线上
-// const secret = 'b41a29583618d8e9de201d5e80db7056';
-// const clientId = '5a97ede6f8635a00018551a1';
+const secret = 'b41a29583618d8e9de201d5e80db7056';
+const clientId = '5a97ede6f8635a00018551a1';
 function randomEmail() {
   let rand = Math.random()
     .toString(36)
@@ -418,7 +418,7 @@ test('user:getVerificationCode 获取短信验证码', async t => {
   }
 });
 
-test('oauth:loginByLDAP 使用 LDAP 登录', async t => {
+test.skip('oauth:loginByLDAP 使用 LDAP 登录', async t => {
   const validAuth = auth;
   try {
     let res = await validAuth.loginByLDAP({
