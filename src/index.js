@@ -21,13 +21,15 @@ const defaultOpts = {
   accessToken: '',
   userPoolId: '',
   secret: '',
-  onInitError: function(err) { throw err; }
+  onInitError: function(err) {
+    throw err;
+  },
 };
 class Authing {
   constructor(options) {
-    this.opts = Object.assign({}, defaultOpts, options)
-    this.version = process.env.VERSION
-    this.tokenManager = TokenManager.getInstance()
+    this.opts = Object.assign({}, defaultOpts, options);
+    this.version = process.env.VERSION;
+    this.tokenManager = TokenManager.getInstance();
     if (options.host) {
       configs.services.user.host = options.host.user || configs.services.user.host;
       configs.services.oauth.host = options.host.oauth || configs.services.oauth.host;
@@ -91,14 +93,17 @@ class Authing {
         query: `query getClientWhenSdkInit {
           getClientWhenSdkInit(secret: "${options.secret}", clientId: "${options.userPoolId}")${queryField}
         }`
-      }).then(res => {
-        TokenManager.getInstance().setToken(res.accessToken);
-      }).catch(this.opts.onInitError);
+      })
+        .then(res => {
+          TokenManager.getInstance().setToken(res.accessToken);
+          this.userPoolSettings = res.clientInfo;
+        })
+        .catch(this.opts.onInitError);
     } else {
-      this.FetchToken = Promise.resolve()
+      this.FetchToken = Promise.resolve();
     }
     // 预检 oauth users 服务 或 cdn
-    this.checkPreflight().catch(this.opts.onInitError)
+    this.checkPreflight().catch(this.opts.onInitError);
   }
 }
 Authing.prototype = {
