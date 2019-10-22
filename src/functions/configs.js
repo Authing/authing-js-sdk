@@ -39,7 +39,8 @@ export default {
     'userPatch',
     'verifyResetPasswordVerifyCode',
     'updateRolePermissions',
-    'getUserPoolSettings'
+    'getUserPoolSettings',
+    'sendActivationEmail'
   ],
   web: [
     '_uploadAvatar',

@@ -736,3 +736,9 @@ test('获取用户池基础设置', async t => {
   t.assert(res.hasOwnProperty('enableEmail'));
   t.assert(res.hasOwnProperty('jwtExpired'));
 });
+
+test.only('发送激活邮件', async t => {
+  const validAuth = auth;
+  let res = await validAuth.sendActivationEmail({email: 'xxx@163.com'})
+  t.is(res.message, '发送验证邮件成功')
+});
