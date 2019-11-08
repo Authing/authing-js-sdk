@@ -334,7 +334,7 @@ test.skip('user:changePassord 用户通过找回密码邮件的验证码修改�
 
 test('user:sendVerifyEmail 发送验证邮件', async t => {
   const validAuth = auth;
-  let email = randomEmail();
+  let email = 'hexguy@163.com';
   // let email = 'yezuwei@authing.cn';
   try {
     let user = await validAuth.register({
@@ -737,8 +737,13 @@ test('获取用户池基础设置', async t => {
   t.assert(res.hasOwnProperty('jwtExpired'));
 });
 
-test.only('发送激活邮件', async t => {
+test('发送激活邮件', async t => {
   const validAuth = auth;
   let res = await validAuth.sendActivationEmail({email: 'xxx@163.com'})
   t.is(res.message, '发送验证邮件成功')
 });
+
+test.only('has axios', async t => {
+  const validAuth = auth;
+  t.truthy(validAuth._axios)
+})

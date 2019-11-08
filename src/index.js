@@ -1,5 +1,6 @@
 const TokenManager = require('./TokenManager').default;
 const { GraphQLClient } = require('./GraphQL');
+const axios = require('axios')
 const configs = require('./configs').default;
 const mods = require('./functions').default;
 // sdk 的所有参数
@@ -30,6 +31,7 @@ class Authing {
     this.opts = Object.assign({}, defaultOpts, options);
     this.version = process.env.VERSION;
     this.tokenManager = TokenManager.getInstance();
+    this._axios = axios
     if (options.host) {
       configs.services.user.host = options.host.user || configs.services.user.host;
       configs.services.oauth.host = options.host.oauth || configs.services.oauth.host;
