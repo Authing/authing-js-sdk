@@ -40,7 +40,8 @@ export default {
     'verifyResetPasswordVerifyCode',
     'updateRolePermissions',
     'getUserPoolSettings',
-    'sendActivationEmail'
+    'sendActivationEmail',
+    'getUsersByRole'
   ],
   web: [
     '_uploadAvatar',
@@ -79,6 +80,6 @@ export default {
     'updateSuccessRedirectTips',
     'user',
     'verifyResetPasswordVerifyCode',
-    'getUserPoolSettings'
+    'getUserPoolSettings',
   ]
 };

@@ -743,7 +743,13 @@ test('发送激活邮件', async t => {
   t.is(res.message, '发送验证邮件成功')
 });
 
-test.only('has axios', async t => {
+test.only('user:查询某个角色下的所有用户', async t => {
+  const validAuth = auth;
+  let res = await validAuth.getUsersByRole({roleId: '5da9c92a2a24432643a33969'})
+  t.assert(Array.isArray(res.list))
+  console.log(JSON.stringify(res))
+});
+test('has axios', async t => {
   const validAuth = auth;
   t.truthy(validAuth._axios)
 })
