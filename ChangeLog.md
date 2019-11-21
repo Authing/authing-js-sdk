@@ -4,8 +4,8 @@
 
 ```js
 let auth = new Authing({
-  userPoolId: clientId,
-  secret
+  userPoolId: 'your_userpool_id',
+  secret: 'your_userpool_id'
 });
 ```
 
