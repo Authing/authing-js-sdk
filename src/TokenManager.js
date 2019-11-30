@@ -4,6 +4,7 @@ export default class TokenManager {
   constructor(opts, UserServiceGql) {
     this.opts = opts;
     this.UserServiceGql = UserServiceGql;
+    this.lockRefresh = false;
   }
   static getInstance(opts, UserServiceGql) {
     if (!TokenManager.instance) {
@@ -41,7 +42,7 @@ export default class TokenManager {
     }
   }
   async getToken(type) {
-    if (process.env.BUILD_TARGET === "node") {
+    if (process.env.BUILD_TARGET === "node" && !this.lockRefresh) {
       // 如果在 node 环境下
       if (
         TokenManager.instance.ownerToken &&
@@ -50,16 +51,18 @@ export default class TokenManager {
         // 取出 jwt 中间的 payload
         let payload = TokenManager.instance.ownerToken.split(".")[1];
         let buf = Buffer.from(payload, "base64");
-        let jsonStr = buf.toString()
+        let jsonStr = buf.toString();
         try {
           let info = JSON.parse(jsonStr);
           let expireTime = new Date(info.exp * 1000);
           if (expireTime < Date.now()) {
             // 如果过期了
-            await this.refreshOwnerToken()
+            this.lockRefresh = true;
+            await this.refreshOwnerToken();
+            this.lockRefresh = false;
           }
         } catch (err) {
-          console.log('刷新 token 前置条件失败')
+          console.log("刷新 token 前置条件失败");
         }
       }
     }

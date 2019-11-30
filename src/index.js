@@ -53,7 +53,13 @@ class Authing {
     });
     this.tokenManager = TokenManager.getInstance(
       this.opts,
-      this.UserServiceGql
+      new GraphQLClient({
+        baseURL: configs.services.user.host,
+        headers: {
+          Authorization: ""
+        },
+        timeout: this.opts.timeout
+      })
     );
 
     if (!options.accessToken) {
