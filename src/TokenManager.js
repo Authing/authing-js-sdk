@@ -28,63 +28,82 @@ export default class TokenManager {
       return (TokenManager.instance.userToken = token);
     }
   }
-  async refreshOwnerToken() {
+  refreshOwnerToken() {
     try {
-      let res = await this.UserServiceGql.request({
+      // 重新获取 token
+      return this.UserServiceGql.request({
         operationName: "getClientWhenSdkInit",
         query: `query getClientWhenSdkInit {
           getClientWhenSdkInit(secret: "${this.opts.secret}", clientId: "${this.opts.userPoolId}") {accessToken}
         }`
+      }).then(res => {
+        // 获取完了之后更新 TokenManager 维护的 token
+        this.setOwnerToken(res.accessToken);
       });
-      this.setOwnerToken(res.accessToken);
     } catch (err) {
       throw Error("刷新 token 失败");
     }
   }
-  async getToken(type) {
-    if (process.env.BUILD_TARGET === "node" && !this.lockRefresh) {
-      // 如果在 node 环境下
-      if (
-        TokenManager.instance.ownerToken &&
-        typeof TokenManager.instance.ownerToken === "string"
-      ) {
-        // 取出 jwt 中间的 payload
-        let payload = TokenManager.instance.ownerToken.split(".")[1];
-        let buf = Buffer.from(payload, "base64");
-        let jsonStr = buf.toString();
-        try {
-          let info = JSON.parse(jsonStr);
-          let expireTime = new Date(info.exp * 1000);
-          if (expireTime < Date.now()) {
-            // 如果过期了
-            this.lockRefresh = true;
-            await this.refreshOwnerToken();
-            this.lockRefresh = false;
+  getToken(type) {
+    return new Promise((resolve, reject) => {
+      function chooseToken() {
+        if (!type) {
+          /*
+          if (typeof window === 'undefined') {
+            return `Bearer ${TokenManager.instance.ownerToken}`;
+          } else {
+            return `Bearer ${TokenManager.instance.userToken}`;
           }
-        } catch (err) {
-          console.log("刷新 token 前置条件失败");
+          */
+          if (TokenManager.instance.userToken) {
+            resolve(`Bearer ${TokenManager.instance.userToken}`);
+          } else if (TokenManager.instance.ownerToken) {
+            resolve(`Bearer ${TokenManager.instance.ownerToken}`);
+          } else {
+            resolve(null);
+          }
+        } else {
+          resolve(`Bearer ${TokenManager.instance[type]}`);
         }
       }
-    }
-
-    if (!type) {
-      /*
-      if (typeof window === 'undefined') {
-        return `Bearer ${TokenManager.instance.ownerToken}`;
+      if (process.env.BUILD_TARGET === "node" && !this.lockRefresh) {
+        // 如果在 node 环境下
+        if (
+          TokenManager.instance.ownerToken &&
+          typeof TokenManager.instance.ownerToken === "string"
+        ) {
+          // 如果 ownerToken 被设置过
+          // 取出 jwt 中间的 payload
+          let payload = TokenManager.instance.ownerToken.split(".")[1];
+          let buf = Buffer.from(payload, "base64");
+          let jsonStr = buf.toString();
+          try {
+            let info = JSON.parse(jsonStr);
+            let expireTime = new Date(info.exp * 1000);
+            if (expireTime < Date.now()) {
+              // 如果过期了
+              this.lockRefresh = true;
+              this.refreshOwnerToken().then(() => {
+                this.lockRefresh = false;
+                chooseToken();
+              });
+            } else {
+              // node 环境下，且 token 没过期
+              chooseToken();
+            }
+          } catch (err) {
+            console.log("刷新 token 前置条件失败");
+            reject(err);
+          }
+        } else {
+          // 如果没有 ownerToken，返回 null
+          resolve(null);
+        }
       } else {
-        return `Bearer ${TokenManager.instance.userToken}`;
+        // 如果在浏览器环境下
+        chooseToken();
       }
-      */
-      if (TokenManager.instance.userToken) {
-        return `Bearer ${TokenManager.instance.userToken}`;
-      } else if (TokenManager.instance.ownerToken) {
-        return `Bearer ${TokenManager.instance.ownerToken}`;
-      } else {
-        return null;
-      }
-    } else {
-      return `Bearer ${TokenManager.instance[type]}`;
-    }
+    });
   }
 }
 
