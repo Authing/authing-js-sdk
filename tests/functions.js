@@ -585,7 +585,7 @@ test('用户和认证服务预检函数', async t => {
   t.is(res[1].data.ok, 1);
 });
 
-test('根据参数决定是否进行用户和认证服务预检和 cdn 预检', async t => {
+test.only('根据参数决定是否进行用户和认证服务预检和 cdn 预检', async t => {
   let auth = new Authing({
     userPoolId: clientId,
     secret,
@@ -743,11 +743,10 @@ test('发送激活邮件', async t => {
   t.is(res.message, '发送验证邮件成功')
 });
 
-test.only('user:查询某个角色下的所有用户', async t => {
+test('user:查询某个角色下的所有用户', async t => {
   const validAuth = auth;
   let res = await validAuth.getUsersByRole({roleId: '5da9c92a2a24432643a33969'})
   t.assert(Array.isArray(res.list))
-  console.log(JSON.stringify(res))
 });
 test('has axios', async t => {
   const validAuth = auth;

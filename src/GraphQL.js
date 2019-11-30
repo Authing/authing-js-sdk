@@ -13,13 +13,14 @@ export class GraphQLClient {
     };
   }
 
-  request(data, tokenType) {
+  async request(data, tokenType) {
     this.options.data = data;
     // 每次请求前先看看要不要发 token
+    let token = await TokenManager.getInstance().getToken(tokenType)
     this.options = {
       ...this.options,
       headers: {
-        Authorization: TokenManager.getInstance().getToken(tokenType)
+        Authorization: token
       }
     };
     return axios(this.options).then(res => {
