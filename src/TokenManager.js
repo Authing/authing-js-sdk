@@ -29,20 +29,17 @@ export default class TokenManager {
     }
   }
   refreshOwnerToken() {
-    try {
-      // 重新获取 token
-      return this.UserServiceGql.request({
-        operationName: "getClientWhenSdkInit",
-        query: `query getClientWhenSdkInit {
+    // 重新获取 token
+    return this.UserServiceGql.request({
+      operationName: "getClientWhenSdkInit",
+      query: `query getClientWhenSdkInit {
           getClientWhenSdkInit(secret: "${this.opts.secret}", clientId: "${this.opts.userPoolId}") {accessToken}
         }`
-      }).then(res => {
-        // 获取完了之后更新 TokenManager 维护的 token
-        this.setOwnerToken(res.accessToken);
-      });
-    } catch (err) {
-      throw Error("刷新 token 失败");
-    }
+    }).then(res => {
+      // 获取完了之后更新 TokenManager 维护的 token
+      this.setOwnerToken(res.accessToken);
+      return res
+    });
   }
   getToken(type) {
     return new Promise((resolve, reject) => {
@@ -86,6 +83,9 @@ export default class TokenManager {
               this.refreshOwnerToken().then(() => {
                 this.lockRefresh = false;
                 chooseToken();
+              }).catch(err => {
+                this.lockRefresh = false;
+                reject(err)
               });
             } else {
               // node 环境下，且 token 没过期

@@ -2,12 +2,12 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 const Authing = require("../dist/authing-js-sdk-node");
 
-// const clientId = "59f86b4832eb28071bdd9214";
-// const secret = "1caa5332db050488028670a9293501ac";
+const clientId = "59f86b4832eb28071bdd9214";
+const secret = "1caa5332db050488028670a9293501ac";
 
 //线上
-const secret = 'bb278212d520fc19f169e361179ea690';
-const clientId = '5c95905578fce5000166f853';
+// const secret = 'bb278212d520fc19f169e361179ea690';
+// const clientId = '5c95905578fce5000166f853';
 function randomEmail() {
   let rand = Math.random()
     .toString(36)
@@ -18,10 +18,10 @@ function randomEmail() {
 let auth = new Authing({
   userPoolId: clientId,
   secret,
-  // host: {
-  //   user: "http://localhost:5555/graphql",
-  //   oauth: "http://localhost:5556/graphql"
-  // }
+  host: {
+    user: "http://localhost:5555/graphql",
+    oauth: "http://localhost:5556/graphql"
+  }
 });
 test("初始化", async t => {
   let fault = new Authing({
