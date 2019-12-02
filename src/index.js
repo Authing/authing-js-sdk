@@ -31,7 +31,7 @@ class Authing {
     Object.defineProperty(this, "_axios", {
       enumerable: false,
       value: axios
-    })
+    });
     this.opts = Object.assign({}, defaultOpts, options);
     this.version = process.env.VERSION;
     if (options.host) {
@@ -109,13 +109,18 @@ class Authing {
         }`
       })
         .then(res => {
+          if (!res.accessToken) {
+            throw Error("网络获取 owner token 失败");
+          }
           TokenManager.getInstance().setToken(res.accessToken);
           this.userPoolSettings = res.clientInfo;
-          return res.accessToken
+          return res.accessToken;
         })
         .catch(this.opts.onInitError);
     } else {
-      this.FetchToken = Promise.resolve('don\'t need to fetch owner token in browser');
+      this.FetchToken = Promise.resolve(
+        "don't need to fetch owner token in browser"
+      );
     }
     // 预检 oauth users 服务 或 cdn
     this.checkPreflight();
