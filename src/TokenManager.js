@@ -63,6 +63,7 @@ export default class TokenManager {
           resolve(`Bearer ${TokenManager.instance[type]}`);
         }
       }
+      // lock 的目的是防止无限互相调用，UserServiceGql -> getToken -> 当前 token 过期 -> refreshOwnerToken -> UserServiceGql -> getToken
       if (process.env.BUILD_TARGET === "node" && !this.lockRefresh) {
         // 如果在 node 环境下
         if (
