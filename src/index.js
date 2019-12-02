@@ -28,7 +28,10 @@ const defaultOpts = {
 };
 class Authing {
   constructor(options) {
-    this._axios = axios;
+    Object.defineProperty(this, "_axios", {
+      enumerable: false,
+      value: axios
+    })
     this.opts = Object.assign({}, defaultOpts, options);
     this.version = process.env.VERSION;
     if (options.host) {
