@@ -108,10 +108,11 @@ class Authing {
         .then(res => {
           TokenManager.getInstance().setToken(res.accessToken);
           this.userPoolSettings = res.clientInfo;
+          return res.accessToken
         })
         .catch(this.opts.onInitError);
     } else {
-      this.FetchToken = Promise.resolve();
+      this.FetchToken = Promise.resolve('don\'t need to fetch owner token in browser');
     }
     // 预检 oauth users 服务 或 cdn
     this.checkPreflight();
