@@ -10,7 +10,7 @@ export function updateRolePermissions(options) {
     _id: options.roleId
   };
 
-  return this.FetchToken.then(() => {
+  return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: 'UpdateRole',
       query: `

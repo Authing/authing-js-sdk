@@ -2,8 +2,8 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 const Authing = require("../dist/authing-js-sdk-node");
 
-const clientId = "59f86b4832eb28071bdd9214";
-const secret = "1caa5332db050488028670a9293501ac";
+const clientId = "5db6b39d104fa92ca8506591";
+const secret = "93288038b5f07f98786eeb9a6455b81c";
 
 //线上
 // const secret = 'bb278212d520fc19f169e361179ea690';
@@ -430,7 +430,7 @@ test("oauth:genQRCode 生成 QRCode", async t => {
   }
 });
 
-test("user:getVerificationCode 获取短信验证码", async t => {
+test.skip("user:getVerificationCode 获取短信验证码", async t => {
   const validAuth = auth;
   let phone = "13116172397";
   let res = await validAuth.getVerificationCode(phone);
@@ -691,7 +691,7 @@ test("根据 id 查询单个用户", async t => {
   t.assert(user._id);
 });
 
-test("根据 id 批量查询多个个用户", async t => {
+test("根据 id 批量查询多个用户", async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res1 = await validAuth.register({
@@ -789,11 +789,42 @@ test("发送激活邮件", async t => {
 
 test("user:查询某个角色下的所有用户", async t => {
   const validAuth = auth;
-  let res = await validAuth.getUsersByRole({
-    roleId: "5da9c92a2a24432643a33969"
+  let email = randomEmail();
+
+  let res = await validAuth.register({
+    email,
+    password: "123456a"
   });
-  t.assert(Array.isArray(res.list));
+  t.assert(res.email);
+  let user = await validAuth.login({ email, password: "123456a" });
+  t.assert(user.email);
+  t.assert(user._id);
+  let role = await validAuth.createRole({
+    clientId,
+    name: "myRole",
+    descriptions: "ava test role"
+  });
+  t.assert(role._id);
+  try {
+    let res2 = await validAuth.assignUserToRole({
+      user: user._id,
+      roleId: role._id
+    });
+    t.assert(Array.isArray(res2.list));
+    t.assert(res2.list.length);
+    t.assert(res2.list[0]._id);
+  } catch (err) {
+    t.log(formatError(err));
+    t.fail("assignUserToRole 请求错误");
+  }
+
+  let res2 = await validAuth.getUsersByRole({
+    roleId: role._id
+  });
+  t.assert(Array.isArray(res2.list));
+  t.assert(res2.list[0]._id)
 });
+
 test("has axios", async t => {
   const validAuth = auth;
   t.truthy(validAuth._axios);

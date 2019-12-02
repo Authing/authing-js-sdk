@@ -1,4 +1,3 @@
-import configs from '../configs';
 import axios from 'axios';
 // 检验微信二维码扫描状态
 export function checkQR(QRCodeId) {
@@ -13,7 +12,7 @@ export function checkQR(QRCodeId) {
     random = QRCodeId;
   }
 
-  let url = configs.services.oauth.host;
+  let url = this.opts.host.oauth;
   url = url.replace('/graphql', '');
 
   return axios.post(`${url}/oauth/wxapp/confirm/qr?random=${random}&useSelfWxapp=${this.opts.useSelfWxapp}`);

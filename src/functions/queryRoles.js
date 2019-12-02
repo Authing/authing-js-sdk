@@ -9,7 +9,7 @@ export function queryRoles(options) {
     count: options.count
   };
 
-  return this.FetchToken.then(() => {
+  return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: 'ClientRoles',
       query: `

@@ -1,7 +1,6 @@
 const TokenManager = require("./TokenManager").default;
 const { GraphQLClient } = require("./GraphQL");
 const axios = require("axios");
-const configs = require("./configs").default;
 const mods = require("./functions").default;
 // sdk 的所有参数
 const defaultOpts = {
@@ -34,21 +33,15 @@ class Authing {
     });
     this.opts = Object.assign({}, defaultOpts, options);
     this.version = process.env.VERSION;
-    if (options.host) {
-      configs.services.user.host =
-        options.host.user || configs.services.user.host;
-      configs.services.oauth.host =
-        options.host.oauth || configs.services.oauth.host;
-    }
     this.UserServiceGql = new GraphQLClient({
-      baseURL: configs.services.user.host,
+      baseURL: this.opts.host.user,
       headers: {
         Authorization: ""
       },
       timeout: this.opts.timeout
     });
     this.OAuthServiceGql = new GraphQLClient({
-      baseURL: configs.services.oauth.host,
+      baseURL: this.opts.host.oauth,
       headers: {
         Authorization: ""
       },
@@ -57,7 +50,7 @@ class Authing {
     this.tokenManager = TokenManager.getInstance(
       this.opts,
       new GraphQLClient({
-        baseURL: configs.services.user.host,
+        baseURL: this.opts.host.user,
         headers: {
           Authorization: ""
         },
@@ -65,19 +58,19 @@ class Authing {
       })
     );
 
-    if (!options.accessToken) {
-      if (!options.userPoolId) {
+    if (!this.opts.accessToken) {
+      if (!this.opts.userPoolId) {
         throw new Error("userPoolId is not provided");
       }
     } else {
       // 直接拿 token 初始化
-      TokenManager.getInstance().setToken(options.accessToken);
+      TokenManager.getInstance().setToken(this.opts.accessToken);
     }
 
-    this.userPoolId = options.userPoolId;
+    this.userPoolId = this.opts.userPoolId;
     if (process.env.BUILD_TARGET === "node") {
       // NodeJS 环境初始化 sdk 经过网络请求
-      this.secret = options.secret;
+      this.secret = this.opts.secret;
       const queryField = `{
         accessToken
         clientInfo {
@@ -102,10 +95,10 @@ class Authing {
           }
         }
       }`;
-      this.FetchToken = this.UserServiceGql.request({
+      this.fetchToken = this.UserServiceGql.request({
         operationName: "getClientWhenSdkInit",
         query: `query getClientWhenSdkInit {
-          getClientWhenSdkInit(secret: "${options.secret}", clientId: "${options.userPoolId}")${queryField}
+          getClientWhenSdkInit(secret: "${this.opts.secret}", clientId: "${this.opts.userPoolId}")${queryField}
         }`
       })
         .then(res => {
@@ -118,7 +111,7 @@ class Authing {
         })
         .catch(this.opts.onInitError);
     } else {
-      this.FetchToken = Promise.resolve(
+      this.fetchToken = Promise.resolve(
         "don't need to fetch owner token in browser"
       );
     }

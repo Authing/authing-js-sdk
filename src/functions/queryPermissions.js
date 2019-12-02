@@ -8,7 +8,7 @@ export function queryPermissions(userId) {
     user: userId
   };
 
-  return this.FetchToken.then(() => {
+  return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: 'QueryRoleByUserId',
       query: `query QueryRoleByUserId($user: String!, $client: String!){

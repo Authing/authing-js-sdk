@@ -1,11 +1,10 @@
 import axios from "axios";
-import configs from "../configs";
 export function getVerificationCode(phone) {
   if (!phone) {
     throw "phone is not provided";
   }
 
-  const url = `${configs.services.user.host.replace(
+  const url = `${this.opts.host.user.replace(
     "/graphql",
     ""
   )}/send_smscode/${phone}/${this.userPoolId}`;

@@ -6,7 +6,7 @@ export function userPatch(options) {
     throw Error('ids in options is not provided');
   }
   options.registerInClient = this.userPoolId;
-  return this.FetchToken.then(() => {
+  return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: 'userPatch',
       query: `query userPatch($ids: String!){

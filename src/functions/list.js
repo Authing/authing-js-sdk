@@ -11,7 +11,7 @@ export function list(page, count, queryOptions) {
     count,
     populate: queryOptions.populate
   };
-  return this.FetchToken.then(() => {
+  return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: 'users',
       query: `query users($registerInClient: String, $page: Int, $count: Int, $populate: Boolean){

@@ -6,7 +6,7 @@ export function user(options) {
     throw Error('id in options is not provided');
   }
   options.registerInClient = this.userPoolId;
-  return this.FetchToken.then(() => {
+  return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: 'user',
       query: `query user($id: String!, $registerInClient: String!){

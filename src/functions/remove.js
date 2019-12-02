@@ -3,7 +3,7 @@ export function remove(_id, operator) {
     throw Error('_id is not provided');
   }
 
-  return this.FetchToken.then(() => {
+  return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: 'removeUsers',
       query: `mutation removeUsers($ids: [String], $registerInClient: String, $operator: String) {

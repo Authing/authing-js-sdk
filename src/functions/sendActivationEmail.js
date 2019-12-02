@@ -5,7 +5,7 @@ export function sendActivationEmail(options) {
 
   options.client = this.userPoolId;
 
-  return this.FetchToken.then(() => {
+  return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: 'SendVerifyEmail',
       query: `

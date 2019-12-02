@@ -9,7 +9,7 @@ export function assignUserToRole(options) {
     user: options.user
   };
 
-  return this.FetchToken.then(() => {
+  return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: 'AssignUserToRole',
       query: `
