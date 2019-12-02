@@ -14,7 +14,6 @@ export class GraphQLClient {
   }
 
   request(data, tokenType) {
-    this.options.data = data;
     // 每次请求前先看看要不要发 token
     return TokenManager.getInstance()
       .getToken(tokenType)
@@ -23,7 +22,8 @@ export class GraphQLClient {
           ...this.options,
           headers: {
             Authorization: token
-          }
+          },
+          data
         };
         return axios(this.options).then(res => {
           const d = res.data;

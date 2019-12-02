@@ -103,6 +103,8 @@ class Authing {
       })
         .then(res => {
           if (!res.accessToken) {
+            console.log('--getClientWhenSdkInit res--')
+            console.log(res)
             throw Error("网络获取 owner token 失败");
           }
           TokenManager.getInstance().setToken(res.accessToken);
