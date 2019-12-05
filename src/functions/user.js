@@ -19,6 +19,7 @@ export function user(options) {
         nickname
         company
         photo
+        phone
         browser
         registerInClient
         registerMethod
