@@ -31,7 +31,7 @@ test("初始化", async t => {
     //   user: 'http://localhost:5555/graphql',
     //   oauth: 'http://localhost:5556/graphql'
     // },
-    onInitError: function(err) {
+    onInitError: function (err) {
       t.assert(err);
     }
   });
@@ -421,7 +421,7 @@ test("oauth:genQRCode 生成 QRCode", async t => {
   if (
     res.data.code === 500 &&
     res.data.message ===
-      "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
+    "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
   ) {
     t.pass();
   }
@@ -829,3 +829,29 @@ test("has axios", async t => {
   const validAuth = auth;
   t.truthy(validAuth._axios);
 });
+
+test('发送修改邮箱邮件', async t => {
+  const validAuth = auth;
+  const res = await validAuth.sendChangeEmailVerifyCode({
+    email: 'cdbfhoergnrexxjk@qq.com' // 当前邮箱或者没有注册过的邮箱
+  })
+  t.assert(res.code === 200)
+})
+
+test('发送修改邮箱邮件 - 邮箱已绑定，请换一个吧', async t => {
+  const validAuth = auth;
+  const res = await validAuth.sendChangeEmailVerifyCode({
+    email: 'ax6coi4ytmk@test.com' // 已经被其他人注册过的邮箱
+  })
+  t.assert(res.code === 200)
+})
+
+test('修改邮箱', async t => {
+  const validAuth = auth;
+  const newEmail = "cdbfhorexxjk@qq.com"
+  const res = await validAuth.updateEmail({
+    email: newEmail,
+    emailCode: "2815"
+  })
+  t.assert(res.email === newEmail)
+})
