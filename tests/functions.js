@@ -2,8 +2,8 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 const Authing = require("../dist/authing-js-sdk-node");
 
-const clientId = "5db6b39d104fa92ca8506591";
-const secret = "93288038b5f07f98786eeb9a6455b81c";
+const clientId = "5dd77e6efa26f000d18101ca";
+const secret = "82f4c093e345d79c416ec3da6854a453";
 
 //线上
 // const secret = 'bb278212d520fc19f169e361179ea690';
@@ -31,7 +31,7 @@ test("初始化", async t => {
     //   user: 'http://localhost:5555/graphql',
     //   oauth: 'http://localhost:5556/graphql'
     // },
-    onInitError: function(err) {
+    onInitError: function (err) {
       t.assert(err);
     }
   });
@@ -421,7 +421,7 @@ test("oauth:genQRCode 生成 QRCode", async t => {
   if (
     res.data.code === 500 &&
     res.data.message ===
-      "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
+    "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
   ) {
     t.pass();
   }
@@ -561,6 +561,26 @@ test("user:update 修改用户资料", async t => {
   });
   t.assert(updated.nickname === "niska");
 });
+
+test("user:update 不能直接修改手机号、邮箱", async t => {
+  const validAuth = auth;
+  let email = randomEmail();
+  let user = await validAuth.register({
+    email,
+    password: "123456a"
+  });
+  let loggedIn = await validAuth.login({ email, password: "123456a" });
+  let newEmail = randomEmail()
+
+  try{
+    let updated = await validAuth.update({
+      _id: loggedIn._id,
+      email: newEmail
+    });
+  }catch(error){
+    t.assert(error.message.message === "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。")
+  }
+})
 
 test("user:updateRolePermissions 修改角色权限", async t => {
   const validAuth = auth;
@@ -829,3 +849,29 @@ test("has axios", async t => {
   const validAuth = auth;
   t.truthy(validAuth._axios);
 });
+
+test('发送修改邮箱邮件', async t => {
+  const validAuth = auth;
+  const res = await validAuth.sendChangeEmailVerifyCode({
+    email: 'cdbfhoergnrexxjk@qq.com' // 当前邮箱或者没有注册过的邮箱
+  })
+  t.assert(res.code === 200)
+})
+
+test('发送修改邮箱邮件 - 邮箱已绑定，请换一个吧', async t => {
+  const validAuth = auth;
+  const res = await validAuth.sendChangeEmailVerifyCode({
+    email: 'ax6coi4ytmk@test.com' // 已经被其他人注册过的邮箱
+  })
+  t.assert(res.code === 200)
+})
+
+test('修改邮箱', async t => {
+  const validAuth = auth;
+  const newEmail = "cdbfhorexxjk@qq.com"
+  const res = await validAuth.updateEmail({
+    email: newEmail,
+    emailCode: "2815"
+  })
+  t.assert(res.email === newEmail)
+})
