@@ -25,6 +25,12 @@ export function startPollingQRCodeStatus(options) {
     }
   }
 
+  if (onPollingStart) {
+    if (!isFunction(onPollingStart)) {
+      throw Error('onResult must be a function.');
+    }
+  }
+
   if (onResult) {
     if (!isFunction(onResult)) {
       throw Error('onResult must be a function.');
@@ -131,5 +137,7 @@ export function startPollingQRCodeStatus(options) {
       }
     })
   }, interval)
+
+  return intervalNum
 
 }

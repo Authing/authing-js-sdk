@@ -94,6 +94,6 @@ export default {
     'checkQRCodeStatus',
     'exchangeUserInfoWithTicket',
     'startPollingQRCodeStatus',
-    'startAppScaning'
+    'startAppAuthScanning'
   ]
 };
