@@ -46,9 +46,8 @@ export default {
     'updateEmail',
     'sendChangeEmailVerifyCode',
     'geneQRCode',
-    'startPollingQRCodeStatus',
+    'checkQRCodeStatus',
     'exchangeUserInfoWithTicket',
-    'startAppScaning'
   ],
   web: [
     '_uploadAvatar',
@@ -92,6 +91,9 @@ export default {
     'updateEmail',
     'sendChangeEmailVerifyCode',
     'geneQRCode',
-    'exchangeUserInfoWithTicket'
+    'checkQRCodeStatus',
+    'exchangeUserInfoWithTicket',
+    'startPollingQRCodeStatus',
+    'startAppScaning'
   ]
 };

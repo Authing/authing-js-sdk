@@ -20,6 +20,10 @@ export function geneQRCode(options) {
     throw Error('scence is not provided.');
   }
 
+  if (scence !== "APP_AUTH") {
+    throw Error(`Unsupported scence ${scence}, the choices are APP_AUTH`)
+  }
+
   let queryObject = { scence }
   if (userDefinedData) {
     if (!(typeof userDefinedData === 'object' && userDefinedData !== null)) {
