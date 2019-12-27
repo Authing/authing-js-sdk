@@ -44,7 +44,11 @@ export default {
     'getUsersByRole',
     'updatePhone',
     'updateEmail',
-    'sendChangeEmailVerifyCode'
+    'sendChangeEmailVerifyCode',
+    'geneQRCode',
+    'startPollingQRCodeStatus',
+    'exchangeUserInfoWithTicket',
+    'startAppScaning'
   ],
   web: [
     '_uploadAvatar',
@@ -86,6 +90,8 @@ export default {
     'getUserPoolSettings',
     'updatePhone',
     'updateEmail',
-    'sendChangeEmailVerifyCode'
+    'sendChangeEmailVerifyCode',
+    'geneQRCode',
+    'exchangeUserInfoWithTicket'
   ]
 };

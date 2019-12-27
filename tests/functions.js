@@ -2,8 +2,8 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 const Authing = require("../dist/authing-js-sdk-node");
 
-const clientId = "5dd77e6efa26f000d18101ca";
-const secret = "82f4c093e345d79c416ec3da6854a453";
+const clientId = "5e04ae0d5f3cee22fb37612b";
+const secret = "08a19bd05bcc8d529ff7861ccd9ff17d";
 
 //线上
 // const secret = 'bb278212d520fc19f169e361179ea690';
@@ -19,8 +19,8 @@ let auth = new Authing({
   userPoolId: clientId,
   secret,
   host: {
-    user: "http://localhost:5555/graphql",
-    oauth: "http://localhost:5556/graphql"
+    user: "http://localhost:3000/graphql",
+    oauth: "http://localhost:3000/graphql"
   }
 });
 test("初始化", async t => {
@@ -572,12 +572,12 @@ test("user:update 不能直接修改手机号、邮箱", async t => {
   let loggedIn = await validAuth.login({ email, password: "123456a" });
   let newEmail = randomEmail()
 
-  try{
+  try {
     let updated = await validAuth.update({
       _id: loggedIn._id,
       email: newEmail
     });
-  }catch(error){
+  } catch (error) {
     t.assert(error.message.message === "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。")
   }
 })
@@ -874,4 +874,17 @@ test('修改邮箱', async t => {
     emailCode: "2815"
   })
   t.assert(res.email === newEmail)
+})
+
+test('生成二维码', async t => {
+  const authing = auth;
+  const res = await authing.geneQRCode({
+    scence: 'APP_AUTH',
+    userDefinedData: {
+      hello: 'world'
+    }
+  })
+  t.assert(res.status === 200)
+  t.assert(res.data.qrcodeId !== undefined)
+  t.assert(res.data.qrcodeUrl !== undefined)
 })
