@@ -721,7 +721,7 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\n//# sourceURL=webpack://Authing/./src/functions/exchangeUserInfoWithTicket.js?");
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.exchangeUserInfoWithTicket = exchangeUserInfoWithTicket;\n\nvar _axios = _interopRequireDefault(__webpack_require__(/*! axios */ \"./node_modules/axios/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nfunction exchangeUserInfoWithTicket(ticket) {\n  if (!ticket) {\n    throw Error('ticket is not provided.');\n  }\n\n  var host = this.opts.host.oauth.replace(\"/graphql\", \"\");\n  var url = \"\".concat(host, \"/oauth/scan-qrcode/exchangeUserInfoWithTicket\");\n  return _axios[\"default\"].post(url, {\n    ticket: ticket\n  }).then(function (res) {\n    return res.data;\n  })[\"catch\"](function (err) {\n    return err;\n  });\n}\n\n//# sourceURL=webpack://Authing/./src/functions/exchangeUserInfoWithTicket.js?");
 
 /***/ }),
 
