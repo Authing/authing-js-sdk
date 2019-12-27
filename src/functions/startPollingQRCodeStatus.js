@@ -119,7 +119,7 @@ export function startPollingQRCodeStatus(options) {
         if (data.canceled) {
           clearInterval(intervalNum)
           if (onCancel) {
-            oncancel()
+            onCancel()
           }
         }
 
