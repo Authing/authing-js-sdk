@@ -19,8 +19,8 @@ export function checkQRCodeStatus(options) {
     throw Error(`Unsupported scence ${scence}, the choices are APP_AUTH`)
   }
   let host = this.opts.host.oauth.replace("/graphql", "");
-  let queryString = convertObjectToQueryString({ qrcodeId })
-  let url = `${host}/oauth/scan-qrcode/check?${queryString}`
+  let queryString = convertObjectToQueryString({ qrcodeId, scence })
+  let url = `${host}/qrcode/check?${queryString}`
 
   return axios.get(url).then(res => {
     return res.data
