@@ -327,7 +327,7 @@ authing.startAppAuthScanning({
 
 ### 了解更多
 
-了解更多，请查看：[使用 APP 扫码登录 Web](https://docs.authing.cn/authing/scan-qrcode/wxapp-qrcode)
+了解更多，请查看：[使用 APP 扫码登录 Web](https://docs.authing.cn/authing/scan-qrcode/app-qrcode)
 
 ## 自定义请求链接
 
