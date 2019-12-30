@@ -9,13 +9,13 @@ function checkOptions(options) {
     throw Error('options must be an object.');
   }
 
-  let { scence = "APP_AUTH", interval = 800,
+  let { scene = "APP_AUTH", interval = 800,
     onPollingStart, onResult, onScanned, onExpired, onSuccess, onCancel, onError,
     onQRCodeShow, onQRCodeLoad, onQRCodeLoadFaild, qrcodeSize, containerSize
   } = options
 
-  if (scence !== "APP_AUTH") {
-    throw Error(`Unsupported scence ${scence}, the choices are APP_AUTH`)
+  if (scene !== "APP_AUTH") {
+    throw Error(`Unsupported scene ${scene}, the choices are APP_AUTH`)
   }
 
   if (onPollingStart) {
@@ -154,7 +154,7 @@ export function startAppAuthScanning(options) {
   const self = this;
   checkOptions(options);
 
-  let { mount = "authing__app-scan-qrcode-root-node", scence = "APP_AUTH", interval = 800,
+  let { mount = "authing__app-scan-qrcode-root-node", scene = "APP_AUTH", interval = 800,
     onPollingStart, onResult, onScanned, onExpired, onSuccess, onCancel, onError, onQRCodeShow, onQRCodeLoad,
     onQRCodeLoadFaild,
     tips = "使用 <strong> APP </strong> 扫码登录",
@@ -308,7 +308,7 @@ export function startAppAuthScanning(options) {
 
   let start = () => {
     loading();
-    self.geneQRCode({ scence: scence }).then((res) => {
+    self.geneQRCode({ scene: scene }).then((res) => {
       if (res.code !== 200) {
         genRetry(qrcodeNode, res.message);
         if (onQRCodeLoadFaild) {
@@ -380,7 +380,7 @@ export function startAppAuthScanning(options) {
             // 开始轮询
             self.startPollingQRCodeStatus({
               qrcodeId,
-              scence,
+              scene,
               interval,
               onPollingStart,
               onResult,

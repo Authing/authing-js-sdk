@@ -10,16 +10,16 @@ export function checkQRCodeStatus(options) {
     throw Error('options must be an object.');
   }
 
-  let { qrcodeId, scence } = options
+  let { qrcodeId, scene } = options
   if (!qrcodeId) {
     throw Error('qrcodeId is not provided.');
   }
 
-  if (scence !== "APP_AUTH") {
-    throw Error(`Unsupported scence ${scence}, the choices are APP_AUTH`)
+  if (scene !== "APP_AUTH") {
+    throw Error(`Unsupported scene ${scene}, the choices are APP_AUTH`)
   }
   let host = this.opts.host.oauth.replace("/graphql", "");
-  let queryString = convertObjectToQueryString({ qrcodeId, scence })
+  let queryString = convertObjectToQueryString({ qrcodeId, scene })
   let url = `${host}/qrcode/check?${queryString}`
 
   return axios.get(url).then(res => {

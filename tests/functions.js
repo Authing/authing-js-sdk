@@ -1322,7 +1322,7 @@ test.only('loginByOidc', async t => {
 test('生成二维码', async t => {
   const authing = auth;
   const res = await authing.geneQRCode({
-    scence: 'APP_AUTH',
+    scene: 'APP_AUTH',
     userDefinedData: {
       hello: 'world'
     }

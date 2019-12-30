@@ -9,14 +9,14 @@ export function startPollingQRCodeStatus(options) {
     throw Error('options must be an object.');
   }
 
-  let { qrcodeId, scence, interval = 800, onPollingStart, onResult, onScanned, onExpired, onSuccess, onCancel, onError } = options
+  let { qrcodeId, scene, interval = 800, onPollingStart, onResult, onScanned, onExpired, onSuccess, onCancel, onError } = options
 
   if (!qrcodeId) {
     throw Error('qrcodeId is not provided.');
   }
 
-  if (scence !== "APP_AUTH") {
-    throw Error(`Unsupported scence ${scence}, the choices are APP_AUTH`)
+  if (scene !== "APP_AUTH") {
+    throw Error(`Unsupported scene ${scene}, the choices are APP_AUTH`)
   }
 
   if (interval) {
@@ -80,7 +80,7 @@ export function startPollingQRCodeStatus(options) {
 
     this.checkQRCodeStatus({
       qrcodeId,
-      scence
+      scene
     }).then(res => {
 
       // 业务状态码 code = 200 表示成功查询到二维码状态
