@@ -164,6 +164,8 @@ export function startWXAppScaning(opts) {
                 const checkResult = checkRes.data.data;
                 if (checkResult.code === 200) {
                   clearInterval(inter);
+                  // 登录成功记录 token
+                  this.tokenManager.setUserToken(checkResult.data.token);
                   if (redirect) {
                     const shadowX = genShadow(successRedirectTips || '扫码成功，即将跳转', () => {
                       window.location.href = `${checkResult.redirect}?code=200&data=${JSON.stringify(checkResult.data)}`;
