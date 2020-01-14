@@ -1,4 +1,4 @@
-query rbacRoleList($userPoolId: String!, $sortBy: SortByEnum, $page: Int, $count: Int){
+query QueryRbacRoleList($userPoolId: String!, $sortBy: SortByEnum, $page: Int, $count: Int){
     rbacRoleList(userPoolId: $userPoolId, sortBy: $sortBy, page: $page, count: $count){
         totalCount
     }

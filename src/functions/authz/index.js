@@ -7,6 +7,7 @@ import deleteGroupBatch from "./deleteGroupBatch"
 import role from "./role"
 import createRole from "./createRole"
 import updateRole from "./updateRole"
+import roleList from "./roleList"
 
 const mod = {
 
@@ -20,8 +21,9 @@ const mod = {
 
   // Role
   role,
+  roleList,
   createRole,
-  updateRole
+  updateRole,
 }
 
 export default mod

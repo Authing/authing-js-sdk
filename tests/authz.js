@@ -140,3 +140,8 @@ test('查询 Role', async t => {
   t.assert(res._id === role._id)
   t.assert(res.name === role.name)
 })
+
+test('批量查询 Role', async t => {
+  const res = await authing.authz.roleList()
+  t.assert(res.totalCount > 0)
+})
