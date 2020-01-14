@@ -15,15 +15,33 @@ let authing = new Authing({
   }
 });
 
-test('创建 Group', async t => {
+let groupId = null
 
+test.before('创建 Group', async t => {
+  let res
   try {
-    const res = await authing.authn.createGroup({
-      name: "管理员2",
-      description: "hkjdsh"
+    res = await authing.authn.createGroup({
+      name: `管理员${Math.random().toString(36).slice(2)}`,
+      description: "描述信息"
     })
-    console.log(res)
   } catch (error) {
-    console.log(error.message.message.errors[0])
+    console.log(error.message.message)
   }
+  t.assert(res)
+  t.assert(res._id)
+  groupId = res._id
+})
+
+test('查询 Group', async t => {
+  let res
+  try {
+    res = await authing.authn.group({
+      _id: groupId
+    })
+  } catch (error) {
+    console.log(error.response.data.errors[0])
+  }
+
+  t.assert(res)
+  t.assert(res._id === groupId)
 })

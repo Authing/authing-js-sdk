@@ -1,7 +1,9 @@
 import createGroup from "./createGroup"
+import group from "./group"
 
 const mod = {
-  createGroup
+  createGroup,
+  group
 }
 
 export default mod

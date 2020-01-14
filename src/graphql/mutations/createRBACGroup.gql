@@ -1,0 +1,8 @@
+mutation createRBACGroup($input: CreateRBACGroupInput!){
+    createRBACGroup(input: $input){
+        _id
+        userPoolId
+        name
+        description
+    }
+}

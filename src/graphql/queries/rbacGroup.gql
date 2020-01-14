@@ -1,0 +1,8 @@
+query QueryRBACGroup($_id: String!){
+    rbacGroup(_id: $_id){
+        _id
+        userPoolId
+        name
+        description
+    }
+}

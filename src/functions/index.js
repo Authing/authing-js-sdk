@@ -53,8 +53,6 @@ import updateSuccessRedirectTips from './updateSuccessRedirectTips.js'
 
 // authn submodule
 import authn from "./authn"
-import createGroup from "./authn/createGroup"
-
 
 // Node & Browser 共用
 let mod = {
