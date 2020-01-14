@@ -186,12 +186,12 @@ test('批量删除 Role', async t => {
 })
 
 test('Group 添加 Role', async t => {
-  const group = await authing.authz.createGroup({
+  group = await authing.authz.createGroup({
     name: `管理员${Math.random().toString(36).slice(2)}`,
     description: "描述信息"
   })
 
-  const role = await authing.authz.createRole({
+  role = await authing.authz.createRole({
     name: `角色${Math.random().toString(36).slice(2)}`,
     description: '描述'
   })
@@ -203,6 +203,20 @@ test('Group 添加 Role', async t => {
   const roles = res.roles
   t.assert(roles.totalCount === 1)
   t.assert(roles.list[0]._id === role._id)
+})
+
+test('查询 Group 中包含的 Role', async t => {
+  const res = await authing.authz.groupRoleList(group._id)
+  t.assert(res.roles.totalCount === 1)
+})
+
+test('Group 删除 Role', async t => {
+  await authing.authz.removeRoleFromGroup({
+    roleId: role._id,
+    groupId: group._id
+  })
+  const res = await authing.authz.groupRoleList(group._id)
+  t.assert(res.roles.totalCount === 0)
 })
 
 test('Group 批量添加 Role', async t => {

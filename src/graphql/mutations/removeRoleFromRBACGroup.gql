@@ -1,4 +1,4 @@
-mutation removeRoleFromRBACGroup($input: RemoveRoleFromRBACGroupInput!){
+mutation RemoveRoleFromRBACGroup($input: RemoveRoleFromRBACGroupInput!){
     removeRoleFromRBACGroup(input: $input){
         _id
         userPoolId

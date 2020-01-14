@@ -12,6 +12,8 @@ import deleteRole from "./deleteRole"
 import deleteRoleBatch from "./deleteRoleBatch"
 import addRoleToGroup from "./addRoleToGroup"
 import addRoleToGroupBatch from "./addRoleToGroupBatch"
+import removeRoleFromGroup from "./removeRoleFromGroup"
+import groupRoleList from "./groupRoleList"
 
 const mod = {
 
@@ -22,6 +24,9 @@ const mod = {
   updateGroup,
   deleteGroup,
   deleteGroupBatch,
+
+  // Group Users & Roles
+  groupRoleList,
 
   // Role
   role,
@@ -34,6 +39,7 @@ const mod = {
   // Group add/remove Role
   addRoleToGroup,
   addRoleToGroupBatch,
+  removeRoleFromGroup,
 }
 
 export default mod
