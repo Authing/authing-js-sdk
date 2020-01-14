@@ -1,4 +1,4 @@
-query rbacRole($_id: String!){
+query QueryRBACRole($_id: String!){
     rbacRole(_id: $_id){
         _id
         userPoolId

@@ -14,8 +14,9 @@ let authing = new Authing({
 });
 
 let group = {}
+let role = {}
 
-test.before('创建 Group', async t => {
+test('创建 Group', async t => {
   let res
   try {
     res = await authing.authn.createGroup({
@@ -111,4 +112,21 @@ test('批量删除 Group', async t => {
     errcode = error.message.code
   }
   t.assert(errcode === 1004)
+})
+
+test('创建 Role', async t => {
+  role = await authing.authn.createRole({
+    name: `角色${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+
+  t.assert(role)
+  t.assert(role._id)
+  t.assert(role.name)
+})
+
+test('查询 Role', async t => {
+  const res = await authing.authn.role(role._id)
+  t.assert(res._id === role._id)
+  t.assert(res.name === role.name)
 })
