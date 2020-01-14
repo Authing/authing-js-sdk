@@ -4,6 +4,10 @@ import checkOptions from "../../utils/checkOptions"
 const createGroup = function (options) {
   checkOptions(options, [
     {
+      name: '_id',
+      type: String
+    },
+    {
       name: 'name',
       type: String
     },
@@ -12,11 +16,10 @@ const createGroup = function (options) {
       type: String
     }
   ])
-  options.userPoolId = this.userPoolId;
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
-      operationName: "CreateRBACGroup",
-      query: mutations.createRBACGroup,
+      operationName: "UpdateRBACGroup",
+      query: mutations.updateRBACGroup,
       variables: {
         input: options
       }

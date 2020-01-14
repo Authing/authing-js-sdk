@@ -8,7 +8,8 @@
   "prepublishOnly": "npm run build",
   "scripts": {
     "lint": "eslint --fix .",
-    "test": "ava -vs",
+    "test": "export BUILD_TARGET=node && ava -vs",
+    "test:web": "ava -vs",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov | codecov",
     "start": "nyc --reporter html ava -vs && open ./.nyc_output/index.html",
     "build": "webpack --config webpack.config.js"
@@ -45,7 +46,7 @@
   },
   "ava": {
     "files": [
-      "tests/functions.js"
+      "tests/authn.js"
     ],
     "require": [
       "@babel/register",

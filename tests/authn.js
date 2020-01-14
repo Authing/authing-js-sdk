@@ -13,7 +13,7 @@ let authing = new Authing({
   }
 });
 
-let groupId = null
+let group = {}
 
 test.before('创建 Group', async t => {
   let res
@@ -27,21 +27,21 @@ test.before('创建 Group', async t => {
   }
   t.assert(res)
   t.assert(res._id)
-  groupId = res._id
+  group = res
 })
 
 test('查询 Group', async t => {
   let res
   try {
     res = await authing.authn.group({
-      _id: groupId
+      _id: group._id
     })
   } catch (error) {
     console.log(error.response.data.errors[0])
   }
 
   t.assert(res)
-  t.assert(res._id === groupId)
+  t.assert(res._id === group._id)
 })
 
 test('查询 Group 列表', async  t => {
@@ -50,9 +50,25 @@ test('查询 Group 列表', async  t => {
     res = await authing.authn.groupList()
   } catch (error) {
     console.log(error)
-    console.log(error.response.data.errors[0])
   }
 
   t.assert(res)
   t.assert(res.totalCount > 0)
+})
+
+test('修改 Group', async  t => {
+  let res
+  try {
+    res = await authing.authn.updateGroup({
+      _id: group._id,
+      name: group.name,
+      description: '新的描述'
+    })
+  } catch (error) {
+    console.log(error)
+  }
+
+  t.assert(res)
+  t.assert(res._id === group._id)
+  t.assert(res.description === "新的描述")
 })
