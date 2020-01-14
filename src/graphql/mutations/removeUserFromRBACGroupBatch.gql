@@ -1,8 +1,11 @@
-mutation removeUserFromRBACGroupBatch($input: RemoveUserFromRBACGroupBatchInput!){
-    removeUserFromRBACGroupBatch(input: $input){
-        _id
-        userPoolId
-        name
-        description
-    }
+mutation removeUserFromRBACGroupBatch($input: RemoveUserFromRBACGroupBatchInput!) {
+	removeUserFromRBACGroupBatch(input: $input) {
+		_id
+		userPoolId
+		name
+		description
+		users {
+			totalCount
+		}
+	}
 }

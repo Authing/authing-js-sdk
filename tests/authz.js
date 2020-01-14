@@ -303,6 +303,14 @@ test('Group 查询用户列表', async t => {
   t.assert(res.users.totalCount === 1)
 })
 
+test('Group 删除 User', async t => {
+  const res = await authing.authz.removeUserFromGroup({
+    groupId: group._id,
+    userId: user._id
+  })
+  t.assert(res.users.totalCount === 0)
+})
+
 test('Group 批量添加 User', async t => {
   const user1 = await authing.register({
     email: Math.random()
