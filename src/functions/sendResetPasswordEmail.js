@@ -1,4 +1,4 @@
-export function sendResetPasswordEmail(options) {
+export default function sendResetPasswordEmail(options) {
   if (!options) {
     throw Error("options is not provided");
   }

@@ -1,4 +1,4 @@
-export function readOAuthList(params) {
+export default function readOAuthList(params) {
   let variables = {}
   if (params) {
     variables = params

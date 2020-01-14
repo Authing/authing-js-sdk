@@ -1,6 +1,6 @@
 import configs from "../configs";
 import TokenMananger from "../TokenManager";
-export function loginByLDAP(options) {
+export default function loginByLDAP(options) {
   if (!options) {
     throw Error("options is not provided.");
   }

@@ -1,4 +1,4 @@
-export function queryRoles(options) {
+export default function queryRoles(options) {
   if (!options) {
     throw Error('options is not provided.');
   }

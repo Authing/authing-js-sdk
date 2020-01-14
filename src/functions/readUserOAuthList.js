@@ -1,4 +1,4 @@
-export function readUserOAuthList(variables) {
+export default function readUserOAuthList(variables) {
   return this.OAuthServiceGql.request({
     operationName: 'notBindOAuthList',
     query: `query notBindOAuthList($user: String, $client: String) {

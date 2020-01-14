@@ -1,4 +1,4 @@
-export function removeUserFromRole(options) {
+export default function removeUserFromRole(options) {
   if (!options) {
     throw Error('options is not provided.');
   }

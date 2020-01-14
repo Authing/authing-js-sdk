@@ -1,4 +1,4 @@
-export function getUserPoolSettings() {
+export default function getUserPoolSettings() {
   return this.UserServiceGql.request({
     operationName: "getUserPoolSettings",
     query: `query getUserPoolSettings($userPoolId: String!) {

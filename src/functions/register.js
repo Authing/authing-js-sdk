@@ -1,7 +1,7 @@
 import configs from "../configs";
 import encryption from "../utils/_encryption";
 
-export function register(options) {
+export default function register(options) {
   if (!options) {
     throw Error("options is not provided");
   }

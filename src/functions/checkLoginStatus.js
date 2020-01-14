@@ -1,4 +1,4 @@
-export function checkLoginStatus(token) {
+export default function checkLoginStatus(token) {
   return this.UserServiceGql.request({
     operationName: "checkLoginStatus",
     query: `query checkLoginStatus($token: String) {
