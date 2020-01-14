@@ -85,7 +85,30 @@ test('删除 Group', async t => {
   } catch (error) {
     errcode = error.message.code
   }
-  
+
   t.assert(!res)
+  t.assert(errcode === 1004)
+})
+
+test('批量删除 Group', async t => {
+  const group1 = await authing.authn.createGroup({
+    name: `管理员${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+  const group2 = await authing.authn.createGroup({
+    name: `管理员${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+  const res = await authing.authn.deleteGroupBatch([group1._id, group2._id])
+  t.assert(res.success)
+  t.assert(res.requestCount === 2)
+  t.assert(res.deletedCount === 2)
+
+  let errcode
+  try {
+    const res = await authing.authn.group(group1._id)
+  } catch (error) {
+    errcode = error.message.code
+  }
   t.assert(errcode === 1004)
 })
