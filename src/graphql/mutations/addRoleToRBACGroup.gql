@@ -1,8 +1,16 @@
-mutation addRoleToRBACGroup($input: AddRoleToRBACGroupInput!){
+mutation AddRoleToRBACGroup($input: AddRoleToRBACGroupInput!){
     addRoleToRBACGroup(input: $input){
         _id
         userPoolId
         name
         description
+        roles {
+            totalCount
+            list {
+                _id
+                name
+                description
+            }
+        }
     }
 }
