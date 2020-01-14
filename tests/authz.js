@@ -15,6 +15,7 @@ let authing = new Authing({
 
 let group = {}
 let role = {}
+let roleIdList = []
 
 test('创建 Group', async t => {
   let res
@@ -220,7 +221,7 @@ test('Group 删除 Role', async t => {
 })
 
 test('Group 批量添加 Role', async t => {
-  const group = await authing.authz.createGroup({
+  group = await authing.authz.createGroup({
     name: `管理员${Math.random().toString(36).slice(2)}`,
     description: "描述信息"
   })
@@ -235,6 +236,8 @@ test('Group 批量添加 Role', async t => {
     description: '描述'
   })
 
+  roleIdList.push(role1._id, role2._id)
+
   let res
   try {
     res = await authing.authz.addRoleToGroupBatch({
@@ -247,4 +250,13 @@ test('Group 批量添加 Role', async t => {
 
   const roles = res.roles
   t.assert(roles.totalCount === 2)
+})
+
+test('Group 批量删除 Role', async t => {
+  await authing.authz.removeRoleFromGroupBatch({
+    roleIdList,
+    groupId: group._id
+  })
+  const res = await authing.authz.groupRoleList(group._id)
+  t.assert(res.roles.totalCount === 0)
 })
