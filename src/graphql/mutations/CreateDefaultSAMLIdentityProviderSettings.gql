@@ -1,0 +1,9 @@
+mutation CreateDefaultSAMLIdentityProviderSettings($name: String!, $image: String, $description: String, $mappings: AssertionMapInputType){
+    CreateDefaultSAMLIdentityProviderSettings(name: $name, image: $image, description: $description, mappings: $mappings){
+        _id
+        name
+        image
+        description
+        isDeleted
+    }
+}

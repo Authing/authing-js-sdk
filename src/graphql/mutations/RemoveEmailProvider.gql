@@ -1,0 +1,11 @@
+mutation RemoveEmailProvider($_ids: [String]!){
+    RemoveEmailProvider(_ids: $_ids){
+        _id
+        name
+        image
+        description
+        client
+        user
+        status
+    }
+}

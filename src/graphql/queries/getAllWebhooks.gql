@@ -1,0 +1,11 @@
+query getAllWebhooks($client: String!){
+    getAllWebhooks(client: $client){
+        _id
+        client
+        url
+        isLastTimeSuccess
+        contentType
+        secret
+        enable
+    }
+}

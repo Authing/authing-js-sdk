@@ -1,0 +1,15 @@
+query querySystemOAuthSetting{
+    querySystemOAuthSetting{
+        _id
+        name
+        alias
+        image
+        description
+        enabled
+        url
+        client
+        user
+        oAuthUrl
+        wxappLogo
+    }
+}

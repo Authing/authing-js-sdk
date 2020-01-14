@@ -1,0 +1,5 @@
+query GetSAMLIdentityProviderList($clientId: String, $page: Int, $count: Int){
+    GetSAMLIdentityProviderList(clientId: $clientId, page: $page, count: $count){
+        totalCount
+    }
+}

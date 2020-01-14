@@ -1,0 +1,10 @@
+query getWebhookLogDetail($id: String!){
+    getWebhookLogDetail(id: $id){
+        _id
+        webhook
+        client
+        event
+        errorMessage
+        when
+    }
+}

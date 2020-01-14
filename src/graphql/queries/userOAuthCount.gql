@@ -1,0 +1,3 @@
+query userOAuthCount($userIds: [String]){
+    userOAuthCount(userIds: $userIds)
+}

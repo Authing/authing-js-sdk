@@ -1,0 +1,6 @@
+query userAnalytics($clientId: String){
+    userAnalytics(clientId: $clientId){
+        allUsers
+        totalApps
+    }
+}

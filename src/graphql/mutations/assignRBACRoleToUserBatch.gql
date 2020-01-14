@@ -1,0 +1,8 @@
+mutation assignRBACRoleToUserBatch($input: AssignUserToRBACRoleBatchInput!){
+    assignRBACRoleToUserBatch(input: $input){
+        _id
+        userPoolId
+        name
+        description
+    }
+}

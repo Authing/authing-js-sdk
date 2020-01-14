@@ -1,0 +1,12 @@
+query ReadSystemPricing{
+    ReadSystemPricing{
+        _id
+        type
+        startNumber
+        freeNumber
+        startPrice
+        maxNumber
+        d
+        features
+    }
+}

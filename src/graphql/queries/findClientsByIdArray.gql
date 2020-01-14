@@ -1,0 +1,5 @@
+query findClientsByIdArray($clientsId: [String]){
+    findClientsByIdArray(clientsId: $clientsId){
+        totalCount
+    }
+}

@@ -1,0 +1,6 @@
+query decodeJwtToken($token: String){
+    decodeJwtToken(token: $token){
+        iat
+        exp
+    }
+}

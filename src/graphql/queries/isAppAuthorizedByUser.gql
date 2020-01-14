@@ -1,0 +1,5 @@
+query isAppAuthorizedByUser($userId: String, $appId: String){
+    isAppAuthorizedByUser(userId: $userId, appId: $appId){
+        authorized
+    }
+}

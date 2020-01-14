@@ -1,0 +1,5 @@
+query queryOperationLogs($userPoolId: String!, $coll: String!, $page: Int, $count: Int){
+    queryOperationLogs(userPoolId: $userPoolId, coll: $coll, page: $page, count: $count){
+        totalCount
+    }
+}

@@ -1,0 +1,19 @@
+mutation AddLDAPServer($name: String!, $clientId: String!, $userId: String!, $ldapLink: String!, $baseDN: String!, $searchStandard: String!, $username: String!, $password: String!, $emailPostfix: String, $description: String, $enabled: Boolean){
+    AddLDAPServer(name: $name, clientId: $clientId, userId: $userId, ldapLink: $ldapLink, baseDN: $baseDN, searchStandard: $searchStandard, username: $username, password: $password, emailPostfix: $emailPostfix, description: $description, enabled: $enabled){
+        _id
+        name
+        clientId
+        userId
+        ldapLink
+        baseDN
+        searchStandard
+        emailPostfix
+        username
+        password
+        description
+        enabled
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}

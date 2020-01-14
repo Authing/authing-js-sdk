@@ -1,0 +1,8 @@
+mutation createRBACRole($input: CreateRBACRoleInput!){
+    createRBACRole(input: $input){
+        _id
+        userPoolId
+        name
+        description
+    }
+}

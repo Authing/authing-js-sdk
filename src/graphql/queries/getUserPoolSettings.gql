@@ -1,0 +1,21 @@
+query getUserPoolSettings($userPoolId: String!){
+    getUserPoolSettings(userPoolId: $userPoolId){
+        _id
+        usersCount
+        logo
+        emailVerifiedDefault
+        registerDisabled
+        showWXMPQRCode
+        useMiniLogin
+        useSelfWxapp
+        allowedOrigins
+        name
+        secret
+        token
+        descriptions
+        jwtExpired
+        createdAt
+        isDeleted
+        enableEmail
+    }
+}

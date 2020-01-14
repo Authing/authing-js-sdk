@@ -1,0 +1,8 @@
+mutation assignRBACRoleToUser($input: AssignUserToRBACRoleInput!){
+    assignRBACRoleToUser(input: $input){
+        _id
+        userPoolId
+        name
+        description
+    }
+}

@@ -1,0 +1,8 @@
+mutation addPermission($name: String!, $description: String){
+    addPermission(name: $name, description: $description){
+        _id
+        name
+        affect
+        description
+    }
+}

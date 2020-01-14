@@ -1,0 +1,5 @@
+query getOAuthedAppList($clientId: String, $page: Int, $count: Int){
+    getOAuthedAppList(clientId: $clientId, page: $page, count: $count){
+        totalCount
+    }
+}

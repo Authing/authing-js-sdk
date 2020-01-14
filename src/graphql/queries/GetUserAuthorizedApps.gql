@@ -1,0 +1,5 @@
+query GetUserAuthorizedApps($clientId: String, $userId: String, $page: Int, $count: Int){
+    GetUserAuthorizedApps(clientId: $clientId, userId: $userId, page: $page, count: $count){
+        totalCount
+    }
+}

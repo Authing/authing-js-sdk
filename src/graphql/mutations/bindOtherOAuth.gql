@@ -1,0 +1,11 @@
+mutation bindOtherOAuth($type: String!, $unionid: String!, $userInfo: String!, $client: String, $user: String){
+    bindOtherOAuth(type: $type, unionid: $unionid, userInfo: $userInfo, client: $client, user: $user){
+        _id
+        user
+        client
+        type
+        unionid
+        userInfo
+        createdAt
+    }
+}

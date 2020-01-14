@@ -1,0 +1,21 @@
+mutation updateUserClient($client: UpdateUserClientInput!){
+    updateUserClient(client: $client){
+        _id
+        usersCount
+        logo
+        emailVerifiedDefault
+        registerDisabled
+        showWXMPQRCode
+        useMiniLogin
+        useSelfWxapp
+        allowedOrigins
+        name
+        secret
+        token
+        descriptions
+        jwtExpired
+        createdAt
+        isDeleted
+        enableEmail
+    }
+}

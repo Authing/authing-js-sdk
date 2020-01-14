@@ -1,0 +1,11 @@
+mutation deleteClientWebhook($id: String!){
+    deleteClientWebhook(id: $id){
+        _id
+        client
+        url
+        isLastTimeSuccess
+        contentType
+        secret
+        enable
+    }
+}

@@ -1,0 +1,8 @@
+mutation SaveEmailProviderWithClient($options: EmailProviderWithClientAddInput){
+    SaveEmailProviderWithClient(options: $options){
+        _id
+        user
+        client
+        status
+    }
+}

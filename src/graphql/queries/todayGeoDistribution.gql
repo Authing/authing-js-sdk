@@ -1,0 +1,7 @@
+query todayGeoDistribution($today: String){
+    todayGeoDistribution(today: $today){
+        city
+        size
+        point
+    }
+}

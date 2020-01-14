@@ -1,0 +1,10 @@
+query getWebhookLogs($webhook: String!){
+    getWebhookLogs(webhook: $webhook){
+        _id
+        webhook
+        client
+        event
+        errorMessage
+        when
+    }
+}

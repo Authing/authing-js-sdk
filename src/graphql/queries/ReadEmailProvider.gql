@@ -1,0 +1,11 @@
+query ReadEmailProvider($clientId: String){
+    ReadEmailProvider(clientId: $clientId){
+        _id
+        name
+        image
+        description
+        client
+        user
+        status
+    }
+}

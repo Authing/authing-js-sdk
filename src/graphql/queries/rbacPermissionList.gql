@@ -1,0 +1,5 @@
+query rbacPermissionList($userPoolId: String!, $sortBy: SortByEnum, $page: Int, $count: Int){
+    rbacPermissionList(userPoolId: $userPoolId, sortBy: $sortBy, page: $page, count: $count){
+        totalCount
+    }
+}

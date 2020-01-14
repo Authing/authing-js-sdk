@@ -1,0 +1,11 @@
+mutation RevokeUserAuthorizedApp($appId: String, $userPoolId: String, $userId: String){
+    RevokeUserAuthorizedApp(appId: $appId, userPoolId: $userPoolId, userId: $userId){
+        _id
+        appId
+        userId
+        scope
+        type
+        isRevoked
+        when
+    }
+}

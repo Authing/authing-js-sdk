@@ -1,0 +1,29 @@
+mutation UpdateOIDCApp($appId: String!, $domain: String, $name: String, $image: String, $redirect_uris: [String], $token_endpoint_auth_method: String, $grant_types: [String], $response_types: [String], $id_token_signed_response_alg: String, $jwks_uri: String, $jwks: String, $description: String, $homepageURL: String, $css: String, $authorization_code_expire: String, $id_token_expire: String, $access_token_expire: String, $cas_expire: String, $customStyles: OIDCProviderCustomStylesInput){
+    UpdateOIDCApp(appId: $appId, domain: $domain, name: $name, image: $image, redirect_uris: $redirect_uris, token_endpoint_auth_method: $token_endpoint_auth_method, grant_types: $grant_types, response_types: $response_types, id_token_signed_response_alg: $id_token_signed_response_alg, jwks_uri: $jwks_uri, jwks: $jwks, description: $description, homepageURL: $homepageURL, css: $css, authorization_code_expire: $authorization_code_expire, id_token_expire: $id_token_expire, access_token_expire: $access_token_expire, cas_expire: $cas_expire, customStyles: $customStyles){
+        _id
+        name
+        domain
+        image
+        redirect_uris
+        client_id
+        client_secret
+        token_endpoint_auth_method
+        id_token_signed_response_alg
+        jwks_uri
+        jwks
+        clientId
+        grant_types
+        response_types
+        description
+        homepageURL
+        isDeleted
+        isDefault
+        when
+        css
+        authorization_code_expire
+        id_token_expire
+        access_token_expire
+        cas_expire
+        loginUrl
+    }
+}

@@ -1,0 +1,8 @@
+query rbacRole($_id: String!){
+    rbacRole(_id: $_id){
+        _id
+        userPoolId
+        name
+        description
+    }
+}

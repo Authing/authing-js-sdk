@@ -1,0 +1,5 @@
+query registerEveryDayCount($client: String){
+    registerEveryDayCount(client: $client){
+        list
+    }
+}

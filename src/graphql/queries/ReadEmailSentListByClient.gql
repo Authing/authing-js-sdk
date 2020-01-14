@@ -1,0 +1,5 @@
+query ReadEmailSentListByClient($client: String!, $page: Int, $count: Int){
+    ReadEmailSentListByClient(client: $client, page: $page, count: $count){
+        totalCount
+    }
+}

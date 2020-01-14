@@ -1,0 +1,15 @@
+mutation AddOAuthList($options: OAuthListUpdateInput, $fields: [OAuthListFieldsFormUpdateInput]){
+    AddOAuthList(options: $options, fields: $fields){
+        _id
+        name
+        alias
+        image
+        description
+        enabled
+        url
+        client
+        user
+        oAuthUrl
+        wxappLogo
+    }
+}

@@ -1,0 +1,11 @@
+mutation AddEmailProvider($options: EmailProviderListInput){
+    AddEmailProvider(options: $options){
+        _id
+        name
+        image
+        description
+        client
+        user
+        status
+    }
+}

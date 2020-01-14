@@ -1,0 +1,5 @@
+query userPatch($ids: String){
+    userPatch(ids: $ids){
+        totalCount
+    }
+}

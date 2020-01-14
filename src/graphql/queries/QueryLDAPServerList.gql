@@ -1,0 +1,5 @@
+query QueryLDAPServerList($clientId: String!, $page: Int, $count: Int){
+    QueryLDAPServerList(clientId: $clientId, page: $page, count: $count){
+        totalCount
+    }
+}

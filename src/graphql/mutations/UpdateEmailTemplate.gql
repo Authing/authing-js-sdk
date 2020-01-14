@@ -1,0 +1,13 @@
+mutation UpdateEmailTemplate($options: EmailTemplateInput!){
+    UpdateEmailTemplate(options: $options){
+        _id
+        type
+        sender
+        object
+        hasURL
+        URLExpireTime
+        status
+        redirectTo
+        content
+    }
+}

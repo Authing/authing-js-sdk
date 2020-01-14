@@ -1,0 +1,15 @@
+query ReadEmailTemplatesBySystem{
+    ReadEmailTemplatesBySystem{
+        _id
+        user
+        client
+        type
+        sender
+        object
+        hasURL
+        URLExpireTime
+        redirectTo
+        status
+        content
+    }
+}

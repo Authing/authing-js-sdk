@@ -1,0 +1,8 @@
+mutation removeUserFromRBACGroup($input: RemoveUserFromRBACGroupInput!){
+    removeUserFromRBACGroup(input: $input){
+        _id
+        userPoolId
+        name
+        description
+    }
+}

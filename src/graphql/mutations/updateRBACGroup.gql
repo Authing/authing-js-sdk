@@ -1,0 +1,8 @@
+mutation UpdateRBACGroup($input: UpdateRBACGroupInput!){
+    updateRBACGroup(input: $input){
+        _id
+        userPoolId
+        name
+        description
+    }
+}

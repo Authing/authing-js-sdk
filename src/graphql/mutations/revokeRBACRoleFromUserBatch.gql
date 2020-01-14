@@ -1,0 +1,8 @@
+mutation revokeRBACRoleFromUserBatch($input: RevokeRBACRoleFromUserBatchInput!){
+    revokeRBACRoleFromUserBatch(input: $input){
+        _id
+        userPoolId
+        name
+        description
+    }
+}

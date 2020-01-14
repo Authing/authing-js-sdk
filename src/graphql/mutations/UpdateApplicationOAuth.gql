@@ -1,0 +1,15 @@
+mutation UpdateApplicationOAuth($client: String, $oauth: String, $user: String, $alias: String, $fields: [OAuthListFieldsFormUpdateInput]){
+    UpdateApplicationOAuth(client: $client, oauth: $oauth, user: $user, alias: $alias, fields: $fields){
+        _id
+        name
+        alias
+        image
+        description
+        enabled
+        url
+        client
+        user
+        oAuthUrl
+        wxappLogo
+    }
+}

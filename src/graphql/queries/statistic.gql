@@ -1,0 +1,5 @@
+query statistic($sortBy: String, $page: Int, $count: Int){
+    statistic(sortBy: $sortBy, page: $page, count: $count){
+        totalCount
+    }
+}

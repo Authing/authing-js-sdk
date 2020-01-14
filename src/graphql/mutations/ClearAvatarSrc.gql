@@ -1,0 +1,15 @@
+mutation ClearAvatarSrc($client: String, $oauth: String, $user: String){
+    ClearAvatarSrc(client: $client, oauth: $oauth, user: $user){
+        _id
+        name
+        alias
+        image
+        description
+        enabled
+        url
+        client
+        user
+        oAuthUrl
+        wxappLogo
+    }
+}

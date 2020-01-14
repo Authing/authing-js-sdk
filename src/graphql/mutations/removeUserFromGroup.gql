@@ -1,0 +1,6 @@
+mutation removeUserFromGroup($client: String!, $user: String!, $group: String!){
+    removeUserFromGroup(client: $client, user: $user, group: $group){
+        _id
+        createdAt
+    }
+}

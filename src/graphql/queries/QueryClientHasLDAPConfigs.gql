@@ -1,0 +1,5 @@
+query QueryClientHasLDAPConfigs($clientId: String){
+    QueryClientHasLDAPConfigs(clientId: $clientId){
+        result
+    }
+}

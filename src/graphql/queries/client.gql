@@ -1,0 +1,21 @@
+query client($id: String!, $userId: String!, $fromAdmin: Boolean){
+    client(id: $id, userId: $userId, fromAdmin: $fromAdmin){
+        _id
+        usersCount
+        logo
+        emailVerifiedDefault
+        registerDisabled
+        showWXMPQRCode
+        useMiniLogin
+        useSelfWxapp
+        allowedOrigins
+        name
+        secret
+        token
+        descriptions
+        jwtExpired
+        createdAt
+        isDeleted
+        enableEmail
+    }
+}

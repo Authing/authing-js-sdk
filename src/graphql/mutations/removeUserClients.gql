@@ -1,0 +1,21 @@
+mutation removeUserClients($ids: [String]){
+    removeUserClients(ids: $ids){
+        _id
+        usersCount
+        logo
+        emailVerifiedDefault
+        registerDisabled
+        showWXMPQRCode
+        useMiniLogin
+        useSelfWxapp
+        allowedOrigins
+        name
+        secret
+        token
+        descriptions
+        jwtExpired
+        createdAt
+        isDeleted
+        enableEmail
+    }
+}

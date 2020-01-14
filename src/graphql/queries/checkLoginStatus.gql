@@ -1,0 +1,7 @@
+query checkLoginStatus($token: String){
+    checkLoginStatus(token: $token){
+        message
+        code
+        status
+    }
+}

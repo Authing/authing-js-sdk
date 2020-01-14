@@ -1,0 +1,5 @@
+query GetSAMLServiceProviderList($clientId: String, $page: Int, $count: Int){
+    GetSAMLServiceProviderList(clientId: $clientId, page: $page, count: $count){
+        totalCount
+    }
+}

@@ -1,0 +1,9 @@
+mutation createCustomMFA($userIdInMiniLogin: String!, $userPoolId: String!, $name: String!, $secret: String!, $remark: String){
+    createCustomMFA(userIdInMiniLogin: $userIdInMiniLogin, userPoolId: $userPoolId, name: $name, secret: $secret, remark: $remark){
+        _id
+        userIdInMiniLogin
+        remark
+        name
+        secret
+    }
+}

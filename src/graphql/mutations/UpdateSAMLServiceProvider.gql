@@ -1,0 +1,38 @@
+mutation UpdateSAMLServiceProvider($appId: String!, $name: String!, $domain: String!, $clientId: String!, $redirectUrl: String!, $loginUrl: String!, $logoutUrl: String!, $nameId: String!, $IdPEntityID: String, $assertionConsumeService: [AssertionConsumeServiceInputType], $image: String, $mappings: AssertionMapInputType, $defaultIdPMapId: String, $description: String, $SPMetadata: String, $IdPMetadata: String, $enableSignRes: Boolean, $resSignPublicKey: String, $hasResEncrypted: Boolean, $resEncryptAlgorithm: String, $resAbstractAlgorithm: String, $resDecryptPrivateKey: String, $resDecryptPrivateKeyPass: String, $resEncryptPublicKey: String, $enableSignReq: Boolean, $reqSignAlgorithm: String, $reqAbstractAlgorithm: String, $reqSignPrivateKey: String, $reqSignPrivateKeyPass: String, $reqSignPublicKey: String){
+    UpdateSAMLServiceProvider(appId: $appId, name: $name, domain: $domain, clientId: $clientId, redirectUrl: $redirectUrl, loginUrl: $loginUrl, logoutUrl: $logoutUrl, nameId: $nameId, IdPEntityID: $IdPEntityID, assertionConsumeService: $assertionConsumeService, image: $image, mappings: $mappings, defaultIdPMapId: $defaultIdPMapId, description: $description, SPMetadata: $SPMetadata, IdPMetadata: $IdPMetadata, enableSignRes: $enableSignRes, resSignPublicKey: $resSignPublicKey, hasResEncrypted: $hasResEncrypted, resEncryptAlgorithm: $resEncryptAlgorithm, resAbstractAlgorithm: $resAbstractAlgorithm, resDecryptPrivateKey: $resDecryptPrivateKey, resDecryptPrivateKeyPass: $resDecryptPrivateKeyPass, resEncryptPublicKey: $resEncryptPublicKey, enableSignReq: $enableSignReq, reqSignAlgorithm: $reqSignAlgorithm, reqAbstractAlgorithm: $reqAbstractAlgorithm, reqSignPrivateKey: $reqSignPrivateKey, reqSignPrivateKeyPass: $reqSignPrivateKeyPass, reqSignPublicKey: $reqSignPublicKey){
+        _id
+        name
+        domain
+        image
+        appSecret
+        defaultIdPMapId
+        appId
+        clientId
+        description
+        isDeleted
+        enabled
+        when
+        SPMetadata
+        IdPMetadata
+        IdPEntityID
+        redirectUrl
+        loginUrl
+        logoutUrl
+        nameId
+        enableSignRes
+        resSignPublicKey
+        hasResEncrypted
+        resEncryptAlgorithm
+        resAbstractAlgorithm
+        resDecryptPrivateKey
+        resDecryptPrivateKeyPass
+        resEncryptPublicKey
+        enableSignReq
+        reqSignAlgorithm
+        reqAbstractAlgorithm
+        reqSignPrivateKey
+        reqSignPrivateKeyPass
+        reqSignPublicKey
+        SPUrl
+    }
+}

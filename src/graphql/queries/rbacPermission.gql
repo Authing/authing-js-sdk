@@ -1,0 +1,10 @@
+query rbacPermission($_id: String!){
+    rbacPermission(_id: $_id){
+        _id
+        name
+        userPoolId
+        createdAt
+        updatedAt
+        description
+    }
+}
