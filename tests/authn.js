@@ -1,6 +1,4 @@
 import test from "ava";
-import { formatError } from "../src/utils/formatError";
-import { randomEmail } from "../src/utils/randomEmail"
 const Authing = require("../src/index");
 const userPoolId = "5e1be38ab1599657b6477022";
 const secret = "62c5ee88764b4584d65aae499fb9a84a";
@@ -44,4 +42,17 @@ test('查询 Group', async t => {
 
   t.assert(res)
   t.assert(res._id === groupId)
+})
+
+test('查询 Group 列表', async  t => {
+  let res
+  try {
+    res = await authing.authn.groupList()
+  } catch (error) {
+    console.log(error)
+    console.log(error.response.data.errors[0])
+  }
+
+  t.assert(res)
+  t.assert(res.totalCount > 0)
 })
