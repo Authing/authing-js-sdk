@@ -1,4 +1,4 @@
-mutation deleteRBACRole($_id: String!){
+mutation DeleteRBACRole($_id: String!){
     deleteRBACRole(_id: $_id){
         message
         code

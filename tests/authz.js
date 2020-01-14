@@ -145,3 +145,15 @@ test('批量查询 Role', async t => {
   const res = await authing.authz.roleList()
   t.assert(res.totalCount > 0)
 })
+
+test('删除 Role', async t => {
+  await authing.authz.deleteRole(role._id)
+
+  let errcode
+  try {
+    const res = await authing.authz.role(role._id)
+  } catch (error) {
+    errcode = error.message.code
+  }
+  t.assert(errcode === 1004)
+})

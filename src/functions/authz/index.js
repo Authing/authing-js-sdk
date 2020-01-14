@@ -8,6 +8,7 @@ import role from "./role"
 import createRole from "./createRole"
 import updateRole from "./updateRole"
 import roleList from "./roleList"
+import deleteRole from "./deleteRole"
 
 const mod = {
 
@@ -24,6 +25,7 @@ const mod = {
   roleList,
   createRole,
   updateRole,
+  deleteRole
 }
 
 export default mod
