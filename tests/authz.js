@@ -125,6 +125,16 @@ test('创建 Role', async t => {
   t.assert(role.name)
 })
 
+test('修改 Role', async t => {
+  role = await authing.authz.updateRole({
+    _id: role._id,
+    name: role.name,
+    description: '新的描述'
+  })
+  t.assert(role)
+  t.assert(role.description === '新的描述')
+})
+
 test('查询 Role', async t => {
   const res = await authing.authz.role(role._id)
   t.assert(res._id === role._id)

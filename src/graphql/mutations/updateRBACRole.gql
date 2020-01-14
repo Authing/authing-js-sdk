@@ -1,4 +1,4 @@
-mutation updateRBACRole($input: UpdateRBACRoleInput!){
+mutation UpdateRBACRole($input: UpdateRBACRoleInput!){
     updateRBACRole(input: $input){
         _id
         userPoolId
