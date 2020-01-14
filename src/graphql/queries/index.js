@@ -106,6 +106,7 @@ module.exports.rbacRole = fs.readFileSync(path.join(__dirname, 'rbacRole.gql'), 
 module.exports.rbacRoleList = fs.readFileSync(path.join(__dirname, 'rbacRoleList.gql'), 'utf8');
 module.exports.rbacGroup = fs.readFileSync(path.join(__dirname, 'rbacGroup.gql'), 'utf8');
 module.exports.rbacGroupRoleList = fs.readFileSync(path.join(__dirname, 'rbacGroupRoleList.gql'), 'utf8')
+module.exports.rbacGroupUserList = fs.readFileSync(path.join(__dirname, 'rbacGroupUserList.gql'), 'utf8')
 module.exports.rbacGroupList = fs.readFileSync(path.join(__dirname, 'rbacGroupList.gql'), 'utf8');
 module.exports.rbacPermission = fs.readFileSync(path.join(__dirname, 'rbacPermission.gql'), 'utf8');
 module.exports.rbacPermissionList = fs.readFileSync(path.join(__dirname, 'rbacPermissionList.gql'), 'utf8');

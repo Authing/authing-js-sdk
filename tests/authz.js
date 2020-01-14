@@ -292,3 +292,13 @@ test('Group 添加 User', async t => {
   t.assert(res.users.totalCount === 1)
 })
 
+test('Group 查询用户列表', async t => {
+
+  let res
+  try {
+    res = await authing.authz.groupUserList(group._id)
+  } catch (err) {
+    t.fail(formatError(err));
+  }
+  t.assert(res.users.totalCount === 1)
+})
