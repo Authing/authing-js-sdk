@@ -4,5 +4,8 @@ mutation assignRBACRoleToUser($input: AssignUserToRBACRoleInput!){
         userPoolId
         name
         description
+        users {
+            totalCount
+        }
     }
 }
