@@ -302,3 +302,29 @@ test('Group 查询用户列表', async t => {
   }
   t.assert(res.users.totalCount === 1)
 })
+
+test('Group 批量添加 User', async t => {
+  const user1 = await authing.register({
+    email: Math.random()
+      .toString(36)
+      .slice(2) + "@authing.cn",
+    password: "123456a"
+  });
+  const user2 = await authing.register({
+    email: Math.random()
+      .toString(36)
+      .slice(2) + "@authing.cn",
+    password: "123456a"
+  });
+
+  const group = await authing.authz.createGroup({
+    name: `管理员${Math.random().toString(36).slice(2)}`,
+    description: "描述信息"
+  })
+
+  const res = await authing.authz.addUserToGroupBatch({
+    groupId: group._id,
+    userIdList: [user1._id, user2._id]
+  })
+  t.assert(res.users.totalCount === 2)
+})
