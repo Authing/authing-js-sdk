@@ -51,8 +51,8 @@ import updateRetryTips from './updateRetryTips.js'
 import updateSuccessTips from './updateSuccessTips.js'
 import updateSuccessRedirectTips from './updateSuccessRedirectTips.js'
 
-// authn submodule
-import authn from "./authn"
+// authz submodule
+import authz from "./authz"
 
 // Node & Browser 共用
 let mod = {
@@ -103,7 +103,7 @@ if (process.env.BUILD_TARGET === 'node') {
     updateRolePermissions,
     sendActivationEmail,
     getUsersByRole,
-    authn
+    authz
   })
 } else if (process.env.BUILD_TARGET === 'web') {
   mod = Object.assign(mod, {

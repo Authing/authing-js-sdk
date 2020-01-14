@@ -19,7 +19,7 @@ let role = {}
 test('创建 Group', async t => {
   let res
   try {
-    res = await authing.authn.createGroup({
+    res = await authing.authz.createGroup({
       name: `管理员${Math.random().toString(36).slice(2)}`,
       description: "描述信息"
     })
@@ -34,7 +34,7 @@ test('创建 Group', async t => {
 test('查询 Group', async t => {
   let res
   try {
-    res = await authing.authn.group(group._id)
+    res = await authing.authz.group(group._id)
   } catch (error) {
     console.log(error.response.data.errors[0])
   }
@@ -46,7 +46,7 @@ test('查询 Group', async t => {
 test('查询 Group 列表', async  t => {
   let res
   try {
-    res = await authing.authn.groupList()
+    res = await authing.authz.groupList()
   } catch (error) {
     console.log(error)
   }
@@ -58,7 +58,7 @@ test('查询 Group 列表', async  t => {
 test('修改 Group', async  t => {
   let res
   try {
-    res = await authing.authn.updateGroup({
+    res = await authing.authz.updateGroup({
       _id: group._id,
       name: group.name,
       description: '新的描述'
@@ -74,7 +74,7 @@ test('修改 Group', async  t => {
 
 test('删除 Group', async t => {
   try {
-    await authing.authn.deleteGroup(group._id)
+    await authing.authz.deleteGroup(group._id)
   } catch (error) {
     console.log(error)
   }
@@ -82,7 +82,7 @@ test('删除 Group', async t => {
   let res
   let errcode
   try {
-    res = await authing.authn.group(group._id)
+    res = await authing.authz.group(group._id)
   } catch (error) {
     errcode = error.message.code
   }
@@ -92,22 +92,22 @@ test('删除 Group', async t => {
 })
 
 test('批量删除 Group', async t => {
-  const group1 = await authing.authn.createGroup({
+  const group1 = await authing.authz.createGroup({
     name: `管理员${Math.random().toString(36).slice(2)}`,
     description: '描述'
   })
-  const group2 = await authing.authn.createGroup({
+  const group2 = await authing.authz.createGroup({
     name: `管理员${Math.random().toString(36).slice(2)}`,
     description: '描述'
   })
-  const res = await authing.authn.deleteGroupBatch([group1._id, group2._id])
+  const res = await authing.authz.deleteGroupBatch([group1._id, group2._id])
   t.assert(res.success)
   t.assert(res.requestCount === 2)
   t.assert(res.deletedCount === 2)
 
   let errcode
   try {
-    const res = await authing.authn.group(group1._id)
+    const res = await authing.authz.group(group1._id)
   } catch (error) {
     errcode = error.message.code
   }
@@ -115,7 +115,7 @@ test('批量删除 Group', async t => {
 })
 
 test('创建 Role', async t => {
-  role = await authing.authn.createRole({
+  role = await authing.authz.createRole({
     name: `角色${Math.random().toString(36).slice(2)}`,
     description: '描述'
   })
@@ -126,7 +126,7 @@ test('创建 Role', async t => {
 })
 
 test('查询 Role', async t => {
-  const res = await authing.authn.role(role._id)
+  const res = await authing.authz.role(role._id)
   t.assert(res._id === role._id)
   t.assert(res.name === role.name)
 })
