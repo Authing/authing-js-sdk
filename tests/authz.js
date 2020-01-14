@@ -18,6 +18,7 @@ let group = {}
 let role = {}
 let roleIdList = []
 let user
+let userIdList = []
 
 // Group 增删改查
 test('创建 Group', async t => {
@@ -325,14 +326,23 @@ test('Group 批量添加 User', async t => {
     password: "123456a"
   });
 
-  const group = await authing.authz.createGroup({
+  group = await authing.authz.createGroup({
     name: `管理员${Math.random().toString(36).slice(2)}`,
     description: "描述信息"
   })
 
+  userIdList = [user1._id, user2._id]
   const res = await authing.authz.addUserToGroupBatch({
     groupId: group._id,
-    userIdList: [user1._id, user2._id]
+    userIdList
   })
   t.assert(res.users.totalCount === 2)
+})
+
+test('Group 批量删除 User', async  t => {
+  const res = await authing.authz.removeUserFromGroupBatch({
+    groupId: group._id,
+    userIdList
+  })
+  t.assert(res.users.totalCount === 0)
 })

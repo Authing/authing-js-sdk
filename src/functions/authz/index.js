@@ -19,6 +19,7 @@ import addUserToGroup from "./addUserToGroup"
 import addUserToGroupBatch from "./addUserToGroupBatch"
 import groupUserList from "./groupUserList"
 import removeUserFromGroup from "./removeUserFromGroup"
+import removeUserFromGroupBatch from "./removeUserFromGroupBatch"
 
 const mod = {
 
@@ -51,7 +52,8 @@ const mod = {
   // Group add/remove User
   addUserToGroup,
   addUserToGroupBatch,
-  removeUserFromGroup
+  removeUserFromGroup,
+  removeUserFromGroupBatch
 }
 
 export default mod
