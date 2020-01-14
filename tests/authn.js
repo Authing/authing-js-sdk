@@ -33,9 +33,7 @@ test.before('创建 Group', async t => {
 test('查询 Group', async t => {
   let res
   try {
-    res = await authing.authn.group({
-      _id: group._id
-    })
+    res = await authing.authn.group(group._id)
   } catch (error) {
     console.log(error.response.data.errors[0])
   }
@@ -71,4 +69,23 @@ test('修改 Group', async  t => {
   t.assert(res)
   t.assert(res._id === group._id)
   t.assert(res.description === "新的描述")
+})
+
+test('删除 Group', async t => {
+  try {
+    await authing.authn.deleteGroup(group._id)
+  } catch (error) {
+    console.log(error)
+  }
+
+  let res
+  let errcode
+  try {
+    res = await authing.authn.group(group._id)
+  } catch (error) {
+    errcode = error.message.code
+  }
+  
+  t.assert(!res)
+  t.assert(errcode === 1004)
 })

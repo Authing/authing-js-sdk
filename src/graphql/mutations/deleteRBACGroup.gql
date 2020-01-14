@@ -1,4 +1,4 @@
-mutation deleteRBACGroup($_id: String!){
+mutation DeleteRBACGroup($_id: String!){
     deleteRBACGroup(_id: $_id){
         message
         code
