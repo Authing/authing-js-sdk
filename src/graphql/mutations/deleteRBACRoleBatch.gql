@@ -1,4 +1,4 @@
-mutation deleteRBACRoleBatch($idList: [String!]!){
+mutation DeleteRBACRoleBatch($idList: [String!]!){
     deleteRBACRoleBatch(idList: $idList){
         success
         requestCount

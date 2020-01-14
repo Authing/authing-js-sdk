@@ -157,3 +157,30 @@ test('删除 Role', async t => {
   }
   t.assert(errcode === 1004)
 })
+
+test('批量删除 Role', async t => {
+  const role1 = await authing.authz.createRole({
+    name: `角色${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+
+  const role2 = await authing.authz.createRole({
+    name: `角色${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+
+  let res
+  res = await authing.authz.deleteRoleBatch([
+    role1._id,
+    role2._id
+  ])
+  t.assert(res.success)
+
+  let errcode
+  try {
+    res = await authing.authz.role(role1._id)
+  } catch (error) {
+    errcode = error.message.code
+  }
+  t.assert(errcode === 1004)
+})

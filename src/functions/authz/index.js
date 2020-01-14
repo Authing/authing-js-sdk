@@ -9,6 +9,7 @@ import createRole from "./createRole"
 import updateRole from "./updateRole"
 import roleList from "./roleList"
 import deleteRole from "./deleteRole"
+import deleteRoleBatch from "./deleteRoleBatch"
 
 const mod = {
 
@@ -25,7 +26,8 @@ const mod = {
   roleList,
   createRole,
   updateRole,
-  deleteRole
+  deleteRole,
+  deleteRoleBatch
 }
 
 export default mod
