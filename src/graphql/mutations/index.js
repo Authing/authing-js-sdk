@@ -105,6 +105,7 @@ module.exports.revokeRBACRoleFromUserBatch = fs.readFileSync(path.join(__dirname
 module.exports.addPermissionToRBACRole = fs.readFileSync(path.join(__dirname, 'addPermissionToRBACRole.gql'), 'utf8');
 module.exports.removePermissionFromRBACRole = fs.readFileSync(path.join(__dirname, 'removePermissionFromRBACRole.gql'), 'utf8');
 module.exports.addRoleToRBACGroup = fs.readFileSync(path.join(__dirname, 'addRoleToRBACGroup.gql'), 'utf8');
+module.exports.addRoleToRBACGroupBatch = fs.readFileSync(path.join(__dirname, 'addRoleToRBACGroupBatch.gql'), 'utf8')
 module.exports.removeRoleFromRBACGroup = fs.readFileSync(path.join(__dirname, 'removeRoleFromRBACGroup.gql'), 'utf8');
 module.exports.addUserToRBACGroup = fs.readFileSync(path.join(__dirname, 'addUserToRBACGroup.gql'), 'utf8');
 module.exports.addUserToRBACGroupBatch = fs.readFileSync(path.join(__dirname, 'addUserToRBACGroupBatch.gql'), 'utf8');

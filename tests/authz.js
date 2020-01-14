@@ -204,3 +204,33 @@ test('Group 添加 Role', async t => {
   t.assert(roles.totalCount === 1)
   t.assert(roles.list[0]._id === role._id)
 })
+
+test('Group 批量添加 Role', async t => {
+  const group = await authing.authz.createGroup({
+    name: `管理员${Math.random().toString(36).slice(2)}`,
+    description: "描述信息"
+  })
+
+  const role1 = await authing.authz.createRole({
+    name: `角色${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+
+  const role2 = await authing.authz.createRole({
+    name: `角色${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+
+  let res
+  try {
+    res = await authing.authz.addRoleToGroupBatch({
+      roleIdList: [role1._id, role2._id],
+      groupId: group._id
+    })
+  } catch (error) {
+    console.log(error.response.data.errors[0])
+  }
+
+  const roles = res.roles
+  t.assert(roles.totalCount === 2)
+})

@@ -1,0 +1,16 @@
+mutation AddRoleToRBACGroupBatch($input: AddRoleToRBACGroupBatchInput!){
+    addRoleToRBACGroupBatch(input: $input){
+        _id
+        userPoolId
+        name
+        description
+        roles {
+            totalCount
+            list {
+                _id
+                name
+                description
+            }
+        }
+    }
+}
