@@ -1,8 +1,9 @@
 import test from "ava";
+import { formatError } from "../src/utils/formatError";
+
 const Authing = require("../src/index");
 const userPoolId = "5e1be38ab1599657b6477022";
 const secret = "62c5ee88764b4584d65aae499fb9a84a";
-
 
 let authing = new Authing({
   userPoolId,
@@ -16,7 +17,9 @@ let authing = new Authing({
 let group = {}
 let role = {}
 let roleIdList = []
+let user
 
+// Group 增删改查
 test('创建 Group', async t => {
   let res
   try {
@@ -115,6 +118,8 @@ test('批量删除 Group', async t => {
   t.assert(errcode === 1004)
 })
 
+
+// Role 增删改查
 test('创建 Role', async t => {
   role = await authing.authz.createRole({
     name: `角色${Math.random().toString(36).slice(2)}`,
@@ -186,6 +191,7 @@ test('批量删除 Role', async t => {
   t.assert(errcode === 1004)
 })
 
+// Group 添加/删除 Role
 test('Group 添加 Role', async t => {
   group = await authing.authz.createGroup({
     name: `管理员${Math.random().toString(36).slice(2)}`,
@@ -260,3 +266,29 @@ test('Group 批量删除 Role', async t => {
   const res = await authing.authz.groupRoleList(group._id)
   t.assert(res.roles.totalCount === 0)
 })
+
+// Group 添加/删除 User
+test('注册用户', async t => {
+  try {
+    user = await authing.register({
+      email: Math.random()
+        .toString(36)
+        .slice(2) + "@authing.cn",
+      password: "123456a"
+    });
+    t.assert(user.email);
+    t.pass();
+  } catch (err) {
+    t.log(formatError(err));
+    t.fail(formatError(err));
+  }
+})
+
+test('Group 添加 User', async t => {
+  const res = await authing.authz.addUserToGroup({
+    groupId: group._id,
+    userId: user._id
+  })
+  t.assert(res.users.totalCount === 1)
+})
+
