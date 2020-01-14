@@ -1,0 +1,11 @@
+query QueryRbacGroupList($userPoolId: String!) {
+	rbacGroupList(userPoolId: $userPoolId) {
+		totalCount
+		list {
+			_id
+			userPoolId
+			name
+			description
+		}
+	}
+}
