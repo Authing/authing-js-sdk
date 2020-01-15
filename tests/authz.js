@@ -30,7 +30,7 @@ test('创建 Group', async t => {
       description: "描述信息"
     })
   } catch (error) {
-    console.log(error.message.message)
+    t.fail(formatError(error))
   }
   t.assert(res)
   t.assert(res._id)
@@ -42,7 +42,7 @@ test('查询 Group', async t => {
   try {
     res = await authing.authz.group(group._id)
   } catch (error) {
-    console.log(error.response.data.errors[0])
+    t.fail(formatError(error))
   }
 
   t.assert(res)
@@ -54,7 +54,7 @@ test('查询 Group 列表', async  t => {
   try {
     res = await authing.authz.groupList()
   } catch (error) {
-    console.log(error)
+    t.fail(formatError(error))
   }
 
   t.assert(res)
@@ -70,7 +70,7 @@ test('修改 Group', async  t => {
       description: '新的描述'
     })
   } catch (error) {
-    console.log(error)
+    t.fail(formatError(error))
   }
 
   t.assert(res)
@@ -82,7 +82,7 @@ test('删除 Group', async t => {
   try {
     await authing.authz.deleteGroup(group._id)
   } catch (error) {
-    console.log(error)
+    t.fail(formatError(error))
   }
 
   let res
