@@ -470,6 +470,23 @@ test('批量查询 Permission', async t => {
   }
 })
 
+test('删除 Permission', async t => {
+  try {
+    let res = await authing.authz.deletePermission(permission._id)
+    t.assert(res.status)
+
+    let errcode
+    try {
+      res = await authing.authz.permission(permission._id)
+    } catch (error) {
+      errcode = error.message.code
+    }
+    t.assert(errcode === 1004)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+})
+
 test('修改 Permission', async t => {
   try {
     const res = await authing.authz.createPermission({

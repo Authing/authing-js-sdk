@@ -29,6 +29,7 @@ import createPermission from "./createPermission"
 import updatePermission from "./updatePermission"
 import permission from "./permission"
 import permissionList from "./permissionList"
+import deletePermission from "./deletePermission"
 
 const mod = {
 
@@ -78,6 +79,7 @@ const mod = {
   permissionList,
   createPermission,
   updatePermission,
+  deletePermission,
 }
 
 export default mod
