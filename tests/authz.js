@@ -367,3 +367,33 @@ test('授予 User Role', async t => {
 
   t.assert(res.users.totalCount === 1)
 })
+
+test('批量授予 User Role', async t => {
+  role = await authing.authz.createRole({
+    name: `角色${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+
+  const user1 = await authing.register({
+    email: Math.random()
+      .toString(36)
+      .slice(2) + "@authing.cn",
+    password: "123456a"
+  });
+
+  const user2 = await authing.register({
+    email: Math.random()
+      .toString(36)
+      .slice(2) + "@authing.cn",
+    password: "123456a"
+  });
+
+  userIdList = [user1._id, user2._id]
+
+  const res = await authing.authz.assignRoleToUserBatch({
+    userIdList,
+    roleId: role._id
+  })
+
+  t.assert(res.users.totalCount === 2)
+})
