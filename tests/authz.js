@@ -461,6 +461,15 @@ test('查询 Permission', async t => {
   }
 })
 
+test('批量查询 Permission', async t => {
+  try {
+    const res = await authing.authz.permissionList(userPoolId)
+    t.assert(res.totalCount > 0)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+})
+
 test('修改 Permission', async t => {
   try {
     const res = await authing.authz.createPermission({

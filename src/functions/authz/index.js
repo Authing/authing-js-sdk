@@ -28,6 +28,7 @@ import roleUserList from "./roleUserList"
 import createPermission from "./createPermission"
 import updatePermission from "./updatePermission"
 import permission from "./permission"
+import permissionList from "./permissionList"
 
 const mod = {
 
@@ -74,6 +75,7 @@ const mod = {
 
   // Permission
   permission,
+  permissionList,
   createPermission,
   updatePermission,
 }
