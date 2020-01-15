@@ -433,3 +433,17 @@ test('批量撤销 User Role', async t => {
     t.fail(formatError(err))
   }
 })
+
+test('创建 Permission', async  t => {
+  try {
+    const res = await authing.authz.createPermission({
+      name:  `权限${Math.random().toString(36).slice(2)}`,
+      description: '描述'
+    })
+    t.assert(res._id)
+    t.assert(res.name)
+    t.assert(res.description)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+})
