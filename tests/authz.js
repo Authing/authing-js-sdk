@@ -368,6 +368,16 @@ test('授予 User Role', async t => {
   t.assert(res.users.totalCount === 1)
 })
 
+test('查询 Role 中包含的 User', async t => {
+  try {
+    const res = await authing.authz.roleUserList(role._id)
+    t.assert(res.users.totalCount === 1)
+    t.assert(res.users.list[0]._id === user._id)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+})
+
 
 test('撤销 User Role', async t => {
 

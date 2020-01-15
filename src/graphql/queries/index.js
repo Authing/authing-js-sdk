@@ -103,6 +103,7 @@ module.exports.getUserPoolSettings = fs.readFileSync(path.join(__dirname, 'getUs
 module.exports.queryAuthAuditRecords = fs.readFileSync(path.join(__dirname, 'queryAuthAuditRecords.gql'), 'utf8');
 module.exports.queryUserPoolCommonInfo = fs.readFileSync(path.join(__dirname, 'queryUserPoolCommonInfo.gql'), 'utf8');
 module.exports.rbacRole = fs.readFileSync(path.join(__dirname, 'rbacRole.gql'), 'utf8');
+module.exports.rbacRoleUserList = fs.readFileSync(path.join(__dirname, 'rbacRoleUserList.gql'), 'utf8');
 module.exports.rbacRoleList = fs.readFileSync(path.join(__dirname, 'rbacRoleList.gql'), 'utf8');
 module.exports.rbacGroup = fs.readFileSync(path.join(__dirname, 'rbacGroup.gql'), 'utf8');
 module.exports.rbacGroupRoleList = fs.readFileSync(path.join(__dirname, 'rbacGroupRoleList.gql'), 'utf8')
