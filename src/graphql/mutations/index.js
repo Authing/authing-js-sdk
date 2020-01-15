@@ -90,6 +90,7 @@ module.exports.recordAuthAudit = fs.readFileSync(path.join(__dirname, 'recordAut
 module.exports.createRBACPermission = fs.readFileSync(path.join(__dirname, 'createRBACPermission.gql'), 'utf8');
 module.exports.updateRBACPermission = fs.readFileSync(path.join(__dirname, 'updateRBACPermission.gql'), 'utf8');
 module.exports.deleteRBACPermission = fs.readFileSync(path.join(__dirname, 'deleteRBACPermission.gql'), 'utf8');
+module.exports.deleteRBACPermissionBatch = fs.readFileSync(path.join(__dirname, 'deleteRBACPermissionBatch.gql'), 'utf8');
 module.exports.createRBACRole = fs.readFileSync(path.join(__dirname, 'createRBACRole.gql'), 'utf8');
 module.exports.updateRBACRole = fs.readFileSync(path.join(__dirname, 'updateRBACRole.gql'), 'utf8');
 module.exports.deleteRBACRole = fs.readFileSync(path.join(__dirname, 'deleteRBACRole.gql'), 'utf8');

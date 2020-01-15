@@ -487,6 +487,31 @@ test('删除 Permission', async t => {
   }
 })
 
+test('批量删除 Permission', async t => {
+  const permission1 = await authing.authz.createPermission({
+    name: `权限${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+  const permission2 = await authing.authz.createPermission({
+    name: `权限${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+
+  const res = await authing.authz.deletePermissionBatch([
+    permission1._id,
+    permission2._id
+  ])
+  t.assert(res.success)
+  
+  let errcode
+  try {
+    const res = await authing.authz.permission(permission1._id)
+  } catch (error) {
+    errcode = error.message.code
+  }
+  t.assert(errcode === 1004)
+})
+
 test('修改 Permission', async t => {
   try {
     const res = await authing.authz.createPermission({

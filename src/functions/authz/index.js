@@ -30,6 +30,7 @@ import updatePermission from "./updatePermission"
 import permission from "./permission"
 import permissionList from "./permissionList"
 import deletePermission from "./deletePermission"
+import deletePermissionBatch from "./deletePermissionBatch"
 
 const mod = {
 
@@ -80,6 +81,7 @@ const mod = {
   createPermission,
   updatePermission,
   deletePermission,
+  deletePermissionBatch
 }
 
 export default mod
