@@ -368,6 +368,20 @@ test('授予 User Role', async t => {
   t.assert(res.users.totalCount === 1)
 })
 
+
+test('撤销 User Role', async t => {
+
+  try {
+    const res = await authing.authz.revokeRoleFromUser({
+      userId: user._id,
+      roleId: role._id
+    })
+    t.assert(res.users.totalCount === 0)
+  } catch (err) {
+    t.fail(formatError(err));
+  }
+})
+
 test('批量授予 User Role', async t => {
   role = await authing.authz.createRole({
     name: `角色${Math.random().toString(36).slice(2)}`,

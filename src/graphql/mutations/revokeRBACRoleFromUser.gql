@@ -4,5 +4,8 @@ mutation revokeRBACRoleFromUser($input: RevokeRBACRoleFromUserInput!){
         userPoolId
         name
         description
+        users {
+            totalCount
+        }
     }
 }
