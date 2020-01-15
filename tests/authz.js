@@ -450,6 +450,17 @@ test('创建 Permission', async  t => {
   }
 })
 
+test('查询 Permission', async t => {
+  try {
+    const res = await authing.authz.permission(permission._id)
+    t.assert(res._id)
+    t.assert(res.name)
+    t.assert(res.description)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+})
+
 test('修改 Permission', async t => {
   try {
     const res = await authing.authz.createPermission({
