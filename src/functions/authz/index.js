@@ -23,6 +23,7 @@ import removeUserFromGroupBatch from "./removeUserFromGroupBatch"
 import assignRoleToUser from "./assignRoleToUser"
 import assignRoleToUserBatch from "./assignRoleToUserBatch"
 import revokeRoleFromUser from "./revokeRoleFromUser"
+import revokeRoleFromUserBatch from "./revokeRoleFromUserBatch"
 
 const mod = {
 
@@ -61,7 +62,8 @@ const mod = {
   // Role add/remove User
   assignRoleToUser,
   assignRoleToUserBatch,
-  revokeRoleFromUser
+  revokeRoleFromUser,
+  revokeRoleFromUserBatch
 }
 
 export default mod

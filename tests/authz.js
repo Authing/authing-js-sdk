@@ -411,3 +411,15 @@ test('批量授予 User Role', async t => {
 
   t.assert(res.users.totalCount === 2)
 })
+
+test('批量撤销 User Role', async t => {
+  try {
+    const res = await authing.authz.revokeRoleFromUserBatch({
+      userIdList,
+      roleId: role._id
+    })
+    t.assert(res.users.totalCount === 0)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+})
