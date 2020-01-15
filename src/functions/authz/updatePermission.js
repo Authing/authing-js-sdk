@@ -10,12 +10,12 @@ export default function (options) {
     {
       name: 'name',
       type: String
-    }
+    },
   ])
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
-      operationName: "UpdateRBACRole",
-      query: mutations.updateRBACRole,
+      operationName: "updateRBACPermission",
+      query: mutations.updateRBACPermission,
       variables: {
         input: options
       }

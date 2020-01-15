@@ -10,10 +10,6 @@ export default function (options) {
     {
       name: 'name',
       type: String
-    },
-    {
-      name: 'description',
-      type: String
     }
   ])
   return this.fetchToken.then(() => {

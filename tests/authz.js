@@ -19,6 +19,7 @@ let role = {}
 let roleIdList = []
 let user
 let userIdList = []
+let permission = {}
 
 // Group 增删改查
 test('创建 Group', async t => {
@@ -437,12 +438,27 @@ test('批量撤销 User Role', async t => {
 test('创建 Permission', async  t => {
   try {
     const res = await authing.authz.createPermission({
-      name:  `权限${Math.random().toString(36).slice(2)}`,
+      name: `权限${Math.random().toString(36).slice(2)}`,
       description: '描述'
     })
     t.assert(res._id)
     t.assert(res.name)
     t.assert(res.description)
+    permission = res
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+})
+
+test('修改 Permission', async t => {
+  try {
+    const res = await authing.authz.createPermission({
+      name: `权限${Math.random().toString(36).slice(2)}`,
+      description: '新的描述'
+    })
+    t.assert(res._id)
+    t.assert(res.name)
+    t.assert(res.description === "新的描述")
   } catch (err) {
     t.fail(formatError(err))
   }
