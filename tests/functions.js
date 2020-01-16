@@ -2,8 +2,8 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 const Authing = require("../dist/authing-js-sdk-node");
 
-const clientId = "5dd77e6efa26f000d18101ca";
-const secret = "82f4c093e345d79c416ec3da6854a453";
+const clientId = "5e1bded76d0afd49b9792ea4";
+const secret = "6680cc1caff46b99c886a7ec4a48b8b2";
 
 //线上
 // const secret = 'bb278212d520fc19f169e361179ea690';
@@ -19,8 +19,8 @@ let auth = new Authing({
   userPoolId: clientId,
   secret,
   host: {
-    user: "http://localhost:5555/graphql",
-    oauth: "http://localhost:5556/graphql"
+    user: "http://localhost:5510/graphql",
+    oauth: "http://localhost:5510/graphql"
   }
 });
 test("初始化", async t => {
@@ -31,7 +31,7 @@ test("初始化", async t => {
     //   user: 'http://localhost:5555/graphql',
     //   oauth: 'http://localhost:5556/graphql'
     // },
-    onInitError: function (err) {
+    onInitError: function(err) {
       t.assert(err);
     }
   });
@@ -421,7 +421,7 @@ test("oauth:genQRCode 生成 QRCode", async t => {
   if (
     res.data.code === 500 &&
     res.data.message ===
-    "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
+      "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
   ) {
     t.pass();
   }
@@ -570,17 +570,20 @@ test("user:update 不能直接修改手机号、邮箱", async t => {
     password: "123456a"
   });
   let loggedIn = await validAuth.login({ email, password: "123456a" });
-  let newEmail = randomEmail()
+  let newEmail = randomEmail();
 
-  try{
+  try {
     let updated = await validAuth.update({
       _id: loggedIn._id,
       email: newEmail
     });
-  }catch(error){
-    t.assert(error.message.message === "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。")
+  } catch (error) {
+    t.assert(
+      error.message.message ===
+        "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。"
+    );
   }
-})
+});
 
 test("user:updateRolePermissions 修改角色权限", async t => {
   const validAuth = auth;
@@ -842,7 +845,7 @@ test("user:查询某个角色下的所有用户", async t => {
     roleId: role._id
   });
   t.assert(Array.isArray(res2.list));
-  t.assert(res2.list[0]._id)
+  t.assert(res2.list[0]._id);
 });
 
 test("has axios", async t => {
@@ -850,28 +853,61 @@ test("has axios", async t => {
   t.truthy(validAuth._axios);
 });
 
-test('发送修改邮箱邮件', async t => {
+test("发送修改邮箱邮件", async t => {
   const validAuth = auth;
   const res = await validAuth.sendChangeEmailVerifyCode({
-    email: 'cdbfhoergnrexxjk@qq.com' // 当前邮箱或者没有注册过的邮箱
-  })
-  t.assert(res.code === 200)
-})
+    email: "cdbfhoergnrexxjk@qq.com" // 当前邮箱或者没有注册过的邮箱
+  });
+  t.assert(res.code === 200);
+});
 
-test('发送修改邮箱邮件 - 邮箱已绑定，请换一个吧', async t => {
+test("发送修改邮箱邮件 - 邮箱已绑定，请换一个吧", async t => {
   const validAuth = auth;
   const res = await validAuth.sendChangeEmailVerifyCode({
-    email: 'ax6coi4ytmk@test.com' // 已经被其他人注册过的邮箱
-  })
-  t.assert(res.code === 200)
-})
+    email: "ax6coi4ytmk@test.com" // 已经被其他人注册过的邮箱
+  });
+  t.assert(res.code === 200);
+});
 
-test('修改邮箱', async t => {
+test("修改邮箱", async t => {
   const validAuth = auth;
-  const newEmail = "cdbfhorexxjk@qq.com"
+  const newEmail = "cdbfhorexxjk@qq.com";
   const res = await validAuth.updateEmail({
     email: newEmail,
     emailCode: "2815"
-  })
-  t.assert(res.email === newEmail)
-})
+  });
+  t.assert(res.email === newEmail);
+});
+test("测试手机号登陆", async t => {
+  const validAuth = auth;
+  const phone = "13100512747";
+  let res = {};
+  try {
+    res = await validAuth.loginByPhonePassword({
+      phone: phone,
+      password: "123456"
+    });
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.phone === phone);
+});
+
+test.only("测试手机号注册", async t => {
+  //验证码需要手动填写
+  const validAuth = auth;
+  const phone = "13100512747";
+  const password = "123456";
+  const phoneCode = "1234";
+  let res = {};
+  try {
+    res = await validAuth.register({
+      phone: phone,
+      phoneCode: phoneCode,
+      password: password
+    });
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.phone === phone);
+});
