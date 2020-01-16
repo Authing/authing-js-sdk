@@ -44,7 +44,8 @@ export default {
     'getUsersByRole',
     'updatePhone',
     'updateEmail',
-    'sendChangeEmailVerifyCode'
+    'sendChangeEmailVerifyCode',
+    'loginByPhonePassword',
   ],
   web: [
     '_uploadAvatar',
@@ -86,6 +87,7 @@ export default {
     'getUserPoolSettings',
     'updatePhone',
     'updateEmail',
-    'sendChangeEmailVerifyCode'
+    'sendChangeEmailVerifyCode',
+    'loginByPhonePassword',
   ]
 };
