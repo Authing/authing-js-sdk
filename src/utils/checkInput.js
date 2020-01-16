@@ -1,4 +1,4 @@
-export default function checkInput(options, reqirements) {
+export default function checkInput(input, reqirements) {
   /*
  
   */
@@ -9,12 +9,12 @@ export default function checkInput(options, reqirements) {
     let item = reqirements[i];
     if (item instanceof Object) {
       let { name, type } = item;
-      if (!options[name]) {
-        throw Error(`options.${name} is not provided.`);
+      if (!input[name]) {
+        throw Error(`input.${name} is not provided.`);
       }
       if (type) {
-        if (!options[name] instanceof type) {
-          throw Error(`options.${name} must be type ${type}`);
+        if (!input[name] instanceof type) {
+          throw Error(`input.${name} must be type ${type}`);
         }
       }
     }

@@ -6,10 +6,6 @@ export default function (input) {
     {
       name: '_id',
       type: String
-    },
-    {
-      name: 'name',
-      type: String
     }
   ])
   return this.fetchToken.then(() => {
@@ -17,7 +13,7 @@ export default function (input) {
       operationName: "UpdateRBACGroup",
       query: mutations.updateRBACGroup,
       variables: {
-        input: input
+        input
       }
     })
   })

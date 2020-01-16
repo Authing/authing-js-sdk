@@ -66,7 +66,6 @@ test('修改 Group', async  t => {
   try {
     res = await authing.authz.updateGroup({
       _id: group._id,
-      name: group.name,
       description: '新的描述'
     })
   } catch (error) {
@@ -74,7 +73,7 @@ test('修改 Group', async  t => {
   }
 
   t.assert(res)
-  t.assert(res._id === group._id)
+  t.assert(res.name === group.name)
   t.assert(res.description === "新的描述")
 })
 
@@ -502,7 +501,7 @@ test('批量删除 Permission', async t => {
     permission2._id
   ])
   t.assert(res.success)
-  
+
   let errcode
   try {
     const res = await authing.authz.permission(permission1._id)
