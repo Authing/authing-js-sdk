@@ -1,8 +1,8 @@
 import mutations from "../../graphql/mutations"
-import checkOptions from "../../utils/checkOptions"
+import checkInput from "../../utils/checkInput"
 
-export default function (options) {
-  checkOptions(options, [
+export default function (input) {
+  checkInput(input, [
     {
       name: 'name',
       type: String
@@ -12,13 +12,13 @@ export default function (options) {
       type: String
     }
   ])
-  options.userPoolId = this.userPoolId;
+  input.userPoolId = this.userPoolId;
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: "createRBACPermission",
       query: mutations.createRBACPermission,
       variables: {
-        input: options
+        input: input
       }
     })
   })

@@ -1,8 +1,8 @@
 import mutations from "../../graphql/mutations"
-import checkOptions from "../../utils/checkOptions"
+import checkInput from "../../utils/checkInput"
 
-export default function (options) {
-  checkOptions(options, [
+export default function (input) {
+  checkInput(input, [
     {
       name: '_id',
       type: String
@@ -17,7 +17,7 @@ export default function (options) {
       operationName: "updateRBACPermission",
       query: mutations.updateRBACPermission,
       variables: {
-        input: options
+        input: input
       }
     })
   })

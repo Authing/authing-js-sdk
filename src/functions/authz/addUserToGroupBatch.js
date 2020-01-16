@@ -1,8 +1,8 @@
 import mutations from "../../graphql/mutations"
-import checkOptions from "../../utils/checkOptions"
+import checkInput from "../../utils/checkInput"
 
-export default function (options) {
-  checkOptions(options, [
+export default function (input) {
+  checkInput(input, [
     {
       name: 'userIdList',
       type: String
@@ -17,7 +17,7 @@ export default function (options) {
       operationName: "addUserToRBACGroupBatch",
       query: mutations.addUserToRBACGroupBatch,
       variables: {
-        input: options
+        input: input
       }
     })
   })

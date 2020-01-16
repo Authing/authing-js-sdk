@@ -1,4 +1,4 @@
-export default function checkOptions(options, reqirements) {
+export default function checkInput(options, reqirements) {
   /*
  
   */

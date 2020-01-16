@@ -1,5 +1,5 @@
 import queries from "../../graphql/queries"
-import checkOptions from "../../utils/checkOptions"
+import checkInput from "../../utils/checkInput"
 
 export default function groupList() {
   return this.fetchToken.then(() => {

@@ -46,7 +46,7 @@
   },
   "ava": {
     "files": [
-      "tests/authn.js"
+      "tests/authz.js"
     ],
     "require": [
       "@babel/register",
