@@ -2,8 +2,8 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 const Authing = require("../dist/authing-js-sdk-node");
 
-const clientId = "5e1bded76d0afd49b9792ea4";
-const secret = "6680cc1caff46b99c886a7ec4a48b8b2";
+const clientId = "5dd77e6efa26f000d18101ca";
+const secret = "82f4c093e345d79c416ec3da6854a453";
 
 //线上
 // const secret = 'bb278212d520fc19f169e361179ea690';
@@ -19,8 +19,8 @@ let auth = new Authing({
   userPoolId: clientId,
   secret,
   host: {
-    user: "http://localhost:5510/graphql",
-    oauth: "http://localhost:5510/graphql"
+    user: "http://localhost:5555/graphql",
+    oauth: "http://localhost:5556/graphql"
   }
 });
 test("初始化", async t => {
@@ -31,7 +31,7 @@ test("初始化", async t => {
     //   user: 'http://localhost:5555/graphql',
     //   oauth: 'http://localhost:5556/graphql'
     // },
-    onInitError: function(err) {
+    onInitError: function (err) {
       t.assert(err);
     }
   });
