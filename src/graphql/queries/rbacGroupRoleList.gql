@@ -1,7 +1,6 @@
 query QueryRBACGroupRoleList($_id: String!, $sortBy: SortByEnum = CREATEDAT_DESC, $page: Int = 0, $count: Int = 10) {
 	rbacGroup(_id: $_id) {
 		_id
-		userPoolId
 		name
 		description
 		roles(sortBy: $sortBy, page: $page, count: $count) {
@@ -10,6 +9,8 @@ query QueryRBACGroupRoleList($_id: String!, $sortBy: SortByEnum = CREATEDAT_DESC
 				_id
 				name
 				description
+				createdAt
+				updatedAt
 			}
 		}
 	}
