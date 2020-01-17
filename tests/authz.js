@@ -49,10 +49,25 @@ test('查询 Group', async t => {
   t.assert(res._id === group._id)
 })
 
-test('查询 Group 列表', async  t => {
+test('查询 Group 列表 - 默认方式', async  t => {
   let res
   try {
     res = await authing.authz.groupList()
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+  t.assert(res)
+  t.assert(res.totalCount > 0)
+})
+
+test('查询 Group 列表 - 按照创建时间升序（旧的优先）', async  t => {
+  let res
+  try {
+    res = await authing.authz.groupList({
+      sortBy: 'CREATEDAT_ASC',
+      page: 1,
+      count: 10
+    })
   } catch (error) {
     t.fail(formatError(error))
   }
