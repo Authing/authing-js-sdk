@@ -1,10 +1,12 @@
-query QueryRbacGroupList($userPoolId: String!) {
-	rbacGroupList(userPoolId: $userPoolId) {
+query QueryRbacGroupList($userPoolId: String!, $sortBy: SortByEnum = CREATEDAT_DESC, $page: Int = 0, $count: Int = 10) {
+	rbacGroupList(userPoolId: $userPoolId, sortBy: $sortBy, page: $page, count: $count) {
 		totalCount
 		list {
 			_id
 			name
 			description
+			createdAt
+			updatedAt
 		}
 	}
 }

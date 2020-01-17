@@ -1,8 +1,9 @@
-mutation UpdateRBACGroup($input: UpdateRBACGroupInput!){
-    updateRBACGroup(input: $input){
-        _id
-        userPoolId
-        name
-        description
-    }
+mutation UpdateRBACGroup($input: UpdateRBACGroupInput!) {
+	updateRBACGroup(input: $input) {
+		_id
+		name
+		description
+		createdAt
+		updatedAt
+	}
 }
