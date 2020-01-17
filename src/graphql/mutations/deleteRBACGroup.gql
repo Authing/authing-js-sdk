@@ -1,7 +1,7 @@
-mutation DeleteRBACGroup($_id: String!){
-    deleteRBACGroup(_id: $_id){
-        message
-        code
-        status
-    }
+mutation DeleteRBACGroup($_id: String!) {
+	deleteRBACGroup(_id: $_id) {
+		message
+		code
+		status
+	}
 }

@@ -1,7 +1,7 @@
-mutation deleteRBACPermission($_id: String!){
-    deleteRBACPermission(_id: $_id){
-        message
-        code
-        status
-    }
+mutation deleteRBACPermission($_id: String!) {
+	deleteRBACPermission(_id: $_id) {
+		message
+		code
+		status
+	}
 }

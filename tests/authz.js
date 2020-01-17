@@ -121,9 +121,7 @@ test('批量删除 Group', async t => {
     description: '描述'
   })
   const res = await authing.authz.deleteGroupBatch([group1._id, group2._id])
-  t.assert(res.success)
-  t.assert(res.requestCount === 2)
-  t.assert(res.deletedCount === 2)
+  t.assert(res.code === 200)
 
   let errcode
   try {
@@ -196,7 +194,7 @@ test('批量删除 Role', async t => {
     role1._id,
     role2._id
   ])
-  t.assert(res.success)
+  t.assert(res.code === 200)
 
   let errcode
   try {
@@ -487,7 +485,7 @@ test('批量查询 Permission', async t => {
 test('删除 Permission', async t => {
   try {
     let res = await authing.authz.deletePermission(permission._id)
-    t.assert(res.status)
+    t.assert(res.code === 200)
 
     let errcode
     try {
@@ -515,7 +513,7 @@ test('批量删除 Permission', async t => {
     permission1._id,
     permission2._id
   ])
-  t.assert(res.success)
+  t.assert(res.code === 200)
 
   let errcode
   try {

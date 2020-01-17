@@ -1,7 +1,7 @@
-mutation DeleteRBACGroupBatch($idList: [String!]!){
-    deleteRBACGroupBatch(idList: $idList){
-        success
-        requestCount
-        deletedCount
-    }
+mutation DeleteRBACGroupBatch($idList: [String!]!) {
+	deleteRBACGroupBatch(idList: $idList) {
+		message
+		code
+		status
+	}
 }

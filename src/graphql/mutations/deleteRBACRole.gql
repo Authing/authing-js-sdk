@@ -1,7 +1,7 @@
-mutation DeleteRBACRole($_id: String!){
-    deleteRBACRole(_id: $_id){
-        message
-        code
-        status
-    }
+mutation DeleteRBACRole($_id: String!) {
+	deleteRBACRole(_id: $_id) {
+		message
+		code
+		status
+	}
 }
