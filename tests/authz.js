@@ -20,6 +20,7 @@ let roleIdList = []
 let user
 let userIdList = []
 let permission = {}
+let permissionIdList = []
 
 // Group 增删改查
 test('创建 Group', async t => {
@@ -692,5 +693,82 @@ test('修改 Permission', async t => {
     t.assert(res.description === "新的描述")
   } catch (err) {
     t.fail(formatError(err))
+  }
+})
+
+test('Role 添加 Permission', async t => {
+
+  permission = await authing.authz.createPermission({
+    name: `权限${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+
+  try {
+    const res = await authing.authz.addPermissionToRole({
+      permissionId: permission._id,
+      roleId: role._id
+    }, {
+      fetchPermissions: true
+    })
+    t.assert(res.code === 200)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+
+})
+
+test('Role 批量添加 Permission', async t => {
+  const permission1 = await authing.authz.createPermission({
+    name: `权限${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+
+  const permission2 = await authing.authz.createPermission({
+    name: `权限${Math.random().toString(36).slice(2)}`,
+    description: '描述'
+  })
+
+  permissionIdList = [permission1._id, permission2._id]
+  try {
+    const res = await authing.authz.addPermissionToRoleBatch({
+      permissionIdList,
+      roleId: role._id
+    }, {
+      fetchPermissions: true
+    })
+    t.assert(res.code === 200)
+    t.assert(res.data.list)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+})
+
+test('Role 删除 Permission', async  t => {
+  try {
+    const res = await authing.authz.removePermissionFromRole({
+      permissionId: permission._id,
+      roleId: role._id
+    }, {
+      fetchPermissions: true
+    })
+    t.assert(res.code === 200)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+})
+
+test('Role 批量删除 Permission', async t => {
+  try {
+    const res = await authing.authz.removePermissionFromRoleBatch({
+      permissionIdList,
+      roleId: role._id
+    }, {
+      fetchPermissions: true
+    })
+    t.assert(res.code === 200)
+    t.assert(res.data.list.length === 0)
+    t.assert(res.data.totalCount === 0)
+  } catch (error) {
+    t.fail(formatError(error))
   }
 })

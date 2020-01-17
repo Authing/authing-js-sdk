@@ -31,6 +31,10 @@ import permission from "./permission"
 import permissionList from "./permissionList"
 import deletePermission from "./deletePermission"
 import deletePermissionBatch from "./deletePermissionBatch"
+import addPermissionToRole from "./addPermissionToRole"
+import addPermissionToRoleBatch from "./addPermissionToRoleBatch"
+import removePermissionFromRole from "./removePermissionFromRole"
+import removePermissionFromRoleBatch from "./removePermissionFromRoleBatch"
 
 const mod = {
 
@@ -81,7 +85,12 @@ const mod = {
   createPermission,
   updatePermission,
   deletePermission,
-  deletePermissionBatch
+  deletePermissionBatch,
+
+  addPermissionToRole,
+  addPermissionToRoleBatch,
+  removePermissionFromRole,
+  removePermissionFromRoleBatch
 }
 
 export default mod
