@@ -535,7 +535,7 @@ test('授予 User Role', async t => {
     roleId: role._id
   })
 
-  t.assert(res.users.totalCount === 1)
+  t.assert(res.code === 200)
 })
 
 test('查询 Role 中包含的 User', async t => {
@@ -556,7 +556,7 @@ test('撤销 User Role', async t => {
       userId: user._id,
       roleId: role._id
     })
-    t.assert(res.users.totalCount === 0)
+    t.assert(res.code === 200)
   } catch (err) {
     t.fail(formatError(err));
   }
@@ -589,7 +589,7 @@ test('批量授予 User Role', async t => {
     roleId: role._id
   })
 
-  t.assert(res.users.totalCount === 2)
+  t.assert(res.code === 200)
 })
 
 test('批量撤销 User Role', async t => {
@@ -598,7 +598,7 @@ test('批量撤销 User Role', async t => {
       userIdList,
       roleId: role._id
     })
-    t.assert(res.users.totalCount === 0)
+    t.assert(res.code === 200)
   } catch (err) {
     t.fail(formatError(err))
   }
