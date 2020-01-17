@@ -893,7 +893,7 @@ test("测试手机号登陆", async t => {
   t.assert(res.phone === phone);
 });
 
-test.only("测试手机号注册", async t => {
+test("测试手机号注册", async t => {
   //验证码需要手动填写
   const validAuth = auth;
   const phone = "13100512747";
@@ -911,3 +911,28 @@ test.only("测试手机号注册", async t => {
   }
   t.assert(res.phone === phone);
 });
+test.only("测试sendOneTimePhoneCode发送验证码", async t => {
+  //验证码需要手动填写
+  const validAuth = auth;
+  const phone = "13100512747";
+  let res = {};
+  try {
+    res = await validAuth.sendOneTimePhoneCode(phone);
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.code === 200);
+});
+test.only("测试sendRegisterPhoneCode发送验证码", async t => {
+  //验证码需要手动填写
+  const validAuth = auth;
+  const phone = "13100512747";
+  let res = {};
+  try {
+    res = await validAuth.sendRegisterPhoneCode(phone);
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.code === 200);
+});
+

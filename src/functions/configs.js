@@ -46,6 +46,8 @@ export default {
     'updateEmail',
     'sendChangeEmailVerifyCode',
     'loginByPhonePassword',
+    'sendOneTimePhoneCode',
+    'sendRegisterPhoneCode',
   ],
   web: [
     '_uploadAvatar',
@@ -89,5 +91,7 @@ export default {
     'updateEmail',
     'sendChangeEmailVerifyCode',
     'loginByPhonePassword',
+    'sendOneTimePhoneCode',
+    'sendRegisterPhoneCode',
   ]
 };
