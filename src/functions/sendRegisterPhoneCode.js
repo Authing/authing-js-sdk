@@ -7,7 +7,7 @@ export function sendRegisterPhoneCode(phone) {
   const url = `${this.opts.host.user.replace(
     "/graphql",
     ""
-  )}/send_register_smscode/${phone}/${this.userPoolId}`;
+  )}/notification/send_register_smscode/${phone}/${this.userPoolId}`;
   return axios.get(url).then(result => {
     if (result.data.code !== 200) {
       throw Error(JSON.stringify(result.data));
