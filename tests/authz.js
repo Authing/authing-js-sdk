@@ -428,7 +428,32 @@ test('Group 添加 User', async t => {
     groupId: group._id,
     userId: user._id
   })
-  t.assert(res.users.totalCount === 1)
+  t.assert(res.code === 200)
+})
+
+test('Group 添加 User - 返回最新用户列表', async t => {
+  user = await authing.register({
+    email: Math.random()
+      .toString(36)
+      .slice(2) + "@authing.cn",
+    password: "123456a"
+  });
+
+  group = await authing.authz.createGroup({
+    name: `管理员${Math.random().toString(36).slice(2)}`,
+    description: "描述信息"
+  })
+
+  const res = await authing.authz.addUserToGroup({
+    groupId: group._id,
+    userId: user._id
+  }, {
+    fetchUsers: true
+  })
+  t.assert(res.code === 200)
+  t.assert(res.data)
+  t.assert(res.data.totalCount)
+  t.assert(res.data.list)
 })
 
 test('Group 查询用户列表', async t => {
@@ -447,7 +472,7 @@ test('Group 删除 User', async t => {
     groupId: group._id,
     userId: user._id
   })
-  t.assert(res.users.totalCount === 0)
+  t.assert(res.code === 200)
 })
 
 test('Group 批量添加 User', async t => {
@@ -470,11 +495,18 @@ test('Group 批量添加 User', async t => {
   })
 
   userIdList = [user1._id, user2._id]
-  const res = await authing.authz.addUserToGroupBatch({
-    groupId: group._id,
-    userIdList
-  })
-  t.assert(res.users.totalCount === 2)
+
+  let res
+  try {
+    res = await authing.authz.addUserToGroupBatch({
+      groupId: group._id,
+      userIdList
+    })
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+
+  t.assert(res.code)
 })
 
 test('Group 批量删除 User', async  t => {
@@ -482,7 +514,7 @@ test('Group 批量删除 User', async  t => {
     groupId: group._id,
     userIdList
   })
-  t.assert(res.users.totalCount === 0)
+  t.assert(res.code === 200)
 })
 
 test('授予 User Role', async t => {
