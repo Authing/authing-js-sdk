@@ -28,55 +28,56 @@ mutation assignRBACRoleToUser($input: AssignUserToRBACRoleInput!){
   let fetchUsers = options && options.fetchUsers
   if (fetchUsers) {
     query = `
-mutation assignRBACRoleToUser($input: AssignUserToRBACRoleInput!){
-      assignRBACRoleToUser(input: $input){
-          _id
-          name
-          description
-          createdAt
-          updatedAt
-          users {
-            totalCount
-            list {
+    mutation assignRBACRoleToUser($input: AssignUserToRBACRoleInput!) {
+      assignRBACRoleToUser(input: $input) {
+        _id
+        name
+        description
+        createdAt
+        updatedAt
+        users {
+          totalCount
+          list {
+            _id
+            unionid
+            email
+            emailVerified
+            username
+            nickname
+            company
+            photo
+            phone
+            browser
+            registerInClient
+            registerMethod
+            oauth
+            token
+            tokenExpiredAt
+            loginsCount
+            lastLogin
+            lastIP
+            signedUp
+            blocked
+            isDeleted
+            userLocation {
               _id
-              unionid
-              email
-              emailVerified
-              username
-              nickname
-              company
-              photo
-              phone
-              browser
-              registerInClient
-              registerMethod
-              oauth
-              token
-              tokenExpiredAt
-              loginsCount
-              lastLogin
-              lastIP
-              signedUp
-              blocked
-              isDeleted
-              userLocation {
+              when
+              where
+            }
+            userLoginHistory {
+              totalCount
+              list {
                 _id
                 when
-                where
-              }
-              userLoginHistory {
-                totalCount
-                list {
-                  _id
-                  when
-                  success
-                  ip
-                  result
-                }
+                success
+                ip
+                result
               }
             }
+          }
+        }
       }
-}
+    }    
     `
   }
   return this.fetchToken.then(() => {

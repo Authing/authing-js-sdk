@@ -22,6 +22,40 @@ let userIdList = []
 let permission = {}
 let permissionIdList = []
 
+
+const createGroup = async (name) => {
+  name = name || `分组${Math.random().toString(36).slice(2)}`
+  return await authing.authz.createGroup({
+    name,
+    description: "描述信息"
+  })
+}
+
+async function createRole(name) {
+  name = name || `角色${Math.random().toString(36).slice(2)}`
+  return await authing.authz.createRole({
+    name,
+    description: '描述'
+  })
+}
+
+async function createPermission(name) {
+  name = name || `权限${Math.random().toString(36).slice(2)}`;
+  return await authing.authz.createPermission({
+    name,
+    description: '描述'
+  })
+}
+
+async function createUser() {
+  return await authing.register({
+    email: Math.random()
+      .toString(36)
+      .slice(2) + "@authing.cn",
+    password: "123456a"
+  });
+}
+
 // Group 增删改查
 test('创建 Group', async t => {
   let res
@@ -771,4 +805,160 @@ test('Role 批量删除 Permission', async t => {
   } catch (error) {
     t.fail(formatError(error))
   }
+})
+
+test('查询群组列表', async t => {
+  const group = await createGroup()
+  const user = await createUser()
+  const res = await authing.authz.addUserToGroup({
+    groupId: group._id,
+    userId: user._id
+  }, {
+    fetchUsers: true
+  })
+  t.assert(res.data.totalCount === 1)
+  t.assert(res.data.list.length === 1)
+
+  try {
+    const res = await authing.userGroupList(user._id)
+    t.assert(res.totalCount === 1)
+    t.assert(res.rawList.length === 1)
+    t.assert(res.list.length === 1)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+})
+
+test('查询角色列表 - 直接授予角色', async t => {
+  const user = await createUser()
+  const role = await createRole()
+
+  try {
+    const res = await authing.authz.assignRoleToUser({
+      userId: user._id,
+      roleId: role._id
+    }, {
+      fetchUsers: true
+    })
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+
+  try {
+    const res = await authing.userRoleList(user._id)
+    t.assert(res.totalCount === 1)
+    t.assert(res.rawList.length === 1)
+    t.assert(res.list.length === 1)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+})
+
+test('查询角色列表 - 通过分组继承角色', async t => {
+  const group = await createGroup()
+  const role = await createRole()
+  const user = await createUser()
+
+  await authing.authz.addRoleToGroup({
+    roleId: role._id,
+    groupId: group._id
+  })
+
+  await authing.authz.addUserToGroup({
+    groupId: group._id,
+    userId: user._id
+  })
+
+  try {
+    const res = await authing.userRoleList(user._id)
+    t.assert(res.totalCount === 1)
+    t.assert(res.rawList.length === 1)
+    t.assert(res.list.length === 1)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+})
+
+test('查询角色列表 - 直接授予 & 通过分组继承', async t => {
+  const group = await createGroup()
+  const role = await createRole()
+  const user = await createUser()
+
+  // 通过分组继承
+  await authing.authz.addRoleToGroup({
+    roleId: role._id,
+    groupId: group._id
+  })
+  await authing.authz.addUserToGroup({
+    groupId: group._id,
+    userId: user._id
+  })
+
+  // 直接授予角色
+  const role2 = await createRole()
+  await authing.authz.assignRoleToUser({
+    roleId: role2._id,
+    userId: user._id
+  })
+
+  try {
+    const res = await authing.userRoleList(user._id)
+    t.assert(res.totalCount === 2)
+    t.assert(res.rawList.length === 2)
+    t.assert(res.list.length === 2)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+})
+
+test('查询权限列表 - 直接赋予用户角色', async t => {
+  const role = await createRole()
+  let permissions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  permissions.forEach(async p => {
+    let permission = await createPermission();
+    const res = await authing.authz.addPermissionToRole({
+      roleId: role._id,
+      permissionId: permission._id
+    })
+  })
+
+  const user = await createUser()
+  await authing.authz.assignRoleToUser({
+    roleId: role._id,
+    userId: user._id
+  })
+
+  const res = await authing.userPermissionList(user._id)
+  t.assert(res.totalCount === 10)
+  t.assert(res.list.length === 10)
+  t.assert(res.rawList.length === 10)
+})
+
+test('查询权限列表 - 将用户加入群组', async t => {
+  const group = await createGroup()
+  const role = await createRole()
+  let permissions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  permissions.forEach(async p => {
+    let permission = await createPermission();
+    await authing.authz.addPermissionToRole({
+      roleId: role._id,
+      permissionId: permission._id
+    })
+  })
+  const user = await createUser()
+
+  await authing.authz.addRoleToGroup({
+    roleId: role._id,
+    groupId: group._id
+  })
+
+  await authing.authz.addUserToGroup({
+    groupId: group._id,
+    userId: user._id
+  })
+
+  const res = await authing.userPermissionList(user._id)
+  t.assert(res.totalCount === 10)
+  t.assert(res.list.length === 10)
+  t.assert(res.rawList.length === 10)
 })

@@ -54,6 +54,11 @@ import updateSuccessRedirectTips from './updateSuccessRedirectTips.js'
 // authz submodule
 import authz from "./authz"
 
+// user submodule
+import userPermissionList from "./user/userPermissionList"
+import userGroupList from "./user/userGroupList"
+import userRoleList from "./user/userRoleList"
+
 // Node & Browser 共用
 let mod = {
   bindOAuth,
@@ -88,6 +93,9 @@ let mod = {
   updatePhone,
   updateEmail,
   sendChangeEmailVerifyCode,
+  userPermissionList,
+  userRoleList,
+  userGroupList
 }
 if (process.env.BUILD_TARGET === 'node') {
   mod = Object.assign(mod, {
