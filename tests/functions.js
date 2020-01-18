@@ -2,12 +2,13 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 const Authing = require("../src/index");
 
-const clientId = "5e1be38ab1599657b6477022";
+const userPoolId = "5e1be38ab1599657b6477022";
 const secret = "62c5ee88764b4584d65aae499fb9a84a";
 
 //线上
 // const secret = 'bb278212d520fc19f169e361179ea690';
-// const clientId = '5c95905578fce5000166f853';
+// const userPoolId = '5c95905578fce5000166f853';
+
 function randomEmail() {
   let rand = Math.random()
     .toString(36)
@@ -16,7 +17,7 @@ function randomEmail() {
   return email;
 }
 let auth = new Authing({
-  userPoolId: clientId,
+  userPoolId: userPoolId,
   secret,
   host: {
     user: "http://localhost:5510/graphql",
@@ -25,11 +26,11 @@ let auth = new Authing({
 });
 test("初始化", async t => {
   let fault = new Authing({
-    userPoolId: clientId,
+    userPoolId,
     secret: "1",
     // host: {
-    //   user: 'http://localhost:5555/graphql',
-    //   oauth: 'http://localhost:5556/graphql'
+    //   user: 'http://localhost:5510/graphql',
+    //   oauth: 'http://localhost:5510/graphql'
     // },
     onInitError: function (err) {
       t.assert(err);
@@ -147,7 +148,7 @@ test("users:queryPermissions 查询用户权限", async t => {
 test("users:queryRoles 查询角色列表", async t => {
   try {
     const validAuth = auth;
-    let roles = await validAuth.queryRoles({ clientId, page: 1, count: 10 });
+    let roles = await validAuth.queryRoles({ userPoolId, page: 1, count: 10 });
     t.assert(Array.isArray(roles.list));
     t.pass();
   } catch (err) {
@@ -218,7 +219,7 @@ test("user:createRole 创建角色组", async t => {
   const validAuth = auth;
   try {
     let res = await validAuth.createRole({
-      clientId,
+      userPoolId,
       name: "myRole",
       descriptions: "ava test role"
     });
@@ -242,7 +243,7 @@ test("user:assignUserToRole 把用户指派到角色组", async t => {
   t.assert(user.email);
   t.assert(user._id);
   let role = await validAuth.createRole({
-    clientId,
+    userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -274,7 +275,7 @@ test("user:removeUserFromRole 把用户从角色组移除", async t => {
   t.assert(user.email);
   t.assert(user._id);
   let role = await validAuth.createRole({
-    clientId,
+    userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -396,7 +397,7 @@ test("user:checkLoginStatus 检查登录状态", async t => {
   t.assert(res.message === "已登录");
   t.assert(res.token.data.email);
   t.assert(res.token.data.id);
-  t.assert(res.token.data.clientId);
+  t.assert(res.token.data.userPoolId);
   t.assert(res.token.iat);
   t.assert(res.token.exp);
 });
@@ -417,7 +418,7 @@ test("user:decodeToken 解析 jwt token", async t => {
 
 test("oauth:genQRCode 生成 QRCode", async t => {
   const validAuth = auth;
-  let res = await validAuth.genQRCode(clientId);
+  let res = await validAuth.genQRCode(userPoolId);
   if (
     res.data.code === 500 &&
     res.data.message ===
@@ -570,22 +571,25 @@ test("user:update 不能直接修改手机号、邮箱", async t => {
     password: "123456a"
   });
   let loggedIn = await validAuth.login({ email, password: "123456a" });
-  let newEmail = randomEmail()
+  let newEmail = randomEmail();
 
-  try{
+  try {
     let updated = await validAuth.update({
       _id: loggedIn._id,
       email: newEmail
     });
-  }catch(error){
-    t.assert(error.message.message === "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。")
+  } catch (error) {
+    t.assert(
+      error.message.message ===
+      "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。"
+    );
   }
-})
+});
 
 test("user:updateRolePermissions 修改角色权限", async t => {
   const validAuth = auth;
   let res = await validAuth.createRole({
-    clientId,
+    userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -604,7 +608,7 @@ test("user:updateRolePermissions 修改角色权限", async t => {
 //   const validAuth = auth;
 
 //   let res = await validAuth.revokeAuthedApp({
-//     "userPoolId": clientId,
+//     "userPoolId": userPoolId,
 //     "userId": "5d765d4013d73a5e90b7857a",
 //     "appId": "5d5a8a7bbc7275af2cb71920"
 //   })
@@ -615,7 +619,7 @@ test("user:updateRolePermissions 修改角色权限", async t => {
 //   const validAuth = auth;
 
 //   let res = await validAuth.getAuthedAppList({
-//     clientId,
+//     userPoolId,
 //     "userId": "5d765d4013d73a5e90b7857a",
 //     "appId": "5d5a8a7bbc7275af2cb71920"
 //   })
@@ -637,7 +641,7 @@ test("用户和认证服务预检函数", async t => {
 
 test("根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
   let auth = new Authing({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     secret,
     // host: {
     //   user: 'http://localhost:5555/graphql',
@@ -653,7 +657,7 @@ test("根据参数决定是否进行用户和认证服务预检和 cdn 预检", 
   t.is(service[1].data.ok, 1);
   t.is(cdn, "ok");
   auth = new Authing({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     secret,
     // host: {
     //   user: 'http://localhost:5555/graphql',
@@ -670,7 +674,7 @@ test("根据参数决定是否进行用户和认证服务预检和 cdn 预检", 
 
   // 两个 preflight 都打开
   auth = new Authing({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     secret,
     // host: {
     //   user: 'http://localhost:5555/graphql',
@@ -728,7 +732,7 @@ test("根据 id 批量查询多个用户", async t => {
   } catch (err) {
     console.log(JSON.stringify(err));
   }
-  t.assert(users.list.every(v => v._id && v.registerInClient === clientId));
+  t.assert(users.list.every(v => v._id && v.registerInClient === userPoolId));
 });
 
 test("变更用户 MFA 状态", async t => {
@@ -740,7 +744,7 @@ test("变更用户 MFA 状态", async t => {
   });
   let logined = await validAuth.login({ email, password: "123456a" });
   res = await validAuth.changeMFA({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     userId: res._id,
     enable: true
   });
@@ -759,15 +763,15 @@ test("查询用户 MFA 状态", async t => {
     password: "123456a"
   });
   let loggedIn = await validAuth.login({ email, password: "123456a" });
-  let mfa = await validAuth.queryMFA({ userPoolId: clientId, userId: res._id });
+  let mfa = await validAuth.queryMFA({ userPoolId: userPoolId, userId: res._id });
   t.is(mfa, null);
   res = await validAuth.changeMFA({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     userId: res._id,
     enable: true
   });
   mfa = await validAuth.queryMFA({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     userId: loggedIn._id
   });
   t.assert(res._id);
@@ -779,7 +783,7 @@ test("查询用户 MFA 状态", async t => {
 
 test("检查微信二维码是否被扫描", async t => {
   const validAuth = auth;
-  let res = await validAuth.genQRCode(clientId);
+  let res = await validAuth.genQRCode(userPoolId);
   let status = await validAuth.checkQR();
   t.is(status.data.data.code, 500);
   t.is(status.data.data.message, "have not been authed");
@@ -788,7 +792,7 @@ test("检查微信二维码是否被扫描", async t => {
 
 test("获取用户池基础设置", async t => {
   const validAuth = auth;
-  let res = await validAuth.getUserPoolSettings(clientId);
+  let res = await validAuth.getUserPoolSettings(userPoolId);
   t.assert(res.hasOwnProperty("name"));
   t.assert(res.hasOwnProperty("logo"));
   t.assert(res.hasOwnProperty("descriptions"));
@@ -820,7 +824,7 @@ test("user:查询某个角色下的所有用户", async t => {
   t.assert(user.email);
   t.assert(user._id);
   let role = await validAuth.createRole({
-    clientId,
+    userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -842,7 +846,7 @@ test("user:查询某个角色下的所有用户", async t => {
     roleId: role._id
   });
   t.assert(Array.isArray(res2.list));
-  t.assert(res2.list[0]._id)
+  t.assert(res2.list[0]._id);
 });
 
 test("has axios", async t => {
@@ -850,28 +854,86 @@ test("has axios", async t => {
   t.truthy(validAuth._axios);
 });
 
-test('发送修改邮箱邮件', async t => {
+test("发送修改邮箱邮件", async t => {
   const validAuth = auth;
   const res = await validAuth.sendChangeEmailVerifyCode({
-    email: 'cdbfhoergnrexxjk@qq.com' // 当前邮箱或者没有注册过的邮箱
-  })
-  t.assert(res.code === 200)
-})
+    email: "cdbfhoergnrexxjk@qq.com" // 当前邮箱或者没有注册过的邮箱
+  });
+  t.assert(res.code === 200);
+});
 
-test('发送修改邮箱邮件 - 邮箱已绑定，请换一个吧', async t => {
+test("发送修改邮箱邮件 - 邮箱已绑定，请换一个吧", async t => {
   const validAuth = auth;
   const res = await validAuth.sendChangeEmailVerifyCode({
-    email: 'ax6coi4ytmk@test.com' // 已经被其他人注册过的邮箱
-  })
-  t.assert(res.code === 200)
-})
+    email: "ax6coi4ytmk@test.com" // 已经被其他人注册过的邮箱
+  });
+  t.assert(res.code === 200);
+});
 
-test('修改邮箱', async t => {
+test("修改邮箱", async t => {
   const validAuth = auth;
-  const newEmail = "cdbfhorexxjk@qq.com"
+  const newEmail = "cdbfhorexxjk@qq.com";
   const res = await validAuth.updateEmail({
     email: newEmail,
     emailCode: "2815"
-  })
-  t.assert(res.email === newEmail)
-})
+  });
+  t.assert(res.email === newEmail);
+});
+test("测试手机号登陆", async t => {
+  const validAuth = auth;
+  const phone = "13100512747";
+  let res = {};
+  try {
+    res = await validAuth.loginByPhonePassword({
+      phone: phone,
+      password: "123456"
+    });
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.phone === phone);
+});
+
+test("测试手机号注册", async t => {
+  //验证码需要手动填写
+  const validAuth = auth;
+  const phone = "13100512747";
+  const password = "123456";
+  const phoneCode = "1234";
+  let res = {};
+  try {
+    res = await validAuth.register({
+      phone: phone,
+      phoneCode: phoneCode,
+      password: password
+    });
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.phone === phone);
+});
+test("测试sendOneTimePhoneCode发送验证码", async t => {
+  //验证码需要手动填写
+  const validAuth = auth;
+  const phone = "13100512747";
+  let res = {};
+  try {
+    res = await validAuth.sendOneTimePhoneCode(phone);
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.code === 200);
+});
+test("测试sendRegisterPhoneCode发送验证码", async t => {
+  //验证码需要手动填写
+  const validAuth = auth;
+  const phone = "13100512747";
+  let res = {};
+  try {
+    res = await validAuth.sendRegisterPhoneCode(phone);
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.code === 200);
+});
+

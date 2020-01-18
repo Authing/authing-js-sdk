@@ -50,6 +50,9 @@ import updateFailedTips from './updateFailedTips.js'
 import updateRetryTips from './updateRetryTips.js'
 import updateSuccessTips from './updateSuccessTips.js'
 import updateSuccessRedirectTips from './updateSuccessRedirectTips.js'
+import loginByPhonePassword from "./loginByPhonePassword"
+import sendOneTimePhoneCode from "./sendOneTimePhoneCode"
+import sendRegisterPhoneCode from "./sendRegisterPhoneCode"
 
 // authz submodule
 import authz from "./authz"
@@ -95,8 +98,12 @@ let mod = {
   sendChangeEmailVerifyCode,
   userPermissionList,
   userRoleList,
-  userGroupList
+  userGroupList,
+  loginByPhonePassword,
+  sendOneTimePhoneCode,
+  sendRegisterPhoneCode
 }
+
 if (process.env.BUILD_TARGET === 'node') {
   mod = Object.assign(mod, {
     createRole,
