@@ -1,7 +1,0 @@
-query ReadSAMLSPList($clientId: String!){
-    ReadSAMLSPList(clientId: $clientId){
-        providerName
-        url
-        logo
-    }
-}

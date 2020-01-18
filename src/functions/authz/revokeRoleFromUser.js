@@ -1,4 +1,3 @@
-import mutations from "../../graphql/mutations"
 import checkInput from "../../utils/checkInput"
 
 export default function (input, options) {

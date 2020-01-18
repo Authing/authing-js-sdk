@@ -1,5 +1,0 @@
-query queryUserPoolCommonInfo($userPoolId: String!){
-    queryUserPoolCommonInfo(userPoolId: $userPoolId){
-        _id
-    }
-}

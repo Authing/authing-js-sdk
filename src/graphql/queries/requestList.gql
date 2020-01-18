@@ -1,5 +1,0 @@
-query requestList($page: Int, $count: Int){
-    requestList(page: $page, count: $count){
-        totalCount
-    }
-}

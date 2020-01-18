@@ -1,8 +1,0 @@
-mutation removeSuperAdminUser($_id: String!, $username: String!){
-    removeSuperAdminUser(_id: $_id, username: $username){
-        email
-        username
-        _id
-        upgrade
-    }
-}

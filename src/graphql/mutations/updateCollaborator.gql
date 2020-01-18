@@ -1,6 +1,0 @@
-mutation updateCollaborator($collaborationId: String!, $permissionDescriptors: [PermissionDescriptorsInputType]!){
-    updateCollaborator(collaborationId: $collaborationId, permissionDescriptors: $permissionDescriptors){
-        _id
-        createdAt
-    }
-}

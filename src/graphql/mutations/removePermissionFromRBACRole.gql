@@ -1,8 +1,0 @@
-mutation removePermissionFromRBACRole($input: RemovePermissionFromRBACRoleInput!){
-    removePermissionFromRBACRole(input: $input){
-        _id
-        userPoolId
-        name
-        description
-    }
-}

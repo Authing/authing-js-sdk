@@ -1,15 +1,21 @@
-import mutations from "../../graphql/mutations"
-
 export default function (idList) {
 
   if (!idList instanceof Array) {
     throw "idList must be an array!"
   }
-
+  const query = `
+  mutation DeleteRBACRoleBatch($idList: [String!]!) {
+    deleteRBACRoleBatch(idList: $idList) {
+      message
+      code
+      status
+    }
+  }  
+  `
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: "DeleteRBACRoleBatch",
-      query: mutations.deleteRBACRoleBatch,
+      query,
       variables: {
         idList
       }

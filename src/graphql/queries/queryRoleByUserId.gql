@@ -1,5 +1,0 @@
-query queryRoleByUserId($user: String!, $client: String!){
-    queryRoleByUserId(user: $user, client: $client){
-        totalCount
-    }
-}

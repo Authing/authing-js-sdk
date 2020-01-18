@@ -1,5 +1,0 @@
-query getCustomMFA($userIdInMiniLogin: String!, $page: Int, $count: Int){
-    getCustomMFA(userIdInMiniLogin: $userIdInMiniLogin, page: $page, count: $count){
-        total
-    }
-}

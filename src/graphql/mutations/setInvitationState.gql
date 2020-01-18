@@ -1,8 +1,0 @@
-mutation setInvitationState($client: String!, $enablePhone: Boolean){
-    setInvitationState(client: $client, enablePhone: $enablePhone){
-        client
-        enablePhone
-        createdAt
-        updatedAt
-    }
-}

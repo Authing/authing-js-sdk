@@ -1,8 +1,0 @@
-query ReadEmailProviderWithClient{
-    ReadEmailProviderWithClient{
-        _id
-        user
-        client
-        status
-    }
-}

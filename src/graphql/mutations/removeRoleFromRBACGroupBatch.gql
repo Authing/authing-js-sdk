@@ -1,8 +1,0 @@
-mutation RemoveRoleFromRBACGroupBatch($input: RemoveRoleFromRBACGroupBatchInput!){
-    removeRoleFromRBACGroupBatch(input: $input){
-        _id
-        userPoolId
-        name
-        description
-    }
-}

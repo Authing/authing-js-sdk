@@ -1,6 +1,0 @@
-mutation addCollaborator($userPoolId: String!, $collaboratorUserId: String!, $permissionDescriptors: [PermissionDescriptorsInputType]!){
-    addCollaborator(userPoolId: $userPoolId, collaboratorUserId: $collaboratorUserId, permissionDescriptors: $permissionDescriptors){
-        _id
-        createdAt
-    }
-}

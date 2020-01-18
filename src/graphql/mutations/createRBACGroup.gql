@@ -1,9 +1,0 @@
-mutation CreateRBACGroup($input: CreateRBACGroupInput!) {
-	createRBACGroup(input: $input) {
-		_id
-		name
-		description
-		createdAt
-		updatedAt
-	}
-}

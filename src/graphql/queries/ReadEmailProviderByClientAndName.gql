@@ -1,8 +1,0 @@
-query ReadEmailProviderByClientAndName($clientId: String){
-    ReadEmailProviderByClientAndName(clientId: $clientId){
-        _id
-        user
-        client
-        status
-    }
-}

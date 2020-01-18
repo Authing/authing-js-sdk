@@ -1,9 +1,0 @@
-query userClientTypes{
-    userClientTypes{
-        _id
-        name
-        description
-        image
-        example
-    }
-}

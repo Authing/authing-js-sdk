@@ -1,5 +1,0 @@
-query wxQRCodeLog($page: Int, $count: Int, $clientId: String, $sortBy: String){
-    wxQRCodeLog(page: $page, count: $count, clientId: $clientId, sortBy: $sortBy){
-        totalCount
-    }
-}

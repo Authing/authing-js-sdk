@@ -1,6 +1,0 @@
-query queryCollaborationByUserPoolIdAndUserId($userId: String!, $userPoolId: String!){
-    queryCollaborationByUserPoolIdAndUserId(userId: $userId, userPoolId: $userPoolId){
-        _id
-        createdAt
-    }
-}

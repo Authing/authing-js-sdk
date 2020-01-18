@@ -1,5 +1,0 @@
-query searchUser($type: String!, $value: String!, $registerInClient: String!, $page: Int, $count: Int){
-    searchUser(type: $type, value: $value, registerInClient: $registerInClient, page: $page, count: $count){
-        totalCount
-    }
-}

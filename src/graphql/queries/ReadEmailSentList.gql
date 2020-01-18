@@ -1,5 +1,0 @@
-query ReadEmailSentList($page: Int, $count: Int, $sortBy: String){
-    ReadEmailSentList(page: $page, count: $count, sortBy: $sortBy){
-        totalCount
-    }
-}

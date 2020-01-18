@@ -1,7 +1,0 @@
-mutation ContinuePay($order: String!){
-    ContinuePay(order: $order){
-        code
-        url
-        charge
-    }
-}

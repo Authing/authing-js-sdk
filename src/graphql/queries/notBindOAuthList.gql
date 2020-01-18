@@ -1,9 +1,0 @@
-query notBindOAuthList($client: String, $user: String){
-    notBindOAuthList(client: $client, user: $user){
-        type
-        oAuthUrl
-        image
-        name
-        binded
-    }
-}

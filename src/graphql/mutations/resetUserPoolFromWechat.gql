@@ -1,5 +1,0 @@
-mutation resetUserPoolFromWechat($client: String!, $registerMethod: String!, $limit: Int!){
-    resetUserPoolFromWechat(client: $client, registerMethod: $registerMethod, limit: $limit){
-        totalCount
-    }
-}

@@ -1,8 +1,0 @@
-query ReadUserPricing($userId: String, $clientId: String){
-    ReadUserPricing(userId: $userId, clientId: $clientId){
-        user
-        client
-        isFree
-        freeNumber
-    }
-}

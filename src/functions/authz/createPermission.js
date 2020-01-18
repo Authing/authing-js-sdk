@@ -1,4 +1,3 @@
-import mutations from "../../graphql/mutations"
 import checkInput from "../../utils/checkInput"
 
 export default function (input) {
@@ -12,11 +11,23 @@ export default function (input) {
       type: String
     }
   ])
+  const query = `
+  mutation createRBACPermission($input: CreateRBACPermissionInput!){
+    createRBACPermission(input: $input){
+        _id
+        name
+        userPoolId
+        createdAt
+        updatedAt
+        description
+    }
+}
+  `
   input.userPoolId = this.userPoolId;
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: "createRBACPermission",
-      query: mutations.createRBACPermission,
+      query,
       variables: {
         input: input
       }

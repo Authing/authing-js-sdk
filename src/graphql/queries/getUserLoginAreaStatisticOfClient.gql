@@ -1,3 +1,0 @@
-query getUserLoginAreaStatisticOfClient($userPool: String!, $start: String, $end: String){
-    getUserLoginAreaStatisticOfClient(userPool: $userPool, start: $start, end: $end)
-}

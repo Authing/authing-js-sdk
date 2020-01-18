@@ -1,8 +1,0 @@
-mutation addPermissionToRBACRole($input: AddPermissionToRBACRoleInput!){
-    addPermissionToRBACRole(input: $input){
-        _id
-        userPoolId
-        name
-        description
-    }
-}

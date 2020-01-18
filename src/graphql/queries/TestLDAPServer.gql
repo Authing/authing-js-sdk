@@ -1,5 +1,0 @@
-query TestLDAPServer($name: String!, $clientId: String!, $userId: String!, $ldapLink: String!, $baseDN: String!, $searchStandard: String!, $username: String!, $password: String!, $emailPostfix: String, $description: String, $enabled: Boolean){
-    TestLDAPServer(name: $name, clientId: $clientId, userId: $userId, ldapLink: $ldapLink, baseDN: $baseDN, searchStandard: $searchStandard, username: $username, password: $password, emailPostfix: $emailPostfix, description: $description, enabled: $enabled){
-        result
-    }
-}

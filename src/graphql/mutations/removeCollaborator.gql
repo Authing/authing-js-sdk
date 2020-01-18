@@ -1,6 +1,0 @@
-mutation removeCollaborator($collaborationId: String!){
-    removeCollaborator(collaborationId: $collaborationId){
-        _id
-        createdAt
-    }
-}

@@ -1,3 +1,0 @@
-query PreviewEmailByType($type: String!, $client: String!, $meta_data: String){
-    PreviewEmailByType(type: $type, client: $client, meta_data: $meta_data)
-}

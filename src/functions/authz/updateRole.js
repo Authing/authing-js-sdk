@@ -1,4 +1,3 @@
-import mutations from "../../graphql/mutations"
 import checkInput from "../../utils/checkInput"
 
 export default function (input) {
@@ -12,10 +11,21 @@ export default function (input) {
       type: String
     }
   ])
+  const query = `
+  mutation UpdateRBACRole($input: UpdateRBACRoleInput!){
+    updateRBACRole(input: $input){
+        _id
+        name
+        description
+        createdAt
+        updatedAt
+    }
+}
+  `
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: "UpdateRBACRole",
-      query: mutations.updateRBACRole,
+      query,
       variables: {
         input: input
       }

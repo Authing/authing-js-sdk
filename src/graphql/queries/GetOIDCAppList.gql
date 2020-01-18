@@ -1,5 +1,0 @@
-query GetOIDCAppList($clientId: String, $page: Int, $count: Int){
-    GetOIDCAppList(clientId: $clientId, page: $page, count: $count){
-        totalCount
-    }
-}

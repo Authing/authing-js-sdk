@@ -41,7 +41,7 @@
 		"webpack-cli": "^3.3.9"
 	},
 	"ava": {
-		"files": [ "tests/functions.js", "tests/authz.js" ],
+		"files": [ "tests/authz.js" ],
 		"require": [ "@babel/register", "@babel/polyfill" ],
 		"babel": {
 			"testOptions": {

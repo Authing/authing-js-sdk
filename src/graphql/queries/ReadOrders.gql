@@ -1,5 +1,0 @@
-query ReadOrders($user: String, $page: Int, $count: Int){
-    ReadOrders(user: $user, page: $page, count: $count){
-        totalCount
-    }
-}

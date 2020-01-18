@@ -1,9 +1,0 @@
-mutation UpdateRBACGroup($input: UpdateRBACGroupInput!) {
-	updateRBACGroup(input: $input) {
-		_id
-		name
-		description
-		createdAt
-		updatedAt
-	}
-}
