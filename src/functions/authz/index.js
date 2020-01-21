@@ -25,6 +25,7 @@ import assignRoleToUserBatch from "./assignRoleToUserBatch"
 import revokeRoleFromUser from "./revokeRoleFromUser"
 import revokeRoleFromUserBatch from "./revokeRoleFromUserBatch"
 import roleUserList from "./roleUserList"
+import rolePermissionList from "./rolePermissionList"
 import createPermission from "./createPermission"
 import updatePermission from "./updatePermission"
 import permission from "./permission"
@@ -78,6 +79,7 @@ const mod = {
 
   // Role & User
   roleUserList,
+  rolePermissionList,
 
   // Permission
   permission,
