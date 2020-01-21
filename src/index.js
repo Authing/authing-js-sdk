@@ -1,6 +1,7 @@
 const TokenManager = require("./TokenManager").default;
 const { GraphQLClient } = require("./GraphQL");
 const axios = require("axios");
+const configs = require("./configs").default;
 const mods = require("./functions").default;
 // sdk 的所有参数
 const defaultOpts = {
@@ -21,6 +22,13 @@ const defaultOpts = {
   accessToken: "",
   userPoolId: "",
   secret: "",
+  passwordEncPublicKey: `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
+5KIofVthEopwrXFkp8OCeocaTHt9ICjTT2QeJh6cZaDaArfZ873GPUn00eOIZ7Ae
++TiA2BKHbCvloW3w5Lnqm70iSsUi5Fmu9/2+68GZRH9L7Mlh8cFksCicW2Y2W2uM
+GKl64GDcIq3au+aqJQIDAQAB
+-----END PUBLIC KEY-----
+`,
   onInitError: function(err) {
     throw err;
   }
@@ -32,6 +40,8 @@ class Authing {
       value: axios
     });
     this.opts = Object.assign({}, defaultOpts, options);
+    // 依赖关系：login，register，changePassword，loginByPhonePassword -> _encryption 函数 -> configs.openSSLSecret -> opts.passwordEncPublicKey，
+    configs.openSSLSecret = this.opts.passwordEncPublicKey;
     this.version = process.env.VERSION;
     this.UserServiceGql = new GraphQLClient({
       baseURL: this.opts.host.user,
@@ -103,8 +113,8 @@ class Authing {
       })
         .then(res => {
           if (!res.accessToken) {
-            console.log('--getClientWhenSdkInit res--')
-            console.log(res)
+            console.log("--getClientWhenSdkInit res--");
+            console.log(res);
             throw Error("网络获取 owner token 失败");
           }
           TokenManager.getInstance().setToken(res.accessToken);

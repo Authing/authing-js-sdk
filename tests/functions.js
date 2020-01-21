@@ -6,8 +6,8 @@ const Authing = require("../dist/authing-js-sdk-node");
 // const secret = "82f4c093e345d79c416ec3da6854a453";
 
 //线上
-const secret = 'bb278212d520fc19f169e361179ea690';
-const clientId = '5c95905578fce5000166f853';
+const secret = "bb278212d520fc19f169e361179ea690";
+const clientId = "5c95905578fce5000166f853";
 function randomEmail() {
   let rand = Math.random()
     .toString(36)
@@ -17,11 +17,11 @@ function randomEmail() {
 }
 let auth = new Authing({
   userPoolId: clientId,
-  secret,
-  host: {
-    user: "http://localhost:5510/graphql",
-    oauth: "http://localhost:5510/graphql"
-  }
+  secret
+  // host: {
+  //   user: "http://localhost:5510/graphql",
+  //   oauth: "http://localhost:5510/graphql"
+  // }
 });
 test("初始化", async t => {
   let fault = new Authing({
@@ -31,7 +31,7 @@ test("初始化", async t => {
     //   user: 'http://localhost:5510/graphql',
     //   oauth: 'http://localhost:5510/graphql'
     // },
-    onInitError: function (err) {
+    onInitError: function(err) {
       t.assert(err);
     }
   });
@@ -911,7 +911,7 @@ test("测试手机号注册", async t => {
   }
   t.assert(res.phone === phone);
 });
-test.only("测试sendOneTimePhoneCode发送验证码", async t => {
+test("测试sendOneTimePhoneCode发送验证码", async t => {
   //验证码需要手动填写
   const validAuth = auth;
   const phone = "13100512747";
@@ -923,7 +923,7 @@ test.only("测试sendOneTimePhoneCode发送验证码", async t => {
   }
   t.assert(res.code === 200);
 });
-test.only("测试sendRegisterPhoneCode发送验证码", async t => {
+test("测试sendRegisterPhoneCode发送验证码", async t => {
   //验证码需要手动填写
   const validAuth = auth;
   const phone = "13100512747";
@@ -936,3 +936,55 @@ test.only("测试sendRegisterPhoneCode发送验证码", async t => {
   t.assert(res.code === 200);
 });
 
+test.only("测试密码加密公钥参数", async t => {
+  // 测试正确的加密公钥
+  let validAuth = new Authing({
+    userPoolId: clientId,
+    secret,
+    // host: {
+    //   user: "http://localhost:5510/graphql",
+    //   oauth: "http://localhost:5510/graphql"
+    // }
+    passwordEncPublicKey: `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
+5KIofVthEopwrXFkp8OCeocaTHt9ICjTT2QeJh6cZaDaArfZ873GPUn00eOIZ7Ae
++TiA2BKHbCvloW3w5Lnqm70iSsUi5Fmu9/2+68GZRH9L7Mlh8cFksCicW2Y2W2uM
+GKl64GDcIq3au+aqJQIDAQAB
+-----END PUBLIC KEY-----`
+  });
+  let email = randomEmail();
+  let res = await validAuth.register({
+    email,
+    password: "123456a"
+  });
+  t.assert(res.email);
+  // 测试错误的加密公钥
+  validAuth = new Authing({
+    userPoolId: clientId,
+    secret,
+    // host: {
+    //   user: "http://localhost:5510/graphql",
+    //   oauth: "http://localhost:5510/graphql"
+    // }
+    passwordEncPublicKey: `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
+5KIofVthEopwrXFkp8OCeocaTHt9ICjTT2QeJh6cZaDaArfZ873GPUn00eOIZ7Ae
++TiA2BKHbCvloW3w5Lnqm70iSsUi5Fmu9/2+68GZRH9L7Mlh8cFksCicW2Y2W2uM
+GKl64GDcIq3au+aqJQIDA123
+-----END PUBLIC KEY-----`
+  });
+  email = randomEmail();
+  try {
+    res = await validAuth.register({
+      email,
+      password: "123456a"
+    });
+  } catch (err) {
+    if (err.message.code === 2016) {
+      t.assert(err.message.message === "密码解密出错");
+      t.pass();
+    } else {
+      t.fail();
+    }
+  }
+});
