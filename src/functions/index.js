@@ -56,6 +56,7 @@ import sendRegisterPhoneCode from "./sendRegisterPhoneCode"
 
 // authz submodule
 import authz from "./authz"
+import OrgModel from "./org"
 
 // user submodule
 import userPermissionList from "./user/userPermissionList"
@@ -118,7 +119,8 @@ if (process.env.BUILD_TARGET === 'node') {
     updateRolePermissions,
     sendActivationEmail,
     getUsersByRole,
-    authz
+    authz,
+    OrgModel
   })
 } else if (process.env.BUILD_TARGET === 'web') {
   mod = Object.assign(mod, {

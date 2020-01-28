@@ -21,7 +21,7 @@ const defaultOpts = {
   accessToken: "",
   userPoolId: "",
   secret: "",
-  onInitError: function(err) {
+  onInitError: function (err) {
     throw err;
   }
 };
@@ -120,9 +120,15 @@ class Authing {
     // 预检 oauth users 服务 或 cdn
     this.checkPreflight();
 
-    if(this.authz){
+    if (this.authz) {
       Object.keys(this.authz).forEach(item => {
         this.authz[item] = this.authz[item].bind(this)
+      })
+    }
+
+    if (this.OrgModel) {
+      Object.keys(this.OrgModel).forEach(item => {
+        this.OrgModel[item] = this.OrgModel[item].bind(this)
       })
     }
   }
