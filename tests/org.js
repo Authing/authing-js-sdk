@@ -47,8 +47,32 @@ async function createUser() {
   });
 }
 
-test('SDK 结构', async t => {
-  const org = authing.OrgModel
-  org.all()
-  t.assert(true)
+let org
+
+test('创建 Org', async t => {
+  const group = await createGroup()
+  try {
+    org = await authing.OrgModel.createOrg({
+      rootId: group._id
+    })
+    t.assert(org._id)
+    t.assert(org.nodes.length)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+})
+
+test('添加 Org Node', async t => {
+  const group = await createGroup()
+  try {
+    org = await authing.OrgModel.addNode({
+      orgId: org._id,
+      parentId: org.nodes[0]._id,
+      groupId: group._id
+    })
+    t.assert(org._id)
+    t.assert(org.nodes.length === 2)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
 })

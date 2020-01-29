@@ -1,5 +1,9 @@
 import all from "./all"
+import createOrg from "./createOrg"
+import addNode from "./addNode"
 
 export default {
-  all
+  all,
+  createOrg,
+  addNode
 }
