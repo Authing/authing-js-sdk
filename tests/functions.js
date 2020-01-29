@@ -911,10 +911,10 @@ test("测试手机号注册", async t => {
   }
   t.assert(res.phone === phone);
 });
-test.only("测试sendOneTimePhoneCode发送验证码", async t => {
+test("测试sendOneTimePhoneCode发送验证码", async t => {
   //验证码需要手动填写
   const validAuth = auth;
-  const phone = "13100512747";
+  const phone = "13100512745";
   let res = {};
   try {
     res = await validAuth.sendOneTimePhoneCode(phone);
@@ -923,7 +923,7 @@ test.only("测试sendOneTimePhoneCode发送验证码", async t => {
   }
   t.assert(res.code === 200);
 });
-test.only("测试sendRegisterPhoneCode发送验证码", async t => {
+test("测试sendRegisterPhoneCode发送验证码", async t => {
   //验证码需要手动填写
   const validAuth = auth;
   const phone = "13100512747";
@@ -936,3 +936,13 @@ test.only("测试sendRegisterPhoneCode发送验证码", async t => {
   t.assert(res.code === 200);
 });
 
+test('测试casLogout',async t =>{
+  const validAuth = auth;
+  let res = {}
+  try {
+    res = await validAuth.casLogout();
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.code === 200);
+})

@@ -48,6 +48,7 @@ export default {
     'loginByPhonePassword',
     'sendOneTimePhoneCode',
     'sendRegisterPhoneCode',
+    'casLogout',
   ],
   web: [
     '_uploadAvatar',
@@ -93,5 +94,6 @@ export default {
     'loginByPhonePassword',
     'sendOneTimePhoneCode',
     'sendRegisterPhoneCode',
+    'casLogout',
   ]
 };
