@@ -1,4 +1,5 @@
 import test from "ava";
+import { inspect } from "util"
 import { formatError } from "../src/utils/formatError";
 
 const Authing = require("../src/index");
@@ -62,17 +63,33 @@ test('创建 Org', async t => {
   }
 })
 
-test('添加 Org Node', async t => {
+test('添加 Node', async t => {
   const group = await createGroup()
   try {
-    org = await authing.OrgModel.addNode({
+    const newOrg = await authing.OrgModel.addNode({
       orgId: org._id,
       parentId: org.nodes[0]._id,
       groupId: group._id
     })
-    t.assert(org._id)
-    t.assert(org.nodes.length === 2)
+    t.assert(newOrg._id)
+    t.assert(newOrg.nodes.length === 2)
   } catch (error) {
     t.fail(formatError(error))
+  }
+
+  const group2 = await createGroup()
+  await authing.OrgModel.addNode({
+    orgId: org._id,
+    parentId: org.nodes[0]._id,
+    groupId: group2._id
+  })
+})
+
+test('查询 Org', async t => {
+  try {
+    org = await authing.OrgModel.org(org._id)
+    t.assert(org.nodes.length === 3)
+  } catch (err) {
+    t.fail(formatError(err))
   }
 })
