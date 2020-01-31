@@ -126,9 +126,9 @@ class Authing {
       })
     }
 
-    if (this.OrgModel) {
-      Object.keys(this.OrgModel).forEach(item => {
-        this.OrgModel[item] = this.OrgModel[item].bind(this)
+    if (this.org) {
+      Object.keys(this.org).forEach(item => {
+        this.org[item] = this.org[item].bind(this)
       })
     }
   }

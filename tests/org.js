@@ -54,7 +54,7 @@ let group
 test('创建 Org', async t => {
   const group = await createGroup()
   try {
-    org = await authing.OrgModel.createOrg({
+    org = await authing.org.createOrg({
       rootId: group._id
     })
     t.assert(org._id)
@@ -67,7 +67,7 @@ test('创建 Org', async t => {
 test('添加 Node', async t => {
   group = await createGroup()
   try {
-    const newOrg = await authing.OrgModel.addNode({
+    const newOrg = await authing.org.addNode({
       orgId: org._id,
       parentGroupId: org.nodes[0]._id,
       groupId: group._id
@@ -79,7 +79,7 @@ test('添加 Node', async t => {
   }
 
   const group2 = await createGroup()
-  await authing.OrgModel.addNode({
+  await authing.org.addNode({
     orgId: org._id,
     parentGroupId: org.nodes[0]._id,
     groupId: group2._id
@@ -88,7 +88,7 @@ test('添加 Node', async t => {
 
 test('查询 Org', async t => {
   try {
-    org = await authing.OrgModel.findById(org._id)
+    org = await authing.org.findById(org._id)
     t.assert(org.nodes.length === 3)
   } catch (err) {
     t.fail(formatError(err))
@@ -96,7 +96,7 @@ test('查询 Org', async t => {
 })
 
 test('删除 Node', async t => {
-  org = await authing.OrgModel.removeNode({
+  org = await authing.org.removeNode({
     orgId: org._id,
     groupId: group._id
   })
@@ -106,7 +106,7 @@ test('删除 Node', async t => {
 
 test('删除 Org', async t => {
   try {
-    const res = await authing.OrgModel.dropById(org._id)
+    const res = await authing.org.dropById(org._id)
     t.assert(res.code === 200)
   } catch (error) {
     t.fail(formatError(error))
@@ -115,7 +115,7 @@ test('删除 Org', async t => {
 
 test('查询 Org - 不存在', async t => {
   try {
-    org = await authing.OrgModel.findById(org._id)
+    org = await authing.org.findById(org._id)
     t.assert(org._id)
   } catch (err) {
     t.assert(err.message.code === 3901)
