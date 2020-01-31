@@ -2,12 +2,12 @@ import all from "./all"
 import createOrg from "./createOrg"
 import addNode from "./addNode"
 import removeNode from "./removeNode"
-import org from "./org"
+import findById from "./findById"
 
 export default {
   all,
   createOrg,
   addNode,
-  org,
+  findById,
   removeNode
 }

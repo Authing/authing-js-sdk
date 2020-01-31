@@ -1,4 +1,4 @@
-export default async function createOrg(_id) {
+export default async function findById(_id) {
 
   const query = `
   query org($_id: String!){

@@ -88,7 +88,7 @@ test('添加 Node', async t => {
 
 test('查询 Org', async t => {
   try {
-    org = await authing.OrgModel.org(org._id)
+    org = await authing.OrgModel.findById(org._id)
     t.assert(org.nodes.length === 3)
   } catch (err) {
     t.fail(formatError(err))
