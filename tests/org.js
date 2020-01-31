@@ -103,3 +103,21 @@ test('删除 Node', async t => {
   t.assert(org._id)
   t.assert(org.nodes.length === 2)
 })
+
+test('删除 Org', async t => {
+  try {
+    const res = await authing.OrgModel.dropById(org._id)
+    t.assert(res.code === 200)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+})
+
+test('查询 Org - 不存在', async t => {
+  try {
+    org = await authing.OrgModel.findById(org._id)
+    t.assert(org._id)
+  } catch (err) {
+    t.assert(err.message.code === 3901)
+  }
+})
