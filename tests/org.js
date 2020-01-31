@@ -49,13 +49,14 @@ async function createUser() {
 }
 
 let org
+let rootGroup
 let group
 
 test('创建 Org', async t => {
-  const group = await createGroup()
+  rootGroup = await createGroup()
   try {
     org = await authing.org.createOrg({
-      rootGroupId: group._id
+      rootGroupId: rootGroup._id
     })
     t.assert(org._id)
     t.assert(org.nodes.length)
@@ -90,6 +91,29 @@ test('查询 Org', async t => {
   try {
     org = await authing.org.findById(org._id)
     t.assert(org.nodes.length === 3)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+})
+
+test('判断是否为 Root Node', async t => {
+
+  try {
+    const isRoot = await authing.org.isRootNode({
+      groupId: rootGroup._id,
+      orgId: org._id
+    })
+    t.assert(isRoot === true)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+
+  try {
+    const isRoot = await authing.org.isRootNode({
+      groupId: group._id,
+      orgId: org._id
+    })
+    t.assert(isRoot === false)
   } catch (err) {
     t.fail(formatError(err))
   }
