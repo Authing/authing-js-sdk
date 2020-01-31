@@ -1,7 +1,7 @@
 import checkInput from "../../utils/checkInput"
 
 
-export default async function addNode(input) {
+export default async function removeNode(input) {
 
   checkInput(input, [
     {
@@ -11,15 +11,11 @@ export default async function addNode(input) {
     {
       name: "groupId",
       type: String
-    },
-    {
-      name: "parentGroupId",
-      type: String
-    },
+    }
   ])
   const query = `
-  mutation addOrgNode($input: AddOrgNodeInput!){
-    addOrgNode(input: $input){
+  mutation removeOrgNode($input: RemoveOrgNodeInput!){
+    removeOrgNode(input: $input){
       _id
       nodes {
         _id
@@ -32,7 +28,7 @@ export default async function addNode(input) {
 
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
-      operationName: "addOrgNode",
+      operationName: "removeOrgNode",
       query,
       variables: {
         input

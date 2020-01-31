@@ -49,6 +49,7 @@ async function createUser() {
 }
 
 let org
+let group
 
 test('创建 Org', async t => {
   const group = await createGroup()
@@ -64,11 +65,11 @@ test('创建 Org', async t => {
 })
 
 test('添加 Node', async t => {
-  const group = await createGroup()
+  group = await createGroup()
   try {
     const newOrg = await authing.OrgModel.addNode({
       orgId: org._id,
-      parentId: org.nodes[0]._id,
+      parentGroupId: org.nodes[0]._id,
       groupId: group._id
     })
     t.assert(newOrg._id)
@@ -80,7 +81,7 @@ test('添加 Node', async t => {
   const group2 = await createGroup()
   await authing.OrgModel.addNode({
     orgId: org._id,
-    parentId: org.nodes[0]._id,
+    parentGroupId: org.nodes[0]._id,
     groupId: group2._id
   })
 })
@@ -92,4 +93,13 @@ test('查询 Org', async t => {
   } catch (err) {
     t.fail(formatError(err))
   }
+})
+
+test('删除 Node', async t => {
+  org = await authing.OrgModel.removeNode({
+    orgId: org._id,
+    groupId: group._id
+  })
+  t.assert(org._id)
+  t.assert(org.nodes.length === 2)
 })
