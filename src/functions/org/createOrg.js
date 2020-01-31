@@ -2,7 +2,7 @@ import checkInput from "../../utils/checkInput"
 
 export default async function createOrg(input) {
   checkInput(input, [{
-    name: "rootId",
+    name: "rootGroupId",
     type: String
   }])
 

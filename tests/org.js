@@ -55,7 +55,7 @@ test('创建 Org', async t => {
   const group = await createGroup()
   try {
     org = await authing.org.createOrg({
-      rootId: group._id
+      rootGroupId: group._id
     })
     t.assert(org._id)
     t.assert(org.nodes.length)
