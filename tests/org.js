@@ -119,6 +119,32 @@ test('判断是否为 Root Node', async t => {
   }
 })
 
+test('查询根节点的子节点', async t => {
+  try {
+    const children = await authing.org.childrenNodes({
+      orgId: org._id,
+      groupId: rootGroup._id
+    })
+    t.assert(children.length === 2)
+    t.assert(children[0].group)
+    t.assert(children[0].group._id)
+  } catch (err) {
+    t.fail(formatError(errF))
+  }
+})
+
+test('查询叶节点的子节点', async t => {
+  try {
+    const children = await authing.org.childrenNodes({
+      orgId: org._id,
+      groupId: group._id
+    })
+    t.assert(children.length === 0)
+  } catch (err) {
+    t.fail(formatError(errF))
+  }
+})
+
 test('删除 Node', async t => {
   org = await authing.org.removeNode({
     orgId: org._id,
