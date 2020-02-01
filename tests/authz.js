@@ -556,6 +556,39 @@ test('Group 查询用户列表', async t => {
   t.assert(res.users.totalCount === 1)
 })
 
+test('Group 查询用户列表 - 分页', async t => {
+
+  // 创建一个 Group
+  const group = await createGroup()
+
+  // 创建多个用户
+  let users = []
+  for (let i = 0; i < 15; i++) {
+    let user = await createUser()
+    users.push(user)
+  }
+
+  // 添加用户到 group
+  for (let user of users) {
+    await authing.authz.addUserToGroup({
+      groupId: group._id,
+      userId: user._id
+    })
+  }
+
+  // 分页查询用户
+  let res = await authing.authz.groupUserList(group._id)
+  t.assert(res.totalCount === 15)
+  t.assert(res.list.length === 10)
+
+  res = await authing.authz.groupUserList(group._id, {
+    page: 1,
+    count: 10
+  })
+  t.assert(res.totalCount === 15)
+  t.assert(res.list.length === 5)
+})
+
 test('Group 删除 User', async t => {
   const res = await authing.authz.removeUserFromGroup({
     groupId: group._id,
