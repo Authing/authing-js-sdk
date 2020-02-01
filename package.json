@@ -1,6 +1,6 @@
 {
 	"name": "authing-js-sdk",
-	"version": "3.7.0",
+	"version": "3.4.1",
 	"description": "Official sdk of Authing",
 	"main": "dist/authing-js-sdk-node.js",
 	"browser": "dist/authing-js-sdk-browser.min.js",
@@ -8,8 +8,8 @@
 	"prepublishOnly": "npm run build",
 	"scripts": {
 		"lint": "eslint --fix .",
-		"test": "export BUILD_TARGET=node && ava -vs",
 		"test:web": "ava -vs",
+		"test": "export BUILD_TARGET=node && ava -vs",
 		"coverage": "nyc report --reporter=text-lcov > coverage.lcov | codecov",
 		"start": "nyc --reporter html ava -vs && open ./.nyc_output/index.html",
 		"build": "webpack --config webpack.config.js"
@@ -27,7 +27,8 @@
 	"homepage": "https://github.com/Authing/authing-js-sdk#readme",
 	"dependencies": {
 		"axios": "^0.19.0",
-		"jsencrypt": "^3.0.0-rc.1"
+		"jsencrypt": "^3.0.0-rc.1",
+		"lodash": "^4.17.15"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.6.3",
