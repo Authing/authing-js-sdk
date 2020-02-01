@@ -5,10 +5,6 @@ export default function (input) {
     {
       name: 'name',
       type: String
-    },
-    {
-      name: 'description',
-      type: String
     }
   ])
   const query = `
