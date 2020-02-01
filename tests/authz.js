@@ -56,6 +56,16 @@ async function createUser() {
   });
 }
 
+async function createUserBatch(count) {
+  // 创建多个用户
+  let users = []
+  for (let i = 0; i < count; i++) {
+    let user = await createUser()
+    users.push(user)
+  }
+  return users
+}
+
 // Group 增删改查
 test('创建 Group', async t => {
   let res
@@ -660,11 +670,32 @@ test('授予 User Role', async t => {
   t.assert(res.code === 200)
 })
 
-test('查询 Role 中包含的 User', async t => {
+test.only('查询 Role 中包含的 User # 分页', async t => {
+
   try {
-    const res = await authing.authz.roleUserList(role._id)
-    t.assert(res.users.totalCount === 1)
-    t.assert(res.users.list[0]._id === user._id)
+    // 创建一个 Role
+    const role = await createRole()
+    // 创建多个用户
+    let users = await createUserBatch(15)
+    // 添加用户到 group
+    for (let user of users) {
+      await authing.authz.assignRoleToUser({
+        roleId: role._id,
+        userId: user._id
+      })
+    }
+
+    // 分页查询用户
+    let res = await authing.authz.roleUserList(role._id)
+    t.assert(res.totalCount === 15)
+    t.assert(res.list.length === 10)
+
+    res = await authing.authz.roleUserList(role._id, {
+      page: 1,
+      count: 10
+    })
+    t.assert(res.totalCount === 15)
+    t.assert(res.list.length === 5)
   } catch (err) {
     t.fail(formatError(err))
   }
