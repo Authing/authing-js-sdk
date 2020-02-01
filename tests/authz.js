@@ -303,7 +303,8 @@ test('Group 添加 Role - 返回最新角色列表', async t => {
 
 test('查询 Group 中包含的 Role', async t => {
   const res = await authing.authz.groupRoleList(group._id)
-  t.assert(res.roles.totalCount === 1)
+  t.assert(res.totalCount === 1)
+  t.assert(res.list.length === 1)
 })
 
 test('Group 删除 Role', async t => {
@@ -315,7 +316,8 @@ test('Group 删除 Role', async t => {
   t.assert(res.code === 200)
 
   res = await authing.authz.groupRoleList(group._id)
-  t.assert(res.roles.totalCount === 0)
+  t.assert(res.totalCount === 0)
+  t.assert(res.list.length === 0)
 })
 
 test('Group 删除 Role - 返回最新角色列表', async t => {
@@ -346,7 +348,8 @@ test('Group 删除 Role - 返回最新角色列表', async t => {
   t.assert(res.data.totalCount === 0)
 
   res = await authing.authz.groupRoleList(group._id)
-  t.assert(res.roles.totalCount === 0)
+  t.assert(res.totalCount === 0)
+  t.assert(res.list.length === 0)
 })
 
 test('Group 批量添加 Role', async t => {
@@ -423,7 +426,8 @@ test('Group 批量删除 Role', async t => {
   t.assert(res.code === 200)
 
   res = await authing.authz.groupRoleList(group._id)
-  t.assert(res.roles.totalCount === 0)
+  t.assert(res.totalCount === 0)
+  t.assert(res.list.length === 0)
 })
 
 test('Group 批量删除 Role - 返回最新角色列表', async t => {
@@ -438,7 +442,8 @@ test('Group 批量删除 Role - 返回最新角色列表', async t => {
   t.assert(res.data)
 
   res = await authing.authz.groupRoleList(group._id)
-  t.assert(res.roles.totalCount === 0)
+  t.assert(res.totalCount === 0)
+  t.assert(res.list.length === 0)
 })
 
 test('查询 Group Permission 列表 # 1', async t => {
@@ -460,7 +465,7 @@ test('查询 Group Permission 列表 # 1', async t => {
   t.assert(list[0].name)
 })
 
-test.only('查询 Group Permission 列表 # 2', async t => {
+test('查询 Group Permission 列表 # 2', async t => {
   const group = await createGroup()
   const role1 = await createRole()
   const role2 = await createRole()

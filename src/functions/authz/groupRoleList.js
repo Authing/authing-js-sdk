@@ -1,11 +1,11 @@
-export default function group(_id) {
+export default function groupRoleList(_id) {
   const query = `
-  query QueryRBACGroupRoleList($_id: String!, $sortBy: SortByEnum = CREATEDAT_DESC, $page: Int = 0, $count: Int = 10) {
+  query QueryRBACGroupRoleList($_id: String!) {
     rbacGroup(_id: $_id) {
       _id
       name
       description
-      roles(sortBy: $sortBy, page: $page, count: $count) {
+      roles {
         totalCount
         list {
           _id
@@ -18,13 +18,14 @@ export default function group(_id) {
     }
   }
   `
+  let variables = { _id }
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: "QueryRBACGroupRoleList",
       query,
-      variables: {
-        _id
-      }
+      variables
+    }).then(res => {
+      return res.roles
     })
   })
 }
