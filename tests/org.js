@@ -103,9 +103,12 @@ test('查询 Org', async t => {
 
 test('查询 Org 列表', async t => {
   try {
-    const orgs = await authing.org.all()
-    t.assert(orgs.totalCount)
-    t.assert(orgs.list.length)
+    const { totalCount, list: orgs } = await authing.org.all()
+    t.assert(totalCount)
+    t.assert(orgs.length)
+
+    let org = orgs[0]
+    // printFullObject(org.tree)
   } catch (err) {
     t.fail(formatError(err))
   }
@@ -187,7 +190,7 @@ test('查询 Org - 不存在', async t => {
   }
 })
 
-test.only('构建树状 Group # 1', async t => {
+test('构建树状 Group # 1', async t => {
   /* 组织架构
       公司A 
     /      \
