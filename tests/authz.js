@@ -834,8 +834,8 @@ test('Role 批量添加 Permission', async t => {
 test('查询 Role Permission 列表', async t => {
   try {
     const res = await authing.authz.rolePermissionList(role._id)
-    t.assert(res.permissions.list.length > 0)
-    t.assert(res.permissions.totalCount > 0)
+    t.assert(res.list.length > 0)
+    t.assert(res.totalCount > 0)
   } catch (error) {
     t.fail(formatError(error))
   }
