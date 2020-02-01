@@ -23,12 +23,27 @@ let permission = {}
 let permissionIdList = []
 
 
+async function sleep(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, ms)
+  })
+}
+
 const createGroup = async (name) => {
   name = name || `分组${Math.random().toString(36).slice(2)}`
   return await authing.authz.createGroup({
     name,
     description: "描述信息"
   })
+}
+
+async function createGroupBatch(count) {
+  let list = []
+  for (let i = 0; i < count; i++) {
+    let group = await createGroup()
+    list.push(group)
+  }
+  return list
 }
 
 async function createRole(name) {
@@ -39,12 +54,30 @@ async function createRole(name) {
   })
 }
 
+async function createRoleBatch(count) {
+  let list = []
+  for (let i = 0; i < count; i++) {
+    let role = await createRole()
+    list.push(role)
+  }
+  return list
+}
+
 async function createPermission(name) {
   name = name || `权限${Math.random().toString(36).slice(2)}`;
   return await authing.authz.createPermission({
     name,
     description: '描述'
   })
+}
+
+async function createPermissionBatch(count) {
+  let list = []
+  for (let i = 0; i < count; i++) {
+    let p = await createPermission()
+    list.push(p)
+  }
+  return list
 }
 
 async function createUser() {
@@ -68,219 +101,195 @@ async function createUserBatch(count) {
 
 // Group 增删改查
 test('创建 Group', async t => {
-  let res
-  try {
-    res = await authing.authz.createGroup({
-      name: `管理员${Math.random().toString(36).slice(2)}`,
-      description: "描述信息"
-    })
-  } catch (error) {
-    t.fail(formatError(error))
-  }
-  t.assert(res)
-  t.assert(res._id)
-  group = res
+  const group = await createGroup()
+  t.assert(group)
+  t.assert(group._id)
+  t.assert(group.name)
+  t.assert(group.description)
+  t.assert(group.createdAt)
+  t.assert(group.updatedAt)
 })
 
 test('查询 Group', async t => {
-  let res
-  try {
-    res = await authing.authz.group(group._id)
-  } catch (error) {
-    t.fail(formatError(error))
-  }
-
-  t.assert(res)
-  t.assert(res._id === group._id)
+  let group = await createGroup()
+  group = await authing.authz.group(group._id)
+  t.assert(group)
+  t.assert(group._id)
+  t.assert(group.name)
+  t.assert(group.description)
+  t.assert(group.createdAt)
+  t.assert(group.updatedAt)
 })
 
-test('查询 Group 列表 - 默认方式', async  t => {
-  let res
+test('查询 Group # 不存在', async t => {
   try {
-    res = await authing.authz.groupList()
+    const group = await authing.authz.group("NOGTEXIST")
   } catch (error) {
-    t.fail(formatError(error))
+    const errcode = error.message.code
+    t.assert(errcode === 3901)
   }
-  t.assert(res)
-  t.assert(res.totalCount > 0)
 })
 
-test('查询 Group 列表 - 按照创建时间升序（旧的优先）', async  t => {
-  let res
-  try {
-    res = await authing.authz.groupList({
-      sortBy: 'CREATEDAT_ASC',
-      page: 1,
-      count: 10
-    })
-  } catch (error) {
-    t.fail(formatError(error))
-  }
+test('查询 Group 列表 # 默认方式', async  t => {
+  const { totalCount, list } = await authing.authz.groupList()
+  t.assert(totalCount)
+  t.assert(list.length)
+})
 
-  t.assert(res)
-  t.assert(res.totalCount > 0)
+test('查询 Group 列表 # 按照创建时间升序（旧的优先）', async  t => {
+  const { totalCount, list } = await authing.authz.groupList({
+    sortBy: 'CREATEDAT_ASC',
+  })
+  t.assert(totalCount)
+  t.assert(list.length)
+  t.assert(list[0].createdAt < list[1].createdAt)
+})
+
+
+test('查询 Group 列表 # 分页', async  t => {
+  await createGroupBatch(10)
+  await sleep(1000)
+  await createGroupBatch(10)
+  const { list: page0 } = await authing.authz.groupList()
+  const { list: page1 } = await authing.authz.groupList({ page: 1 })
+  t.assert(page0.length === 10)
+  t.assert(page0[0].createdAt > page1[0].createdAt)
 })
 
 test('修改 Group', async  t => {
-  let res
-  try {
-    res = await authing.authz.updateGroup({
-      _id: group._id,
-      description: '新的描述'
-    })
-  } catch (error) {
-    t.fail(formatError(error))
-  }
-
-  t.assert(res)
-  t.assert(res.name === group.name)
-  t.assert(res.description === "新的描述")
+  let group = await createGroup()
+  let updatedGroup = await authing.authz.updateGroup({
+    _id: group._id,
+    description: '新的描述'
+  })
+  t.assert(group.name === updatedGroup.name)
+  t.assert(updatedGroup.description === "新的描述")
+  t.assert(updatedGroup.createdAt)
+  t.assert(updatedGroup.updatedAt)
 })
 
 test('删除 Group', async t => {
-  try {
-    await authing.authz.deleteGroup(group._id)
-  } catch (error) {
-    t.fail(formatError(error))
-  }
+  let group = await createGroup()
+  let res = await authing.authz.deleteGroup(group._id)
+  t.assert(res.code === 200)
 
-  let res
-  let errcode
   try {
-    res = await authing.authz.group(group._id)
+    await authing.authz.group(group._id)
   } catch (error) {
-    errcode = error.message.code
+    const errcode = error.message.code
+    t.assert(errcode === 3901)
   }
-
-  t.assert(!res)
-  t.assert(errcode === 1004)
 })
 
 test('批量删除 Group', async t => {
-  const group1 = await authing.authz.createGroup({
-    name: `管理员${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-  const group2 = await authing.authz.createGroup({
-    name: `管理员${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-  const res = await authing.authz.deleteGroupBatch([group1._id, group2._id])
+  const groups = await createGroupBatch(3)
+  const idList = groups.map(group => group._id)
+  const res = await authing.authz.deleteGroupBatch(idList)
   t.assert(res.code === 200)
 
-  let errcode
   try {
-    const res = await authing.authz.group(group1._id)
+    const res = await authing.authz.group(groups[0]._id)
   } catch (error) {
-    errcode = error.message.code
+    const errcode = error.message.code
+    t.assert(errcode === 3901)
   }
-  t.assert(errcode === 1004)
 })
 
 
 // Role 增删改查
 test('创建 Role', async t => {
-  role = await authing.authz.createRole({
-    name: `角色${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
+  const role = await createRole()
   t.assert(role)
   t.assert(role._id)
   t.assert(role.name)
+  t.assert(role.createdAt)
+  t.assert(role.updatedAt)
+})
+
+test('创建 Role # 可创建同名 Role', async t => {
+  const role1 = await createRole('角色名')
+  const role2 = await createRole('角色名')
+  t.assert(role1)
+  t.assert(role2)
 })
 
 test('修改 Role', async t => {
+  let role = await createRole()
   role = await authing.authz.updateRole({
     _id: role._id,
-    name: role.name,
     description: '新的描述'
   })
   t.assert(role)
+  t.assert(role.name)
   t.assert(role.description === '新的描述')
 })
 
 test('查询 Role', async t => {
-  const res = await authing.authz.role(role._id)
-  t.assert(res._id === role._id)
-  t.assert(res.name === role.name)
+  let role = await createRole()
+  role = await authing.authz.role(role._id)
+  t.assert(role)
+  t.assert(role._id)
+  t.assert(role.name)
+  t.assert(role.description)
+  t.assert(role.createdAt)
+  t.assert(role.updatedAt)
 })
 
-test('查询用户池 Role - 默认排序', async t => {
-  const res = await authing.authz.roleList()
-
-  t.assert(res.totalCount > 0)
-  t.assert(res.list[0])
+test('查询用户池 Role # 默认排序', async t => {
+  await createRoleBatch(15)
+  const { totalCount, list } = await authing.authz.roleList()
+  t.assert(totalCount > 10)
+  t.assert(list.length === 10)
 })
 
 test('查询用户池 Role - 自定义排序/分页', async t => {
-  let res
-  try {
-    res = await authing.authz.roleList({
-      sortBy: 'CREATEDAT_ASC',
-      page: 1,
-      count: 10
-    })
-  } catch (error) {
-    t.fail(formatError(error))
-  }
+  await createRoleBatch(10)
+  await sleep(1000)
+  await createRoleBatch(10)
+  const { list: page0 } = await authing.authz.roleList({
+    sortBy: 'CREATEDAT_ASC',
+    page: 0,
+    count: 10
+  })
+  const { list: page1 } = await authing.authz.roleList({
+    sortBy: 'CREATEDAT_ASC',
+    page: 1,
+    count: 10
+  })
 
-  t.assert(res)
-  t.assert(res.totalCount > 0)
-  t.assert(res.list[0])
+  t.assert(page0.length === 10)
+  t.assert(page0[0].createdAt < page1[0].createdAt)
 })
 
 test('删除 Role', async t => {
+  const role = await createRole()
   await authing.authz.deleteRole(role._id)
-
-  let errcode
   try {
     const res = await authing.authz.role(role._id)
   } catch (error) {
-    errcode = error.message.code
+    const errcode = error.message.code
+    t.assert(errcode === 3903)
   }
-  t.assert(errcode === 1004)
 })
 
 test('批量删除 Role', async t => {
-  const role1 = await authing.authz.createRole({
-    name: `角色${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
-  const role2 = await authing.authz.createRole({
-    name: `角色${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
-  let res
-  res = await authing.authz.deleteRoleBatch([
-    role1._id,
-    role2._id
-  ])
+  const roles = await createRoleBatch(3)
+  const idList = roles.map(x => x._id)
+  const res = await authing.authz.deleteRoleBatch(idList)
   t.assert(res.code === 200)
 
-  let errcode
   try {
-    res = await authing.authz.role(role1._id)
+    await authing.authz.role(idList[0])
   } catch (error) {
-    errcode = error.message.code
+    const errcode = error.message.code
+    t.assert(errcode === 3903)
   }
-  t.assert(errcode === 1004)
 })
 
 // Group 添加/删除 Role
 test('Group 添加 Role - 不返回最新角色列表', async t => {
-  group = await authing.authz.createGroup({
-    name: `管理员${Math.random().toString(36).slice(2)}`,
-    description: "描述信息"
-  })
-
-  role = await authing.authz.createRole({
-    name: `角色${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
+  const group = await createGroup()
+  const role = await createRole()
   const res = await authing.authz.addRoleToGroup({
     roleId: role._id,
     groupId: group._id
@@ -290,16 +299,8 @@ test('Group 添加 Role - 不返回最新角色列表', async t => {
 
 
 test('Group 添加 Role - 返回最新角色列表', async t => {
-  group = await authing.authz.createGroup({
-    name: `管理员${Math.random().toString(36).slice(2)}`,
-    description: "描述信息"
-  })
-
-  role = await authing.authz.createRole({
-    name: `角色${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
+  const group = await createGroup()
+  const role = await createRole()
   const res = await authing.authz.addRoleToGroup({
     roleId: role._id,
     groupId: group._id
@@ -312,19 +313,37 @@ test('Group 添加 Role - 返回最新角色列表', async t => {
 })
 
 test('查询 Group 中包含的 Role', async t => {
-  const res = await authing.authz.groupRoleList(group._id)
-  t.assert(res.totalCount === 1)
-  t.assert(res.list.length === 1)
+  const group = await createGroup()
+  const role = await createRole()
+  await authing.authz.addRoleToGroup({
+    roleId: role._id,
+    groupId: group._id
+  })
+  try {
+    const res = await authing.authz.groupRoleList(group._id)
+    t.assert(res.totalCount === 1)
+    t.assert(res.list.length === 1)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+
 })
 
 test('Group 删除 Role', async t => {
-  let res = await authing.authz.removeRoleFromGroup({
+  let res
+  const group = await createGroup()
+  const role = await createRole()
+
+  res = await authing.authz.addRoleToGroup({
+    roleId: role._id,
+    groupId: group._id
+  })
+  res = await authing.authz.removeRoleFromGroup({
     roleId: role._id,
     groupId: group._id
   })
 
   t.assert(res.code === 200)
-
   res = await authing.authz.groupRoleList(group._id)
   t.assert(res.totalCount === 0)
   t.assert(res.list.length === 0)
@@ -332,16 +351,8 @@ test('Group 删除 Role', async t => {
 
 test('Group 删除 Role - 返回最新角色列表', async t => {
 
-  group = await authing.authz.createGroup({
-    name: `管理员${Math.random().toString(36).slice(2)}`,
-    description: "描述信息"
-  })
-
-  role = await authing.authz.createRole({
-    name: `角色${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
+  const group = await createGroup()
+  const role = await createRole()
   await authing.authz.addRoleToGroup({
     roleId: role._id,
     groupId: group._id
@@ -363,76 +374,55 @@ test('Group 删除 Role - 返回最新角色列表', async t => {
 })
 
 test('Group 批量添加 Role', async t => {
-  group = await authing.authz.createGroup({
-    name: `管理员${Math.random().toString(36).slice(2)}`,
-    description: "描述信息"
-  })
+  const group = await createGroup()
+  const roles = await createRoleBatch(3)
+  const roleIdList = roles.map(x => x._id)
 
-  const role1 = await authing.authz.createRole({
-    name: `角色${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
-  const role2 = await authing.authz.createRole({
-    name: `角色${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
-  roleIdList.push(role1._id, role2._id)
-
-  let res
   try {
-    res = await authing.authz.addRoleToGroupBatch({
-      roleIdList: [role1._id, role2._id],
+    const res = await authing.authz.addRoleToGroupBatch({
+      roleIdList,
       groupId: group._id
     })
+    t.assert(res.code === 200)
   } catch (error) {
     t.fail(formatError(error))
   }
 
-  t.assert(res.code === 200)
 })
 
 test('Group 批量添加 Role - 返回最新角色列表', async t => {
-  group = await authing.authz.createGroup({
-    name: `管理员${Math.random().toString(36).slice(2)}`,
-    description: "描述信息"
-  })
+  const group = await createGroup()
+  const roles = await createRoleBatch(3)
+  const roleIdList = roles.map(x => x._id)
 
-  const role1 = await authing.authz.createRole({
-    name: `角色${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
-  const role2 = await authing.authz.createRole({
-    name: `角色${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
-  roleIdList.push(role1._id, role2._id)
-
-  let res
   try {
-    res = await authing.authz.addRoleToGroupBatch({
+    const res = await authing.authz.addRoleToGroupBatch({
       roleIdList,
       groupId: group._id
     }, {
       fetchRoles: true
     })
+    t.assert(res.code === 200)
+    t.assert(res.data.totalCount)
+    t.assert(res.data.list)
   } catch (error) {
     t.fail(formatError(error))
   }
-
-  t.assert(res.data.totalCount)
-  t.assert(res.data.list)
 })
 
 test('Group 批量删除 Role', async t => {
-  let res = await authing.authz.removeRoleFromGroupBatch({
+  const group = await createGroup()
+  const roles = await createRoleBatch(3)
+  const roleIdList = roles.map(x => x._id)
+  await authing.authz.addRoleToGroupBatch({
     roleIdList,
     groupId: group._id
   })
 
+  let res = await authing.authz.removeRoleFromGroupBatch({
+    roleIdList,
+    groupId: group._id
+  })
   t.assert(res.code === 200)
 
   res = await authing.authz.groupRoleList(group._id)
@@ -441,13 +431,20 @@ test('Group 批量删除 Role', async t => {
 })
 
 test('Group 批量删除 Role - 返回最新角色列表', async t => {
+  const group = await createGroup()
+  const roles = await createRoleBatch(3)
+  const roleIdList = roles.map(x => x._id)
+  await authing.authz.addRoleToGroupBatch({
+    roleIdList,
+    groupId: group._id
+  })
+
   let res = await authing.authz.removeRoleFromGroupBatch({
-    roleIdList: [],
+    roleIdList,
     groupId: group._id
   }, {
     fetchRoles: true
   })
-
   t.assert(res.code === 200)
   t.assert(res.data)
 
@@ -517,32 +514,24 @@ test('注册用户', async t => {
     t.assert(user.email);
     t.pass();
   } catch (err) {
-    t.log(formatError(err));
     t.fail(formatError(err));
   }
 })
 
 test('Group 添加 User', async t => {
+  const group = await createGroup()
+  const user = await createUser()
   const res = await authing.authz.addUserToGroup({
     groupId: group._id,
     userId: user._id
   })
   t.assert(res.code === 200)
+  t.assert(!res.data)
 })
 
 test('Group 添加 User - 返回最新用户列表', async t => {
-  user = await authing.register({
-    email: Math.random()
-      .toString(36)
-      .slice(2) + "@authing.cn",
-    password: "123456a"
-  });
-
-  group = await authing.authz.createGroup({
-    name: `管理员${Math.random().toString(36).slice(2)}`,
-    description: "描述信息"
-  })
-
+  const group = await createGroup()
+  const user = await createUser()
   const res = await authing.authz.addUserToGroup({
     groupId: group._id,
     userId: user._id
@@ -556,14 +545,21 @@ test('Group 添加 User - 返回最新用户列表', async t => {
 })
 
 test('Group 查询用户列表', async t => {
+  const group = await createGroup()
+  const users = await createUserBatch(10)
+  const userIdList = users.map(x => x._id)
+  await authing.authz.addUserToGroupBatch({
+    groupId: group._id,
+    userIdList
+  })
 
-  let res
   try {
-    res = await authing.authz.groupUserList(group._id)
+    const { totalCount, list } = await authing.authz.groupUserList(group._id)
+    t.assert(totalCount === 10)
+    t.assert(list.length === 10)
   } catch (err) {
     t.fail(formatError(err));
   }
-  t.assert(res.users.totalCount === 1)
 })
 
 test('Group 查询用户列表 - 分页', async t => {
@@ -600,11 +596,25 @@ test('Group 查询用户列表 - 分页', async t => {
 })
 
 test('Group 删除 User', async t => {
-  const res = await authing.authz.removeUserFromGroup({
-    groupId: group._id,
-    userId: user._id
-  })
-  t.assert(res.code === 200)
+  try {
+    const group = await createGroup()
+    const user = await createUser()
+    let res = await authing.authz.addUserToGroup({
+      groupId: group._id,
+      userId: user._id
+    })
+    res = await authing.authz.removeUserFromGroup({
+      groupId: group._id,
+      userId: user._id
+    })
+    t.assert(res.code === 200)
+
+    const { totalCount, list } = await authing.authz.groupUserList(group._id)
+    t.assert(totalCount === 0)
+    t.assert(list.length === 0)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
 })
 
 test('Group 批量添加 User', async t => {
@@ -670,7 +680,7 @@ test('授予 User Role', async t => {
   t.assert(res.code === 200)
 })
 
-test.only('查询 Role 中包含的 User # 分页', async t => {
+test('查询 Role 中包含的 User # 分页', async t => {
 
   try {
     // 创建一个 Role
@@ -758,103 +768,102 @@ test('批量撤销 User Role', async t => {
 })
 
 test('创建 Permission', async  t => {
-  try {
-    const res = await authing.authz.createPermission({
-      name: `权限${Math.random().toString(36).slice(2)}`,
-      description: '描述'
-    })
-    t.assert(res._id)
-    t.assert(res.name)
-    t.assert(res.description)
-    permission = res
-  } catch (err) {
-    t.fail(formatError(err))
-  }
+  const permission = await createPermission()
+  t.assert(permission)
+  t.assert(permission._id)
+  t.assert(permission.name)
+  t.assert(permission.description)
+  t.assert(permission.createdAt)
+  t.assert(permission.updatedAt)
 })
 
 test('查询 Permission', async t => {
+  let permission = await createPermission()
+  permission = await authing.authz.permission(permission._id)
+  t.assert(permission)
+  t.assert(permission._id)
+  t.assert(permission.name)
+  t.assert(permission.description)
+  t.assert(permission.createdAt)
+  t.assert(permission.updatedAt)
+})
+
+test('查询用户池 Permission 列表 # 默认方式', async t => {
+  await createPermissionBatch(10)
+
   try {
-    const res = await authing.authz.permission(permission._id)
-    t.assert(res._id)
-    t.assert(res.name)
-    t.assert(res.description)
+    const { totalCount, list } = await authing.authz.permissionList()
+    t.assert(totalCount > 0)
+    t.assert(list.length === 10)
   } catch (err) {
     t.fail(formatError(err))
   }
 })
 
-test('批量查询 Permission', async t => {
-  try {
-    const res = await authing.authz.permissionList(userPoolId)
-    t.assert(res.totalCount > 0)
-  } catch (err) {
-    t.fail(formatError(err))
-  }
+test('查询用户池 Permission 列表 # 排序/分页', async t => {
+  await createPermissionBatch(10)
+  await sleep(10)
+  await createPermissionBatch(10)
+
+  const { list: page0 } = await authing.authz.permissionList({
+    sortBy: 'CREATEDAT_ASC',
+    page: 0,
+    count: 10
+  })
+  const { list: page1 } = await authing.authz.permissionList({
+    sortBy: 'CREATEDAT_ASC',
+    page: 1,
+    count: 10
+  })
+
+  t.assert(page0.length === 10)
+  t.assert(page0[0].createdAt < page1[0].createdAt)
 })
 
 test('删除 Permission', async t => {
-  try {
-    let res = await authing.authz.deletePermission(permission._id)
-    t.assert(res.code === 200)
+  const p = await createPermission()
+  const res = await authing.authz.deletePermission(p._id)
+  t.assert(res.code === 200)
 
-    let errcode
-    try {
-      res = await authing.authz.permission(permission._id)
-    } catch (error) {
-      errcode = error.message.code
-    }
-    t.assert(errcode === 1004)
-  } catch (err) {
-    t.fail(formatError(err))
+  try {
+    await authing.authz.permission(p._id)
+  } catch (error) {
+    const errcode = error.message.code
+    t.assert(errcode === 3905)
   }
 })
 
 test('批量删除 Permission', async t => {
-  const permission1 = await authing.authz.createPermission({
-    name: `权限${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-  const permission2 = await authing.authz.createPermission({
-    name: `权限${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
-  const res = await authing.authz.deletePermissionBatch([
-    permission1._id,
-    permission2._id
-  ])
+  const permissions = await createPermissionBatch(3)
+  const idList = permissions.map(x => x._id)
+  const res = await authing.authz.deletePermissionBatch(idList)
   t.assert(res.code === 200)
 
-  let errcode
   try {
-    const res = await authing.authz.permission(permission1._id)
+    const res = await authing.authz.permission(idList[0])
   } catch (error) {
-    errcode = error.message.code
+    const errcode = error.message.code
+    t.assert(errcode === 3905)
   }
-  t.assert(errcode === 1004)
 })
 
 test('修改 Permission', async t => {
-  try {
-    const res = await authing.authz.createPermission({
-      name: `权限${Math.random().toString(36).slice(2)}`,
-      description: '新的描述'
-    })
-    t.assert(res._id)
-    t.assert(res.name)
-    t.assert(res.description === "新的描述")
-  } catch (err) {
-    t.fail(formatError(err))
-  }
+  let permission = await createPermission()
+  permission = await authing.authz.updatePermission({
+    _id: permission._id,
+    description: '新的描述'
+  })
+  t.assert(permission)
+  t.assert(permission._id)
+  t.assert(permission.name)
+  t.assert(permission.description === "新的描述")
+  t.assert(permission.createdAt)
+  t.assert(permission.updatedAt)
 })
 
 test('Role 添加 Permission', async t => {
-
-  permission = await authing.authz.createPermission({
-    name: `权限${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
+  const role = await createRole()
+  const permission = await createPermission()
   try {
     const res = await authing.authz.addPermissionToRole({
       permissionId: permission._id,
@@ -870,17 +879,9 @@ test('Role 添加 Permission', async t => {
 })
 
 test('Role 批量添加 Permission', async t => {
-  const permission1 = await authing.authz.createPermission({
-    name: `权限${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
-  const permission2 = await authing.authz.createPermission({
-    name: `权限${Math.random().toString(36).slice(2)}`,
-    description: '描述'
-  })
-
-  permissionIdList = [permission1._id, permission2._id]
+  const role = await createRole()
+  const permissions = await createPermissionBatch(3)
+  const permissionIdList = permissions.map(x => x._id)
   try {
     const res = await authing.authz.addPermissionToRoleBatch({
       permissionIdList,
@@ -896,16 +897,29 @@ test('Role 批量添加 Permission', async t => {
 })
 
 test('查询 Role Permission 列表', async t => {
+  const role = await createRole()
+  const permission = await createPermission()
+  await authing.authz.addPermissionToRole({
+    roleId: role._id,
+    permissionId: permission._id
+  })
   try {
     const res = await authing.authz.rolePermissionList(role._id)
-    t.assert(res.list.length > 0)
-    t.assert(res.totalCount > 0)
+    t.assert(res.list.length === 1)
+    t.assert(res.totalCount === 1)
   } catch (error) {
     t.fail(formatError(error))
   }
 })
 
 test('Role 删除 Permission', async  t => {
+  const role = await createRole()
+  const permission = await createPermission()
+  await authing.authz.addPermissionToRole({
+    roleId: role._id,
+    permissionId: permission._id
+  })
+
   try {
     const res = await authing.authz.removePermissionFromRole({
       permissionId: permission._id,
@@ -914,6 +928,7 @@ test('Role 删除 Permission', async  t => {
       fetchPermissions: true
     })
     t.assert(res.code === 200)
+    t.assert(res.data.totalCount === 0)
   } catch (error) {
     t.fail(formatError(error))
   }
@@ -1041,15 +1056,13 @@ test('查询角色列表 - 直接授予 & 通过分组继承', async t => {
 
 test('查询权限列表 - 直接赋予用户角色', async t => {
   const role = await createRole()
-  let permissions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  permissions.forEach(async p => {
-    let permission = await createPermission();
-    const res = await authing.authz.addPermissionToRole({
+  const permissions = await createPermissionBatch(10)
+  for (let permission of permissions) {
+    await authing.authz.addPermissionToRole({
       roleId: role._id,
       permissionId: permission._id
     })
-  })
-
+  }
   const user = await createUser()
   await authing.authz.assignRoleToUser({
     roleId: role._id,

@@ -1,4 +1,4 @@
-export default function group(_id) {
+export default function (_id) {
   const query = `
   query QueryRBACRole($_id: String!) {
     rbacRole(_id: $_id) {

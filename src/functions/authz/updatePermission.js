@@ -5,11 +5,7 @@ export default function (input) {
     {
       name: '_id',
       type: String
-    },
-    {
-      name: 'name',
-      type: String
-    },
+    }
   ])
   const query = `
   mutation updateRBACPermission($input: UpdateRBACPermissionInput!){

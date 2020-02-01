@@ -15,9 +15,10 @@ export default function (input) {
   mutation CreateRBACRole($input: CreateRBACRoleInput!){
     createRBACRole(input: $input){
         _id
-        userPoolId
         name
         description
+        updatedAt
+        createdAt
     }
 }
   `
@@ -27,7 +28,7 @@ export default function (input) {
       operationName: "CreateRBACRole",
       query,
       variables: {
-        input: input
+        input
       }
     })
   })
