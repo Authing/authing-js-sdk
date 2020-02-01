@@ -1,4 +1,6 @@
 import checkInput from "../../utils/checkInput"
+import buildTree from "../../utils/buildTree"
+import _ from "lodash"
 
 export default async function createOrg(input) {
   checkInput(input, [{
@@ -12,8 +14,15 @@ export default async function createOrg(input) {
       _id
       nodes {
         _id
-      children
-      root
+        children
+        root
+        group {
+          _id
+          name
+          description
+          createdAt
+          updatedAt
+        }
       }
     }
   }
@@ -27,6 +36,7 @@ export default async function createOrg(input) {
         input
       }
     }).then(res => {
+      res.tree = buildTree(_.cloneDeep(res.nodes))
       return res
     })
   })

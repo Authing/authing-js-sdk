@@ -1,5 +1,6 @@
 import checkInput from "../../utils/checkInput"
-
+import buildTree from "../../utils/buildTree"
+import _ from "lodash"
 
 export default async function removeNode(input) {
 
@@ -21,6 +22,13 @@ export default async function removeNode(input) {
         _id
         children
         root
+        group {
+          _id
+          name
+          description
+          createdAt
+          updatedAt
+        }
       }
     }
   }
@@ -34,6 +42,7 @@ export default async function removeNode(input) {
         input
       }
     }).then(res => {
+      res.tree = buildTree(_.cloneDeep(res.nodes))
       return res
     })
   })

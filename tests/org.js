@@ -1,4 +1,5 @@
 import test from "ava";
+const _ = require("lodash")
 import { inspect } from "util"
 import { formatError } from "../src/utils/formatError";
 
@@ -46,6 +47,10 @@ async function createUser() {
       .slice(2) + "@authing.cn",
     password: "123456a"
   });
+}
+
+function printFullObject(obj) {
+  console.log(inspect(obj, false, null, true /* enable colors */))
 }
 
 let org
@@ -180,4 +185,50 @@ test('查询 Org - 不存在', async t => {
   } catch (err) {
     t.assert(err.message.code === 3901)
   }
+})
+
+test.only('构建树状 Group # 1', async t => {
+  /* 组织架构
+      公司A 
+    /      \
+  技术部门  销售部
+    /          \
+  CTO         销售经理
+  */
+
+  const 公司A = await createGroup('公司A')
+  const 技术部门 = await createGroup('技术部门')
+  const 销售部 = await createGroup('销售部')
+  const CTO = await createGroup('CTO')
+  const 销售经理 = await createGroup('销售经理')
+
+  let org = await authing.org.createOrg({
+    rootGroupId: 公司A._id
+  })
+  await authing.org.addNode({
+    orgId: org._id,
+    groupId: 技术部门._id,
+    parentGroupId: 公司A._id
+  })
+  await authing.org.addNode({
+    orgId: org._id,
+    groupId: 销售部._id,
+    parentGroupId: 公司A._id
+  })
+  await authing.org.addNode({
+    orgId: org._id,
+    groupId: CTO._id,
+    parentGroupId: 技术部门._id
+  })
+  await authing.org.addNode({
+    orgId: org._id,
+    groupId: 销售经理._id,
+    parentGroupId: 销售部._id
+  })
+
+  org = await authing.org.findById(org._id)
+  const orgTree = org.tree
+  // printFullObject(orgTree)
+  t.assert(orgTree._id === 公司A._id) // 根节点
+  t.assert(orgTree.children.length === 2) // 有两个一级子节点
 })

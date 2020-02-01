@@ -1,3 +1,6 @@
+import buildTree from "../../utils/buildTree"
+import _ from "lodash"
+
 export default async function findById(_id) {
 
   const query = `
@@ -8,6 +11,13 @@ export default async function findById(_id) {
         _id
         children
         root
+        group {
+          _id
+          name
+          description
+          createdAt
+          updatedAt
+        }
       }
     }
   }
@@ -20,6 +30,7 @@ export default async function findById(_id) {
         _id
       }
     }).then(res => {
+      res.tree = buildTree(_.cloneDeep(res.nodes))
       return res
     })
   })
