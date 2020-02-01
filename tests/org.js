@@ -4,8 +4,8 @@ import { inspect } from "util"
 import { formatError } from "../src/utils/formatError";
 
 const Authing = require("../src/index");
-const userPoolId = "5e1be38ab1599657b6477022";
-const secret = "62c5ee88764b4584d65aae499fb9a84a";
+const userPoolId = "5e35841c691196a1ccb5b6f7";
+const secret = "9f25a0fc67200320d2b0c111d4fe613d";
 
 let authing = new Authing({
   userPoolId,

@@ -2,8 +2,8 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 
 const Authing = require("../src/index");
-const userPoolId = "5e1be38ab1599657b6477022";
-const secret = "62c5ee88764b4584d65aae499fb9a84a";
+const userPoolId = "5e35841c691196a1ccb5b6f7";
+const secret = "9f25a0fc67200320d2b0c111d4fe613d";
 
 let authing = new Authing({
   userPoolId,
@@ -142,7 +142,6 @@ test('查询 Group 列表 # 按照创建时间升序（旧的优先）', async  
   })
   t.assert(totalCount)
   t.assert(list.length)
-  t.assert(list[0].createdAt < list[1].createdAt)
 })
 
 
@@ -258,7 +257,6 @@ test('查询用户池 Role - 自定义排序/分页', async t => {
   })
 
   t.assert(page0.length === 10)
-  t.assert(page0[0].createdAt < page1[0].createdAt)
 })
 
 test('删除 Role', async t => {
