@@ -114,6 +114,14 @@ test('查询 Org 列表', async t => {
   }
 })
 
+test('查询 Org Root Node', async t => {
+  const group = await authing.org.rootNode(org._id)
+  t.assert(group)
+  t.assert(group._id)
+  t.assert(group.name)
+  t.assert(group._id === rootGroup._id)
+})
+
 test('判断是否为 Root Node', async t => {
 
   try {
@@ -231,7 +239,7 @@ test('构建树状 Group # 1', async t => {
 
   org = await authing.org.findById(org._id)
   const orgTree = org.tree
-  printFullObject(orgTree)
+  // printFullObject(orgTree)
   t.assert(orgTree._id === 公司A._id) // 根节点
   t.assert(orgTree.children.length === 2) // 有两个一级子节点
 })

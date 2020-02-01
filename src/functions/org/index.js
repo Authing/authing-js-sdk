@@ -6,6 +6,7 @@ import findById from "./findById"
 import dropById from "./dropById"
 import isRootNode from "./isRootNode"
 import childrenNodes from "./childrenNodes"
+import rootNode from "./rootNode"
 
 export default {
   all,
@@ -15,5 +16,6 @@ export default {
   dropById,
   removeNode,
   isRootNode,
-  childrenNodes
+  childrenNodes,
+  rootNode
 }
