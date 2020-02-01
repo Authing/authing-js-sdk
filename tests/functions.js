@@ -2,12 +2,8 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 const Authing = require("../src/index");
 
-const userPoolId = "5e1be38ab1599657b6477022";
-const secret = "62c5ee88764b4584d65aae499fb9a84a";
-
-//线上
-// const secret = 'bb278212d520fc19f169e361179ea690';
-// const userPoolId = '5c95905578fce5000166f853';
+const userPoolId = "5e35841c691196a1ccb5b6f7";
+const secret = "9f25a0fc67200320d2b0c111d4fe613d";
 
 function randomEmail() {
   let rand = Math.random()
@@ -17,7 +13,7 @@ function randomEmail() {
   return email;
 }
 let auth = new Authing({
-  userPoolId: userPoolId,
+  userPoolId,
   secret,
   host: {
     user: "http://localhost:5510/graphql",
@@ -191,7 +187,7 @@ test("user:logout 登出", async t => {
   t.assert(user._id);
   try {
     let res2 = await validAuth.logout(user._id);
-    t.is(res2.tokenExpiredAt, "2000-1-1 00:00:00");
+    t.is(res2.tokenExpiredAt, "2000-01-01T00:00:00+08:00");
   } catch (err) {
     t.log(formatError(err));
     t.fail();
@@ -397,7 +393,7 @@ test("user:checkLoginStatus 检查登录状态", async t => {
   t.assert(res.message === "已登录");
   t.assert(res.token.data.email);
   t.assert(res.token.data.id);
-  t.assert(res.token.data.userPoolId);
+  t.assert(res.token.data.clientId);
   t.assert(res.token.iat);
   t.assert(res.token.exp);
 });
@@ -635,26 +631,26 @@ test("cdnPreflight 函数", async t => {
 test("用户和认证服务预检函数", async t => {
   const validAuth = auth;
   let res = await validAuth.preflightFun();
-  t.is(res[0].data.ok, 1);
-  t.is(res[1].data.ok, 1);
+  t.is(res[0].data.ok, 2);
+  t.is(res[1].data.ok, 2);
 });
 
-test("根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
+test.skip("根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
   let auth = new Authing({
-    userPoolId: userPoolId,
+    userPoolId,
     secret,
-    // host: {
-    //   user: 'http://localhost:5555/graphql',
-    //   oauth: 'http://localhost:5556/graphql'
-    // },
+    host: {
+      user: 'http://localhost:5510/graphql',
+      oauth: 'http://localhost:5510/graphql'
+    },
     preflight: true
   });
   let validAuth = auth;
   let res = await validAuth.checkPreflight();
   let service = await res[0];
   let cdn = await res[1];
-  t.is(service[0].data.ok, 1);
-  t.is(service[1].data.ok, 1);
+  t.is(service[0].data.ok, 2);
+  t.is(service[1].data.ok, 2);
   t.is(cdn, "ok");
   auth = new Authing({
     userPoolId: userPoolId,
@@ -805,7 +801,7 @@ test("获取用户池基础设置", async t => {
   t.assert(res.hasOwnProperty("jwtExpired"));
 });
 
-test("发送激活邮件", async t => {
+test.skip("发送激活邮件", async t => {
   const validAuth = auth;
   let res = await validAuth.sendActivationEmail({ email: "xxx@163.com" });
   t.is(res.message, "发送验证邮件成功");
@@ -870,7 +866,7 @@ test("发送修改邮箱邮件 - 邮箱已绑定，请换一个吧", async t => 
   t.assert(res.code === 200);
 });
 
-test("修改邮箱", async t => {
+test.skip("修改邮箱", async t => {
   const validAuth = auth;
   const newEmail = "cdbfhorexxjk@qq.com";
   const res = await validAuth.updateEmail({
@@ -879,7 +875,7 @@ test("修改邮箱", async t => {
   });
   t.assert(res.email === newEmail);
 });
-test("测试手机号登陆", async t => {
+test.skip("测试手机号登陆", async t => {
   const validAuth = auth;
   const phone = "13100512747";
   let res = {};
@@ -894,7 +890,7 @@ test("测试手机号登陆", async t => {
   t.assert(res.phone === phone);
 });
 
-test("测试手机号注册", async t => {
+test.skip("测试手机号注册", async t => {
   //验证码需要手动填写
   const validAuth = auth;
   const phone = "13100512747";
@@ -912,10 +908,10 @@ test("测试手机号注册", async t => {
   }
   t.assert(res.phone === phone);
 });
-test("测试sendOneTimePhoneCode发送验证码", async t => {
+test.skip("测试sendOneTimePhoneCode发送验证码", async t => {
   //验证码需要手动填写
   const validAuth = auth;
-  const phone = "13100512747";
+  const phone = "13100512745";
   let res = {};
   try {
     res = await validAuth.sendOneTimePhoneCode(phone);
@@ -924,7 +920,7 @@ test("测试sendOneTimePhoneCode发送验证码", async t => {
   }
   t.assert(res.code === 200);
 });
-test("测试sendRegisterPhoneCode发送验证码", async t => {
+test.skip("测试sendRegisterPhoneCode发送验证码", async t => {
   //验证码需要手动填写
   const validAuth = auth;
   const phone = "13100512747";
@@ -936,4 +932,65 @@ test("测试sendRegisterPhoneCode发送验证码", async t => {
   }
   t.assert(res.code === 200);
 });
-
+test('测试casLogout', async t => {
+  const validAuth = auth;
+  let res = {}
+  try {
+    res = await validAuth.casLogout();
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.code === 200);
+})
+test.skip("测试密码加密公钥参数", async t => {
+  // 测试正确的加密公钥
+  let validAuth = new Authing({
+    userPoolId,
+    secret,
+    // host: {
+    //   user: "http://localhost:5510/graphql",
+    //   oauth: "http://localhost:5510/graphql"
+    // }
+    passwordEncPublicKey: `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
+5KIofVthEopwrXFkp8OCeocaTHt9ICjTT2QeJh6cZaDaArfZ873GPUn00eOIZ7Ae
++TiA2BKHbCvloW3w5Lnqm70iSsUi5Fmu9/2+68GZRH9L7Mlh8cFksCicW2Y2W2uM
+GKl64GDcIq3au+aqJQIDAQAB
+-----END PUBLIC KEY-----`
+  });
+  let email = randomEmail();
+  let res = await validAuth.register({
+    email,
+    password: "123456a"
+  });
+  t.assert(res.email);
+  // 测试错误的加密公钥
+  validAuth = new Authing({
+    userPoolId: clientId,
+    secret,
+    // host: {
+    //   user: "http://localhost:5510/graphql",
+    //   oauth: "http://localhost:5510/graphql"
+    // }
+    passwordEncPublicKey: `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
+5KIofVthEopwrXFkp8OCeocaTHt9ICjTT2QeJh6cZaDaArfZ873GPUn00eOIZ7Ae
++TiA2BKHbCvloW3w5Lnqm70iSsUi5Fmu9/2+68GZRH9L7Mlh8cFksCicW2Y2W2uM
+GKl64GDcIq3au+aqJQIDA123
+-----END PUBLIC KEY-----`
+  });
+  email = randomEmail();
+  try {
+    res = await validAuth.register({
+      email,
+      password: "123456a"
+    });
+  } catch (err) {
+    if (err.message.code === 2016) {
+      t.assert(err.message.message === "密码解密出错");
+      t.pass();
+    } else {
+      t.fail();
+    }
+  }
+});

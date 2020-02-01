@@ -53,6 +53,7 @@ import updateSuccessRedirectTips from './updateSuccessRedirectTips.js'
 import loginByPhonePassword from "./loginByPhonePassword"
 import sendOneTimePhoneCode from "./sendOneTimePhoneCode"
 import sendRegisterPhoneCode from "./sendRegisterPhoneCode"
+import casLogout from "./casLogout"
 
 // authz submodule
 import authz from "./authz"
@@ -102,7 +103,8 @@ let mod = {
   userGroupList,
   loginByPhonePassword,
   sendOneTimePhoneCode,
-  sendRegisterPhoneCode
+  sendRegisterPhoneCode,
+  casLogout
 }
 
 if (process.env.BUILD_TARGET === 'node') {
