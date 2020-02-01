@@ -441,6 +441,55 @@ test('Group 批量删除 Role - 返回最新角色列表', async t => {
   t.assert(res.roles.totalCount === 0)
 })
 
+test('查询 Group Permission 列表 # 1', async t => {
+  const group = await createGroup()
+  const role = await createRole()
+  const permission = await createPermission()
+  await authing.authz.addPermissionToRole({
+    roleId: role._id,
+    permissionId: permission._id
+  })
+  await authing.authz.addRoleToGroup({
+    roleId: role._id,
+    groupId: group._id
+  })
+
+  const { totalCount, list } = await authing.authz.groupPermissionList(group._id)
+  t.assert(totalCount === 1)
+  t.assert(list.length === 1)
+  t.assert(list[0].name)
+})
+
+test.only('查询 Group Permission 列表 # 2', async t => {
+  const group = await createGroup()
+  const role1 = await createRole()
+  const role2 = await createRole()
+  const permission1 = await createPermission()
+  const permission2 = await createPermission()
+
+  await authing.authz.addPermissionToRole({
+    roleId: role1._id,
+    permissionId: permission1._id
+  })
+  await authing.authz.addPermissionToRole({
+    roleId: role2._id,
+    permissionId: permission2._id
+  })
+  await authing.authz.addRoleToGroup({
+    roleId: role1._id,
+    groupId: group._id
+  })
+  await authing.authz.addRoleToGroup({
+    roleId: role2._id,
+    groupId: group._id
+  })
+
+  const { totalCount, list } = await authing.authz.groupPermissionList(group._id)
+  t.assert(totalCount === 2)
+  t.assert(list.length === 2)
+  t.assert(list[0].name)
+})
+
 // Group 添加/删除 User
 test('注册用户', async t => {
   try {

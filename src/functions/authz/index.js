@@ -36,6 +36,7 @@ import addPermissionToRole from "./addPermissionToRole"
 import addPermissionToRoleBatch from "./addPermissionToRoleBatch"
 import removePermissionFromRole from "./removePermissionFromRole"
 import removePermissionFromRoleBatch from "./removePermissionFromRoleBatch"
+import groupPermissionList from "./groupPermissionList"
 
 const mod = {
 
@@ -50,6 +51,7 @@ const mod = {
   // Group Users & Roles
   groupRoleList,
   groupUserList,
+  groupPermissionList,
 
   // Role
   role,
