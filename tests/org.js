@@ -147,7 +147,7 @@ test('查询根节点的子节点', async t => {
     t.assert(children[0].group)
     t.assert(children[0].group._id)
   } catch (err) {
-    t.fail(formatError(errF))
+    t.fail(formatError(err))
   }
 })
 
@@ -159,7 +159,7 @@ test('查询叶节点的子节点', async t => {
     })
     t.assert(children.length === 0)
   } catch (err) {
-    t.fail(formatError(errF))
+    t.fail(formatError(err))
   }
 })
 
@@ -231,7 +231,7 @@ test('构建树状 Group # 1', async t => {
 
   org = await authing.org.findById(org._id)
   const orgTree = org.tree
-  // printFullObject(orgTree)
+  printFullObject(orgTree)
   t.assert(orgTree._id === 公司A._id) // 根节点
   t.assert(orgTree.children.length === 2) // 有两个一级子节点
 })

@@ -14,15 +14,12 @@ export default async function createOrg(input) {
       _id
       nodes {
         _id
-        children
-        root
-        group {
-          _id
-          name
+        name
           description
           createdAt
           updatedAt
-        }
+        children
+        root
       }
     }
   }

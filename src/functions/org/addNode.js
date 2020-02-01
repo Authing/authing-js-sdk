@@ -24,15 +24,12 @@ export default async function addNode(input) {
       _id
       nodes {
         _id
+        name
+        description
+        createdAt
+        updatedAt
         children
         root
-        group {
-          _id
-          name
-          description
-          createdAt
-          updatedAt
-        }
       }
     }
   }

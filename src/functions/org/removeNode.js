@@ -20,20 +20,16 @@ export default async function removeNode(input) {
       _id
       nodes {
         _id
+        name
+        description
+        createdAt
+        updatedAt
         children
         root
-        group {
-          _id
-          name
-          description
-          createdAt
-          updatedAt
-        }
       }
     }
   }
   `
-
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: "removeOrgNode",

@@ -9,15 +9,12 @@ export default async function findById(_id) {
       _id
       nodes {
         _id
-        children
-        root
-        group {
-          _id
-          name
+        name
           description
           createdAt
           updatedAt
-        }
+        children
+        root
       }
     }
   }
