@@ -99,8 +99,8 @@ test('查询 Org', async t => {
 test('查询 Org 列表', async t => {
   try {
     const orgs = await authing.org.all()
-    t.assert(orgs.totalCount === 1)
-    t.assert(orgs.list.length === 1)
+    t.assert(orgs.totalCount)
+    t.assert(orgs.list.length)
   } catch (err) {
     t.fail(formatError(err))
   }
