@@ -1,19 +1,27 @@
 import test from "ava";
 import { formatError } from "../src/utils/formatError";
 const Authing = require("../dist/authing-js-sdk-node");
-
+import axios from "axios";
+import querystring from "querystring";
 // const clientId = "5dd77e6efa26f000d18101ca";
 // const secret = "82f4c093e345d79c416ec3da6854a453";
-
+let baseHost = "authing.cn";
 //线上
 const secret = "bb278212d520fc19f169e361179ea690";
 const clientId = "5c95905578fce5000166f853";
+
+const gqlEndPoint = "https://core.authing.cn/graphql";
 function randomEmail() {
   let rand = Math.random()
     .toString(36)
     .slice(2);
   let email = rand + "@test.com";
   return email;
+}
+function randomName() {
+  return Math.random()
+    .toString(36)
+    .slice(2);
 }
 let auth = new Authing({
   userPoolId: clientId,
@@ -987,4 +995,284 @@ GKl64GDcIq3au+aqJQIDA123
       t.fail();
     }
   }
+});
+test("OIDC 授权码模式", async t => {
+  // 创建 oidc 应用
+  let name = randomName();
+  let domain = randomName();
+  let redirectUri = "https://baidu.com";
+  let token = await auth.fetchToken;
+
+  let res = await axios.post(
+    gqlEndPoint,
+    {
+      query:
+        "mutation CreateOIDCApp($name: String!, $domain: String!, $image: String, $redirect_uris: [String!]!, $clientId: String, $description: String, $homepageURL: String, $grant_types: [String!]!, $token_endpoint_auth_method: String, $id_token_signed_response_alg: String, $response_types: [String!]!, $jwks: String, $jwks_uri: String, $authorization_code_expire: String, $id_token_expire: String, $access_token_expire: String, $cas_expire: String) {\n  CreateOIDCApp(name: $name, domain: $domain, image: $image, redirect_uris: $redirect_uris, clientId: $clientId, homepageURL: $homepageURL, description: $description, token_endpoint_auth_method: $token_endpoint_auth_method, grant_types: $grant_types, response_types: $response_types, jwks: $jwks, jwks_uri: $jwks_uri, id_token_signed_response_alg: $id_token_signed_response_alg, authorization_code_expire: $authorization_code_expire, id_token_expire: $id_token_expire, access_token_expire: $access_token_expire, cas_expire: $cas_expire) {\n    _id\n    name\n    image\n  domain \n client_secret \n __typename\n  }\n}\n",
+      variables: {
+        name,
+        redirectUris: [],
+        description: "",
+        image: "",
+        redirectUriString: redirectUri,
+        grant_types: ["authorization_code", "refresh_token"],
+        token_endpoint_auth_method: "client_secret_post",
+        response_types: ["code"],
+        id_token_signed_response_alg: "HS256",
+        id_token_encrypted_response_alg: "不加密",
+        id_token_encrypted_response_enc: "不加密",
+        userinfo_signed_response_alg: "不加密",
+        userinfo_encrypted_response_alg: "不加密",
+        userinfo_encrypted_response_enc: "不加密",
+        request_object_signing_alg: "不加密",
+        request_object_encryption_alg: "不加密",
+        request_object_encryption_enc: "不加密",
+        domain,
+        jwks: "",
+        jwks_uri: "",
+        authorization_code_expire: "600",
+        id_token_expire: "3600",
+        access_token_expire: "3600",
+        cas_expire: "3600",
+        redirect_uris: [redirectUri],
+        clientId // oidc 应用所属的用户池的 id
+      },
+      operationName: "CreateOIDCApp"
+    },
+    {
+      headers: { Authorization: token }
+    }
+  );
+  t.truthy(res.data.data.CreateOIDCApp._id);
+  let oidcApp = res.data.data.CreateOIDCApp;
+  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+
+  let url = `https://${oidcApp.domain}.authing.cn/oauth/oidc/auth?client_id=${oidcApp._id}&redirect_uri=https%3A%2F%2Fbaidu.com&scope=openid%20profile offline_access&prompt=consent&response_type=code&state=881c87be7g6`;
+  try {
+    res = await axios.get(url, { maxRedirects: 0 });
+  } catch (err) {
+    let cookies = err.response.headers["set-cookie"];
+    let location = err.response.headers.location;
+    let email = randomEmail();
+    let user = await auth.register({
+      email,
+      password: "123456a"
+    });
+    let loggedInUser = await auth.login({ email, password: "123456a" });
+    let token = loggedInUser.token;
+    let oidcConfirmUrl = `https://${oidcApp.domain}.authing.cn${location}/login`;
+    res = await axios.post(
+      oidcConfirmUrl,
+      {},
+      {
+        headers: {
+          cookie: cookies.join(";"),
+          authorization: token
+        }
+      }
+    );
+    t.assert(res.data.redirectTo);
+    try {
+      res = await axios.get(res.data.redirectTo, {
+        headers: {
+          cookie: cookies.join(";")
+        },
+        maxRedirects: 0
+      });
+    } catch (err) {
+      let redirectUrl = err.response.headers.location;
+      let qs = redirectUrl.split("?")[1];
+      let qsObj = querystring.parse(qs);
+      let code = qsObj.code;
+      // code 换 token
+      let code2token = await axios.post(
+        `https://${oidcApp.domain}.${baseHost}/oauth/oidc/token`,
+        querystring.stringify({
+          code,
+          client_id: oidcApp._id,
+          client_secret: oidcApp.client_secret,
+          grant_type: "authorization_code",
+          redirect_uri: redirectUri
+        }),
+        {
+          headers: { "content-type": "application/x-www-form-urlencoded" }
+        }
+      );
+      let token = code2token.data;
+      t.assert(code2token.data.access_token);
+      t.assert(code2token.data.expires_in);
+      t.assert(code2token.data.id_token);
+      t.assert(code2token.data.scope);
+      t.assert(code2token.data.token_type);
+      // 在线验证 token
+      let status = await auth.checkLoginStatus(token.access_token);
+      t.true(status.status);
+      status = await auth.checkLoginStatus(token.id_token);
+      t.true(status.status);
+      // token 换用户信息
+      let userInfoRes = await axios.get(
+        `https://${oidcApp.domain}.${baseHost}/oauth/oidc/user/userinfo`,
+        {
+          params: {
+            access_token: token.access_token
+          }
+        }
+      );
+      let userInfo = userInfoRes.data;
+      t.assert(userInfo.sub);
+      // 刷新 token
+      let refresh = await axios.post(
+        `https://${oidcApp.domain}.${baseHost}/oauth/oidc/token`,
+        querystring.stringify({
+          client_id: oidcApp._id,
+          client_secret: oidcApp.client_secret,
+          grant_type: "refresh_token",
+          refresh_token: token.refresh_token
+        }),
+        {
+          headers: { "content-type": "application/x-www-form-urlencoded" }
+        }
+      );
+      let refreshedToken = refresh.data;
+      // 在线验证刷新之后的 token
+      status = await auth.checkLoginStatus(refreshedToken.access_token);
+      t.true(status.status);
+      status = await auth.checkLoginStatus(refreshedToken.id_token);
+      t.true(status.status);
+      // 用刷新后的 token 换用户信息
+      userInfoRes = await axios.get(
+        `https://${oidcApp.domain}.${baseHost}/oauth/oidc/user/userinfo`,
+        {
+          params: {
+            access_token: refreshedToken.access_token
+          }
+        }
+      );
+      userInfo = userInfoRes.data;
+      t.assert(userInfo.sub);
+    }
+  }
+});
+test("OIDC 隐式模式", async t => {
+  // 创建 oidc 应用
+  let name = randomName();
+  let domain = randomName();
+  let redirectUri = "https://baidu.com";
+  let token = await auth.fetchToken;
+
+  let res = await axios.post(
+    gqlEndPoint,
+    {
+      query:
+        "mutation CreateOIDCApp($name: String!, $domain: String!, $image: String, $redirect_uris: [String!]!, $clientId: String, $description: String, $homepageURL: String, $grant_types: [String!]!, $token_endpoint_auth_method: String, $id_token_signed_response_alg: String, $response_types: [String!]!, $jwks: String, $jwks_uri: String, $authorization_code_expire: String, $id_token_expire: String, $access_token_expire: String, $cas_expire: String) {\n  CreateOIDCApp(name: $name, domain: $domain, image: $image, redirect_uris: $redirect_uris, clientId: $clientId, homepageURL: $homepageURL, description: $description, token_endpoint_auth_method: $token_endpoint_auth_method, grant_types: $grant_types, response_types: $response_types, jwks: $jwks, jwks_uri: $jwks_uri, id_token_signed_response_alg: $id_token_signed_response_alg, authorization_code_expire: $authorization_code_expire, id_token_expire: $id_token_expire, access_token_expire: $access_token_expire, cas_expire: $cas_expire) {\n    _id\n    name\n    image\n  domain \n client_secret \n __typename\n  }\n}\n",
+      variables: {
+        name,
+        redirectUris: [],
+        description: "",
+        image: "",
+        redirectUriString: redirectUri,
+        grant_types: [
+          "authorization_code",
+          "refresh_token",
+          "implicit",
+          "client_credentials"
+        ],
+        token_endpoint_auth_method: "client_secret_post",
+        response_types: [
+          "code",
+          "code token",
+          "id_token token",
+          "code id_token",
+          "code id_token token",
+          "none",
+          "id_token"
+        ],
+        id_token_signed_response_alg: "HS256",
+        id_token_encrypted_response_alg: "不加密",
+        id_token_encrypted_response_enc: "不加密",
+        userinfo_signed_response_alg: "不加密",
+        userinfo_encrypted_response_alg: "不加密",
+        userinfo_encrypted_response_enc: "不加密",
+        request_object_signing_alg: "不加密",
+        request_object_encryption_alg: "不加密",
+        request_object_encryption_enc: "不加密",
+        domain,
+        jwks: "",
+        jwks_uri: "",
+        authorization_code_expire: "600",
+        id_token_expire: "3600",
+        access_token_expire: "3600",
+        cas_expire: "3600",
+        redirect_uris: [redirectUri],
+        clientId // oidc 应用所属的用户池的 id
+      },
+      operationName: "CreateOIDCApp"
+    },
+    {
+      headers: { Authorization: token }
+    }
+  );
+  t.truthy(res.data.data.CreateOIDCApp._id);
+  let oidcApp = res.data.data.CreateOIDCApp;
+  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+  let url = `https://${oidcApp.domain}.authing.cn/oauth/oidc/auth?client_id=${oidcApp._id}&redirect_uri=https%3A%2F%2Fbaidu.com&scope=openid profile&response_type=id_token token&state=23436&nonce=12415`;
+  try {
+    res = await axios.get(url, { maxRedirects: 0 });
+  } catch (err) {
+    let cookies = err.response.headers["set-cookie"];
+    let location = err.response.headers.location;
+    let email = randomEmail();
+    let user = await auth.register({
+      email,
+      password: "123456a"
+    });
+    let loggedInUser = await auth.login({ email, password: "123456a" });
+    let token = loggedInUser.token;
+    let oidcConfirmUrl = `https://${oidcApp.domain}.authing.cn${location}/login`;
+    res = await axios.post(
+      oidcConfirmUrl,
+      {},
+      {
+        headers: {
+          cookie: cookies.join(";"),
+          authorization: token
+        }
+      }
+    );
+    t.assert(res.data.redirectTo);
+    try {
+      res = await axios.get(res.data.redirectTo, {
+        headers: {
+          cookie: cookies.join(";")
+        },
+        maxRedirects: 0
+      });
+    } catch (err) {
+      let redirectUrl = err.response.headers.location;
+      let qs = redirectUrl.split("#")[1];
+      let qsObj = querystring.parse(qs);
+      let idToken = qsObj.id_token;
+      let accessToken = qsObj.access_token;
+      t.assert(qsObj.id_token);
+      t.assert(qsObj.access_token);
+      // 在线验证 token
+      let status = await auth.checkLoginStatus(accessToken);
+      t.true(status.status);
+      status = await auth.checkLoginStatus(idToken);
+      t.true(status.status);
+      // token 换用户信息
+      let userInfoRes = await axios.get(
+        `https://${oidcApp.domain}.${baseHost}/oauth/oidc/user/userinfo`,
+        {
+          params: {
+            access_token: accessToken
+          }
+        }
+      );
+      let userInfo = userInfoRes.data;
+      t.assert(userInfo.sub);
+    }
+  }
+});
+test("OIDC 混合模式", async t => {
+  // 创建 oidc 应用
 });
