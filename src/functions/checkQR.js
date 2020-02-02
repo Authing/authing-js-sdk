@@ -1,6 +1,6 @@
 import axios from 'axios';
 // 检验微信二维码扫描状态
-export function checkQR(QRCodeId) {
+export default function checkQR(QRCodeId) {
   let random;
   if (typeof QRCodeId === 'undefined') {
     if (typeof sessionStorage !== 'undefined') {

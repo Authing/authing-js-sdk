@@ -1,4 +1,4 @@
-export function queryPermissions(userId) {
+export default function queryPermissions(userId) {
   if (!userId) {
     throw Error('userId is not provided.');
   }

@@ -1,4 +1,4 @@
-export function updateEmail(options) {
+export default function updateEmail(options) {
     if (!options) {
         throw Error("options is not provided");
     }

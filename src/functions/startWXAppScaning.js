@@ -1,4 +1,4 @@
-export function startWXAppScaning(opts) {
+export default function startWXAppScaning(opts) {
   const self = this;
 
   if (!opts) {

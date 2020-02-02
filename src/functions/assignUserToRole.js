@@ -1,4 +1,4 @@
-export function assignUserToRole(options) {
+export default function assignUserToRole(options) {
   if (!options) {
     throw Error('options is not provided.');
   }

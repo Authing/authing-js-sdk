@@ -1,4 +1,4 @@
-export function sendActivationEmail(options) {
+export default function sendActivationEmail(options) {
   if (!options.email) {
     throw Error('email in options is not provided');
   }

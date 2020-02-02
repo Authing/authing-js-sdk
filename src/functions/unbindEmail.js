@@ -1,4 +1,4 @@
-export function unbindEmail(variables) {
+export default function unbindEmail(variables) {
   return this.UserServiceGql.request({
     operationName: "unbindEmail",
     query: `mutation unbindEmail(

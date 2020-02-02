@@ -1,4 +1,4 @@
-export function refreshToken(options) {
+export default function refreshToken(options) {
   if (!options) {
     throw Error("options is not provided.");
   }

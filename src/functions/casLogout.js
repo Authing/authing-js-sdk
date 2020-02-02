@@ -1,5 +1,5 @@
 import axios from "axios";
-export function casLogout() {
+export default function casLogout() {
   const url = `${this.opts.host.user.replace(
     "/graphql",
     ""

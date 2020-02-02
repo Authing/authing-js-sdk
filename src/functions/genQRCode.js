@@ -1,6 +1,6 @@
 import axios from "axios";
 import { randomWord } from "../utils/randomWord";
-export function genQRCode(clientId) {
+export default function genQRCode(clientId) {
   const random = randomWord(true, 12, 24);
   if (typeof sessionStorage !== "undefined") {
     sessionStorage.randomWord = random;

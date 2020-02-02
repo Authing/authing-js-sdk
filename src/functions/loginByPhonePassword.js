@@ -1,7 +1,7 @@
 import configs from "../configs";
 import encryption from "../utils/_encryption";
 import TokenMananger from "../TokenManager";
-export function loginByPhonePassword(options) {
+export default function loginByPhonePassword(options) {
   if (!options) {
     throw Error("options is not provided.");
   }
@@ -49,7 +49,7 @@ export function loginByPhonePassword(options) {
     // 登录成功记录 token
     if (res && res.token) {
       TokenMananger.getInstance().setUserToken(res.token);
-      if(configs.inBrowser)
+      if (configs.inBrowser)
         localStorage.setItem('_authing_token', res.token)
     }
     return res;

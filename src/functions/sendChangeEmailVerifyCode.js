@@ -1,4 +1,4 @@
-export function sendChangeEmailVerifyCode(options) {
+export default function sendChangeEmailVerifyCode(options) {
     if (!options) {
         throw Error("options is not provided");
     }

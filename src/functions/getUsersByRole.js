@@ -1,4 +1,4 @@
-export function getUsersByRole({ roleId, page = 1, count = 10 }) {
+export default function getUsersByRole({ roleId, page = 1, count = 10 }) {
   // 查询属于某角色的所有用户
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({

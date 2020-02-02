@@ -1,4 +1,4 @@
-export function updateRolePermissions(options) {
+export default function updateRolePermissions(options) {
   if (!options) {
     throw Error('options is not provided.');
   }

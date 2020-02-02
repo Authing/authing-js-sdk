@@ -1,4 +1,4 @@
-export function checkPreflight() {
+export default function checkPreflight() {
   let service = Promise.resolve('ok')
   let cdn = Promise.resolve('ok')
   if (this.opts.preflight) {

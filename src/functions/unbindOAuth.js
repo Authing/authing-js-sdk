@@ -1,4 +1,4 @@
-export function unbindOAuth(variables) {
+export default function unbindOAuth(variables) {
   if (!variables) {
     throw Error("options is not provided");
   }

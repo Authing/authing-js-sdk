@@ -1,5 +1,5 @@
 import axios from "axios";
-export function getVerificationCode(phone) {
+export default function getVerificationCode(phone) {
   if (!phone) {
     throw "phone is not provided";
   }

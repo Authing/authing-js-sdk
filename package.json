@@ -1,76 +1,60 @@
 {
-  "name": "authing-js-sdk",
-  "version": "3.6.0",
-  "description": "Official sdk of Authing",
-  "main": "dist/authing-js-sdk-node.js",
-  "browser": "dist/authing-js-sdk-browser.min.js",
-  "unpkg": "dist/authing-js-sdk-browser.min.js",
-  "prepublishOnly": "npm run build",
-  "scripts": {
-    "lint": "eslint --fix .",
-    "test": "ava -vs",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov | codecov",
-    "start": "nyc --reporter html ava -vs && open ./.nyc_output/index.html",
-    "build": "webpack --config webpack.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Authing/authing-js-sdk.git"
-  },
-  "keywords": [
-    "authing",
-    "auth",
-    "oauth"
-  ],
-  "author": "authing",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Authing/authing-js-sdk/issues"
-  },
-  "homepage": "https://github.com/Authing/authing-js-sdk#readme",
-  "dependencies": {
-    "axios": "^0.19.0",
-    "jsencrypt": "^3.0.0-rc.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.6.3",
-    "@babel/polyfill": "^7.6.0",
-    "@babel/preset-env": "^7.6.3",
-    "@babel/register": "^7.6.2",
-    "ava": "^2.4.0",
-    "babel-loader": "^8.0.6",
-    "eslint": "^6.5.1",
-    "webpack": "^4.41.0",
-    "webpack-cli": "^3.3.9"
-  },
-  "ava": {
-    "files": [
-      "tests/functions.js"
-    ],
-    "require": [
-      "@babel/register",
-      "@babel/polyfill"
-    ],
-    "babel": {
-      "testOptions": {
-        "presets": [
-          "@babel/preset-env"
-        ]
-      }
-    }
-  },
-  "nyc": {
-    "lines": 10,
-    "check-coverage": true,
-    "reporter": [
-      "text-lcov"
-    ],
-    "report-dir": "./.nyc_output",
-    "exclude": [
-      "test",
-      "test{,-*}.js",
-      "**/*.test.js",
-      "**/__tests__/**"
-    ]
-  }
+	"name": "authing-js-sdk",
+	"version": "3.7.0",
+	"description": "Official sdk of Authing",
+	"main": "dist/authing-js-sdk-node.js",
+	"browser": "dist/authing-js-sdk-browser.min.js",
+	"unpkg": "dist/authing-js-sdk-browser.min.js",
+	"prepublishOnly": "npm run build",
+	"scripts": {
+		"lint": "eslint --fix .",
+		"test:web": "ava -vs",
+		"test": "export BUILD_TARGET=node && ava -vs",
+		"coverage": "nyc report --reporter=text-lcov > coverage.lcov | codecov",
+		"start": "nyc --reporter html ava -vs && open ./.nyc_output/index.html",
+		"build": "webpack --config webpack.config.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Authing/authing-js-sdk.git"
+	},
+	"keywords": [ "authing", "auth", "oauth" ],
+	"author": "authing",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Authing/authing-js-sdk/issues"
+	},
+	"homepage": "https://github.com/Authing/authing-js-sdk#readme",
+	"dependencies": {
+		"axios": "^0.19.0",
+		"jsencrypt": "^3.0.0-rc.1",
+		"lodash": "^4.17.15"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.6.3",
+		"@babel/polyfill": "^7.6.0",
+		"@babel/preset-env": "^7.6.3",
+		"@babel/register": "^7.6.2",
+		"ava": "^2.4.0",
+		"babel-loader": "^8.0.6",
+		"eslint": "^6.5.1",
+		"webpack": "^4.41.0",
+		"webpack-cli": "^3.3.9"
+	},
+	"ava": {
+		"files": [ "tests/org.js", "tests/authz.js", "tests/functions.js" ],
+		"require": [ "@babel/register", "@babel/polyfill" ],
+		"babel": {
+			"testOptions": {
+				"presets": [ "@babel/preset-env" ]
+			}
+		}
+	},
+	"nyc": {
+		"lines": 10,
+		"check-coverage": true,
+		"reporter": [ "text-lcov" ],
+		"report-dir": "./.nyc_output",
+		"exclude": [ "test", "test{,-*}.js", "**/*.test.js", "**/__tests__/**" ]
+	}
 }

@@ -1,4 +1,4 @@
-export function revokeAuthedApp(options) {
+export default function revokeAuthedApp(options) {
   if (!options) {
     throw Error("options is not provided.");
   }

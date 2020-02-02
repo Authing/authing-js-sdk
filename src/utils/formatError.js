@@ -2,7 +2,7 @@ export function formatError(error) {
   if (typeof error === 'string') return error;
   if (error.request) {
     // axios 错误
-    if(error.response)
+    if (error.response)
       return JSON.stringify(error.response.data);
     else
       return JSON.stringify(error.request);

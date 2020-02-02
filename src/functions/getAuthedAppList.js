@@ -1,4 +1,4 @@
-export function getAuthedAppList(options) {
+export default function getAuthedAppList(options) {
   if (!options) {
     throw Error("options is not provided.");
   }

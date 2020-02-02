@@ -1,5 +1,5 @@
 import axios from "axios";
-export function sendRegisterPhoneCode(phone) {
+export default function sendRegisterPhoneCode(phone) {
   if (!phone) {
     throw "phone is not provided";
   }

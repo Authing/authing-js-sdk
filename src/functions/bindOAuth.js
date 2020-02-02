@@ -1,4 +1,4 @@
-export function bindOAuth(variables) {
+export default function bindOAuth(variables) {
   if (!variables) {
     throw Error('options is not provided');
   }
