@@ -1,5 +1,5 @@
 import axios from 'axios';
-export function _uploadAvatar(options) {
+export default function _uploadAvatar(options) {
   return this.UserServiceGql.request({
     operationName: 'qiNiuUploadToken',
     query: `query qiNiuUploadToken {

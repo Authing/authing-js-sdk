@@ -1,5 +1,5 @@
 import configs from '../configs'
-export function selectAvatarFile(cb) {
+export default function selectAvatarFile(cb) {
   if (!configs.inBrowser) {
     throw Error("当前不是浏览器环境，无法选取文件");
   }

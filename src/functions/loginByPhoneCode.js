@@ -1,6 +1,6 @@
 import configs from "../configs";
 import TokenMananger from "../TokenManager";
-export function loginByPhoneCode(options) {
+export default function loginByPhoneCode(options) {
   if (!options) {
     throw Error("options is not provided.");
   }

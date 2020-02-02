@@ -1,4 +1,4 @@
-export function list(page, count, queryOptions) {
+export default function list(page, count, queryOptions) {
   page = page || 1;
   count = count || 10;
   queryOptions = queryOptions || {

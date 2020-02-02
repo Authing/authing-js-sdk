@@ -129,10 +129,24 @@ class Authing {
     }
     // 预检 oauth users 服务 或 cdn
     this.checkPreflight();
+
+    if (this.authz) {
+      Object.keys(this.authz).forEach(item => {
+        this.authz[item] = this.authz[item].bind(this)
+      })
+    }
+
+    if (this.org) {
+      Object.keys(this.org).forEach(item => {
+        this.org[item] = this.org[item].bind(this)
+      })
+    }
   }
 }
+
 Authing.prototype = {
   constructor: Authing,
   ...mods
 };
+
 module.exports = Authing;

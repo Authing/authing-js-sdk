@@ -1,4 +1,4 @@
-export function remove(_id, operator) {
+export default function remove(_id, operator) {
   if (!_id) {
     throw Error('_id is not provided');
   }

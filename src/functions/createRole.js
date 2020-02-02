@@ -1,4 +1,4 @@
-export function createRole(options) {
+export default function createRole(options) {
   if (!options) {
     throw Error('options is not provided.');
   }

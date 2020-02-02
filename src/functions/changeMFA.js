@@ -1,4 +1,4 @@
-export function changeMFA(options) {
+export default function changeMFA(options) {
   // 用于修改某一用户池（应用）的 MFA 状态
   if (!options) {
     throw Error("options is not provided.");

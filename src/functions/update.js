@@ -1,5 +1,5 @@
 import encryption from '../utils/_encryption';
-export function update(options) {
+export default function update(options) {
   const self = this;
   if (!options) {
     throw Error('options is not provided');

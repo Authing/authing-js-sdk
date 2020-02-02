@@ -1,4 +1,4 @@
-export function updatePhone(options) {
+export default function updatePhone(options) {
     if (!options) {
         throw Error("options is not provided");
     }

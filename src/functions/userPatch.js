@@ -1,4 +1,4 @@
-export function userPatch(options) {
+export default function userPatch(options) {
   if (!options) {
     throw Error('options is not provided');
   }

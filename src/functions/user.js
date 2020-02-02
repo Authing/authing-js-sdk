@@ -1,4 +1,4 @@
-export function user(options) {
+export default function user(options) {
   if (!options) {
     throw Error('options is not provided');
   }

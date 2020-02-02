@@ -1,6 +1,6 @@
 import encryption from "../utils/_encryption";
 
-export function changePassword(options) {
+export default function changePassword(options) {
   if (!options) {
     throw Error("options is not provided");
   }

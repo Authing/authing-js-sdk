@@ -1,4 +1,4 @@
-export function verifyResetPasswordVerifyCode(options) {
+export default function verifyResetPasswordVerifyCode(options) {
   if (!options) {
     throw Error("options is not provided");
   }

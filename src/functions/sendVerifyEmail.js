@@ -1,4 +1,4 @@
-export function sendVerifyEmail(options) {
+export default function sendVerifyEmail(options) {
   if (!options.email) {
     throw Error("email in options is not provided");
   }

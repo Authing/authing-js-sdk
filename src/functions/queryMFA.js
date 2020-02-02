@@ -1,4 +1,4 @@
-export function queryMFA(options) {
+export default function queryMFA(options) {
   if (!options) {
     throw Error("options is not provided.");
   }

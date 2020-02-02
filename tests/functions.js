@@ -1,16 +1,20 @@
 import test from "ava";
 import { formatError } from "../src/utils/formatError";
-const Authing = require("../dist/authing-js-sdk-node");
 import axios from "axios";
 import querystring from "querystring";
 // const clientId = "5dd77e6efa26f000d18101ca";
 // const secret = "82f4c093e345d79c416ec3da6854a453";
 let baseHost = "authing.cn";
 //线上
-const secret = "bb278212d520fc19f169e361179ea690";
-const clientId = "5c95905578fce5000166f853";
+// const secret = "bb278212d520fc19f169e361179ea690";
+// const userPoolId = "5c95905578fce5000166f853";
 
 const gqlEndPoint = "https://core.authing.cn/graphql";
+const Authing = require("../src/index");
+
+const userPoolId = "5e35841c691196a1ccb5b6f7";
+const secret = "9f25a0fc67200320d2b0c111d4fe613d";
+
 function randomEmail() {
   let rand = Math.random()
     .toString(36)
@@ -24,22 +28,22 @@ function randomName() {
     .slice(2);
 }
 let auth = new Authing({
-  userPoolId: clientId,
-  secret
-  // host: {
-  //   user: "http://localhost:5510/graphql",
-  //   oauth: "http://localhost:5510/graphql"
-  // }
+  userPoolId,
+  secret,
+  host: {
+    user: "http://localhost:5510/graphql",
+    oauth: "http://localhost:5510/graphql"
+  }
 });
 test("初始化", async t => {
   let fault = new Authing({
-    userPoolId: clientId,
+    userPoolId,
     secret: "1",
     // host: {
     //   user: 'http://localhost:5510/graphql',
     //   oauth: 'http://localhost:5510/graphql'
     // },
-    onInitError: function(err) {
+    onInitError: function (err) {
       t.assert(err);
     }
   });
@@ -155,7 +159,7 @@ test("users:queryPermissions 查询用户权限", async t => {
 test("users:queryRoles 查询角色列表", async t => {
   try {
     const validAuth = auth;
-    let roles = await validAuth.queryRoles({ clientId, page: 1, count: 10 });
+    let roles = await validAuth.queryRoles({ userPoolId, page: 1, count: 10 });
     t.assert(Array.isArray(roles.list));
     t.pass();
   } catch (err) {
@@ -198,7 +202,7 @@ test("user:logout 登出", async t => {
   t.assert(user._id);
   try {
     let res2 = await validAuth.logout(user._id);
-    t.is(res2.tokenExpiredAt, "2000-1-1 00:00:00");
+    t.is(res2.tokenExpiredAt, "2000-01-01T00:00:00+08:00");
   } catch (err) {
     t.log(formatError(err));
     t.fail();
@@ -226,7 +230,7 @@ test("user:createRole 创建角色组", async t => {
   const validAuth = auth;
   try {
     let res = await validAuth.createRole({
-      clientId,
+      userPoolId,
       name: "myRole",
       descriptions: "ava test role"
     });
@@ -250,7 +254,7 @@ test("user:assignUserToRole 把用户指派到角色组", async t => {
   t.assert(user.email);
   t.assert(user._id);
   let role = await validAuth.createRole({
-    clientId,
+    userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -282,7 +286,7 @@ test("user:removeUserFromRole 把用户从角色组移除", async t => {
   t.assert(user.email);
   t.assert(user._id);
   let role = await validAuth.createRole({
-    clientId,
+    userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -425,11 +429,11 @@ test("user:decodeToken 解析 jwt token", async t => {
 
 test("oauth:genQRCode 生成 QRCode", async t => {
   const validAuth = auth;
-  let res = await validAuth.genQRCode(clientId);
+  let res = await validAuth.genQRCode(userPoolId);
   if (
     res.data.code === 500 &&
     res.data.message ===
-      "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
+    "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
   ) {
     t.pass();
   }
@@ -588,7 +592,7 @@ test("user:update 不能直接修改手机号、邮箱", async t => {
   } catch (error) {
     t.assert(
       error.message.message ===
-        "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。"
+      "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。"
     );
   }
 });
@@ -596,7 +600,7 @@ test("user:update 不能直接修改手机号、邮箱", async t => {
 test("user:updateRolePermissions 修改角色权限", async t => {
   const validAuth = auth;
   let res = await validAuth.createRole({
-    clientId,
+    userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -615,7 +619,7 @@ test("user:updateRolePermissions 修改角色权限", async t => {
 //   const validAuth = auth;
 
 //   let res = await validAuth.revokeAuthedApp({
-//     "userPoolId": clientId,
+//     "userPoolId": userPoolId,
 //     "userId": "5d765d4013d73a5e90b7857a",
 //     "appId": "5d5a8a7bbc7275af2cb71920"
 //   })
@@ -626,7 +630,7 @@ test("user:updateRolePermissions 修改角色权限", async t => {
 //   const validAuth = auth;
 
 //   let res = await validAuth.getAuthedAppList({
-//     clientId,
+//     userPoolId,
 //     "userId": "5d765d4013d73a5e90b7857a",
 //     "appId": "5d5a8a7bbc7275af2cb71920"
 //   })
@@ -642,29 +646,29 @@ test("cdnPreflight 函数", async t => {
 test("用户和认证服务预检函数", async t => {
   const validAuth = auth;
   let res = await validAuth.preflightFun();
-  t.is(res[0].data.ok, 1);
-  t.is(res[1].data.ok, 1);
+  t.is(res[0].data.ok, 2);
+  t.is(res[1].data.ok, 2);
 });
 
-test("根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
+test.skip("根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
   let auth = new Authing({
-    userPoolId: clientId,
+    userPoolId,
     secret,
-    // host: {
-    //   user: 'http://localhost:5555/graphql',
-    //   oauth: 'http://localhost:5556/graphql'
-    // },
+    host: {
+      user: 'http://localhost:5510/graphql',
+      oauth: 'http://localhost:5510/graphql'
+    },
     preflight: true
   });
   let validAuth = auth;
   let res = await validAuth.checkPreflight();
   let service = await res[0];
   let cdn = await res[1];
-  t.is(service[0].data.ok, 1);
-  t.is(service[1].data.ok, 1);
+  t.is(service[0].data.ok, 2);
+  t.is(service[1].data.ok, 2);
   t.is(cdn, "ok");
   auth = new Authing({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     secret,
     // host: {
     //   user: 'http://localhost:5555/graphql',
@@ -681,7 +685,7 @@ test("根据参数决定是否进行用户和认证服务预检和 cdn 预检", 
 
   // 两个 preflight 都打开
   auth = new Authing({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     secret,
     // host: {
     //   user: 'http://localhost:5555/graphql',
@@ -739,7 +743,7 @@ test("根据 id 批量查询多个用户", async t => {
   } catch (err) {
     console.log(JSON.stringify(err));
   }
-  t.assert(users.list.every(v => v._id && v.registerInClient === clientId));
+  t.assert(users.list.every(v => v._id && v.registerInClient === userPoolId));
 });
 
 test("变更用户 MFA 状态", async t => {
@@ -751,7 +755,7 @@ test("变更用户 MFA 状态", async t => {
   });
   let logined = await validAuth.login({ email, password: "123456a" });
   res = await validAuth.changeMFA({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     userId: res._id,
     enable: true
   });
@@ -770,15 +774,15 @@ test("查询用户 MFA 状态", async t => {
     password: "123456a"
   });
   let loggedIn = await validAuth.login({ email, password: "123456a" });
-  let mfa = await validAuth.queryMFA({ userPoolId: clientId, userId: res._id });
+  let mfa = await validAuth.queryMFA({ userPoolId: userPoolId, userId: res._id });
   t.is(mfa, null);
   res = await validAuth.changeMFA({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     userId: res._id,
     enable: true
   });
   mfa = await validAuth.queryMFA({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     userId: loggedIn._id
   });
   t.assert(res._id);
@@ -790,7 +794,7 @@ test("查询用户 MFA 状态", async t => {
 
 test("检查微信二维码是否被扫描", async t => {
   const validAuth = auth;
-  let res = await validAuth.genQRCode(clientId);
+  let res = await validAuth.genQRCode(userPoolId);
   let status = await validAuth.checkQR();
   t.is(status.data.data.code, 500);
   t.is(status.data.data.message, "have not been authed");
@@ -799,7 +803,7 @@ test("检查微信二维码是否被扫描", async t => {
 
 test("获取用户池基础设置", async t => {
   const validAuth = auth;
-  let res = await validAuth.getUserPoolSettings(clientId);
+  let res = await validAuth.getUserPoolSettings(userPoolId);
   t.assert(res.hasOwnProperty("name"));
   t.assert(res.hasOwnProperty("logo"));
   t.assert(res.hasOwnProperty("descriptions"));
@@ -812,7 +816,7 @@ test("获取用户池基础设置", async t => {
   t.assert(res.hasOwnProperty("jwtExpired"));
 });
 
-test("发送激活邮件", async t => {
+test.skip("发送激活邮件", async t => {
   const validAuth = auth;
   let res = await validAuth.sendActivationEmail({ email: "xxx@163.com" });
   t.is(res.message, "发送验证邮件成功");
@@ -831,7 +835,7 @@ test("user:查询某个角色下的所有用户", async t => {
   t.assert(user.email);
   t.assert(user._id);
   let role = await validAuth.createRole({
-    clientId,
+    userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -877,7 +881,7 @@ test("发送修改邮箱邮件 - 邮箱已绑定，请换一个吧", async t => 
   t.assert(res.code === 200);
 });
 
-test("修改邮箱", async t => {
+test.skip("修改邮箱", async t => {
   const validAuth = auth;
   const newEmail = "cdbfhorexxjk@qq.com";
   const res = await validAuth.updateEmail({
@@ -886,7 +890,7 @@ test("修改邮箱", async t => {
   });
   t.assert(res.email === newEmail);
 });
-test("测试手机号登陆", async t => {
+test.skip("测试手机号登陆", async t => {
   const validAuth = auth;
   const phone = "13100512747";
   let res = {};
@@ -901,7 +905,7 @@ test("测试手机号登陆", async t => {
   t.assert(res.phone === phone);
 });
 
-test("测试手机号注册", async t => {
+test.skip("测试手机号注册", async t => {
   //验证码需要手动填写
   const validAuth = auth;
   const phone = "13100512747";
@@ -919,10 +923,10 @@ test("测试手机号注册", async t => {
   }
   t.assert(res.phone === phone);
 });
-test("测试sendOneTimePhoneCode发送验证码", async t => {
+test.skip("测试sendOneTimePhoneCode发送验证码", async t => {
   //验证码需要手动填写
   const validAuth = auth;
-  const phone = "13100512747";
+  const phone = "13100512745";
   let res = {};
   try {
     res = await validAuth.sendOneTimePhoneCode(phone);
@@ -931,7 +935,7 @@ test("测试sendOneTimePhoneCode发送验证码", async t => {
   }
   t.assert(res.code === 200);
 });
-test("测试sendRegisterPhoneCode发送验证码", async t => {
+test.skip("测试sendRegisterPhoneCode发送验证码", async t => {
   //验证码需要手动填写
   const validAuth = auth;
   const phone = "13100512747";
@@ -943,11 +947,20 @@ test("测试sendRegisterPhoneCode发送验证码", async t => {
   }
   t.assert(res.code === 200);
 });
-
-test.only("测试密码加密公钥参数", async t => {
+test('测试casLogout', async t => {
+  const validAuth = auth;
+  let res = {}
+  try {
+    res = await validAuth.casLogout();
+  } catch (err) {
+    console.log(formatError(err));
+  }
+  t.assert(res.code === 200);
+})
+test.skip("测试密码加密公钥参数", async t => {
   // 测试正确的加密公钥
   let validAuth = new Authing({
-    userPoolId: clientId,
+    userPoolId,
     secret,
     // host: {
     //   user: "http://localhost:5510/graphql",
@@ -968,7 +981,7 @@ GKl64GDcIq3au+aqJQIDAQAB
   t.assert(res.email);
   // 测试错误的加密公钥
   validAuth = new Authing({
-    userPoolId: clientId,
+    userPoolId: userPoolId,
     secret,
     // host: {
     //   user: "http://localhost:5510/graphql",
