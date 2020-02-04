@@ -1,7 +1,7 @@
 import checkInput from "../../utils/checkInput"
 
 
-export default async function addNode(input) {
+export default function addNode(input) {
 
   checkInput(input, [
     {

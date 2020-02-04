@@ -2,7 +2,7 @@ import checkInput from "../../utils/checkInput"
 import buildTree from "../../utils/buildTree"
 import _ from "lodash"
 
-export default async function createOrg(input) {
+export default function createOrg(input) {
   checkInput(input, [{
     name: "rootGroupId",
     type: String

@@ -2,7 +2,7 @@ import checkInput from "../../utils/checkInput"
 import buildTree from "../../utils/buildTree"
 import _ from "lodash"
 
-export default async function addNode(input) {
+export default function addNode(input) {
 
   checkInput(input, [
     {

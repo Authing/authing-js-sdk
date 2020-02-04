@@ -1,4 +1,4 @@
-export default async function findById(_id) {
+export default function findById(_id) {
 
   const query = `
   mutation deleteOrg($_id: String!){

@@ -1,7 +1,7 @@
 import buildTree from "../../utils/buildTree"
 import _ from "lodash"
 
-export default async function findById(_id) {
+export default function findById(_id) {
 
   const query = `
   query org($_id: String!){

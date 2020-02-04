@@ -1,4 +1,4 @@
-export default async function (_id) {
+export default function (_id) {
   const query = `
   query orgRootNode($_id: String!){
     orgRootNode(_id: $_id){

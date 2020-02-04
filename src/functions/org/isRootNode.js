@@ -1,7 +1,7 @@
 import checkInput from "../../utils/checkInput"
 
 
-export default async function isRoot(input) {
+export default function isRoot(input) {
   checkInput(input, [{
     name: "orgId",
     type: String
