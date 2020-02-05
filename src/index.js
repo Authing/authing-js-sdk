@@ -141,6 +141,12 @@ class Authing {
         this.org[item] = this.org[item].bind(this)
       })
     }
+
+    if(this.rules){
+      Object.keys(this.rules).forEach(item => {
+        this.rules[item] = this.rules[item].bind(this)
+      })
+    }
   }
 }
 

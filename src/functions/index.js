@@ -64,6 +64,9 @@ import userPermissionList from "./user/userPermissionList"
 import userGroupList from "./user/userGroupList"
 import userRoleList from "./user/userRoleList"
 
+// Rules submodule
+import rules from "./rules"
+
 // Node & Browser 共用
 let mod = {
   bindOAuth,
@@ -122,7 +125,8 @@ if (process.env.BUILD_TARGET === 'node') {
     sendActivationEmail,
     getUsersByRole,
     authz,
-    org
+    org,
+    rules
   })
 } else if (process.env.BUILD_TARGET === 'web') {
   mod = Object.assign(mod, {
