@@ -34,8 +34,25 @@ test('获取 Rule 模版', async  t => {
   templates = list
 })
 
-test('创建 Rule', async t => {
-  const { code } = templates[0]
+test('创建 Rule # PRE_REGISTER - 注册邮箱白名单', async t => {
+  const code = `
+function pipe(request, callback) {
+  const body = JSON.parse(request.body)
+  const email = body.email
+  const whitelist = ['example.com']; //authorized domains
+  const userHasAccess = whitelist.some(
+    function (domain) {
+      const emailSplit = email.split('@');
+      return emailSplit[emailSplit.length - 1].toLowerCase() === domain;
+    });
+
+  if (!userHasAccess) {
+    return callback(new UnauthorizedError('Access denied.'));
+  }
+
+  return callback(null);
+}  
+`
   const name = `Rule - ${Math.random().toString(36).slice(2)}`
   try {
     rule = await authing.rules.createRule({
@@ -54,3 +71,46 @@ test('创建 Rule', async t => {
     t.fail(formatError(error))
   }
 })
+
+test('修改 Rule # 更新代码', async t => {
+  const code = `
+function pipe(request, callback) {
+  const body = JSON.parse(request.body)
+  const email = body.email
+  const whitelist = ['example.com']; //authorized domains
+  const userHasAccess = whitelist.some(
+    function (domain) {
+      const emailSplit = email.split('@');
+      return emailSplit[emailSplit.length - 1].toLowerCase() === domain;
+    });
+
+  if (!userHasAccess) {
+    return callback(new UnauthorizedError('Access denied.'));
+  }
+
+  return callback(null);
+}  
+`
+  try {
+    rule = await authing.rules.updateRule({
+      _id: rule._id,
+      code
+    })
+    t.assert(rule.code === code)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+})
+
+test('修改 Rule # 关闭', async t => {
+  try {
+    rule = await authing.rules.updateRule({
+      _id: rule._id,
+      enabled: false
+    })
+    t.assert(rule.enabled === false)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+})
+
