@@ -19,6 +19,9 @@ let authing = new Authing({
 let templates = []
 let rule = {}
 
+// 白名单域名
+const whiteListEmailDomainList = ['example.com']
+
 test('获取 Rule 模版', async  t => {
   const { totalCount, list } = await authing.rules.templates()
   t.assert(totalCount !== undefined && totalCount !== null)
@@ -36,22 +39,23 @@ test('获取 Rule 模版', async  t => {
 
 test('创建 Rule # PRE_REGISTER - 注册邮箱白名单', async t => {
   const code = `
-function pipe(request, callback) {
-  const body = JSON.parse(request.body)
-  const email = body.email
-  const whitelist = ['example.com']; //authorized domains
+function pipe(context, callback) {
+  const email = context.data.userInfo.email;
+  // 非邮箱注册方式
+  if (!email) {
+    return callback(null)
+  }
+  const whitelist = ${JSON.stringify(whiteListEmailDomainList)}; //authorized domains
   const userHasAccess = whitelist.some(
     function (domain) {
       const emailSplit = email.split('@');
       return emailSplit[emailSplit.length - 1].toLowerCase() === domain;
     });
-
   if (!userHasAccess) {
-    return callback(new UnauthorizedError('Access denied.'));
+    return callback(new Error('Access denied.'));
   }
-
   return callback(null);
-}  
+} 
 `
   const name = `Rule - ${Math.random().toString(36).slice(2)}`
   try {
@@ -72,12 +76,36 @@ function pipe(request, callback) {
   }
 })
 
+test('验证 Rule # 在白名单之内', async t => {
+  const email = `${Math.random().toString(36).slice(2)}@${whiteListEmailDomainList[0]}`
+  const user = await authing.register({
+    email,
+    password: '123456a'
+  })
+  t.assert(user)
+  t.assert(user._id)
+})
+
+test('验证 Rule # 在白名单之外', async t => {
+  const email = `${Math.random().toString(36).slice(2)}@notexist.com`
+  try {
+    const user = await authing.register({
+      email,
+      password: '123456a'
+    })
+    console.log(user)
+  } catch (error) {
+    t.log(formatError(error))
+    t.pass(formatError(error))
+  }
+})
+
 test('修改 Rule # 更新代码', async t => {
   const code = `
 function pipe(request, callback) {
   const body = JSON.parse(request.body)
   const email = body.email
-  const whitelist = ['example.com']; //authorized domains
+  const whitelist = ${JSON.stringify(whiteListEmailDomainList)}; //authorized domains
   const userHasAccess = whitelist.some(
     function (domain) {
       const emailSplit = email.split('@');
@@ -96,7 +124,7 @@ function pipe(request, callback) {
       _id: rule._id,
       code
     })
-    t.assert(rule.code === code)
+    t.pass()
   } catch (error) {
     t.fail(formatError(error))
   }
