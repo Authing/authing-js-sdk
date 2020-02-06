@@ -102,22 +102,23 @@ test('验证 Rule # 在白名单之外', async t => {
 
 test('修改 Rule # 更新代码', async t => {
   const code = `
-function pipe(request, callback) {
-  const body = JSON.parse(request.body)
-  const email = body.email
+function pipe(context, callback) {
+  const email = context.data.userInfo.email;
+  // 非邮箱注册方式
+  if (!email) {
+    return callback(null)
+  }
   const whitelist = ${JSON.stringify(whiteListEmailDomainList)}; //authorized domains
   const userHasAccess = whitelist.some(
     function (domain) {
       const emailSplit = email.split('@');
       return emailSplit[emailSplit.length - 1].toLowerCase() === domain;
     });
-
   if (!userHasAccess) {
-    return callback(new UnauthorizedError('Access denied.'));
+    return callback(new Error('Access denied.'));
   }
-
   return callback(null);
-}  
+} 
 `
   try {
     rule = await authing.rules.updateRule({
