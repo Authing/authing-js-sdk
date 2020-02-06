@@ -16,6 +16,9 @@ let authing = new Authing({
   }
 });
 
+let templates = []
+let rule = {}
+
 test('获取 Rule 模版', async  t => {
   const { totalCount, list } = await authing.rules.templates()
   t.assert(totalCount !== undefined && totalCount !== null)
@@ -27,5 +30,27 @@ test('获取 Rule 模版', async  t => {
     t.assert(list[0].type)
     t.assert(list[0].name_zh)
     t.assert(list[0].name_en)
+  }
+  templates = list
+})
+
+test('创建 Rule', async t => {
+  const { code } = templates[0]
+  const name = `Rule - ${Math.random().toString(36).slice(2)}`
+  try {
+    rule = await authing.rules.createRule({
+      name,
+      code,
+      type: "PRE_REGISTER"
+    })
+    t.assert(rule)
+    t.assert(rule._id)
+    t.assert(rule.code)
+    t.assert(rule.type)
+    t.assert(rule.name)
+    t.assert(rule.name)
+    t.assert(rule.faasUrl)
+  } catch (error) {
+    t.fail(formatError(error))
   }
 })
