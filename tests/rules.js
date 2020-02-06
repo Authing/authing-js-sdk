@@ -87,6 +87,17 @@ test('查询 Rule', async t => {
   t.assert(rule.faasUrl)
 })
 
+test('查询用户池 Rule 列表', async t => {
+  try {
+    const { totalCount, list } = await authing.rules.all()
+    t.assert(totalCount)
+    t.assert(list.length === totalCount)
+    t.assert(list[0]._id)
+  } catch (err) {
+    t.fail(formatError(err))
+  }
+})
+
 test('验证 Rule # 在白名单之内', async t => {
   const email = `${Math.random().toString(36).slice(2)}@${whiteListEmailDomainList[0]}`
   const user = await authing.register({
