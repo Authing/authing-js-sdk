@@ -143,3 +143,7 @@ test('修改 Rule # 关闭', async t => {
   }
 })
 
+test('删除 Rule', async t => {
+  const { code, message } = await authing.rules.deleteById(rule._id)
+  t.assert(code === 200)
+})
