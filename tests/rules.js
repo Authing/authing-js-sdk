@@ -76,6 +76,17 @@ function pipe(context, callback) {
   }
 })
 
+test('查询 Rule', async t => {
+  rule = await authing.rules.ruleById(rule._id)
+  t.assert(rule)
+  t.assert(rule._id)
+  t.assert(rule.code)
+  t.assert(rule.type)
+  t.assert(rule.name)
+  t.assert(rule.name)
+  t.assert(rule.faasUrl)
+})
+
 test('验证 Rule # 在白名单之内', async t => {
   const email = `${Math.random().toString(36).slice(2)}@${whiteListEmailDomainList[0]}`
   const user = await authing.register({
@@ -146,4 +157,12 @@ test('修改 Rule # 关闭', async t => {
 test('删除 Rule', async t => {
   const { code, message } = await authing.rules.deleteById(rule._id)
   t.assert(code === 200)
+})
+
+test('查询 Rule # 不存在', async t => {
+  try {
+    rule = await authing.rules.ruleById(rule._id)
+  } catch (error) {
+    t.assert(error.message.code === 4003)
+  }
 })
