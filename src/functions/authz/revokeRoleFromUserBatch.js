@@ -58,6 +58,7 @@ mutation revokeRBACRoleFromUserBatch($input: RevokeRBACRoleFromUserBatchInput!){
                 signedUp
                 blocked
                 isDeleted
+                customData
                 userLocation {
                   _id
                   when

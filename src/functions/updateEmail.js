@@ -47,6 +47,7 @@ mutation updateEmail(
         signedUp
         blocked
         isDeleted
+        customData
     }
 }        
       `,

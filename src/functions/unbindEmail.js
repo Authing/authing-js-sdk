@@ -28,6 +28,7 @@ export default function unbindEmail(variables) {
         signedUp
         blocked
         isDeleted
+        customData
       }
     }`,
     variables

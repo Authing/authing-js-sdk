@@ -58,6 +58,7 @@ mutation assignRBACRoleToUser($input: AssignUserToRBACRoleInput!){
             signedUp
             blocked
             isDeleted
+            customData
             userLocation {
               _id
               when

@@ -16,6 +16,32 @@ let authing = new Authing({
   }
 });
 
+const createRule = async function (code, type, name) {
+  name = name || `Rule - ${Math.random().toString(36).slice(2)}`
+  type = type || "PRE_REGISTER"
+  return await authing.rules.createRule({
+    name,
+    code,
+    type
+  })
+}
+
+const createUser = async function (email) {
+  email = email || Math.random().toString(36).slice(2) + "@test.com"
+  return await authing.register({
+    email,
+    password: "123456a"
+  });
+}
+
+const createGroup = async (name) => {
+  name = name || `分组${Math.random().toString(36).slice(2)}`
+  return await authing.authz.createGroup({
+    name,
+    description: "描述信息"
+  })
+}
+
 let templates = []
 let rule = {}
 
@@ -176,4 +202,72 @@ test('查询 Rule # 不存在', async t => {
   } catch (error) {
     t.assert(error.message.code === 4003)
   }
+})
+
+test('测试 Rule # pipe 函数中使用 authing-js-sdk', async t => {
+  const group = await createGroup("超级管理员")
+  const code = `
+async function pipe(user, context, callback) {
+  if (!user.email.endsWith('@authing.cn')) {
+    return callback(null, user, context)
+  }
+
+  // Add this user to "超级管理员" group
+  try {
+    await authing.authz.addUserToGroup({
+      userId: user._id,
+      groupId: "${group._id}"
+    })
+  } catch (error) { }
+
+  callback(null, user, context)
+}
+  `
+  const rule = await createRule(code, "POST_REGISTER")
+  // 以 authing.cn 域名邮箱注册的用户自动加入 5e3cdde963726c6108fb26a6 group
+  const user = await createUser(`${Math.random().toString(36).slice(2)}@authing.cn`)
+  await authing.rules.deleteById(rule._id)
+  const groups = await authing.userGroupList(user._id)
+  t.log(groups)
+  t.assert(groups.totalCount === 1)
+  t.assert(groups.list.length === 1)
+})
+
+test('测试 POST-REGISTER RULE # 持久化自定义字段到数据库', async t => {
+  const code1 = `
+async function pipe(user, context, callback) {
+  user.addAttr('KEY1', 'VALUE1')
+  user.addAttrAndPersist('KEY2', 'VALUE2')
+  callback(null, user, context)
+}`
+  const code2 = `
+async function pipe(user, context, callback) {
+  user.addAttr('KEY3', 'VALUE3')
+  user.addAttrAndPersist('KEY4', 'VALUE4')
+  callback(null, user, context)
+}`
+  const rule1 = await createRule(code1, "POST_REGISTER")
+  const rule2 = await createRule(code2, "POST_REGISTER")
+
+  // KEY1, KEY2, KEY3, KEY4 作为自定义数据字段返回
+  const user = await createUser()
+  t.assert(user.customData)
+  let customData = JSON.parse(user.customData)
+  t.assert(customData.KEY1)
+  t.assert(customData.KEY2)
+  t.assert(customData.KEY3)
+  t.assert(customData.KEY4)
+
+  // KEY2, KEY4 将持久保存至数据库
+  const userInfo = await authing.user({
+    id: user._id
+  })
+  customData = JSON.parse(userInfo.customData)
+  t.assert(!customData.KEY1)
+  t.assert(customData.KEY2)
+  t.assert(!customData.KEY3)
+  t.assert(customData.KEY4)
+
+  await authing.rules.deleteById(rule1._id)
+  await authing.rules.deleteById(rule2._id)
 })

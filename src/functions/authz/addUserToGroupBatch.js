@@ -57,6 +57,7 @@ mutation AddUserToRBACGroupBatch($input: AddUserToRBACGroupBatchInput!){
             signedUp
             blocked
             isDeleted
+            customData
             userLocation {
               _id
               when

@@ -58,6 +58,7 @@ export default function (input, options) {
             signedUp
             blocked
             isDeleted
+            customData
             userLocation {
               _id
               when
