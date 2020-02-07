@@ -236,14 +236,14 @@ async function pipe(user, context, callback) {
 test('测试 POST-REGISTER RULE # 持久化自定义字段到数据库', async t => {
   const code1 = `
 async function pipe(user, context, callback) {
-  user.addAttr('KEY1', 'VALUE1')
-  user.addAttrAndPersist('KEY2', 'VALUE2')
+  user.addMetaData('KEY1', 'VALUE1')
+  user.addMetaDataAndPersist('KEY2', 'VALUE2')
   callback(null, user, context)
 }`
   const code2 = `
 async function pipe(user, context, callback) {
-  user.addAttr('KEY3', 'VALUE3')
-  user.addAttrAndPersist('KEY4', 'VALUE4')
+  user.addMetaData('KEY3', 'VALUE3')
+  user.addMetaDataAndPersist('KEY4', 'VALUE4')
   callback(null, user, context)
 }`
   const rule1 = await createRule(code1, "POST_REGISTER")
