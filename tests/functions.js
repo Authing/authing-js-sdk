@@ -8,12 +8,12 @@ let baseHost = "authing.cn";
 //线上
 // const secret = "bb278212d520fc19f169e361179ea690";
 // const userPoolId = "5c95905578fce5000166f853";
-
+process.env.BUILD_TARGET = "node";
 const gqlEndPoint = "https://core.authing.cn/graphql";
 const Authing = require("../src/index");
 
-const userPoolId = "5e35841c691196a1ccb5b6f7";
-const secret = "9f25a0fc67200320d2b0c111d4fe613d";
+const userPoolId = "5e3ec277257204ad861f3677";
+const secret = "9b64ac77b2a93719dc2a3f72b64b4834";
 
 function randomEmail() {
   let rand = Math.random()
@@ -43,7 +43,7 @@ test("初始化", async t => {
     //   user: 'http://localhost:5510/graphql',
     //   oauth: 'http://localhost:5510/graphql'
     // },
-    onInitError: function (err) {
+    onInitError: function(err) {
       t.assert(err);
     }
   });
@@ -433,7 +433,7 @@ test("oauth:genQRCode 生成 QRCode", async t => {
   if (
     res.data.code === 500 &&
     res.data.message ===
-    "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
+      "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
   ) {
     t.pass();
   }
@@ -592,7 +592,7 @@ test("user:update 不能直接修改手机号、邮箱", async t => {
   } catch (error) {
     t.assert(
       error.message.message ===
-      "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。"
+        "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。"
     );
   }
 });
@@ -655,8 +655,8 @@ test.skip("根据参数决定是否进行用户和认证服务预检和 cdn 预�
     userPoolId,
     secret,
     host: {
-      user: 'http://localhost:5510/graphql',
-      oauth: 'http://localhost:5510/graphql'
+      user: "http://localhost:5510/graphql",
+      oauth: "http://localhost:5510/graphql"
     },
     preflight: true
   });
@@ -724,6 +724,7 @@ test("根据 id 查询单个用户", async t => {
   });
   let user = await validAuth.user({ id: res._id });
   t.assert(user._id);
+  t.assert(user.thirdPartyIdentity)
 });
 
 test("根据 id 批量查询多个用户", async t => {
@@ -774,7 +775,10 @@ test("查询用户 MFA 状态", async t => {
     password: "123456a"
   });
   let loggedIn = await validAuth.login({ email, password: "123456a" });
-  let mfa = await validAuth.queryMFA({ userPoolId: userPoolId, userId: res._id });
+  let mfa = await validAuth.queryMFA({
+    userPoolId: userPoolId,
+    userId: res._id
+  });
   t.is(mfa, null);
   res = await validAuth.changeMFA({
     userPoolId: userPoolId,
@@ -947,16 +951,16 @@ test.skip("测试sendRegisterPhoneCode发送验证码", async t => {
   }
   t.assert(res.code === 200);
 });
-test('测试casLogout', async t => {
+test("测试casLogout", async t => {
   const validAuth = auth;
-  let res = {}
+  let res = {};
   try {
     res = await validAuth.casLogout();
   } catch (err) {
     console.log(formatError(err));
   }
   t.assert(res.code === 200);
-})
+});
 test.skip("测试密码加密公钥参数", async t => {
   // 测试正确的加密公钥
   let validAuth = new Authing({
@@ -1288,4 +1292,13 @@ test("OIDC 隐式模式", async t => {
 });
 test("OIDC 混合模式", async t => {
   // 创建 oidc 应用
+});
+test("refreshThirdPartyToken", async t => {
+  let email = randomEmail();
+  let user = await auth.register({
+    email,
+    password: "123456a"
+  });
+  let res = await auth.refreshThirdPartyToken(user._id);
+  t.false(res.refreshSuccess);
 });
