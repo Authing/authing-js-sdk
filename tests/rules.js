@@ -27,11 +27,12 @@ const createRule = async function (code, type, name) {
   })
 }
 
-const createUser = async function (email) {
+const createUser = async function (email, password) {
   email = email || Math.random().toString(36).slice(2) + "@test.com"
+  password = password || "123456a"
   return await authing.register({
     email,
-    password: "123456a"
+    password
   });
 }
 
@@ -315,4 +316,32 @@ UA: \${user.device}
   const user = await createUser()
   t.assert(user)
   await authing.rules.deleteById(rule._id)
+})
+
+test('测试 POST_AUTHENTICATION RULE', async t => {
+
+  // 注册用户
+  const email = Math.random().toString(36).slice(2) + "@authing.cn"
+  const password = "123456!"
+  let user = await createUser(email, password)
+  t.assert(user)
+  t.assert(user.email === email)
+
+  // 添加 RULE
+  const code = `
+async function pipe(user, context, callback) {
+  user.addMetaData('KEY1', 'VALUE1')
+  user.addMetaDataAndPersist('KEY2', 'VALUE2')
+  callback(null, user, context)
+}
+  `
+  const rule = await createRule(code, "POST_AUTHENTICATION")
+  user = await authing.login({
+    email,
+    password
+  })
+  t.assert(user.metadata)
+  let metadata = JSON.parse(user.metadata)
+  t.assert(metadata.KEY1)
+  t.assert(metadata.KEY2)
 })
