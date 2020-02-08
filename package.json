@@ -1,6 +1,6 @@
 {
 	"name": "@authing/js",
-	"version": "3.6.2",
+	"version": "3.6.3",
 	"description": "Official sdk of Authing",
 	"main": "dist/authing-js-sdk-node.js",
 	"browser": "dist/authing-js-sdk-browser.min.js",
@@ -9,7 +9,7 @@
 	"scripts": {
 		"lint": "eslint --fix .",
 		"test:web": "ava -vs",
-		"test": "export BUILD_TARGET=node && ava -vs",
+		"test": "export BUILD_TARGET=node && ava -vs --timeout=2m",
 		"coverage": "nyc report --reporter=text-lcov > coverage.lcov | codecov",
 		"start": "nyc --reporter html ava -vs && open ./.nyc_output/index.html",
 		"build": "webpack --config webpack.config.js"

@@ -42,7 +42,7 @@ export default function loginByLDAP(options) {
         lastIP
         signedUp
         blocked
-        customData
+        metadata
       }
     }`,
     variables: options

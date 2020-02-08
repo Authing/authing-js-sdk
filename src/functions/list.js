@@ -40,7 +40,7 @@ export default function list(page, count, queryOptions) {
           signedUp
           blocked
           isDeleted
-          customData
+          metadata
           userLocation {
             _id
             when

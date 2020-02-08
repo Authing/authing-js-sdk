@@ -32,7 +32,7 @@ export default function userPatch(options) {
           signedUp
           blocked
           isDeleted
-          customData
+          metadata
           userLocation {
             _id
             when

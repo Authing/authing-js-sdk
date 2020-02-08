@@ -233,7 +233,7 @@ async function pipe(user, context, callback) {
   t.assert(groups.list.length === 1)
 })
 
-test('测试 POST-REGISTER RULE # 持久化自定义字段到数据库', async t => {
+test.only('测试 POST-REGISTER RULE # 持久化自定义字段到数据库', async t => {
   const code1 = `
 async function pipe(user, context, callback) {
   user.addMetaData('KEY1', 'VALUE1')
@@ -251,22 +251,22 @@ async function pipe(user, context, callback) {
 
   // KEY1, KEY2, KEY3, KEY4 作为自定义数据字段返回
   const user = await createUser()
-  t.assert(user.customData)
-  let customData = JSON.parse(user.customData)
-  t.assert(customData.KEY1)
-  t.assert(customData.KEY2)
-  t.assert(customData.KEY3)
-  t.assert(customData.KEY4)
+  t.assert(user.metadata)
+  let metadata = JSON.parse(user.metadata)
+  t.assert(metadata.KEY1)
+  t.assert(metadata.KEY2)
+  t.assert(metadata.KEY3)
+  t.assert(metadata.KEY4)
 
   // KEY2, KEY4 将持久保存至数据库
   const userInfo = await authing.user({
     id: user._id
   })
-  customData = JSON.parse(userInfo.customData)
-  t.assert(!customData.KEY1)
-  t.assert(customData.KEY2)
-  t.assert(!customData.KEY3)
-  t.assert(customData.KEY4)
+  metadata = JSON.parse(userInfo.metadata)
+  t.assert(!metadata.KEY1)
+  t.assert(metadata.KEY2)
+  t.assert(!metadata.KEY3)
+  t.assert(metadata.KEY4)
 
   await authing.rules.deleteById(rule1._id)
   await authing.rules.deleteById(rule2._id)
@@ -288,23 +288,29 @@ test('Rule Configuration CURD', async t => {
   t.assert(configurations.totalCount === 0)
 })
 
-test.only('在 Rule 中使用 Configuration', async t => {
+test('在 Rule 中使用 Configuration', async t => {
   const larkWebhookUrl = "https://open.feishu.cn/open-apis/bot/hook/686dd7a0bbe841cc88b70a6272c250ab"
   await authing.rules.setConfiguration('LARK_WEBHOOK', larkWebhookUrl)
   const code = `
 async function pipe(user, context, callback) {
   const webhook = configuration.LARK_WEBHOOK
   await axios.post(webhook, {
-    title: "From Authing Rules Pipeline",
-    text: {
-      user,
-      context
-    }
+    title: "New User Registered - From Authing Rules Pipeline",
+    text: \`
+用户信息：
+ID: \${user._id}
+昵称：\${user.username}
+注册方式：\${user.registerMethod}
+邮箱：\${user.email}
+手机号：\${user.phone}
+UA: \${user.device}
+用户池 ID: \${user.registerInClient}
+\`
   })
   return callback(null, user, context)
 }
     `
-  await createRule(code, "POST_REGISTER")
+  const rule = await createRule(code, "POST_REGISTER")
   const user = await createUser()
   t.assert(user)
   await authing.rules.deleteById(rule._id)

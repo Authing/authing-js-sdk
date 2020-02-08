@@ -39,7 +39,7 @@ export default function login(options) {
           signedUp
           blocked
           isDeleted
-          customData
+          metadata
         }
     }`,
     variables: options

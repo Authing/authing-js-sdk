@@ -60,7 +60,7 @@ export default function update(options) {
     signedUp
     blocked
     isDeleted
-    customData
+    metadata
     `;
 
   function generateArgs(opts) {
