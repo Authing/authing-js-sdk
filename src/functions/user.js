@@ -47,6 +47,13 @@ export default function user(options) {
             result
           }
         }
+        thirdPartyIdentity {
+          provider
+          refreshToken
+          expiresIn
+          updatedAt
+          accessToken
+        }
       }
     }`,
       variables: options
