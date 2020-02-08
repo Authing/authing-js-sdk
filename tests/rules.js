@@ -271,3 +271,19 @@ async function pipe(user, context, callback) {
   await authing.rules.deleteById(rule1._id)
   await authing.rules.deleteById(rule2._id)
 })
+
+test('Rule Configuration CURD', async t => {
+  let configurations = await authing.rules.setConfiguration("KEY1", "VALUE1")
+  t.assert(configurations.totalCount === 1)
+  t.assert(configurations.list[0].key === "KEY1")
+  t.assert(configurations.list[0].value === "VALUE1")
+
+  await authing.rules.setConfiguration('KEY2', 'VALUE2')
+
+  configurations = await authing.rules.configurations()
+  t.assert(configurations.totalCount === 2)
+
+  configurations = await authing.rules.removeConfiguration('KEY1')
+  configurations = await authing.rules.removeConfiguration('KEY2')
+  t.assert(configurations.totalCount === 0)
+})
