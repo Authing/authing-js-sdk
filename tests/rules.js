@@ -287,3 +287,25 @@ test('Rule Configuration CURD', async t => {
   configurations = await authing.rules.removeConfiguration('KEY2')
   t.assert(configurations.totalCount === 0)
 })
+
+test.only('在 Rule 中使用 Configuration', async t => {
+  const larkWebhookUrl = "https://open.feishu.cn/open-apis/bot/hook/686dd7a0bbe841cc88b70a6272c250ab"
+  await authing.rules.setConfiguration('LARK_WEBHOOK', larkWebhookUrl)
+  const code = `
+async function pipe(user, context, callback) {
+  const webhook = configuration.LARK_WEBHOOK
+  await axios.post(webhook, {
+    title: "From Authing Rules Pipeline",
+    text: {
+      user,
+      context
+    }
+  })
+  return callback(null, user, context)
+}
+    `
+  await createRule(code, "POST_REGISTER")
+  const user = await createUser()
+  t.assert(user)
+  await authing.rules.deleteById(rule._id)
+})

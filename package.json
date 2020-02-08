@@ -1,5 +1,5 @@
 {
-	"name": "authing-js-sdk",
+	"name": "@authing/js",
 	"version": "3.6.2",
 	"description": "Official sdk of Authing",
 	"main": "dist/authing-js-sdk-node.js",
