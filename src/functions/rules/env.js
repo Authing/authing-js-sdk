@@ -1,18 +1,18 @@
 export default function () {
   const query = `
-  query ruleConfigurations($userPoolId: String!) {
-    ruleConfigurations(userPoolId: $userPoolId) {
+  query ruleEnv($userPoolId: String!) {
+    ruleEnv(userPoolId: $userPoolId) {
       totalCount
       list {
         key
         value
       }
     }
-  }  
+  }
   `
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
-      operationName: "ruleConfigurations",
+      operationName: "ruleEnv",
       query,
       variables: {
         userPoolId: this.userPoolId

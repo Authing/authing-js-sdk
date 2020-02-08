@@ -4,9 +4,9 @@ import updateRule from "./updateRule"
 import deleteById from "./deleteById"
 import ruleById from "./ruleById"
 import all from "./all"
-import setConfiguration from "./setConfiguration"
-import removeConfiguration from "./removeConfiguration"
-import configurations from "./configurations"
+import setEnv from "./setEnv"
+import removeEnv from "./removeEnv"
+import env from "./env"
 
 export default {
   templates,
@@ -15,7 +15,7 @@ export default {
   deleteById,
   ruleById,
   all,
-  setConfiguration,
-  removeConfiguration,
-  configurations
+  setEnv,
+  removeEnv,
+  env
 }

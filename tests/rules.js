@@ -13,7 +13,8 @@ let authing = new Authing({
   host: {
     user: "http://localhost:5510/graphql",
     oauth: "http://localhost:5510/graphql"
-  }
+  },
+  timeout: 100000,
 });
 
 const createRule = async function (code, type, name) {
@@ -233,7 +234,7 @@ async function pipe(user, context, callback) {
   t.assert(groups.list.length === 1)
 })
 
-test.only('测试 POST-REGISTER RULE # 持久化自定义字段到数据库', async t => {
+test('测试 POST-REGISTER RULE # 持久化自定义字段到数据库', async t => {
   const code1 = `
 async function pipe(user, context, callback) {
   user.addMetaData('KEY1', 'VALUE1')
@@ -272,25 +273,25 @@ async function pipe(user, context, callback) {
   await authing.rules.deleteById(rule2._id)
 })
 
-test('Rule Configuration CURD', async t => {
-  let configurations = await authing.rules.setConfiguration("KEY1", "VALUE1")
-  t.assert(configurations.totalCount === 1)
-  t.assert(configurations.list[0].key === "KEY1")
-  t.assert(configurations.list[0].value === "VALUE1")
+test('Rule Env CURD', async t => {
+  let env = await authing.rules.setEnv("KEY1", "VALUE1")
+  t.assert(env.totalCount > 0)
+  t.assert(env.list[0].key)
+  t.assert(env.list[0].value)
 
-  await authing.rules.setConfiguration('KEY2', 'VALUE2')
+  await authing.rules.setEnv('KEY2', 'VALUE2')
 
-  configurations = await authing.rules.configurations()
-  t.assert(configurations.totalCount === 2)
+  env = await authing.rules.env()
+  t.assert(env.totalCount > 0)
 
-  configurations = await authing.rules.removeConfiguration('KEY1')
-  configurations = await authing.rules.removeConfiguration('KEY2')
-  t.assert(configurations.totalCount === 0)
+  env = await authing.rules.removeEnv('KEY1')
+  env = await authing.rules.removeEnv('KEY2')
+  t.assert(env.totalCount)
 })
 
-test('在 Rule 中使用 Configuration', async t => {
+test('在 Rule 中使用 Env', async t => {
   const larkWebhookUrl = "https://open.feishu.cn/open-apis/bot/hook/686dd7a0bbe841cc88b70a6272c250ab"
-  await authing.rules.setConfiguration('LARK_WEBHOOK', larkWebhookUrl)
+  await authing.rules.setEnv('LARK_WEBHOOK', larkWebhookUrl)
   const code = `
 async function pipe(user, context, callback) {
   const webhook = env.LARK_WEBHOOK

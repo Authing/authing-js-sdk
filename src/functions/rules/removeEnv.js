@@ -3,15 +3,15 @@ export default function (key) {
     throw "key is not provided!"
   }
   const query = `
-  mutation removeRuleConfiguration($input: RemoveRuleConfigurationInput!) {
-    removeRuleConfiguration(input: $input) {
+  mutation removeRuleEnv($input: RemoveRuleEnvInput!) {
+    removeRuleEnv(input: $input) {
       totalCount
       list {
         key
         value
       }
     }
-  }  
+  }
   `
   let input = {
     key,
@@ -19,7 +19,7 @@ export default function (key) {
   }
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
-      operationName: "removeRuleConfiguration",
+      operationName: "removeRuleEnv",
       query,
       variables: {
         input

@@ -3,15 +3,16 @@ export default function (key, value) {
     throw "key or value is not provided!"
   }
   const query = `
-mutation setRuleConfiguration($input: AddRuleConfigurationInput!) {
-  setRuleConfiguration(input: $input) {
-    totalCount
-    list {
-      key
-      value
+  mutation setRuleEnv($input: SetRuleEnvInput!) {
+    setRuleEnv(input: $input) {
+      totalCount
+      list {
+        key
+        value
+      }
     }
   }
-}  
+  
   `
   let input = {
     key,
@@ -20,7 +21,7 @@ mutation setRuleConfiguration($input: AddRuleConfigurationInput!) {
   }
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
-      operationName: "setRuleConfiguration",
+      operationName: "setRuleEnv",
       query,
       variables: {
         input
