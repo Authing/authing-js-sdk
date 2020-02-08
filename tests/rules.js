@@ -293,7 +293,7 @@ test('在 Rule 中使用 Configuration', async t => {
   await authing.rules.setConfiguration('LARK_WEBHOOK', larkWebhookUrl)
   const code = `
 async function pipe(user, context, callback) {
-  const webhook = configuration.LARK_WEBHOOK
+  const webhook = env.LARK_WEBHOOK
   await axios.post(webhook, {
     title: "New User Registered - From Authing Rules Pipeline",
     text: \`
