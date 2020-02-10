@@ -2,17 +2,19 @@ import test from "ava";
 import { inspect } from "util"
 import { formatError } from "../src/utils/formatError";
 import _ from "lodash"
+import axios from "axios";
 
 const Authing = require("../src/index");
-const userPoolId = "5d9f78acb02d3e14484cfc37";
-const secret = "328e6a2922035365bb3aa339595dd863";
+const userPoolId = "5e35841c691196a1ccb5b6f7";
+const secret = "9f25a0fc67200320d2b0c111d4fe613d";
 
+const host = 'http://localhost:5510'
 let authing = new Authing({
   userPoolId,
   secret,
   host: {
-    user: "http://localhost:5510/graphql",
-    oauth: "http://localhost:5510/graphql"
+    user: `${host}/graphql`,
+    oauth: `${host}/graphql`
   },
   timeout: 100000,
 });
@@ -81,7 +83,7 @@ async function pipe(context, callback) {
 }  
 `,
   larkNotifyPostAuthentication: `
-async function pipe(context, callback) {
+async function pipe(user, context, callback) {
   const webhook = env.LARK_WEBHOOK
   await axios.post(user, webhook, {
     title: "TEST#POST-AUTHENTICATION",
@@ -446,4 +448,30 @@ test('测试 ldap 认证方式 # 添加了 connetion', async t => {
   } catch (error) {
     t.log(formatError(error))
   }
+})
+
+test('自定义 Token', async t => {
+  const code = `
+async function pipe(user, context, callback) {
+  user.setTokenField('KEY','VALUE')
+  return callback(null, user, context)
+}  
+`
+  await createRule(code, ruleTypes.POST_AUTHENTICATION)
+  const email = Math.random().toString(36).slice(2) + "@authing.cn"
+  const password = "123456!"
+  let user = await createUser(email, password)
+  user = await authing.login({
+    email,
+    password
+  })
+
+  t.assert(user)
+  t.assert(user.token)
+
+  const token = user.token
+  const res = await axios.get(`${host}/authing/token?access_token=${token}`)
+  const decryptedToken = res.data.token.data
+  t.assert(decryptedToken.KEY)
+  t.log(decryptedToken)
 })
