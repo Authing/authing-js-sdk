@@ -4,8 +4,8 @@ import { formatError } from "../src/utils/formatError";
 import _ from "lodash"
 
 const Authing = require("../src/index");
-const userPoolId = "5e35841c691196a1ccb5b6f7";
-const secret = "9f25a0fc67200320d2b0c111d4fe613d";
+const userPoolId = "5d9f78acb02d3e14484cfc37";
+const secret = "328e6a2922035365bb3aa339595dd863";
 
 let authing = new Authing({
   userPoolId,
@@ -43,6 +43,67 @@ const createGroup = async (name) => {
     description: "描述信息"
   })
 }
+
+const rules = {
+  persistMetadata: `
+async function pipe(user, context, callback) {
+  user.addMetaData('KEY1', 'VALUE1')
+  user.addMetaDataAndPersist('KEY2', 'VALUE2')
+  callback(null, user, context)
+}`,
+
+  larkNotifyPostRegister: `
+async function pipe(user, context, callback) {
+  const webhook = env.LARK_WEBHOOK
+  await axios.post(webhook, {
+    title: "TEST#POST-REGISTER",
+    text: JSON.stringify({
+      protocol: context.protocol,
+      connection: context.connection,
+      ldapConfiguration: context.ldapConfiguration
+    })
+  })
+  return callback(null, user, context)
+}  
+`,
+  larkNotifyPreRegister: `
+async function pipe(context, callback) {
+  const webhook = env.LARK_WEBHOOK
+  await axios.post(webhook, {
+    title: "TEST#PRE-REGISTER",
+    text: JSON.stringify({
+      protocol: context.protocol,
+      connection: context.connection,
+      ldapConfiguration: context.ldapConfiguration
+    })
+  })
+  return callback(null, context)
+}  
+`,
+  larkNotifyPostAuthentication: `
+async function pipe(context, callback) {
+  const webhook = env.LARK_WEBHOOK
+  await axios.post(user, webhook, {
+    title: "TEST#POST-AUTHENTICATION",
+    text: JSON.stringify({
+      protocol: context.protocol,
+      connection: context.connection,
+      ldapConfiguration: context.ldapConfiguration
+    })
+  })
+  return callback(null, user, context)
+}  
+`
+}
+
+const ruleTypes = {
+  PRE_REGISTER: "PRE_REGISTER",
+  POST_REGISTER: "POST_REGISTER",
+  POST_AUTHENTICATION: "POST_AUTHENTICATION"
+}
+
+const larkWebhookUrl = "https://open.feishu.cn/open-apis/bot/hook/686dd7a0bbe841cc88b70a6272c250ab"
+
 
 let templates = []
 let rule = {}
@@ -291,7 +352,6 @@ test('Rule Env CURD', async t => {
 })
 
 test('在 Rule 中使用 Env', async t => {
-  const larkWebhookUrl = "https://open.feishu.cn/open-apis/bot/hook/686dd7a0bbe841cc88b70a6272c250ab"
   await authing.rules.setEnv('LARK_WEBHOOK', larkWebhookUrl)
   const code = `
 async function pipe(user, context, callback) {
@@ -344,4 +404,46 @@ async function pipe(user, context, callback) {
   let metadata = JSON.parse(user.metadata)
   t.assert(metadata.KEY1)
   t.assert(metadata.KEY2)
+})
+
+test('测试 ldap 认证方式 # 添加了 connetion', async t => {
+
+  const rule1 = await createRule(rules.larkNotifyPreRegister, ruleTypes.PRE_REGISTER)
+  const rule2 = await createRule(rules.larkNotifyPostRegister, ruleTypes.POST_REGISTER)
+  const rule3 = await createRule(rules.larkNotifyPostAuthentication, ruleTypes.POST_AUTHENTICATION)
+  await authing.rules.setEnv('LARK_WEBHOOK', larkWebhookUrl)
+
+  const username = Math.random().toString(36).slice(2) + "@authing.cn"
+  const password = "123456!"
+
+  // 普通方式注册
+  try {
+    let user = await createUser(username, password)
+    t.log("普通方式注册", user)
+  } catch (error) {
+    t.log(formatError(error))
+  }
+
+  // ldap 方式注册
+  try {
+    const user = await authing.loginByLDAP({
+      username,
+      password
+    })
+    t.log("ldap 方式注册", user)
+  } catch (error) {
+    t.log(formatError(error))
+  }
+
+  // ldap 方式登录
+  try {
+    const user = await authing.loginByLDAP({
+      username,
+      password
+    })
+    t.log("ldap 方式登录", user)
+
+  } catch (error) {
+    t.log(formatError(error))
+  }
 })
