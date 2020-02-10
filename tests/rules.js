@@ -475,3 +475,31 @@ async function pipe(user, context, callback) {
   t.assert(decryptedToken.KEY)
   t.log(decryptedToken)
 })
+
+test('部分字段只读', async t => {
+  const code = `
+async function pipe(user, context, callback) {
+  user._id = "xxx"
+  user.registerMethod = "xxx"
+  user.registerInClient = "xxx"
+  user.password = "xxx"
+  user.company = "非凡科技有限公司"
+  callback(null, user, context)
+}  
+`
+
+  await createRule(code, ruleTypes.POST_REGISTER)
+  await createRule(code, ruleTypes.POST_AUTHENTICATION)
+  const email = Math.random().toString(36).slice(2) + "@authing.cn"
+  const password = "123456!"
+  let user = await createUser(email, password)
+  t.assert(user.registerMethod === "default:username-password")
+
+  user = await authing.login({
+    email,
+    password
+  })
+  t.assert(user)
+  t.assert(user.company === "非凡科技有限公司")
+  t.log(user)
+})
