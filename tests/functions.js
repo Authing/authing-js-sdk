@@ -12,8 +12,8 @@ process.env.BUILD_TARGET = "node";
 const gqlEndPoint = "https://core.authing.cn/graphql";
 const Authing = require("../src/index");
 
-const userPoolId = "5e3ec277257204ad861f3677";
-const secret = "9b64ac77b2a93719dc2a3f72b64b4834";
+const userPoolId = "5e3a3b2315a0b8398cdaaa04";
+const secret = "14f98c87cdf648e341c58eb852e5adf0";
 
 function randomEmail() {
   let rand = Math.random()
@@ -51,15 +51,18 @@ test("初始化", async t => {
     setTimeout(resolve, 3000);
   });
 });
-test("users:register 用户密码注册", async t => {
+test.only("users:register 用户密码注册", async t => {
   const validAuth = auth;
   let email = randomEmail();
   try {
     let res = await validAuth.register({
       email,
-      password: "123456a"
+      password: "123456a",
+      lastLogin: new Date(2019, 5, 1),
+      signedUp: new Date(2019, 5, 1)
     });
-    t.assert(res.email);
+    t.assert(res.lastLogin);
+    t.assert(res.signedUp);
     t.pass();
   } catch (err) {
     t.log(formatError(err));
