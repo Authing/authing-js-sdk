@@ -64,6 +64,9 @@ import org from "./org"
 import userPermissionList from "./user/userPermissionList"
 import userGroupList from "./user/userGroupList"
 import userRoleList from "./user/userRoleList"
+import metadata from "./user/metadata"
+import setMetadata from "./user/setMetadata"
+import removeMetadata from "./user/removeMetadata"
 
 // Pipeline submodule
 import pipeline from "./pipeline"
@@ -108,7 +111,10 @@ let mod = {
   loginByPhonePassword,
   sendOneTimePhoneCode,
   sendRegisterPhoneCode,
-  casLogout
+  casLogout,
+  metadata,
+  setMetadata,
+  removeMetadata
 }
 
 if (process.env.BUILD_TARGET === 'node') {

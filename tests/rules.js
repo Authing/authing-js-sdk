@@ -5,8 +5,8 @@ import _ from "lodash"
 import axios from "axios";
 
 const Authing = require("../src/index");
-const userPoolId = "5e35841c691196a1ccb5b6f7";
-const secret = "9f25a0fc67200320d2b0c111d4fe613d";
+const userPoolId = "5e4cdd055df3df65dc58b97d";
+const secret = "49882b55cbaddf40af0bb5f8b7ad9309";
 
 const host = 'http://localhost:5510'
 let authing = new Authing({
@@ -502,4 +502,30 @@ async function pipe(user, context, callback) {
   t.assert(user)
   t.assert(user.company === "非凡科技有限公司")
   t.log(user)
+})
+
+test.only('metadata 增删改查', async t => {
+  const user = await createUser()
+  try {
+    let res = await authing.setMetadata({
+      _id: user._id,
+      key: "KEY",
+      value: "VALUE"
+    })
+    let firstMetadata = res.list[0]
+    t.assert(firstMetadata.key === "KEY")
+    t.assert(firstMetadata.value === "VALUE")
+
+    res = await authing.metadata(user._id)
+    t.assert(res.list.length === 1)
+    t.assert(res.list[0].key === "KEY")
+
+    res = await authing.removeMetadata({
+      _id: user._id,
+      key: "KEY"
+    })
+    t.assert(res.list.length === 0)
+  } catch (error) {
+    t.fail(formatError(error))
+  }
 })
