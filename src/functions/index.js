@@ -65,8 +65,8 @@ import userPermissionList from "./user/userPermissionList"
 import userGroupList from "./user/userGroupList"
 import userRoleList from "./user/userRoleList"
 
-// Rules submodule
-import rules from "./rules"
+// Pipeline submodule
+import pipeline from "./pipeline"
 
 // Node & Browser 共用
 let mod = {
@@ -128,7 +128,7 @@ if (process.env.BUILD_TARGET === 'node') {
     getUsersByRole,
     authz,
     org,
-    rules
+    pipeline
   })
 } else if (process.env.BUILD_TARGET === 'web') {
   mod = Object.assign(mod, {

@@ -22,7 +22,7 @@ let authing = new Authing({
 const createRule = async function (code, type, name) {
   name = name || `Rule - ${Math.random().toString(36).slice(2)}`
   type = type || "PRE_REGISTER"
-  return await authing.rules.createRule({
+  return await authing.pipeline.createRule({
     name,
     code,
     type
@@ -114,7 +114,7 @@ let rule = {}
 const whiteListEmailDomainList = ['example.com']
 
 test('获取 Rule 模版', async  t => {
-  const { totalCount, list } = await authing.rules.templates()
+  const { totalCount, list } = await authing.pipeline.templates()
   t.assert(totalCount !== undefined && totalCount !== null)
   t.assert(list)
   t.assert(list.length === totalCount)
@@ -150,7 +150,7 @@ function pipe(context, callback) {
 `
   const name = `Rule - ${Math.random().toString(36).slice(2)}`
   try {
-    rule = await authing.rules.createRule({
+    rule = await authing.pipeline.createRule({
       name,
       code,
       type: "PRE_REGISTER"
@@ -168,7 +168,7 @@ function pipe(context, callback) {
 })
 
 test('查询 Rule', async t => {
-  rule = await authing.rules.ruleById(rule._id)
+  rule = await authing.pipeline.ruleById(rule._id)
   t.assert(rule)
   t.assert(rule._id)
   t.assert(rule.code)
@@ -180,7 +180,7 @@ test('查询 Rule', async t => {
 
 test('查询用户池 Rule 列表', async t => {
   try {
-    const { totalCount, list } = await authing.rules.all()
+    const { totalCount, list } = await authing.pipeline.all()
     t.assert(totalCount)
     t.assert(list.length === totalCount)
     t.assert(list[0]._id)
@@ -234,7 +234,7 @@ function pipe(context, callback) {
 } 
 `
   try {
-    rule = await authing.rules.updateRule({
+    rule = await authing.pipeline.updateRule({
       _id: rule._id,
       code
     })
@@ -246,7 +246,7 @@ function pipe(context, callback) {
 
 test('修改 Rule # 关闭', async t => {
   try {
-    rule = await authing.rules.updateRule({
+    rule = await authing.pipeline.updateRule({
       _id: rule._id,
       enabled: false
     })
@@ -257,13 +257,13 @@ test('修改 Rule # 关闭', async t => {
 })
 
 test('删除 Rule', async t => {
-  const { code, message } = await authing.rules.deleteById(rule._id)
+  const { code, message } = await authing.pipeline.deleteById(rule._id)
   t.assert(code === 200)
 })
 
 test('查询 Rule # 不存在', async t => {
   try {
-    rule = await authing.rules.ruleById(rule._id)
+    rule = await authing.pipeline.ruleById(rule._id)
   } catch (error) {
     t.assert(error.message.code === 4003)
   }
@@ -291,7 +291,7 @@ async function pipe(user, context, callback) {
   const rule = await createRule(code, "POST_REGISTER")
   // 以 authing.cn 域名邮箱注册的用户自动加入 5e3cdde963726c6108fb26a6 group
   const user = await createUser(`${Math.random().toString(36).slice(2)}@authing.cn`)
-  await authing.rules.deleteById(rule._id)
+  await authing.pipeline.deleteById(rule._id)
   const groups = await authing.userGroupList(user._id)
   t.log(groups)
   t.assert(groups.totalCount === 1)
@@ -333,28 +333,28 @@ async function pipe(user, context, callback) {
   t.assert(!metadata.KEY3)
   t.assert(metadata.KEY4)
 
-  await authing.rules.deleteById(rule1._id)
-  await authing.rules.deleteById(rule2._id)
+  await authing.pipeline.deleteById(rule1._id)
+  await authing.pipeline.deleteById(rule2._id)
 })
 
 test('Rule Env CURD', async t => {
-  let env = await authing.rules.setEnv("KEY1", "VALUE1")
+  let env = await authing.pipeline.setEnv("KEY1", "VALUE1")
   t.assert(env.totalCount > 0)
   t.assert(env.list[0].key)
   t.assert(env.list[0].value)
 
-  await authing.rules.setEnv('KEY2', 'VALUE2')
+  await authing.pipeline.setEnv('KEY2', 'VALUE2')
 
-  env = await authing.rules.env()
+  env = await authing.pipeline.env()
   t.assert(env.totalCount > 0)
 
-  env = await authing.rules.removeEnv('KEY1')
-  env = await authing.rules.removeEnv('KEY2')
+  env = await authing.pipeline.removeEnv('KEY1')
+  env = await authing.pipeline.removeEnv('KEY2')
   t.assert(env.totalCount)
 })
 
 test('在 Rule 中使用 Env', async t => {
-  await authing.rules.setEnv('LARK_WEBHOOK', larkWebhookUrl)
+  await authing.pipeline.setEnv('LARK_WEBHOOK', larkWebhookUrl)
   const code = `
 async function pipe(user, context, callback) {
   const webhook = env.LARK_WEBHOOK
@@ -377,7 +377,7 @@ UA: \${user.device}
   const rule = await createRule(code, "POST_REGISTER")
   const user = await createUser()
   t.assert(user)
-  await authing.rules.deleteById(rule._id)
+  await authing.pipeline.deleteById(rule._id)
 })
 
 test('测试 POST_AUTHENTICATION RULE', async t => {
@@ -413,7 +413,7 @@ test('测试 ldap 认证方式 # 添加了 connetion', async t => {
   const rule1 = await createRule(rules.larkNotifyPreRegister, ruleTypes.PRE_REGISTER)
   const rule2 = await createRule(rules.larkNotifyPostRegister, ruleTypes.POST_REGISTER)
   const rule3 = await createRule(rules.larkNotifyPostAuthentication, ruleTypes.POST_AUTHENTICATION)
-  await authing.rules.setEnv('LARK_WEBHOOK', larkWebhookUrl)
+  await authing.pipeline.setEnv('LARK_WEBHOOK', larkWebhookUrl)
 
   const username = Math.random().toString(36).slice(2) + "@authing.cn"
   const password = "123456!"

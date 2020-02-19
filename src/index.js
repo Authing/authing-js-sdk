@@ -142,9 +142,9 @@ class Authing {
       })
     }
 
-    if(this.rules){
-      Object.keys(this.rules).forEach(item => {
-        this.rules[item] = this.rules[item].bind(this)
+    if(this.pipeline){
+      Object.keys(this.pipeline).forEach(item => {
+        this.pipeline[item] = this.pipeline[item].bind(this)
       })
     }
   }
