@@ -42,6 +42,7 @@ export default function loginByLDAP(options) {
         lastIP
         signedUp
         blocked
+        metadata
       }
     }`,
     variables: options
@@ -49,7 +50,7 @@ export default function loginByLDAP(options) {
     // 登录成功记录 token
     if (res && res.token) {
       TokenMananger.getInstance().setUserToken(res.token);
-      if(configs.inBrowser)
+      if (configs.inBrowser)
         localStorage.setItem('_authing_token', res.token)
     }
     return res;

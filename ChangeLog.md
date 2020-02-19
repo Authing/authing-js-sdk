@@ -1,3 +1,7 @@
+# v 3.9.0
+
+- 上线 [Authing Pipeline](https://docs.authing.cn/authing/extensibility/pipeline) .
+
 # 2.x 到 3.x
 
 - 初始化方式和参数发生变化，新的初始化方式：
