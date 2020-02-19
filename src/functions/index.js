@@ -54,6 +54,7 @@ import loginByPhonePassword from "./loginByPhonePassword"
 import sendOneTimePhoneCode from "./sendOneTimePhoneCode"
 import sendRegisterPhoneCode from "./sendRegisterPhoneCode"
 import casLogout from "./casLogout"
+import refreshThirdPartyToken from "./refreshThirdPartyToken"
 
 // authz submodule
 import authz from "./authz"
@@ -118,6 +119,7 @@ if (process.env.BUILD_TARGET === 'node') {
     queryPermissions,
     queryRoles,
     refreshToken,
+    refreshThirdPartyToken,
     remove,
     removeUserFromRole,
     userPatch,

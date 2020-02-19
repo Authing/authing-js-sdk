@@ -45,7 +45,8 @@ export default function register(options) {
       $streetAddress: String,
       $postalCode: String,
       $country: String,
-      $updatedAt: String,
+      $signedUp: String,
+      $lastLogin: String,
       $forceLogin: Boolean,
       $registerInClient: String!,
       $oauth: String,
@@ -84,7 +85,8 @@ export default function register(options) {
           streetAddress: $streetAddress,
           postalCode: $postalCode,
           country: $country,
-          updatedAt: $updatedAt,
+          signedUp: $signedUp,
+          lastLogin: $lastLogin,
           gender: $gender,
           birthdate: $birthdate,
           region: $region,
@@ -109,6 +111,8 @@ export default function register(options) {
             photo,
             browser,
             password,
+            signedUp
+            lastLogin
             token,
             group {
               name
