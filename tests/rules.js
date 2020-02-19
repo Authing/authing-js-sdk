@@ -504,7 +504,7 @@ async function pipe(user, context, callback) {
   t.log(user)
 })
 
-test.only('metadata 增删改查', async t => {
+test('metadata 增删改查', async t => {
   const user = await createUser()
   try {
     let res = await authing.setMetadata({
