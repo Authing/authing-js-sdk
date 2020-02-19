@@ -42,7 +42,7 @@
 		"webpack-cli": "^3.3.9"
 	},
 	"ava": {
-		"files": [ "tests/rules.js" ],
+		"files": [ "tests/*.js" ],
 		"require": [ "@babel/register", "@babel/polyfill" ],
 		"babel": {
 			"testOptions": {
