@@ -5,10 +5,10 @@ import _ from "lodash"
 import axios from "axios";
 
 const Authing = require("../src/index");
-const userPoolId = "5e4cdd055df3df65dc58b97d";
-const secret = "49882b55cbaddf40af0bb5f8b7ad9309";
+const userPoolId = "";
+const secret = "";
 
-const host = 'http://localhost:5510'
+const host = 'https://localhost:5510'
 let authing = new Authing({
   userPoolId,
   secret,
@@ -528,4 +528,34 @@ test('metadata 增删改查', async t => {
   } catch (error) {
     t.fail(formatError(error))
   }
+})
+
+
+test('Pipeline 自定义 Token', async t => {
+
+  // 注册用户
+  const email = Math.random().toString(36).slice(2) + "@authing.cn"
+  const password = "123456!"
+  try {
+    await authing.register({
+      email,
+      password
+    })
+  } catch (error) {
+    t.fail(formatError(error))
+  }
+
+
+  // 登录获取 token
+  const user = await authing.login({
+    email,
+    password
+  })
+  const token = user.token
+
+  // decode token
+  const res = await axios.get(`${host}/authing/token?access_token=${token}`)
+  const decryptedToken = res.data.token.data
+  t.log(decryptedToken)
+  t.assert(decryptedToken.KEY === "VALUE")
 })
