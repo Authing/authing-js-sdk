@@ -5,10 +5,10 @@ import _ from "lodash"
 import axios from "axios";
 
 const Authing = require("../src/index");
-const userPoolId = "59f86b4832eb28071bdd9214";
-const secret = "1caa5332db050488028670a9293501ac";
+const userPoolId = "";
+const secret = "";
 
-const host = 'https://core.celebes.live'
+const host = 'https://localhost:5510'
 let authing = new Authing({
   userPoolId,
   secret,
