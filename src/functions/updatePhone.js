@@ -47,7 +47,6 @@ mutation updatePhone(
         signedUp
         blocked
         isDeleted
-        metadata
     }
 }        
       `,

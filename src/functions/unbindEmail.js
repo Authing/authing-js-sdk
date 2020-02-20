@@ -28,7 +28,6 @@ export default function unbindEmail(variables) {
         signedUp
         blocked
         isDeleted
-        metadata
       }
     }`,
     variables

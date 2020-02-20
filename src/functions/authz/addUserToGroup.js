@@ -62,7 +62,6 @@ mutation AddUserToRBACGroup($input: AddUserToRBACGroupInput!){
               when
               where
             }
-            metadata
             userLoginHistory {
               totalCount
               list {

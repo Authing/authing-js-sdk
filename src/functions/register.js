@@ -118,8 +118,7 @@ export default function register(options) {
               name
             },
             blocked,
-            device,
-            metadata
+            device
         }
     }`,
     variables: options

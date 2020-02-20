@@ -32,7 +32,6 @@ export default function user(options) {
         signedUp
         blocked
         isDeleted
-        metadata
         userLocation {
           _id
           when

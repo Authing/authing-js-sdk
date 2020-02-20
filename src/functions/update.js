@@ -59,9 +59,7 @@ export default function update(options) {
     lastIP
     signedUp
     blocked
-    isDeleted
-    metadata
-    `;
+    isDeleted`;
 
   function generateArgs(opts) {
     const args = [];

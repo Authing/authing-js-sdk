@@ -1,6 +1,6 @@
 {
 	"name": "authing-js-sdk",
-	"version": "3.9.0",
+	"version": "3.8.0",
 	"description": "Official sdk of Authing",
 	"main": "dist/authing-js-sdk-node.js",
 	"browser": "dist/authing-js-sdk-browser.min.js",
@@ -9,7 +9,7 @@
 	"scripts": {
 		"lint": "eslint --fix .",
 		"test:web": "ava -vs",
-		"test": "export BUILD_TARGET=node && ava -vs --timeout=2m",
+		"test": "export BUILD_TARGET=node && ava -vs",
 		"coverage": "nyc report --reporter=text-lcov > coverage.lcov | codecov",
 		"start": "nyc --reporter html ava -vs && open ./.nyc_output/index.html",
 		"build": "webpack --config webpack.config.js"
@@ -42,7 +42,7 @@
 		"webpack-cli": "^3.3.9"
 	},
 	"ava": {
-		"files": [ "tests/*.js" ],
+		"files": [ "tests/org.js", "tests/authz.js", "tests/functions.js" ],
 		"require": [ "@babel/register", "@babel/polyfill" ],
 		"babel": {
 			"testOptions": {

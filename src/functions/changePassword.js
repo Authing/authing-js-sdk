@@ -49,7 +49,6 @@ export default function changePassword(options) {
           signedUp
           blocked
           isDeleted
-          metadata
         }
       }
     `,

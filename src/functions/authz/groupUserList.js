@@ -26,7 +26,6 @@ export default function groupUserList(_id, options) {
           signedUp
           blocked
           isDeleted
-          metadata
           userLocation {
             _id
             when
