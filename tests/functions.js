@@ -12,8 +12,8 @@ process.env.BUILD_TARGET = "node";
 const gqlEndPoint = "https://core.authing.cn/graphql";
 const Authing = require("../src/index");
 
-const userPoolId = "5e3a3b2315a0b8398cdaaa04";
-const secret = "14f98c87cdf648e341c58eb852e5adf0";
+const userPoolId = "5e57fa63c942050998c3ab0d";
+const secret = "a7680ae6d41bf462392881b5ef190dd3";
 
 function randomEmail() {
   let rand = Math.random()
@@ -33,7 +33,8 @@ let auth = new Authing({
   host: {
     user: "http://localhost:5510/graphql",
     oauth: "http://localhost:5510/graphql"
-  }
+  },
+  baseUrl: 'http://localhost:5510'
 });
 test("初始化", async t => {
   let fault = new Authing({
@@ -51,7 +52,7 @@ test("初始化", async t => {
     setTimeout(resolve, 3000);
   });
 });
-test.only("users:register 用户密码注册", async t => {
+test("users:register 用户密码注册", async t => {
   const validAuth = auth;
   let email = randomEmail();
   try {
@@ -1305,3 +1306,15 @@ test("refreshThirdPartyToken", async t => {
   let res = await auth.refreshThirdPartyToken(user._id);
   t.false(res.refreshSuccess);
 });
+
+test.only('loginByOidc', async t => {
+  let user = await auth.loginByOidc({
+    client_id: '5e57fa63c942050998c3ab11',
+    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
+    email: 'test3@123.com',
+    password: '123456',
+
+  })
+  t.assert(user.sub)
+  console.log(user)
+})

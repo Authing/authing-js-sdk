@@ -10,6 +10,7 @@ const defaultOpts = {
   timeout: 10000,
   preflight: false,
   cdnPreflight: false,
+  baseUrl: 'https://core.authing.cn',
   host: {
     user: "https://users.authing.cn/graphql",
     oauth: "https://oauth.authing.cn/graphql"
@@ -35,11 +36,11 @@ GKl64GDcIq3au+aqJQIDAQAB
 };
 class Authing {
   constructor(options) {
+    this.opts = Object.assign({}, defaultOpts, options);
     Object.defineProperty(this, "_axios", {
       enumerable: false,
-      value: axios
+      value: axios.create({baseURL: this.opts.baseUrl})
     });
-    this.opts = Object.assign({}, defaultOpts, options);
     // 依赖关系：login，register，changePassword，loginByPhonePassword -> _encryption 函数 -> configs.openSSLSecret -> opts.passwordEncPublicKey，
     configs.openSSLSecret = this.opts.passwordEncPublicKey;
     this.version = process.env.VERSION;

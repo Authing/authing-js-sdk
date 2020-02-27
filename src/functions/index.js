@@ -14,6 +14,7 @@ import genQRCode from './genQRCode.js'
 import list from './list.js'
 import login from './login.js'
 import loginByLDAP from './loginByLDAP.js'
+import loginByOidc from './loginByOidc.js'
 import loginByPhoneCode from './loginByPhoneCode.js'
 import logout from './logout.js'
 import preflightFun from './preflightFun.js'
@@ -73,6 +74,7 @@ import pipeline from "./pipeline"
 
 // Node & Browser 共用
 let mod = {
+  loginByOidc,
   bindOAuth,
   cdnPreflightFun,
   changeMFA,
