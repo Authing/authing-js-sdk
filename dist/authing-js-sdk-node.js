@@ -1307,8 +1307,12 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 "use strict";
 eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = loginByOidc;\n\nvar _configs = _interopRequireDefault(__webpack_require__(/*! ../configs */ \"./src/configs.js\"));\n\nvar _TokenManager = _interopRequireDefault(__webpack_require__(/*! ../TokenManager */ \"./src/TokenManager.js\"));\n\nvar _querystring = _interopRequireDefault(__webpack_require__(/*! querystring */ \"querystring\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nfunction ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }\n\nfunction _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }\n\nfunction _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }\n\nfunction isPassingInMultiUserIdentifierParams(oidcParams) {\n  var parameters = [\"username\", \"email\", \"phone\", \"unionid\"];\n  var flag = false;\n\n  for (var _i = 0, _parameters = parameters; _i < _parameters.length; _i++) {\n    var item = _parameters[_i];\n\n    if (!flag && oidcParams[item]) {\n      flag = true;\n    } else if (flag && oidcParams[item]) {\n      return true;\n    }\n  }\n\n  return false;\n}\n\nfunction loginByOidc(options) {\n  var _this = this;\n\n  if (!options) {\n    throw Error(\"options is not provided.\");\n  }\n\n  if (!options.client_id) {\n    throw Error(\"options.client_id is not provided.\");\n  }\n\n  if (!options.client_secret) {\n    throw Error(\"options.client_secret is not provided.\");\n  }\n\n  options.grant_type = \"password\";\n  options.scope = options.scope || 'openid profile email phone';\n\n  if (isPassingInMultiUserIdentifierParams(options)) {\n    throw Error(\"repeated parameters provided. please don't pass in username or email or phone or unionid at the same time.\");\n  }\n\n  var noIdentifier = true;\n  [\"username\", \"email\", \"phone\", \"unionid\"].forEach(function (item) {\n    if (item in options) {\n      noIdentifier = false;\n    }\n  });\n\n  if (noIdentifier) {\n    throw Error(\"please provider one identifiler: email, phone, username or unionid\");\n  }\n\n  if (!options.unionid && !options.password) {\n    throw Error(\"options.password is not provided.\");\n  }\n\n  var token = {};\n  return this._axios.post(\"\".concat(this.opts.baseUrl, \"/oauth/oidc/token\"), _querystring[\"default\"].stringify(options), {\n    \"Content-Type\": \"application/x-www-form-urlencoded\"\n  }).then(function (res) {\n    _TokenManager[\"default\"].getInstance().setUserToken(res.data.access_token);\n\n    token = res.data;\n    return _this._axios.post(\"\".concat(_this.opts.baseUrl, \"/oauth/oidc/me\"), _querystring[\"default\"].stringify({\n      access_token: res.data.access_token\n    }), {\n      \"Content-Type\": \"application/x-www-form-urlencoded\"\n    });\n  }).then(function (res) {\n    return _objectSpread({}, res.data, {}, token);\n  });\n}\n\n//# sourceURL=webpack://Authing/./src/functions/loginByOidc.js?");
+=======
+eval("var map = {\n\t\"./_uploadAvatar.js\": \"./src/functions/_uploadAvatar.js\",\n\t\"./assignUserToRole.js\": \"./src/functions/assignUserToRole.js\",\n\t\"./bindOAuth.js\": \"./src/functions/bindOAuth.js\",\n\t\"./cdnPreflightFun.js\": \"./src/functions/cdnPreflightFun.js\",\n\t\"./changeMFA.js\": \"./src/functions/changeMFA.js\",\n\t\"./changePassword.js\": \"./src/functions/changePassword.js\",\n\t\"./checkLoginStatus.js\": \"./src/functions/checkLoginStatus.js\",\n\t\"./checkPreflight.js\": \"./src/functions/checkPreflight.js\",\n\t\"./checkQR.js\": \"./src/functions/checkQR.js\",\n\t\"./configs.js\": \"./src/functions/configs.js\",\n\t\"./createRole.js\": \"./src/functions/createRole.js\",\n\t\"./decodeToken.js\": \"./src/functions/decodeToken.js\",\n\t\"./exchangeUserInfoWithTicket.js\": \"./src/functions/exchangeUserInfoWithTicket.js\",\n\t\"./genQRCode.js\": \"./src/functions/genQRCode.js\",\n\t\"./geneQRCode.js\": \"./src/functions/geneQRCode.js\",\n\t\"./getAuthedAppList.js\": \"./src/functions/getAuthedAppList.js\",\n\t\"./getUserPoolSettings.js\": \"./src/functions/getUserPoolSettings.js\",\n\t\"./getUsersByRole.js\": \"./src/functions/getUsersByRole.js\",\n\t\"./getVerificationCode.js\": \"./src/functions/getVerificationCode.js\",\n\t\"./index.js\": \"./src/functions/index.js\",\n\t\"./list.js\": \"./src/functions/list.js\",\n\t\"./login.js\": \"./src/functions/login.js\",\n\t\"./loginByLDAP.js\": \"./src/functions/loginByLDAP.js\",\n\t\"./loginByPhoneCode.js\": \"./src/functions/loginByPhoneCode.js\",\n\t\"./loginFromLocalStorage.js\": \"./src/functions/loginFromLocalStorage.js\",\n\t\"./logout.js\": \"./src/functions/logout.js\",\n\t\"./preflightFun.js\": \"./src/functions/preflightFun.js\",\n\t\"./queryMFA.js\": \"./src/functions/queryMFA.js\",\n\t\"./queryPermissions.js\": \"./src/functions/queryPermissions.js\",\n\t\"./queryRoles.js\": \"./src/functions/queryRoles.js\",\n\t\"./readOAuthList.js\": \"./src/functions/readOAuthList.js\",\n\t\"./readUserOAuthList.js\": \"./src/functions/readUserOAuthList.js\",\n\t\"./refreshToken.js\": \"./src/functions/refreshToken.js\",\n\t\"./register.js\": \"./src/functions/register.js\",\n\t\"./remove.js\": \"./src/functions/remove.js\",\n\t\"./removeUserFromRole.js\": \"./src/functions/removeUserFromRole.js\",\n\t\"./revokeAuthedApp.js\": \"./src/functions/revokeAuthedApp.js\",\n\t\"./selectAvatarFile.js\": \"./src/functions/selectAvatarFile.js\",\n\t\"./sendActivationEmail.js\": \"./src/functions/sendActivationEmail.js\",\n\t\"./sendChangeEmailVerifyCode.js\": \"./src/functions/sendChangeEmailVerifyCode.js\",\n\t\"./sendResetPasswordEmail.js\": \"./src/functions/sendResetPasswordEmail.js\",\n\t\"./sendVerifyEmail.js\": \"./src/functions/sendVerifyEmail.js\",\n\t\"./startAppScaning.js\": \"./src/functions/startAppScaning.js\",\n\t\"./startPollingQRCodeStatus.js\": \"./src/functions/startPollingQRCodeStatus.js\",\n\t\"./startWXAppScaning.js\": \"./src/functions/startWXAppScaning.js\",\n\t\"./unbindEmail.js\": \"./src/functions/unbindEmail.js\",\n\t\"./unbindOAuth.js\": \"./src/functions/unbindOAuth.js\",\n\t\"./update.js\": \"./src/functions/update.js\",\n\t\"./updateEmail.js\": \"./src/functions/updateEmail.js\",\n\t\"./updateFailedTips.js\": \"./src/functions/updateFailedTips.js\",\n\t\"./updatePhone.js\": \"./src/functions/updatePhone.js\",\n\t\"./updateRetryTips.js\": \"./src/functions/updateRetryTips.js\",\n\t\"./updateRolePermissions.js\": \"./src/functions/updateRolePermissions.js\",\n\t\"./updateSuccessRedirectTips.js\": \"./src/functions/updateSuccessRedirectTips.js\",\n\t\"./updateSuccessTips.js\": \"./src/functions/updateSuccessTips.js\",\n\t\"./user.js\": \"./src/functions/user.js\",\n\t\"./userPatch.js\": \"./src/functions/userPatch.js\",\n\t\"./verifyResetPasswordVerifyCode.js\": \"./src/functions/verifyResetPasswordVerifyCode.js\"\n};\n\n\nfunction webpackContext(req) {\n\tvar id = webpackContextResolve(req);\n\treturn __webpack_require__(id);\n}\nfunction webpackContextResolve(req) {\n\tif(!__webpack_require__.o(map, req)) {\n\t\tvar e = new Error(\"Cannot find module '\" + req + \"'\");\n\t\te.code = 'MODULE_NOT_FOUND';\n\t\tthrow e;\n\t}\n\treturn map[req];\n}\nwebpackContext.keys = function webpackContextKeys() {\n\treturn Object.keys(map);\n};\nwebpackContext.resolve = webpackContextResolve;\nmodule.exports = webpackContext;\nwebpackContext.id = \"./src/functions sync \\\\.js$\";\n\n//# sourceURL=webpack://Authing/./src/functions_sync_nonrecursive_\\.js$?");
+>>>>>>> 719f934... add api: geneQRCode
 
 /***/ }),
 
@@ -1428,7 +1432,11 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+<<<<<<< HEAD
 eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = findById;\n\nvar _buildTree = _interopRequireDefault(__webpack_require__(/*! ../../utils/buildTree */ \"./src/utils/buildTree.js\"));\n\nvar _lodash = _interopRequireDefault(__webpack_require__(/*! lodash */ \"./node_modules/lodash/lodash.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nfunction findById(_id) {\n  var _this = this;\n\n  var query = \"\\n  query org($_id: String!){\\n    org(_id: $_id) {\\n      _id\\n      nodes {\\n        _id\\n        name\\n          description\\n          createdAt\\n          updatedAt\\n        children\\n        root\\n      }\\n    }\\n  }\\n  \";\n  return this.fetchToken.then(function () {\n    return _this.UserServiceGql.request({\n      operationName: \"org\",\n      query: query,\n      variables: {\n        _id: _id\n      }\n    }).then(function (res) {\n      res.tree = (0, _buildTree[\"default\"])(_lodash[\"default\"].cloneDeep(res.nodes));\n      return res;\n    });\n  });\n}\n\n//# sourceURL=webpack://Authing/./src/functions/org/findById.js?");
+=======
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n// 条目为文件名\nvar _default = {\n  node: ['assignUserToRole', 'bindOAuth', 'cdnPreflightFun', 'changeMFA', 'changePassword', 'checkLoginStatus', 'checkPreflight', 'checkQR', 'createRole', 'decodeToken', 'getAuthedAppList', 'getVerificationCode', 'genQRCode', 'list', 'login', 'loginByLDAP', 'loginByPhoneCode', 'logout', 'preflightFun', 'queryMFA', 'queryPermissions', 'queryRoles', 'readOAuthList', 'readUserOAuthList', 'refreshToken', 'register', 'remove', 'removeUserFromRole', 'revokeAuthedApp', 'sendResetPasswordEmail', 'sendVerifyEmail', 'unbindEmail', 'unbindOAuth', 'update', 'user', 'userPatch', 'verifyResetPasswordVerifyCode', 'updateRolePermissions', 'getUserPoolSettings', 'sendActivationEmail', 'getUsersByRole', 'updatePhone', 'updateEmail', 'sendChangeEmailVerifyCode', 'geneQRCode', 'startPollingQRCodeStatus', 'exchangeUserInfoWithTicket', 'startAppScaning'],\n  web: ['_uploadAvatar', 'bindOAuth', 'cdnPreflightFun', 'changeMFA', 'changePassword', 'checkLoginStatus', 'checkPreflight', 'checkQR', 'decodeToken', 'genQRCode', 'getAuthedAppList', 'getVerificationCode', 'login', 'loginByLDAP', 'loginByPhoneCode', 'loginFromLocalStorage', 'logout', 'preflightFun', 'queryMFA', 'readOAuthList', 'readUserOAuthList', 'register', 'revokeAuthedApp', 'selectAvatarFile', 'sendResetPasswordEmail', 'sendVerifyEmail', 'startWXAppScaning', 'unbindEmail', 'unbindOAuth', 'update', 'updateFailedTips', 'updateRetryTips', 'updateSuccessTips', 'updateSuccessRedirectTips', 'user', 'verifyResetPasswordVerifyCode', 'getUserPoolSettings', 'updatePhone', 'updateEmail', 'sendChangeEmailVerifyCode', 'geneQRCode', 'exchangeUserInfoWithTicket']\n};\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack://Authing/./src/functions/configs.js?");
+>>>>>>> 719f934... add api: geneQRCode
 
 /***/ }),
 
@@ -1456,10 +1464,29 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 
 /***/ }),
 
+<<<<<<< HEAD
 /***/ "./src/functions/org/removeNode.js":
 /*!*****************************************!*\
   !*** ./src/functions/org/removeNode.js ***!
   \*****************************************/
+=======
+/***/ "./src/functions/exchangeUserInfoWithTicket.js":
+/*!*****************************************************!*\
+  !*** ./src/functions/exchangeUserInfoWithTicket.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n//# sourceURL=webpack://Authing/./src/functions/exchangeUserInfoWithTicket.js?");
+
+/***/ }),
+
+/***/ "./src/functions/genQRCode.js":
+/*!************************************!*\
+  !*** ./src/functions/genQRCode.js ***!
+  \************************************/
+>>>>>>> 719f934... add api: geneQRCode
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1468,10 +1495,29 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 
 /***/ }),
 
+<<<<<<< HEAD
 /***/ "./src/functions/org/rootNode.js":
 /*!***************************************!*\
   !*** ./src/functions/org/rootNode.js ***!
   \***************************************/
+=======
+/***/ "./src/functions/geneQRCode.js":
+/*!*************************************!*\
+  !*** ./src/functions/geneQRCode.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.geneQRCode = geneQRCode;\n\nvar _axios = _interopRequireDefault(__webpack_require__(/*! axios */ \"./node_modules/axios/index.js\"));\n\nvar _queryString = __webpack_require__(/*! ../utils/queryString */ \"./src/utils/queryString.js\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nfunction _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nfunction geneQRCode(options) {\n  if (!options) {\n    throw Error('options is not provided.');\n  }\n\n  if (!(_typeof(options) === 'object' && options !== null)) {\n    throw Error('options must be an object.');\n  }\n\n  var userPoolId = options.userPoolId,\n      scence = options.scence,\n      userDefinedData = options.userDefinedData;\n  userPoolId = userPoolId || this.userPoolId;\n\n  if (!userPoolId) {\n    throw Error('userPoolId is not provided.');\n  }\n\n  if (!scence) {\n    throw Error('scence is not provided.');\n  }\n\n  var queryObject = {\n    scence: scence\n  };\n\n  if (userDefinedData) {\n    if (!(_typeof(userDefinedData) === 'object' && userDefinedData !== null)) {\n      throw Error('userDefinedData must be an object.');\n    }\n\n    queryObject = Object.assign(queryObject, userDefinedData);\n  }\n\n  var host = this.opts.host.oauth.replace(\"/graphql\", \"\");\n  var queryString = (0, _queryString.convertObjectToQueryString)(queryObject);\n  var url = \"\".concat(host, \"/qrcode/\").concat(userPoolId, \"?\").concat(queryString);\n  return _axios[\"default\"].get(url).then(function (res) {\n    return res.data;\n  })[\"catch\"](function (err) {\n    return err;\n  });\n}\n\n//# sourceURL=webpack://Authing/./src/functions/geneQRCode.js?");
+
+/***/ }),
+
+/***/ "./src/functions/getAuthedAppList.js":
+/*!*******************************************!*\
+  !*** ./src/functions/getAuthedAppList.js ***!
+  \*******************************************/
+>>>>>>> 719f934... add api: geneQRCode
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1828,6 +1874,30 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 
 /***/ }),
 
+/***/ "./src/functions/startAppScaning.js":
+/*!******************************************!*\
+  !*** ./src/functions/startAppScaning.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n//# sourceURL=webpack://Authing/./src/functions/startAppScaning.js?");
+
+/***/ }),
+
+/***/ "./src/functions/startPollingQRCodeStatus.js":
+/*!***************************************************!*\
+  !*** ./src/functions/startPollingQRCodeStatus.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n//# sourceURL=webpack://Authing/./src/functions/startPollingQRCodeStatus.js?");
+
+/***/ }),
+
 /***/ "./src/functions/startWXAppScaning.js":
 /*!********************************************!*\
   !*** ./src/functions/startWXAppScaning.js ***!
@@ -2125,6 +2195,18 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 
 "use strict";
 eval("\n\nmodule.exports = __webpack_require__(/*! crypto */ \"crypto\");\n\n//# sourceURL=webpack://Authing/./src/utils/crypto-polyfill/index.js?");
+
+/***/ }),
+
+/***/ "./src/utils/queryString.js":
+/*!**********************************!*\
+  !*** ./src/utils/queryString.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.convertObjectToQueryString = convertObjectToQueryString;\n\nfunction convertObjectToQueryString(obj) {\n  var str = [];\n\n  for (var p in obj) {\n    if (obj.hasOwnProperty(p)) {\n      str.push(encodeURIComponent(p) + \"=\" + encodeURIComponent(obj[p]));\n    }\n  }\n\n  return str.join(\"&\");\n}\n\n//# sourceURL=webpack://Authing/./src/utils/queryString.js?");
 
 /***/ }),
 
