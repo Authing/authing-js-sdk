@@ -1524,10 +1524,11 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /*!*****************************************************!*\
   !*** ./src/functions/exchangeUserInfoWithTicket.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: exchangeUserInfoWithTicket */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-eval("\n\n//# sourceURL=webpack://Authing/./src/functions/exchangeUserInfoWithTicket.js?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"exchangeUserInfoWithTicket\", function() { return exchangeUserInfoWithTicket; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n\nfunction exchangeUserInfoWithTicket(ticket) {\n  if (!ticket) {\n    throw Error('ticket is not provided.');\n  }\n\n  var host = this.opts.host.oauth.replace(\"/graphql\", \"\");\n  var url = \"\".concat(host, \"/oauth/scan-qrcode/exchangeUserInfoWithTicket\");\n  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, {\n    ticket: ticket\n  }).then(function (res) {\n    return res.data;\n  })[\"catch\"](function (err) {\n    return err;\n  });\n}\n\n//# sourceURL=webpack://Authing/./src/functions/exchangeUserInfoWithTicket.js?");
 
 /***/ }),
 
