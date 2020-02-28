@@ -30,7 +30,7 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
 GKl64GDcIq3au+aqJQIDAQAB
 -----END PUBLIC KEY-----
 `,
-  onInitError: function(err) {
+  onInitError: function (err) {
     throw err;
   }
 };
@@ -39,7 +39,7 @@ class Authing {
     this.opts = Object.assign({}, defaultOpts, options);
     Object.defineProperty(this, "_axios", {
       enumerable: false,
-      value: axios.create({baseURL: this.opts.baseUrl})
+      value: axios.create({ baseURL: this.opts.baseUrl })
     });
     // 依赖关系：login，register，changePassword，loginByPhonePassword -> _encryption 函数 -> configs.openSSLSecret -> opts.passwordEncPublicKey，
     configs.openSSLSecret = this.opts.passwordEncPublicKey;
@@ -143,9 +143,15 @@ class Authing {
       })
     }
 
-    if(this.pipeline){
+    if (this.pipeline) {
       Object.keys(this.pipeline).forEach(item => {
         this.pipeline[item] = this.pipeline[item].bind(this)
+      })
+    }
+
+    if (this.qrlogin) {
+      Object.keys(this.qrlogin).forEach(item => {
+        this.qrlogin[item] = this.qrlogin[item].bind(this)
       })
     }
   }

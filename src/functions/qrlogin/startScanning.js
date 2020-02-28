@@ -1,4 +1,4 @@
-import { isFunction } from "../utils/isFunction";
+import { isFunction } from "../../utils/isFunction";
 
 function checkOptions(options) {
   if (!options) {
@@ -113,7 +113,7 @@ function checkOptions(options) {
   }
 }
 
-export function startAppAuthScanning(options) {
+export default function startAppAuthScanning(options) {
 
   /*
   - 调用示例
@@ -308,7 +308,7 @@ export function startAppAuthScanning(options) {
 
   let start = () => {
     loading();
-    self.geneQRCode({ scene: scene }).then((res) => {
+    self.qrlogin.geneCode({ scene: scene }).then((res) => {
       if (res.code !== 200) {
         genRetry(qrcodeNode, res.message);
         if (onQRCodeLoadFaild) {
@@ -378,7 +378,7 @@ export function startAppAuthScanning(options) {
             }
 
             // 开始轮询
-            self.startPollingQRCodeStatus({
+            self.qrlogin.pollingCodeStatus({
               qrcodeId,
               scene,
               interval,

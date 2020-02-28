@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { convertObjectToQueryString } from "../utils/queryString"
+import { convertObjectToQueryString } from "../../utils/queryString"
 
 // 检验微信二维码扫描状态
-export function checkQRCodeStatus(options) {
+export default function checkQRCodeStatus(options) {
   if (!options) {
     throw Error('options is not provided.');
   }

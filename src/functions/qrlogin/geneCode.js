@@ -1,7 +1,7 @@
 import axios from "axios";
-import { convertObjectToQueryString } from "../utils/queryString";
+import { convertObjectToQueryString } from "../../utils/queryString";
 
-export function geneQRCode(options) {
+export default function geneQRCode(options) {
   if (!options) {
     throw Error('options is not provided.');
   }

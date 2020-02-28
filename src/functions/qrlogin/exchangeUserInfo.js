@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export function exchangeUserInfoWithTicket(ticket) {
+export default function exchangeUserInfoWithTicket(ticket) {
   if (!ticket) {
     throw Error('ticket is not provided.');
   }

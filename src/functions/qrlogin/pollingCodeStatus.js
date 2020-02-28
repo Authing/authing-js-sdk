@@ -1,6 +1,6 @@
-import { isFunction } from "../utils/isFunction";
+import { isFunction } from "../../utils/isFunction";
 
-export function startPollingQRCodeStatus(options) {
+export default function startPollingQRCodeStatus(options) {
   if (!options) {
     throw Error('options is not provided.');
   }
@@ -78,7 +78,7 @@ export function startPollingQRCodeStatus(options) {
       callOnPoolingStart = true
     }
 
-    this.checkQRCodeStatus({
+    this.qrlogin.checkCodeStatus({
       qrcodeId,
       scene
     }).then(res => {
