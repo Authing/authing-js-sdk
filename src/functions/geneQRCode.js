@@ -24,7 +24,7 @@ export function geneQRCode(options) {
     throw Error(`Unsupported scence ${scence}, the choices are APP_AUTH`)
   }
 
-  let queryObject = { scence }
+  let queryObject = { scence, userPoolId }
   if (userDefinedData) {
     if (!(typeof userDefinedData === 'object' && userDefinedData !== null)) {
       throw Error('userDefinedData must be an object.');
@@ -35,7 +35,7 @@ export function geneQRCode(options) {
 
   let host = this.opts.host.oauth.replace("/graphql", "");
   let queryString = convertObjectToQueryString(queryObject)
-  let url = `${host}/qrcode/${userPoolId}?${queryString}`
+  let url = `${host}/qrcode/gene?${queryString}`
 
 
   return axios.get(url).then(res => {
