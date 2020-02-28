@@ -372,9 +372,6 @@ export function startAppAuthScanning(options) {
             }
 
             let decoratedOnError = function (data) {
-              const message = data.message
-              genRetry(qrcodeNode, message);
-              qrcodeWrapper.appendChild(shadow);
               if (onError) {
                 onError(data)
               }
