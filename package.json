@@ -1,6 +1,6 @@
 {
 	"name": "authing-js-sdk",
-	"version": "3.11.0",
+	"version": "3.12.0",
 	"description": "Official sdk of Authing",
 	"main": "dist/authing-js-sdk-node.js",
 	"browser": "dist/authing-js-sdk-browser.min.js",
@@ -18,11 +18,7 @@
 		"type": "git",
 		"url": "git+https://github.com/Authing/authing-js-sdk.git"
 	},
-	"keywords": [
-		"authing",
-		"auth",
-		"oauth"
-	],
+	"keywords": [ "authing", "auth", "oauth" ],
 	"author": "authing",
 	"license": "MIT",
 	"bugs": {
@@ -47,33 +43,19 @@
 		"webpack-cli": "^3.3.9"
 	},
 	"ava": {
-		"files": [
-			"tests/*.js"
-		],
-		"require": [
-			"@babel/register",
-			"@babel/polyfill"
-		],
+		"files": [ "tests/*.js" ],
+		"require": [ "@babel/register", "@babel/polyfill" ],
 		"babel": {
 			"testOptions": {
-				"presets": [
-					"@babel/preset-env"
-				]
+				"presets": [ "@babel/preset-env" ]
 			}
 		}
 	},
 	"nyc": {
 		"lines": 10,
 		"check-coverage": true,
-		"reporter": [
-			"text-lcov"
-		],
+		"reporter": [ "text-lcov" ],
 		"report-dir": "./.nyc_output",
-		"exclude": [
-			"test",
-			"test{,-*}.js",
-			"**/*.test.js",
-			"**/__tests__/**"
-		]
+		"exclude": [ "test", "test{,-*}.js", "**/*.test.js", "**/__tests__/**" ]
 	}
 }

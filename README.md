@@ -232,11 +232,9 @@ authing.startWXAppScaning({
 
 ## APP 扫码登录 Web
 
-APP 扫码登录，是已处于登录状态的 APP 端用户，授权 Web 端登录的流程。示例：[APP 扫码登录 Web](https://sample.authing.co/scan-qrcode)
-
 ### 基础用法
 
-使用 `startAppAuthScanning` 方法：
+使用 `qrcode.startScanning` 方法：
  
 ```javascript
 import Authing from 'authing-js-sdk';
@@ -245,7 +243,7 @@ const authing = new Authing({
 	userPoolId: 'your_userpool_id'
 });
 
-authing.startAppAuthScanning({
+authing.qrcode.startScanning({
   onSuccess(userInfo) {
     alert('扫码成功，请打开控制台查看用户信息')
     console.log(userInfo);
@@ -262,7 +260,7 @@ authing.startAppAuthScanning({
 ### 参数说明
 
 ```javascript
-authing.startAppAuthScanning({
+authing.qrcode.startScanning({
     mount: '', // 可选，二维码挂载点，如不写则默认漂浮在文档中间
     interval: 1000, // 可选，轮询间隔时间，默认为 800 ms 
 
