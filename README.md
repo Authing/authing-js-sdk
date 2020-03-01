@@ -23,6 +23,12 @@ Authing 的 JavaScript SDK 支持 **Angular.js**，**React.js**，**Vue.js** 以
 $ npm install authing-js-sdk --save
 ```
 
+#### CDN
+
+```javascript
+<script src="https://cdn.jsdelivr.net/npm/authing-js-sdk/dist/authing-js-sdk-browser.min.js"></script>
+```
+
 ---
 
 ## 初始化
@@ -222,7 +228,104 @@ authing.startWXAppScaning({
   authing.updateSuccessRedirectTips(tips: string)
 ```
 
-了解更多，请查看：[使用小程序扫码登录](https://docs.authing.cn/authing/advanced/wxapp-qrcode)
+了解更多，请查看：[使用小程序扫码登录](https://docs.authing.cn/authing/scan-qrcode/wxapp-qrcode)
+
+## APP 扫码登录 Web
+
+### 基础用法
+
+使用 `qrcode.startScanning` 方法：
+ 
+```javascript
+import Authing from 'authing-js-sdk';
+
+const authing = new Authing({
+	userPoolId: 'your_userpool_id'
+});
+
+authing.qrcode.startScanning({
+  onSuccess(userInfo) {
+    alert('扫码成功，请打开控制台查看用户信息')
+    console.log(userInfo);
+    // 存储 token 到 localStorage 中
+    localStorage.setItem('token', userInfo.token);
+  }
+})
+```
+
+这会在将用于扫描登录的二维码到文档中间：
+
+![](http://lcjim-img.oss-cn-beijing.aliyuncs.com/2019-12-28-063158.png)
+
+### 参数说明
+
+```javascript
+authing.qrcode.startScanning({
+    mount: '', // 可选，二维码挂载点，如不写则默认漂浮在文档中间
+    interval: 1000, // 可选，轮询间隔时间，默认为 800 ms 
+
+    onPollingStart: (intervalNum) => {},
+    onResult: (res) => {},
+    onScanned: (userInfo) => {},
+    onSuccess: (data) => {
+        const { ticket, userInfo } = data;
+    },
+    onCancel: () => {},
+    onExpired: () => {},
+    onError: (data) => {},
+
+    onQRCodeShow: (qrcode) => {},
+    onQRCodeLoad: (qrcode) => {},
+    onQRCodeLoadFaild: (error) => {},
+    tips: '使用 <strong> APP </strong> 扫码登录',
+    scannedTips: '用户已扫码，等待确认',
+    canceledTips: '用户取消授权',
+    expiredTips: '二维码已过期',
+    successTips: '扫码成功',
+    retryTips: '重试',
+    failedTips: '网络出错，请重试'
+})
+```
+
+完整参数：
+
+- options
+  - mount <string> 可选。挂载点 Dom ID，如不写则默认漂浮在文档中间。
+  - interval: 可选。轮询时间间隔，单位为 ms，默认为 800 ms。
+  - onPollingStart: 轮询开始时会被回调，且只会被调用一次。参数 intervalNum 为 setInterval 返回的数值，可使用 clearInterval 停止轮询。
+  - onResult: 每次查询获取到数据都会回调，参数 res 示例如下：
+```json
+{
+    "code": 200,
+    "message": "查询二维码状态成功",
+    "data": {
+        "qrcodeId": "5e05f6027fde537d950f7da9", // 二维码 ID
+        "scanned": false, // 是否已被扫描
+        "expired": false, // 是否已过期
+        "success": false, // 是否同意授权
+        "canceled": false, // 是否取消授权
+        "status": 0, //   - 0: 未知状态，即还未扫码，或者已经扫码但用户还没有点击同意授权或者取消授权。- 1: 用户同意授权。-1: 用户取消授权
+        "userInfo": {}, 
+        "ticket": "", // 可用于换取完整用户信息，仅在 APP 端用户同意授权之后才返回
+        "description": "二维码还没有被扫描"
+    }
+}
+```
+  - onScanned: 用户扫码时会被回调，且只会被回调一次。参数 userInfo 只包含了用户昵称和头像，开发者可以将其展示在扫码框中，如下所示：
+![](http://lcjim-img.oss-cn-beijing.aliyuncs.com/2019-12-28-063559.jpg)
+  - onSuccess: 用户同意授权之后将会被回调，且只会回调一次，之后轮询结束。参数 data 是一个字典，包含两个字段：ticket 和 userInfo。出于安全性考虑，默认情况下，userInfo 只会包含昵称（nickname）和头像（photo）两个字段，开发者也可以在后台配置使其返回完整用户信息，详情见下文。 ticket 可以用来换取完整的用户信息，相关接口见下文。
+  - onCancel：用户取消授权只会会被回调，且只会回调一次，之后轮询结束。
+  - onExpired：二维码失效时被回调，且只会回调一次，之后轮询结束。
+  - onError：每次查询失败时都会被回调。参数 data 示例如下：完整的错误代码可见
+{"code": 2241,"message": "二维码不存在","data": null}
+  - onQRCodeLoad：二维码首次成功加载时回调。参数 qrcode 是一个字典，包含两个字段：qrcodeId、qrcodeUrl。
+  - onQRCodeShow：二维码首次出现在盘面上时回调。参数 qrcode 同上。
+  - onQRCodeLoadFaild：二维码加载失败时会被回调。
+
+
+### 了解更多
+
+了解更多，请查看：[使用 APP 扫码登录 Web](https://docs.authing.cn/authing/scan-qrcode/app-qrcode)
 
 ## 自定义请求链接
 
