@@ -73,6 +73,9 @@ import removeMetadata from "./user/removeMetadata"
 // Pipeline submodule
 import pipeline from "./pipeline"
 
+// qrcode login module
+import qrlogin from "./qrlogin"
+
 // Node & Browser 共用
 let mod = {
   loginByOidc,
@@ -117,7 +120,8 @@ let mod = {
   casLogout,
   metadata,
   setMetadata,
-  removeMetadata
+  removeMetadata,
+  qrlogin
 }
 
 if (process.env.BUILD_TARGET === 'node') {

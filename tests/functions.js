@@ -1336,3 +1336,15 @@ test.only('refreshOidcToken', async t => {
   console.log(refreshToken)
   t.assert(refreshToken.access_token)
 })
+test('生成二维码', async t => {
+  const authing = auth;
+  const res = await authing.geneQRCode({
+    scene: 'APP_AUTH',
+    userDefinedData: {
+      hello: 'world'
+    }
+  })
+  t.assert(res.status === 200)
+  t.assert(res.data.qrcodeId !== undefined)
+  t.assert(res.data.qrcodeUrl !== undefined)
+})
