@@ -70,6 +70,24 @@ test("users:register 用户密码注册", async t => {
     t.fail(formatError(err));
   }
 });
+test.only("users:createUser 用户密码注册", async t => {
+  const validAuth = auth;
+  let email = randomEmail();
+  try {
+    let res = await validAuth.createUser({
+      email,
+      password: "123456a",
+      lastLogin: new Date(2019, 5, 1),
+      signedUp: new Date(2019, 5, 1)
+    });
+    t.assert(res.lastLogin);
+    t.assert(res.signedUp);
+    t.pass();
+  } catch (err) {
+    t.log(formatError(err));
+    t.fail(formatError(err));
+  }
+});
 test("users:register 用户密码注册，保留原始密码字段内容", async t => {
   const validAuth = auth;
   let email = randomEmail();
@@ -1044,7 +1062,7 @@ test("OIDC 授权码模式", async t => {
         userinfo_signed_response_alg: "不加密",
         userinfo_encrypted_response_alg: "不加密",
         userinfo_encrypted_response_enc: "不加密",
-        request_object_signing_alg: "不加密",
+        request_object_signIng_alg: "不加密",
         request_object_encryption_alg: "不加密",
         request_object_encryption_enc: "不加密",
         domain,
@@ -1213,7 +1231,7 @@ test("OIDC 隐式模式", async t => {
         userinfo_signed_response_alg: "不加密",
         userinfo_encrypted_response_alg: "不加密",
         userinfo_encrypted_response_enc: "不加密",
-        request_object_signing_alg: "不加密",
+        request_object_signIng_alg: "不加密",
         request_object_encryption_alg: "不加密",
         request_object_encryption_enc: "不加密",
         domain,
@@ -1319,7 +1337,7 @@ test('loginByOidc', async t => {
   console.log(user)
 })
 
-test.only('refreshOidcToken', async t => {
+test('refreshOidcToken', async t => {
   let user = await auth.loginByOidc({
     client_id: '5e57fa63c942050998c3ab11',
     client_secret: '4b4796bf54ba0c50e6364801c517e22c',
@@ -1336,6 +1354,17 @@ test.only('refreshOidcToken', async t => {
   console.log(refreshToken)
   t.assert(refreshToken.access_token)
 })
+test.only('signIn', async t => {
+  let user = await auth.signIn({
+    client_id: '5e57fa63c942050998c3ab11',
+    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
+    email: 'test3@123.com',
+    password: '123456',
+  })
+  t.assert(user.sub)
+  console.log(user)
+})
+
 test('生成二维码', async t => {
   const authing = auth;
   const res = await authing.geneQRCode({

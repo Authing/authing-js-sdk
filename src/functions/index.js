@@ -15,6 +15,7 @@ import list from './list.js'
 import login from './login.js'
 import loginByLDAP from './loginByLDAP.js'
 import loginByOidc from './loginByOidc.js'
+import signIn from './loginByOidc.js'
 import refreshOidcToken from './refreshOidcToken'
 import loginByPhoneCode from './loginByPhoneCode.js'
 import logout from './logout.js'
@@ -26,6 +27,7 @@ import readOAuthList from './readOAuthList.js'
 import readUserOAuthList from './readUserOAuthList.js'
 import refreshToken from './refreshToken.js'
 import register from './register.js'
+import createUser from './register' // register 副本
 import remove from './remove.js'
 import removeUserFromRole from './removeUserFromRole.js'
 import revokeAuthedApp from './revokeAuthedApp.js'
@@ -99,6 +101,8 @@ let mod = {
   readOAuthList,
   readUserOAuthList,
   register,
+  createUser,
+  signIn,
   revokeAuthedApp,
   sendResetPasswordEmail,
   sendVerifyEmail,
