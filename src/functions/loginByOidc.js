@@ -39,7 +39,7 @@ export default function loginByOidc(options) {
   });
   if (noIdentifier) {
     throw Error(
-      "please provider one identifiler: email, phone, username or unionid"
+      "please provide one identifiler: email, phone, username or unionid"
     );
   }
   if (!options.unionid && !options.password) {

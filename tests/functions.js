@@ -1307,7 +1307,7 @@ test("refreshThirdPartyToken", async t => {
   t.false(res.refreshSuccess);
 });
 
-test.only('loginByOidc', async t => {
+test('loginByOidc', async t => {
   let user = await auth.loginByOidc({
     client_id: '5e57fa63c942050998c3ab11',
     client_secret: '4b4796bf54ba0c50e6364801c517e22c',
@@ -1317,4 +1317,22 @@ test.only('loginByOidc', async t => {
   })
   t.assert(user.sub)
   console.log(user)
+})
+
+test.only('refreshOidcToken', async t => {
+  let user = await auth.loginByOidc({
+    client_id: '5e57fa63c942050998c3ab11',
+    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
+    scope: 'openid profile email phone offline_access',
+    email: 'test3@123.com',
+    password: '123456',
+  })
+  t.assert(user.sub)
+  let refreshToken = await auth.refreshOidcToken({
+    client_id: '5e57fa63c942050998c3ab11',
+    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
+    refresh_token: user.refresh_token
+  })
+  console.log(refreshToken)
+  t.assert(refreshToken.access_token)
 })

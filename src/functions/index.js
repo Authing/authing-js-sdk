@@ -15,6 +15,7 @@ import list from './list.js'
 import login from './login.js'
 import loginByLDAP from './loginByLDAP.js'
 import loginByOidc from './loginByOidc.js'
+import refreshOidcToken from './refreshOidcToken'
 import loginByPhoneCode from './loginByPhoneCode.js'
 import logout from './logout.js'
 import preflightFun from './preflightFun.js'
@@ -121,6 +122,7 @@ let mod = {
 
 if (process.env.BUILD_TARGET === 'node') {
   mod = Object.assign(mod, {
+    refreshOidcToken,
     createRole,
     assignUserToRole,
     list,
