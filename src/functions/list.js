@@ -29,7 +29,6 @@ export default function list(page, count, queryOptions) {
           company
           photo
           browser
-          password
           registerInClient
           registerMethod
           token

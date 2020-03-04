@@ -110,7 +110,6 @@ export default function register(options) {
             company,
             photo,
             browser,
-            password,
             signedUp
             lastLogin
             token,
