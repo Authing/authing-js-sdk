@@ -2,8 +2,6 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 import axios from "axios";
 import querystring from "querystring";
-// const clientId = "5dd77e6efa26f000d18101ca";
-// const secret = "82f4c093e345d79c416ec3da6854a453";
 let baseHost = "authing.cn";
 //线上
 // const secret = "bb278212d520fc19f169e361179ea690";
@@ -12,8 +10,8 @@ process.env.BUILD_TARGET = "node";
 const gqlEndPoint = "https://core.authing.cn/graphql";
 const Authing = require("../src/index");
 
-const userPoolId = "5e57fa63c942050998c3ab0d";
-const secret = "a7680ae6d41bf462392881b5ef190dd3";
+const userPoolId = "5e538b5d5c002972d307575c";
+const secret = "e871f0508aaaba3df920ef8c03edcf08";
 
 function randomEmail() {
   let rand = Math.random()
@@ -70,7 +68,7 @@ test("users:register 用户密码注册", async t => {
     t.fail(formatError(err));
   }
 });
-test.only("users:createUser 用户密码注册", async t => {
+test("users:createUser 用户密码注册", async t => {
   const validAuth = auth;
   let email = randomEmail();
   try {
@@ -1355,14 +1353,19 @@ test('refreshOidcToken', async t => {
   t.assert(refreshToken.access_token)
 })
 test.only('signIn', async t => {
-  let user = await auth.signIn({
-    client_id: '5e57fa63c942050998c3ab11',
-    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
-    email: 'test3@123.com',
-    password: '123456',
-  })
-  t.assert(user.sub)
-  console.log(user)
+  try {
+
+    let user = await auth.signIn({
+      oidcAppId: '5e538b5e5c002972d3075767',
+      email: 'test3@123.com',
+      password: '123456',
+    })
+    t.assert(user.sub)
+    console.log(user)
+  }catch(err) {
+    console.log(JSON.stringify(err.response.data))
+  }
+
 })
 
 test('生成二维码', async t => {
