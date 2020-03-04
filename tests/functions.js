@@ -1352,7 +1352,7 @@ test('refreshOidcToken', async t => {
   console.log(refreshToken)
   t.assert(refreshToken.access_token)
 })
-test.only('signIn', async t => {
+test('signIn', async t => {
   try {
 
     let user = await auth.signIn({
@@ -1361,11 +1361,28 @@ test.only('signIn', async t => {
       password: '123456',
     })
     t.assert(user.sub)
-    console.log(user)
   }catch(err) {
     console.log(JSON.stringify(err.response.data))
+    t.fail()
   }
-
+})
+test.only('refreshSignInToken', async t => {
+  try {
+    let user = await auth.signIn({
+      oidcAppId: '5e538b5e5c002972d3075767',
+      email: 'test3@123.com',
+      password: '123456',
+    })
+    t.assert(user.sub)
+    let refreshedToken = await auth.refreshSignInToken({
+      oidcAppId: '5e538b5e5c002972d3075767',
+      refreshToken: user.refresh_token
+    })
+    t.assert(refreshedToken.id_token)
+  }catch(err) {
+    console.log(JSON.stringify(err.response.data))
+    t.fail()
+  }
 })
 
 test('生成二维码', async t => {

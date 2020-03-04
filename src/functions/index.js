@@ -16,6 +16,7 @@ import login from './login.js'
 import loginByLDAP from './loginByLDAP.js'
 import loginByOidc from './loginByOidc.js'
 import signIn from './signIn.js'
+import refreshSignInToken from './refreshSignInToken.js'
 import refreshOidcToken from './refreshOidcToken'
 import loginByPhoneCode from './loginByPhoneCode.js'
 import logout from './logout.js'
@@ -103,6 +104,7 @@ let mod = {
   register,
   createUser,
   signIn,
+  refreshSignInToken,
   revokeAuthedApp,
   sendResetPasswordEmail,
   sendVerifyEmail,
