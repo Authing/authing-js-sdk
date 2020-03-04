@@ -1,4 +1,3 @@
-import configs from "../configs";
 import TokenMananger from "../TokenManager";
 import qs from "querystring";
 function isPassingInMultiUserIdentifierParams(oidcParams) {
@@ -25,7 +24,7 @@ export default function loginByOidc(options) {
     throw Error("options.client_secret is not provided.");
   }
   options.grant_type = "password";
-  options.scope = options.scope || 'openid profile email phone'
+  options.scope = options.scope || "openid profile email phone";
   if (isPassingInMultiUserIdentifierParams(options)) {
     throw Error(
       "repeated parameters provided. please don't pass in username or email or phone or unionid at the same time."
@@ -48,7 +47,9 @@ export default function loginByOidc(options) {
   let token = {};
   return this._axios
     .post(`${this.opts.baseUrl}/oauth/oidc/token`, qs.stringify(options), {
-      "Content-Type": "application/x-www-form-urlencoded"
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
     })
     .then(res => {
       TokenMananger.getInstance().setUserToken(res.data.access_token);
@@ -56,7 +57,11 @@ export default function loginByOidc(options) {
       return this._axios.post(
         `${this.opts.baseUrl}/oauth/oidc/me`,
         qs.stringify({ access_token: res.data.access_token }),
-        { "Content-Type": "application/x-www-form-urlencoded" }
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        }
       );
     })
     .then(res => {
