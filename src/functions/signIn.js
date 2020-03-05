@@ -1,4 +1,5 @@
 import TokenMananger from "../TokenManager";
+import configs from "../configs";
 
 function isPassingInMultiUserIdentifierParams(oidcParams) {
   const parameters = ["username", "email", "phone", "unionid"];
@@ -95,6 +96,9 @@ export default function signIn(options) {
     // 登录成功记录 token
     if (res && res.token) {
       TokenMananger.getInstance().setUserToken(res.token);
+    }
+    if (configs.inBrowser) {
+      localStorage.setItem("_authing_token", res.token);
     }
     return res;
   });
