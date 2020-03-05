@@ -1,3 +1,5 @@
+import TokenMananger from "../TokenManager";
+
 function isPassingInMultiUserIdentifierParams(oidcParams) {
   const parameters = ["username", "email", "phone", "unionid"];
   let flag = false;
@@ -89,5 +91,11 @@ export default function signIn(options) {
     }
   `,
     variables: options
+  }).then(res => {
+    // 登录成功记录 token
+    if (res && res.token) {
+      TokenMananger.getInstance().setUserToken(res.token);
+    }
+    return res;
   });
 }
