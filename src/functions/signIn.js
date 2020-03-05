@@ -17,10 +17,10 @@ export default function signIn(options) {
   if (!options) {
     throw Error("options is not provided.");
   }
-
-  if (!options.oidcAppId) {
-    throw Error("options.oidcAppId is not provided.");
-  }
+  options.userPoolId = this.userPoolId
+  // if (!options.oidcAppId) {
+  //   throw Error("options.oidcAppId is not provided.");
+  // }
   if (isPassingInMultiUserIdentifierParams(options)) {
     throw Error(
       "repeated parameters provided. please don't pass in username or email or phone or unionid at the same time."
@@ -43,8 +43,9 @@ export default function signIn(options) {
   return this.UserServiceGql.request({
     operationName: "SignIn",
     query: `
-    mutation SignIn($oidcAppId: String!, $email: String, $phone: String, $username: String, $unionid: String, $password: String) {
+    mutation SignIn($oidcAppId: String, $email: String, $userPoolId: String, $phone: String, $username: String, $unionid: String, $password: String) {
       signIn(oidcAppId: $oidcAppId,
+      userPoolId: $userPoolId,
       email: $email,
       phone: $phone,
       password: $password,
@@ -80,7 +81,7 @@ export default function signIn(options) {
         email
         email_verified,
         phone_number
-        phone_number_verified,
+        phone_number_verified
         token
         access_token
         id_token

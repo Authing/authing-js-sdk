@@ -2,9 +2,11 @@ export default function refreshSignInToken(options) {
   if (!options) {
     throw Error("options is not provided.");
   }
-  if (!options.oidcAppId) {
-    throw Error("options.oidcAppId is not provided.");
-  }
+  options.userPoolId = this.userPoolId
+
+  // if (!options.oidcAppId) {
+  //   throw Error("options.oidcAppId is not provided.");
+  // }
   if (!options.refreshToken) {
     throw Error("options.refreshToken is not provided.");
   }
@@ -13,11 +15,13 @@ export default function refreshSignInToken(options) {
     operationName: "RefreshSignInToken",
     query: `
       mutation RefreshSignInToken(
-        $oidcAppId: String!
+        $oidcAppId: String,
+        $userPoolId: String,
         $refreshToken: String!
       ) {
         refreshSignInToken(
           oidcAppId: $oidcAppId
+          userPoolId: $userPoolId
           refreshToken: $refreshToken
         ) {
           id_token

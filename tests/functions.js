@@ -3,15 +3,18 @@ import { formatError } from "../src/utils/formatError";
 import axios from "axios";
 import querystring from "querystring";
 let baseHost = "authing.cn";
-//线上
+// 线上
 // const secret = "bb278212d520fc19f169e361179ea690";
 // const userPoolId = "5c95905578fce5000166f853";
 process.env.BUILD_TARGET = "node";
 const gqlEndPoint = "https://core.authing.cn/graphql";
 const Authing = require("../src/index");
-
-const userPoolId = "5e538b5d5c002972d307575c";
-const secret = "e871f0508aaaba3df920ef8c03edcf08";
+// 测试机
+const userPoolId = "5e19942188b013078127c024";
+const secret = "203033ce97452602843aac51db25468a";
+// 本机 yelexin
+// const userPoolId = "5e538b5d5c002972d307575c";
+// const secret = "e871f0508aaaba3df920ef8c03edcf08";
 
 function randomEmail() {
   let rand = Math.random()
@@ -29,10 +32,13 @@ let auth = new Authing({
   userPoolId,
   secret,
   host: {
-    user: "http://localhost:5510/graphql",
-    oauth: "http://localhost:5510/graphql"
+    // user: "http://localhost:5510/graphql",
+    // oauth: "http://localhost:5510/graphql",
+    user: "https://core.celebes.live/graphql",
+    oauth: "https://core.celebes.live/graphql",
   },
-  baseUrl: 'http://localhost:5510'
+  // baseUrl: 'http://localhost:5510',
+  baseUrl: 'https://core.celebes.live',
 });
 test("初始化", async t => {
   let fault = new Authing({
@@ -1356,7 +1362,6 @@ test('signIn', async t => {
   try {
 
     let user = await auth.signIn({
-      oidcAppId: '5e538b5e5c002972d3075767',
       email: 'test3@123.com',
       password: '123456',
     })
@@ -1369,13 +1374,11 @@ test('signIn', async t => {
 test.only('refreshSignInToken', async t => {
   try {
     let user = await auth.signIn({
-      oidcAppId: '5e538b5e5c002972d3075767',
-      email: 'test3@123.com',
+      email: 'test1@123.com',
       password: '123456',
     })
     t.assert(user.sub)
     let refreshedToken = await auth.refreshSignInToken({
-      oidcAppId: '5e538b5e5c002972d3075767',
       refreshToken: user.refresh_token
     })
     t.assert(refreshedToken.id_token)
