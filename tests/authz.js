@@ -2,8 +2,8 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 
 const Authing = require("../src/index");
-const userPoolId = "5e35841c691196a1ccb5b6f7";
-const secret = "9f25a0fc67200320d2b0c111d4fe613d";
+const userPoolId = "5e4cdd055df3df65dc58b97d";
+const secret = "49882b55cbaddf40af0bb5f8b7ad9309";
 
 let authing = new Authing({
   userPoolId,

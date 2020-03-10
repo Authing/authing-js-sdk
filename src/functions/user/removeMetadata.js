@@ -30,6 +30,17 @@ export default function (input) {
       variables: {
         input
       }
+    }).then(res => {
+      for(let item of res.list){
+        try{
+          item.value = parsetInt(item.value)
+        }catch(error){}
+
+        try{
+          item.value = JSON.parse(item.value)
+        }catch(error){}
+      }
+      return res
     })
   })
 }

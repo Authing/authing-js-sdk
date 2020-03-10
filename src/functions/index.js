@@ -68,6 +68,7 @@ import userRoleList from "./user/userRoleList"
 import metadata from "./user/metadata"
 import setMetadata from "./user/setMetadata"
 import removeMetadata from "./user/removeMetadata"
+import searchByMetadata from "./user/searchByMetadata"
 
 // Pipeline submodule
 import pipeline from "./pipeline"
@@ -120,6 +121,7 @@ let mod = {
   metadata,
   setMetadata,
   removeMetadata,
+  searchByMetadata,
   qrlogin
 }
 

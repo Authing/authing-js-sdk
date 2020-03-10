@@ -22,6 +22,17 @@ export default function (_id) {
       variables: {
         _id
       }
+    }).then(res => {
+      for(let item of res.list){
+        try{
+          item.value = parsetInt(item.value)
+        }catch(error){}
+
+        try{
+          item.value = JSON.parse(item.value)
+        }catch(error){}
+      }
+      return res
     })
   })
 }

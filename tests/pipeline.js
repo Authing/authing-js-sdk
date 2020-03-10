@@ -5,8 +5,8 @@ import _ from "lodash"
 import axios from "axios";
 
 const Authing = require("../src/index");
-const userPoolId = "";
-const secret = "";
+const userPoolId = "5e4cdd055df3df65dc58b97d";
+const secret = "49882b55cbaddf40af0bb5f8b7ad9309";
 
 const host = 'https://localhost:5510'
 let authing = new Authing({
@@ -298,7 +298,7 @@ async function pipe(user, context, callback) {
   t.assert(groups.list.length === 1)
 })
 
-test('测试 POST-REGISTER RULE # 持久化自定义字段到数据库', async t => {
+test.only('测试 POST-REGISTER RULE # 持久化自定义字段到数据库', async t => {
   const code1 = `
 async function pipe(user, context, callback) {
   user.addMetaData('KEY1', 'VALUE1')
@@ -380,7 +380,7 @@ UA: \${user.device}
   await authing.pipeline.deleteById(rule._id)
 })
 
-test('测试 POST_AUTHENTICATION RULE', async t => {
+test.only('测试 POST_AUTHENTICATION RULE', async t => {
 
   // 注册用户
   const email = Math.random().toString(36).slice(2) + "@authing.cn"
