@@ -154,6 +154,10 @@ auth.login({...}).then(info => {})
   - 超时时间，默认为 10000（10 秒）。
 - **onInitError**，`function(err) {}`
   - 错误处理函数，用于处理初始化失败错误、预检错误。
+- **passwordEncPublicKey**
+  - PEM 格式密码加密公钥，默认为 Authing 官方的加密公钥。私有化部署用户需要传入自己的加密公钥。
+- **cdnHost**
+  - 图片 CDN host，供私有化部署了 Authing 服务的开发者填写。示例： https://mybucket.yourcdndomain.com，末尾请不要带 "/" 。
 
 ## API
 
