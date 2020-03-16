@@ -32,7 +32,8 @@ GKl64GDcIq3au+aqJQIDAQAB
 `,
   onInitError: function (err) {
     throw err;
-  }
+  },
+  cdnHost: "https://usercontents.authing.cn"
 };
 class Authing {
   constructor(options) {
