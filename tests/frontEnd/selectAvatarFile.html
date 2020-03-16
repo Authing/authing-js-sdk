@@ -8,9 +8,9 @@
   </head>
   <body>
     <input type="button" name="choose-file" id="choose-file" value="测试">
-    <script src="../../dist/authing-js-sdk-browser.js?v=4"></script>
+    <script src="../../dist/authing-js-sdk-browser.js?v=6"></script>
     <script>
-      var validAuth = new Authing({ userPoolId: '5da3fe0411e283f7ddf500bc', host: { user: 'http://localhost:5555/graphql', oauth: 'http://localhost:5556/graphql' } });
+      var validAuth = new Authing({ userPoolId: '5da3fe0411e283f7ddf500bc' });
       document.getElementById('choose-file').addEventListener('click', (e) => {
         validAuth.selectAvatarFile(file => {
           console.log(file)
