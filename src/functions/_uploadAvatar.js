@@ -1,5 +1,6 @@
 import axios from 'axios';
 export default function _uploadAvatar(options) {
+  const cdnHost = this.opts.cdnHost
   return this.UserServiceGql.request({
     operationName: 'qiNiuUploadToken',
     query: `query qiNiuUploadToken {
@@ -30,7 +31,7 @@ export default function _uploadAvatar(options) {
     .then(data => data.data)
     .then(data => {
       if (data.key) {
-        options.photo = `https://usercontents.authing.cn/${data.key}`;
+        options.photo = `${cdnHost}/${data.key}`;
       }
       return options;
     })
