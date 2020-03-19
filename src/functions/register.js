@@ -16,9 +16,10 @@ export default function register(options) {
     options.browser = window.navigator.userAgent;
   }
 
-  return this.UserServiceGql.request({
-    operationName: "register",
-    query: `
+  return this.fetchToken.then(() => {
+    return this.UserServiceGql.request({
+      operationName: "register",
+      query: `
     mutation register(
       $unionid: String,
       $openid: String,
@@ -121,6 +122,7 @@ export default function register(options) {
             metadata
         }
     }`,
-    variables: options
+      variables: options
+    });
   });
 }
