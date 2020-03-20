@@ -127,7 +127,7 @@ export default function startWXAppScaning(opts) {
 
   start = () => {
     loading();
-    self.genQRCode(self.opts.userPoolId).then((qrRes) => {
+    self.genQRCode().then((qrRes) => {
       qrRes = qrRes.data;
 
       if (qrRes.code !== 200) {
