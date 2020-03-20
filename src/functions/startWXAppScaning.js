@@ -186,7 +186,7 @@ export default function startWXAppScaning(opts) {
             }, interval);
           };
 
-          const tip = genTip(tips || '使用 <strong>微信</strong> 或小程序 <strong>身份管家</strong> 扫码登录');
+          const tip = genTip(tips || `使用 <strong>微信</strong> 或小程序 <strong>${this.opts.enableFetchPhone?'小登录':'身份管家'}</strong> 扫码登录`);
 
           qrcodeWrapper.appendChild(qrcodeImage);
           qrcodeWrapper.appendChild(tip);
