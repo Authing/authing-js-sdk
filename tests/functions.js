@@ -8,7 +8,7 @@ let baseHost = "authing.cn";
 // const userPoolId = "5c95905578fce5000166f853";
 process.env.BUILD_TARGET = "node";
 const gqlEndPoint = "https://core.authing.cn/graphql";
-const Authing = require("../src/index");
+const Authing = require("../dist/authing-js-sdk-node");
 // 测试机
 const userPoolId = "5e19942188b013078127c024";
 const secret = "203033ce97452602843aac51db25468a";

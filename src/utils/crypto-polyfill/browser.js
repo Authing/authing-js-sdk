@@ -1,2 +1,2 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-module.exports = require('jsencrypt');
+import jsencrypt from 'jsencrypt'
+export default jsencrypt
