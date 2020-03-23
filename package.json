@@ -50,12 +50,13 @@
 		"webpack-cli": "^3.3.9"
 	},
 	"ava": {
-		"files": [
-			"tests/*.js"
-		],
-		"require": [
-			"esm"
-		]
+		"files": [ "tests/*.js" ],
+		"require": [ "@babel/register", "@babel/polyfill" ],
+		"babel": {
+			"testOptions": {
+				"presets": [ "@babel/preset-env" ]
+			}
+		}
 	},
 	"nyc": {
 		"lines": 10,
