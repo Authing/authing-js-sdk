@@ -204,6 +204,7 @@ export default function startWXAppScaning(opts) {
         }
       }
     }).catch((error) => {
+      console.log(error)
       genRetry(qrcodeNode, failedTips || '网络出错，请重试', '__authing_failed_tip');
       if (onError) {
         onError(error);
