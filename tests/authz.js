@@ -1,103 +1,17 @@
 import test from "ava";
 import { formatError } from "../src/utils/formatError";
-
-const Authing = require("../src/index");
-const userPoolId = "5e35841c691196a1ccb5b6f7";
-const secret = "9f25a0fc67200320d2b0c111d4fe613d";
-
-let authing = new Authing({
-  userPoolId,
-  secret,
-  host: {
-    user: "http://localhost:5510/graphql",
-    oauth: "http://localhost:5510/graphql"
-  }
-});
+import {
+  authing, sleep,
+  createGroup, createGroupBatch, createRole, createRoleBatch,
+  createPermission, createPermissionBatch, createUser, createUserBatch
+} from "./base"
 
 let group = {}
 let role = {}
-let roleIdList = []
 let user
 let userIdList = []
-let permission = {}
 let permissionIdList = []
 
-
-async function sleep(ms) {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, ms)
-  })
-}
-
-const createGroup = async (name) => {
-  name = name || `分组${Math.random().toString(36).slice(2)}`
-  return await authing.authz.createGroup({
-    name,
-    description: "描述信息"
-  })
-}
-
-async function createGroupBatch(count) {
-  let list = []
-  for (let i = 0; i < count; i++) {
-    let group = await createGroup()
-    list.push(group)
-  }
-  return list
-}
-
-async function createRole(name) {
-  name = name || `角色${Math.random().toString(36).slice(2)}`
-  return await authing.authz.createRole({
-    name,
-    description: '描述'
-  })
-}
-
-async function createRoleBatch(count) {
-  let list = []
-  for (let i = 0; i < count; i++) {
-    let role = await createRole()
-    list.push(role)
-  }
-  return list
-}
-
-async function createPermission(name) {
-  name = name || `权限${Math.random().toString(36).slice(2)}`;
-  return await authing.authz.createPermission({
-    name,
-    description: '描述'
-  })
-}
-
-async function createPermissionBatch(count) {
-  let list = []
-  for (let i = 0; i < count; i++) {
-    let p = await createPermission()
-    list.push(p)
-  }
-  return list
-}
-
-async function createUser() {
-  return await authing.register({
-    email: Math.random()
-      .toString(36)
-      .slice(2) + "@authing.cn",
-    password: "123456a"
-  });
-}
-
-async function createUserBatch(count) {
-  // 创建多个用户
-  let users = []
-  for (let i = 0; i < count; i++) {
-    let user = await createUser()
-    users.push(user)
-  }
-  return users
-}
 
 // Group 增删改查
 test('创建 Group', async t => {
@@ -123,7 +37,7 @@ test('查询 Group', async t => {
 
 test('查询 Group # 不存在', async t => {
   try {
-    const group = await authing.authz.group("NOGTEXIST")
+    await authing.authz.group("NOGTEXIST")
   } catch (error) {
     const errcode = error.message.code
     t.assert(errcode === 3901)
@@ -187,7 +101,7 @@ test('批量删除 Group', async t => {
   t.assert(res.code === 200)
 
   try {
-    const res = await authing.authz.group(groups[0]._id)
+    await authing.authz.group(groups[0]._id)
   } catch (error) {
     const errcode = error.message.code
     t.assert(errcode === 3901)
@@ -257,13 +171,14 @@ test('查询用户池 Role - 自定义排序/分页', async t => {
   })
 
   t.assert(page0.length === 10)
+  t.assert(page1.length)
 })
 
 test('删除 Role', async t => {
   const role = await createRole()
   await authing.authz.deleteRole(role._id)
   try {
-    const res = await authing.authz.role(role._id)
+    await authing.authz.role(role._id)
   } catch (error) {
     const errcode = error.message.code
     t.assert(errcode === 3903)
@@ -838,7 +753,7 @@ test('批量删除 Permission', async t => {
   t.assert(res.code === 200)
 
   try {
-    const res = await authing.authz.permission(idList[0])
+    await authing.authz.permission(idList[0])
   } catch (error) {
     const errcode = error.message.code
     t.assert(errcode === 3905)
@@ -975,7 +890,7 @@ test('查询角色列表 - 直接授予角色', async t => {
   const role = await createRole()
 
   try {
-    const res = await authing.authz.assignRoleToUser({
+    await authing.authz.assignRoleToUser({
       userId: user._id,
       roleId: role._id
     }, {
@@ -1077,7 +992,7 @@ test('查询权限列表 - 将用户加入群组', async t => {
   const group = await createGroup()
   const role = await createRole()
   let permissions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  permissions.forEach(async p => {
+  permissions.forEach(async () => {
     let permission = await createPermission();
     await authing.authz.addPermissionToRole({
       roleId: role._id,

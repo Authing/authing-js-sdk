@@ -1,50 +1,7 @@
 import test from "ava";
-import { inspect } from "util"
 import { formatError } from "../src/utils/formatError";
-import _ from "lodash"
 import axios from "axios";
-
-const Authing = require("../src/index");
-const userPoolId = "";
-const secret = "";
-
-const host = 'https://localhost:5510'
-let authing = new Authing({
-  userPoolId,
-  secret,
-  host: {
-    user: `${host}/graphql`,
-    oauth: `${host}/graphql`
-  },
-  timeout: 100000,
-});
-
-const createRule = async function (code, type, name) {
-  name = name || `Rule - ${Math.random().toString(36).slice(2)}`
-  type = type || "PRE_REGISTER"
-  return await authing.pipeline.createRule({
-    name,
-    code,
-    type
-  })
-}
-
-const createUser = async function (email, password) {
-  email = email || Math.random().toString(36).slice(2) + "@test.com"
-  password = password || "123456a"
-  return await authing.register({
-    email,
-    password
-  });
-}
-
-const createGroup = async (name) => {
-  name = name || `分组${Math.random().toString(36).slice(2)}`
-  return await authing.authz.createGroup({
-    name,
-    description: "描述信息"
-  })
-}
+import { authing, createGroup, createUser, createRule, config } from "./base"
 
 const rules = {
   persistMetadata: `
@@ -107,7 +64,6 @@ const ruleTypes = {
 const larkWebhookUrl = "https://open.feishu.cn/open-apis/bot/hook/686dd7a0bbe841cc88b70a6272c250ab"
 
 
-let templates = []
 let rule = {}
 
 // 白名单域名
@@ -125,7 +81,6 @@ test('获取 Rule 模版', async  t => {
     t.assert(list[0].name_zh)
     t.assert(list[0].name_en)
   }
-  templates = list
 })
 
 test('创建 Rule # PRE_REGISTER - 注册邮箱白名单', async t => {
@@ -206,7 +161,7 @@ test('验证 Rule # 在白名单之外', async t => {
       email,
       password: '123456a'
     })
-    console.log(user)
+    t.assert(user)
   } catch (error) {
     t.log(formatError(error))
     t.pass(formatError(error))
@@ -397,7 +352,7 @@ async function pipe(user, context, callback) {
   callback(null, user, context)
 }
   `
-  const rule = await createRule(code, "POST_AUTHENTICATION")
+  await createRule(code, "POST_AUTHENTICATION")
   user = await authing.login({
     email,
     password
@@ -410,9 +365,9 @@ async function pipe(user, context, callback) {
 
 test('测试 ldap 认证方式 # 添加了 connetion', async t => {
 
-  const rule1 = await createRule(rules.larkNotifyPreRegister, ruleTypes.PRE_REGISTER)
-  const rule2 = await createRule(rules.larkNotifyPostRegister, ruleTypes.POST_REGISTER)
-  const rule3 = await createRule(rules.larkNotifyPostAuthentication, ruleTypes.POST_AUTHENTICATION)
+  await createRule(rules.larkNotifyPreRegister, ruleTypes.PRE_REGISTER)
+  await createRule(rules.larkNotifyPostRegister, ruleTypes.POST_REGISTER)
+  await createRule(rules.larkNotifyPostAuthentication, ruleTypes.POST_AUTHENTICATION)
   await authing.pipeline.setEnv('LARK_WEBHOOK', larkWebhookUrl)
 
   const username = Math.random().toString(36).slice(2) + "@authing.cn"
@@ -470,7 +425,7 @@ async function pipe(user, context, callback) {
   t.assert(user.token)
 
   const token = user.token
-  const res = await axios.get(`${host}/authing/token?access_token=${token}`)
+  const res = await axios.get(`${config.host.base}/authing/token?access_token=${token}`)
   const decryptedToken = res.data.token.data
   t.assert(decryptedToken.KEY)
   t.log(decryptedToken)
@@ -554,7 +509,7 @@ test('Pipeline 自定义 Token', async t => {
   const token = user.token
 
   // decode token
-  const res = await axios.get(`${host}/authing/token?access_token=${token}`)
+  const res = await axios.get(`${config.host.base}/authing/token?access_token=${token}`)
   const decryptedToken = res.data.token.data
   t.log(decryptedToken)
   t.assert(decryptedToken.KEY === "VALUE")

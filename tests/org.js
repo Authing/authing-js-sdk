@@ -1,68 +1,6 @@
 import test from "ava";
-const _ = require("lodash")
-import { inspect } from "util"
 import { formatError } from "../src/utils/formatError";
-
-const Authing = require("../src/index");
-const userPoolId = "5e35841c691196a1ccb5b6f7";
-const secret = "9f25a0fc67200320d2b0c111d4fe613d";
-
-let authing = new Authing({
-  userPoolId,
-  secret,
-  host: {
-    user: "http://localhost:5510/graphql",
-    oauth: "http://localhost:5510/graphql"
-  }
-});
-
-const createGroup = async (name, description) => {
-  name = name || `分组${Math.random().toString(36).slice(2)}`
-  description = description || ""
-  return await authing.authz.createGroup({
-    name,
-    description
-  })
-}
-
-async function createRole(name, description) {
-  name = name || `角色${Math.random().toString(36).slice(2)}`
-  description = description || ""
-  return await authing.authz.createRole({
-    name,
-    description
-  })
-}
-
-async function createPermission(name, description) {
-  name = name || `权限${Math.random().toString(36).slice(2)}`;
-  description = description || ""
-  return await authing.authz.createPermission({
-    name,
-    description
-  })
-}
-
-async function createPermissionBatch(permissions) {
-  let list = []
-  for (let name of permissions) {
-    list.push(await createPermission(name))
-  }
-  return list
-}
-
-async function createUser() {
-  return await authing.register({
-    email: Math.random()
-      .toString(36)
-      .slice(2) + "@authing.cn",
-    password: "123456a"
-  });
-}
-
-function printFullObject(obj) {
-  console.log(inspect(obj, false, null, true /* enable colors */))
-}
+import { authing, createGroup, createUser, createRole, createPermissionBatch } from "./base"
 
 let org
 let rootGroup
