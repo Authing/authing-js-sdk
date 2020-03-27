@@ -1094,11 +1094,7 @@ test('生成二维码', async t => {
   t.assert(res.data.qrcodeUrl !== undefined)
 })
 
-<<<<<<< HEAD
 test('测试多个用户池登录', async t=>{
-=======
-test.only('测试多个用户池登录', async t => {
->>>>>>> master
   let configs = [
     {
       userPoolId: "5e442f7a2a94353ac2536892",
