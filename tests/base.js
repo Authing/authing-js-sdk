@@ -10,7 +10,8 @@ export const authing = new Authing({
   host: {
     user: config['host']['user'],
     oauth: config['host']['oauth']
-  }
+  },
+  baseUrl: config.host.base
 });
 
 export const createRule = async function (code, type, name) {

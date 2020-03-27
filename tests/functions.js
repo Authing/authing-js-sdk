@@ -601,12 +601,11 @@ test.skip("revokeAuthedApp: 撤回用户对某个 SSO 应用的授权", async t 
   console.log(res)
 })
 
-test.only("getAuthedAppList: 用户在用户池内授权的 SSO 应用列表", async t => {
+test.skip("getAuthedAppList: 用户在用户池内授权的 SSO 应用列表", async t => {
   const validAuth = auth;
 
   let res = await validAuth.getAuthedAppList({
     "userId": "5d765d4013d73a5e90b7857a",
-    "appId": "5d5a8a7bbc7275af2cb71920"
   })
   console.log(res)
 })
@@ -624,7 +623,7 @@ test("preflightFun: 用户和认证服务预检函数", async t => {
   t.is(res[1].data.ok, 2);
 });
 
-test.only("checkPreflight: 根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
+test("checkPreflight: 根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
   let auth = new Authing({
     userPoolId: config.userPoolId,
     secret: config.secret,
@@ -985,10 +984,10 @@ test("refreshThirdPartyToken: 刷新 Github、微信 等社会化登录 token", 
   t.false(res.refreshSuccess);
 });
 
-test('loginByOidc: OIDC Password 模式登录', async t => {
+test.only('loginByOidc: OIDC Password 模式登录', async t => {
   let user = await auth.loginByOidc({
-    client_id: '5e57fa63c942050998c3ab11',
-    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
+    client_id: config.oidcAppId,
+    client_secret: config.oidcAppSecret,
     email: 'test3@123.com',
     password: '123456',
   })
@@ -996,18 +995,18 @@ test('loginByOidc: OIDC Password 模式登录', async t => {
   console.log(user)
 })
 
-test('refreshOidcToken: 刷新 OIDC token', async t => {
+test.only('refreshOidcToken: 刷新 OIDC token', async t => {
   let user = await auth.loginByOidc({
-    client_id: '5e57fa63c942050998c3ab11',
-    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
+    client_id: config.oidcAppId,
+    client_secret: config.oidcAppSecret,
     scope: 'openid profile email phone offline_access',
     email: 'test3@123.com',
     password: '123456',
   })
   t.assert(user.sub)
   let refreshToken = await auth.refreshOidcToken({
-    client_id: '5e57fa63c942050998c3ab11',
-    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
+    client_id: config.oidcAppId,
+    client_secret: config.oidcAppSecret,
     refresh_token: user.refresh_token
   })
   console.log(refreshToken)
