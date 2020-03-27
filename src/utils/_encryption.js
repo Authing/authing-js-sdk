@@ -7,7 +7,7 @@ let encryption;
 
 if (configs.inBrowser) {
   encryption = (paw) => {
-    const encrypt = new cryptoPolyfill.JSEncrypt(); // 实例化加密对象
+    const encrypt = new cryptoPolyfill(); // 实例化加密对象
     encrypt.setPublicKey(configs.openSSLSecret); // 设置公钥
     const encryptoPasswd = encrypt.encrypt(paw); // 加密明文
     return encryptoPasswd;

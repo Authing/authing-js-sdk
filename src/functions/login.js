@@ -16,6 +16,8 @@ export default function login(options) {
   if (configs.inBrowser) {
     options.browser = window.navigator.userAgent;
   }
+  console.log('encryption242535')
+  console.log(encryption)
   return this.UserServiceGql.request({
     operationName: "login",
     query: `mutation login($unionid: String, $email: String, $username: String, $password: String, $lastIP: String, $registerInClient: String!, $verifyCode: String, $browser: String, $openid: String, $MFACode: String) {
