@@ -984,7 +984,7 @@ test("refreshThirdPartyToken: 刷新 Github、微信 等社会化登录 token", 
   t.false(res.refreshSuccess);
 });
 
-test.only('loginByOidc: OIDC Password 模式登录', async t => {
+test('loginByOidc: OIDC Password 模式登录', async t => {
   let user = await auth.loginByOidc({
     client_id: config.oidcAppId,
     client_secret: config.oidcAppSecret,
@@ -1009,7 +1009,6 @@ test.only('refreshOidcToken: 刷新 OIDC token', async t => {
     client_secret: config.oidcAppSecret,
     refresh_token: user.refresh_token
   })
-  console.log(refreshToken)
   t.assert(refreshToken.access_token)
 })
 test('signIn，基于 OIDC 的登录模式', async t => {
