@@ -1371,7 +1371,7 @@ test('signIn', async t => {
     t.fail()
   }
 })
-test.only('refreshSignInToken', async t => {
+test('refreshSignInToken', async t => {
   try {
     let user = await auth.signIn({
       email: 'test1@123.com',
@@ -1399,4 +1399,34 @@ test('生成二维码', async t => {
   t.assert(res.status === 200)
   t.assert(res.data.qrcodeId !== undefined)
   t.assert(res.data.qrcodeUrl !== undefined)
+})
+
+test.only('测试多个用户池登录', async t=>{
+  let configs = [
+    {
+      userPoolId: "5e442f7a2a94353ac2536892",
+      secret: "2052b4f2690167ef0ab9e3bd56c1627b"
+    },
+    {
+      userPoolId: "5e6a4a98dee1b66fb488d8d9",
+      secret: "b131236aa1b8c5cf8366860abf8f76b6"
+    }
+  ];
+  let [auth1, auth2] = configs.map(config => {
+      let { userPoolId, secret } = config;
+      return new Authing({
+        userPoolId,
+        secret,
+        host: {
+          user: "https://core.authing.cn/graphql",
+          oauth: "https://core.authing.cn/graphql"
+        }
+      });
+    })
+  let user1 = await auth1.register({ phone: "17624355600", password: "123456" });
+  await auth1.remove(user1._id,'5e3d513fa00e847cafec9315');
+  let user2 = await auth2.register({ phone: "17624355679", password: "123456" });
+  await auth2.remove(user2._id,'5ccb24701bbaf00d50ced851');
+  console.log("success");
+
 })
