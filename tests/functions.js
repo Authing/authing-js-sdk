@@ -2,19 +2,8 @@ import test from "ava";
 import { formatError } from "../src/utils/formatError";
 import axios from "axios";
 import querystring from "querystring";
-let baseHost = "authing.cn";
-// 线上
-// const secret = "bb278212d520fc19f169e361179ea690";
-// const userPoolId = "5c95905578fce5000166f853";
-process.env.BUILD_TARGET = "node";
-const gqlEndPoint = "https://core.authing.cn/graphql";
-const Authing = require("../src/index");
-// 测试机
-const userPoolId = "5e19942188b013078127c024";
-const secret = "203033ce97452602843aac51db25468a";
-// 本机 yelexin
-// const userPoolId = "5e538b5d5c002972d307575c";
-// const secret = "e871f0508aaaba3df920ef8c03edcf08";
+import { authing, config } from "./base"
+import Authing from "../src/index"
 
 function randomEmail() {
   let rand = Math.random()
@@ -28,34 +17,8 @@ function randomName() {
     .toString(36)
     .slice(2);
 }
-let auth = new Authing({
-  userPoolId,
-  secret,
-  host: {
-    // user: "http://localhost:5510/graphql",
-    // oauth: "http://localhost:5510/graphql",
-    user: "https://core.celebes.live/graphql",
-    oauth: "https://core.celebes.live/graphql",
-  },
-  // baseUrl: 'http://localhost:5510',
-  baseUrl: 'https://core.celebes.live',
-});
-test("初始化", async t => {
-  let fault = new Authing({
-    userPoolId,
-    secret: "1",
-    // host: {
-    //   user: 'http://localhost:5510/graphql',
-    //   oauth: 'http://localhost:5510/graphql'
-    // },
-    onInitError: function(err) {
-      t.assert(err);
-    }
-  });
-  await new Promise(resolve => {
-    setTimeout(resolve, 3000);
-  });
-});
+
+let auth = authing
 test("users:register 用户密码注册", async t => {
   const validAuth = auth;
   let email = randomEmail();
@@ -185,7 +148,7 @@ test("users:queryPermissions 查询用户权限", async t => {
 test("users:queryRoles 查询角色列表", async t => {
   try {
     const validAuth = auth;
-    let roles = await validAuth.queryRoles({ userPoolId, page: 1, count: 10 });
+    let roles = await validAuth.queryRoles({ userPoolId: auth.userPoolId, page: 1, count: 10 });
     t.assert(Array.isArray(roles.list));
     t.pass();
   } catch (err) {
@@ -256,7 +219,7 @@ test("user:createRole 创建角色组", async t => {
   const validAuth = auth;
   try {
     let res = await validAuth.createRole({
-      userPoolId,
+      userPoolId: validAuth.userPoolId,
       name: "myRole",
       descriptions: "ava test role"
     });
@@ -280,7 +243,7 @@ test("user:assignUserToRole 把用户指派到角色组", async t => {
   t.assert(user.email);
   t.assert(user._id);
   let role = await validAuth.createRole({
-    userPoolId,
+    userPoolId: validAuth.userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -312,7 +275,7 @@ test("user:removeUserFromRole 把用户从角色组移除", async t => {
   t.assert(user.email);
   t.assert(user._id);
   let role = await validAuth.createRole({
-    userPoolId,
+    userPoolId: validAuth.userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -326,6 +289,7 @@ test("user:removeUserFromRole 把用户从角色组移除", async t => {
       user: user._id,
       roleId: role._id
     });
+    t.assert(res2._id)
     t.assert(res3._id);
   } catch (err) {
     t.log(formatError(err));
@@ -364,6 +328,7 @@ test("user:sendResetPasswordEmail 发送重置密码邮件", async t => {
       email,
       password: "123456a"
     });
+    t.assert(user)
   } catch (err) {
     t.assert(err.message.code === 2026);
     t.assert(err.message.message === "用户已存在，请不要重复注册");
@@ -386,7 +351,7 @@ test.skip("user:changePassord 用户通过找回密码邮件的验证码修改�
   let user = await validAuth.login({ email, password: "123456a" });
   t.assert(user.email);
   t.assert(user._id);
-  let pwd = await validAuth.changePassword({
+  await validAuth.changePassword({
     email,
     password: "123456abc",
     verifyCode: ""
@@ -402,6 +367,7 @@ test("user:sendVerifyEmail 发送验证邮件", async t => {
       email,
       password: "123456a"
     });
+    t.assert(user)
   } catch (err) {
     t.log(formatError(err));
     t.assert(err.message.code === 2026 || err.message.code === 500);
@@ -421,6 +387,7 @@ test("user:checkLoginStatus 检查登录状态", async t => {
     email,
     password: "123456a"
   });
+  t.assert(user)
   /*
   let res = await validAuth.checkLoginStatus(user.token);
   t.assert(res.status === false);
@@ -446,6 +413,7 @@ test("user:decodeToken 解析 jwt token", async t => {
     email,
     password: "123456a"
   });
+  t.assert(user)
   let loggedIn = await validAuth.login({ email, password: "123456a" });
   let decoded = await validAuth.decodeToken(loggedIn.token);
   t.assert(decoded.status.code === 200);
@@ -455,11 +423,11 @@ test("user:decodeToken 解析 jwt token", async t => {
 
 test("oauth:genQRCode 生成 QRCode", async t => {
   const validAuth = auth;
-  let res = await validAuth.genQRCode(userPoolId);
+  let res = await validAuth.genQRCode(validAuth.userPoolId);
   if (
     res.data.code === 500 &&
     res.data.message ===
-      "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
+    "获取qrcode地址失败，请确认已打开小程序OAuth。若已打开，可能是网络问题，请重试。"
   ) {
     t.pass();
   }
@@ -504,6 +472,7 @@ test("user:bindOAuth 绑定 OAuth 登录方式", async t => {
     email,
     password: "123456a"
   });
+  t.assert(user)
   let loggedIn = await validAuth.login({ email, password: "123456a" });
   let list = await validAuth.readOAuthList();
   t.is(Array.isArray(list), true);
@@ -525,6 +494,7 @@ test("user:unbindOAuth 解绑 OAuth 登录方式", async t => {
     email,
     password: "123456a"
   });
+  t.assert(user)
   let loggedIn = await validAuth.login({ email, password: "123456a" });
   let list = await validAuth.readOAuthList();
   t.is(Array.isArray(list), true);
@@ -559,6 +529,7 @@ test("user:unbindEmail 解绑 email", async t => {
       user: user._id,
       client: user.registerInClient
     });
+    t.assert(res)
   } catch (err) {
     t.assert(err.message.code === 2217);
     t.assert(err.message.message === "没有配置其他登录方式，不能解绑邮箱");
@@ -592,6 +563,7 @@ test("user:update 修改用户资料", async t => {
     email,
     password: "123456a"
   });
+  t.assert(user)
   let loggedIn = await validAuth.login({ email, password: "123456a" });
   let updated = await validAuth.update({
     _id: loggedIn._id,
@@ -607,6 +579,7 @@ test("user:update 不能直接修改手机号、邮箱", async t => {
     email,
     password: "123456a"
   });
+  t.assert(user)
   let loggedIn = await validAuth.login({ email, password: "123456a" });
   let newEmail = randomEmail();
 
@@ -615,10 +588,11 @@ test("user:update 不能直接修改手机号、邮箱", async t => {
       _id: loggedIn._id,
       email: newEmail
     });
+    t.assert(updated)
   } catch (error) {
     t.assert(
       error.message.message ===
-        "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。"
+      "updateUser 接口不能直接修改邮箱，请使用 updateEmail 接口。"
     );
   }
 });
@@ -626,7 +600,7 @@ test("user:update 不能直接修改手机号、邮箱", async t => {
 test("user:updateRolePermissions 修改角色权限", async t => {
   const validAuth = auth;
   let res = await validAuth.createRole({
-    userPoolId,
+    userPoolId: validAuth.userPoolId,
     name: "myRole",
     descriptions: "ava test role"
   });
@@ -1366,7 +1340,7 @@ test('signIn', async t => {
       password: '123456',
     })
     t.assert(user.sub)
-  }catch(err) {
+  } catch (err) {
     console.log(JSON.stringify(err.response.data))
     t.fail()
   }
@@ -1382,7 +1356,7 @@ test('refreshSignInToken', async t => {
       refreshToken: user.refresh_token
     })
     t.assert(refreshedToken.id_token)
-  }catch(err) {
+  } catch (err) {
     console.log(JSON.stringify(err.response.data))
     t.fail()
   }
@@ -1401,7 +1375,7 @@ test('生成二维码', async t => {
   t.assert(res.data.qrcodeUrl !== undefined)
 })
 
-test.only('测试多个用户池登录', async t=>{
+test.only('测试多个用户池登录', async t => {
   let configs = [
     {
       userPoolId: "5e442f7a2a94353ac2536892",
@@ -1413,20 +1387,20 @@ test.only('测试多个用户池登录', async t=>{
     }
   ];
   let [auth1, auth2] = configs.map(config => {
-      let { userPoolId, secret } = config;
-      return new Authing({
-        userPoolId,
-        secret,
-        host: {
-          user: "https://core.authing.cn/graphql",
-          oauth: "https://core.authing.cn/graphql"
-        }
-      });
-    })
+    let { userPoolId, secret } = config;
+    return new Authing({
+      userPoolId,
+      secret,
+      host: {
+        user: "https://core.authing.cn/graphql",
+        oauth: "https://core.authing.cn/graphql"
+      }
+    });
+  })
   let user1 = await auth1.register({ phone: "17624355600", password: "123456" });
-  await auth1.remove(user1._id,'5e3d513fa00e847cafec9315');
+  await auth1.remove(user1._id, '5e3d513fa00e847cafec9315');
   let user2 = await auth2.register({ phone: "17624355679", password: "123456" });
-  await auth2.remove(user2._id,'5ccb24701bbaf00d50ced851');
+  await auth2.remove(user2._id, '5ccb24701bbaf00d50ced851');
   console.log("success");
 
 })
