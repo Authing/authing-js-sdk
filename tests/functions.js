@@ -17,7 +17,9 @@ function randomName() {
     .toString(36)
     .slice(2);
 }
-
+function randomPhone() {
+  return `131${Math.floor(Math.random()*8999+1000)}${Math.floor(Math.random()*8999+1000)}`
+}
 test("users:register 用户密码注册", async t => {
   const validAuth = auth;
   let email = randomEmail();
@@ -995,7 +997,7 @@ test('loginByOidc: OIDC Password 模式登录', async t => {
   console.log(user)
 })
 
-test.only('refreshOidcToken: 刷新 OIDC token', async t => {
+test('refreshOidcToken: 刷新 OIDC token', async t => {
   let user = await auth.loginByOidc({
     client_id: config.oidcAppId,
     client_secret: config.oidcAppSecret,
@@ -1054,7 +1056,7 @@ test('geneQRCode: 生成二维码', async t => {
   t.assert(res.data.qrcodeUrl !== undefined)
 })
 
-test('测试多个用户池登录', async t=>{
+test.only('测试多个用户池登录', async t=>{
   let configs = [
     {
       userPoolId: "5e442f7a2a94353ac2536892",
@@ -1076,10 +1078,9 @@ test('测试多个用户池登录', async t=>{
       }
     });
   })
-  let user1 = await auth1.register({ phone: "17624355600", password: "123456" });
+  let user1 = await auth1.register({ phone: randomPhone(), password: "123456" });
   await auth1.remove(user1._id, '5e3d513fa00e847cafec9315');
-  let user2 = await auth2.register({ phone: "17624355679", password: "123456" });
+  let user2 = await auth2.register({ phone: randomPhone(), password: "123456" });
   await auth2.remove(user2._id, '5ccb24701bbaf00d50ced851');
-  console.log("success");
-
+  t.pass()
 })
