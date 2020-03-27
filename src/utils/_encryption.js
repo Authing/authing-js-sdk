@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 
-const configs = require('../configs').default;
-const cryptoPolyfill = require('./crypto-polyfill');
+import configs from '../configs'
+import cryptoPolyfill from './crypto-polyfill';
 
 let encryption;
 
@@ -23,5 +23,4 @@ if (configs.inBrowser) {
     return encryptText;
   };
 }
-
-module.exports = encryption;
+export default encryption

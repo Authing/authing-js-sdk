@@ -1,4 +1,5 @@
 import { isFunction } from "../../utils/isFunction";
+import createCssClassStyleSheet from '../../utils/createCssClassStyleSheet'
 
 function checkOptions(options) {
   if (!options) {
@@ -183,11 +184,12 @@ export default function startAppAuthScanning(options) {
   if (!qrcodeNode) {
     qrcodeNode = document.createElement('div');
     qrcodeNode.id = mountNode;
-    qrcodeNode.style = `z-index: 65535;position: fixed;background: #fff;width: ${containerSize.width}px;height: ${containerSize.height}px;left: 50%;margin-left: -${containerSize.width / 2}px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -${containerSize.height / 2}px;border: 1px solid #ccc;`;
+    createCssClassStyleSheet('__authing-qrcode-node-mount',`z-index: 65535;position: fixed;background: #fff;width: ${containerSize.width}px;height: ${containerSize.height}px;left: 50%;margin-left: -${containerSize.width / 2}px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -${containerSize.height / 2}px;border: 1px solid #ccc;`)
+    qrcodeNode.classList.add('__authing-qrcode-node-mount')
     document.getElementsByTagName('body')[0].appendChild(qrcodeNode);
     needGenerate = true;
   } else {
-    qrcodeNode.style = 'position:relative';
+    qrcodeNode.style.position = 'relative';
   }
 
   // 创建 <style> 
@@ -216,9 +218,11 @@ export default function startAppAuthScanning(options) {
     const tip = document.createElement('span');
     tip.class = 'authing__heading-subtitle';
     if (!needGenerate) {
-      tip.style = 'display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;';
+      createCssClassStyleSheet('__authing__heading-subtitle-style', 'display: block;font-weight: 400;font-size: 15px;color: #888;line-height: 48px;')
+      tip.classList.add('__authing__heading-subtitle-style')
     } else {
-      tip.style = 'display: block;font-weight: 400;font-size: 12px;color: #888;';
+      createCssClassStyleSheet('__authing__heading-subtitle-style', 'display: block;font-weight: 400;font-size: 12px;color: #888;')
+      tip.classList.add('__authing__heading-subtitle-style')
     }
     tip.innerHTML = text;
     return tip;
@@ -243,11 +247,14 @@ export default function startAppAuthScanning(options) {
 
     const shadow = document.createElement('div');
     shadow.id = shadowId;
-    shadow.style = `text-align:center;width: ${qrcodeSize.width}px;height: ${qrcodeSize.height}px;position: absolute;left: 50%;top: 0px;margin-left: -${qrcodeSize.width / 2}px;background-color: rgba(0,0,0, 0.5);line-height:${qrcodeSize.height}px;color:#fff;font-weight:600;`;
+    createCssClassStyleSheet('__authing-shadow-style', `text-align:center;width: ${qrcodeSize.width}px;height: ${qrcodeSize.height}px;position: absolute;left: 50%;top: 0px;margin-left: -${qrcodeSize.width / 2}px;background-color: rgba(0,0,0, 0.5);line-height:${qrcodeSize.height}px;color:#fff;font-weight:600;`)
+    shadow.classList.add('__authing-shadow-style')
 
     const shadowA = document.createElement('a');
     shadowA.innerHTML = text;
-    shadowA.style = 'color:#fff;border-bottom: 1px solid #fff;cursor: pointer;';
+    shadowA.style.color='#fff';
+    shadowA.style.borderBottom = '1px solid #fff'
+    shadowA.style.cursor = 'pointer'
     shadowA.onclick = aOnClick;
     shadowA.id = shadowAId;
     shadow.appendChild(shadowA);
@@ -262,15 +269,17 @@ export default function startAppAuthScanning(options) {
       document.getElementById(shadowId).remove()
     }
     const shadow = document.createElement('div');
-    shadow.style = `text-align:center;width: ${qrcodeSize.width}px;height: ${qrcodeSize.height}px;position: absolute;left: 50%;top: 0px;margin-left: -${qrcodeSize.width / 2}px;line-height:${qrcodeSize.height}px;color:#fff;font-weight:600;display: flex;
+    createCssClassStyleSheet('__authing-shadow-style-position',  `text-align:center;width: ${qrcodeSize.width}px;height: ${qrcodeSize.height}px;position: absolute;left: 50%;top: 0px;margin-left: -${qrcodeSize.width / 2}px;line-height:${qrcodeSize.height}px;color:#fff;font-weight:600;display: flex;
     align-items: center; /*垂直居中*/
-    justify-content: center; /*水平居中*/`;
+    justify-content: center; /*水平居中*/`)
+    shadow.classList.add('__authing-shadow-style-position')
     shadow.id = shadowId;
 
     const img = document.createElement('img');
     img.id = 'authing__scanned-user';
     img.src = photo
-    img.style = "width: 100px; height: 100px"
+    img.style.width = '100px'
+    img.style.height = '100px'
     shadow.appendChild(img);
     return shadow;
   };
@@ -280,15 +289,15 @@ export default function startAppAuthScanning(options) {
 
     qrcodeWrapper = document.createElement('div');
     qrcodeWrapper.id = 'authing__qrcode-wrapper';
-    qrcodeWrapper.style = 'text-align: center;position: relative;';
-
+    qrcodeWrapper.style.textAlign = 'center';
+    qrcodeWrapper.style.position = 'relative';
     // TODO: 这里换一个二维码
     const qrcodeImage = genImage('https://usercontents.authing.cn/0ab3a1bf19c0d7106673e494d532f91a.png');
 
     if (!needGenerate) {
-      qrcodeImage.style = 'margin-top: 12px;';
+      qrcodeImage.style.marginTop = '12px';
     } else {
-      qrcodeImage.style = 'margin-top: 16px;';
+      qrcodeImage.style.marginTop = '16px';
     }
 
     qrcodeImage.onload = () => {
@@ -317,13 +326,14 @@ export default function startAppAuthScanning(options) {
       } else {
         const { qrcodeId, qrcodeUrl } = res.data
         if (onQRCodeLoad) {
-          onQRCodeLoad(qrcode);
+          onQRCodeLoad(qrcodeUrl);
         }
 
         if (qrcodeNode) {
           qrcodeWrapper = document.createElement('div');
           qrcodeWrapper.id = 'authing__qrcode-wrapper';
-          qrcodeWrapper.style = 'text-align: center;position: relative;';
+          qrcodeWrapper.style.textAlign = 'center';
+          qrcodeWrapper.style.position = 'relative';
 
           const qrcodeImage = genImage(qrcodeUrl);
           qrcodeImage.onload = () => {

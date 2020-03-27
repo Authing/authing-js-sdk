@@ -18,7 +18,11 @@
 		"type": "git",
 		"url": "git+https://github.com/Authing/authing-js-sdk.git"
 	},
-	"keywords": [ "authing", "auth", "oauth" ],
+	"keywords": [
+		"authing",
+		"auth",
+		"oauth"
+	],
 	"author": "authing",
 	"license": "MIT",
 	"bugs": {
@@ -27,11 +31,13 @@
 	"homepage": "https://github.com/Authing/authing-js-sdk#readme",
 	"dependencies": {
 		"axios": "^0.19.0",
+		"core-js": "3",
 		"jsencrypt": "^3.0.0-rc.1",
 		"lodash": "^4.17.15",
 		"querystring": "^0.2.0"
 	},
 	"devDependencies": {
+		"@ava/babel": "^1.0.1",
 		"@babel/core": "^7.6.3",
 		"@babel/polyfill": "^7.6.0",
 		"@babel/preset-env": "^7.6.3",
@@ -39,6 +45,7 @@
 		"ava": "^2.4.0",
 		"babel-loader": "^8.0.6",
 		"eslint": "^6.5.1",
+		"esm": "^3.2.25",
 		"webpack": "^4.41.0",
 		"webpack-cli": "^3.3.9"
 	},
@@ -54,8 +61,15 @@
 	"nyc": {
 		"lines": 10,
 		"check-coverage": true,
-		"reporter": [ "text-lcov" ],
+		"reporter": [
+			"text-lcov"
+		],
 		"report-dir": "./.nyc_output",
-		"exclude": [ "test", "test{,-*}.js", "**/*.test.js", "**/__tests__/**" ]
+		"exclude": [
+			"test",
+			"test{,-*}.js",
+			"**/*.test.js",
+			"**/__tests__/**"
+		]
 	}
 }
