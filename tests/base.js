@@ -2,7 +2,7 @@ const Authing = require("../src/index");
 const yaml = require("yaml")
 const fs = require("fs")
 const path = require("path")
-
+let base_config = yaml.parse(fs.readFileSync(path.join(__dirname, "baseConfig.yaml"), 'utf8'));
 export const config = yaml.parse(fs.readFileSync(path.join(__dirname, "config.yaml"), 'utf8'));
 export const authing = new Authing({
   userPoolId: config['userPoolId'],
