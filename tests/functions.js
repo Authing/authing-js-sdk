@@ -240,7 +240,7 @@ test("user:assignUserToRole 把用户指派到角色组", async t => {
   }
 });
 
-test.only("user:removeUserFromRole 把用户从角色组移除", async t => {
+test("user:removeUserFromRole 把用户从角色组移除", async t => {
   const validAuth = auth;
   let email = randomEmail();
 
@@ -625,11 +625,16 @@ test("preflightFun: 用户和认证服务预检函数", async t => {
   t.is(res[1].data.ok, 2);
 });
 
-test("checkPreflight: 根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
+test.only("checkPreflight: 根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
   let auth = new Authing({
     userPoolId: config.userPoolId,
     secret: config.secret,
-    preflight: true
+    preflight: true,
+    host: {
+      user: config['host']['user'],
+      oauth: config['host']['oauth']
+    },
+    baseUrl: config.host.base
   });
   let validAuth = auth;
   let res = await validAuth.checkPreflight();
@@ -641,7 +646,12 @@ test("checkPreflight: 根据参数决定是否进行用户和认证服务预检�
   auth = new Authing({
     userPoolId: config.userPoolId,
     secret: config.secret,
-    cdnPreflight: true
+    cdnPreflight: true,
+    host: {
+      user: config['host']['user'],
+      oauth: config['host']['oauth']
+    },
+    baseUrl: config.host.base
   });
   validAuth = auth;
   res = await validAuth.checkPreflight();
@@ -655,15 +665,21 @@ test("checkPreflight: 根据参数决定是否进行用户和认证服务预检�
     userPoolId: config.userPoolId,
     secret: config.secret,
     cdnPreflight: true,
-    preflight: true
+    preflight: true,
+    host: {
+      user: config['host']['user'],
+      oauth: config['host']['oauth']
+    },
+    baseUrl: config.host.base
   });
   validAuth = auth;
   res = await validAuth.checkPreflight();
   service = await res[0];
   cdn = await res[1];
-  t.is(service[0].data.ok, 1);
-  t.is(service[1].data.ok, 1);
+  t.is(service[0].data.ok, 2);
+  t.is(service[1].data.ok, 2);
   t.is(cdn.data, "a\n");
+
 });
 
 test("readOAuthList", async t => {
@@ -1056,7 +1072,7 @@ test('geneQRCode: 生成二维码', async t => {
   t.assert(res.data.qrcodeUrl !== undefined)
 })
 
-test.only('测试多个用户池登录', async t=>{
+test('测试多个用户池登录', async t=>{
   let configs = [
     {
       userPoolId: "5e442f7a2a94353ac2536892",
