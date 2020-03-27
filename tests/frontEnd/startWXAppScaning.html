@@ -12,10 +12,9 @@
     </div>
     <script src="../../dist/authing-js-sdk-browser.js?v=4"></script>
     <script>
-      var validAuth = new Authing({ userPoolId: '5d1eeec1ec626c2abb803a24' });
-      validAuth.startWXAppScaning({
+      var authing = new Authing({ userPoolId: '5a9fa26cf8635a000185528c' });
+      authing.startWXAppScaning({
         onError: function(err) {
-          console.log('err12423543456');
           console.log(err);
         },
         onSuccess: function(data) {
@@ -37,11 +36,11 @@
         redirect: false,
         useSelfWxapp: true,
         enableFetchPhone: true,
-        tips: 'tips',
-        successTips: 'successTips',
-        successRedirectTips: 'successRedirectTips',
-        retryTips: 'retryTips',
-        failedTips: 'failedTips',
+        // tips: 'tips',
+        // successTips: 'successTips',
+        // successRedirectTips: 'successRedirectTips',
+        // retryTips: 'retryTips',
+        // failedTips: 'failedTips',
         mount: 'good',
         interval: 3000
       });
