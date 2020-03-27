@@ -100,29 +100,6 @@ test("users:login 用户密码登录", async t => {
     t.fail(JSON.stringify(err));
   }
 });
-test("queryPermissions: 读取用户权限", async t => {
-  try {
-    await new Promise(resolve => {
-      setTimeout(resolve, 5000);
-    });
-    const validAuth = auth;
-    let email = randomEmail();
-    let res = await validAuth.register({
-      email,
-      password: "123456a"
-    });
-    t.assert(res.email);
-    let user = await validAuth.login({ email, password: "123456a" });
-    t.assert(user.email);
-    t.assert(user._id);
-    let permission = await validAuth.queryPermissions(user._id);
-    t.assert(Array.isArray(permission.list));
-    t.pass();
-  } catch (err) {
-    t.log(formatError(err));
-    t.fail(JSON.stringify(err));
-  }
-});
 
 test("users:queryPermissions 查询用户权限", async t => {
   try {
