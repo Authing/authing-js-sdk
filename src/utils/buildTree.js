@@ -1,5 +1,4 @@
-const _ = require("lodash")
-
+import _ from 'lodash'
 export default function buildTree(nodes) {
   /* nodes structure
   [

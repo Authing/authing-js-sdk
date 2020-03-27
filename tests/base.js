@@ -1,16 +1,19 @@
-const Authing = require("../src/index");
 const yaml = require("yaml")
 const fs = require("fs")
 const path = require("path")
-
 export const config = yaml.parse(fs.readFileSync(path.join(__dirname, "config.yaml"), 'utf8'));
+process.env.BUILD_TARGET = config.env
+const Authing = require("../src/index");
+
+let base_config = yaml.parse(fs.readFileSync(path.join(__dirname, "baseConfig.yaml"), 'utf8'));
 export const authing = new Authing({
   userPoolId: config['userPoolId'],
   secret: config['secret'],
   host: {
     user: config['host']['user'],
     oauth: config['host']['oauth']
-  }
+  },
+  baseUrl: config.host.base
 });
 
 export const createRule = async function (code, type, name) {

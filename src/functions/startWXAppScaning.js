@@ -1,3 +1,4 @@
+import createCssClassStyleSheet from '../utils/createCssClassStyleSheet'
 export default function startWXAppScaning(opts) {
   const self = this;
 
@@ -32,11 +33,13 @@ export default function startWXAppScaning(opts) {
   if (!qrcodeNode) {
     qrcodeNode = document.createElement('div');
     qrcodeNode.id = mountNode;
-    qrcodeNode.style = 'z-index: 65535;position: fixed;background: #fff;width: 300px;height: 300px;left: 50%;margin-left: -150px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -150px;border: 1px solid #ccc;';
+    createCssClassStyleSheet('__authing-qrcode-node', `z-index: 65535;position: fixed;background: #fff;width: 300px;height: 300px;left: 50%;margin-left: -150px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -150px;border: 1px solid #ccc;`)
+    qrcodeNode.classList.add("__authing-qrcode-node")
     document.getElementsByTagName('body')[0].appendChild(qrcodeNode);
     needGenerate = true;
   } else {
-    qrcodeNode.style = 'position:relative';
+    createCssClassStyleSheet('__authing-qrcode-node', `position:relative;`)
+    qrcodeNode.classList.add("__authing-qrcode-node")
   }
 
   const styleNode = document.createElement('style'); const
@@ -65,9 +68,11 @@ export default function startWXAppScaning(opts) {
     const tip = document.createElement('span');
     tip.class = 'authing__heading-subtitle';
     if (!needGenerate) {
-      tip.style = 'display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;';
+      createCssClassStyleSheet('__authing__heading-tip', `display: block;font-weight: 400;font-size: 15px;color: #888;ine-height: 48px;`)
+      tip.classList.add('__authing__heading-tip');
     } else {
-      tip.style = 'display: block;font-weight: 400;font-size: 12px;color: #888;';
+      createCssClassStyleSheet('__authing__heading-tip', `display: block;font-weight: 400;font-size: 12px;color: #888;`)
+      tip.classList.add('__authing__heading-tip');
     }
     tip.innerHTML = text;
     return tip;
@@ -85,11 +90,13 @@ export default function startWXAppScaning(opts) {
   const genShadow = (text, aOnClick, shadowAId) => {
     const shadow = document.createElement('div');
     shadow.id = 'authing__retry';
-    shadow.style = 'text-align:center;width: 240px;height: 240px;position: absolute;left: 50%;top: 0px;margin-left: -120px;background-color: rgba(0,0,0, 0.5);line-height:240px;color:#fff;font-weight:600;';
-
+    createCssClassStyleSheet('__authing-shadow-wrap', 'text-align:center;width: 240px;height: 240px;position: absolute;left: 50%;top: 0px;margin-left: -120px;background-color: rgba(0,0,0, 0.5);line-height:240px;color:#fff;font-weight:600;')
+    shadow.classList.add('__authing-shadow-wrap')
     const shadowA = document.createElement('a');
     shadowA.innerHTML = text;
-    shadowA.style = 'color:#fff;border-bottom: 1px solid #fff;cursor: pointer;';
+    createCssClassStyleSheet('__authing-shadow-a-wrap', 'color:#fff;border-bottom: 1px solid #fff;cursor: pointer;')
+
+    shadowA.classList.add('__authing-shadow-a-wrap');
     shadowA.onclick = aOnClick;
     shadowA.id = shadowAId;
     shadow.appendChild(shadowA);
@@ -101,14 +108,16 @@ export default function startWXAppScaning(opts) {
 
     qrcodeWrapper = document.createElement('div');
     qrcodeWrapper.id = 'authing__qrcode-wrapper';
-    qrcodeWrapper.style = 'text-align: center;position: relative;';
+    createCssClassStyleSheet('__authing-qrcode-wrapper-center', 'text-align: center;position: relative;')
+
+    qrcodeWrapper.classList.add('__authing-qrcode-wrapper-center')
 
     const qrcodeImage = genImage('https://usercontents.authing.cn/authing_user_manager_wxapp_qrcode.jpg');
 
     if (!needGenerate) {
-      qrcodeImage.style = 'margin-top: 12px;';
+      qrcodeImage.style.marginTop = '12px';
     } else {
-      qrcodeImage.style = 'margin-top: 16px;';
+      qrcodeImage.style.marginTop = '16px';
     }
 
     qrcodeImage.onload = () => {
@@ -146,7 +155,8 @@ export default function startWXAppScaning(opts) {
         if (qrcodeNode) {
           qrcodeWrapper = document.createElement('div');
           qrcodeWrapper.id = 'authing__qrcode-wrapper';
-          qrcodeWrapper.style = 'text-align: center;position: relative;';
+          qrcodeWrapper.style.textAlign = 'center';
+          qrcodeWrapper.style.position = 'relative;';
 
           const qrcodeImage = genImage(qrcode.qrcode);
 
@@ -194,6 +204,7 @@ export default function startWXAppScaning(opts) {
         }
       }
     }).catch((error) => {
+      console.log(error)
       genRetry(qrcodeNode, failedTips || '网络出错，请重试', '__authing_failed_tip');
       if (onError) {
         onError(error);

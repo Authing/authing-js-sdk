@@ -1,1 +1,4 @@
-module.exports = require('crypto');
+// import crypto from 'crypto'
+// export default crypto
+const crypto = require('crypto')
+module.exports = crypto

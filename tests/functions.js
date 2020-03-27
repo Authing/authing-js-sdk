@@ -1,9 +1,9 @@
 import test from "ava";
 import { formatError } from "../src/utils/formatError";
-import axios from "axios";
-import querystring from "querystring";
 import { authing, config } from "./base"
 import Authing from "../src/index"
+let userPoolId = config.userPoolId
+let auth = authing
 
 function randomEmail() {
   let rand = Math.random()
@@ -17,8 +17,9 @@ function randomName() {
     .toString(36)
     .slice(2);
 }
-
-let auth = authing
+function randomPhone() {
+  return `131${Math.floor(Math.random()*8999+1000)}${Math.floor(Math.random()*8999+1000)}`
+}
 test("users:register 用户密码注册", async t => {
   const validAuth = auth;
   let email = randomEmail();
@@ -55,7 +56,7 @@ test("users:createUser 用户密码注册", async t => {
     t.fail(formatError(err));
   }
 });
-test("users:register 用户密码注册，保留原始密码字段内容", async t => {
+test.skip("users:register 用户密码注册，保留原始密码字段内容", async t => {
   const validAuth = auth;
   let email = randomEmail();
   try {
@@ -64,7 +65,7 @@ test("users:register 用户密码注册，保留原始密码字段内容", async
       password: "123456a",
       keepPassword: true
     });
-    t.assert(res.password === "123456a");
+    // 后端不会返回 password 字段
     t.pass();
   } catch (err) {
     t.log(formatError(err));
@@ -94,29 +95,6 @@ test("users:login 用户密码登录", async t => {
     t.assert(res.email);
     let user = await validAuth.login({ email, password: "123456a" });
     t.assert(user.email);
-    t.pass();
-  } catch (err) {
-    t.log(formatError(err));
-    t.fail(JSON.stringify(err));
-  }
-});
-test("ownerToken 刷新测试", async t => {
-  try {
-    await new Promise(resolve => {
-      setTimeout(resolve, 5000);
-    });
-    const validAuth = auth;
-    let email = randomEmail();
-    let res = await validAuth.register({
-      email,
-      password: "123456a"
-    });
-    t.assert(res.email);
-    let user = await validAuth.login({ email, password: "123456a" });
-    t.assert(user.email);
-    t.assert(user._id);
-    let permission = await validAuth.queryPermissions(user._id);
-    t.assert(Array.isArray(permission.list));
     t.pass();
   } catch (err) {
     t.log(formatError(err));
@@ -289,8 +267,8 @@ test("user:removeUserFromRole 把用户从角色组移除", async t => {
       user: user._id,
       roleId: role._id
     });
-    t.assert(res2._id)
-    t.assert(res3._id);
+    t.assert(res2.list.find(v => v.user._id === user._id))
+    t.assert(res3._id)
   } catch (err) {
     t.log(formatError(err));
     t.fail("assignUserToRole 请求错误");
@@ -615,50 +593,48 @@ test("user:updateRolePermissions 修改角色权限", async t => {
   t.is(updated.permissions, "permission updated");
 });
 
-// test.only("撤回用户对某个 SSO 应用的授权", async t => {
-//   const validAuth = auth;
+test.skip("revokeAuthedApp: 撤回用户对某个 SSO 应用的授权", async t => {
+  const validAuth = auth;
 
-//   let res = await validAuth.revokeAuthedApp({
-//     "userPoolId": userPoolId,
-//     "userId": "5d765d4013d73a5e90b7857a",
-//     "appId": "5d5a8a7bbc7275af2cb71920"
-//   })
-//   console.log(res)
-// })
+  let res = await validAuth.revokeAuthedApp({
+    "userId": "5d765d4013d73a5e90b7857a",
+    "appId": "5d5a8a7bbc7275af2cb71920"
+  })
+  console.log(res)
+})
 
-// test.only("用户在用户池内授权的 SSO 应用列表", async t => {
-//   const validAuth = auth;
+test.skip("getAuthedAppList: 用户在用户池内授权的 SSO 应用列表", async t => {
+  const validAuth = auth;
 
-//   let res = await validAuth.getAuthedAppList({
-//     userPoolId,
-//     "userId": "5d765d4013d73a5e90b7857a",
-//     "appId": "5d5a8a7bbc7275af2cb71920"
-//   })
-//   console.log(res)
-// })
+  let res = await validAuth.getAuthedAppList({
+    "userId": "5d765d4013d73a5e90b7857a",
+  })
+  console.log(res)
+})
 
-test("cdnPreflight 函数", async t => {
+test("cdnPreflightFun: cdn 预检函数", async t => {
   const validAuth = auth;
   let res = await validAuth.cdnPreflightFun();
   t.is(res.status, 200);
 });
 
-test("用户和认证服务预检函数", async t => {
+test("preflightFun: 用户和认证服务预检函数", async t => {
   const validAuth = auth;
   let res = await validAuth.preflightFun();
   t.is(res[0].data.ok, 2);
   t.is(res[1].data.ok, 2);
 });
 
-test.skip("根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
+test.only("checkPreflight: 根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
   let auth = new Authing({
-    userPoolId,
-    secret,
+    userPoolId: config.userPoolId,
+    secret: config.secret,
+    preflight: true,
     host: {
-      user: "http://localhost:5510/graphql",
-      oauth: "http://localhost:5510/graphql"
+      user: config['host']['user'],
+      oauth: config['host']['oauth']
     },
-    preflight: true
+    baseUrl: config.host.base
   });
   let validAuth = auth;
   let res = await validAuth.checkPreflight();
@@ -668,13 +644,14 @@ test.skip("根据参数决定是否进行用户和认证服务预检和 cdn 预�
   t.is(service[1].data.ok, 2);
   t.is(cdn, "ok");
   auth = new Authing({
-    userPoolId: userPoolId,
-    secret,
-    // host: {
-    //   user: 'http://localhost:5555/graphql',
-    //   oauth: 'http://localhost:5556/graphql'
-    // },
-    cdnPreflight: true
+    userPoolId: config.userPoolId,
+    secret: config.secret,
+    cdnPreflight: true,
+    host: {
+      user: config['host']['user'],
+      oauth: config['host']['oauth']
+    },
+    baseUrl: config.host.base
   });
   validAuth = auth;
   res = await validAuth.checkPreflight();
@@ -685,22 +662,24 @@ test.skip("根据参数决定是否进行用户和认证服务预检和 cdn 预�
 
   // 两个 preflight 都打开
   auth = new Authing({
-    userPoolId: userPoolId,
-    secret,
-    // host: {
-    //   user: 'http://localhost:5555/graphql',
-    //   oauth: 'http://localhost:5556/graphql'
-    // },
+    userPoolId: config.userPoolId,
+    secret: config.secret,
     cdnPreflight: true,
-    preflight: true
+    preflight: true,
+    host: {
+      user: config['host']['user'],
+      oauth: config['host']['oauth']
+    },
+    baseUrl: config.host.base
   });
   validAuth = auth;
   res = await validAuth.checkPreflight();
   service = await res[0];
   cdn = await res[1];
-  t.is(service[0].data.ok, 1);
-  t.is(service[1].data.ok, 1);
+  t.is(service[0].data.ok, 2);
+  t.is(service[1].data.ok, 2);
   t.is(cdn.data, "a\n");
+
 });
 
 test("readOAuthList", async t => {
@@ -715,7 +694,7 @@ test("readOAuthList", async t => {
   }
 });
 
-test("根据 id 查询单个用户", async t => {
+test("user: 根据 id 查询单个用户", async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res = await validAuth.register({
@@ -727,7 +706,7 @@ test("根据 id 查询单个用户", async t => {
   t.assert(user.thirdPartyIdentity)
 });
 
-test("根据 id 批量查询多个用户", async t => {
+test("userPatch: 根据 id 批量查询多个用户", async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res1 = await validAuth.register({
@@ -744,10 +723,10 @@ test("根据 id 批量查询多个用户", async t => {
   } catch (err) {
     console.log(JSON.stringify(err));
   }
-  t.assert(users.list.every(v => v._id && v.registerInClient === userPoolId));
+  t.assert(users.list.every(v => v._id && v.registerInClient === config.userPoolId));
 });
 
-test("变更用户 MFA 状态", async t => {
+test("changeMFA: 变更用户 MFA 状态", async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res = await validAuth.register({
@@ -767,7 +746,7 @@ test("变更用户 MFA 状态", async t => {
   t.true(res.enable);
 });
 
-test("查询用户 MFA 状态", async t => {
+test("queryMFA: 查询用户 MFA 状态", async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res = await validAuth.register({
@@ -776,17 +755,17 @@ test("查询用户 MFA 状态", async t => {
   });
   let loggedIn = await validAuth.login({ email, password: "123456a" });
   let mfa = await validAuth.queryMFA({
-    userPoolId: userPoolId,
+    userPoolId: config.userPoolId,
     userId: res._id
   });
   t.is(mfa, null);
   res = await validAuth.changeMFA({
-    userPoolId: userPoolId,
+    userPoolId: config.userPoolId,
     userId: res._id,
     enable: true
   });
   mfa = await validAuth.queryMFA({
-    userPoolId: userPoolId,
+    userPoolId: config.userPoolId,
     userId: loggedIn._id
   });
   t.assert(res._id);
@@ -796,18 +775,18 @@ test("查询用户 MFA 状态", async t => {
   t.true(res.enable);
 });
 
-test("检查微信二维码是否被扫描", async t => {
+test("genQRCode, checkQR: 检查微信二维码是否被扫描", async t => {
   const validAuth = auth;
-  let res = await validAuth.genQRCode(userPoolId);
+  let res = await validAuth.genQRCode(config.userPoolId);
   let status = await validAuth.checkQR();
   t.is(status.data.data.code, 500);
   t.is(status.data.data.message, "have not been authed");
   //@TODO 给 checkQR 传入正确地参数，进行测试
 });
 
-test("获取用户池基础设置", async t => {
+test("getUserPoolSettings: 获取用户池基础设置", async t => {
   const validAuth = auth;
-  let res = await validAuth.getUserPoolSettings(userPoolId);
+  let res = await validAuth.getUserPoolSettings(config.userPoolId);
   t.assert(res.hasOwnProperty("name"));
   t.assert(res.hasOwnProperty("logo"));
   t.assert(res.hasOwnProperty("descriptions"));
@@ -826,7 +805,7 @@ test.skip("发送激活邮件", async t => {
   t.is(res.message, "发送验证邮件成功");
 });
 
-test("user:查询某个角色下的所有用户", async t => {
+test("getUsersByRole: 查询某个角色下的所有用户", async t => {
   const validAuth = auth;
   let email = randomEmail();
 
@@ -869,7 +848,7 @@ test("has axios", async t => {
   t.truthy(validAuth._axios);
 });
 
-test("发送修改邮箱邮件", async t => {
+test("sendChangeEmailVerifyCode: 发送修改邮箱邮件", async t => {
   const validAuth = auth;
   const res = await validAuth.sendChangeEmailVerifyCode({
     email: "cdbfhoergnrexxjk@qq.com" // 当前邮箱或者没有注册过的邮箱
@@ -877,7 +856,7 @@ test("发送修改邮箱邮件", async t => {
   t.assert(res.code === 200);
 });
 
-test("发送修改邮箱邮件 - 邮箱已绑定，请换一个吧", async t => {
+test("sendChangeEmailVerifyCode: 发送修改邮箱邮件 - 邮箱已绑定，请换一个吧", async t => {
   const validAuth = auth;
   const res = await validAuth.sendChangeEmailVerifyCode({
     email: "ax6coi4ytmk@test.com" // 已经被其他人注册过的邮箱
@@ -951,7 +930,7 @@ test.skip("测试sendRegisterPhoneCode发送验证码", async t => {
   }
   t.assert(res.code === 200);
 });
-test("测试casLogout", async t => {
+test("casLogout: 测试 casLogout", async t => {
   const validAuth = auth;
   let res = {};
   try {
@@ -1013,287 +992,7 @@ GKl64GDcIq3au+aqJQIDA123
     }
   }
 });
-test("OIDC 授权码模式", async t => {
-  // 创建 oidc 应用
-  let name = randomName();
-  let domain = randomName();
-  let redirectUri = "https://baidu.com";
-  let token = await auth.fetchToken;
-
-  let res = await axios.post(
-    gqlEndPoint,
-    {
-      query:
-        "mutation CreateOIDCApp($name: String!, $domain: String!, $image: String, $redirect_uris: [String!]!, $clientId: String, $description: String, $homepageURL: String, $grant_types: [String!]!, $token_endpoint_auth_method: String, $id_token_signed_response_alg: String, $response_types: [String!]!, $jwks: String, $jwks_uri: String, $authorization_code_expire: String, $id_token_expire: String, $access_token_expire: String, $cas_expire: String) {\n  CreateOIDCApp(name: $name, domain: $domain, image: $image, redirect_uris: $redirect_uris, clientId: $clientId, homepageURL: $homepageURL, description: $description, token_endpoint_auth_method: $token_endpoint_auth_method, grant_types: $grant_types, response_types: $response_types, jwks: $jwks, jwks_uri: $jwks_uri, id_token_signed_response_alg: $id_token_signed_response_alg, authorization_code_expire: $authorization_code_expire, id_token_expire: $id_token_expire, access_token_expire: $access_token_expire, cas_expire: $cas_expire) {\n    _id\n    name\n    image\n  domain \n client_secret \n __typename\n  }\n}\n",
-      variables: {
-        name,
-        redirectUris: [],
-        description: "",
-        image: "",
-        redirectUriString: redirectUri,
-        grant_types: ["authorization_code", "refresh_token"],
-        token_endpoint_auth_method: "client_secret_post",
-        response_types: ["code"],
-        id_token_signed_response_alg: "HS256",
-        id_token_encrypted_response_alg: "不加密",
-        id_token_encrypted_response_enc: "不加密",
-        userinfo_signed_response_alg: "不加密",
-        userinfo_encrypted_response_alg: "不加密",
-        userinfo_encrypted_response_enc: "不加密",
-        request_object_signIng_alg: "不加密",
-        request_object_encryption_alg: "不加密",
-        request_object_encryption_enc: "不加密",
-        domain,
-        jwks: "",
-        jwks_uri: "",
-        authorization_code_expire: "600",
-        id_token_expire: "3600",
-        access_token_expire: "3600",
-        cas_expire: "3600",
-        redirect_uris: [redirectUri],
-        clientId // oidc 应用所属的用户池的 id
-      },
-      operationName: "CreateOIDCApp"
-    },
-    {
-      headers: { Authorization: token }
-    }
-  );
-  t.truthy(res.data.data.CreateOIDCApp._id);
-  let oidcApp = res.data.data.CreateOIDCApp;
-  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
-
-  let url = `https://${oidcApp.domain}.authing.cn/oauth/oidc/auth?client_id=${oidcApp._id}&redirect_uri=https%3A%2F%2Fbaidu.com&scope=openid%20profile offline_access&prompt=consent&response_type=code&state=881c87be7g6`;
-  try {
-    res = await axios.get(url, { maxRedirects: 0 });
-  } catch (err) {
-    let cookies = err.response.headers["set-cookie"];
-    let location = err.response.headers.location;
-    let email = randomEmail();
-    let user = await auth.register({
-      email,
-      password: "123456a"
-    });
-    let loggedInUser = await auth.login({ email, password: "123456a" });
-    let token = loggedInUser.token;
-    let oidcConfirmUrl = `https://${oidcApp.domain}.authing.cn${location}/login`;
-    res = await axios.post(
-      oidcConfirmUrl,
-      {},
-      {
-        headers: {
-          cookie: cookies.join(";"),
-          authorization: token
-        }
-      }
-    );
-    t.assert(res.data.redirectTo);
-    try {
-      res = await axios.get(res.data.redirectTo, {
-        headers: {
-          cookie: cookies.join(";")
-        },
-        maxRedirects: 0
-      });
-    } catch (err) {
-      let redirectUrl = err.response.headers.location;
-      let qs = redirectUrl.split("?")[1];
-      let qsObj = querystring.parse(qs);
-      let code = qsObj.code;
-      // code 换 token
-      let code2token = await axios.post(
-        `https://${oidcApp.domain}.${baseHost}/oauth/oidc/token`,
-        querystring.stringify({
-          code,
-          client_id: oidcApp._id,
-          client_secret: oidcApp.client_secret,
-          grant_type: "authorization_code",
-          redirect_uri: redirectUri
-        }),
-        {
-          headers: { "content-type": "application/x-www-form-urlencoded" }
-        }
-      );
-      let token = code2token.data;
-      t.assert(code2token.data.access_token);
-      t.assert(code2token.data.expires_in);
-      t.assert(code2token.data.id_token);
-      t.assert(code2token.data.scope);
-      t.assert(code2token.data.token_type);
-      // 在线验证 token
-      let status = await auth.checkLoginStatus(token.access_token);
-      t.true(status.status);
-      status = await auth.checkLoginStatus(token.id_token);
-      t.true(status.status);
-      // token 换用户信息
-      let userInfoRes = await axios.get(
-        `https://${oidcApp.domain}.${baseHost}/oauth/oidc/user/userinfo`,
-        {
-          params: {
-            access_token: token.access_token
-          }
-        }
-      );
-      let userInfo = userInfoRes.data;
-      t.assert(userInfo.sub);
-      // 刷新 token
-      let refresh = await axios.post(
-        `https://${oidcApp.domain}.${baseHost}/oauth/oidc/token`,
-        querystring.stringify({
-          client_id: oidcApp._id,
-          client_secret: oidcApp.client_secret,
-          grant_type: "refresh_token",
-          refresh_token: token.refresh_token
-        }),
-        {
-          headers: { "content-type": "application/x-www-form-urlencoded" }
-        }
-      );
-      let refreshedToken = refresh.data;
-      // 在线验证刷新之后的 token
-      status = await auth.checkLoginStatus(refreshedToken.access_token);
-      t.true(status.status);
-      status = await auth.checkLoginStatus(refreshedToken.id_token);
-      t.true(status.status);
-      // 用刷新后的 token 换用户信息
-      userInfoRes = await axios.get(
-        `https://${oidcApp.domain}.${baseHost}/oauth/oidc/user/userinfo`,
-        {
-          params: {
-            access_token: refreshedToken.access_token
-          }
-        }
-      );
-      userInfo = userInfoRes.data;
-      t.assert(userInfo.sub);
-    }
-  }
-});
-test("OIDC 隐式模式", async t => {
-  // 创建 oidc 应用
-  let name = randomName();
-  let domain = randomName();
-  let redirectUri = "https://baidu.com";
-  let token = await auth.fetchToken;
-
-  let res = await axios.post(
-    gqlEndPoint,
-    {
-      query:
-        "mutation CreateOIDCApp($name: String!, $domain: String!, $image: String, $redirect_uris: [String!]!, $clientId: String, $description: String, $homepageURL: String, $grant_types: [String!]!, $token_endpoint_auth_method: String, $id_token_signed_response_alg: String, $response_types: [String!]!, $jwks: String, $jwks_uri: String, $authorization_code_expire: String, $id_token_expire: String, $access_token_expire: String, $cas_expire: String) {\n  CreateOIDCApp(name: $name, domain: $domain, image: $image, redirect_uris: $redirect_uris, clientId: $clientId, homepageURL: $homepageURL, description: $description, token_endpoint_auth_method: $token_endpoint_auth_method, grant_types: $grant_types, response_types: $response_types, jwks: $jwks, jwks_uri: $jwks_uri, id_token_signed_response_alg: $id_token_signed_response_alg, authorization_code_expire: $authorization_code_expire, id_token_expire: $id_token_expire, access_token_expire: $access_token_expire, cas_expire: $cas_expire) {\n    _id\n    name\n    image\n  domain \n client_secret \n __typename\n  }\n}\n",
-      variables: {
-        name,
-        redirectUris: [],
-        description: "",
-        image: "",
-        redirectUriString: redirectUri,
-        grant_types: [
-          "authorization_code",
-          "refresh_token",
-          "implicit",
-          "client_credentials"
-        ],
-        token_endpoint_auth_method: "client_secret_post",
-        response_types: [
-          "code",
-          "code token",
-          "id_token token",
-          "code id_token",
-          "code id_token token",
-          "none",
-          "id_token"
-        ],
-        id_token_signed_response_alg: "HS256",
-        id_token_encrypted_response_alg: "不加密",
-        id_token_encrypted_response_enc: "不加密",
-        userinfo_signed_response_alg: "不加密",
-        userinfo_encrypted_response_alg: "不加密",
-        userinfo_encrypted_response_enc: "不加密",
-        request_object_signIng_alg: "不加密",
-        request_object_encryption_alg: "不加密",
-        request_object_encryption_enc: "不加密",
-        domain,
-        jwks: "",
-        jwks_uri: "",
-        authorization_code_expire: "600",
-        id_token_expire: "3600",
-        access_token_expire: "3600",
-        cas_expire: "3600",
-        redirect_uris: [redirectUri],
-        clientId // oidc 应用所属的用户池的 id
-      },
-      operationName: "CreateOIDCApp"
-    },
-    {
-      headers: { Authorization: token }
-    }
-  );
-  t.truthy(res.data.data.CreateOIDCApp._id);
-  let oidcApp = res.data.data.CreateOIDCApp;
-  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
-  let url = `https://${oidcApp.domain}.authing.cn/oauth/oidc/auth?client_id=${oidcApp._id}&redirect_uri=https%3A%2F%2Fbaidu.com&scope=openid profile&response_type=id_token token&state=23436&nonce=12415`;
-  try {
-    res = await axios.get(url, { maxRedirects: 0 });
-  } catch (err) {
-    let cookies = err.response.headers["set-cookie"];
-    let location = err.response.headers.location;
-    let email = randomEmail();
-    let user = await auth.register({
-      email,
-      password: "123456a"
-    });
-    let loggedInUser = await auth.login({ email, password: "123456a" });
-    let token = loggedInUser.token;
-    let oidcConfirmUrl = `https://${oidcApp.domain}.authing.cn${location}/login`;
-    res = await axios.post(
-      oidcConfirmUrl,
-      {},
-      {
-        headers: {
-          cookie: cookies.join(";"),
-          authorization: token
-        }
-      }
-    );
-    t.assert(res.data.redirectTo);
-    try {
-      res = await axios.get(res.data.redirectTo, {
-        headers: {
-          cookie: cookies.join(";")
-        },
-        maxRedirects: 0
-      });
-    } catch (err) {
-      let redirectUrl = err.response.headers.location;
-      let qs = redirectUrl.split("#")[1];
-      let qsObj = querystring.parse(qs);
-      let idToken = qsObj.id_token;
-      let accessToken = qsObj.access_token;
-      t.assert(qsObj.id_token);
-      t.assert(qsObj.access_token);
-      // 在线验证 token
-      let status = await auth.checkLoginStatus(accessToken);
-      t.true(status.status);
-      status = await auth.checkLoginStatus(idToken);
-      t.true(status.status);
-      // token 换用户信息
-      let userInfoRes = await axios.get(
-        `https://${oidcApp.domain}.${baseHost}/oauth/oidc/user/userinfo`,
-        {
-          params: {
-            access_token: accessToken
-          }
-        }
-      );
-      let userInfo = userInfoRes.data;
-      t.assert(userInfo.sub);
-    }
-  }
-});
-test("OIDC 混合模式", async t => {
-  // 创建 oidc 应用
-});
-test("refreshThirdPartyToken", async t => {
+test("refreshThirdPartyToken: 刷新 Github、微信 等社会化登录 token", async t => {
   let email = randomEmail();
   let user = await auth.register({
     email,
@@ -1303,36 +1002,34 @@ test("refreshThirdPartyToken", async t => {
   t.false(res.refreshSuccess);
 });
 
-test('loginByOidc', async t => {
+test('loginByOidc: OIDC Password 模式登录', async t => {
   let user = await auth.loginByOidc({
-    client_id: '5e57fa63c942050998c3ab11',
-    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
+    client_id: config.oidcAppId,
+    client_secret: config.oidcAppSecret,
     email: 'test3@123.com',
     password: '123456',
-
   })
   t.assert(user.sub)
   console.log(user)
 })
 
-test('refreshOidcToken', async t => {
+test('refreshOidcToken: 刷新 OIDC token', async t => {
   let user = await auth.loginByOidc({
-    client_id: '5e57fa63c942050998c3ab11',
-    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
+    client_id: config.oidcAppId,
+    client_secret: config.oidcAppSecret,
     scope: 'openid profile email phone offline_access',
     email: 'test3@123.com',
     password: '123456',
   })
   t.assert(user.sub)
   let refreshToken = await auth.refreshOidcToken({
-    client_id: '5e57fa63c942050998c3ab11',
-    client_secret: '4b4796bf54ba0c50e6364801c517e22c',
+    client_id: config.oidcAppId,
+    client_secret: config.oidcAppSecret,
     refresh_token: user.refresh_token
   })
-  console.log(refreshToken)
   t.assert(refreshToken.access_token)
 })
-test('signIn', async t => {
+test('signIn，基于 OIDC 的登录模式', async t => {
   try {
 
     let user = await auth.signIn({
@@ -1345,7 +1042,7 @@ test('signIn', async t => {
     t.fail()
   }
 })
-test('refreshSignInToken', async t => {
+test('refreshSignInToken，刷新 signIn token', async t => {
   try {
     let user = await auth.signIn({
       email: 'test1@123.com',
@@ -1362,20 +1059,20 @@ test('refreshSignInToken', async t => {
   }
 })
 
-test('生成二维码', async t => {
+test('geneQRCode: 生成二维码', async t => {
   const authing = auth;
-  const res = await authing.geneQRCode({
+  const res = await authing.qrlogin.geneCode({
     scene: 'APP_AUTH',
     userDefinedData: {
       hello: 'world'
     }
   })
-  t.assert(res.status === 200)
+  t.assert(res.code === 200)
   t.assert(res.data.qrcodeId !== undefined)
   t.assert(res.data.qrcodeUrl !== undefined)
 })
 
-test.only('测试多个用户池登录', async t => {
+test('测试多个用户池登录', async t=>{
   let configs = [
     {
       userPoolId: "5e442f7a2a94353ac2536892",
@@ -1397,10 +1094,9 @@ test.only('测试多个用户池登录', async t => {
       }
     });
   })
-  let user1 = await auth1.register({ phone: "17624355600", password: "123456" });
+  let user1 = await auth1.register({ phone: randomPhone(), password: "123456" });
   await auth1.remove(user1._id, '5e3d513fa00e847cafec9315');
-  let user2 = await auth2.register({ phone: "17624355679", password: "123456" });
+  let user2 = await auth2.register({ phone: randomPhone(), password: "123456" });
   await auth2.remove(user2._id, '5ccb24701bbaf00d50ced851');
-  console.log("success");
-
+  t.pass()
 })
