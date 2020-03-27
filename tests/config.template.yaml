@@ -1,0 +1,6 @@
+userPoolId: 
+secret: 
+host:
+  base: http://localhost:5510
+  user: http://localhost:5510/graphql
+  oauth: http://localhost:5510/graphql

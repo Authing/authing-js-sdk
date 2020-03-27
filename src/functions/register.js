@@ -120,6 +120,7 @@ export default function register(options) {
             blocked,
             device,
             metadata
+            registerInClient
         }
     }`,
       variables: options
