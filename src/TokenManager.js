@@ -3,29 +3,47 @@ export default class TokenManager {
   // 实例化 tokenManager 的时候传入外部配置，用于后续刷新 token
   constructor(opts, UserServiceGql) {
     this.opts = opts;
+    this.instances = [];
     this.UserServiceGql = UserServiceGql;
     this.lockRefresh = false;
   }
   static getInstance(opts, UserServiceGql) {
-    if (!TokenManager.instance) {
-      TokenManager.instance = new TokenManager(opts, UserServiceGql);
+    TokenManager.instances = !TokenManager.instances
+    ? {}
+    : TokenManager.instances;
+    if (!opts || !opts.userPoolId) {
+      if (TokenManager.instances['default']) {
+        return TokenManager.instances["default"];
+      }else {
+        throw new Error('not valid opts')
+      }
+    } 
+    if (!TokenManager.instances[opts.userPoolId]) {
+      TokenManager.instances[opts.userPoolId] = new TokenManager(
+        opts,
+        UserServiceGql
+      );
+      TokenManager.instances['default'] = TokenManager.instances[opts.userPoolId]
     }
-    return TokenManager.instance;
+    return TokenManager.instances[opts.userPoolId];
   }
-  static destroy() {
-    TokenManager.instance = null;
+  static destroy(opts) {
+    if (!!TokenManager.instances){
+      return 
+    }
+    TokenManager.instances[opts.userPoolId] = null
   }
   setUserToken(userToken) {
-    TokenManager.instance.userToken = userToken;
+    TokenManager.getInstance(this.opts).userToken = userToken;
   }
   setOwnerToken(ownerToken) {
-    TokenManager.instance.ownerToken = ownerToken;
+    TokenManager.getInstance(this.opts).ownerToken = ownerToken;
   }
   setToken(token) {
     if (typeof window === "undefined" && typeof document === "undefined") {
-      return (TokenManager.instance.ownerToken = token);
+      return (TokenManager.getInstance(this.opts).ownerToken = token);
     } else {
-      return (TokenManager.instance.userToken = token);
+      return (TokenManager.getInstance(this.opts).userToken = token);
     }
   }
   refreshOwnerToken() {
@@ -38,41 +56,35 @@ export default class TokenManager {
     }).then(res => {
       // 获取完了之后更新 TokenManager 维护的 token
       this.setOwnerToken(res.accessToken);
-      return res
+      return res;
     });
   }
   getToken(type) {
+    let that = this;
     return new Promise((resolve, reject) => {
       function chooseToken() {
         if (!type) {
-          /*
-          if (typeof window === 'undefined') {
-            return `Bearer ${TokenManager.instance.ownerToken}`;
-          } else {
-            return `Bearer ${TokenManager.instance.userToken}`;
-          }
-          */
-          if (TokenManager.instance.userToken) {
-            resolve(`Bearer ${TokenManager.instance.userToken}`);
-          } else if (TokenManager.instance.ownerToken) {
-            resolve(`Bearer ${TokenManager.instance.ownerToken}`);
+          if (TokenManager.getInstance(that.opts).userToken) {
+            resolve(`Bearer ${TokenManager.getInstance(that.opts).userToken}`);
+          } else if (TokenManager.getInstance(that.opts).ownerToken) {
+            resolve(`Bearer ${TokenManager.getInstance(that.opts).ownerToken}`);
           } else {
             resolve(null);
           }
         } else {
-          resolve(`Bearer ${TokenManager.instance[type]}`);
+          resolve(`Bearer ${TokenManager.getInstance(that.opts)[type]}`);
         }
       }
       // lock 的目的是防止无限互相调用，UserServiceGql -> getToken -> 当前 token 过期 -> refreshOwnerToken -> UserServiceGql -> getToken
       if (process.env.BUILD_TARGET === "node" && !this.lockRefresh) {
         // 如果在 node 环境下
         if (
-          TokenManager.instance.ownerToken &&
-          typeof TokenManager.instance.ownerToken === "string"
+          TokenManager.getInstance(this.opts).ownerToken &&
+          typeof TokenManager.getInstance(this.opts).ownerToken === "string"
         ) {
           // 如果 ownerToken 被设置过
           // 取出 jwt 中间的 payload
-          let payload = TokenManager.instance.ownerToken.split(".")[1];
+          let payload = TokenManager.getInstance(this.opts).ownerToken.split(".")[1];
           let buf = Buffer.from(payload, "base64");
           let jsonStr = buf.toString();
           try {
@@ -81,13 +93,15 @@ export default class TokenManager {
             if (expireTime < Date.now()) {
               // 如果过期了
               this.lockRefresh = true;
-              this.refreshOwnerToken().then(() => {
-                this.lockRefresh = false;
-                chooseToken();
-              }).catch(err => {
-                this.lockRefresh = false;
-                reject(err)
-              });
+              this.refreshOwnerToken()
+                .then(() => {
+                  this.lockRefresh = false;
+                  chooseToken();
+                })
+                .catch(err => {
+                  this.lockRefresh = false;
+                  reject(err);
+                });
             } else {
               // node 环境下，且 token 没过期
               chooseToken();

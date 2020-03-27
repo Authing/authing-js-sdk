@@ -15,7 +15,7 @@ export class GraphQLClient {
 
   request(data, tokenType) {
     // 每次请求前先看看要不要发 token
-    return TokenManager.getInstance()
+    return TokenManager.getInstance(this.options)
       .getToken(tokenType)
       .then(token => {
         this.options = {
