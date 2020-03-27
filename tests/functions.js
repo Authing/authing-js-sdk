@@ -240,7 +240,7 @@ test("user:assignUserToRole 把用户指派到角色组", async t => {
   }
 });
 
-test("user:removeUserFromRole 把用户从角色组移除", async t => {
+test.only("user:removeUserFromRole 把用户从角色组移除", async t => {
   const validAuth = auth;
   let email = randomEmail();
 
@@ -267,8 +267,8 @@ test("user:removeUserFromRole 把用户从角色组移除", async t => {
       user: user._id,
       roleId: role._id
     });
-    t.assert(res2._id)
-    t.assert(res3._id);
+    t.assert(res2.list.find(v => v.user._id === user._id))
+    t.assert(res3._id)
   } catch (err) {
     t.log(formatError(err));
     t.fail("assignUserToRole 请求错误");
@@ -1045,13 +1045,13 @@ test('refreshSignInToken，刷新 signIn token', async t => {
 
 test('geneQRCode: 生成二维码', async t => {
   const authing = auth;
-  const res = await authing.geneQRCode({
+  const res = await authing.qrlogin.geneCode({
     scene: 'APP_AUTH',
     userDefinedData: {
       hello: 'world'
     }
   })
-  t.assert(res.status === 200)
+  t.assert(res.code === 200)
   t.assert(res.data.qrcodeId !== undefined)
   t.assert(res.data.qrcodeUrl !== undefined)
 })
