@@ -758,7 +758,7 @@ test("queryMFA: 查询用户 MFA 状态", async t => {
   t.true(res.enable);
 });
 
-test("检查微信二维码是否被扫描", async t => {
+test("genQRCode, checkQR: 检查微信二维码是否被扫描", async t => {
   const validAuth = auth;
   let res = await validAuth.genQRCode(config.userPoolId);
   let status = await validAuth.checkQR();
@@ -767,7 +767,7 @@ test("检查微信二维码是否被扫描", async t => {
   //@TODO 给 checkQR 传入正确地参数，进行测试
 });
 
-test("获取用户池基础设置", async t => {
+test("getUserPoolSettings: 获取用户池基础设置", async t => {
   const validAuth = auth;
   let res = await validAuth.getUserPoolSettings(config.userPoolId);
   t.assert(res.hasOwnProperty("name"));
@@ -788,7 +788,7 @@ test.skip("发送激活邮件", async t => {
   t.is(res.message, "发送验证邮件成功");
 });
 
-test("user:查询某个角色下的所有用户", async t => {
+test("getUsersByRole: 查询某个角色下的所有用户", async t => {
   const validAuth = auth;
   let email = randomEmail();
 
@@ -831,7 +831,7 @@ test("has axios", async t => {
   t.truthy(validAuth._axios);
 });
 
-test("发送修改邮箱邮件", async t => {
+test("sendChangeEmailVerifyCode: 发送修改邮箱邮件", async t => {
   const validAuth = auth;
   const res = await validAuth.sendChangeEmailVerifyCode({
     email: "cdbfhoergnrexxjk@qq.com" // 当前邮箱或者没有注册过的邮箱
@@ -839,7 +839,7 @@ test("发送修改邮箱邮件", async t => {
   t.assert(res.code === 200);
 });
 
-test("发送修改邮箱邮件 - 邮箱已绑定，请换一个吧", async t => {
+test("sendChangeEmailVerifyCode: 发送修改邮箱邮件 - 邮箱已绑定，请换一个吧", async t => {
   const validAuth = auth;
   const res = await validAuth.sendChangeEmailVerifyCode({
     email: "ax6coi4ytmk@test.com" // 已经被其他人注册过的邮箱
@@ -913,7 +913,7 @@ test.skip("测试sendRegisterPhoneCode发送验证码", async t => {
   }
   t.assert(res.code === 200);
 });
-test("测试casLogout", async t => {
+test("casLogout: 测试 casLogout", async t => {
   const validAuth = auth;
   let res = {};
   try {
@@ -975,7 +975,7 @@ GKl64GDcIq3au+aqJQIDA123
     }
   }
 });
-test("refreshThirdPartyToken", async t => {
+test("refreshThirdPartyToken: 刷新 Github、微信 等社会化登录 token", async t => {
   let email = randomEmail();
   let user = await auth.register({
     email,
@@ -985,7 +985,7 @@ test("refreshThirdPartyToken", async t => {
   t.false(res.refreshSuccess);
 });
 
-test('loginByOidc', async t => {
+test('loginByOidc: OIDC Password 模式登录', async t => {
   let user = await auth.loginByOidc({
     client_id: '5e57fa63c942050998c3ab11',
     client_secret: '4b4796bf54ba0c50e6364801c517e22c',
@@ -996,7 +996,7 @@ test('loginByOidc', async t => {
   console.log(user)
 })
 
-test('refreshOidcToken', async t => {
+test('refreshOidcToken: 刷新 OIDC token', async t => {
   let user = await auth.loginByOidc({
     client_id: '5e57fa63c942050998c3ab11',
     client_secret: '4b4796bf54ba0c50e6364801c517e22c',
@@ -1013,7 +1013,7 @@ test('refreshOidcToken', async t => {
   console.log(refreshToken)
   t.assert(refreshToken.access_token)
 })
-test('signIn', async t => {
+test('signIn，基于 OIDC 的登录模式', async t => {
   try {
 
     let user = await auth.signIn({
@@ -1026,7 +1026,7 @@ test('signIn', async t => {
     t.fail()
   }
 })
-test('refreshSignInToken', async t => {
+test('refreshSignInToken，刷新 signIn token', async t => {
   try {
     let user = await auth.signIn({
       email: 'test1@123.com',
@@ -1043,7 +1043,7 @@ test('refreshSignInToken', async t => {
   }
 })
 
-test('生成二维码', async t => {
+test('geneQRCode: 生成二维码', async t => {
   const authing = auth;
   const res = await authing.geneQRCode({
     scene: 'APP_AUTH',
