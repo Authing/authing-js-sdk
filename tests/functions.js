@@ -1,9 +1,9 @@
 import test from "ava";
 import { formatError } from "../src/utils/formatError";
-import axios from "axios";
-import querystring from "querystring";
 import { authing, config } from "./base"
 import Authing from "../src/index"
+let userPoolId = config.userPoolId
+let auth = authing
 
 function randomEmail() {
   let rand = Math.random()
@@ -18,7 +18,6 @@ function randomName() {
     .slice(2);
 }
 
-let auth = authing
 test("users:register 用户密码注册", async t => {
   const validAuth = auth;
   let email = randomEmail();
@@ -592,49 +591,43 @@ test("user:updateRolePermissions 修改角色权限", async t => {
   t.is(updated.permissions, "permission updated");
 });
 
-// test.only("撤回用户对某个 SSO 应用的授权", async t => {
-//   const validAuth = auth;
+test.skip("revokeAuthedApp: 撤回用户对某个 SSO 应用的授权", async t => {
+  const validAuth = auth;
 
-//   let res = await validAuth.revokeAuthedApp({
-//     "userPoolId": userPoolId,
-//     "userId": "5d765d4013d73a5e90b7857a",
-//     "appId": "5d5a8a7bbc7275af2cb71920"
-//   })
-//   console.log(res)
-// })
+  let res = await validAuth.revokeAuthedApp({
+    "userId": "5d765d4013d73a5e90b7857a",
+    "appId": "5d5a8a7bbc7275af2cb71920"
+  })
+  console.log(res)
+})
 
-// test.only("用户在用户池内授权的 SSO 应用列表", async t => {
-//   const validAuth = auth;
+test.only("getAuthedAppList: 用户在用户池内授权的 SSO 应用列表", async t => {
+  const validAuth = auth;
 
-//   let res = await validAuth.getAuthedAppList({
-//     userPoolId,
-//     "userId": "5d765d4013d73a5e90b7857a",
-//     "appId": "5d5a8a7bbc7275af2cb71920"
-//   })
-//   console.log(res)
-// })
+  let res = await validAuth.getAuthedAppList({
+    "userId": "5d765d4013d73a5e90b7857a",
+    "appId": "5d5a8a7bbc7275af2cb71920"
+  })
+  console.log(res)
+})
 
-test("cdnPreflight 函数", async t => {
+test("cdnPreflightFun: cdn 预检函数", async t => {
   const validAuth = auth;
   let res = await validAuth.cdnPreflightFun();
   t.is(res.status, 200);
 });
 
-test("用户和认证服务预检函数", async t => {
+test("preflightFun: 用户和认证服务预检函数", async t => {
   const validAuth = auth;
   let res = await validAuth.preflightFun();
   t.is(res[0].data.ok, 2);
   t.is(res[1].data.ok, 2);
 });
 
-test.skip("根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
+test.only("checkPreflight: 根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
   let auth = new Authing({
-    userPoolId,
-    secret,
-    host: {
-      user: "http://localhost:5510/graphql",
-      oauth: "http://localhost:5510/graphql"
-    },
+    userPoolId: config.userPoolId,
+    secret: config.secret,
     preflight: true
   });
   let validAuth = auth;
@@ -645,12 +638,8 @@ test.skip("根据参数决定是否进行用户和认证服务预检和 cdn 预�
   t.is(service[1].data.ok, 2);
   t.is(cdn, "ok");
   auth = new Authing({
-    userPoolId: userPoolId,
-    secret,
-    // host: {
-    //   user: 'http://localhost:5555/graphql',
-    //   oauth: 'http://localhost:5556/graphql'
-    // },
+    userPoolId: config.userPoolId,
+    secret: config.secret,
     cdnPreflight: true
   });
   validAuth = auth;
@@ -662,12 +651,8 @@ test.skip("根据参数决定是否进行用户和认证服务预检和 cdn 预�
 
   // 两个 preflight 都打开
   auth = new Authing({
-    userPoolId: userPoolId,
-    secret,
-    // host: {
-    //   user: 'http://localhost:5555/graphql',
-    //   oauth: 'http://localhost:5556/graphql'
-    // },
+    userPoolId: config.userPoolId,
+    secret: config.secret,
     cdnPreflight: true,
     preflight: true
   });
@@ -692,7 +677,7 @@ test("readOAuthList", async t => {
   }
 });
 
-test("根据 id 查询单个用户", async t => {
+test("user: 根据 id 查询单个用户", async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res = await validAuth.register({
@@ -704,7 +689,7 @@ test("根据 id 查询单个用户", async t => {
   t.assert(user.thirdPartyIdentity)
 });
 
-test("根据 id 批量查询多个用户", async t => {
+test("userPatch: 根据 id 批量查询多个用户", async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res1 = await validAuth.register({
@@ -721,10 +706,10 @@ test("根据 id 批量查询多个用户", async t => {
   } catch (err) {
     console.log(JSON.stringify(err));
   }
-  t.assert(users.list.every(v => v._id && v.registerInClient === userPoolId));
+  t.assert(users.list.every(v => v._id && v.registerInClient === config.userPoolId));
 });
 
-test("变更用户 MFA 状态", async t => {
+test("changeMFA: 变更用户 MFA 状态", async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res = await validAuth.register({
@@ -744,7 +729,7 @@ test("变更用户 MFA 状态", async t => {
   t.true(res.enable);
 });
 
-test("查询用户 MFA 状态", async t => {
+test("queryMFA: 查询用户 MFA 状态", async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res = await validAuth.register({
@@ -753,17 +738,17 @@ test("查询用户 MFA 状态", async t => {
   });
   let loggedIn = await validAuth.login({ email, password: "123456a" });
   let mfa = await validAuth.queryMFA({
-    userPoolId: userPoolId,
+    userPoolId: config.userPoolId,
     userId: res._id
   });
   t.is(mfa, null);
   res = await validAuth.changeMFA({
-    userPoolId: userPoolId,
+    userPoolId: config.userPoolId,
     userId: res._id,
     enable: true
   });
   mfa = await validAuth.queryMFA({
-    userPoolId: userPoolId,
+    userPoolId: config.userPoolId,
     userId: loggedIn._id
   });
   t.assert(res._id);
@@ -775,7 +760,7 @@ test("查询用户 MFA 状态", async t => {
 
 test("检查微信二维码是否被扫描", async t => {
   const validAuth = auth;
-  let res = await validAuth.genQRCode(userPoolId);
+  let res = await validAuth.genQRCode(config.userPoolId);
   let status = await validAuth.checkQR();
   t.is(status.data.data.code, 500);
   t.is(status.data.data.message, "have not been authed");
@@ -784,7 +769,7 @@ test("检查微信二维码是否被扫描", async t => {
 
 test("获取用户池基础设置", async t => {
   const validAuth = auth;
-  let res = await validAuth.getUserPoolSettings(userPoolId);
+  let res = await validAuth.getUserPoolSettings(config.userPoolId);
   t.assert(res.hasOwnProperty("name"));
   t.assert(res.hasOwnProperty("logo"));
   t.assert(res.hasOwnProperty("descriptions"));
