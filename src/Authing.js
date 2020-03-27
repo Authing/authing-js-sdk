@@ -32,7 +32,8 @@ GKl64GDcIq3au+aqJQIDAQAB
 `,
   onInitError: function(err) {
     throw err;
-  }
+  },
+  cdnHost: "https://usercontents.authing.cn"
 };
 function AuthingBase() {}
 AuthingBase.prototype = {
@@ -55,7 +56,8 @@ class Authing extends AuthingBase {
       headers: {
         Authorization: ""
       },
-      timeout: this.opts.timeout
+      timeout: this.opts.timeout,
+      userPoolId:this.opts.userPoolId,
     });
     this.OAuthServiceGql = new GraphQLClient({
       baseURL: this.opts.host.oauth,
@@ -81,7 +83,7 @@ class Authing extends AuthingBase {
       }
     } else {
       // 直接拿 token 初始化
-      TokenManager.getInstance().setToken(this.opts.accessToken);
+      TokenManager.getInstance(this.opts).setToken(this.opts.accessToken);
     }
 
     this.userPoolId = this.opts.userPoolId;
@@ -124,7 +126,7 @@ class Authing extends AuthingBase {
             console.log(res);
             throw Error("网络获取 owner token 失败");
           }
-          TokenManager.getInstance().setToken(res.accessToken);
+          TokenManager.getInstance(this.opts).setToken(res.accessToken);
           this.userPoolSettings = res.clientInfo;
           return res.accessToken;
         })
