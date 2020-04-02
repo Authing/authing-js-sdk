@@ -60,7 +60,7 @@ import sendOneTimePhoneCode from "./sendOneTimePhoneCode"
 import sendRegisterPhoneCode from "./sendRegisterPhoneCode"
 import casLogout from "./casLogout"
 import refreshThirdPartyToken from "./refreshThirdPartyToken"
-
+import authingTokenToOidcToken from './authingTokenToOidcToken'
 // authz submodule
 import authz from "./authz"
 import org from "./org"
@@ -148,7 +148,8 @@ if (process.env.BUILD_TARGET === 'node') {
     getUsersByRole,
     authz,
     org,
-    pipeline
+    pipeline,
+    authingTokenToOidcToken,
   })
 } else if (process.env.BUILD_TARGET === 'web') {
   mod = Object.assign(mod, {
