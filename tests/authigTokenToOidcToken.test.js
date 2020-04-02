@@ -3,7 +3,7 @@ import { formatError } from "../src/utils/formatError";
 import { authing, config } from "./base"
 import {randomEmail} from './utils/random'
 
-test("authigTokenToOidcToken authingToken 换 OIDC Token", async t => {
+test("authingTokenToOidcToken authingToken 换 OIDC Token", async t => {
   let email = randomEmail();
   try {
     let user = await authing.register({
