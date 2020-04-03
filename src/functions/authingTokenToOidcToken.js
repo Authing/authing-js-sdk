@@ -18,5 +18,8 @@ export default function authingTokenToOidcToken(options) {
     })
     .then(res => {
       return res.data;
+    })
+    .catch(err => {
+      throw err.response.data;
     });
 }
