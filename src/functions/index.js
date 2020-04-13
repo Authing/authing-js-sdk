@@ -79,6 +79,11 @@ import pipeline from "./pipeline"
 // qrcode login module
 import qrlogin from "./qrlogin"
 
+// ad connector
+import loginByAd from "./loginByAd"
+import adConnectorByProvider from "./adConnectorByProvider"
+import verifyPhoneCode from "./verifyPhoneCode"
+
 // Node & Browser 共用
 let mod = {
   loginByOidc,
@@ -127,7 +132,10 @@ let mod = {
   metadata,
   setMetadata,
   removeMetadata,
-  qrlogin
+  qrlogin,
+  loginByAd,
+  adConnectorByProvider,
+  verifyPhoneCode
 }
 
 if (process.env.BUILD_TARGET === 'node') {
