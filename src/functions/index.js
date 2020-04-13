@@ -82,6 +82,7 @@ import qrlogin from "./qrlogin"
 // ad connector
 import loginByAd from "./loginByAd"
 import adConnectorByProvider from "./adConnectorByProvider"
+import verifyPhoneCode from "./verifyPhoneCode"
 
 // Node & Browser 共用
 let mod = {
@@ -133,7 +134,8 @@ let mod = {
   removeMetadata,
   qrlogin,
   loginByAd,
-  adConnectorByProvider
+  adConnectorByProvider,
+  verifyPhoneCode
 }
 
 if (process.env.BUILD_TARGET === 'node') {

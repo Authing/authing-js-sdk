@@ -6,15 +6,20 @@ process.env.BUILD_TARGET = config.env
 const Authing = require("../dist/authing-js-sdk-node");
 
 let base_config = yaml.parse(fs.readFileSync(path.join(__dirname, "baseConfig.yaml"), 'utf8'));
-export const authing = new Authing({
+
+const options = {
   userPoolId: config['userPoolId'],
   secret: config['secret'],
-  host: {
+}
+
+if (config.host) {
+  options.host = {
     user: config['host']['user'],
     oauth: config['host']['oauth']
-  },
-  baseUrl: config.host.base
-});
+  }
+}
+
+export const authing = new Authing(options);
 
 export const createRule = async function (code, type, name) {
   name = name || `Rule - ${Math.random().toString(36).slice(2)}`
