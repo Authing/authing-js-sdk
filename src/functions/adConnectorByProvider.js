@@ -27,6 +27,6 @@ export default function adConnectorByProvider(options) {
       }
     }
     `,
-    variables
+    variables: options,
   });
 }
