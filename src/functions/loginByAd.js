@@ -23,7 +23,7 @@ export default function loginByAd(options) {
   return this.OAuthServiceGql.request({
     operationName: "loginByAd",
     query: `mutation loginByAd($username: String!, $password: String!, $adConnectorId: String!) {
-    LoginByLDAP(username: $username, password: $password, adConnectorId: $adConnectorId) {
+    loginByAd(username: $username, password: $password, adConnectorId: $adConnectorId) {
         _id
         email
         emailVerified
