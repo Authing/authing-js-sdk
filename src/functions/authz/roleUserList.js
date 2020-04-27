@@ -5,9 +5,26 @@ export default function roleUserList(_id, options) {
       users(sortBy: $sortBy, page: $page, count: $count) {
         totalCount
         list {
-          _id
-          name
-          email
+          _id,
+          email,
+          phone,
+          emailVerified,
+          unionid,
+          openid,
+          oauth,
+          registerMethod,
+          username,
+          nickname,
+          company,
+          photo,
+          browser,
+          signedUp
+          lastLogin
+          token,
+          blocked,
+          device,
+          metadata,
+          registerInClient
         }
       }
     }
