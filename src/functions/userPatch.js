@@ -15,6 +15,7 @@ export default function userPatch(options) {
           _id
           unionid
           email
+          phone
           emailVerified
           username
           nickname
