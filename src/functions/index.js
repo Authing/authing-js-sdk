@@ -72,6 +72,7 @@ import userRoleList from "./user/userRoleList"
 import metadata from "./user/metadata"
 import setMetadata from "./user/setMetadata"
 import removeMetadata from "./user/removeMetadata"
+import userExist from "./user/userExist"
 
 // Pipeline submodule
 import pipeline from "./pipeline"
@@ -135,7 +136,8 @@ let mod = {
   qrlogin,
   loginByAd,
   adConnectorByProvider,
-  verifyPhoneCode
+  verifyPhoneCode,
+  userExist,
 }
 
 if (process.env.BUILD_TARGET === 'node') {

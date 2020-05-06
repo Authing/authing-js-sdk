@@ -1100,3 +1100,7 @@ test('测试多个用户池登录', async t=>{
   await auth2.remove(user2._id, '5ccb24701bbaf00d50ced851');
   t.pass()
 })
+test.only('测试是否存在用户',async t=>{
+  let res =await auth.userExist('59f86b4832eb28071bdd9214',{phone:"123"})
+  return res
+}) 
