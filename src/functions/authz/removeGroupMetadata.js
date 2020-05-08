@@ -1,4 +1,5 @@
 import checkInput from "../../utils/checkInput"
+import { paseGroupMetadata } from "../../utils/parseGroupMetadata"
 
 export default function (input) {
 

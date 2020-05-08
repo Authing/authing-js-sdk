@@ -1,4 +1,4 @@
-import checkInput from "../../utils/checkInput"
+import { paseGroupMetadata } from "../../utils/parseGroupMetadata"
 
 export default function (_id) {
 
@@ -14,7 +14,9 @@ export default function (_id) {
     return this.UserServiceGql.request({
       operationName: "groupMetadata",
       query,
-      variables: input
+      variables: {
+        _id
+      }
     }).then(list => {
       return paseGroupMetadata(list)
     })

@@ -20,11 +20,24 @@ export default function (input) {
   const query = `
   query searchGroupByMetadata($userPoolId: String!, $key:String!, $value: String!) {
     searchGroupByMetadata(userPoolId: $userPoolId, key: $key, value: $value) {
-      key
-      value
+      list {
+        _id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+      totalCount
     }
   }  
   `
+
+  if (typeof input.value !== "string") {
+    input.value = JSON.stringify(input.value)
+  }
+
+  input.userPoolId = this.userPoolId
+  
   return this.fetchToken.then(() => {
     return this.UserServiceGql.request({
       operationName: "searchGroupByMetadata",
