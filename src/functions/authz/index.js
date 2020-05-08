@@ -37,6 +37,10 @@ import addPermissionToRoleBatch from "./addPermissionToRoleBatch"
 import removePermissionFromRole from "./removePermissionFromRole"
 import removePermissionFromRoleBatch from "./removePermissionFromRoleBatch"
 import groupPermissionList from "./groupPermissionList"
+import addGroupMetadata from "./addGroupMetadata"
+import removeGroupMetadata from "./removeGroupMetadata"
+import groupMetadata from "./groupMetadata"
+import searchGroupByMetadata from "./searchGroupByMetadata"
 
 const mod = {
 
@@ -94,7 +98,13 @@ const mod = {
   addPermissionToRole,
   addPermissionToRoleBatch,
   removePermissionFromRole,
-  removePermissionFromRoleBatch
+  removePermissionFromRoleBatch,
+
+  // Group 自定义用户字段
+  addGroupMetadata,
+  removeGroupMetadata,
+  groupMetadata,
+  searchGroupByMetadata
 }
 
 export default mod
