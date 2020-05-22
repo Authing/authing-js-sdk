@@ -52,6 +52,12 @@ export class ManagementTokenProvider {
     return await this.refreshAccessToken()
   }
 
+  /**
+   * 刷新用户池 accessToken
+   *
+   * @returns
+   * @memberof ManagementTokenProvider
+   */
   async refreshAccessToken() {
     this._accessToken = await this.getClientWhenSdkInit()
     const decoded: DecodedAccessToken = jwtDecode(this._accessToken)
