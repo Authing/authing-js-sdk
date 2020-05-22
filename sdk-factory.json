@@ -1,0 +1,14 @@
+[
+	{
+		"sdkName": "management.users.list",
+		"graphqlApiName": "users",
+		"fields": [],
+		"selectedFields": []
+	},
+	{
+		"sdkName": "management.users.list",
+		"graphqlApiName": "users",
+		"fields": [],
+		"selectedFields": []
+	}
+]

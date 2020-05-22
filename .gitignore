@@ -9,3 +9,5 @@ coverage
 *.log
 
 package-lock.json
+sdk-factory
+.env

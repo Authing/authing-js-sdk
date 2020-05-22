@@ -1,0 +1,2359 @@
+directive @date(format: String) on FIELD_DEFINITION
+
+type ADConnctorCommonInfo {
+  _id: String
+  name: String
+  logo: String
+  status: Boolean
+}
+
+type ADConnector {
+  _id: String
+  name: String
+  secret: String
+  salt: String
+  logo: String
+  enabled: Boolean
+  userPoolId: String
+  status: Boolean
+  createdAt: String
+}
+
+type ADConnectorEnabledProvider {
+  providerType: String!
+  providerId: String!
+  userPoolId: String!
+  adConnectorId: String!
+}
+
+input AddOrgNodeInput {
+  orgId: String!
+  groupId: String!
+  parentGroupId: String!
+}
+
+input AddPermissionToRBACRoleBatchInput {
+  permissionIdList: [String!]!
+  roleId: String!
+}
+
+input AddPermissionToRBACRoleInput {
+  permissionId: String!
+  roleId: String!
+}
+
+input AddRoleToRBACGroupBatchInput {
+  roleIdList: [String!]!
+  groupId: String!
+}
+
+input AddRoleToRBACGroupInput {
+  roleId: String!
+  groupId: String!
+}
+
+input AddUserToRBACGroupBatchInput {
+  userIdList: [String!]!
+  groupId: String!
+}
+
+input AddUserToRBACGroupInput {
+  userId: String!
+  groupId: String!
+}
+
+type App2WxappLoginStrategy {
+  ticketExpriresAfter: Int
+  ticketExchangeUserInfoNeedSecret: Boolean
+}
+
+input App2WxappLoginStrategyInput {
+  ticketExpriresAfter: Int
+  ticketExchangeUserInfoNeedSecret: Boolean
+}
+
+type AppSecretByClientId {
+  secret: String
+  clientId: String
+}
+
+type AssertionConsumeService {
+  binding: String
+  url: String
+  isDefault: Boolean
+}
+
+input AssertionConsumeServiceInputType {
+  binding: String
+  url: String
+  isDefault: Boolean
+}
+
+type AssertionMap {
+  username: String
+  nickname: String
+  photo: String
+  company: String
+  providerName: String
+  email: String
+}
+
+input AssertionMapInputType {
+  username: String
+  nickname: String
+  photo: String
+  company: String
+  providerName: String
+  email: String
+}
+
+input AssignUserToRBACRoleBatchInput {
+  userIdList: [String!]!
+  roleId: String!
+}
+
+input AssignUserToRBACRoleInput {
+  userId: String!
+  roleId: String!
+}
+
+type AuthAuditRecord {
+  userPoolId: String
+  appType: String
+  appId: String
+  event: String
+  userId: String
+  createdAt: String
+}
+
+type AuthAuditRecordsList {
+  list: [AuthAuditRecord]
+  totalCount: Int
+}
+
+input AuthenticationContextInput {
+  protocol: String!
+  connection: String!
+  ldapConfiguration: LdapConfigurationInput
+}
+
+type BasicUserInfo {
+  _id: String
+  username: String
+  photo: String
+  email: String
+}
+
+type ChangeEmailStrategy {
+  verifyOldEmail: Boolean
+}
+
+input ChangeEmailStrategyInput {
+  verifyOldEmail: Boolean
+}
+
+type ChangePhoneStrategy {
+  verifyOldPhone: Boolean
+}
+
+input ChangePhoneStrategyInput {
+  verifyOldPhone: Boolean
+}
+
+type ChildrenOAuthList {
+  _id: String
+  name: String
+  alias: String
+  image: String
+  description: String
+  enabled: Boolean
+  url: String
+  client: String
+  user: String
+  oAuthUrl: String
+  wxappLogo: String
+  fields: [OAuthListFieldsForm]
+  oauth: ChildrenOAuthList
+}
+
+type Client {
+  _id: String
+  name: String
+  createdAt: String
+  user: User
+}
+
+type ClientHasLDAPConfigs {
+  result: Boolean
+}
+
+type ClientInfoAndAccessToken {
+  clientInfo: UserClient
+  accessToken: String
+}
+
+type ClientInWxQRCodeLogList {
+  _id: String
+  name: String
+  createdAt: String
+  user: UserInClientInWxQRCodeLogList
+}
+
+type ClientWebhook {
+  _id: String
+  client: String!
+  events: [WebhookEvent!]!
+  url: String!
+  isLastTimeSuccess: Boolean
+  contentType: String!
+  secret: String
+  enable: Boolean!
+}
+
+type Collaboration {
+  _id: String
+  createdAt: String
+  owner: User
+  collaborator: User
+  userPool: UserClient
+  permissionDescriptors: [PermissionDescriptors]
+}
+
+type CollaborativeUserPoolList {
+  list: [Collaboration]
+  totalCount: Int
+}
+
+type CollaboratorPermissions {
+  collaborator: User
+  list: [PermissionDescriptors]
+}
+
+type Collaborators {
+  collaborationId: String
+  list: [Collaboration]
+}
+
+type CommonMessage {
+  message: String
+  code: Int
+  status: Boolean
+}
+
+input CreateOrgInput {
+  rootGroupId: String!
+  userPoolId: String!
+}
+
+input CreateRBACGroupInput {
+  userPoolId: String!
+  name: String!
+  description: String
+}
+
+input CreateRBACPermissionInput {
+  userPoolId: String!
+  name: String!
+  description: String
+}
+
+input CreateRBACRoleInput {
+  userPoolId: String!
+  name: String!
+  description: String
+}
+
+input CreateRuleInput {
+  userPoolId: String!
+  name: String!
+  description: String
+  type: RuleTypes!
+  code: String!
+  async: Boolean
+}
+
+type CustomMFA {
+  _id: String
+  userIdInMiniLogin: String
+  userPoolId: UserClient
+  remark: String
+  name: String
+  secret: String
+}
+
+type DayServiceCallList {
+  day: String
+  count: Int
+}
+
+type DayServiceCallListOfAllServices {
+  userService: [DayServiceCallList]
+  emailService: [DayServiceCallList]
+  oAuthService: [DayServiceCallList]
+  payService: [DayServiceCallList]
+}
+
+type DayUserGrowth {
+  day: String
+  count: Int
+}
+
+input DeleteOrgInput {
+  _id: String!
+}
+
+type DeleteRBACGroupBatchResult {
+  success: Boolean!
+  requestCount: Int!
+  deletedCount: Int!
+}
+
+type DeleteRBACPermissionBatchResult {
+  success: Boolean!
+  requestCount: Int!
+  deletedCount: Int!
+}
+
+type DeleteRBACRoleBatchResult {
+  success: Boolean!
+  requestCount: Int!
+  deletedCount: Int!
+}
+
+type Email {
+  list: [PopulatedEmailSentList]
+  totalCount: Int
+}
+
+type EmailListPaged {
+  totalCount: Int
+  list: [EmailSentList]
+}
+
+type EmailProviderChildrenList {
+  _id: String
+  name: String
+  image: String
+  description: String
+  fields: [EmailProviderForm]
+  client: String
+  user: String
+  status: Boolean
+  provider: EmailProviderChildrenList
+}
+
+type EmailProviderForm {
+  label: String
+  type: String
+  placeholder: String
+  help: String
+  value: String
+  options: [String]
+}
+
+input EmailProviderFormAddInput {
+  label: String
+  type: String
+  placeholder: String
+  help: String
+  value: String
+  options: [String]
+}
+
+input EmailProviderFormInput {
+  label: String
+  type: String
+  placeholder: String
+  help: String
+  value: String
+  options: [String]
+}
+
+type EmailProviderList {
+  _id: String
+  name: String
+  image: String
+  description: String
+  fields: [EmailProviderForm]
+  client: String
+  user: String
+  status: Boolean
+  provider: EmailProviderChildrenList
+}
+
+input EmailProviderListInput {
+  _id: String
+  name: String
+  image: String
+  description: String
+  fields: [EmailProviderFormInput]
+}
+
+type EmailProviderWithClient {
+  _id: String
+  name: String
+  image: String
+  description: String
+}
+
+input EmailProviderWithClientAddInput {
+  _id: String
+  user: String
+  client: String
+  status: Boolean
+  fields: [EmailProviderFormAddInput]
+  provider: String
+}
+
+type EmailProviderWithClientForm {
+  label: String
+  type: String
+  placeholder: String
+  help: String
+  value: String
+  options: [String]
+}
+
+type EmailProviderWithClientList {
+  _id: String
+  user: String
+  client: String
+  status: Boolean
+  fields: [EmailProviderWithClientForm]
+  provider: EmailProviderWithClient
+}
+
+type EmailSentList {
+  _id: String
+  user: String
+  subject: String
+  content: String
+  sender: String
+  receivers: [String]
+  post: String
+  createdAt: String
+  rejected: [String]
+  isDeleted: String
+  client: String
+}
+
+type EmailTemplate {
+  _id: String
+  type: String
+  sender: String
+  object: String
+  hasURL: Boolean
+  URLExpireTime: Int
+  status: Boolean
+  redirectTo: String
+  content: String
+}
+
+input EmailTemplateInput {
+  _id: String
+  type: String
+  sender: String
+  object: String
+  hasURL: Boolean
+  URLExpireTime: Int
+  status: Boolean
+  redirectTo: String
+  content: String
+}
+
+type EmailTemplateWithClient {
+  _id: String
+  user: String
+  client: String
+  template: EmailTemplate
+  type: String
+  sender: String
+  object: String
+  hasURL: Boolean
+  URLExpireTime: Int
+  redirectTo: String
+  status: Boolean
+  content: String
+}
+
+input EmailTemplateWithClientInput {
+  _id: String
+  user: String
+  client: String
+  template: String
+  sender: String
+  object: String
+  hasURL: Boolean
+  URLExpireTime: Int
+  redirectTo: String
+  status: Boolean
+  content: String
+}
+
+type EncryptPassword {
+  _id: String
+  encryptUrl: String
+  decryptUrl: String
+  client: String
+  user: String
+  logs: String
+  enable: Boolean
+  createdAt: String
+  updatedAt: String
+  password: String
+}
+
+type ExtendUser {
+  _id: String
+  email: String
+  unionid: String
+  openid: String
+  emailVerified: Boolean
+  phone: String
+  phoneVerified: Boolean
+  username: String
+  nickname: String
+  company: String
+  photo: String
+  browser: String
+  device: String
+  password: String
+  registerInClient: String
+  registerMethod: String
+  oauth: String
+  token: String
+  tokenExpiredAt: String
+  loginsCount: Int
+  lastLogin: String
+  lastIP: String
+  signedUp: String
+  blocked: Boolean
+  isDeleted: Boolean
+  name: String
+  givenName: String
+  familyName: String
+  middleName: String
+  profile: String
+  preferredUsername: String
+  website: String
+  gender: String
+  birthdate: String
+  zoneinfo: String
+  locale: String
+  address: String
+  formatted: String
+  streetAddress: String
+  locality: String
+  region: String
+  postalCode: String
+  country: String
+  updatedAt: String
+  group: Group
+  clientType: UserClientType
+  userLocation: [UserLocation]
+  userLoginHistory: PagedUserLoginHistory
+  systemApplicationType: SystemApplicationType
+  thirdPartyIdentity: ThirdPartyIdentity
+  customData: String
+  metadata: String
+}
+
+type FrequentRegisterCheckConfig {
+  timeInterval: Int
+  limit: Int
+  enable: Boolean
+}
+
+input FrequentRegisterCheckConfigInput {
+  timeInterval: Int
+  limit: Int
+  enable: Boolean
+}
+
+type GeographicalDistributionList {
+  city: String
+  size: Float
+  point: [Float]
+}
+
+type Group {
+  _id: String
+  name: String
+  descriptions: String
+  client: String
+  permissions: String
+  createdAt: String
+}
+
+type Invitation {
+  client: String!
+  phone: String
+  isDeleted: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type InvitationCode {
+  _id: String
+  user: String
+  client: String
+  code: String
+  createdAt: String
+}
+
+type InvitationState {
+  client: String!
+  enablePhone: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type isAdConenctorAlive {
+  isAlive: Boolean
+}
+
+type IsAppAuthorizedByUser {
+  authorized: Boolean
+}
+
+type IsReservedDomain {
+  domainValue: String
+  isReserved: Boolean
+}
+
+input IsRootNodeOfOrgInput {
+  groupId: String!
+  orgId: String!
+}
+
+type JwtDecodedData {
+  data: JwtPayloadData
+  status: CommonMessage
+  iat: String
+  exp: Int
+}
+
+type JWTDecodedDataCheckLogin {
+  message: String
+  code: Int
+  status: Boolean
+  token: TokenWholeInfo
+}
+
+type JwtPayloadData {
+  email: String
+  id: String
+  clientId: String
+  unionid: String
+}
+
+input LdapConfigurationInput {
+  _id: String!
+  enabled: Boolean!
+  isDeleted: Boolean!
+  name: String!
+  ldapLink: String!
+  baseDN: String!
+  searchStandard: String!
+  username: String!
+  description: String!
+  createdAt: String!
+  updatedAt: String
+}
+
+type LDAPServerList {
+  list: [LDAPSingleServer]
+  totalCount: Int
+}
+
+type LDAPServerTesterType {
+  result: Boolean
+}
+
+type LDAPSingleServer {
+  _id: String
+  name: String
+  clientId: String
+  userId: String
+  ldapLink: String
+  baseDN: String
+  searchStandard: String
+  emailPostfix: String
+  username: String
+  password: String
+  description: String
+  enabled: Boolean
+  isDeleted: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type LDAPUserTesterType {
+  result: Boolean
+}
+
+type LoginFailCheckConfig {
+  timeInterval: Int
+  limit: Int
+  enable: Boolean
+}
+
+input LoginFailCheckConfigInput {
+  timeInterval: Int
+  limit: Int
+  enable: Boolean
+}
+
+type LoginHotDotPicData {
+  list: [[String]]
+}
+
+type LoginTopEmailList {
+  domain: String
+  count: Int
+}
+
+type MFA {
+  _id: String
+  userId: String
+  userPoolId: String
+  enable: Boolean
+  shareKey: String
+}
+
+type Mutation {
+  SendEmail(receivers: [String]!, subject: String!, client: String!, user: String, testAvailable: Boolean, providerName: String, content: String, sender: String, meta_data: String, secret: String): EmailSentList
+  AddEmailProvider(options: EmailProviderListInput): EmailProviderList
+  RemoveEmailProvider(_ids: [String]!): [EmailProviderList]
+  UpdateEmailProvider(options: EmailProviderListInput): EmailProviderList
+  SaveEmailProviderWithClient(options: EmailProviderWithClientAddInput): EmailProviderWithClientList
+  UpdateEmailTemplateWithClient(options: EmailTemplateWithClientInput!): EmailProviderWithClientList
+  SendEmailByType(user: String!, type: String!, client: String!, receivers: [String]!, meta_data: String): EmailSentList
+  UseDefaultEmailProvider(user: String!, client: String!): Boolean
+  UpdateEmailTemplate(options: EmailTemplateInput!): EmailTemplate
+  AddOAuthList(options: OAuthListUpdateInput, fields: [OAuthListFieldsFormUpdateInput]): OAuthList
+  RemoveOAuthList(ids: [String]): [String]
+  RemoveOAuthProvider(appId: String!, clientId: String!): OAuthProviderClient
+  UpdateOAuthList(options: OAuthListUpdateInput, fields: [OAuthListFieldsFormUpdateInput]): OAuthList
+  UpdateApplicationOAuth(client: String, oauth: String, user: String, alias: String, fields: [OAuthListFieldsFormUpdateInput]): OAuthList
+  SetApplicationOAuthEnableOrDisable(client: String, oauth: String, user: String, enabled: Boolean): OAuthList
+  CreateOAuthProvider(name: String!, domain: String!, redirectUris: [String]!, grants: [String!]!, clientId: String, image: String, description: String, homepageURL: String, casExpire: Int): OAuthProviderClient
+  UpdateOAuthProvider(appId: String!, domain: String, name: String, image: String, redirectUris: [String], grants: [String], description: String, homepageURL: String, css: String, casExpire: Int): OAuthProviderClient
+  CreateOIDCApp(name: String!, domain: String!, redirect_uris: [String]!, grant_types: [String!]!, response_types: [String!]!, clientId: String, client_id: String, token_endpoint_auth_method: String, image: String, isDefault: Boolean, id_token_signed_response_alg: String, id_token_encrypted_response_alg: String, id_token_encrypted_response_enc: String, userinfo_signed_response_alg: String, userinfo_encrypted_response_alg: String, userinfo_encrypted_response_enc: String, request_object_signing_alg: String, request_object_encryption_alg: String, request_object_encryption_enc: String, jwks_uri: String, _jwks_uri: String, jwks: String, _jwks: String, custom_jwks: String, description: String, homepageURL: String, authorization_code_expire: String, id_token_expire: String, access_token_expire: String, cas_expire: String, customStyles: OIDCProviderCustomStylesInput): OIDCProviderClient
+  UpdateOIDCApp(appId: String!, domain: String, name: String, image: String, redirect_uris: [String], token_endpoint_auth_method: String, grant_types: [String], response_types: [String], id_token_signed_response_alg: String, id_token_encrypted_response_alg: String, id_token_encrypted_response_enc: String, userinfo_signed_response_alg: String, userinfo_encrypted_response_alg: String, userinfo_encrypted_response_enc: String, request_object_signing_alg: String, request_object_encryption_alg: String, request_object_encryption_enc: String, jwks_uri: String, _jwks_uri: String, custom_jwks: String, jwks: String, _jwks: String, description: String, homepageURL: String, css: String, authorization_code_expire: String, id_token_expire: String, access_token_expire: String, cas_expire: String, customStyles: OIDCProviderCustomStylesInput): OIDCProviderClient
+  RemoveOIDCApp(appId: String!, clientId: String!): OIDCProviderClient
+  CreateSAMLServiceProvider(name: String!, domain: String!, clientId: String!, redirectUrl: String!, description: String, SPMetadata: String, IdPMetadata: String, image: String, mappings: AssertionMapInputType, defaultIdPMapId: String): SAMLServiceProviderClient
+  UpdateSAMLServiceProvider(appId: String!, name: String!, domain: String!, clientId: String!, redirectUrl: String!, loginUrl: String!, logoutUrl: String!, nameId: String!, IdPEntityID: String, assertionConsumeService: [AssertionConsumeServiceInputType], image: String, mappings: AssertionMapInputType, defaultIdPMapId: String, description: String, SPMetadata: String, IdPMetadata: String, enableSignRes: Boolean, resSignPublicKey: String, hasResEncrypted: Boolean, resEncryptAlgorithm: String, resAbstractAlgorithm: String, resDecryptPrivateKey: String, resDecryptPrivateKeyPass: String, resEncryptPublicKey: String, enableSignReq: Boolean, reqSignAlgorithm: String, reqAbstractAlgorithm: String, reqSignPrivateKey: String, reqSignPrivateKeyPass: String, reqSignPublicKey: String): SAMLServiceProviderClient
+  RemoveSAMLServiceProvider(appId: String!, clientId: String!): SAMLServiceProviderClient
+  EnableSAMLServiceProvider(appId: String!, clientId: String!, enabled: Boolean): SAMLServiceProviderClient
+  CreateSAMLIdentityProvider(name: String!, domain: String!, clientId: String!, image: String, description: String, SPMetadata: String, IdPMetadata: String): SAMLIdentityProviderClient
+  UpdateSAMLIdentityProvider(appId: String!, clientId: String!, domain: String, image: String, name: String, description: String, SPMetadata: String, attributeNameFormat: String, customAttributes: String, emailDomainTransformation: String, authnContextClassRef: String, IdPMetadata: String, assertionConsumerUrl: String, bindings: [String], nameIds: [String], attributes: [String], enableSignRes: Boolean, resSignAlgorithm: String, resAbstractAlgorithm: String, resSignPublicKey: String, resSignPrivateKey: String, resSignPrivateKeyPass: String, enableSignReq: Boolean, reqSignPublicKey: String, enableEncryptRes: Boolean, resEncryptPublicKey: String, css: String): SAMLIdentityProviderClient
+  RemoveSAMLIdentityProvider(appId: String!, clientId: String!): SAMLIdentityProviderClient
+  EnableSAMLIdentityProvider(appId: String!, clientId: String!, enabled: Boolean): SAMLIdentityProviderClient
+  CreateDefaultSAMLIdentityProviderSettings(name: String!, image: String, description: String, mappings: AssertionMapInputType): SAMLDefaultIdentityProviderSettings
+  AddLDAPServer(name: String!, clientId: String!, userId: String!, ldapLink: String!, baseDN: String!, searchStandard: String!, username: String!, password: String!, emailPostfix: String, description: String, enabled: Boolean): LDAPSingleServer
+  UpdateLDAPServer(ldapId: String!, name: String!, clientId: String!, userId: String!, ldapLink: String!, baseDN: String!, username: String!, searchStandard: String!, password: String!, emailPostfix: String, description: String, enabled: Boolean): LDAPSingleServer
+  RemoveLDAPServer(ldapId: String!, clientId: String!): LDAPSingleServer
+  LoginByLDAP(username: String!, password: String!, clientId: String!, browser: String): User
+  ClearAvatarSrc(client: String, oauth: String, user: String): OAuthList
+  RevokeUserAuthorizedApp(appId: String, userPoolId: String, userId: String): UserAuthorizedApp
+  UpdateSystemPricing(options: PricingFieldsInput): PricingList
+  AddSystemPricing(options: PricingFieldsInput): PricingList
+  order(options: OrderAddInput!): OrderSuccess
+  ContinuePay(order: String!): OrderSuccess
+  IncClientFlowNumber(user: String, userInvitied: String, client: String, number: Int): OrderSuccess
+  register(userInfo: UserRegisterInput!, invitationCode: String, keepPassword: Boolean): ExtendUser
+  createUser(userInfo: UserRegisterInput!, invitationCode: String, keepPassword: Boolean): ExtendUser
+  login(registerInClient: String!, phone: String, phoneCode: Int, unionid: String, openid: String, username: String, email: String, password: String, lastIP: String, verifyCode: String, MFACode: String, fromRegister: Boolean, device: String, browser: String): ExtendUser
+  updateUser(options: UserUpdateInput!): User
+  removeUsers(ids: [String], registerInClient: String, operator: String): [User]
+  newClient(client: NewUserClientInput!): UserClient
+  removeUserClients(ids: [String]): [UserClient]
+  updateUserClient(client: UpdateUserClientInput!): UserClient
+  changePassword(password: String!, email: String!, client: String!, verifyCode: String!): ExtendUser
+  sendResetPasswordEmail(client: String!, email: String!): CommonMessage
+  verifyResetPasswordVerifyCode(verifyCode: String!, email: String!, client: String!): CommonMessage
+  sendVerifyEmail(email: String!, client: String!, token: String): CommonMessage
+  generateInvitationCode(user: String!, client: String!): InvitationCode
+  refreshAppSecret(client: UpdateUserClientInput!): UserClient
+  updateSuperAdminUser(options: SuperAdminUpdateInput!): UsersInGroupListItem
+  addSuperAdminUser(options: SuperAdminUpdateInput!): UsersInGroupListItem
+  removeSuperAdminUser(_id: String!, username: String!): UsersInGroupListItem
+  recordRequest(when: String!, ip: String!, responseTime: Int!, size: Int!, from: String): CommonMessage
+  bindOtherOAuth(type: String!, unionid: String!, userInfo: String!, client: String, user: String): UserOAuthBind
+  unbindOtherOAuth(type: String!, client: String, user: String): UserOAuthBind
+  unbindEmail(user: String, client: String): User
+  oauthPasswordLogin(registerInClient: String!, phone: String, unionid: String, email: String, password: String, lastIP: String, verifyCode: String): ExtendUser
+  createRole(client: String!, name: String!, descriptions: String): Group
+  updateRole(_id: String!, client: String!, name: String!, descriptions: String, permissions: String): Group
+  updatePermissions(role: String!, client: String!, permissions: String): Group
+  assignUserToRole(client: String!, user: String!, group: String!): PagedUserGroup
+  removeUserFromGroup(client: String!, user: String!, group: String!): UserGroup
+  addClientWebhook(client: String!, events: [String!]!, url: String!, contentType: String!, enable: Boolean!, secret: String, isLastTimeSuccess: Boolean): ClientWebhook
+  updateClientWebhook(id: String!, events: [String!]!, url: String!, contentType: String!, enable: Boolean!, secret: String, isLastTimeSuccess: Boolean): ClientWebhook
+  deleteClientWebhook(id: String!): ClientWebhook
+  SendWebhookTest(id: String!): Boolean
+  refreshToken(client: String!, user: String!): RefreshToken
+  addCollaborator(userPoolId: String!, collaboratorUserId: String!, permissionDescriptors: [PermissionDescriptorsInputType]!): Collaboration
+  removeCollaborator(collaborationId: String!): Collaboration
+  updateCollaborator(collaborationId: String!, permissionDescriptors: [PermissionDescriptorsInputType]!): Collaboration
+  addPermission(name: String!, description: String): Permission
+  updatePasswordStrengthSettingsByUserPoolId(userPoolId: String!, pwdStrength: Int): PasswordStrengthSettings
+  resetUserPoolFromWechat(client: String!, registerMethod: String!, limit: Int!): PagedUsers
+  encryptPassword(password: String!, client: String!, isTest: Boolean): EncryptPassword
+  enablePasswordFaas(client: String!, enable: Boolean!): PaaswordFaas
+  addToInvitation(client: String!, phone: String): Invitation
+  removeFromInvitation(client: String!, phone: String): Invitation
+  setInvitationState(client: String!, enablePhone: Boolean): InvitationState
+  changeMFA(enable: Boolean!, userId: String, userPoolId: String, _id: String, refreshKey: Boolean): MFA
+  createCustomMFA(userIdInMiniLogin: String!, userPoolId: String!, name: String!, secret: String!, remark: String): CustomMFA
+  removeCustomMFA(_id: String!): CustomMFA
+  recordAuthAudit(userPoolId: String!, appType: String!, appId: String!, userId: String!, event: String!, message: String): CommonMessage
+  refreshThirdPartyToken(userPoolId: String!, userId: String!): RefreshThirdPartyIdentityResult
+  signIn(oidcAppId: String, userPoolId: String, email: String, password: String, phone: String, unionid: String, username: String): OidcPasswordModeUserInfo
+  refreshSignInToken(oidcAppId: String, userPoolId: String, refreshToken: String!): RefreshedSignInToken
+  createAdConnector(name: String!, logo: String, userPoolId: String!): ADConnector
+  updateAdConnector(_id: String!, name: String, logo: String): ADConnector
+  refreshAdConnectorSecret(_id: String): ADConnector
+  removeAdConnector(_id: String!): Boolean
+  enableAdConnector(_id: String!): Boolean
+  disableAdConnector(_id: String!): Boolean
+  enableAdConnectorForProvider(providerType: providerType!, providerId: String!, adConnectorId: String!): Boolean
+  disableAdConnectorForProvider(providerId: String!, adConnectorId: String!): Boolean
+  loginByAd(adConnectorId: String!, username: String!, password: String!): User
+  createRBACPermission(input: CreateRBACPermissionInput!): RBACPermission
+  updateRBACPermission(input: UpdateRBACPermissionInput!): RBACPermission
+  deleteRBACPermission(_id: String!): CommonMessage!
+  deleteRBACPermissionBatch(idList: [String!]!): CommonMessage!
+  createRBACRole(input: CreateRBACRoleInput!): RBACRole
+  updateRBACRole(input: UpdateRBACRoleInput!): RBACRole
+  deleteRBACRole(_id: String!): CommonMessage
+  deleteRBACRoleBatch(idList: [String!]!): CommonMessage!
+  createRBACGroup(input: CreateRBACGroupInput!): RBACGroup
+  updateRBACGroup(input: UpdateRBACGroupInput!): RBACGroup
+  deleteRBACGroup(_id: String!): CommonMessage!
+  deleteRBACGroupBatch(idList: [String!]!): CommonMessage!
+  assignRBACRoleToUser(input: AssignUserToRBACRoleInput!): RBACRole!
+  assignRBACRoleToUserBatch(input: AssignUserToRBACRoleBatchInput!): RBACRole!
+  revokeRBACRoleFromUser(input: RevokeRBACRoleFromUserInput!): RBACRole!
+  revokeRBACRoleFromUserBatch(input: RevokeRBACRoleFromUserBatchInput!): RBACRole!
+  addPermissionToRBACRole(input: AddPermissionToRBACRoleInput!): RBACRole!
+  addPermissionToRBACRoleBatch(input: AddPermissionToRBACRoleBatchInput): RBACRole!
+  removePermissionFromRBACRole(input: RemovePermissionFromRBACRoleInput!): RBACRole!
+  removePermissionFromRBACRoleBatch(input: RemovePermissionFromRBACRoleBatchInput!): RBACRole!
+  addRoleToRBACGroup(input: AddRoleToRBACGroupInput!): RBACGroup!
+  addRoleToRBACGroupBatch(input: AddRoleToRBACGroupBatchInput!): RBACGroup!
+  removeRoleFromRBACGroup(input: RemoveRoleFromRBACGroupInput!): RBACGroup!
+  removeRoleFromRBACGroupBatch(input: RemoveRoleFromRBACGroupBatchInput!): RBACGroup!
+  addUserToRBACGroup(input: AddUserToRBACGroupInput!): RBACGroup!
+  addUserToRBACGroupBatch(input: AddUserToRBACGroupBatchInput!): RBACGroup!
+  removeUserFromRBACGroup(input: RemoveUserFromRBACGroupInput!): RBACGroup!
+  removeUserFromRBACGroupBatch(input: RemoveUserFromRBACGroupBatchInput!): RBACGroup!
+  createOrg(input: CreateOrgInput!): Org!
+  deleteOrg(_id: String!): CommonMessage!
+  addOrgNode(input: AddOrgNodeInput!): Org!
+  removeOrgNode(input: RemoveOrgNodeInput!): Org!
+  createRule(input: CreateRuleInput!): Rule!
+  updateRule(input: UpdateRuleInput!): Rule!
+  deleteRule(_id: String!): CommonMessage!
+  setRuleEnv(input: SetRuleEnvInput!): PagedRuleEnvVariable!
+  removeRuleEnv(input: RemoveRuleEnvInput!): PagedRuleEnvVariable!
+  updateRuleOrder(input: UpdateRuleOrderInput!): CommonMessage
+  updatePhone(userPoolId: String!, phone: String!, phoneCode: String!, oldPhone: String, oldPhoneCode: String): User
+  updateEmail(userPoolId: String!, email: String!, emailCode: String!, oldEmail: String, oldEmailCode: String): User
+  sendChangeEmailVerifyCode(userPoolId: String!, email: String!): CommonMessage
+  setUserMetadata(input: SetUserMetadataInput!): UserMetaDataList!
+  removeUserMetadata(input: RemoveUserMetadataInput!): UserMetaDataList!
+}
+
+input NewUserClientInput {
+  name: String!
+  userId: String!
+  logo: String
+  clientTypeId: String
+  userPoolTypeList: [String!]
+}
+
+type NotBindOAuth {
+  type: String
+  oAuthUrl: String
+  image: String
+  name: String
+  binded: Boolean
+}
+
+type OAuthAppPagedList {
+  totalCount: Int
+  list: [OAuthProviderClient]
+}
+
+type OAuthList {
+  _id: String
+  name: String
+  alias: String
+  image: String
+  description: String
+  enabled: Boolean
+  url: String
+  client: String
+  user: String
+  oAuthUrl: String
+  wxappLogo: String
+  fields: [OAuthListFieldsForm]
+  oauth: ChildrenOAuthList
+}
+
+type OAuthListFieldsForm {
+  label: String
+  type: String
+  placeholder: String
+  value: String
+  children: [OAuthListFieldsFormRecursion]
+  checked: [String]
+}
+
+type OAuthListFieldsFormRecursion {
+  label: String
+  type: String
+  placeholder: String
+  value: String
+  children: [OAuthListFieldsFormRecursion]
+}
+
+input OAuthListFieldsFormRecursionInput {
+  label: String
+  type: String
+  placeholder: String
+  value: String
+  children: [OAuthListFieldsFormRecursionInput]
+}
+
+input OAuthListFieldsFormUpdateInput {
+  label: String
+  type: String
+  placeholder: String
+  value: String
+  children: [OAuthListFieldsFormRecursionInput]
+  checked: [String]
+}
+
+input OAuthListUpdateInput {
+  _id: String
+  name: String
+  alias: String
+  image: String
+  description: String
+  enabled: Boolean
+  url: String
+  client: String
+  user: String
+  oAuthUrl: String
+  wxappLogo: String
+}
+
+type OAuthProviderClient {
+  _id: String
+  name: String
+  domain: String
+  image: String
+  redirectUris: [String]
+  appSecret: String
+  client_id: String
+  clientId: String
+  grants: [String]
+  description: String
+  homepageURL: String
+  isDeleted: Boolean
+  when: String
+  css: String
+  loginUrl: String
+  casExpire: Int
+}
+
+type OIDCAppPagedList {
+  totalCount: Int
+  list: [OIDCProviderClient]
+}
+
+type OidcPasswordModeUserInfo {
+  sub: String
+  birthdate: String
+  family_name: String
+  gender: String
+  given_name: String
+  locale: String
+  middle_name: String
+  name: String
+  nickname: String
+  picture: String
+  preferred_username: String
+  profile: String
+  updated_at: String
+  website: String
+  zoneinfo: String
+  username: String
+  _id: String
+  company: String
+  browser: String
+  device: String
+  logins_count: Int
+  register_method: String
+  blocked: Boolean
+  last_ip: String
+  register_in_userpool: String
+  last_login: String
+  signed_up: String
+  email: String
+  email_verified: Boolean
+  phone_number: String
+  phone_number_verified: Boolean
+  token: String
+  access_token: String
+  id_token: String
+  refresh_token: String
+  expires_in: Int
+  token_type: String
+  scope: String
+}
+
+type OIDCProviderClient {
+  _id: String
+  name: String
+  domain: String
+  image: String
+  redirect_uris: [String]
+  client_id: String
+  client_secret: String
+  token_endpoint_auth_method: String
+  id_token_signed_response_alg: String
+  id_token_encrypted_response_alg: String
+  id_token_encrypted_response_enc: String
+  userinfo_signed_response_alg: String
+  userinfo_encrypted_response_alg: String
+  userinfo_encrypted_response_enc: String
+  request_object_signing_alg: String
+  request_object_encryption_alg: String
+  request_object_encryption_enc: String
+  jwks_uri: String
+  _jwks_uri: String
+  custom_jwks: String
+  jwks: String
+  _jwks: String
+  clientId: String
+  grant_types: [String]
+  response_types: [String]
+  description: String
+  homepageURL: String
+  isDeleted: Boolean
+  isDefault: Boolean
+  when: String
+  css: String
+  authorization_code_expire: String
+  id_token_expire: String
+  access_token_expire: String
+  cas_expire: String
+  loginUrl: String
+  customStyles: OIDCProviderCustomStyles
+}
+
+type OIDCProviderCustomStyles {
+  forceLogin: Boolean
+  hideQRCode: Boolean
+  hideUP: Boolean
+  hideUsername: Boolean
+  hideRegister: Boolean
+  hidePhone: Boolean
+  hideSocial: Boolean
+  hideClose: Boolean
+  hidePhonePassword: Boolean
+  placeholder: OIDCProviderCustomStylesPlaceholder
+  qrcodeScanning: OIDCProviderCustomStylesQrcodeScanning
+  defaultLoginMethod: OIDCProviderDefaultLoginMethod
+}
+
+input OIDCProviderCustomStylesInput {
+  forceLogin: Boolean
+  hideQRCode: Boolean
+  hideUP: Boolean
+  hideUsername: Boolean
+  hideRegister: Boolean
+  hidePhone: Boolean
+  hideSocial: Boolean
+  hideClose: Boolean
+  hidePhonePassword: Boolean
+  placeholder: OIDCProviderCustomStylesPlaceholderInput
+  qrcodeScanning: OIDCProviderCustomStylesQrcodeScanningInput
+  defaultLoginMethod: OIDCProviderDefaultLoginMethod
+}
+
+type OIDCProviderCustomStylesPlaceholder {
+  username: String
+  email: String
+  password: String
+  confirmPassword: String
+  verfiyCode: String
+  newPassword: String
+  phone: String
+  phoneCode: String
+}
+
+input OIDCProviderCustomStylesPlaceholderInput {
+  username: String
+  email: String
+  password: String
+  confirmPassword: String
+  verfiyCode: String
+  newPassword: String
+  phone: String
+  phoneCode: String
+}
+
+type OIDCProviderCustomStylesQrcodeScanning {
+  redirect: Boolean
+  interval: Int
+  tips: String
+}
+
+input OIDCProviderCustomStylesQrcodeScanningInput {
+  redirect: Boolean
+  interval: Int
+  tips: String
+}
+
+enum OIDCProviderDefaultLoginMethod {
+  PHONE
+  PASSWORD
+  QRCODE
+}
+
+type OperationLog {
+  operatorId: String
+  operatorName: String
+  operatorAvatar: String
+  isAdmin: Boolean
+  isCollaborator: Boolean
+  isOwner: Boolean
+  operationType: String
+  updatedFields: String
+  removedFields: [String]
+  operateAt: String
+  fullDocument: String
+  coll: String
+}
+
+type OperationLogsList {
+  totalCount: Int
+  list: [OperationLog]
+}
+
+input OrderAddInput {
+  user: String!
+  client: String!
+  pricing: String!
+  flowNumber: Int!
+  price: Float!
+  timeOfPurchase: Int!
+}
+
+type OrderClient {
+  _id: String
+  name: String
+  secret: String
+  descriptions: String
+  jwtExpired: Int
+  createdAt: String
+  isDeleted: Boolean
+}
+
+type OrderList {
+  _id: String
+  client: String
+  user: String
+  timeOfPurchase: Int
+  flowNumber: Int
+  price: Float
+  pricing: OrderPricing
+  createdAt: String
+  completed: Boolean
+  payMethod: String
+  endAt: String
+  clientInfo: OrderClient
+}
+
+type OrderPricing {
+  _id: String
+  type: String
+  startNumber: Int
+  freeNumber: Int
+  startPrice: Int
+  maxNumber: Int
+  d: Int
+  features: [String]
+}
+
+type OrderSuccess {
+  code: Int
+  url: String
+  charge: String
+}
+
+type Org {
+  _id: String!
+  nodes: [OrgNode!]!
+}
+
+type OrgChildNode {
+  group: RBACGroup!
+  depth: Int!
+}
+
+input OrgChildrenNodesInput {
+  groupId: String!
+  orgId: String!
+}
+
+type OrgNode {
+  _id: String!
+  name: String!
+  description: String
+  createdAt: String
+  updatedAt: String
+  children: [String!]!
+  root: Boolean
+}
+
+type PaaswordFaas {
+  encryptUrl: String
+  decryptUrl: String
+  user: String
+  client: String
+  logs: String
+  enable: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type PagedCustomMFAList {
+  list: [CustomMFA]
+  total: Int
+}
+
+type PagedOrders {
+  list: [OrderList]
+  totalCount: Int!
+}
+
+type PagedOrg {
+  totalCount: Int!
+  list: [Org!]!
+}
+
+type PagedRBACGroup {
+  totalCount: Int
+  list: [RBACGroup!]!
+}
+
+type PagedRBACPermission {
+  totalCount: Int
+  list: [RBACPermission!]!
+}
+
+type PagedRBACRole {
+  totalCount: Int
+  list: [RBACRole!]!
+}
+
+type PagedRequestList {
+  totalCount: Int
+  list: [Request]
+}
+
+type PagedRoles {
+  list: [Group]
+  totalCount: Int!
+}
+
+type PagedRuleEnvVariable {
+  totalCount: Int!
+  list: [RuleEnvVariable!]!
+}
+
+type PagedRules {
+  totalCount: Int!
+  list: [Rule!]!
+}
+
+type PagedUserClientList {
+  list: [PagedUserClientListItem]
+  totalCount: Int!
+}
+
+type PagedUserClientListItem {
+  _id: String
+  name: String
+  createdAt: String
+  usersCount: Int
+  user: UserBrief
+}
+
+type PagedUserClients {
+  list: [UserClient]
+  totalCount: Int!
+}
+
+type PagedUserGroup {
+  list: [UserGroup]
+  totalCount: Int!
+}
+
+type PagedUserLoginHistory {
+  list: [UserLoginHistory]
+  totalCount: Int!
+}
+
+type PagedUserPoolWithMFA {
+  list: [UserPoolWithMFA]
+  total: Int
+}
+
+type PagedUsers {
+  list: [ExtendUser]
+  totalCount: Int
+}
+
+type PasswordStrengthSettings {
+  userPoolId: String
+  pwdStrength: Int
+}
+
+type PatchExtendUser {
+  list: [ExtendUser]
+  totalCount: Int!
+}
+
+type Permission {
+  _id: String
+  name: String
+  affect: String
+  description: String
+}
+
+type PermissionDescriptors {
+  permissionId: String
+  name: String
+  operationAllow: Int
+}
+
+input PermissionDescriptorsInputType {
+  permissionId: String
+  operationAllow: Int
+}
+
+input PermissionDescriptorsListInputType {
+  permissionId: String
+  name: String
+  operationAllow: Int
+}
+
+type PermissionList {
+  list: [Permission]
+  totalCount: Int
+}
+
+type PopulatedEmailSentList {
+  _id: String
+  subject: String
+  content: String
+  sender: String
+  receivers: [String]
+  createdAt: String
+  client: Client
+}
+
+input PricingFieldsInput {
+  _id: String
+  type: String
+  startNumber: Int
+  freeNumber: Int
+  startPrice: Int
+  maxNumber: Int
+  d: Int
+  features: [String]
+}
+
+type PricingList {
+  _id: String
+  type: String
+  startNumber: Int
+  freeNumber: Int
+  startPrice: Int
+  maxNumber: Int
+  d: Int
+  features: [String]
+}
+
+type ProviderGeneralInfo {
+  _id: String
+  type: String
+  name: String
+  image: String
+  domain: String
+  clientId: String
+  client_id: String
+  css: String
+  redirect_uris: [String]
+}
+
+enum providerType {
+  OIDC
+  OAuth
+}
+
+type QpsByTime {
+  qps: Float
+  time: String
+}
+
+type QrcodeLoginStrategy {
+  qrcodeExpiresAfter: Int
+  returnFullUserInfo: Boolean
+  allowExchangeUserInfoFromBrowser: Boolean
+  ticketExpiresAfter: Int
+}
+
+input QrcodeLoginStrategyInput {
+  qrcodeExpiresAfter: Int
+  returnFullUserInfo: Boolean
+  allowExchangeUserInfoFromBrowser: Boolean
+  ticketExpiresAfter: Int
+}
+
+type Query {
+  ReadEmailSentList(page: Int, count: Int, sortBy: String): Email
+  ReadEmailSentListByClient(client: String!, page: Int, count: Int): EmailListPaged
+  ReadEmailProvider(clientId: String): [EmailProviderList]
+  ReadEmailProviderByClientAndName(clientId: String): [EmailProviderWithClientList]
+  ReadEmailTemplatesByClient(clientId: String!): [EmailTemplateWithClient]
+  ReadEmailProviderWithClient: [EmailProviderWithClientList]
+  ReadEmailTemplateByClientAndType(type: String!, client: String!): EmailTemplate
+  PreviewEmailByType(type: String!, client: String!, meta_data: String): String
+  ReadEmailTemplatesBySystem: [EmailTemplateWithClient]
+  ReadOauthList(clientId: String, dontGetURL: Boolean, useGuard: Boolean): [OAuthList]
+  ReadSAMLSPList(clientId: String!): [SAMLSPListItem]
+  userOAuthCount(userIds: [String]): [Int]
+  wxQRCodeLog(page: Int, count: Int, clientId: String, sortBy: String): WxQRCodeLog
+  querySystemOAuthSetting: [OAuthList]
+  notBindOAuthList(client: String, user: String): [NotBindOAuth]
+  QueryClientIdByAppId(appId: String): OAuthProviderClient
+  getOAuthedAppInfo(appId: String!): OAuthProviderClient
+  getOAuthedAppList(clientId: String, page: Int, count: Int): OAuthAppPagedList
+  GetOIDCAppInfo(appId: String!): OIDCProviderClient
+  GetOIDCAppList(clientId: String, page: Int, count: Int): OIDCAppPagedList
+  queryProviderInfoByDomain(domain: String): ProviderGeneralInfo
+  queryProviderInfoByAppId(appId: String): ProviderGeneralInfo
+  QueryAppInfoByAppID(appId: String, responseType: String, redirectUrl: String): OAuthProviderClient
+  QueryAppInfoByDomain(domain: String): OAuthProviderClient
+  QueryOIDCAppInfoByDomain(domain: String): OIDCProviderClient
+  QueryOIDCAppInfoByAppID(appId: String, responseType: String, redirectUrl: String): OIDCProviderClient
+  QuerySAMLServiceProviderInfoByAppID(appId: String!): SAMLServiceProviderClient
+  QuerySAMLServiceProviderInfoByDomain(domain: String!): SAMLServiceProviderClient
+  QuerySAMLIdentityProviderInfoByAppID(appId: String): SAMLIdentityProviderClient
+  QuerySAMLIdentityProviderInfoByDomain(domain: String): SAMLIdentityProviderClient
+  QueryDefaultSAMLIdentityProviderSettingsList(page: Int, count: Int): SAMLDefaultIdentityProviderSettingsList
+  GetSAMLServiceProviderList(clientId: String, page: Int, count: Int): SAMLServiceProviderAppPagedList
+  GetSAMLServiceProviderInfo(appId: String!): SAMLServiceProviderClient
+  GetSAMLIdentityProviderInfo(appId: String!): SAMLIdentityProviderClient
+  GetSAMLIdentityProviderList(clientId: String, page: Int, count: Int): SAMLIdentityProviderAppPagedList
+  QueryLDAPServerList(clientId: String!, page: Int, count: Int): LDAPServerList
+  TestLDAPServer(name: String!, clientId: String!, userId: String!, ldapLink: String!, baseDN: String!, searchStandard: String!, username: String!, password: String!, emailPostfix: String, description: String, enabled: Boolean): LDAPServerTesterType
+  TestLDAPUser(testUsername: String!, testPassword: String!, name: String!, clientId: String!, userId: String!, ldapLink: String!, baseDN: String!, searchStandard: String!, username: String!, password: String!, emailPostfix: String, description: String, enabled: Boolean): LDAPUserTesterType
+  QueryClientHasLDAPConfigs(clientId: String): ClientHasLDAPConfigs
+  GetUserAuthorizedApps(clientId: String, userId: String, page: Int, count: Int): UserAuthorizedAppPagedList
+  isAppAuthorizedByUser(userId: String, appId: String): IsAppAuthorizedByUser
+  checkIsReservedDomain(domainValue: String!): IsReservedDomain
+  ReadSystemPricing: [PricingList]
+  ReadOrders(user: String, page: Int, count: Int): PagedOrders
+  ReadUserPricing(userId: String, clientId: String): UserPricingType
+  users(registerInClient: String, page: Int, count: Int, populate: Boolean): PagedUsers
+  usersByOidcApp(userPoolId: String, page: Int, count: Int, appId: String): UserIds
+  user(id: String, registerInClient: String, token: String, auth: Boolean, userLoginHistoryPage: Int, userLoginHistoryCount: Int): ExtendUser
+  userAnalytics(clientId: String): UserAnalytics
+  isLoginExpired(id: String!): Boolean
+  client(id: String!, userId: String!, fromAdmin: Boolean): UserClient
+  userClients(userId: String!, page: Int, count: Int, computeUsersCount: Boolean): PagedUserClients
+  searchUser(type: String!, value: String!, registerInClient: String!, page: Int, count: Int): PagedUsers
+  userClientTypes: [UserClientType]
+  isClientOfUser(email: String, password: String, clientId: String): Boolean
+  getAccessTokenByAppSecret(secret: String, clientId: String, retUserId: Boolean, timestamp: String, signature: String, nonce: Int): String
+  loginCount(userId: String, clientId: String, month: String): UserLoginCount
+  qiNiuUploadToken(type: String): String
+  decodeJwtToken(token: String): JwtDecodedData
+  checkLoginStatus(token: String): JWTDecodedDataCheckLogin
+  getAppSecretByClientId(token: String, clientId: String): AppSecretByClientId
+  previewEmailTemplate(type: String, client: String): CommonMessage
+  loginHotDotPicData(client: String): LoginHotDotPicData
+  registerEveryDayCount(client: String): RegisterEveryDayCount
+  statistic(sortBy: String, page: Int, count: Int): Statistic
+  userClientList(page: Int, count: Int, sortBy: String): PagedUserClientList
+  usersInGroup(group: String, page: Int, count: Int): UsersInGroup
+  qpsByTime(startTime: String, endTime: String, currentTime: String): [QpsByTime]
+  todayGeoDistribution(today: String): [GeographicalDistributionList]
+  findClientsByIdArray(clientsId: [String]): PagedUserClientList
+  recentServiceCall(today: String): DayServiceCallListOfAllServices
+  platformUserGrowthTrend(today: String): [DayUserGrowth]
+  requestList(page: Int, count: Int): PagedRequestList
+  bindedOAuthList(client: String!, user: String): [UserOAuthBind]
+  userPatch(ids: String): PatchExtendUser
+  isClientBelongToUser(userId: String, clientId: String, permissionDescriptors: [PermissionDescriptorsListInputType]): Boolean
+  queryClient(id: String!): UserClient
+  clientRoles(client: String!, page: Int, count: Int): PagedRoles
+  userGroup(group: String!, client: String!, page: Int, count: Int): PagedUserGroup
+  queryRoleByUserId(user: String!, client: String!): PagedUserGroup
+  getClientWhenSdkInit(secret: String, clientId: String, retUserId: Boolean, timestamp: String, signature: String, nonce: Int): ClientInfoAndAccessToken
+  getWebhookDetail(client: String!): ClientWebhook
+  getAllWebhooks(client: String!): [ClientWebhook]
+  getWebhookLogDetail(id: String!): WebhookLog
+  getWebhookLogs(webhook: String!): [WebhookLog]
+  getWebhookSettingOptions: WebhookSettingOptions
+  queryCollaborativeUserPoolByUserId(userId: String!, page: Int, count: Int): CollaborativeUserPoolList
+  queryCollaboratorsByUserPoolId(userPoolId: String!, count: Int, page: Int): Collaborators
+  queryCollaboratorPermissions(userId: String, collaborationId: String): CollaboratorPermissions
+  queryPasswordStrengthSettingsByUserPoolId(userPoolId: String!): PasswordStrengthSettings
+  queryCollaborationByUserPoolIdAndUserId(userId: String!, userPoolId: String!): Collaboration
+  queryPermissionList: PermissionList
+  searchUserBasicInfoById(userId: String): BasicUserInfo
+  queryPasswordFaasEnabled(client: String!): PaaswordFaas
+  emailDomainTopNList(userPoolId: String!): [LoginTopEmailList]
+  registerMethodTopList(userPoolId: String!): [RegisterMethodList]
+  querySMSSendCount(userPoolId: String!): SMSCountInfo
+  queryInvitation(client: String!): [Invitation]
+  queryInvitationState(client: String!): InvitationState
+  queryMFA(_id: String, userId: String, userPoolId: String): MFA
+  queryAuthorizedUserPool(unionid: String, phone: String, openid: String, page: Int, count: Int): PagedUserPoolWithMFA
+  getCustomMFA(userIdInMiniLogin: String!, page: Int, count: Int): PagedCustomMFAList
+  validatePassword(userPool: String!, password: String!, encryptedPassword: String!): ValidateResult
+  getUserLoginAreaStatisticOfClient(userPool: String!, start: String, end: String): String
+  getUserPoolSettings(userPoolId: String!): UserClient
+  queryAuthAuditRecords(userPoolId: String!, sortBy: String, page: Int, count: Int): AuthAuditRecordsList
+  queryUserPoolCommonInfo(userPoolId: String!): UserPoolCommonInfo
+  isDomainAvaliable(domain: String!): Boolean
+  checkPhoneCode(userPoolId: String!, phone: String!, phoneCode: String!): CommonMessage
+  userExist(userPoolId: String!, email: String, phone: String, username: String): Boolean
+  adConnectorByProvider(providerId: String!, providerType: providerType!): ADConnctorCommonInfo
+  isAdConnectorAlive(adConnectorId: String): isAdConenctorAlive
+  adConnectorList(userPoolId: String!, providerType: providerType): [ADConnector]
+  providerListByADConnector(_id: String!): [ADConnectorEnabledProvider]
+  checkAdConnectorStatus(adConnectorId: String!): Boolean
+  rbacRole(_id: String!): RBACRole
+  rbacRoleList(userPoolId: String!, sortBy: SortByEnum = CREATEDAT_DESC, page: Int = 0, count: Int = 10): PagedRBACRole
+  rbacGroup(_id: String!): RBACGroup
+  rbacGroupList(userPoolId: String!, sortBy: SortByEnum = CREATEDAT_DESC, page: Int = 0, count: Int = 10): PagedRBACGroup
+  rbacPermission(_id: String!): RBACPermission
+  rbacPermissionList(userPoolId: String!, sortBy: SortByEnum = CREATEDAT_DESC, page: Int = 0, count: Int = 10): PagedRBACPermission
+  userPermissionList(_id: String!): UserPermissionList!
+  userGroupList(_id: String!): UserGroupList!
+  userRoleList(_id: String!): UserRoleList!
+  org(_id: String!): Org!
+  orgs(userPoolId: String!): PagedOrg!
+  orgRootNode(_id: String!): RBACGroup!
+  orgChildrenNodes(input: OrgChildrenNodesInput!): [OrgChildNode!]!
+  isRootNodeOfOrg(input: IsRootNodeOfOrgInput!): Boolean
+  orgNodeUserList(orgId: String!, nodeId: String!, page: Int = 0, count: Int = 10, includeChildrenNodes: Boolean = false): PagedUsers
+  ruleById(_id: String!): Rule!
+  rules(userPoolId: String!): PagedRules!
+  ruleEnv(userPoolId: String!): PagedRuleEnvVariable!
+  queryOperationLogs(userPoolId: String!, coll: String!, page: Int, count: Int): OperationLogsList
+  userMetadata(_id: String!): UserMetaDataList!
+}
+
+type RBACGroup {
+  _id: String!
+  userPoolId: String!
+  name: String!
+  description: String
+  createdAt: String
+  updatedAt: String
+  roles: PagedRBACRole
+  permissions: PagedRBACPermission
+  users(sortBy: SortByEnum = CREATEDAT_DESC, page: Int = 0, count: Int = 10): PagedUsers
+}
+
+type RBACPermission {
+  _id: String!
+  name: String!
+  userPoolId: String!
+  createdAt: String
+  updatedAt: String
+  description: String
+}
+
+type RBACRole {
+  _id: String!
+  userPoolId: String!
+  name: String!
+  description: String
+  createdAt: String
+  updatedAt: String
+  permissions: PagedRBACPermission
+  users(sortBy: SortByEnum = CREATEDAT_DESC, page: Int = 0, count: Int = 10): PagedUsers
+}
+
+type RefreshedSignInToken {
+  access_token: String
+  id_token: String
+  refresh_token: String
+  scope: String
+  expires_in: Int
+}
+
+type RefreshThirdPartyIdentityResult {
+  refreshSuccess: Boolean
+  message: String
+  provider: String
+  refreshToken: String
+  accessToken: String
+  updatedAt: String
+}
+
+type RefreshToken {
+  token: String
+  iat: Int
+  exp: Int
+}
+
+type RegisterEveryDayCount {
+  list: [[String]]
+}
+
+type RegisterMethodList {
+  method: String
+  count: Int
+}
+
+input RemoveOrgNodeInput {
+  orgId: String!
+  groupId: String!
+}
+
+input RemovePermissionFromRBACRoleBatchInput {
+  permissionIdList: [String!]!
+  roleId: String!
+}
+
+input RemovePermissionFromRBACRoleInput {
+  permissionId: String!
+  roleId: String!
+}
+
+input RemoveRoleFromRBACGroupBatchInput {
+  roleIdList: [String!]!
+  groupId: String!
+}
+
+input RemoveRoleFromRBACGroupInput {
+  roleId: String!
+  groupId: String!
+}
+
+input RemoveRuleEnvInput {
+  userPoolId: String!
+  key: String!
+}
+
+input RemoveUserFromRBACGroupBatchInput {
+  userIdList: [String!]!
+  groupId: String!
+}
+
+input RemoveUserFromRBACGroupInput {
+  userId: String!
+  groupId: String!
+}
+
+input RemoveUserMetadataInput {
+  _id: String!
+  key: String!
+}
+
+type Request {
+  _id: String
+  when: String
+  where: String
+  ip: String
+  size: Int
+  responseTime: Int
+  service: String
+}
+
+input RevokeRBACRoleFromUserBatchInput {
+  userIdList: [String!]!
+  roleId: String!
+}
+
+input RevokeRBACRoleFromUserInput {
+  userId: String!
+  roleId: String!
+}
+
+type Rule {
+  _id: String!
+  userPoolId: String!
+  name: String!
+  description: String
+  type: RuleTypes!
+  enabled: Boolean!
+  faasUrl: String!
+  code: String!
+  order: Int
+  async: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type RuleEnvVariable {
+  key: String!
+  value: String!
+}
+
+enum RuleTypes {
+  PRE_REGISTER
+  POST_REGISTER
+  POST_AUTHENTICATION
+  PRE_OIDCTOKENISSUED
+}
+
+type SAMLDefaultIdentityProviderSettings {
+  _id: String
+  name: String
+  image: String
+  description: String
+  mappings: AssertionMap
+  isDeleted: Boolean
+}
+
+type SAMLDefaultIdentityProviderSettingsList {
+  list: [SAMLDefaultIdentityProviderSettings]
+  totalCount: Int
+}
+
+type SAMLIdentityProviderAppPagedList {
+  totalCount: Int
+  list: [SAMLIdentityProviderClient]
+}
+
+type SAMLIdentityProviderClient {
+  _id: String
+  name: String
+  domain: String
+  image: String
+  appSecret: String
+  appId: String
+  clientId: String
+  description: String
+  isDeleted: Boolean
+  enabled: Boolean
+  when: String
+  SPMetadata: String
+  attributeNameFormat: String
+  customAttributes: String
+  emailDomainTransformation: String
+  authnContextClassRef: String
+  IdPMetadata: String
+  assertionConsumerUrl: String
+  bindings: [String]
+  nameIds: [String]
+  attributes: [String]
+  enableSignRes: Boolean
+  resSignAlgorithm: String
+  resAbstractAlgorithm: String
+  resSignPublicKey: String
+  resSignPrivateKey: String
+  resSignPrivateKeyPass: String
+  enableSignReq: Boolean
+  reqSignPublicKey: String
+  enableEncryptRes: Boolean
+  resEncryptPublicKey: String
+  css: String
+}
+
+type SAMLServiceProviderAppPagedList {
+  totalCount: Int
+  list: [SAMLServiceProviderClient]
+}
+
+type SAMLServiceProviderClient {
+  _id: String
+  name: String
+  domain: String
+  image: String
+  appSecret: String
+  defaultIdPMap: SAMLDefaultIdentityProviderSettings
+  defaultIdPMapId: String
+  appId: String
+  clientId: String
+  description: String
+  isDeleted: Boolean
+  enabled: Boolean
+  when: String
+  SPMetadata: String
+  IdPMetadata: String
+  IdPEntityID: String
+  assertionConsumeService: [AssertionConsumeService]
+  mappings: AssertionMap
+  redirectUrl: String!
+  loginUrl: String!
+  logoutUrl: String!
+  nameId: String!
+  enableSignRes: Boolean
+  resSignPublicKey: String
+  hasResEncrypted: Boolean
+  resEncryptAlgorithm: String
+  resAbstractAlgorithm: String
+  resDecryptPrivateKey: String
+  resDecryptPrivateKeyPass: String
+  resEncryptPublicKey: String
+  enableSignReq: Boolean
+  reqSignAlgorithm: String
+  reqAbstractAlgorithm: String
+  reqSignPrivateKey: String
+  reqSignPrivateKeyPass: String
+  reqSignPublicKey: String
+  SPUrl: String
+}
+
+type SAMLSPListItem {
+  providerName: String
+  url: String
+  logo: String
+}
+
+input SetRuleEnvInput {
+  userPoolId: String!
+  key: String!
+  value: String!
+}
+
+input SetUserMetadataInput {
+  _id: String!
+  key: String!
+  value: String!
+}
+
+type SMSCountInfo {
+  count: Int
+  limitCount: Int
+}
+
+enum SortByEnum {
+  CREATEDAT_DESC
+  CREATEDAT_ASC
+  UPDATEDAT_DESC
+  UPDATEDAT_ASC
+}
+
+type Statistic {
+  list: [StatisticInfo]
+  totalCount: Int
+}
+
+type StatisticInfo {
+  _id: String
+  username: String
+  email: String
+  loginsCount: Int
+  appsCount: Int
+  OAuthCount: Int
+}
+
+input SuperAdminUpdateInput {
+  _id: String
+  username: String!
+  email: String!
+  password: String!
+}
+
+type SystemApplicationType {
+  _id: String
+  name: String
+  descriptions: String
+  price: Int
+}
+
+type ThirdPartyIdentity {
+  provider: String
+  refreshToken: String
+  accessToken: String
+  expiresIn: Int
+  updatedAt: String
+}
+
+type TokenMoreInfo {
+  email: String
+  id: String
+  clientId: String
+  unionid: String
+}
+
+type TokenWholeInfo {
+  data: TokenMoreInfo
+  iat: Int
+  exp: Int
+}
+
+input UpdateRBACGroupInput {
+  _id: String!
+  name: String
+  description: String
+}
+
+input UpdateRBACPermissionInput {
+  _id: String!
+  name: String
+  description: String
+}
+
+input UpdateRBACRoleInput {
+  _id: String!
+  name: String
+  description: String
+}
+
+input UpdateRuleInput {
+  _id: String!
+  name: String
+  description: String
+  type: RuleTypes
+  enabled: Boolean
+  code: String
+  async: Boolean
+}
+
+input UpdateRuleOrderInput {
+  list: [UpdateRuleOrderItem!]!
+}
+
+input UpdateRuleOrderItem {
+  id: String!
+  order: Int!
+}
+
+input UpdateUserClientInput {
+  _id: String!
+  name: String
+  userId: String!
+  clientType: String
+  userPoolTypeList: [String!]
+  emailVerifiedDefault: Boolean
+  sendWelcomeEmail: Boolean
+  registerDisabled: Boolean
+  showWXMPQRCode: Boolean
+  useMiniLogin: Boolean
+  useSelfWxapp: Boolean
+  enableEmail: Boolean
+  allowedOrigins: String
+  descriptions: String
+  jwtExpired: Int
+  secret: String
+  frequentRegisterCheck: FrequentRegisterCheckConfigInput
+  loginFailCheck: LoginFailCheckConfigInput
+  logo: String
+  changePhoneStrategy: ChangePhoneStrategyInput
+  changeEmailStrategy: ChangeEmailStrategyInput
+  qrcodeLoginStrategy: QrcodeLoginStrategyInput
+  app2WxappLoginStrategy: App2WxappLoginStrategyInput
+}
+
+type User {
+  _id: String
+  username: String
+  email: String
+  unionid: String
+  openid: String
+  emailVerified: Boolean
+  phone: String
+  phoneVerified: Boolean
+  nickname: String
+  company: String
+  photo: String
+  browser: String
+  password: String
+  registerInClient: String
+  registerMethod: String
+  oauth: String
+  token: String
+  tokenExpiredAt: String
+  loginsCount: Int
+  lastLogin: String
+  lastIP: String
+  signedUp: String
+  blocked: Boolean
+  isDeleted: Boolean
+  device: String
+  name: String
+  givenName: String
+  familyName: String
+  middleName: String
+  profile: String
+  preferredUsername: String
+  website: String
+  gender: String
+  birthdate: String
+  zoneinfo: String
+  locale: String
+  address: String
+  formatted: String
+  streetAddress: String
+  locality: String
+  region: String
+  postalCode: String
+  country: String
+  updatedAt: String
+  thirdPartyIdentity: ThirdPartyIdentity
+  oldPassword: String
+  metadata: String
+}
+
+type UserAnalytics {
+  usersAddedToday: UserAnalyticsItem
+  usersAddedLastWeek: UserAnalyticsItem
+  usersLoginLastWeek: UserAnalyticsItem
+  totalUsers: UserAnalyticsItem
+  allUsers: Int
+  totalApps: Int
+}
+
+type UserAnalyticsItem {
+  list: [User]
+  length: Int
+}
+
+type UserAuthorizedApp {
+  _id: String
+  appId: String
+  userId: String
+  scope: String
+  type: String
+  isRevoked: String
+  when: String
+}
+
+type UserAuthorizedAppPagedList {
+  totalCount: Int
+  OAuthApps: [OAuthProviderClient]
+  OIDCApps: [OIDCProviderClient]
+}
+
+type UserBrief {
+  _id: String
+  username: String
+}
+
+type UserClient {
+  _id: String
+  user: User
+  clientType: UserClientType
+  userPoolTypes: [UserClientType!]
+  usersCount: Int
+  logo: String
+  emailVerifiedDefault: Boolean
+  sendWelcomeEmail: Boolean
+  registerDisabled: Boolean
+  showWXMPQRCode: Boolean
+  useMiniLogin: Boolean
+  useSelfWxapp: Boolean
+  allowedOrigins: String
+  name: String
+  secret: String
+  token: String
+  descriptions: String
+  jwtExpired: Int
+  createdAt: String
+  isDeleted: Boolean
+  frequentRegisterCheck: FrequentRegisterCheckConfig
+  loginFailCheck: LoginFailCheckConfig
+  enableEmail: Boolean
+  changePhoneStrategy: ChangePhoneStrategy
+  changeEmailStrategy: ChangeEmailStrategy
+  qrcodeLoginStrategy: QrcodeLoginStrategy
+  app2WxappLoginStrategy: App2WxappLoginStrategy
+}
+
+type UserClientType {
+  _id: String
+  name: String
+  description: String
+  image: String
+  example: String
+}
+
+type UserGroup {
+  _id: String
+  user: User
+  client: UserClient
+  group: Group
+  createdAt: String
+}
+
+type UserGroupList {
+  totalCount: Int!
+  list: [RBACGroup!]!
+  rawList: [String]!
+}
+
+type UserIds {
+  list: [String]
+  totalCount: Int
+}
+
+type UserInClientInWxQRCodeLogList {
+  _id: String
+  username: String
+}
+
+type UserLocation {
+  _id: String
+  user: User
+  userPool: UserClient
+  when: String
+  where: String
+}
+
+type UserLoginCount {
+  _id: String
+  client: String
+  count: Int
+  month: String
+  isError: Boolean
+  totalNumber: Int
+}
+
+type UserLoginHistory {
+  _id: String
+  user: User
+  when: String
+  client: UserClient
+  success: Boolean
+  ip: String
+  result: String
+  device: String
+  browser: String
+}
+
+type UserMetaData {
+  key: String!
+  value: String!
+}
+
+type UserMetaDataList {
+  totalCount: Int!
+  list: [UserMetaData!]!
+}
+
+type UserOAuthBind {
+  _id: String
+  user: String
+  client: String
+  type: String
+  unionid: String
+  userInfo: String
+  createdAt: String
+}
+
+type UserPermissionList {
+  totalCount: Int!
+  list: [RBACPermission!]!
+  rawList: [String]!
+}
+
+type UserPoolCommonInfo {
+  _id: String
+  changePhoneStrategy: ChangePhoneStrategy
+  changeEmailStrategy: ChangeEmailStrategy
+}
+
+type UserPoolWithMFA {
+  userId: String
+  userPool: UserClient
+  MFA: MFA
+}
+
+type UserPricingNotFreeType {
+  number: Int
+}
+
+type UserPricingType {
+  user: String
+  client: String
+  isFree: Boolean
+  pricing: UserPricingNotFreeType
+  freeNumber: Int
+}
+
+input UserRegisterInput {
+  email: String
+  unionid: String
+  openid: String
+  phone: String
+  phoneCode: String
+  password: String
+  forceLogin: Boolean
+  lastIP: String
+  registerInClient: String!
+  registerMethod: String
+  oauth: String
+  username: String
+  nickname: String
+  company: String
+  photo: String
+  device: String
+  browser: String
+  name: String
+  givenName: String
+  familyName: String
+  middleName: String
+  profile: String
+  preferredUsername: String
+  website: String
+  gender: String
+  birthdate: String
+  zoneinfo: String
+  locale: String
+  address: String
+  formatted: String
+  streetAddress: String
+  locality: String
+  region: String
+  postalCode: String
+  country: String
+  updatedAt: String
+  signedUp: String
+  lastLogin: String
+}
+
+type UserRoleList {
+  totalCount: Int!
+  list: [RBACRole!]!
+  rawList: [String]!
+}
+
+type UsersInGroup {
+  list: [UsersInGroupListItem]
+  totalCount: Int
+}
+
+type UsersInGroupListItem {
+  email: String
+  username: String
+  _id: String
+  upgrade: Boolean
+}
+
+input UserUpdateInput {
+  _id: String
+  email: String
+  unionid: String
+  openid: String
+  emailVerified: Boolean
+  phone: String
+  phoneVerified: Boolean
+  username: String
+  nickname: String
+  company: String
+  photo: String
+  browser: String
+  device: String
+  password: String
+  registerInClient: String
+  registerMethod: String
+  oauth: String
+  token: String
+  tokenExpiredAt: String
+  loginsCount: Int
+  lastLogin: String
+  lastIP: String
+  signedUp: String
+  blocked: Boolean
+  isDeleted: Boolean
+  name: String
+  givenName: String
+  familyName: String
+  middleName: String
+  profile: String
+  preferredUsername: String
+  website: String
+  gender: String
+  birthdate: String
+  zoneinfo: String
+  locale: String
+  address: String
+  formatted: String
+  streetAddress: String
+  locality: String
+  region: String
+  postalCode: String
+  country: String
+  updatedAt: String
+  oldPassword: String
+}
+
+type ValidateResult {
+  isValid: Boolean
+}
+
+type WebhookContentType {
+  name: String!
+  label: String!
+}
+
+type WebhookEvent {
+  name: String!
+  label: String!
+  description: String
+}
+
+type WebhookLog {
+  _id: String!
+  webhook: String!
+  client: String!
+  event: String!
+  request: WebhookRequestType
+  response: WebhookResponseType
+  errorMessage: String
+  when: String
+}
+
+type WebhookRequestType {
+  headers: String
+  payload: String
+}
+
+type WebhookResponseType {
+  headers: String
+  body: String
+  statusCode: Int
+}
+
+type WebhookSettingOptions {
+  webhookEvents: [WebhookEvent]!
+  contentTypes: [WebhookContentType]!
+}
+
+type WxQRCodeLog {
+  list: [WxQRCodeLogList]
+  totalCount: Int
+}
+
+type WxQRCodeLogList {
+  random: String
+  expiredAt: String
+  createdAt: String
+  success: Boolean
+  qrcode: String
+  used: Boolean
+  accessToken: String
+  openid: String
+  userInfo: String
+  redirect: String
+  client: ClientInWxQRCodeLogList
+}
+

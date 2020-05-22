@@ -1,0 +1,4 @@
+schema: https://core.authing.cn/graphql
+generates:
+  src/types/graphql.ts:
+    - typescript
