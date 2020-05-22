@@ -1,12 +1,9 @@
 import { ManagementClient } from './index';
-import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { getOptionsFromEnv, randomString } from './../utils/helper';
-import { UsersManagementClient } from './UsersManagementClient';
 import test from "ava"
 
 const management = new ManagementClient(getOptionsFromEnv())
-const tokenProvider = new ManagementTokenProvider(management.options)
-const usersManagement = new UsersManagementClient(management.options, tokenProvider)
+const usersManagement = management.users
 
 test('should be able to create user', async t => {
   const user = await usersManagement.create({

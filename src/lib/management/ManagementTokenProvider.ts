@@ -1,3 +1,4 @@
+import { GraphqlClient } from './../common/GraphqlClient';
 import { graphqlRequest } from '../utils/graphql';
 import { ManagementClientOptions, DecodedAccessToken } from './types';
 import jwtDecode from "jwt-decode"
@@ -11,8 +12,11 @@ export class ManagementTokenProvider {
   private _accessTokenExpriredAt: number
 
   options: ManagementClientOptions
-  constructor(options: ManagementClientOptions) {
+  graphqlClient: GraphqlClient
+
+  constructor(options: ManagementClientOptions, graphqlClient: GraphqlClient) {
     this.options = options
+    this.graphqlClient = graphqlClient
   }
 
 

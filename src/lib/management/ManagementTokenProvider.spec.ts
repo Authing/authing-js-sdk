@@ -1,10 +1,11 @@
+import { ManagementClient } from './index';
 import { sleep, getOptionsFromEnv } from '../utils/helper';
 import test from "ava"
 import { DecodedAccessToken } from './types';
-import { ManagementTokenProvider } from "./ManagementTokenProvider"
 import jwtDecode from "jwt-decode"
 
-const tokenProvider = new ManagementTokenProvider(getOptionsFromEnv())
+const management = new ManagementClient(getOptionsFromEnv())
+const tokenProvider = management.tokenProvider
 
 test('should be able to get accesstoken', async t => {
   const accessToken = await tokenProvider.getAccessToken()

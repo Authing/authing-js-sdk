@@ -1,15 +1,17 @@
+import { GraphqlClient } from './../common/GraphqlClient';
 import { encrypt } from './../utils/encryption';
-import { graphqlRequest } from './../utils/graphql';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserRegisterInput } from '../../types/graphql';
 
 export class UsersManagementClient {
   options: ManagementClientOptions
+  graphqlClient: GraphqlClient
   tokenProvider: ManagementTokenProvider
 
-  constructor(options: ManagementClientOptions, tokenProvider: ManagementTokenProvider) {
+  constructor(options: ManagementClientOptions, graphqlClient: GraphqlClient, tokenProvider: ManagementTokenProvider) {
     this.options = options
+    this.graphqlClient = graphqlClient
     this.tokenProvider = tokenProvider
   }
 
@@ -52,8 +54,7 @@ export class UsersManagementClient {
     }
 
     userInfo.registerInClient = this.options.userPoolId
-    const res: any = await graphqlRequest({
-      endpoint: this.options.host.graphqlApiEndpoint,
+    const res: any = await this.graphqlClient.request({
       variables: options,
       token: await this.tokenProvider.getAccessToken(),
       query: `mutation register($userInfo: UserRegisterInput!, $invitationCode: String, $keepPassword: Boolean){

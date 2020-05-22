@@ -1,3 +1,4 @@
+import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from "./types"
 import { UserPoolManagementClient } from './UserpoolManagementClient';
@@ -26,6 +27,7 @@ export class ManagementClient {
   options: ManagementClientOptions
 
   // sub classes definitions
+  graphqlClient: GraphqlClient
   tokenProvider: ManagementTokenProvider
   users: UsersManagementClient
   userpool: UserPoolManagementClient
@@ -37,9 +39,10 @@ export class ManagementClient {
       this.options.onError(new Error('Init Management Client failed, must provide at least secret or accessToken !'))
     }
 
-    // Init sub classes
-    this.tokenProvider = new ManagementTokenProvider(this.options)
-    this.users = new UsersManagementClient(this.options, this.tokenProvider)
-    this.userpool = new UserPoolManagementClient()
+    // 子模块初始化顺序: GraphqlClient -> ManagementTokenProvider -> Others
+    this.graphqlClient = new GraphqlClient(this.options.host.graphqlApiEndpoint, this.options.userPoolId)
+    this.tokenProvider = new ManagementTokenProvider(this.options, this.graphqlClient)
+    this.users = new UsersManagementClient(this.options, this.graphqlClient, this.tokenProvider)
+    // this.userpool = new UserPoolManagementClient()
   }
 }
