@@ -32,10 +32,10 @@ Official SDK of Authing
 ### ManagermentClient
 
 ```javascript
-import Authing from "authing-js-sdk"
+import { ManagementClient } from "authing-js-sdk"
 
 // Init ManagermentClient
-const management = new Authing.ManagermentClient({
+const management = new ManagermentClient({
   userPoolId: "AUTHING_USERPOOL_ID",
   secret: "AUTHING_USERPOOL_SECRET",
   server: {
@@ -69,10 +69,10 @@ management.pipeline.list()
 ### AuthenticationClient
 
 ```javascript
-import Authing from "authing-js-sdk"
+import { AuthenticationClient } from "authing-js-sdk"
 
 // Init ManagermentClient
-const authing = new Authing.AuthenticationClient({
+const authing = new AuthenticationClient({
   userPoolId: "AUTHING_USERPOOL_ID",
 })
 
