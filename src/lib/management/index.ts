@@ -43,6 +43,6 @@ export class ManagementClient {
     this.graphqlClient = new GraphqlClient(this.options.host.graphqlApiEndpoint, this.options.userPoolId)
     this.tokenProvider = new ManagementTokenProvider(this.options, this.graphqlClient)
     this.users = new UsersManagementClient(this.options, this.graphqlClient, this.tokenProvider)
-    // this.userpool = new UserPoolManagementClient()
+    this.userpool = new UserPoolManagementClient(this.options, this.graphqlClient, this.tokenProvider)
   }
 }

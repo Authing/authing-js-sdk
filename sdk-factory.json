@@ -1,14 +1,6 @@
 [
 	{
 		"sdkName": "management.users.list",
-		"query": "users",
-		"arguments": [
-			{
-				"arg1": "string",
-				"arg2": {
-					""
-				}
-			}
-		]
+		"query": "users"
 	}
 ]

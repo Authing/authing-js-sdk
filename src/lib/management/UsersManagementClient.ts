@@ -3,6 +3,7 @@ import { encrypt } from './../utils/encryption';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserRegisterInput } from '../../types/graphql';
+import users from "../graphqlapi/management.users.list"
 
 export class UsersManagementClient {
   options: ManagementClientOptions
@@ -20,8 +21,8 @@ export class UsersManagementClient {
    * 获取用户池列表
    *  
    */
-  async list() {
-
+  async list(variables: any) {
+    return await users(this.graphqlClient, this.tokenProvider, variables)
   }
 
   /**
