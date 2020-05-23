@@ -34,3 +34,17 @@ export interface DecodedAccessToken {
     id: string
   }
 }
+
+/**
+ *
+ * Authing 分组
+ * @export
+ * @interface AuthingGroup
+ */
+export interface AuthingGroup {
+  _id: string;
+  name: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+}
