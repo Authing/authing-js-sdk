@@ -27,6 +27,7 @@ app.post('/create-sdk-func', (req, res) => {
   const apiName = req.body.apiName
   const funcName = req.body.funcName || apiName
   const query = apis.mutations[apiName] || apis.queries[apiName]
+  console.log(query)
   const code = `
 import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
@@ -41,9 +42,7 @@ export const ${funcName} =  async (garpqhlClient: GraphqlClient, tokenProvider: 
   })
 }
 `
-  console.log(code)
   const filename = path.join(__dirname, `src/lib/graphqlapi/${sdkName}.ts`)
-  console.log(filename)
   fs.writeFileSync(filename, code)
   res.send("ok!")
 })
