@@ -23,3 +23,27 @@ test("should be able to get user list", async t => {
   t.assert(users.totalCount !== undefined)
   t.assert(users.list !== undefined)
 })
+
+test('should be able to get use info', async t => {
+  const user = await usersManagement.create({
+    userInfo: {
+      username: randomString(),
+      password: "123456!"
+    }
+  })
+  const userInfo = await usersManagement.get(user._id)
+  t.assert(userInfo)
+  t.assert(userInfo._id === user._id)
+})
+
+test('should be able to delete user', async t => {
+  let user = await usersManagement.create({
+    userInfo: {
+      username: randomString(),
+      password: "123456!"
+    }
+  })
+  await usersManagement.delete(user._id)
+  user = await usersManagement.get(user._id)
+  t.assert(!user)
+})

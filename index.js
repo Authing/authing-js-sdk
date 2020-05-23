@@ -22,17 +22,15 @@ app.get('/sdk-factory', async (req, res) => {
 })
 
 app.post('/create-sdk-func', (req, res) => {
-  console.log(req.body)
   const sdkName = req.body.sdkName
   const apiName = req.body.apiName
   const funcName = req.body.funcName || apiName
   const query = apis.mutations[apiName] || apis.queries[apiName]
-  console.log(query)
   const code = `
 import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
 
-export const ${funcName} =  async (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider, variables: any) => {
+export const ${funcName} =  async (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider, variables: any) : Promise<any> => {
   const query = \`${query}\`
   const token = await tokenProvider.getAccessToken()
   return await garpqhlClient.request({

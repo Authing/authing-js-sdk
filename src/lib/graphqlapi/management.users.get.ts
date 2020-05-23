@@ -1,4 +1,9 @@
-query user($id: String, $registerInClient: String, $token: String, $auth: Boolean, $userLoginHistoryPage: Int, $userLoginHistoryCount: Int){
+
+import { GraphqlClient } from '../common/GraphqlClient';
+import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
+
+export const user =  async (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider, variables: any) : Promise<any> => {
+  const query = `query user($id: String, $registerInClient: String, $token: String, $auth: Boolean, $userLoginHistoryPage: Int, $userLoginHistoryCount: Int){
     user(id: $id, registerInClient: $registerInClient, token: $token, auth: $auth, userLoginHistoryPage: $userLoginHistoryPage, userLoginHistoryCount: $userLoginHistoryCount){
         _id
         email
@@ -46,4 +51,11 @@ query user($id: String, $registerInClient: String, $token: String, $auth: Boolea
         updatedAt
         metadata
     }
+}`
+  const token = await tokenProvider.getAccessToken()
+  return await garpqhlClient.request({
+    query,
+    variables,
+    token
+  })
 }
