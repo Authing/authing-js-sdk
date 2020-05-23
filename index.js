@@ -29,8 +29,9 @@ app.post('/create-sdk-func', (req, res) => {
   const code = `
 import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
+import { AuthenticationTokenProvider } from '../auth/AuthenticationTokenProvider';
 
-export const ${funcName} =  async (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider, variables: any) : Promise<any> => {
+export const ${funcName} =  async (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider, variables: any) : Promise<any> => {
   const query = \`${query}\`
   const token = await tokenProvider.getAccessToken()
   return await garpqhlClient.request({
@@ -45,6 +46,6 @@ export const ${funcName} =  async (garpqhlClient: GraphqlClient, tokenProvider: 
   res.send("ok!")
 })
 
-app.listen(3000, function () {
+app.listen(3001, function () {
   console.log('Example app listening on port 3000!');
 });

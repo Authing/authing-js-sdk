@@ -1,3 +1,4 @@
+import { BasicAuthenticationClient } from './BasicAuthenticationClient';
 import { CheckLoginStatusRes } from './types';
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import { checkLoginStatus } from './../graphqlapi/auth.checkLoginStatus';
@@ -27,15 +28,17 @@ export class AuthenticationClient {
 
   graphqlClient: GraphqlClient
   tokenProvider: AuthenticationTokenProvider
+  basic: BasicAuthenticationClient
 
   constructor(options: AuthenticationClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options)
     // 子模块初始化顺序: GraphqlClient -> ManagementTokenProvider -> Others
     this.graphqlClient = new GraphqlClient(this.options.host.graphqlApiEndpoint, this.options.userPoolId)
     this.tokenProvider = new AuthenticationTokenProvider(this.options)
+    this.basic = new BasicAuthenticationClient(this.options, this.graphqlClient, this.tokenProvider)
   }
 
-  async checkLoginStatus(token: string) : Promise<CheckLoginStatusRes> {
+  async checkLoginStatus(token: string): Promise<CheckLoginStatusRes> {
     const res = await checkLoginStatus(this.graphqlClient, this.tokenProvider, { token })
     return res.checkLoginStatus
   }
