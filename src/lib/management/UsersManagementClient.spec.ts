@@ -16,3 +16,10 @@ test('should be able to create user', async t => {
   t.assert(user._id)
   t.assert(user.username)
 })
+
+test("should be able to get user list", async t => {
+  const users = await usersManagement.list()
+  t.assert(users)
+  t.assert(users.totalCount !== undefined)
+  t.assert(users.list !== undefined)
+})

@@ -1,3 +1,4 @@
+import { users } from './../graphqlapi/management.users.list';
 import { register } from './../graphqlapi/management.users.create';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { encrypt } from './../utils/encryption';
@@ -16,12 +17,18 @@ export class UsersManagementClient {
     this.tokenProvider = tokenProvider
   }
 
-
   /**
-   * 获取用户池列表
-   *  
+   * page: 页码数, 从 0 开始
+   *
+   * @param {{ page: number, count: number }} options
+   * @returns
+   * @memberof UsersManagementClient
    */
-  async list(variables: any) {
+  async list(page?: number, count?: number) {
+    page = page || 0
+    count = count || 10
+    const res: any = await users(this.graphqlClient, this.tokenProvider, Object.assign({}, { page, count }, { registerInClient: this.options.userPoolId }))
+    return res.users
   }
 
   /**
