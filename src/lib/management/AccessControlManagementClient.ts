@@ -1,3 +1,4 @@
+import { addGroupMetadata } from './../graphqlapi/management.accesscontrol.addGroupMetadata';
 import { createRBACGroup } from './../graphqlapi/management.accesscontrol.createGroup';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
@@ -24,5 +25,14 @@ export class AccessControlManagementClient {
     })
     const group = res.createRBACGroup
     return group
+  }
+
+  async addGroupMetadata(groupId: string, key: string, value: any): Promise<{ key: string, value: string }> {
+    const res = await addGroupMetadata(this.graphqlClient, this.tokenProvider, {
+      groupId,
+      key,
+      value
+    })
+    return res.addGroupMetadata
   }
 }

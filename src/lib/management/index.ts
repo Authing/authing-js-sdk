@@ -1,3 +1,4 @@
+import { OrgManagementClient } from './OrgManagementClient';
 import { AccessControlManagementClient } from './AccessControlManagementClient';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
@@ -33,6 +34,7 @@ export class ManagementClient {
   users: UsersManagementClient
   userpool: UserPoolManagementClient
   accessControl: AccessControlManagementClient
+  org: OrgManagementClient
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options)
@@ -47,5 +49,6 @@ export class ManagementClient {
     this.users = new UsersManagementClient(this.options, this.graphqlClient, this.tokenProvider)
     this.userpool = new UserPoolManagementClient(this.options, this.graphqlClient, this.tokenProvider)
     this.accessControl = new AccessControlManagementClient(this.options, this.graphqlClient, this.tokenProvider)
+    this.org = new OrgManagementClient(this.options, this.graphqlClient, this.tokenProvider)
   }
 }

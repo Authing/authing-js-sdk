@@ -427,6 +427,11 @@
   resolved "https://registry.npm.taobao.org/@types/jwt-decode/download/@types/jwt-decode-2.2.1.tgz#afdf5c527fcfccbd4009b5fd02d1e18241f2d2f2"
   integrity sha1-r99cUn/PzL1ACbX9AtHhgkHy0vI=
 
+"@types/lodash@^4.14.152":
+  version "4.14.152"
+  resolved "https://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.152.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Flodash%2Fdownload%2F%40types%2Flodash-4.14.152.tgz#7e7679250adce14e749304cdb570969f77ec997c"
+  integrity sha1-fnZ5JQrc4U50kwTNtXCWn3fsmXw=
+
 "@types/lru-cache@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@types/lru-cache/download/@types/lru-cache-5.1.0.tgz#57f228f2b80c046b4a1bd5cac031f81f207f4f03"
