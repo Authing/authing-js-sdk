@@ -28,7 +28,20 @@ export class UsersManagementClient {
    * @memberof UsersManagementClient
    */
   async delete(userId: string) {
-    const res: any = await removeUsers(this.graphqlClient, this.tokenProvider, { registerInClient: this.options.userPoolId, ids: userId })
+    const res: any = await removeUsers(this.graphqlClient, this.tokenProvider, { registerInClient: this.options.userPoolId, ids: [userId] })
+    return res.removeUsers
+  }
+
+
+  /**
+   * 批量删除用户
+   *
+   * @param {string[]} userIds
+   * @returns
+   * @memberof UsersManagementClient
+   */
+  async deleteMany(userIds: string[]) {
+    const res: any = await removeUsers(this.graphqlClient, this.tokenProvider, { registerInClient: this.options.userPoolId, ids: userIds })
     return res.removeUsers
   }
 
