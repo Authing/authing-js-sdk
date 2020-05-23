@@ -1,0 +1,8 @@
+query adConnectorByProvider($providerId: String!, $providerType: providerType!){
+    adConnectorByProvider(providerId: $providerId, providerType: $providerType){
+        _id
+        name
+        logo
+        status
+    }
+}

@@ -1,0 +1,12 @@
+mutation UpdateSystemPricing($options: PricingFieldsInput){
+    UpdateSystemPricing(options: $options){
+        _id
+        type
+        startNumber
+        freeNumber
+        startPrice
+        maxNumber
+        d
+        features
+    }
+}

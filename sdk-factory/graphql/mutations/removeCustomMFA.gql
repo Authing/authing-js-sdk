@@ -1,0 +1,29 @@
+mutation removeCustomMFA($_id: String!){
+    removeCustomMFA(_id: $_id){
+        _id
+        userIdInMiniLogin
+        userPoolId{
+            _id
+            usersCount
+            logo
+            emailVerifiedDefault
+            sendWelcomeEmail
+            registerDisabled
+            showWXMPQRCode
+            useMiniLogin
+            useSelfWxapp
+            allowedOrigins
+            name
+            secret
+            token
+            descriptions
+            jwtExpired
+            createdAt
+            isDeleted
+            enableEmail
+        }
+        remark
+        name
+        secret
+    }
+}

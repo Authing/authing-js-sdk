@@ -1,0 +1,6 @@
+query querySMSSendCount($userPoolId: String!){
+    querySMSSendCount(userPoolId: $userPoolId){
+        count
+        limitCount
+    }
+}

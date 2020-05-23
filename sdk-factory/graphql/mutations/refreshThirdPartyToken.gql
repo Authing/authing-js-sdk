@@ -1,0 +1,10 @@
+mutation refreshThirdPartyToken($userPoolId: String!, $userId: String!){
+    refreshThirdPartyToken(userPoolId: $userPoolId, userId: $userId){
+        refreshSuccess
+        message
+        provider
+        refreshToken
+        accessToken
+        updatedAt
+    }
+}

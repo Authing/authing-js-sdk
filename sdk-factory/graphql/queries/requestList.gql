@@ -1,0 +1,14 @@
+query requestList($page: Int, $count: Int){
+    requestList(page: $page, count: $count){
+        totalCount
+        list{
+            _id
+            when
+            where
+            ip
+            size
+            responseTime
+            service
+        }
+    }
+}

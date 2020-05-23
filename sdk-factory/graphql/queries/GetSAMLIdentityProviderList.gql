@@ -1,0 +1,39 @@
+query GetSAMLIdentityProviderList($clientId: String, $page: Int, $count: Int){
+    GetSAMLIdentityProviderList(clientId: $clientId, page: $page, count: $count){
+        totalCount
+        list{
+            _id
+            name
+            domain
+            image
+            appSecret
+            appId
+            clientId
+            description
+            isDeleted
+            enabled
+            when
+            SPMetadata
+            attributeNameFormat
+            customAttributes
+            emailDomainTransformation
+            authnContextClassRef
+            IdPMetadata
+            assertionConsumerUrl
+            bindings
+            nameIds
+            attributes
+            enableSignRes
+            resSignAlgorithm
+            resAbstractAlgorithm
+            resSignPublicKey
+            resSignPrivateKey
+            resSignPrivateKeyPass
+            enableSignReq
+            reqSignPublicKey
+            enableEncryptRes
+            resEncryptPublicKey
+            css
+        }
+    }
+}

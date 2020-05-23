@@ -1,0 +1,3 @@
+mutation disableAdConnector($_id: String!){
+    disableAdConnector(_id: $_id)
+}

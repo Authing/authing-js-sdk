@@ -1,0 +1,6 @@
+query platformUserGrowthTrend($today: String){
+    platformUserGrowthTrend(today: $today){
+        day
+        count
+    }
+}

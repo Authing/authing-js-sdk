@@ -1,0 +1,3 @@
+query isClientOfUser($email: String, $password: String, $clientId: String){
+    isClientOfUser(email: $email, password: $password, clientId: $clientId)
+}

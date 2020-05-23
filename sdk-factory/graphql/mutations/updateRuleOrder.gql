@@ -1,0 +1,7 @@
+mutation updateRuleOrder($input: UpdateRuleOrderInput!){
+    updateRuleOrder(input: $input){
+        message
+        code
+        status
+    }
+}

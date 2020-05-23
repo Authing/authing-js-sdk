@@ -1,0 +1,16 @@
+mutation assignRBACRoleToUserBatch($sortBy: SortByEnum, $page: Int, $count: Int, $input: AssignUserToRBACRoleBatchInput!){
+    assignRBACRoleToUserBatch(input: $input){
+        _id
+        userPoolId
+        name
+        description
+        createdAt
+        updatedAt
+        permissions{
+            totalCount
+        }
+        users(sortBy: $sortBy, page: $page, count: $count){
+            totalCount
+        }
+    }
+}

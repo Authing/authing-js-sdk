@@ -1,0 +1,9 @@
+mutation generateInvitationCode($user: String!, $client: String!){
+    generateInvitationCode(user: $user, client: $client){
+        _id
+        user
+        client
+        code
+        createdAt
+    }
+}

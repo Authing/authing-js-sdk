@@ -1,0 +1,16 @@
+query getWebhookDetail($client: String!){
+    getWebhookDetail(client: $client){
+        _id
+        client
+        events{
+            name
+            label
+            description
+        }
+        url
+        isLastTimeSuccess
+        contentType
+        secret
+        enable
+    }
+}

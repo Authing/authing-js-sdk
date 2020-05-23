@@ -1,0 +1,11 @@
+query queryUserPoolCommonInfo($userPoolId: String!){
+    queryUserPoolCommonInfo(userPoolId: $userPoolId){
+        _id
+        changePhoneStrategy{
+            verifyOldPhone
+        }
+        changeEmailStrategy{
+            verifyOldEmail
+        }
+    }
+}

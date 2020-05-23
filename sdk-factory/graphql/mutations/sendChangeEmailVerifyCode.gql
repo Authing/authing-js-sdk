@@ -1,0 +1,7 @@
+mutation sendChangeEmailVerifyCode($userPoolId: String!, $email: String!){
+    sendChangeEmailVerifyCode(userPoolId: $userPoolId, email: $email){
+        message
+        code
+        status
+    }
+}

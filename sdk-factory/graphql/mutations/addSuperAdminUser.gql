@@ -1,0 +1,8 @@
+mutation addSuperAdminUser($options: SuperAdminUpdateInput!){
+    addSuperAdminUser(options: $options){
+        email
+        username
+        _id
+        upgrade
+    }
+}

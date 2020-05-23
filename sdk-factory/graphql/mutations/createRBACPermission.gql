@@ -1,0 +1,10 @@
+mutation createRBACPermission($input: CreateRBACPermissionInput!){
+    createRBACPermission(input: $input){
+        _id
+        name
+        userPoolId
+        createdAt
+        updatedAt
+        description
+    }
+}

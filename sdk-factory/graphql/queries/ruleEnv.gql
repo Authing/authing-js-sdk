@@ -1,0 +1,9 @@
+query ruleEnv($userPoolId: String!){
+    ruleEnv(userPoolId: $userPoolId){
+        totalCount
+        list{
+            key
+            value
+        }
+    }
+}

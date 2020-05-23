@@ -1,0 +1,13 @@
+mutation createAdConnector($name: String!, $logo: String, $userPoolId: String!){
+    createAdConnector(name: $name, logo: $logo, userPoolId: $userPoolId){
+        _id
+        name
+        secret
+        salt
+        logo
+        enabled
+        userPoolId
+        status
+        createdAt
+    }
+}

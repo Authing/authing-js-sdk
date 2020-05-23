@@ -1,0 +1,35 @@
+query ReadOauthList($clientId: String, $dontGetURL: Boolean, $useGuard: Boolean){
+    ReadOauthList(clientId: $clientId, dontGetURL: $dontGetURL, useGuard: $useGuard){
+        _id
+        name
+        alias
+        image
+        description
+        enabled
+        url
+        client
+        user
+        oAuthUrl
+        wxappLogo
+        fields{
+            label
+            type
+            placeholder
+            value
+            checked
+        }
+        oauth{
+            _id
+            name
+            alias
+            image
+            description
+            enabled
+            url
+            client
+            user
+            oAuthUrl
+            wxappLogo
+        }
+    }
+}

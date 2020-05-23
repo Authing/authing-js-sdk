@@ -1,0 +1,19 @@
+mutation removeRoleFromRBACGroup($sortBy: SortByEnum, $page: Int, $count: Int, $input: RemoveRoleFromRBACGroupInput!){
+    removeRoleFromRBACGroup(input: $input){
+        _id
+        userPoolId
+        name
+        description
+        createdAt
+        updatedAt
+        roles{
+            totalCount
+        }
+        permissions{
+            totalCount
+        }
+        users(sortBy: $sortBy, page: $page, count: $count){
+            totalCount
+        }
+    }
+}

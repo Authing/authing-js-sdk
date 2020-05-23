@@ -1,0 +1,19 @@
+query orgRootNode($sortBy: SortByEnum, $page: Int, $count: Int, $_id: String!){
+    orgRootNode(_id: $_id){
+        _id
+        userPoolId
+        name
+        description
+        createdAt
+        updatedAt
+        roles{
+            totalCount
+        }
+        permissions{
+            totalCount
+        }
+        users(sortBy: $sortBy, page: $page, count: $count){
+            totalCount
+        }
+    }
+}

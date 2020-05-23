@@ -1,0 +1,8 @@
+query providerListByADConnector($_id: String!){
+    providerListByADConnector(_id: $_id){
+        providerType
+        providerId
+        userPoolId
+        adConnectorId
+    }
+}

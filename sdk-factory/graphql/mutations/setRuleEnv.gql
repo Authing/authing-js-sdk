@@ -1,0 +1,9 @@
+mutation setRuleEnv($input: SetRuleEnvInput!){
+    setRuleEnv(input: $input){
+        totalCount
+        list{
+            key
+            value
+        }
+    }
+}

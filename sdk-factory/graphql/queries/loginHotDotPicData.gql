@@ -1,0 +1,5 @@
+query loginHotDotPicData($client: String){
+    loginHotDotPicData(client: $client){
+        list
+    }
+}

@@ -1,0 +1,35 @@
+mutation SetApplicationOAuthEnableOrDisable($client: String, $oauth: String, $user: String, $enabled: Boolean){
+    SetApplicationOAuthEnableOrDisable(client: $client, oauth: $oauth, user: $user, enabled: $enabled){
+        _id
+        name
+        alias
+        image
+        description
+        enabled
+        url
+        client
+        user
+        oAuthUrl
+        wxappLogo
+        fields{
+            label
+            type
+            placeholder
+            value
+            checked
+        }
+        oauth{
+            _id
+            name
+            alias
+            image
+            description
+            enabled
+            url
+            client
+            user
+            oAuthUrl
+            wxappLogo
+        }
+    }
+}

@@ -1,0 +1,16 @@
+mutation updateRBACRole($sortBy: SortByEnum, $page: Int, $count: Int, $input: UpdateRBACRoleInput!){
+    updateRBACRole(input: $input){
+        _id
+        userPoolId
+        name
+        description
+        createdAt
+        updatedAt
+        permissions{
+            totalCount
+        }
+        users(sortBy: $sortBy, page: $page, count: $count){
+            totalCount
+        }
+    }
+}

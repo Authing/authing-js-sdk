@@ -1,0 +1,22 @@
+query QueryLDAPServerList($clientId: String!, $page: Int, $count: Int){
+    QueryLDAPServerList(clientId: $clientId, page: $page, count: $count){
+        list{
+            _id
+            name
+            clientId
+            userId
+            ldapLink
+            baseDN
+            searchStandard
+            emailPostfix
+            username
+            password
+            description
+            enabled
+            isDeleted
+            createdAt
+            updatedAt
+        }
+        totalCount
+    }
+}

@@ -1,0 +1,41 @@
+query GetSAMLServiceProviderList($clientId: String, $page: Int, $count: Int){
+    GetSAMLServiceProviderList(clientId: $clientId, page: $page, count: $count){
+        totalCount
+        list{
+            _id
+            name
+            domain
+            image
+            appSecret
+            defaultIdPMapId
+            appId
+            clientId
+            description
+            isDeleted
+            enabled
+            when
+            SPMetadata
+            IdPMetadata
+            IdPEntityID
+            redirectUrl
+            loginUrl
+            logoutUrl
+            nameId
+            enableSignRes
+            resSignPublicKey
+            hasResEncrypted
+            resEncryptAlgorithm
+            resAbstractAlgorithm
+            resDecryptPrivateKey
+            resDecryptPrivateKeyPass
+            resEncryptPublicKey
+            enableSignReq
+            reqSignAlgorithm
+            reqAbstractAlgorithm
+            reqSignPrivateKey
+            reqSignPrivateKeyPass
+            reqSignPublicKey
+            SPUrl
+        }
+    }
+}

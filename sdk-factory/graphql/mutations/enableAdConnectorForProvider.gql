@@ -1,0 +1,3 @@
+mutation enableAdConnectorForProvider($providerType: providerType!, $providerId: String!, $adConnectorId: String!){
+    enableAdConnectorForProvider(providerType: $providerType, providerId: $providerId, adConnectorId: $adConnectorId)
+}

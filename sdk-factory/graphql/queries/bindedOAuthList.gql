@@ -1,0 +1,11 @@
+query bindedOAuthList($client: String!, $user: String){
+    bindedOAuthList(client: $client, user: $user){
+        _id
+        user
+        client
+        type
+        unionid
+        userInfo
+        createdAt
+    }
+}

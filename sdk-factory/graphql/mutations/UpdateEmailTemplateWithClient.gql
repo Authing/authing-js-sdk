@@ -1,0 +1,22 @@
+mutation UpdateEmailTemplateWithClient($options: EmailTemplateWithClientInput!){
+    UpdateEmailTemplateWithClient(options: $options){
+        _id
+        user
+        client
+        status
+        fields{
+            label
+            type
+            placeholder
+            help
+            value
+            options
+        }
+        provider{
+            _id
+            name
+            image
+            description
+        }
+    }
+}

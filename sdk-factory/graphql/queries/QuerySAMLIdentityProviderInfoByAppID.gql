@@ -1,0 +1,36 @@
+query QuerySAMLIdentityProviderInfoByAppID($appId: String){
+    QuerySAMLIdentityProviderInfoByAppID(appId: $appId){
+        _id
+        name
+        domain
+        image
+        appSecret
+        appId
+        clientId
+        description
+        isDeleted
+        enabled
+        when
+        SPMetadata
+        attributeNameFormat
+        customAttributes
+        emailDomainTransformation
+        authnContextClassRef
+        IdPMetadata
+        assertionConsumerUrl
+        bindings
+        nameIds
+        attributes
+        enableSignRes
+        resSignAlgorithm
+        resAbstractAlgorithm
+        resSignPublicKey
+        resSignPrivateKey
+        resSignPrivateKeyPass
+        enableSignReq
+        reqSignPublicKey
+        enableEncryptRes
+        resEncryptPublicKey
+        css
+    }
+}

@@ -1,0 +1,11 @@
+mutation unbindOtherOAuth($type: String!, $client: String, $user: String){
+    unbindOtherOAuth(type: $type, client: $client, user: $user){
+        _id
+        user
+        client
+        type
+        unionid
+        userInfo
+        createdAt
+    }
+}

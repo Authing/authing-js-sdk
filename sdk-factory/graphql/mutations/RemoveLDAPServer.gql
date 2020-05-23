@@ -1,0 +1,19 @@
+mutation RemoveLDAPServer($ldapId: String!, $clientId: String!){
+    RemoveLDAPServer(ldapId: $ldapId, clientId: $clientId){
+        _id
+        name
+        clientId
+        userId
+        ldapLink
+        baseDN
+        searchStandard
+        emailPostfix
+        username
+        password
+        description
+        enabled
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}

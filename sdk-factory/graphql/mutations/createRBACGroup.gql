@@ -1,0 +1,19 @@
+mutation createRBACGroup($sortBy: SortByEnum, $page: Int, $count: Int, $input: CreateRBACGroupInput!){
+    createRBACGroup(input: $input){
+        _id
+        userPoolId
+        name
+        description
+        createdAt
+        updatedAt
+        roles{
+            totalCount
+        }
+        permissions{
+            totalCount
+        }
+        users(sortBy: $sortBy, page: $page, count: $count){
+            totalCount
+        }
+    }
+}

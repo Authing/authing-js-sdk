@@ -1,0 +1,7 @@
+mutation deleteRule($_id: String!){
+    deleteRule(_id: $_id){
+        message
+        code
+        status
+    }
+}

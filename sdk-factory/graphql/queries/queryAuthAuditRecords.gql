@@ -1,0 +1,13 @@
+query queryAuthAuditRecords($userPoolId: String!, $sortBy: String, $page: Int, $count: Int){
+    queryAuthAuditRecords(userPoolId: $userPoolId, sortBy: $sortBy, page: $page, count: $count){
+        list{
+            userPoolId
+            appType
+            appId
+            event
+            userId
+            createdAt
+        }
+        totalCount
+    }
+}

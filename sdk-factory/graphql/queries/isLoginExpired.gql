@@ -1,0 +1,3 @@
+query isLoginExpired($id: String!){
+    isLoginExpired(id: $id)
+}

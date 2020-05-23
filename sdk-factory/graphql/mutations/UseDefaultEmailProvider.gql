@@ -1,0 +1,3 @@
+mutation UseDefaultEmailProvider($user: String!, $client: String!){
+    UseDefaultEmailProvider(user: $user, client: $client)
+}

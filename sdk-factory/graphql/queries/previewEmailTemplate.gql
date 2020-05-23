@@ -1,0 +1,7 @@
+query previewEmailTemplate($type: String, $client: String){
+    previewEmailTemplate(type: $type, client: $client){
+        message
+        code
+        status
+    }
+}

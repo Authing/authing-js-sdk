@@ -1,0 +1,14 @@
+query org($_id: String!){
+    org(_id: $_id){
+        _id
+        nodes{
+            _id
+            name
+            description
+            createdAt
+            updatedAt
+            children
+            root
+        }
+    }
+}

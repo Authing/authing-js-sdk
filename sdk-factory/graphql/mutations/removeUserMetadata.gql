@@ -1,0 +1,9 @@
+mutation removeUserMetadata($input: RemoveUserMetadataInput!){
+    removeUserMetadata(input: $input){
+        totalCount
+        list{
+            key
+            value
+        }
+    }
+}

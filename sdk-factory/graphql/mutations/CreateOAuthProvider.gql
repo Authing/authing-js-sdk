@@ -1,0 +1,20 @@
+mutation CreateOAuthProvider($name: String!, $domain: String!, $redirectUris: [String]!, $grants: [String!]!, $clientId: String, $image: String, $description: String, $homepageURL: String, $casExpire: Int){
+    CreateOAuthProvider(name: $name, domain: $domain, redirectUris: $redirectUris, grants: $grants, clientId: $clientId, image: $image, description: $description, homepageURL: $homepageURL, casExpire: $casExpire){
+        _id
+        name
+        domain
+        image
+        redirectUris
+        appSecret
+        client_id
+        clientId
+        grants
+        description
+        homepageURL
+        isDeleted
+        when
+        css
+        loginUrl
+        casExpire
+    }
+}

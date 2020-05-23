@@ -1,0 +1,10 @@
+mutation updateRBACPermission($input: UpdateRBACPermissionInput!){
+    updateRBACPermission(input: $input){
+        _id
+        name
+        userPoolId
+        createdAt
+        updatedAt
+        description
+    }
+}

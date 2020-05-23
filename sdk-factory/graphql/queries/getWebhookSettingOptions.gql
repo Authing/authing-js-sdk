@@ -1,0 +1,13 @@
+query getWebhookSettingOptions{
+    getWebhookSettingOptions{
+        webhookEvents{
+            name
+            label
+            description
+        }
+        contentTypes{
+            name
+            label
+        }
+    }
+}

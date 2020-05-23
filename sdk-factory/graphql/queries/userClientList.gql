@@ -1,0 +1,11 @@
+query userClientList($page: Int, $count: Int, $sortBy: String){
+    userClientList(page: $page, count: $count, sortBy: $sortBy){
+        list{
+            _id
+            name
+            createdAt
+            usersCount
+        }
+        totalCount
+    }
+}

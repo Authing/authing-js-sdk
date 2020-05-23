@@ -1,0 +1,20 @@
+query QueryAppInfoByDomain($domain: String){
+    QueryAppInfoByDomain(domain: $domain){
+        _id
+        name
+        domain
+        image
+        redirectUris
+        appSecret
+        client_id
+        clientId
+        grants
+        description
+        homepageURL
+        isDeleted
+        when
+        css
+        loginUrl
+        casExpire
+    }
+}

@@ -1,0 +1,14 @@
+mutation addOrgNode($input: AddOrgNodeInput!){
+    addOrgNode(input: $input){
+        _id
+        nodes{
+            _id
+            name
+            description
+            createdAt
+            updatedAt
+            children
+            root
+        }
+    }
+}

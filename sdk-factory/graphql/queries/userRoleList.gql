@@ -1,0 +1,14 @@
+query userRoleList($_id: String!){
+    userRoleList(_id: $_id){
+        totalCount
+        list{
+            _id
+            userPoolId
+            name
+            description
+            createdAt
+            updatedAt
+        }
+        rawList
+    }
+}

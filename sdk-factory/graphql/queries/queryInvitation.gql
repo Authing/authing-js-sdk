@@ -1,0 +1,9 @@
+query queryInvitation($client: String!){
+    queryInvitation(client: $client){
+        client
+        phone
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}

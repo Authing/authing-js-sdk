@@ -1,0 +1,9 @@
+mutation removeRuleEnv($input: RemoveRuleEnvInput!){
+    removeRuleEnv(input: $input){
+        totalCount
+        list{
+            key
+            value
+        }
+    }
+}

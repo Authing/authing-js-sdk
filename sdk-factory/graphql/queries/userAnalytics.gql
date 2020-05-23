@@ -1,0 +1,18 @@
+query userAnalytics($clientId: String){
+    userAnalytics(clientId: $clientId){
+        usersAddedToday{
+            length
+        }
+        usersAddedLastWeek{
+            length
+        }
+        usersLoginLastWeek{
+            length
+        }
+        totalUsers{
+            length
+        }
+        allUsers
+        totalApps
+    }
+}

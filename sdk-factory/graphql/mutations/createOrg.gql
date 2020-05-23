@@ -1,0 +1,14 @@
+mutation createOrg($input: CreateOrgInput!){
+    createOrg(input: $input){
+        _id
+        nodes{
+            _id
+            name
+            description
+            createdAt
+            updatedAt
+            children
+            root
+        }
+    }
+}

@@ -1,0 +1,8 @@
+query queryInvitationState($client: String!){
+    queryInvitationState(client: $client){
+        client
+        enablePhone
+        createdAt
+        updatedAt
+    }
+}

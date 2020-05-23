@@ -1,0 +1,3 @@
+query userExist($userPoolId: String!, $email: String, $phone: String, $username: String){
+    userExist(userPoolId: $userPoolId, email: $email, phone: $phone, username: $username)
+}

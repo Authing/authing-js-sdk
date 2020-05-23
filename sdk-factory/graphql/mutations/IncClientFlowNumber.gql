@@ -1,0 +1,7 @@
+mutation IncClientFlowNumber($user: String, $userInvitied: String, $client: String, $number: Int){
+    IncClientFlowNumber(user: $user, userInvitied: $userInvitied, client: $client, number: $number){
+        code
+        url
+        charge
+    }
+}

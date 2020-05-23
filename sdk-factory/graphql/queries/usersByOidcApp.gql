@@ -1,0 +1,6 @@
+query usersByOidcApp($userPoolId: String, $page: Int, $count: Int, $appId: String){
+    usersByOidcApp(userPoolId: $userPoolId, page: $page, count: $count, appId: $appId){
+        list
+        totalCount
+    }
+}

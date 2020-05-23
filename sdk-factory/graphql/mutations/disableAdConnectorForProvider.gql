@@ -1,0 +1,3 @@
+mutation disableAdConnectorForProvider($providerId: String!, $adConnectorId: String!){
+    disableAdConnectorForProvider(providerId: $providerId, adConnectorId: $adConnectorId)
+}

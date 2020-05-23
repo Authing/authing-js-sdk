@@ -1,0 +1,14 @@
+query userPermissionList($_id: String!){
+    userPermissionList(_id: $_id){
+        totalCount
+        list{
+            _id
+            name
+            userPoolId
+            createdAt
+            updatedAt
+            description
+        }
+        rawList
+    }
+}

@@ -1,0 +1,20 @@
+query getOAuthedAppInfo($appId: String!){
+    getOAuthedAppInfo(appId: $appId){
+        _id
+        name
+        domain
+        image
+        redirectUris
+        appSecret
+        client_id
+        clientId
+        grants
+        description
+        homepageURL
+        isDeleted
+        when
+        css
+        loginUrl
+        casExpire
+    }
+}

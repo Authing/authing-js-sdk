@@ -1,0 +1,3 @@
+query isDomainAvaliable($domain: String!){
+    isDomainAvaliable(domain: $domain)
+}

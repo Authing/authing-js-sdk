@@ -1,0 +1,14 @@
+query userGroupList($_id: String!){
+    userGroupList(_id: $_id){
+        totalCount
+        list{
+            _id
+            userPoolId
+            name
+            description
+            createdAt
+            updatedAt
+        }
+        rawList
+    }
+}

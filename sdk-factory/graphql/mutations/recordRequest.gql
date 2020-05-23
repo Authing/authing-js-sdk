@@ -1,0 +1,7 @@
+mutation recordRequest($when: String!, $ip: String!, $responseTime: Int!, $size: Int!, $from: String){
+    recordRequest(when: $when, ip: $ip, responseTime: $responseTime, size: $size, from: $from){
+        message
+        code
+        status
+    }
+}

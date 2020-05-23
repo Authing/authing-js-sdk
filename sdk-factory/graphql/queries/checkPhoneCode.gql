@@ -1,0 +1,7 @@
+query checkPhoneCode($userPoolId: String!, $phone: String!, $phoneCode: String!){
+    checkPhoneCode(userPoolId: $userPoolId, phone: $phone, phoneCode: $phoneCode){
+        message
+        code
+        status
+    }
+}

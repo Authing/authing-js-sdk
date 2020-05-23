@@ -1,0 +1,19 @@
+query queryOperationLogs($userPoolId: String!, $coll: String!, $page: Int, $count: Int){
+    queryOperationLogs(userPoolId: $userPoolId, coll: $coll, page: $page, count: $count){
+        totalCount
+        list{
+            operatorId
+            operatorName
+            operatorAvatar
+            isAdmin
+            isCollaborator
+            isOwner
+            operationType
+            updatedFields
+            removedFields
+            operateAt
+            fullDocument
+            coll
+        }
+    }
+}

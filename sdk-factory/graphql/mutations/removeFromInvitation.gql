@@ -1,0 +1,9 @@
+mutation removeFromInvitation($client: String!, $phone: String){
+    removeFromInvitation(client: $client, phone: $phone){
+        client
+        phone
+        isDeleted
+        createdAt
+        updatedAt
+    }
+}

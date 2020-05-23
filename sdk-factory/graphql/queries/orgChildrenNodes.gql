@@ -1,0 +1,13 @@
+query orgChildrenNodes($input: OrgChildrenNodesInput!){
+    orgChildrenNodes(input: $input){
+        group{
+            _id
+            userPoolId
+            name
+            description
+            createdAt
+            updatedAt
+        }
+        depth
+    }
+}

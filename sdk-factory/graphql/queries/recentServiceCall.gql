@@ -1,0 +1,20 @@
+query recentServiceCall($today: String){
+    recentServiceCall(today: $today){
+        userService{
+            day
+            count
+        }
+        emailService{
+            day
+            count
+        }
+        oAuthService{
+            day
+            count
+        }
+        payService{
+            day
+            count
+        }
+    }
+}

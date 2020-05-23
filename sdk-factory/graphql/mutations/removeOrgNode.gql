@@ -1,0 +1,14 @@
+mutation removeOrgNode($input: RemoveOrgNodeInput!){
+    removeOrgNode(input: $input){
+        _id
+        nodes{
+            _id
+            name
+            description
+            createdAt
+            updatedAt
+            children
+            root
+        }
+    }
+}

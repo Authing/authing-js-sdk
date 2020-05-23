@@ -1,0 +1,6 @@
+query registerMethodTopList($userPoolId: String!){
+    registerMethodTopList(userPoolId: $userPoolId){
+        method
+        count
+    }
+}

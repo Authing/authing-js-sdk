@@ -1,0 +1,9 @@
+query queryCollaborativeUserPoolByUserId($userId: String!, $page: Int, $count: Int){
+    queryCollaborativeUserPoolByUserId(userId: $userId, page: $page, count: $count){
+        list{
+            _id
+            createdAt
+        }
+        totalCount
+    }
+}

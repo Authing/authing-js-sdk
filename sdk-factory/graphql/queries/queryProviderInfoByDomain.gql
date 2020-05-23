@@ -1,0 +1,13 @@
+query queryProviderInfoByDomain($domain: String){
+    queryProviderInfoByDomain(domain: $domain){
+        _id
+        type
+        name
+        image
+        domain
+        clientId
+        client_id
+        css
+        redirect_uris
+    }
+}

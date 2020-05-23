@@ -1,0 +1,5 @@
+query isAdConnectorAlive($adConnectorId: String){
+    isAdConnectorAlive(adConnectorId: $adConnectorId){
+        isAlive
+    }
+}

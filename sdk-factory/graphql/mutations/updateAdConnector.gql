@@ -1,0 +1,13 @@
+mutation updateAdConnector($_id: String!, $name: String, $logo: String){
+    updateAdConnector(_id: $_id, name: $name, logo: $logo){
+        _id
+        name
+        secret
+        salt
+        logo
+        enabled
+        userPoolId
+        status
+        createdAt
+    }
+}
