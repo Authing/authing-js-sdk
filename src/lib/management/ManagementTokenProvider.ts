@@ -38,6 +38,28 @@ export class ManagementTokenProvider {
     return res.getClientWhenSdkInit.accessToken
   }
 
+
+  /**
+   * 刷新 accessToken 
+   *
+   * @memberof ManagementTokenProvider
+   */
+  async refreshToken() {
+    const res: any = await graphqlRequest({
+      endpoint: this.options.host.graphqlApiEndpoint,
+      query: `mutation refreshAccessToken($userPoolId: String!, $accessToken: String!){
+        refreshAccessToken(userPoolId: $userPoolId, accessToken: $accessToken) {
+          accessToken
+        }
+      }`,
+      variables: {
+        userPoolId: this.options.userPoolId,
+        accessToken: this._accessToken
+      }
+    })
+    return res.refreshAccessToken.accessToken
+  }
+
   /**
    * 获取用户池 accessToken
    *
@@ -49,7 +71,7 @@ export class ManagementTokenProvider {
     if (this._accessToken && this._accessTokenExpriredAt - (+new Date()) >= 3600 * 1000) {
       return this._accessToken
     }
-    return await this.refreshAccessToken()
+    return await this.getAccessTokenFromServver()
   }
 
   /**
@@ -58,8 +80,17 @@ export class ManagementTokenProvider {
    * @returns
    * @memberof ManagementTokenProvider
    */
-  async refreshAccessToken() {
-    this._accessToken = await this.getClientWhenSdkInit()
+  async getAccessTokenFromServver() {
+
+    // 如果是通过密钥刷新 
+    let accessToken = null
+    if (this.options.secret) {
+      accessToken = await this.getClientWhenSdkInit()
+    } else {
+      accessToken = await this.refreshToken()
+    }
+
+    this._accessToken = accessToken
     const decoded: DecodedAccessToken = jwtDecode(this._accessToken)
     const { exp } = decoded
     this._accessTokenExpriredAt = exp * 1000
