@@ -149,7 +149,7 @@ export class OrgManagementClient {
 
   /**
    * 查询组织机构树根节点
-   *
+   * TODO: 添加 TypeScript 类型注解
    * @memberof OrgManagementClient
    */
   async rootNode(id: string) {
@@ -157,5 +157,22 @@ export class OrgManagementClient {
       _id: id
     })
     return res.orgRootNode
+  }
+
+  /**
+   * 根据 Group 的自定义字段查询节点
+   *
+   * @param {string} _orgId
+   * @param {{
+   *     key: string,
+   *     value: any
+   *   }[]} _metadataList
+   * @memberof OrgManagementClient
+   */
+  async searchNodes(_orgId: string, _metadataList: {
+    key: string,
+    value: any
+  }[]) {
+    return
   }
 }
