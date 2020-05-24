@@ -11,6 +11,12 @@ export const checkLoginStatus = async (garpqhlClient: GraphqlClient, tokenProvid
         token{
             iat
             exp
+            data {
+              email
+              id
+              clientId
+              unionid
+            }
         }
     }
 }`
