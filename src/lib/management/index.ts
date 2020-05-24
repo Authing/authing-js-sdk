@@ -1,3 +1,4 @@
+import { isDomainAvaliable } from './../graphqlapi/management.isDomainAvaliable';
 import { OrgManagementClient } from './OrgManagementClient';
 import { AccessControlManagementClient } from './AccessControlManagementClient';
 import { GraphqlClient } from './../common/GraphqlClient';
@@ -50,5 +51,10 @@ export class ManagementClient {
     this.userpool = new UserPoolManagementClient(this.options, this.graphqlClient, this.tokenProvider)
     this.accessControl = new AccessControlManagementClient(this.options, this.graphqlClient, this.tokenProvider)
     this.org = new OrgManagementClient(this.options, this.graphqlClient, this.tokenProvider)
+  }
+
+  async isDomainAvaliable(domain: string) {
+    const res = await isDomainAvaliable(this.graphqlClient, this.tokenProvider, { domain })
+    return res.isDomainAvaliable
   }
 }
