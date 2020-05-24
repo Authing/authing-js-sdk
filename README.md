@@ -15,7 +15,7 @@ Official SDK of Authing
   - logs
   - connections
   - importUsers
-  - rbac
+  - accessContorl
   - org
 - authentication (Authentication Api, on behalf of normal users)
   - qrlogin
