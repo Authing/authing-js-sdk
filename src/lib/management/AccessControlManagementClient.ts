@@ -49,6 +49,9 @@ export class AccessControlManagementClient {
    * @memberof AccessControlManagementClient
    */
   async addGroupMetadata(groupId: string, key: string, value: any): Promise<{ key: string, value: string }> {
+    if (typeof value !== "string") {
+      value = JSON.stringify(value)
+    }
     const res = await addGroupMetadata(this.graphqlClient, this.tokenProvider, {
       groupId,
       key,

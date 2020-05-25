@@ -1,3 +1,4 @@
+import { ConnectionManagementClient } from './ConnectionManagementClient';
 import { isDomainAvaliable } from './../graphqlapi/management.isDomainAvaliable';
 import { OrgManagementClient } from './OrgManagementClient';
 import { AccessControlManagementClient } from './AccessControlManagementClient';
@@ -36,6 +37,7 @@ export class ManagementClient {
   userpool: UserPoolManagementClient
   accessControl: AccessControlManagementClient
   org: OrgManagementClient
+  connections: ConnectionManagementClient
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options)
@@ -51,6 +53,7 @@ export class ManagementClient {
     this.userpool = new UserPoolManagementClient(this.options, this.graphqlClient, this.tokenProvider)
     this.accessControl = new AccessControlManagementClient(this.options, this.graphqlClient, this.tokenProvider)
     this.org = new OrgManagementClient(this.options, this.graphqlClient, this.tokenProvider)
+    this.connections = new ConnectionManagementClient(this.options, this.graphqlClient, this.tokenProvider)
   }
 
   async isDomainAvaliable(domain: string) {

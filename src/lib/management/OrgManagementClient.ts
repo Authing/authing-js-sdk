@@ -46,8 +46,10 @@ export class OrgManagementClient {
    */
   async create(rootNodeId: string) {
     const res = await createOrg(this.graphqlClient, this.tokenProvider, {
-      rootGroupId: rootNodeId,
-      userPoolId: this.options.userPoolId
+      input: {
+        rootGroupId: rootNodeId,
+        userPoolId: this.options.userPoolId
+      }
     })
     return res.createOrg
   }
@@ -64,9 +66,11 @@ export class OrgManagementClient {
   }) {
     const { orgId, nodeId, parentNodeId } = options
     const res = await addOrgNode(this.graphqlClient, this.tokenProvider, {
-      orgId,
-      groupId: nodeId,
-      parentGroupId: parentNodeId
+      input: {
+        orgId,
+        groupId: nodeId,
+        parentGroupId: parentNodeId
+      }
     })
     return res.addOrgNode
   }
@@ -107,8 +111,10 @@ export class OrgManagementClient {
    */
   async removeNode(orgId: string, nodeId: string) {
     const res = await removeOrgNode(this.graphqlClient, this.tokenProvider, {
-      orgId,
-      groupId: nodeId
+      input: {
+        orgId,
+        groupId: nodeId
+      }
     })
     return res.removeOrgNode
   }
@@ -124,8 +130,10 @@ export class OrgManagementClient {
    */
   async isRoot(orgId: string, nodeId: string) {
     const res = await isRootNodeOfOrg(this.graphqlClient, this.tokenProvider, {
-      orgId,
-      groupId: nodeId
+      input: {
+        orgId,
+        groupId: nodeId
+      }
     })
     return res.isRootNodeOfOrg
   }
@@ -141,8 +149,10 @@ export class OrgManagementClient {
    */
   async children(orgId: string, nodeId: string) {
     const res = await orgChildrenNodes(this.graphqlClient, this.tokenProvider, {
-      orgId,
-      nodeId
+      input: {
+        orgId,
+        nodeId
+      }
     })
     return res.orgChildrenNodes
   }

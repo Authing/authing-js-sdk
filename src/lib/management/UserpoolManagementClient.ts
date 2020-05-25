@@ -38,11 +38,12 @@ export class UserPoolManagementClient {
       let permissionList = await this.getPermissionList()
       permissionDescriptors = permissionList.list.map((p: any) => ({ permissionId: p._id, operationAllow: 15 }))
     }
-    return addCollaborator(this.graphqlClient, this.tokenProvider,
+    const res: any = await addCollaborator(this.graphqlClient, this.tokenProvider,
       {
         userPoolId: this.options.userPoolId,
         collaboratorUserId,
         permissionDescriptors
       })
+    return res.addCollaborator
   }
 }
