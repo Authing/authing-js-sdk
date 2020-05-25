@@ -34,7 +34,7 @@ export class UserPoolManagementClient {
    * @memberof UserPoolManagementClient
    */
   async addCollaborator(collaboratorUserId: string, permissionDescriptors: PermissionDescriptors[] = []) {
-    if (!permissionDescriptors) {
+    if (permissionDescriptors.length === 0) {
       let permissionList = await this.getPermissionList()
       permissionDescriptors = permissionList.list.map((p: any) => ({ permissionId: p._id, operationAllow: 15 }))
     }

@@ -864,7 +864,7 @@ export class EncryptPassword {
 }
 
 export class ExtendUser {
-  _id?: string;
+  _id: string;
   email?: string;
   unionid?: string;
   openid?: string;
