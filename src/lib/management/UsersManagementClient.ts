@@ -8,6 +8,7 @@ import { encrypt } from './../utils/encryption';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserRegisterInput } from '../../types/graphql';
+import { createInterConnection } from '../graphqlapi/management.users.createInterConnection';
 
 export class UsersManagementClient {
   options: ManagementClientOptions
@@ -102,5 +103,30 @@ export class UsersManagementClient {
     userInfo.registerInClient = this.options.userPoolId
     const data: any = await register(this.graphqlClient, this.tokenProvider, options)
     return data.register
+  }
+
+  /**
+   * 建立跨用户池的用户关联
+   * 
+   * maxAge 单位为 s
+   *
+   * @param {{
+   *     sourceUserPoolId: string,
+   *     sourceUserId: string,
+   *     targetUserPoolId: string,
+   *     targetUserId: string,
+   *     maxAge: number
+   *   }} options
+   * @memberof UsersManagementClient
+   */
+  async createInterConnection(options: {
+    sourceUserPoolId: string,
+    sourceUserId: string,
+    targetUserPoolId: string,
+    targetUserId: string,
+    maxAge: number
+  }) {
+    const res = await createInterConnection(this.graphqlClient, this.tokenProvider, options)
+    return res.createInterConnection
   }
 }
