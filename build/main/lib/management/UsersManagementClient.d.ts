@@ -77,4 +77,11 @@ export declare class UsersManagementClient {
         targetUserId: string;
         maxAge: number;
     }): Promise<any>;
+    /**
+     * 查询用户池具备的跨用户池关联能力
+     *
+     * @returns
+     * @memberof UsersManagementClient
+     */
+    interConnections(): Promise<any>;
 }

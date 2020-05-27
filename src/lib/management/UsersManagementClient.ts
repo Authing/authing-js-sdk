@@ -1,3 +1,4 @@
+import { interConnections } from './../graphqlapi/management.users.interConnections';
 import { removeUsers } from './../graphqlapi/management.users.delete';
 import { user } from './../graphqlapi/management.users.get';
 import { PagedUsers, ExtendUser } from './../../types/graphql';
@@ -128,5 +129,18 @@ export class UsersManagementClient {
   }) {
     const res = await createInterConnection(this.graphqlClient, this.tokenProvider, options)
     return res.createInterConnection
+  }
+
+  /**
+   * 查询用户池具备的跨用户池关联能力
+   *
+   * @returns
+   * @memberof UsersManagementClient
+   */
+  async interConnections() {
+    const res = await interConnections(this.graphqlClient, this.tokenProvider, {
+      userPoolId: this.options.userPoolId
+    })
+    return res.interConnections
   }
 }
