@@ -366,3 +366,7 @@ const auth = new Authing({
 ## Get Help
 
 1. Join us on Gitter: [#authing-chat](https://gitter.im/authing-chat/community)
+
+## License
+
+MIT
