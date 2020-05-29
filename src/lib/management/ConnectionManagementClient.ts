@@ -29,25 +29,19 @@ export class ConnectionManagementClient {
     app = Object.assign({}, {
       "description": "",
       "image": "",
-      "grant_types": ["authorization_code", "refresh_token"],
+      "grant_types": ["authorization_code", "refresh_token", "authingToken"],
       "token_endpoint_auth_method": "client_secret_post",
       "response_types": ["code"],
       "id_token_signed_response_alg": "HS256",
-      "id_token_encrypted_response_alg": "不加密",
-      "id_token_encrypted_response_enc": "不加密",
-      "userinfo_signed_response_alg": "不加密",
-      "userinfo_encrypted_response_alg": "不加密",
-      "userinfo_encrypted_response_enc": "不加密",
-      "request_object_signing_alg": "不加密",
-      "request_object_encryption_alg": "不加密",
-      "request_object_encryption_enc": "不加密",
-      "jwks": "",
-      "jwks_uri": "",
+      "_jwks": "",
+      "_jwks_uri": "",
       "authorization_code_expire": "600",
       "id_token_expire": "3600",
       "access_token_expire": "3600",
       "cas_expire": "3600",
+      "custom_jwks": "",
     }, app)
+
     const res = await CreateOIDCApp(this.graphqlClient, this.tokenProvider, app)
     return res.CreateOIDCApp
   }
