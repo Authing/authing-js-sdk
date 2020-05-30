@@ -47,10 +47,10 @@ export declare class AccessControlManagementClient {
      *
      * @memberof AccessControlManagementClient
      */
-    isUserInGroup(_options: {
+    isUserInGroup(options: {
         userId: string;
         groupId: string;
-    }): Promise<boolean>;
+    }): Promise<any>;
     /**
      * 查询 Group 用户列表
      *

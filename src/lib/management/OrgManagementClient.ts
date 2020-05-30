@@ -1,3 +1,4 @@
+import { searchNodes } from './../graphqlapi/management.org.searchNodes';
 import { orgRootNode } from './../graphqlapi/management.org.rootNode';
 import { orgChildrenNodes } from './../graphqlapi/management.org.children';
 import { isRootNodeOfOrg } from './../graphqlapi/management.org.isRoot';
@@ -179,10 +180,30 @@ export class OrgManagementClient {
    *   }[]} _metadataList
    * @memberof OrgManagementClient
    */
-  async searchNodes(_orgId: string, _metadataList: {
-    key: string,
-    value: any
-  }[]) {
-    return
+  async searchNodes(options: {
+    orgId: string, name?: string, metadataList?: {
+      key: string,
+      value: any
+    }[]
+  }) {
+    let { orgId, name = "", metadataList = [] } = options
+    if (!name && metadataList.length === 0) {
+      this.options.onError(new Error('Plesas Provide name or metadataList'))
+    }
+
+    if (metadataList) {
+      metadataList = metadataList.map(metadata => {
+        if (typeof metadata.value !== "string") {
+          metadata.value = JSON.stringify(metadata.value)
+        }
+        return metadata
+      })
+    }
+    const res = await searchNodes(this.graphqlClient, this.tokenProvider, {
+      orgId,
+      name,
+      metadataList
+    })
+    return res.searchOrgNodes
   }
 }

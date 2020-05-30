@@ -1,3 +1,4 @@
+import { isUserInGroup } from './../graphqlapi/management.accesscontrol.isUserInGroup';
 import { groupUserList } from './../graphqlapi/management.accesscontrol.groupUserList';
 import { addUserToRBACGroup } from './../graphqlapi/management.accesscontrol.addUserToGroup';
 import { addGroupMetadata } from './../graphqlapi/management.accesscontrol.addGroupMetadata';
@@ -84,11 +85,12 @@ export class AccessControlManagementClient {
    * 
    * @memberof AccessControlManagementClient
    */
-  async isUserInGroup(_options: {
+  async isUserInGroup(options: {
     userId: string,
     groupId: string
   }) {
-    return false // TODO: 接入实际接口
+    const res = await isUserInGroup(this.graphqlClient, this.tokenProvider, options)
+    return res.isUserInGroup
   }
 
 

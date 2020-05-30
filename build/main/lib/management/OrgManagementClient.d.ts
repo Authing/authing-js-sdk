@@ -86,8 +86,12 @@ export declare class OrgManagementClient {
      *   }[]} _metadataList
      * @memberof OrgManagementClient
      */
-    searchNodes(_orgId: string, _metadataList: {
-        key: string;
-        value: any;
-    }[]): Promise<void>;
+    searchNodes(options: {
+        orgId: string;
+        name?: string;
+        metadataList?: {
+            key: string;
+            value: any;
+        }[];
+    }): Promise<any>;
 }
