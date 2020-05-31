@@ -1,3 +1,4 @@
+import { passwordLessForceLogin } from './../graphqlapi/management.users.passwordLessForceLogin';
 import { interConnections } from './../graphqlapi/management.users.interConnections';
 import { removeUsers } from './../graphqlapi/management.users.delete';
 import { user } from './../graphqlapi/management.users.get';
@@ -142,5 +143,18 @@ export class UsersManagementClient {
       userPoolId: this.options.userPoolId
     })
     return res.interConnections
+  }
+
+  /**
+   * 管理员让用户强制登录，无需检测任何账号密码、验证码
+   *
+   * @memberof UsersManagementClient
+   */
+  async passwordLessForceLogin(userId: string) {
+    const res = await passwordLessForceLogin(this.graphqlClient, this.tokenProvider, {
+      userPoolId: this.options.userPoolId,
+      userId
+    })
+    return res.passwordLessForceLogin
   }
 }

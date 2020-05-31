@@ -84,4 +84,10 @@ export declare class UsersManagementClient {
      * @memberof UsersManagementClient
      */
     interConnections(): Promise<any>;
+    /**
+     * 管理员让用户强制登录，无需检测任何账号密码、验证码
+     *
+     * @memberof UsersManagementClient
+     */
+    passwordLessForceLogin(userId: string): Promise<any>;
 }
