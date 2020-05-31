@@ -6,11 +6,50 @@ exports.passwordLessForceLogin = async (garpqhlClient, tokenProvider, variables)
   mutation passwordLessForceLogin($userPoolId: String!, $userId: String!){
     passwordLessForceLogin(userPoolId: $userPoolId, userId: $userId) {
       _id
-      name
-      nickname
-      username
-      token
-      email
+    email
+    unionid
+    openid
+    emailVerified
+    phone
+    phoneVerified
+    username
+    nickname
+    company
+    photo
+    browser
+    device
+    password
+    registerInClient
+    registerMethod
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    metadata
     }
   }
   `;
@@ -21,4 +60,4 @@ exports.passwordLessForceLogin = async (garpqhlClient, tokenProvider, variables)
         token
     });
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFuYWdlbWVudC51c2Vycy5wYXNzd29yZExlc3NGb3JjZUxvZ2luLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vc3JjL2xpYi9ncmFwaHFsYXBpL21hbmFnZW1lbnQudXNlcnMucGFzc3dvcmRMZXNzRm9yY2VMb2dpbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFJYSxRQUFBLHNCQUFzQixHQUFHLEtBQUssRUFBRSxhQUE0QixFQUFFLGFBQXNDLEVBQUUsU0FBYyxFQUFnQixFQUFFO0lBQ2pKLE1BQU0sS0FBSyxHQUFHOzs7Ozs7Ozs7OztHQVdiLENBQUE7SUFDRCxNQUFNLEtBQUssR0FBRyxNQUFNLGFBQWEsQ0FBQyxjQUFjLEVBQUUsQ0FBQTtJQUNsRCxPQUFPLE1BQU0sYUFBYSxDQUFDLE9BQU8sQ0FBQztRQUNqQyxLQUFLO1FBQ0wsU0FBUztRQUNULEtBQUs7S0FDTixDQUFDLENBQUE7QUFDSixDQUFDLENBQUEifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFuYWdlbWVudC51c2Vycy5wYXNzd29yZExlc3NGb3JjZUxvZ2luLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vc3JjL2xpYi9ncmFwaHFsYXBpL21hbmFnZW1lbnQudXNlcnMucGFzc3dvcmRMZXNzRm9yY2VMb2dpbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFJYSxRQUFBLHNCQUFzQixHQUFHLEtBQUssRUFBRSxhQUE0QixFQUFFLGFBQXNDLEVBQUUsU0FBYyxFQUFnQixFQUFFO0lBQ2pKLE1BQU0sS0FBSyxHQUFHOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztHQWtEYixDQUFBO0lBQ0QsTUFBTSxLQUFLLEdBQUcsTUFBTSxhQUFhLENBQUMsY0FBYyxFQUFFLENBQUE7SUFDbEQsT0FBTyxNQUFNLGFBQWEsQ0FBQyxPQUFPLENBQUM7UUFDakMsS0FBSztRQUNMLFNBQVM7UUFDVCxLQUFLO0tBQ04sQ0FBQyxDQUFBO0FBQ0osQ0FBQyxDQUFBIn0=

@@ -2,10 +2,18 @@
 import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
 
-export const passwordLessForceLogin = async (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider, variables: any): Promise<any> => {
+export const createUserWithoutAuthentication = async (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider, variables: any): Promise<any> => {
   const query = `
-  mutation passwordLessForceLogin($userPoolId: String!, $userId: String!){
-    passwordLessForceLogin(userPoolId: $userPoolId, userId: $userId) {
+  mutation createUserWithoutAuthentication(
+    $userPoolId: String!
+    $userInfo: UserRegisterInput!
+    $forceLogin: Boolean
+  ) {
+    createUserWithoutAuthentication(
+      userPoolId: $userPoolId
+      userInfo: $userInfo
+      forceLogin: $forceLogin
+    ) {
       _id
     email
     unionid

@@ -1,4 +1,4 @@
-import { PagedUsers, ExtendUser } from './../../types/graphql';
+import { PagedUsers, ExtendUser, User } from './../../types/graphql';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
@@ -90,4 +90,10 @@ export declare class UsersManagementClient {
      * @memberof UsersManagementClient
      */
     passwordLessForceLogin(userId: string): Promise<any>;
+    /**
+     *
+     *
+     * @memberof UsersManagementClient
+     */
+    createUserWithoutAuthentication(userInfo: UserRegisterInput, forceLogin?: boolean): Promise<User>;
 }

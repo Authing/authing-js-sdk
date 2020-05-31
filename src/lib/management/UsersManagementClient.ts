@@ -1,8 +1,9 @@
+import { createUserWithoutAuthentication } from './../graphqlapi/management.users.createUserWithoutAuthentication';
 import { passwordLessForceLogin } from './../graphqlapi/management.users.passwordLessForceLogin';
 import { interConnections } from './../graphqlapi/management.users.interConnections';
 import { removeUsers } from './../graphqlapi/management.users.delete';
 import { user } from './../graphqlapi/management.users.get';
-import { PagedUsers, ExtendUser } from './../../types/graphql';
+import { PagedUsers, ExtendUser, User } from './../../types/graphql';
 import { users } from './../graphqlapi/management.users.list';
 import { register } from './../graphqlapi/management.users.create';
 import { GraphqlClient } from './../common/GraphqlClient';
@@ -156,5 +157,20 @@ export class UsersManagementClient {
       userId
     })
     return res.passwordLessForceLogin
+  }
+
+  /**
+   *
+   *
+   * @memberof UsersManagementClient
+   */
+  async createUserWithoutAuthentication(userInfo: UserRegisterInput, forceLogin?: boolean): Promise<User> {
+    forceLogin = forceLogin || false
+    const res = await createUserWithoutAuthentication(this.graphqlClient, this.tokenProvider, {
+      userPoolId: this.options.userPoolId,
+      userInfo,
+      forceLogin
+    })
+    return res.createUserWithoutAuthentication
   }
 }
