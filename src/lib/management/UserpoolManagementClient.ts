@@ -1,3 +1,4 @@
+import { getUserPoolDetail } from './../graphqlapi/management.userpool.detail';
 import { queryPermissionList } from './../graphqlapi/management.userpool.getPermissionList';
 import { addCollaborator } from './../graphqlapi/management.userpool.addCollaborator';
 import { ManagementClientOptions } from "./types"
@@ -45,5 +46,19 @@ export class UserPoolManagementClient {
         permissionDescriptors
       })
     return res.addCollaborator
+  }
+
+
+  /**
+   * 查询用户池详情
+   *
+   * @returns
+   * @memberof UserPoolManagementClient
+   */
+  async detail() {
+    const res = await getUserPoolDetail(this.graphqlClient, this.tokenProvider, {
+      id: this.options.userPoolId
+    })
+    return res.client
   }
 }

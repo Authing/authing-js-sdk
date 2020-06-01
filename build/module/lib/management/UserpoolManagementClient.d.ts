@@ -21,4 +21,11 @@ export declare class UserPoolManagementClient {
      * @memberof UserPoolManagementClient
      */
     addCollaborator(collaboratorUserId: string, permissionDescriptors?: PermissionDescriptors[]): Promise<any>;
+    /**
+     * 查询用户池详情
+     *
+     * @returns
+     * @memberof UserPoolManagementClient
+     */
+    detail(): Promise<any>;
 }
