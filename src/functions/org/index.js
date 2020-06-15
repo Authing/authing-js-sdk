@@ -7,6 +7,7 @@ import dropById from "./dropById"
 import isRootNode from "./isRootNode"
 import childrenNodes from "./childrenNodes"
 import rootNode from "./rootNode"
+import searchUser from "./searchUser"
 
 export default {
   all,
@@ -17,5 +18,6 @@ export default {
   removeNode,
   isRootNode,
   childrenNodes,
-  rootNode
+  rootNode,
+  searchUser
 }
