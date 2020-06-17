@@ -68,4 +68,9 @@ export declare class AccessControlManagementClient {
         page?: number;
         count?: number;
     }): Promise<any>;
+    /**
+     * 查询用户所在的分组列表
+     *
+     */
+    userGroupList(userId: string): Promise<any>;
 }

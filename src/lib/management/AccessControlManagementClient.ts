@@ -1,3 +1,4 @@
+import { userGroupList } from './../graphqlapi/management.accesscontrol.userGroupList';
 import { isUserInGroup } from './../graphqlapi/management.accesscontrol.isUserInGroup';
 import { groupUserList } from './../graphqlapi/management.accesscontrol.groupUserList';
 import { addUserToRBACGroup } from './../graphqlapi/management.accesscontrol.addUserToGroup';
@@ -118,5 +119,16 @@ export class AccessControlManagementClient {
     }, options)
     const res = await groupUserList(this.graphqlClient, this.tokenProvider, Object.assign({}, options, { groupId }))
     return res.rbacGroup.users
+  }
+
+  /**
+   * 查询用户所在的分组列表
+   *
+   */
+  async userGroupList(userId: string) {
+    const res = await userGroupList(this.graphqlClient, this.tokenProvider, {
+      _id: userId
+    })
+    return res.data.userGroupList
   }
 }
