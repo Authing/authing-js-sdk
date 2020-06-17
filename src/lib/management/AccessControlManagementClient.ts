@@ -129,6 +129,6 @@ export class AccessControlManagementClient {
     const res = await userGroupList(this.graphqlClient, this.tokenProvider, {
       _id: userId
     })
-    return res.data.userGroupList
+    return res.userGroupList
   }
 }
