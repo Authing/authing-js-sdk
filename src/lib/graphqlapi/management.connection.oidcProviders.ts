@@ -44,6 +44,7 @@ export const GetOIDCAppList =  async (garpqhlClient: GraphqlClient, tokenProvide
             access_token_expire
             cas_expire
             loginUrl
+            isForTeamory
         }
     }
 }`

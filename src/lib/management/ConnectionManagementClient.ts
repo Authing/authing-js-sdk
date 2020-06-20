@@ -1,3 +1,4 @@
+import { oidcProviderByDomain } from './../graphqlapi/management.connection.oidcProviderByDomain';
 import { CreateOIDCApp } from './../graphqlapi/management.connection.createOidcProvider';
 import { GetOIDCAppList } from './../graphqlapi/management.connection.oidcProviders';
 import { GraphqlClient } from './../common/GraphqlClient';
@@ -44,5 +45,10 @@ export class ConnectionManagementClient {
 
     const res = await CreateOIDCApp(this.graphqlClient, this.tokenProvider, app)
     return res.CreateOIDCApp
+  }
+
+  async oidcProviderByDomain(domain: string) {
+    const res = await oidcProviderByDomain(this.graphqlClient, this.tokenProvider, { domain })
+    return res.QueryOIDCAppInfoByDomain
   }
 }

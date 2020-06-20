@@ -8,4 +8,5 @@ export declare class ConnectionManagementClient {
     constructor(options: ManagementClientOptions, graphqlClient: GraphqlClient, tokenProvider: ManagementTokenProvider);
     oidcProviders(page?: number, count?: number): Promise<any>;
     createOidcProvider(app: CreateOIDCProviderInput): Promise<any>;
+    oidcProviderByDomain(domain: string): Promise<any>;
 }
