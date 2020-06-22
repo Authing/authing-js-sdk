@@ -8,6 +8,7 @@ export const orgs = async (garpqhlClient: GraphqlClient, tokenProvider: Manageme
         totalCount
         list{
             _id
+            logo
             nodes {
               _id
               name
