@@ -6,6 +6,7 @@ export default function logout(_id) {
   }
   if (configs.inBrowser) {
     localStorage.removeItem('_authing_token');
+    localStorage.clear()
   }
 
   return this.update({
