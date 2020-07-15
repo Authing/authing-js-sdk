@@ -2234,6 +2234,11 @@ graphql-request@^1.8.2:
   dependencies:
     cross-fetch "2.2.2"
 
+graphql-tag@^2.10.4:
+  version "2.10.4"
+  resolved "https://registry.npm.taobao.org/graphql-tag/download/graphql-tag-2.10.4.tgz#2f301a98219be8b178a6453bb7e33b79b66d8f83"
+  integrity sha1-LzAamCGb6LF4pkU7t+M7ebZtj4M=
+
 graphql@^14.0.2:
   version "14.6.0"
   resolved "https://registry.npm.taobao.org/graphql/download/graphql-14.6.0.tgz?cache=0&sync_timestamp=1585840662829&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fgraphql%2Fdownload%2Fgraphql-14.6.0.tgz#57822297111e874ea12f5cd4419616930cd83e49"
