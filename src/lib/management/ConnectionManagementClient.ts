@@ -3,18 +3,23 @@ import { CreateOIDCApp } from './../graphqlapi/management.connection.createOidcP
 import { GetOIDCAppList } from './../graphqlapi/management.connection.oidcProviders';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
-import { ManagementClientOptions, CreateOIDCProviderInput } from './types';
-import _ from 'lodash'
+import { ManagementClientOptions } from './types';
+import _ from 'lodash';
+import { CreateOidcAppVariables } from '../../types/codeGen';
 
 export class ConnectionManagementClient {
-  options: ManagementClientOptions
-  graphqlClient: GraphqlClient
-  tokenProvider: ManagementTokenProvider
+  options: ManagementClientOptions;
+  graphqlClient: GraphqlClient;
+  tokenProvider: ManagementTokenProvider;
 
-  constructor(options: ManagementClientOptions, graphqlClient: GraphqlClient, tokenProvider: ManagementTokenProvider) {
-    this.options = options
-    this.graphqlClient = graphqlClient
-    this.tokenProvider = tokenProvider
+  constructor(
+    options: ManagementClientOptions,
+    graphqlClient: GraphqlClient,
+    tokenProvider: ManagementTokenProvider
+  ) {
+    this.options = options;
+    this.graphqlClient = graphqlClient;
+    this.tokenProvider = tokenProvider;
   }
 
   async oidcProviders(page = 0, count = 10) {
@@ -22,33 +27,45 @@ export class ConnectionManagementClient {
       clientId: this.options.userPoolId,
       page,
       count
-    })
-    return res.GetOIDCAppList
+    });
+    return res.GetOIDCAppList;
   }
 
-  async createOidcProvider(app: CreateOIDCProviderInput) {
-    app = Object.assign({}, {
-      "description": "",
-      "image": "",
-      "grant_types": ["authorization_code", "refresh_token", "authingToken"],
-      "token_endpoint_auth_method": "client_secret_post",
-      "response_types": ["code"],
-      "id_token_signed_response_alg": "HS256",
-      "_jwks": "",
-      "_jwks_uri": "",
-      "authorization_code_expire": "600",
-      "id_token_expire": "3600",
-      "access_token_expire": "3600",
-      "cas_expire": "3600",
-      "custom_jwks": "",
-    }, app)
+  async createOidcProvider(app: CreateOidcAppVariables) {
+    app = Object.assign(
+      {},
+      {
+        description: '',
+        image: '',
+        grant_types: ['authorization_code', 'refresh_token', 'authingToken'],
+        token_endpoint_auth_method: 'client_secret_post',
+        response_types: ['code'],
+        id_token_signed_response_alg: 'HS256',
+        _jwks: '',
+        _jwks_uri: '',
+        authorization_code_expire: '600',
+        id_token_expire: '3600',
+        access_token_expire: '3600',
+        cas_expire: '3600',
+        custom_jwks: ''
+      },
+      app
+    );
 
-    const res = await CreateOIDCApp(this.graphqlClient, this.tokenProvider, app)
-    return res.CreateOIDCApp
+    const res = await CreateOIDCApp(
+      this.graphqlClient,
+      this.tokenProvider,
+      app
+    );
+    return res.CreateOIDCApp;
   }
 
   async oidcProviderByDomain(domain: string) {
-    const res = await oidcProviderByDomain(this.graphqlClient, this.tokenProvider, { domain })
-    return res.QueryOIDCAppInfoByDomain
+    const res = await oidcProviderByDomain(
+      this.graphqlClient,
+      this.tokenProvider,
+      { domain }
+    );
+    return res.QueryOIDCAppInfoByDomain;
   }
 }

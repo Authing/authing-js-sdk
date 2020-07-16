@@ -3,25 +3,28 @@ import { passwordLessForceLogin } from './../graphqlapi/management.users.passwor
 import { interConnections } from './../graphqlapi/management.users.interConnections';
 import { removeUsers } from './../graphqlapi/management.users.delete';
 import { user } from './../graphqlapi/management.users.get';
-import { PagedUsers, ExtendUser, User } from './../../types/graphql';
 import { users } from './../graphqlapi/management.users.list';
 import { register } from './../graphqlapi/management.users.create';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { encrypt } from './../utils/encryption';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
-import { UserRegisterInput } from '../../types/graphql';
 import { createInterConnection } from '../graphqlapi/management.users.createInterConnection';
+import { UserRegisterInput } from '../../types/codeGen';
 
 export class UsersManagementClient {
-  options: ManagementClientOptions
-  graphqlClient: GraphqlClient
-  tokenProvider: ManagementTokenProvider
+  options: ManagementClientOptions;
+  graphqlClient: GraphqlClient;
+  tokenProvider: ManagementTokenProvider;
 
-  constructor(options: ManagementClientOptions, graphqlClient: GraphqlClient, tokenProvider: ManagementTokenProvider) {
-    this.options = options
-    this.graphqlClient = graphqlClient
-    this.tokenProvider = tokenProvider
+  constructor(
+    options: ManagementClientOptions,
+    graphqlClient: GraphqlClient,
+    tokenProvider: ManagementTokenProvider
+  ) {
+    this.options = options;
+    this.graphqlClient = graphqlClient;
+    this.tokenProvider = tokenProvider;
   }
 
   /**
@@ -32,10 +35,12 @@ export class UsersManagementClient {
    * @memberof UsersManagementClient
    */
   async delete(userId: string) {
-    const res: any = await removeUsers(this.graphqlClient, this.tokenProvider, { registerInClient: this.options.userPoolId, ids: [userId] })
-    return res.removeUsers
+    const res = await removeUsers(this.graphqlClient, this.tokenProvider, {
+      registerInClient: this.options.userPoolId,
+      ids: [userId]
+    });
+    return res.removeUsers;
   }
-
 
   /**
    * 批量删除用户
@@ -45,8 +50,11 @@ export class UsersManagementClient {
    * @memberof UsersManagementClient
    */
   async deleteMany(userIds: string[]) {
-    const res: any = await removeUsers(this.graphqlClient, this.tokenProvider, { registerInClient: this.options.userPoolId, ids: userIds })
-    return res.removeUsers
+    const res = await removeUsers(this.graphqlClient, this.tokenProvider, {
+      registerInClient: this.options.userPoolId,
+      ids: userIds
+    });
+    return res.removeUsers;
   }
 
   /**
@@ -56,9 +64,12 @@ export class UsersManagementClient {
    * @returns
    * @memberof UsersManagementClient
    */
-  async get(userId: string): Promise<ExtendUser> {
-    const res: any = await user(this.graphqlClient, this.tokenProvider, { registerInClient: this.options.userPoolId, id: userId })
-    return res.user
+  async get(userId: string) {
+    const res = await user(this.graphqlClient, this.tokenProvider, {
+      registerInClient: this.options.userPoolId,
+      id: userId
+    });
+    return res.user;
   }
 
   /**
@@ -68,11 +79,19 @@ export class UsersManagementClient {
    * @returns
    * @memberof UsersManagementClient
    */
-  async list(page?: number, count?: number): Promise<PagedUsers> {
-    page = page || 0
-    count = count || 10
-    const res: any = await users(this.graphqlClient, this.tokenProvider, Object.assign({}, { page, count }, { registerInClient: this.options.userPoolId }))
-    return res.users
+  async list(page?: number, count?: number) {
+    page = page || 0;
+    count = count || 10;
+    const res = await users(
+      this.graphqlClient,
+      this.tokenProvider,
+      Object.assign(
+        {},
+        { page, count },
+        { registerInClient: this.options.userPoolId }
+      )
+    );
+    return res.users;
   }
 
   /**
@@ -87,30 +106,43 @@ export class UsersManagementClient {
    * @memberof UsersManagementClient
    */
   async create(options: {
-    userInfo: UserRegisterInput,
-    invitationCode?: string,
-    keepPassword?: boolean
-  }): Promise<ExtendUser> {
+    userInfo: UserRegisterInput;
+    invitationCode?: string;
+    keepPassword?: boolean;
+  }) {
+    let { userInfo } = options;
+    options.invitationCode = options.invitationCode || '';
+    options.keepPassword = options.keepPassword || false;
 
-    let { userInfo } = options
-    options.invitationCode = options.invitationCode || ""
-    options.keepPassword = options.keepPassword || false
-
-    if (!userInfo.phone && !userInfo.email && !userInfo.username && !userInfo.unionid) {
-      this.options.onError(new Error("Please provide at least phone, email, username or unionid"))
+    if (
+      !userInfo.phone &&
+      !userInfo.email &&
+      !userInfo.username &&
+      !userInfo.unionid
+    ) {
+      this.options.onError(
+        new Error('Please provide at least phone, email, username or unionid')
+      );
     }
 
     if (options.userInfo.password) {
-      options.userInfo.password = encrypt(options.userInfo.password, this.options.encrptionPublicKey)
+      options.userInfo.password = encrypt(
+        options.userInfo.password,
+        this.options.encrptionPublicKey
+      );
     }
-    userInfo.registerInClient = this.options.userPoolId
-    const data: any = await register(this.graphqlClient, this.tokenProvider, options)
-    return data.register
+    userInfo.registerInClient = this.options.userPoolId;
+    const data = await register(
+      this.graphqlClient,
+      this.tokenProvider,
+      options
+    );
+    return data.register;
   }
 
   /**
    * 建立跨用户池的用户关联
-   * 
+   *
    * maxAge 单位为 s
    *
    * @param {{
@@ -123,14 +155,18 @@ export class UsersManagementClient {
    * @memberof UsersManagementClient
    */
   async createInterConnection(options: {
-    sourceUserPoolId: string,
-    sourceUserId: string,
-    targetUserPoolId: string,
-    targetUserId: string,
-    maxAge: number
+    sourceUserPoolId: string;
+    sourceUserId: string;
+    targetUserPoolId: string;
+    targetUserId: string;
+    maxAge: number;
   }) {
-    const res = await createInterConnection(this.graphqlClient, this.tokenProvider, options)
-    return res.createInterConnection
+    const res = await createInterConnection(
+      this.graphqlClient,
+      this.tokenProvider,
+      options
+    );
+    return res.createInterConnection;
   }
 
   /**
@@ -142,8 +178,8 @@ export class UsersManagementClient {
   async interConnections() {
     const res = await interConnections(this.graphqlClient, this.tokenProvider, {
       userPoolId: this.options.userPoolId
-    })
-    return res.interConnections
+    });
+    return res.interConnections;
   }
 
   /**
@@ -152,11 +188,15 @@ export class UsersManagementClient {
    * @memberof UsersManagementClient
    */
   async passwordLessForceLogin(userId: string) {
-    const res = await passwordLessForceLogin(this.graphqlClient, this.tokenProvider, {
-      userPoolId: this.options.userPoolId,
-      userId
-    })
-    return res.passwordLessForceLogin
+    const res = await passwordLessForceLogin(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        userPoolId: this.options.userPoolId,
+        userId
+      }
+    );
+    return res.passwordLessForceLogin;
   }
 
   /**
@@ -164,13 +204,20 @@ export class UsersManagementClient {
    *
    * @memberof UsersManagementClient
    */
-  async createUserWithoutAuthentication(userInfo: UserRegisterInput, forceLogin?: boolean): Promise<User> {
-    forceLogin = forceLogin || false
-    const res = await createUserWithoutAuthentication(this.graphqlClient, this.tokenProvider, {
-      userPoolId: this.options.userPoolId,
-      userInfo,
-      forceLogin
-    })
-    return res.createUserWithoutAuthentication
+  async createUserWithoutAuthentication(
+    userInfo: UserRegisterInput,
+    forceLogin?: boolean
+  ) {
+    forceLogin = forceLogin || false;
+    const res = await createUserWithoutAuthentication(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        userPoolId: this.options.userPoolId,
+        userInfo,
+        forceLogin
+      }
+    );
+    return res.createUserWithoutAuthentication;
   }
 }

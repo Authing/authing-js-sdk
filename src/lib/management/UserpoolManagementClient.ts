@@ -1,20 +1,24 @@
 import { getUserPoolDetail } from './../graphqlapi/management.userpool.detail';
 import { queryPermissionList } from './../graphqlapi/management.userpool.getPermissionList';
 import { addCollaborator } from './../graphqlapi/management.userpool.addCollaborator';
-import { ManagementClientOptions } from "./types"
-import { GraphqlClient } from "../common/GraphqlClient"
-import { ManagementTokenProvider } from "./ManagementTokenProvider"
-import { PermissionDescriptors } from "../../types/graphql"
+import { ManagementClientOptions } from './types';
+import { GraphqlClient } from '../common/GraphqlClient';
+import { ManagementTokenProvider } from './ManagementTokenProvider';
+import { PermissionDescriptorsListInputType } from '../../types/codeGen';
 
 export class UserPoolManagementClient {
-  options: ManagementClientOptions
-  graphqlClient: GraphqlClient
-  tokenProvider: ManagementTokenProvider
+  options: ManagementClientOptions;
+  graphqlClient: GraphqlClient;
+  tokenProvider: ManagementTokenProvider;
 
-  constructor(options: ManagementClientOptions, graphqlClient: GraphqlClient, tokenProvider: ManagementTokenProvider) {
-    this.options = options
-    this.graphqlClient = graphqlClient
-    this.tokenProvider = tokenProvider
+  constructor(
+    options: ManagementClientOptions,
+    graphqlClient: GraphqlClient,
+    tokenProvider: ManagementTokenProvider
+  ) {
+    this.options = options;
+    this.graphqlClient = graphqlClient;
+    this.tokenProvider = tokenProvider;
   }
 
   /**
@@ -23,31 +27,39 @@ export class UserPoolManagementClient {
    * @memberof UserPoolManagementClient
    */
   async getPermissionList() {
-    const res = await queryPermissionList(this.graphqlClient, this.tokenProvider, {})
-    return res.queryPermissionList
+    const res = await queryPermissionList(
+      this.graphqlClient,
+      this.tokenProvider,
+      {}
+    );
+    return res.queryPermissionList;
   }
 
   /**
    * 添加用户池协作者
-   * 
+   *
    * @param {{ collaboratorUserId: string, permissionDescriptors?: PermissionDescriptors[] }} options
    * @returns
    * @memberof UserPoolManagementClient
    */
-  async addCollaborator(collaboratorUserId: string, permissionDescriptors: PermissionDescriptors[] = []) {
+  async addCollaborator(
+    collaboratorUserId: string,
+    permissionDescriptors: PermissionDescriptorsListInputType[] = []
+  ) {
     if (permissionDescriptors.length === 0) {
-      let permissionList = await this.getPermissionList()
-      permissionDescriptors = permissionList.list.map((p: any) => ({ permissionId: p._id, operationAllow: 15 }))
+      let permissionList = await this.getPermissionList();
+      permissionDescriptors = permissionList.list.map(p => ({
+        permissionId: p._id,
+        operationAllow: 15
+      }));
     }
-    const res: any = await addCollaborator(this.graphqlClient, this.tokenProvider,
-      {
-        userPoolId: this.options.userPoolId,
-        collaboratorUserId,
-        permissionDescriptors
-      })
-    return res.addCollaborator
+    const res = await addCollaborator(this.graphqlClient, this.tokenProvider, {
+      userPoolId: this.options.userPoolId,
+      collaboratorUserId,
+      permissionDescriptors
+    });
+    return res.addCollaborator;
   }
-
 
   /**
    * 查询用户池详情
@@ -56,9 +68,13 @@ export class UserPoolManagementClient {
    * @memberof UserPoolManagementClient
    */
   async detail() {
-    const res = await getUserPoolDetail(this.graphqlClient, this.tokenProvider, {
-      id: this.options.userPoolId
-    })
-    return res.client
+    const res = await getUserPoolDetail(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        id: this.options.userPoolId
+      }
+    );
+    return res.client;
   }
 }

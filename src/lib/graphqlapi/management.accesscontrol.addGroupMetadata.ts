@@ -1,18 +1,21 @@
-
+import {
+  AddGroupMetadata,
+  AddGroupMetadataVariables,
+  AddGroupMetadataDocument
+} from '../../types/codeGen';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
 
-export const addGroupMetadata = async (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider, variables: any): Promise<any> => {
-  const query = ` mutation addGroupMetadata($groupId: String!, $key: String!, $value: String!) {
-    addGroupMetadata(groupId: $groupId, key: $key, value: $value) {
-      key
-      value
-    }
-  }`
-  const token = await tokenProvider.getAccessToken()
-  return await garpqhlClient.request({
+export const addGroupMetadata = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider,
+  variables: AddGroupMetadataVariables
+): Promise<AddGroupMetadata> => {
+  const query = AddGroupMetadataDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
     query,
-    variables,
-    token
-  })
-}
+    token,
+    variables
+  });
+};
