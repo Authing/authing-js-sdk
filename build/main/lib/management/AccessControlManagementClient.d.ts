@@ -1,6 +1,7 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
-import { ManagementClientOptions, AuthingGroup } from './types';
+import { ManagementClientOptions } from './types';
+import { SortByEnum } from '../../types/codeGen';
 export declare class AccessControlManagementClient {
     options: ManagementClientOptions;
     graphqlClient: GraphqlClient;
@@ -14,7 +15,14 @@ export declare class AccessControlManagementClient {
      * @returns {Promise<AuthingGroup>}
      * @memberof AccessControlManagementClient
      */
-    createGroup(name: string, description: string): Promise<AuthingGroup>;
+    createGroup(name: string, description: string): Promise<{
+        _id: string;
+        userPoolId: string;
+        name: string;
+        description?: string;
+        createdAt?: string;
+        updatedAt?: string;
+    }>;
     /**
      * 为 Group 添加自定义数据
      *
@@ -41,7 +49,23 @@ export declare class AccessControlManagementClient {
     addUserToGroup(options: {
         userId: string;
         groupId: string;
-    }): Promise<any>;
+    }): Promise<{
+        _id: string;
+        userPoolId: string;
+        name: string;
+        description?: string;
+        createdAt?: string;
+        updatedAt?: string;
+        roles?: {
+            totalCount?: number;
+        };
+        permissions?: {
+            totalCount?: number;
+        };
+        users?: {
+            totalCount?: number;
+        };
+    }>;
     /**
      * 判断用户是否在 Group 中
      *
@@ -50,7 +74,7 @@ export declare class AccessControlManagementClient {
     isUserInGroup(options: {
         userId: string;
         groupId: string;
-    }): Promise<any>;
+    }): Promise<boolean>;
     /**
      * 查询 Group 用户列表
      *
@@ -63,14 +87,51 @@ export declare class AccessControlManagementClient {
      * @returns
      * @memberof AccessControlManagementClient
      */
-    groupUserList(groupId: string, options: {
-        sortBy?: string;
+    groupUserList(groupId: string, options?: {
+        sortBy?: SortByEnum;
         page?: number;
         count?: number;
-    }): Promise<any>;
+    }): Promise<{
+        totalCount?: number;
+        list?: {
+            _id?: string;
+            unionid?: string;
+            email?: string;
+            emailVerified?: boolean;
+            username?: string;
+            nickname?: string;
+            company?: string;
+            photo?: string;
+            phone?: string;
+            browser?: string;
+            registerInClient?: string;
+            registerMethod?: string;
+            oauth?: string;
+            token?: string;
+            tokenExpiredAt?: string;
+            loginsCount?: number;
+            lastLogin?: string;
+            lastIP?: string;
+            signedUp?: string;
+            blocked?: boolean;
+            isDeleted?: boolean;
+            metadata?: string;
+        }[];
+    }>;
     /**
      * 查询用户所在的分组列表
      *
      */
-    userGroupList(userId: string): Promise<any>;
+    userGroupList(userId: string): Promise<{
+        totalCount: number;
+        rawList: string[];
+        list: {
+            _id: string;
+            userPoolId: string;
+            name: string;
+            description?: string;
+            createdAt?: string;
+            updatedAt?: string;
+        }[];
+    }>;
 }

@@ -1,3 +1,4 @@
 import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
-export declare const orgChildrenNodes: (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider, variables: any) => Promise<any>;
+import { OrgChildrenNodesVariables, OrgChildrenNodes } from '../../types/codeGen';
+export declare const orgChildrenNodes: (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider, variables: OrgChildrenNodesVariables) => Promise<OrgChildrenNodes>;

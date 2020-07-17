@@ -1,4 +1,5 @@
+import { Register, RegisterVariables } from '../../types/CodeGen';
+import { AuthenticationTokenProvider } from '../auth/AuthenticationTokenProvider';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
-import { AuthenticationTokenProvider } from '../auth/AuthenticationTokenProvider';
-export declare const register: (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider, variables: any) => Promise<any>;
+export declare const register: (garpqhlClient: GraphqlClient, tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider, variables: RegisterVariables) => Promise<Register>;

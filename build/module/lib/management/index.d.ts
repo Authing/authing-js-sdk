@@ -16,5 +16,5 @@ export declare class ManagementClient {
     org: OrgManagementClient;
     connections: ConnectionManagementClient;
     constructor(options: ManagementClientOptions);
-    isDomainAvaliable(domain: string): Promise<any>;
+    isDomainAvaliable(domain: string): Promise<boolean>;
 }

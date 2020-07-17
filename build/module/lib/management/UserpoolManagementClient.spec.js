@@ -1,1 +1,29 @@
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVXNlcnBvb2xNYW5hZ2VtZW50Q2xpZW50LnNwZWMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvbGliL21hbmFnZW1lbnQvVXNlcnBvb2xNYW5hZ2VtZW50Q2xpZW50LnNwZWMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiJ9
+import { ManagementClient } from './index';
+import { getOptionsFromEnv, randomString } from './../utils/helper';
+import test from "ava";
+const management = new ManagementClient(getOptionsFromEnv());
+const userManagment = management.users;
+const userpoolManagment = management.userpool;
+test('should be able to add collaborator', async (t) => {
+    const user = await userManagment.create({
+        userInfo: {
+            registerInClient: "",
+            username: randomString(),
+            password: "123456!"
+        }
+    });
+    const { _id } = await userpoolManagment.addCollaborator(user._id);
+    t.assert(_id);
+});
+test("should be able to get userpool detail", async (t) => {
+    const detail = await userpoolManagment.detail();
+    t.assert(detail);
+    t.assert(detail._id !== undefined);
+    t.assert(detail.name !== undefined);
+});
+test('should be able to get get permission list', async (t) => {
+    const list = await userpoolManagment.getPermissionList();
+    t.assert(list);
+    t.assert(list.totalCount !== undefined);
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVXNlcnBvb2xNYW5hZ2VtZW50Q2xpZW50LnNwZWMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvbGliL21hbmFnZW1lbnQvVXNlcnBvb2xNYW5hZ2VtZW50Q2xpZW50LnNwZWMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLGdCQUFnQixFQUFFLE1BQU0sU0FBUyxDQUFDO0FBQzNDLE9BQU8sRUFBRSxpQkFBaUIsRUFBRSxZQUFZLEVBQUUsTUFBTSxtQkFBbUIsQ0FBQztBQUNwRSxPQUFPLElBQUksTUFBTSxLQUFLLENBQUE7QUFFdEIsTUFBTSxVQUFVLEdBQUcsSUFBSSxnQkFBZ0IsQ0FBQyxpQkFBaUIsRUFBRSxDQUFDLENBQUE7QUFDNUQsTUFBTSxhQUFhLEdBQUcsVUFBVSxDQUFDLEtBQUssQ0FBQTtBQUN0QyxNQUFNLGlCQUFpQixHQUFHLFVBQVUsQ0FBQyxRQUFRLENBQUE7QUFFN0MsSUFBSSxDQUFDLG9DQUFvQyxFQUFFLEtBQUssRUFBQyxDQUFDLEVBQUMsRUFBRTtJQUNuRCxNQUFNLElBQUksR0FBRyxNQUFNLGFBQWEsQ0FBQyxNQUFNLENBQUM7UUFDdEMsUUFBUSxFQUFFO1lBQ1IsZ0JBQWdCLEVBQUUsRUFBRTtZQUNwQixRQUFRLEVBQUUsWUFBWSxFQUFFO1lBQ3hCLFFBQVEsRUFBRSxTQUFTO1NBQ3BCO0tBQ0YsQ0FBQyxDQUFBO0lBQ0YsTUFBTSxFQUFFLEdBQUcsRUFBRSxHQUFHLE1BQU0saUJBQWlCLENBQUMsZUFBZSxDQUFDLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQTtJQUNqRSxDQUFDLENBQUMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFBO0FBQ2YsQ0FBQyxDQUFDLENBQUE7QUFFRixJQUFJLENBQUMsdUNBQXVDLEVBQUUsS0FBSyxFQUFDLENBQUMsRUFBQyxFQUFFO0lBQ3RELE1BQU0sTUFBTSxHQUFHLE1BQU0saUJBQWlCLENBQUMsTUFBTSxFQUFFLENBQUE7SUFDL0MsQ0FBQyxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUMsQ0FBQTtJQUNoQixDQUFDLENBQUMsTUFBTSxDQUFDLE1BQU0sQ0FBQyxHQUFHLEtBQUssU0FBUyxDQUFDLENBQUE7SUFDbEMsQ0FBQyxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUMsSUFBSSxLQUFLLFNBQVMsQ0FBQyxDQUFBO0FBQ3JDLENBQUMsQ0FBQyxDQUFBO0FBRUYsSUFBSSxDQUFDLDJDQUEyQyxFQUFFLEtBQUssRUFBQyxDQUFDLEVBQUMsRUFBRTtJQUMxRCxNQUFNLElBQUksR0FBRyxNQUFNLGlCQUFpQixDQUFDLGlCQUFpQixFQUFFLENBQUM7SUFDekQsQ0FBQyxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsQ0FBQTtJQUNkLENBQUMsQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDLFVBQVUsS0FBSyxTQUFTLENBQUMsQ0FBQTtBQUN6QyxDQUFDLENBQUMsQ0FBQSJ9

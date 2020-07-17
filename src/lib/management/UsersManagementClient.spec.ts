@@ -8,6 +8,7 @@ const usersManagement = management.users
 test('should be able to create user', async t => {
   const user = await usersManagement.create({
     userInfo: {
+      registerInClient: "",
       username: randomString(),
       password: "123456!"
     }
@@ -27,6 +28,7 @@ test("should be able to get user list", async t => {
 test('should be able to get use info', async t => {
   const user = await usersManagement.create({
     userInfo: {
+      registerInClient: "",
       username: randomString(),
       password: "123456!"
     }
@@ -39,6 +41,7 @@ test('should be able to get use info', async t => {
 test('should be able to delete user', async t => {
   let user = await usersManagement.create({
     userInfo: {
+      registerInClient: "",
       username: randomString(),
       password: "123456!"
     }
