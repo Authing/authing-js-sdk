@@ -13,6 +13,7 @@ export default function user(options) {
       user(id: $id, registerInClient: $registerInClient) {
         _id
         unionid
+        openid
         email
         emailVerified
         username
@@ -21,6 +22,8 @@ export default function user(options) {
         photo
         phone
         browser
+        device
+        password
         registerInClient
         registerMethod
         oauth
@@ -32,7 +35,43 @@ export default function user(options) {
         signedUp
         blocked
         isDeleted
+        name
+        givenName
+        familyName
+        middleName
+        profile
+        preferredUsername
+        website
+        gender
+        birthdate
+        zoneinfo
+        locale
+        address
+        formatted
+        streetAddress
+        locality
+        region
+        postalCode
         metadata
+        customData
+        salt
+        country
+        updatedAt
+        group {
+          _id
+          name
+          descriptions
+          client
+          permissions
+          createdAt
+        }
+        clientType {
+          _id
+          name
+          description
+          image
+          example
+        }
         userLocation {
           _id
           when
@@ -46,7 +85,15 @@ export default function user(options) {
             success
             ip
             result
+            device
+            browser
           }
+        }
+        systemApplicationType {
+          _id
+          name
+          descriptions
+          price
         }
         thirdPartyIdentity {
           provider

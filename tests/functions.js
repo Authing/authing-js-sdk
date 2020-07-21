@@ -625,7 +625,7 @@ test("preflightFun: 用户和认证服务预检函数", async t => {
   t.is(res[1].data.ok, 2);
 });
 
-test.only("checkPreflight: 根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
+test("checkPreflight: 根据参数决定是否进行用户和认证服务预检和 cdn 预检", async t => {
   let auth = new Authing({
     userPoolId: config.userPoolId,
     secret: config.secret,
@@ -694,7 +694,7 @@ test("readOAuthList", async t => {
   }
 });
 
-test("user: 根据 id 查询单个用户", async t => {
+test.only("user: 根据 id 查询单个用户", async t => {
   let validAuth = auth;
   let email = randomEmail();
   let res = await validAuth.register({
@@ -702,6 +702,7 @@ test("user: 根据 id 查询单个用户", async t => {
     password: "123456a"
   });
   let user = await validAuth.user({ id: res._id });
+  console.log(user)
   t.assert(user._id);
   t.assert(user.thirdPartyIdentity)
 });
@@ -1100,7 +1101,7 @@ test('测试多个用户池登录', async t=>{
   await auth2.remove(user2._id, '5ccb24701bbaf00d50ced851');
   t.pass()
 })
-test.only('测试是否存在用户',async t=>{
+test('测试是否存在用户',async t=>{
   let res =await auth.userExist('59f86b4832eb28071bdd9214',{phone:"123"})
   return res
 }) 
