@@ -194,6 +194,7 @@ export default function startWXAppScaning(opts) {
                 }
               });
             }, interval);
+            intervals.push(interval)
           };
 
           const tip = genTip(tips || `使用 <strong>微信</strong> 或小程序 <strong>${this.opts.enableFetchPhone?'小登录':'身份管家'}</strong> 扫码登录`);
@@ -211,6 +212,13 @@ export default function startWXAppScaning(opts) {
       }
     });
   };
-
   start();
+}
+
+// 全局 intervals: 清除产生多个interval 
+window.intervals = [];
+if(window.intervals.length>1){
+  intervals.slice(0,intervals.length-1).forEach(inter => {
+    clearInterval(inter)
+  });
 }
