@@ -173,6 +173,7 @@ export default function startWXAppScaning(opts) {
               self.checkQR().then((checkRes) => {
                 const checkResult = checkRes.data.data;
                 if (checkResult.code === 200) {
+                  clearInterval(timer);
                   clearInterval(inter);
                   // 登录成功记录 token
                   this.tokenManager.setUserToken(checkResult.data.token);
@@ -194,7 +195,7 @@ export default function startWXAppScaning(opts) {
                 }
               });
             }, interval);
-            intervals.push(interval)
+            intervals.push(inter)
           };
 
           const tip = genTip(tips || `使用 <strong>微信</strong> 或小程序 <strong>${this.opts.enableFetchPhone?'小登录':'身份管家'}</strong> 扫码登录`);
@@ -216,9 +217,12 @@ export default function startWXAppScaning(opts) {
 }
 
 // 全局 intervals: 清除产生多个interval 
+
 window.intervals = [];
-if(window.intervals.length>1){
-  intervals.slice(0,intervals.length-1).forEach(inter => {
-    clearInterval(inter)
-  });
-}
+window.timer = setInterval(()=>{
+  if(window.intervals.length>1){
+    intervals.slice(0,intervals.length-1).forEach(inter => {
+      clearInterval(inter)
+    });
+  }
+},1000)

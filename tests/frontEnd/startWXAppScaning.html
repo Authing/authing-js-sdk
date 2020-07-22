@@ -12,7 +12,7 @@
     </div>
     <script src="../../dist/authing-js-sdk-browser.js?v=4"></script>
     <script>
-      var authing = new Authing({ userPoolId: '5a9fa26cf8635a000185528c' });
+      var authing = new Authing({ userPoolId: '5f1514db40e75488ae62624b' });
       authing.startWXAppScaning({
         onError: function(err) {
           console.log(err);
@@ -34,8 +34,8 @@
           console.log(data);
         },
         redirect: false,
-        useSelfWxapp: true,
-        enableFetchPhone: true,
+        // useSelfWxapp: true,
+        // enableFetchPhone: true,
         // tips: 'tips',
         // successTips: 'successTips',
         // successRedirectTips: 'successRedirectTips',
@@ -44,6 +44,7 @@
         mount: 'good',
         interval: 3000
       });
+     
     </script>
   </body>
 </html>
