@@ -1,13 +1,14 @@
 import createCssClassStyleSheet from '../utils/createCssClassStyleSheet'
+
 export default function startWXAppScaning(opts) {
   const self = this;
-
   if (!opts) {
     opts = {};
   }
-
-  const mountNode = opts.mount || 'authing__qrcode-root-node';
+  const mountNode = opts.mount || 'authing__qrcode-root-node'; 
   const interval = opts.interval || 1500;
+  const intervals = []; // 定时器管理数组 
+
   const { tips, successTips, successRedirectTips, retryTips, failedTips } = opts;
 
   this.opts.enableFetchPhone = opts.enableFetchPhone || this.opts.enableFetchPhone;
@@ -28,32 +29,34 @@ export default function startWXAppScaning(opts) {
   let qrcodeWrapper;
 
   let needGenerate = false;
-  let start = () => { };
 
-  if (!qrcodeNode) {
-    qrcodeNode = document.createElement('div');
-    qrcodeNode.id = mountNode;
-    createCssClassStyleSheet('__authing-qrcode-node', `z-index: 65535;position: fixed;background: #fff;width: 300px;height: 300px;left: 50%;margin-left: -150px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -150px;border: 1px solid #ccc;`)
-    qrcodeNode.classList.add("__authing-qrcode-node")
-    document.getElementsByTagName('body')[0].appendChild(qrcodeNode);
-    needGenerate = true;
-  } else {
-    createCssClassStyleSheet('__authing-qrcode-node', `position:relative;`)
-    qrcodeNode.classList.add("__authing-qrcode-node")
+  const createQrcode = () => {
+    if (!qrcodeNode) {
+      qrcodeNode = document.createElement('div');
+      qrcodeNode.id = mountNode;
+      createCssClassStyleSheet('__authing-qrcode-node', `z-index: 65535;position: fixed;background: #fff;width: 300px;height: 300px;left: 50%;margin-left: -150px;display: flex;justify-content: center;align-items: center;top: 50%;margin-top: -150px;border: 1px solid #ccc;`)
+      qrcodeNode.classList.add("__authing-qrcode-node")
+      document.getElementsByTagName('body')[0].appendChild(qrcodeNode);
+      needGenerate = true;
+    } else {
+      createCssClassStyleSheet('__authing-qrcode-node', `position:relative;`)
+      qrcodeNode.classList.add("__authing-qrcode-node")
+    }
+  
+    const styleNode = document.createElement('style');
+    const style = '#authing__retry a:hover{outline:0px;text-decoration:none;}#authing__spinner{position:absolute;left:50%;margin-left:-6px;}.spinner{margin:100px auto;width:20px;height:20px;position:relative}.container1>div,.container2>div,.container3>div{width:6px;height:6px;background-color:#00a1ea;border-radius:100%;position:absolute;-webkit-animation:bouncedelay 1.2s infinite ease-in-out;animation:bouncedelay 1.2s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}.spinner .spinner-container{position:absolute;width:100%;height:100%}.container2{-webkit-transform:rotateZ(45deg);transform:rotateZ(45deg)}.container3{-webkit-transform:rotateZ(90deg);transform:rotateZ(90deg)}.circle1{top:0;left:0}.circle2{top:0;right:0}.circle3{right:0;bottom:0}.circle4{left:0;bottom:0}.container2 .circle1{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.container3 .circle1{-webkit-animation-delay:-1.0s;animation-delay:-1.0s}.container1 .circle2{-webkit-animation-delay:-0.9s;animation-delay:-0.9s}.container2 .circle2{-webkit-animation-delay:-0.8s;animation-delay:-0.8s}.container3 .circle2{-webkit-animation-delay:-0.7s;animation-delay:-0.7s}.container1 .circle3{-webkit-animation-delay:-0.6s;animation-delay:-0.6s}.container2 .circle3{-webkit-animation-delay:-0.5s;animation-delay:-0.5s}.container3 .circle3{-webkit-animation-delay:-0.4s;animation-delay:-0.4s}.container1 .circle4{-webkit-animation-delay:-0.3s;animation-delay:-0.3s}.container2 .circle4{-webkit-animation-delay:-0.2s;animation-delay:-0.2s}.container3 .circle4{-webkit-animation-delay:-0.1s;animation-delay:-0.1s}@-webkit-keyframes bouncedelay{0%,80%,100%{-webkit-transform:scale(0.0)}40%{-webkit-transform:scale(1.0)}}@keyframes bouncedelay{0%,80%,100%{transform:scale(0.0);-webkit-transform:scale(0.0)}40%{transform:scale(1.0);-webkit-transform:scale(1.0)}}';
+  
+    styleNode.type = 'text/css';
+  
+    if (styleNode.styleSheet) {
+      styleNode.styleSheet.cssText = style;
+    } else {
+      styleNode.innerHTML = style;
+    }
+  
+    document.getElementsByTagName('head')[0].appendChild(styleNode);
   }
-
-  const styleNode = document.createElement('style'); const
-    style = '#authing__retry a:hover{outline:0px;text-decoration:none;}#authing__spinner{position:absolute;left:50%;margin-left:-6px;}.spinner{margin:100px auto;width:20px;height:20px;position:relative}.container1>div,.container2>div,.container3>div{width:6px;height:6px;background-color:#00a1ea;border-radius:100%;position:absolute;-webkit-animation:bouncedelay 1.2s infinite ease-in-out;animation:bouncedelay 1.2s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}.spinner .spinner-container{position:absolute;width:100%;height:100%}.container2{-webkit-transform:rotateZ(45deg);transform:rotateZ(45deg)}.container3{-webkit-transform:rotateZ(90deg);transform:rotateZ(90deg)}.circle1{top:0;left:0}.circle2{top:0;right:0}.circle3{right:0;bottom:0}.circle4{left:0;bottom:0}.container2 .circle1{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.container3 .circle1{-webkit-animation-delay:-1.0s;animation-delay:-1.0s}.container1 .circle2{-webkit-animation-delay:-0.9s;animation-delay:-0.9s}.container2 .circle2{-webkit-animation-delay:-0.8s;animation-delay:-0.8s}.container3 .circle2{-webkit-animation-delay:-0.7s;animation-delay:-0.7s}.container1 .circle3{-webkit-animation-delay:-0.6s;animation-delay:-0.6s}.container2 .circle3{-webkit-animation-delay:-0.5s;animation-delay:-0.5s}.container3 .circle3{-webkit-animation-delay:-0.4s;animation-delay:-0.4s}.container1 .circle4{-webkit-animation-delay:-0.3s;animation-delay:-0.3s}.container2 .circle4{-webkit-animation-delay:-0.2s;animation-delay:-0.2s}.container3 .circle4{-webkit-animation-delay:-0.1s;animation-delay:-0.1s}@-webkit-keyframes bouncedelay{0%,80%,100%{-webkit-transform:scale(0.0)}40%{-webkit-transform:scale(1.0)}}@keyframes bouncedelay{0%,80%,100%{transform:scale(0.0);-webkit-transform:scale(0.0)}40%{transform:scale(1.0);-webkit-transform:scale(1.0)}}';
-
-  styleNode.type = 'text/css';
-
-  if (styleNode.styleSheet) {
-    styleNode.styleSheet.cssText = style;
-  } else {
-    styleNode.innerHTML = style;
-  }
-
-  document.getElementsByTagName('head')[0].appendChild(styleNode);
+  
 
   const loading = () => {
     qrcodeNode.innerHTML = '<div id="authing__spinner" class="spinner"><div class="spinner-container container1"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container2"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container3"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div></div>';
@@ -133,9 +136,24 @@ export default function startWXAppScaning(opts) {
     qrcodeWrapper.appendChild(tip);
     qrcodeElm.appendChild(qrcodeWrapper);
   }
+  // 设置监测器
+  const timer = setInterval(() => {
+    if (intervals.length > 1) {
+      intervals.slice(0, intervals.length - 1).forEach(inter => {
+        clearInterval(inter)
+      });
+    }
+    const hasDom = document.getElementById(mountNode)
+    if (hasDom === null) {
+      intervals.forEach(inter => {
+        clearInterval(inter)
+      })
+    }
+  }, 1000)
 
-  start = () => {
+  const start = () => {
     loading();
+
     self.genQRCode().then((qrRes) => {
       qrRes = qrRes.data;
 
@@ -148,7 +166,7 @@ export default function startWXAppScaning(opts) {
         const qrcode = qrRes.data;
         if (onQRCodeLoad) {
           onQRCodeLoad(qrcode);
-        }        
+        }
         sessionStorage.qrcodeUrl = qrcode.qrcode;
         sessionStorage.qrcode = JSON.stringify(qrcode);
 
@@ -195,10 +213,10 @@ export default function startWXAppScaning(opts) {
                 }
               });
             }, interval);
-            intervals.push(inter)
+            intervals.push(inter) // 推入定时器栈
           };
 
-          const tip = genTip(tips || `使用 <strong>微信</strong> 或小程序 <strong>${this.opts.enableFetchPhone?'小登录':'身份管家'}</strong> 扫码登录`);
+          const tip = genTip(tips || `使用 <strong>微信</strong> 或小程序 <strong>${this.opts.enableFetchPhone ? '小登录' : '身份管家'}</strong> 扫码登录`);
 
           qrcodeWrapper.appendChild(qrcodeImage);
           qrcodeWrapper.appendChild(tip);
@@ -213,16 +231,6 @@ export default function startWXAppScaning(opts) {
       }
     });
   };
+  createQrcode();
   start();
 }
-
-// 全局 intervals: 清除产生多个interval 
-
-window.intervals = [];
-window.timer = setInterval(()=>{
-  if(window.intervals.length>1){
-    intervals.slice(0,intervals.length-1).forEach(inter => {
-      clearInterval(inter)
-    });
-  }
-},1000)

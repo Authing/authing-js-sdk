@@ -170,7 +170,7 @@ if (process.env.BUILD_TARGET === 'node') {
     updateSuccessTips,
     updateSuccessRedirectTips,
     selectAvatarFile,
-    startWXAppScaning
+    startWXAppScaning,
   })
 }
 export default mod;
