@@ -12,7 +12,7 @@ export default function update(options) {
 
   if (options.password) {
     options.password = encryption(options.password);
-    options.oldPassword = encryption(options.oldPassword);
+    options.oldPassword = options.oldPassword ? encryption(options.oldPassword) : null;
   }
 
   options.registerInClient = self.userPoolId;
