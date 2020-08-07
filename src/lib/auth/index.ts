@@ -3,6 +3,7 @@ import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import { checkLoginStatus } from './../graphqlapi/auth.checkLoginStatus';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
+import { sendVerifyEmail } from '../graphqlapi/auth.sendVerifyEmail';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,
@@ -18,8 +19,8 @@ GKl64GDcIq3au+aqJQIDAQAB
   enableAccessTokenCache: true,
   host: {
     graphqlApiEndpoint: 'https://core.authing.cn/graphql',
-    restApiBaseHost: 'https://core.authing.cn'
-  }
+    restApiBaseHost: 'https://core.authing.cn',
+  },
 };
 
 export class AuthenticationClient {
@@ -45,10 +46,26 @@ export class AuthenticationClient {
     );
   }
 
+  /**
+   * 检测 AccessToken 所属用户的登录状态
+   * @param token 用户 AccessToken
+   */
   async checkLoginStatus(token: string) {
     const res = await checkLoginStatus(this.graphqlClient, this.tokenProvider, {
-      token
+      token,
     });
     return res.checkLoginStatus;
+  }
+
+  /**
+   * 想邮箱中发送验证邮件
+   * @param email 用户邮箱
+   */
+  async sendVerifyEmail(email: string) {
+    const res = await sendVerifyEmail(this.graphqlClient, this.tokenProvider, {
+      email,
+      client: this.options.userPoolId,
+    });
+    return res.sendVerifyEmail;
   }
 }
