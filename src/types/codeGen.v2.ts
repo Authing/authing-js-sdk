@@ -2895,11 +2895,27 @@ export type IsActionAllowedVariables = Exact<{
 
 export type IsActionAllowed = { isActionAllowed: boolean };
 
+export type IsActionDeniedVariables = Exact<{
+  resouceCode: Scalars['String'];
+  action: Scalars['String'];
+  userId: Scalars['String'];
+}>;
+
+export type IsActionDenied = { isActionDenied: boolean };
+
 export type IsDomainAvaliableVariables = Exact<{
   domain: Scalars['String'];
 }>;
 
 export type IsDomainAvaliable = { isDomainAvaliable?: Maybe<boolean> };
+
+export type IsPasswordValidVariables = Exact<{
+  password: Scalars['String'];
+}>;
+
+export type IsPasswordValid = {
+  isPasswordValid: { valid: boolean; message?: Maybe<string> };
+};
 
 export type NodeVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -6476,9 +6492,26 @@ export const IsActionAllowedDocument = gql`
     isActionAllowed(resouceCode: $resouceCode, action: $action, userId: $userId)
   }
 `;
+export const IsActionDeniedDocument = gql`
+  query isActionDenied(
+    $resouceCode: String!
+    $action: String!
+    $userId: String!
+  ) {
+    isActionDenied(resouceCode: $resouceCode, action: $action, userId: $userId)
+  }
+`;
 export const IsDomainAvaliableDocument = gql`
   query isDomainAvaliable($domain: String!) {
     isDomainAvaliable(domain: $domain)
+  }
+`;
+export const IsPasswordValidDocument = gql`
+  query isPasswordValid($password: String!) {
+    isPasswordValid(password: $password) {
+      valid
+      message
+    }
   }
 `;
 export const NodeDocument = gql`

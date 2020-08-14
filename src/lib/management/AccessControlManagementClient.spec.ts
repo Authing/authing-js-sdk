@@ -21,6 +21,7 @@ test('平级 role + user + resource', async t => {
   t.assert(resouce);
 
   await acl.allow(roleCode, 'open', resouceCode);
+  await acl.deny(roleCode, 'close', resouceCode);
   const user = await management.users.create({
     username: generateRandomString(),
     password: '123456'
@@ -33,4 +34,7 @@ test('平级 role + user + resource', async t => {
 
   const allowed2 = await acl.isAllowed(userId, 'xxxx', resouceCode);
   t.assert(allowed2 === false);
+
+  const allowed3 = await acl.isAllowed(userId, 'close', resouceCode);
+  t.assert(allowed3 === false);
 });

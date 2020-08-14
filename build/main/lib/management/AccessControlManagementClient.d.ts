@@ -462,4 +462,13 @@ export declare class AccessControlManagementClient {
      *
      */
     isAllowed(userId: string, action: string, resouceCode: string): Promise<boolean>;
+    /**
+     * @description 判断某个用户是否对某个资源没有某个操作权限
+     *
+     * @param userId: 用户ID
+     * @param action: 操作
+     * @param resouceCode: 资源代码
+     *
+     */
+    isDenied(userId: string, action: string, resouceCode: string): Promise<boolean>;
 }

@@ -13,6 +13,7 @@ import { addResource } from '../graphqlapi/management.acl.addResource';
 import { allow } from '../graphqlapi/management.acl.allow';
 import { isAllowed } from '../graphqlapi/management.acl.isAllow';
 import { assignRole } from '../graphqlapi/management.acl.assignRole';
+import { isDenied } from '../graphqlapi/management.acl.isDenied';
 
 export class AccessControlManagementClient {
   options: ManagementClientOptions;
@@ -247,5 +248,26 @@ export class AccessControlManagementClient {
       }
     );
     return isActionAllowed;
+  }
+
+  /**
+   * @description 判断某个用户是否对某个资源没有某个操作权限
+   *
+   * @param userId: 用户ID
+   * @param action: 操作
+   * @param resouceCode: 资源代码
+   *
+   */
+  async isDenied(userId: string, action: string, resouceCode: string) {
+    const { isActionDenied } = await isDenied(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        resouceCode,
+        action,
+        userId
+      }
+    );
+    return isActionDenied;
   }
 }
