@@ -25,8 +25,12 @@ test('平级 role + user + resource', async t => {
     username: generateRandomString(),
     password: '123456'
   });
+  const userId = user._id;
   await acl.assignRole(roleCode, [user._id]);
 
-  const allowed = await acl.isAllowed(roleCode, 'open', resouceCode);
+  const allowed = await acl.isAllowed(userId, 'open', resouceCode);
   t.assert(allowed);
+
+  const allowed2 = await acl.isAllowed(userId, 'xxxx', resouceCode);
+  t.assert(allowed2 === false);
 });

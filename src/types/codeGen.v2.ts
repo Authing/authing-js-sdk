@@ -682,8 +682,8 @@ export type AddWhitelist = {
 export type AssignRoleVariables = Exact<{
   code: Scalars['String'];
   userIds?: Maybe<Array<Scalars['String']>>;
-  groupIds?: Maybe<Array<Scalars['String']>>;
-  nodeIds?: Maybe<Array<Scalars['String']>>;
+  groupCodes?: Maybe<Array<Scalars['String']>>;
+  nodeCodes?: Maybe<Array<Scalars['String']>>;
 }>;
 
 export type AssignRole = {
@@ -2095,8 +2095,8 @@ export type RemoveWhitelist = {
 export type RevokeRoleVariables = Exact<{
   code: Scalars['String'];
   userIds?: Maybe<Array<Scalars['String']>>;
-  groupIds?: Maybe<Array<Scalars['String']>>;
-  nodeIds?: Maybe<Array<Scalars['String']>>;
+  groupCodes?: Maybe<Array<Scalars['String']>>;
+  nodeCodes?: Maybe<Array<Scalars['String']>>;
 }>;
 
 export type RevokeRole = {
@@ -4295,14 +4295,14 @@ export const AssignRoleDocument = gql`
   mutation assignRole(
     $code: String!
     $userIds: [String!]
-    $groupIds: [String!]
-    $nodeIds: [String!]
+    $groupCodes: [String!]
+    $nodeCodes: [String!]
   ) {
     assignRole(
       code: $code
       userIds: $userIds
-      groupIds: $groupIds
-      nodeIds: $nodeIds
+      groupCodes: $groupCodes
+      nodeCodes: $nodeCodes
     ) {
       code
       name
@@ -5691,14 +5691,14 @@ export const RevokeRoleDocument = gql`
   mutation revokeRole(
     $code: String!
     $userIds: [String!]
-    $groupIds: [String!]
-    $nodeIds: [String!]
+    $groupCodes: [String!]
+    $nodeCodes: [String!]
   ) {
     revokeRole(
       code: $code
       userIds: $userIds
-      groupIds: $groupIds
-      nodeIds: $nodeIds
+      groupCodes: $groupCodes
+      nodeCodes: $nodeCodes
     ) {
       code
       name
