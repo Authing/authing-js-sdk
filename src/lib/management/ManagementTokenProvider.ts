@@ -24,7 +24,7 @@ export class ManagementTokenProvider {
    * @returns
    * @memberof ManagementTokenProvider
    */
-  async getClientWhenSdkInit() {
+  private async getClientWhenSdkInit() {
     const res: any = await graphqlRequest({
       endpoint: this.options.host.graphqlApiEndpoint,
       query: `query getClientWhenSdkInit($clientId: String!, $secret: String!) {\n  getClientWhenSdkInit(clientId: $clientId, secret: $secret) {\n    accessToken\n  }\n}\n`,
@@ -41,7 +41,7 @@ export class ManagementTokenProvider {
    *
    * @memberof ManagementTokenProvider
    */
-  async refreshToken() {
+  private async refreshToken() {
     const res: any = await graphqlRequest({
       endpoint: this.options.host.graphqlApiEndpoint,
       query: `mutation refreshAccessToken($userPoolId: String!, $accessToken: String!){
@@ -80,7 +80,7 @@ export class ManagementTokenProvider {
    * @returns
    * @memberof ManagementTokenProvider
    */
-  async getAccessTokenFromServver() {
+  private async getAccessTokenFromServver() {
     // 如果是通过密钥刷新
     let accessToken = null;
     if (this.options.secret) {
