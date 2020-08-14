@@ -1,12 +1,32 @@
 import { ManagementClient } from './index';
-import { getOptionsFromEnv } from './../utils/helper';
-import test from "ava"
+import { generateRandomString, getOptionsFromEnv } from './../utils/helper';
+import test from 'ava';
 
-const management = new ManagementClient(getOptionsFromEnv())
-const accessControl = management.accessControl
+const management = new ManagementClient(getOptionsFromEnv());
+const acl = management.acl;
 
-test('should be able to create group', async t => {
-  const group = await accessControl.createGroup("管理员", "管理员")
-  t.assert(group)
-  t.assert(group._id)
-})
+test('创建分组', async t => {
+  const group = await acl.createGroup(generateRandomString(), '管理员');
+  t.assert(group);
+  t.assert(group._id);
+});
+
+test('平级 role + user + resource', async t => {
+  const roleCode = generateRandomString();
+  const role = await acl.addRole(roleCode);
+  t.assert(role);
+
+  const resouceCode = generateRandomString();
+  const resouce = await acl.addResource(resouceCode);
+  t.assert(resouce);
+
+  await acl.allow(roleCode, 'open', resouceCode);
+  const user = await management.users.create({
+    username: generateRandomString(),
+    password: '123456'
+  });
+  await acl.assignRole(roleCode, [user._id]);
+
+  const allowed = await acl.isAllowed(roleCode, 'open', resouceCode);
+  t.assert(allowed);
+});

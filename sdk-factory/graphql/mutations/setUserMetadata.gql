@@ -1,9 +1,0 @@
-mutation setUserMetadata($input: SetUserMetadataInput!){
-    setUserMetadata(input: $input){
-        totalCount
-        list{
-            key
-            value
-        }
-    }
-}

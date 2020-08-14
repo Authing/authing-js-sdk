@@ -3,20 +3,21 @@
  */
 export interface ManagementClientOptions {
   /** 用户池 ID **/
-  userPoolId: string,
+  userPoolId: string;
   /** 用户池密钥 **/
-  secret?: string,
+  secret?: string;
   /** 用户池 accessToken，如果传入，请注意 token 过期状态，你需要自己维护此 Token 的状态，SDK 不会自动更新  **/
-  accessToken?: string,
+  accessToken?: string;
   /** 请求超时时间 **/
-  timeout?: number,
+  timeout?: number;
   /** 错误回调函数, 默认为 (err: Error) => { throw err } 直接抛出报错 **/
-  onError?: (err: Error) => void,
-  encrptionPublicKey?: string,
+  onError?: (err: Error) => void;
+  encrptionPublicKey?: string;
   host?: {
-    graphqlApiEndpoint: string,
-    restApiBaseHost: string
-  }
+    graphqlApiEndpoint: string;
+    graphqlApiEndpointV2: string;
+    restApiBaseHost: string;
+  };
 }
 
 /**
@@ -24,15 +25,15 @@ export interface ManagementClientOptions {
  */
 export interface DecodedAccessToken {
   /** 签发时间 **/
-  iat: number
+  iat: number;
   /** 过期时间 **/
-  exp: number
+  exp: number;
   data: {
     /** 用户池管理员邮箱 **/
-    email: string,
+    email: string;
     /** 用户池管理员用户 ID **/
-    id: string
-  }
+    id: string;
+  };
 }
 
 /**
@@ -80,34 +81,34 @@ export interface OIDCProviderCustomStylesQrcodeScanningInput {
 }
 
 export interface CreateOIDCProviderInput {
-  name: string
-  domain: string
-  redirect_uris: [string]
-  grant_types?: [string]
-  response_types?: [string]
-  clientId?: string
-  token_endpoint_auth_method?: string
-  image?: string
-  isDefault: boolean
-  id_token_signed_response_alg?: string
-  id_token_encrypted_response_alg?: string
-  id_token_encrypted_response_enc?: string
-  userinfo_signed_response_alg?: string
-  userinfo_encrypted_response_alg?: string
-  userinfo_encrypted_response_enc?: string
-  request_object_signing_alg?: string
-  request_object_encryption_alg?: string
-  request_object_encryption_enc?: string
-  jwks_uri?: string
-  _jwks_uri?: string
-  jwks?: string
-  _jwks?: string
-  custom_jwks?: string
-  description?: string
-  homepageURL?: string
-  authorization_code_expire?: string
-  id_token_expire?: string
-  access_token_expire?: string
-  cas_expire?: string
-  customStyles?: OIDCProviderCustomStylesInput
+  name: string;
+  domain: string;
+  redirect_uris: [string];
+  grant_types?: [string];
+  response_types?: [string];
+  clientId?: string;
+  token_endpoint_auth_method?: string;
+  image?: string;
+  isDefault: boolean;
+  id_token_signed_response_alg?: string;
+  id_token_encrypted_response_alg?: string;
+  id_token_encrypted_response_enc?: string;
+  userinfo_signed_response_alg?: string;
+  userinfo_encrypted_response_alg?: string;
+  userinfo_encrypted_response_enc?: string;
+  request_object_signing_alg?: string;
+  request_object_encryption_alg?: string;
+  request_object_encryption_enc?: string;
+  jwks_uri?: string;
+  _jwks_uri?: string;
+  jwks?: string;
+  _jwks?: string;
+  custom_jwks?: string;
+  description?: string;
+  homepageURL?: string;
+  authorization_code_expire?: string;
+  id_token_expire?: string;
+  access_token_expire?: string;
+  cas_expire?: string;
+  customStyles?: OIDCProviderCustomStylesInput;
 }

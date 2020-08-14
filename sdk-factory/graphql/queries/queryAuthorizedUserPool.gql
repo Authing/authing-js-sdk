@@ -1,8 +1,0 @@
-query queryAuthorizedUserPool($unionid: String, $phone: String, $openid: String, $page: Int, $count: Int){
-    queryAuthorizedUserPool(unionid: $unionid, phone: $phone, openid: $openid, page: $page, count: $count){
-        list{
-            userId
-        }
-        total
-    }
-}

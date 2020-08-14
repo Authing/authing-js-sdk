@@ -1,3 +1,0 @@
-mutation removeAdConnector($_id: String!){
-    removeAdConnector(_id: $_id)
-}

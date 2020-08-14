@@ -1,9 +1,0 @@
-query queryRoleByUserId($user: String!, $client: String!){
-    queryRoleByUserId(user: $user, client: $client){
-        list{
-            _id
-            createdAt
-        }
-        totalCount
-    }
-}

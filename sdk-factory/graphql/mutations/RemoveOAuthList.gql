@@ -1,3 +1,0 @@
-mutation RemoveOAuthList($ids: [String]){
-    RemoveOAuthList(ids: $ids)
-}

@@ -1,8 +1,0 @@
-query orgs($userPoolId: String!){
-    orgs(userPoolId: $userPoolId){
-        totalCount
-        list{
-            _id
-        }
-    }
-}

@@ -11,3 +11,8 @@ export declare const sleep: (ms: number) => Promise<unknown>;
  *
  */
 export declare const getOptionsFromEnv: () => ManagementClientOptions;
+/**
+ * @description 生成随机字符串
+ *
+ */
+export declare function generateRandomString(length?: number): string;

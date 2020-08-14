@@ -1,8 +1,0 @@
-mutation updateSuperAdminUser($options: SuperAdminUpdateInput!){
-    updateSuperAdminUser(options: $options){
-        email
-        username
-        _id
-        upgrade
-    }
-}

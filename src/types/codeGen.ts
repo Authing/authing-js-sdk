@@ -230,7 +230,7 @@ export type UserRegisterInput = {
   salt?: Maybe<Scalars['String']>;
   forceLogin?: Maybe<Scalars['Boolean']>;
   lastIP?: Maybe<Scalars['String']>;
-  registerInClient: Scalars['String'];
+  registerInClient?: Scalars['String'];
   registerMethod?: Maybe<Scalars['String']>;
   oauth?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;

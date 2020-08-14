@@ -1,7 +1,0 @@
-mutation order($options: OrderAddInput!){
-    order(options: $options){
-        code
-        url
-        charge
-    }
-}

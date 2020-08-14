@@ -1,9 +1,0 @@
-query userMetadata($_id: String!){
-    userMetadata(_id: $_id){
-        totalCount
-        list{
-            key
-            value
-        }
-    }
-}

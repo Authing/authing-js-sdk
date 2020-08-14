@@ -15,6 +15,7 @@ export interface ManagementClientOptions {
     encrptionPublicKey?: string;
     host?: {
         graphqlApiEndpoint: string;
+        graphqlApiEndpointV2: string;
         restApiBaseHost: string;
     };
 }

@@ -1,9 +1,0 @@
-query queryCollaboratorsByUserPoolId($userPoolId: String!, $count: Int, $page: Int){
-    queryCollaboratorsByUserPoolId(userPoolId: $userPoolId, count: $count, page: $page){
-        collaborationId
-        list{
-            _id
-            createdAt
-        }
-    }
-}

@@ -1,3 +1,0 @@
-query isRootNodeOfOrg($input: IsRootNodeOfOrgInput!){
-    isRootNodeOfOrg(input: $input)
-}

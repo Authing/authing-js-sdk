@@ -150,8 +150,7 @@ export declare class UsersManagementClient {
      * @returns
      * @memberof UsersManagementClient
      */
-    create(options: {
-        userInfo: UserRegisterInput;
+    create(userInfo: UserRegisterInput, options?: {
         invitationCode?: string;
         keepPassword?: boolean;
     }): Promise<{
