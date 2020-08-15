@@ -6,6 +6,7 @@ import { sendVerifyEmail } from '../graphqlapi/auth.sendVerifyEmail';
 import { RegisterProfile } from '../../types/codeGen.v2';
 import { registerByEmail } from '../graphqlapi/auth.registerByEmail';
 import { encrypt } from '../utils/encryption';
+import { registerByUsername } from '../graphqlapi/auth.registerByUsername';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,
@@ -63,6 +64,30 @@ export class AuthenticationClient {
       {
         input: {
           email,
+          password,
+          profile
+        }
+      }
+    );
+    return user;
+  }
+
+  /**
+   * @description 通过用户名密码注册
+   *
+   */
+  async registerByUsername(
+    username: string,
+    password: string,
+    profile?: RegisterProfile
+  ) {
+    password = encrypt(password, this.options.encrptionPublicKey);
+    const { registerByUsername: user } = await registerByUsername(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        input: {
+          username,
           password,
           profile
         }
