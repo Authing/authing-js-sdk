@@ -1,5 +1,5 @@
 import {
-  RegisterByEmail,
+  RegisterByEmailResponse,
   RegisterByEmailDocument,
   RegisterByEmailVariables
 } from '../../types/CodeGen.v2';
@@ -10,7 +10,7 @@ export const registerByEmail = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: AuthenticationTokenProvider,
   variables: RegisterByEmailVariables
-): Promise<RegisterByEmail> => {
+): Promise<RegisterByEmailResponse> => {
   const query = RegisterByEmailDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({

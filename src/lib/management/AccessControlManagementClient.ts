@@ -8,7 +8,7 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { SortByEnum } from '../../types/codeGen';
-import { CreateRole } from '../../types/codeGen.v2';
+import { Role } from '../../types/codeGen.v2';
 import { addRole } from '../graphqlapi/management.acl.addRole';
 import { addResource } from '../graphqlapi/management.acl.addResource';
 import { allow } from '../graphqlapi/management.acl.allow';
@@ -167,14 +167,14 @@ export class AccessControlManagementClient {
       name?: string;
       description?: string;
     }
-  ): Promise<CreateRole>;
+  ): Promise<Role>;
   async addRole(
     code: string,
     options?: {
       name?: string;
       description?: string;
     }
-  ): Promise<CreateRole>;
+  ): Promise<Role>;
   async addRole(arg1: any, arg2: any, arg3?: any) {
     if (typeof arg2 === 'string') {
       const code = arg1;
@@ -186,7 +186,7 @@ export class AccessControlManagementClient {
         name,
         description
       });
-      return res;
+      return res.createRole;
     } else {
       const code = arg1;
       const { name, description } = arg2 || {};
@@ -195,7 +195,7 @@ export class AccessControlManagementClient {
         name,
         description
       });
-      return res;
+      return res.createRole;
     }
   }
 

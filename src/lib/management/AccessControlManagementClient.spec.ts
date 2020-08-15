@@ -43,8 +43,8 @@ test('有层级的 role + user + resource', async t => {
   // 1. 创建两个角色, employee 是 developer 的父角色
   const employee = generateRandomString();
   const developer = generateRandomString();
-  const role1 = (await acl.addRole(employee)).createRole;
-  const role2 = (await acl.addRole(developer, employee)).createRole;
+  const role1 = await acl.addRole(employee);
+  const role2 = await acl.addRole(developer, employee);
   t.assert(role1);
   t.assert(role2);
   t.assert(role2.parent);

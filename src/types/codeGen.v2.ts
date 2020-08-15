@@ -15,6 +15,397 @@ export type Scalars = {
   ip_String_format_ipv4: any;
 };
 
+export type Query = {
+  qiniuUptoken?: Maybe<Scalars['String']>;
+  isDomainAvaliable?: Maybe<Scalars['Boolean']>;
+  /** 获取社会化登录定义 */
+  socialConnection?: Maybe<SocialConnection>;
+  /** 获取所有社会化登录定义 */
+  socialConnections: Array<SocialConnection>;
+  /** 获取当前用户池的社会化登录配置 */
+  socialConnectionInstance: SocialConnectionInstance;
+  /** 获取当前用户池的所有社会化登录配置 */
+  socialConnectionInstances: Array<SocialConnectionInstance>;
+  /** 获取所有协作管理员 */
+  cooperators: Array<Cooperator>;
+  cooperatedUserpools: PaginatedUserPoolCooperation;
+  emailTemplates: Array<EmailTemplate>;
+  previewEmail: Scalars['String'];
+  /** 获取函数模版 */
+  templateCode: Scalars['String'];
+  function?: Maybe<Function>;
+  functions: PaginatedFunctions;
+  identityProviders?: Maybe<PaginatedIdentityProviders>;
+  /** 查看 Identity Provider */
+  identityProvider: IdentityProvider;
+  identityProviderByDomain: IdentityProvider;
+  /** 查询 MFA 信息 */
+  queryMfa?: Maybe<Mfa>;
+  /** 查询节点详情 */
+  node: Node;
+  /** 通过 code 查询节点 */
+  nodeByCode: Node;
+  /** 查询组织机构详情 */
+  org: Org;
+  /** 查询用户池组织机构列表 */
+  orgs: PaginatedOrgs;
+  /** 查询子节点列表 */
+  childrenNodes: Array<Node>;
+  checkPasswordStrength: CheckPasswordStrengthResult;
+  /** 查询权限详情 */
+  permission: Permission;
+  /** 通过 **code** 查询权限详情 */
+  permissionByCode: Permission;
+  permissions: PaginatedPermissions;
+  pipeline: Pipeline;
+  pipelines: PaginatedPipeline;
+  /** 通过 **code** 查询角色详情 */
+  role: Role;
+  /** 用户池角色列表 */
+  roles: PaginatedRoles;
+  isActionAllowed: Scalars['Boolean'];
+  isActionDenied: Scalars['Boolean'];
+  resouceRules: PaginatedResourceRules;
+  user: User;
+  userBatch: PaginatedUsers;
+  users: PaginatedUsers;
+  searchUser: PaginatedUsers;
+  /** 查询用户池详情 */
+  userpool: UserPool;
+  /** 查询用户池列表 */
+  userpools: PaginatedUserpool;
+  userpoolTypes: Array<UserPoolType>;
+  webhook: Webhook;
+  webhooks: PaginatedWebhook;
+  webhookLog: WebhookLog;
+  webhookLogs: PaginatedWebhookLog;
+  webhookOptions: WebhookOptions;
+  /** 用户池注册白名单列表 */
+  whitelist: Array<WhiteList>;
+};
+
+export type QueryQiniuUptokenArgs = {
+  type?: Maybe<Scalars['String']>;
+};
+
+export type QueryIsDomainAvaliableArgs = {
+  domain: Scalars['String'];
+};
+
+export type QuerySocialConnectionArgs = {
+  provider: Scalars['String'];
+};
+
+export type QuerySocialConnectionInstanceArgs = {
+  provider: Scalars['String'];
+};
+
+export type QueryCooperatedUserpoolsArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+};
+
+export type QueryPreviewEmailArgs = {
+  type: EmailTemplateType;
+};
+
+export type QueryFunctionArgs = {
+  id?: Maybe<Scalars['String']>;
+};
+
+export type QueryFunctionsArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+};
+
+export type QueryIdentityProvidersArgs = {
+  protocol: IdentityProviderProtocol;
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+};
+
+export type QueryIdentityProviderArgs = {
+  id?: Maybe<Scalars['String']>;
+};
+
+export type QueryIdentityProviderByDomainArgs = {
+  domain?: Maybe<Scalars['String']>;
+};
+
+export type QueryQueryMfaArgs = {
+  id?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  userPoolId?: Maybe<Scalars['String']>;
+};
+
+export type QueryNodeArgs = {
+  id: Scalars['String'];
+};
+
+export type QueryNodeByCodeArgs = {
+  orgId: Scalars['String'];
+  code: Scalars['String'];
+};
+
+export type QueryOrgArgs = {
+  id: Scalars['String'];
+};
+
+export type QueryOrgsArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+};
+
+export type QueryChildrenNodesArgs = {
+  orgId: Scalars['String'];
+  nodeId: Scalars['String'];
+};
+
+export type QueryCheckPasswordStrengthArgs = {
+  password: Scalars['String'];
+};
+
+export type QueryPermissionArgs = {
+  id: Scalars['String'];
+};
+
+export type QueryPermissionByCodeArgs = {
+  code: Scalars['String'];
+};
+
+export type QueryPermissionsArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+};
+
+export type QueryPipelineArgs = {
+  id: Scalars['String'];
+};
+
+export type QueryRoleArgs = {
+  code: Scalars['String'];
+};
+
+export type QueryRolesArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+};
+
+export type QueryIsActionAllowedArgs = {
+  resouceCode: Scalars['String'];
+  action: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type QueryIsActionDeniedArgs = {
+  resouceCode: Scalars['String'];
+  action: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type QueryResouceRulesArgs = {
+  code?: Maybe<Scalars['String']>;
+};
+
+export type QueryUserArgs = {
+  id: Scalars['String'];
+};
+
+export type QueryUserBatchArgs = {
+  ids: Array<Scalars['String']>;
+};
+
+export type QueryUsersArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+};
+
+export type QuerySearchUserArgs = {
+  query: Scalars['String'];
+  fields?: Maybe<Scalars['String']>;
+  page?: Maybe<Scalars['Int']>;
+  count?: Maybe<Scalars['Int']>;
+};
+
+export type QueryUserpoolsArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+};
+
+export type QueryWebhookArgs = {
+  webhookId?: Maybe<Scalars['String']>;
+};
+
+export type QueryWebhookLogArgs = {
+  webhookLogId?: Maybe<Scalars['String']>;
+};
+
+export type QueryWhitelistArgs = {
+  type: WhitelistType;
+};
+
+export type SocialConnection = {
+  /** 社会化登录服务商唯一标志 */
+  provider: Scalars['String'];
+  /** 名称 */
+  name: Scalars['String'];
+  /** logo */
+  logo: Scalars['String'];
+  /** 描述信息 */
+  description?: Maybe<Scalars['String']>;
+  /** 表单字段 */
+  fields?: Maybe<Array<SocialConnectionField>>;
+};
+
+export type SocialConnectionField = {
+  key?: Maybe<Scalars['String']>;
+  label?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  placeholder?: Maybe<Scalars['String']>;
+  children?: Maybe<Array<Maybe<SocialConnectionField>>>;
+};
+
+export type SocialConnectionInstance = {
+  provider: Scalars['String'];
+  enabled: Scalars['Boolean'];
+  fields?: Maybe<Array<Maybe<SocialConnectionInstanceField>>>;
+};
+
+export type SocialConnectionInstanceField = {
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
+/** 协作管理员 */
+export type Cooperator = {
+  /** 管理员的角色 */
+  roles: Array<Role>;
+  /** 管理员用户信息 */
+  user: User;
+};
+
+export type Role = {
+  /** 唯一标志 code */
+  code: Scalars['String'];
+  /** 角色名称 */
+  name?: Maybe<Scalars['String']>;
+  /** 角色描述 */
+  description?: Maybe<Scalars['String']>;
+  /** 是否为系统内建，系统内建的角色不能删除 */
+  isSystem?: Maybe<Scalars['Boolean']>;
+  /** 创建时间 */
+  createdAt?: Maybe<Scalars['String']>;
+  /** 修改时间 */
+  updatedAt?: Maybe<Scalars['String']>;
+  /** 该角色包含的权限列表 */
+  permissions: Array<Permission>;
+  /** 被授予此角色的用户列表 */
+  users: PaginatedUsers;
+  /** 父角色 */
+  parent?: Maybe<Role>;
+};
+
+export type Permission = {
+  /** 权限 ID */
+  id: Scalars['String'];
+  /** 唯一标志 code */
+  code: Scalars['String'];
+  /** 权限名称 */
+  name: Scalars['String'];
+  /** 描述信息 */
+  description?: Maybe<Scalars['String']>;
+  /** 是否为系统内建，系统内建的权限不能删除 */
+  isSystem?: Maybe<Scalars['Boolean']>;
+  /** 权限类型，菜单权限、API 权限、数据权限。 */
+  type?: Maybe<Scalars['String']>;
+  /** 创建时间 */
+  createdAt?: Maybe<Scalars['String']>;
+  /** 修改时间 */
+  updatedAt?: Maybe<Scalars['String']>;
+};
+
+export type PaginatedUsers = {
+  totalCount: Scalars['Int'];
+  list: Array<User>;
+};
+
+export type User = {
+  /** 用户 ID */
+  id: Scalars['String'];
+  /** 用户池 ID */
+  userPoolId: Scalars['String'];
+  /** 用户名，用户池内唯一 */
+  username?: Maybe<Scalars['String']>;
+  /** 邮箱，用户池内唯一 */
+  email?: Maybe<Scalars['String']>;
+  /** 邮箱是否已验证 */
+  emailVerified?: Maybe<Scalars['Boolean']>;
+  /** 手机号，用户池内唯一 */
+  phone?: Maybe<Scalars['String']>;
+  /** 手机号是否已验证 */
+  phoneVerified?: Maybe<Scalars['Boolean']>;
+  unionid?: Maybe<Scalars['String']>;
+  openid?: Maybe<Scalars['String']>;
+  /** 昵称，该字段不唯一。 */
+  nickname?: Maybe<Scalars['String']>;
+  /** 注册方式 */
+  registerMethod?: Maybe<Scalars['String']>;
+  /** 头像链接，默认为 https://usercontents.authing.cn/authing-avatar.png */
+  photo?: Maybe<Scalars['String']>;
+  /** 用户密码，数据库使用密钥加 salt 进行加密，非原文密码。 */
+  password?: Maybe<Scalars['String']>;
+  /** 用户社会化登录第三方身份提供商返回的原始用户信息，非社会化登录方式注册的用户此字段为空。 */
+  oauth?: Maybe<Scalars['String']>;
+  /** 用户登录凭证，开发者可以在后端检验该 token 的合法性，从而验证用户身份。详细文档请见：[验证 Token](https://docs.authing.co/advanced/verify-jwt-token.html) */
+  token?: Maybe<Scalars['String']>;
+  /** token 过期时间 */
+  tokenExpiredAt?: Maybe<Scalars['String']>;
+  /** 用户登录总次数 */
+  loginsCount?: Maybe<Scalars['Int']>;
+  /** 用户最近一次登录时间 */
+  lastLogin?: Maybe<Scalars['String']>;
+  /** 用户上一次登录时使用的 IP */
+  lastIP?: Maybe<Scalars['String']>;
+  /** 用户注册时间 */
+  signedUp?: Maybe<Scalars['String']>;
+  /** 该账号是否被禁用 */
+  blocked?: Maybe<Scalars['Boolean']>;
+  /** 账号是否被软删除 */
+  isDeleted?: Maybe<Scalars['Boolean']>;
+  device?: Maybe<Scalars['String']>;
+  browser?: Maybe<Scalars['String']>;
+  company?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  givenName?: Maybe<Scalars['String']>;
+  familyName?: Maybe<Scalars['String']>;
+  middleName?: Maybe<Scalars['String']>;
+  profile?: Maybe<Scalars['String']>;
+  preferredUsername?: Maybe<Scalars['String']>;
+  website?: Maybe<Scalars['String']>;
+  gender?: Maybe<Scalars['String']>;
+  birthdate?: Maybe<Scalars['String']>;
+  zoneinfo?: Maybe<Scalars['String']>;
+  locale?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  formatted?: Maybe<Scalars['String']>;
+  streetAddress?: Maybe<Scalars['String']>;
+  locality?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  /** 自定义用户数据，是一个 JSON 序列化过后的字符串 */
+  customData?: Maybe<Scalars['String']>;
+};
+
 export enum SortByEnum {
   /** 按照创建时间降序（后创建的在前面） */
   CreatedatDesc = 'CREATEDAT_DESC',
@@ -25,6 +416,133 @@ export enum SortByEnum {
   /** 按照更新时间升序（最近更新的在后面） */
   UpdatedatAsc = 'UPDATEDAT_ASC'
 }
+
+export type PaginatedUserPoolCooperation = {
+  list: Array<UserPoolCooperation>;
+  totalCount: Scalars['Int'];
+};
+
+/** 用户池协作关系 */
+export type UserPoolCooperation = {
+  /** 用户池 */
+  userpool: UserPool;
+  /** 在该用户池中具备的角色，未来可以支持多个角色 */
+  role?: Maybe<Role>;
+  permissions?: Maybe<Array<Permission>>;
+};
+
+export type UserPool = {
+  id: Scalars['String'];
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  secret: Scalars['String'];
+  userpoolTypes?: Maybe<Array<UserPoolType>>;
+  logo: Scalars['String'];
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  /** 用户邮箱是否验证（用户的 emailVerified 字段）默认值，默认为 false */
+  emailVerifiedDefault: Scalars['Boolean'];
+  /** 用户注册之后是否发送欢迎邮件 */
+  sendWelcomeEmail: Scalars['Boolean'];
+  /** 是否关闭注册 */
+  registerDisabled: Scalars['Boolean'];
+  /**
+   * 用户池禁止注册后，是否还显示微信小程序扫码登录。当 **showWXMPQRCode** 为 **true** 时，
+   * 前端显示小程序码，此时只有以前允许注册时，扫码登录过的用户可以继续登录；新用户扫码无法登录。
+   */
+  showWxQRCodeWhenRegisterDisabled?: Maybe<Scalars['Boolean']>;
+  /** 前端跨域请求白名单 */
+  allowedOrigins?: Maybe<Scalars['String']>;
+  /** 用户 **token** 有效时间，单位为秒，默认为 15 天。 */
+  tokenExpiresAfter?: Maybe<Scalars['Int']>;
+  /** 是否已删除 */
+  isDeleted?: Maybe<Scalars['Boolean']>;
+  /** 注册频繁检测 */
+  frequentRegisterCheck?: Maybe<FrequentRegisterCheckConfig>;
+  /** 登录失败检测 */
+  loginFailCheck?: Maybe<LoginFailCheckConfig>;
+  /** 手机号修改策略 */
+  changePhoneStrategy?: Maybe<ChangePhoneStrategy>;
+  /** 邮箱修改策略 */
+  changeEmailStrategy?: Maybe<ChangeEmailStrategy>;
+  /** APP 扫码登录配置 */
+  qrcodeLoginStrategy?: Maybe<QrcodeLoginStrategy>;
+  /** APP 拉起小程序登录配置 */
+  app2WxappLoginStrategy?: Maybe<App2WxappLoginStrategy>;
+  /** 注册白名单配置 */
+  whitelist?: Maybe<RegisterWhiteListConfig>;
+};
+
+export type UserPoolType = {
+  code?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  image?: Maybe<Scalars['String']>;
+  sdks?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type FrequentRegisterCheckConfig = {
+  timeInterval?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  enable?: Maybe<Scalars['Boolean']>;
+};
+
+export type LoginFailCheckConfig = {
+  timeInterval?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  enable?: Maybe<Scalars['Boolean']>;
+};
+
+export type ChangePhoneStrategy = {
+  verifyOldPhone?: Maybe<Scalars['Boolean']>;
+};
+
+export type ChangeEmailStrategy = {
+  verifyOldEmail?: Maybe<Scalars['Boolean']>;
+};
+
+export type QrcodeLoginStrategy = {
+  qrcodeExpiresAfter?: Maybe<Scalars['Int']>;
+  returnFullUserInfo?: Maybe<Scalars['Boolean']>;
+  allowExchangeUserInfoFromBrowser?: Maybe<Scalars['Boolean']>;
+  ticketExpiresAfter?: Maybe<Scalars['Int']>;
+};
+
+export type App2WxappLoginStrategy = {
+  ticketExpriresAfter?: Maybe<Scalars['Int']>;
+  ticketExchangeUserInfoNeedSecret?: Maybe<Scalars['Boolean']>;
+};
+
+export type RegisterWhiteListConfig = {
+  /** 是否开启手机号注册白名单 */
+  phoneEnabled?: Maybe<Scalars['Boolean']>;
+  /** 是否开启邮箱注册白名单 */
+  emailEnabled?: Maybe<Scalars['Boolean']>;
+  /** 是否开用户名注册白名单 */
+  usernameEnabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type EmailTemplate = {
+  /** 邮件模版类型 */
+  type: EmailTemplateType;
+  /** 模版名称 */
+  name: Scalars['String'];
+  /** 邮件主题 */
+  subject: Scalars['String'];
+  /** 显示的邮件发送人 */
+  sender: Scalars['String'];
+  /** 邮件模版内容 */
+  content: Scalars['String'];
+  /** 重定向链接，操作成功后，用户将被重定向到此 URL。 */
+  redirectTo?: Maybe<Scalars['String']>;
+  hasURL?: Maybe<Scalars['Boolean']>;
+  /** 验证码过期时间（单位为秒） */
+  expiresIn?: Maybe<Scalars['Int']>;
+  /** 是否开启（自定义模版） */
+  enabled?: Maybe<Scalars['Boolean']>;
+  /** 是否是系统默认模版 */
+  isSystem?: Maybe<Scalars['Boolean']>;
+};
 
 export enum EmailTemplateType {
   /** 重置密码确认 */
@@ -41,6 +559,25 @@ export enum EmailTemplateType {
   ChangeEmail = 'CHANGE_EMAIL'
 }
 
+/** 函数 */
+export type Function = {
+  /** ID */
+  id: Scalars['String'];
+  /** 函数名称 */
+  name: Scalars['String'];
+  /** 源代码 */
+  sourceCode: Scalars['String'];
+  /** 描述信息 */
+  description?: Maybe<Scalars['String']>;
+  /** 云函数链接 */
+  url?: Maybe<Scalars['String']>;
+};
+
+export type PaginatedFunctions = {
+  list: Array<Function>;
+  totalCount: Scalars['Int'];
+};
+
 export enum IdentityProviderProtocol {
   Saml = 'SAML',
   Ad = 'AD',
@@ -49,11 +586,658 @@ export enum IdentityProviderProtocol {
   Oauth = 'OAUTH'
 }
 
+export type PaginatedIdentityProviders = {
+  list: Array<Maybe<IdentityProvider>>;
+  totalCount: Scalars['Int'];
+};
+
+export type IdentityProvider = {
+  /** Identity Provider Client ID */
+  id?: Maybe<Scalars['String']>;
+  /** Identity Provider 标识域名 */
+  domain?: Maybe<Scalars['String']>;
+  /** Identity Provider 类型，可选值有 oidc oauth saml ldap */
+  type?: Maybe<Scalars['String']>;
+  /** Identity Provider 配置信息 */
+  config?: Maybe<Scalars['String']>;
+  /** Identity Provider 启停状态 */
+  enabled?: Maybe<Scalars['Boolean']>;
+  /** Identity Provider 所属用户池 */
+  userPoolId?: Maybe<Scalars['String']>;
+};
+
+export type Mfa = {
+  /** MFA ID */
+  id: Scalars['String'];
+  /** 用户 ID */
+  userId: Scalars['String'];
+  /** 用户池 ID */
+  userPoolId: Scalars['String'];
+  /** 是否开启 MFA */
+  enable: Scalars['Boolean'];
+  /** 密钥 */
+  secret?: Maybe<Scalars['String']>;
+};
+
+export type Node = {
+  /** 节点 ID */
+  id: Scalars['String'];
+  /** 节点名称 */
+  name: Scalars['String'];
+  /** 多语言名称，**key** 为标准 **i18n** 语言编码，**value** 为对应语言的名称。 */
+  nameI18n?: Maybe<Scalars['String']>;
+  /** 描述信息 */
+  description?: Maybe<Scalars['String']>;
+  /** 多语言描述信息 */
+  descriptionI18n?: Maybe<Scalars['String']>;
+  /** 在父节点中的次序值。**order** 值大的排序靠前。有效的值范围是[0, 2^32) */
+  order?: Maybe<Scalars['Int']>;
+  /** 节点唯一标志码，可以通过 code 进行搜索 */
+  code?: Maybe<Scalars['String']>;
+  /** 是否为根节点 */
+  root?: Maybe<Scalars['Boolean']>;
+  /** 距离父节点的深度（如果是查询整棵树，返回的 **depth** 为距离根节点的深度，如果是查询某个节点的子节点，返回的 **depath** 指的是距离该节点的深度。） */
+  depth?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  /** 该节点的子节点 **ID** 列表 */
+  children?: Maybe<Array<Scalars['String']>>;
+  /** 节点的用户列表 */
+  users: PaginatedUsers;
+};
+
+export type NodeUsersArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
+};
+
+export type Org = {
+  /** 组织机构 ID */
+  id: Scalars['String'];
+  /** 根节点 */
+  rootNode: Node;
+  /** 组织机构节点列表 */
+  nodes: Array<Node>;
+};
+
+export type PaginatedOrgs = {
+  totalCount: Scalars['Int'];
+  list: Array<Org>;
+};
+
+export type CheckPasswordStrengthResult = {
+  valid: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']>;
+};
+
+export type PaginatedPermissions = {
+  totalCount: Scalars['Int'];
+  list: Array<Permission>;
+};
+
+export type Pipeline = {
+  id: Scalars['String'];
+  name: Scalars['String'];
+  trigger: Scalars['String'];
+  functions: Array<PipelineFunction>;
+};
+
+export type PipelineFunction = {
+  funcId: Scalars['String'];
+  asynchronous: Scalars['Boolean'];
+  enabled: Scalars['Boolean'];
+  function: Function;
+};
+
+export type PaginatedPipeline = {
+  list: Array<Pipeline>;
+  totalCount: Scalars['Int'];
+};
+
+export type PaginatedRoles = {
+  totalCount: Scalars['Int'];
+  list: Array<Role>;
+};
+
+export type PaginatedResourceRules = {
+  totalCount: Scalars['Int'];
+  list: Array<ResourceRule>;
+};
+
+/** 资源操作规则 */
+export type ResourceRule = {
+  /** 资源 */
+  resouce: Resource;
+  /** 操作 */
+  action: Scalars['String'];
+  /** 是否允许 */
+  allow: Scalars['Boolean'];
+  /** 授权到期时间 */
+  expiresIn?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+  role?: Maybe<Role>;
+  group?: Maybe<Group>;
+  node?: Maybe<Node>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+};
+
+export type Resource = {
+  code: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+};
+
+export type Group = {
+  /** 唯一标志 code */
+  code: Scalars['String'];
+  /** 名称 */
+  name: Scalars['String'];
+  /** 描述 */
+  description?: Maybe<Scalars['String']>;
+  /** 创建时间 */
+  createdAt?: Maybe<Scalars['String']>;
+  /** 修改时间 */
+  updatedAt?: Maybe<Scalars['String']>;
+  /** 包含的用户列表 */
+  users: PaginatedUsers;
+};
+
+export type PaginatedUserpool = {
+  totalCount: Scalars['Int'];
+  list: Array<UserPool>;
+};
+
+export type Webhook = {
+  id?: Maybe<Scalars['String']>;
+  userPoolId: Scalars['String'];
+  events: Array<WebhookEvent>;
+  url: Scalars['String'];
+  isLastTimeSuccess?: Maybe<Scalars['Boolean']>;
+  contentType: Scalars['String'];
+  secret?: Maybe<Scalars['String']>;
+  enable: Scalars['Boolean'];
+};
+
+export type WebhookEvent = {
+  name: Scalars['String'];
+  label: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type PaginatedWebhook = {
+  list: Array<Webhook>;
+  totalCount: Scalars['Int'];
+};
+
+export type WebhookLog = {
+  id: Scalars['String'];
+  webhookId: Scalars['String'];
+  userPoolId: Scalars['String'];
+  event: Scalars['String'];
+  request?: Maybe<WebhookRequestType>;
+  response?: Maybe<WebhookResponseType>;
+  errorMessage?: Maybe<Scalars['String']>;
+};
+
+export type WebhookRequestType = {
+  headers?: Maybe<Scalars['String']>;
+  payload?: Maybe<Scalars['String']>;
+};
+
+export type WebhookResponseType = {
+  headers?: Maybe<Scalars['String']>;
+  body?: Maybe<Scalars['String']>;
+  statusCode?: Maybe<Scalars['Int']>;
+};
+
+export type PaginatedWebhookLog = {
+  list: Array<WebhookLog>;
+  totalCount: Scalars['Int'];
+};
+
+export type WebhookOptions = {
+  webhookEvents: Array<Maybe<WebhookEvent>>;
+  contentTypes: Array<Maybe<WebhookContentType>>;
+};
+
+export type WebhookContentType = {
+  name: Scalars['String'];
+  label: Scalars['String'];
+};
+
 export enum WhitelistType {
   Username = 'USERNAME',
   Email = 'EMAIL',
   Phone = 'PHONE'
 }
+
+export type WhiteList = {
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  value: Scalars['String'];
+};
+
+export type Mutation = {
+  /** 创建社会化登录服务商 */
+  createSocialConnection: SocialConnection;
+  /** 配置社会化登录 */
+  createSocialConnectionInstance: SocialConnectionInstance;
+  /** 开启社会化登录 */
+  enableSocialConnectionInstance: SocialConnectionInstance;
+  /** 关闭社会化登录 */
+  disableSocialConnectionInstance: SocialConnectionInstance;
+  /** 添加协作管理员 */
+  addCooperator: Cooperator;
+  removeCooperator: CommonMessage;
+  /** 配置自定义邮件模版 */
+  configEmailTemplate: EmailTemplate;
+  /** 启用自定义邮件模版 */
+  enableEmailTemplate: EmailTemplate;
+  /** 停用自定义邮件模版（将会使用系统默认邮件模版） */
+  disableEmailTemplate: EmailTemplate;
+  /** 创建函数 */
+  createFunction?: Maybe<Function>;
+  /** 修改函数 */
+  updateFunction: Function;
+  deleteFunction: CommonMessage;
+  /** 创建 Identity Provider */
+  createIdentityProvider: IdentityProvider;
+  /** 编辑 Identity Provider */
+  updateIdentityProvider: IdentityProvider;
+  /** 删除 Identity Provider */
+  deleteIdentityProvider: CommonMessage;
+  /** 开启 IdentityProvider */
+  enableIdentityProvider: IdentityProvider;
+  /** 停用 IdentityProvider */
+  disableIdentityProvider: IdentityProvider;
+  loginByEmail?: Maybe<User>;
+  loginByUsername?: Maybe<User>;
+  loginByPhoneCode?: Maybe<User>;
+  loginByPhonePassword?: Maybe<User>;
+  /** 修改 MFA 信息 */
+  changeMfa?: Maybe<Mfa>;
+  /** 创建组织机构 */
+  createOrg: Org;
+  /** 删除组织机构 */
+  deleteOrg: CommonMessage;
+  /** 添加子节点 */
+  addNode: Org;
+  /** 删除节点（会一并删掉子节点） */
+  deleteNode: Org;
+  /** （批量）将成员添加到节点中 */
+  addMember: Node;
+  /** （批量）将成员从节点中移除 */
+  removeMember: Node;
+  /** 创建权限 */
+  createPermission: Permission;
+  /** 批量创建权限 */
+  createPermissions: Array<Permission>;
+  /** 删除权限 */
+  deletePermission: CommonMessage;
+  /** 批量删除权限 */
+  deletePermissions: BatchOperationResult;
+  createPipeline: Pipeline;
+  addFunctionToPipeline: Pipeline;
+  removeFunctionFromPipeline: Pipeline;
+  registerByUsername?: Maybe<User>;
+  registerByEmail?: Maybe<User>;
+  registerByPhonePassword?: Maybe<User>;
+  createResource: Resource;
+  /** 创建角色 */
+  createRole: Role;
+  /** 修改角色 */
+  updateRole: Role;
+  /** 删除角色 */
+  deleteRole: CommonMessage;
+  /** 批量删除角色 */
+  deleteRoles: BatchOperationResult;
+  /** 给用户授权角色 */
+  assignRole: Role;
+  /** 撤销角色 */
+  revokeRole: Role;
+  /** 给角色添加权限 */
+  attachPermission: BatchOperationResult;
+  /** 角色删除权限 */
+  detachPermission: BatchOperationResult;
+  createResourceRule: ResourceRule;
+  /** 创建用户。此接口需要管理员权限，普通用户注册请使用 **register** 接口。 */
+  doRegisterProcess: User;
+  /** 更新用户信息。 */
+  updateUser: User;
+  /** 修改用户密码，此接口需要验证原始密码，管理员直接修改请使用 **updateUser** 接口。 */
+  updatePassword: User;
+  /** 修改手机号。此接口需要验证手机号验证码，管理员直接修改请使用 **updateUser** 接口。 */
+  updatePhone: User;
+  /** 修改邮箱。此接口需要验证邮箱验证码，管理员直接修改请使用 updateUser 接口。 */
+  updateEmail: User;
+  /** 删除用户 */
+  deleteUser?: Maybe<CommonMessage>;
+  /** 批量删除用户 */
+  deleteUsers?: Maybe<CommonMessage>;
+  /** 创建用户池 */
+  createUserpool: UserPool;
+  updateUserpool: UserPool;
+  refreshUserpoolSecret: Scalars['String'];
+  deleteUserpool: CommonMessage;
+  createWebhook: Webhook;
+  updateWebhook: Webhook;
+  deleteWebhook: CommonMessage;
+  sendWebhookTestRequest: CommonMessage;
+  addWhitelist: Array<Maybe<WhiteList>>;
+  removeWhitelist: Array<Maybe<WhiteList>>;
+};
+
+export type MutationCreateSocialConnectionArgs = {
+  input: CreateSocialConnectionInput;
+};
+
+export type MutationCreateSocialConnectionInstanceArgs = {
+  input: CreateSocialConnectionInstanceInput;
+};
+
+export type MutationEnableSocialConnectionInstanceArgs = {
+  provider: Scalars['String'];
+};
+
+export type MutationDisableSocialConnectionInstanceArgs = {
+  provider: Scalars['String'];
+};
+
+export type MutationAddCooperatorArgs = {
+  userId: Scalars['String'];
+  roleId: Scalars['String'];
+};
+
+export type MutationRemoveCooperatorArgs = {
+  userId: Scalars['String'];
+  roleId: Scalars['String'];
+};
+
+export type MutationConfigEmailTemplateArgs = {
+  input: ConfigEmailTemplateInput;
+};
+
+export type MutationEnableEmailTemplateArgs = {
+  type: EmailTemplateType;
+};
+
+export type MutationDisableEmailTemplateArgs = {
+  type: EmailTemplateType;
+};
+
+export type MutationCreateFunctionArgs = {
+  input: CreateFunctionInput;
+};
+
+export type MutationUpdateFunctionArgs = {
+  input: UpdateFunctionInput;
+};
+
+export type MutationDeleteFunctionArgs = {
+  id: Scalars['String'];
+};
+
+export type MutationCreateIdentityProviderArgs = {
+  input: IdpInput;
+};
+
+export type MutationUpdateIdentityProviderArgs = {
+  input: IdpInput;
+};
+
+export type MutationDeleteIdentityProviderArgs = {
+  id: Scalars['String'];
+};
+
+export type MutationEnableIdentityProviderArgs = {
+  id: Scalars['String'];
+};
+
+export type MutationDisableIdentityProviderArgs = {
+  id: Scalars['String'];
+};
+
+export type MutationLoginByEmailArgs = {
+  input: LoginByEmailInput;
+};
+
+export type MutationLoginByUsernameArgs = {
+  input: LoginByUsernameInput;
+};
+
+export type MutationLoginByPhoneCodeArgs = {
+  input: LoginByPhoneCodeInput;
+};
+
+export type MutationLoginByPhonePasswordArgs = {
+  input: LoginByPhonePasswordInput;
+};
+
+export type MutationChangeMfaArgs = {
+  enable?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  userPoolId?: Maybe<Scalars['String']>;
+  refresh?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationCreateOrgArgs = {
+  name: Scalars['String'];
+  code?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+};
+
+export type MutationDeleteOrgArgs = {
+  id: Scalars['String'];
+};
+
+export type MutationAddNodeArgs = {
+  orgId: Scalars['String'];
+  parentNodeId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  nameI18n?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  descriptionI18n?: Maybe<Scalars['String']>;
+  order?: Maybe<Scalars['Int']>;
+  code?: Maybe<Scalars['String']>;
+};
+
+export type MutationDeleteNodeArgs = {
+  orgId: Scalars['String'];
+  nodeId: Scalars['String'];
+};
+
+export type MutationAddMemberArgs = {
+  orgId: Scalars['String'];
+  nodeId: Scalars['String'];
+  userIds: Array<Scalars['String']>;
+};
+
+export type MutationRemoveMemberArgs = {
+  orgId: Scalars['String'];
+  nodeId: Scalars['String'];
+  userIds: Array<Scalars['String']>;
+};
+
+export type MutationCreatePermissionArgs = {
+  input: CreatePermissionInput;
+};
+
+export type MutationCreatePermissionsArgs = {
+  input: Array<CreatePermissionInput>;
+};
+
+export type MutationDeletePermissionArgs = {
+  id: Scalars['String'];
+};
+
+export type MutationDeletePermissionsArgs = {
+  ids: Array<Scalars['String']>;
+};
+
+export type MutationCreatePipelineArgs = {
+  input: CreatePipelineInput;
+};
+
+export type MutationAddFunctionToPipelineArgs = {
+  input: AddFunctionToPipelineInput;
+};
+
+export type MutationRemoveFunctionFromPipelineArgs = {
+  input: RemoveFunctionFromPipelineInput;
+};
+
+export type MutationRegisterByUsernameArgs = {
+  input: RegisterByUsernameInput;
+};
+
+export type MutationRegisterByEmailArgs = {
+  input: RegisterByEmailInput;
+};
+
+export type MutationRegisterByPhonePasswordArgs = {
+  input: RegisterByPhonePasswordInput;
+};
+
+export type MutationCreateResourceArgs = {
+  code: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+};
+
+export type MutationCreateRoleArgs = {
+  code: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  permissions?: Maybe<Array<Scalars['String']>>;
+  parent?: Maybe<Scalars['String']>;
+};
+
+export type MutationUpdateRoleArgs = {
+  code: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+};
+
+export type MutationDeleteRoleArgs = {
+  code: Scalars['String'];
+};
+
+export type MutationDeleteRolesArgs = {
+  codes: Array<Scalars['String']>;
+};
+
+export type MutationAssignRoleArgs = {
+  code: Scalars['String'];
+  userIds?: Maybe<Array<Scalars['String']>>;
+  groupCodes?: Maybe<Array<Scalars['String']>>;
+  nodeCodes?: Maybe<Array<Scalars['String']>>;
+};
+
+export type MutationRevokeRoleArgs = {
+  code: Scalars['String'];
+  userIds?: Maybe<Array<Scalars['String']>>;
+  groupCodes?: Maybe<Array<Scalars['String']>>;
+  nodeCodes?: Maybe<Array<Scalars['String']>>;
+};
+
+export type MutationAttachPermissionArgs = {
+  code: Scalars['String'];
+  permissionIds: Array<Scalars['String']>;
+};
+
+export type MutationDetachPermissionArgs = {
+  roleId: Scalars['String'];
+  permissionIds: Array<Scalars['String']>;
+};
+
+export type MutationCreateResourceRuleArgs = {
+  resouceCode: Scalars['String'];
+  action: Scalars['String'];
+  allow: Scalars['Boolean'];
+  userId?: Maybe<Scalars['String']>;
+  roleCode?: Maybe<Scalars['String']>;
+};
+
+export type MutationDoRegisterProcessArgs = {
+  userInfo: CreateUserInput;
+  keepPassword?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationUpdateUserArgs = {
+  id: Scalars['String'];
+  input: UpdateUserInput;
+};
+
+export type MutationUpdatePasswordArgs = {
+  id: Scalars['String'];
+  newPassword: Scalars['String'];
+  oldPassword?: Maybe<Scalars['String']>;
+};
+
+export type MutationUpdatePhoneArgs = {
+  phone: Scalars['String'];
+  phoneCode: Scalars['String'];
+  oldPhone?: Maybe<Scalars['String']>;
+  oldPhoneCode?: Maybe<Scalars['String']>;
+};
+
+export type MutationUpdateEmailArgs = {
+  email: Scalars['String'];
+  emailCode: Scalars['String'];
+  oldEmail?: Maybe<Scalars['String']>;
+  oldEmailCode?: Maybe<Scalars['String']>;
+};
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['String'];
+};
+
+export type MutationDeleteUsersArgs = {
+  ids: Array<Scalars['String']>;
+};
+
+export type MutationCreateUserpoolArgs = {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  logo?: Maybe<Scalars['String']>;
+  userpoolTypes?: Maybe<Array<Scalars['String']>>;
+};
+
+export type MutationUpdateUserpoolArgs = {
+  input: UpdateUserpoolInput;
+};
+
+export type MutationCreateWebhookArgs = {
+  input: CreateWebhookInput;
+};
+
+export type MutationUpdateWebhookArgs = {
+  input: UpdateWebhookInput;
+};
+
+export type MutationDeleteWebhookArgs = {
+  input: DeleteWebhookInput;
+};
+
+export type MutationSendWebhookTestRequestArgs = {
+  input: SendWebhookTestRequestInput;
+};
+
+export type MutationAddWhitelistArgs = {
+  type: WhitelistType;
+  list: Array<Scalars['String']>;
+};
+
+export type MutationRemoveWhitelistArgs = {
+  type: WhitelistType;
+  list: Array<Scalars['String']>;
+};
 
 export type CreateSocialConnectionInput = {
   provider: Scalars['String'];
@@ -80,6 +1264,16 @@ export type CreateSocialConnectionInstanceInput = {
 export type CreateSocialConnectionInstanceFieldInput = {
   key: Scalars['String'];
   value: Scalars['String'];
+};
+
+export type CommonMessage = {
+  /** 可读的接口响应说明，请以业务状态码 code 作为判断业务是否成功的标志 */
+  message?: Maybe<Scalars['String']>;
+  /**
+   * 业务状态码（与 HTTP 响应码不同），但且仅当为 200 的时候表示操作成功表示，详细说明请见：
+   * [Authing 错误代码列表](https://docs.authing.co/advanced/error-code.html)
+   */
+  code?: Maybe<Scalars['Int']>;
 };
 
 export type ConfigEmailTemplateInput = {
@@ -159,6 +1353,16 @@ export type CreatePermissionInput = {
   description?: Maybe<Scalars['String']>;
   /** 权限类型 */
   type?: Maybe<Scalars['String']>;
+};
+
+/** 批量删除返回结果 */
+export type BatchOperationResult = {
+  /** 删除成功的个数 */
+  succeedCount: Scalars['Int'];
+  /** 删除失败的个数 */
+  failedCount: Scalars['Int'];
+  message?: Maybe<Scalars['String']>;
+  errors?: Maybe<Array<Scalars['String']>>;
 };
 
 export type CreatePipelineInput = {
@@ -437,7 +1641,7 @@ export type AddCooperatorVariables = Exact<{
   roleId: Scalars['String'];
 }>;
 
-export type AddCooperator = {
+export type AddCooperatorResponse = {
   addCooperator: {
     roles: Array<{
       code: string;
@@ -446,6 +1650,25 @@ export type AddCooperator = {
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
+      permissions: Array<{
+        id: string;
+        code: string;
+        name: string;
+        description?: Maybe<string>;
+        isSystem?: Maybe<boolean>;
+        type?: Maybe<string>;
+        createdAt?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+      }>;
+      users: { totalCount: number };
+      parent?: Maybe<{
+        code: string;
+        name?: Maybe<string>;
+        description?: Maybe<string>;
+        isSystem?: Maybe<boolean>;
+        createdAt?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+      }>;
     }>;
     user: {
       id: string;
@@ -501,7 +1724,7 @@ export type AddFunctionToPipelineVariables = Exact<{
   input: AddFunctionToPipelineInput;
 }>;
 
-export type AddFunctionToPipeline = {
+export type AddFunctionToPipelineResponse = {
   addFunctionToPipeline: {
     id: string;
     name: string;
@@ -524,7 +1747,7 @@ export type AddMemberVariables = Exact<{
   userIds: Array<Scalars['String']>;
 }>;
 
-export type AddMember = {
+export type AddMemberResponse = {
   addMember: {
     id: string;
     name: string;
@@ -553,7 +1776,7 @@ export type AddNodeVariables = Exact<{
   code?: Maybe<Scalars['String']>;
 }>;
 
-export type AddNode = {
+export type AddNodeResponse = {
   addNode: {
     id: string;
     rootNode: {
@@ -592,7 +1815,7 @@ export type AddWhitelistVariables = Exact<{
   list: Array<Scalars['String']>;
 }>;
 
-export type AddWhitelist = {
+export type AddWhitelistResponse = {
   addWhitelist: Array<
     Maybe<{
       createdAt?: Maybe<string>;
@@ -609,7 +1832,7 @@ export type AssignRoleVariables = Exact<{
   nodeCodes?: Maybe<Array<Scalars['String']>>;
 }>;
 
-export type AssignRole = {
+export type AssignRoleResponse = {
   assignRole: {
     code: string;
     name?: Maybe<string>;
@@ -644,7 +1867,7 @@ export type AttachPermissionVariables = Exact<{
   permissionIds: Array<Scalars['String']>;
 }>;
 
-export type AttachPermission = {
+export type AttachPermissionResponse = {
   attachPermission: {
     succeedCount: number;
     failedCount: number;
@@ -661,7 +1884,7 @@ export type ChangeMfaVariables = Exact<{
   refresh?: Maybe<Scalars['Boolean']>;
 }>;
 
-export type ChangeMfa = {
+export type ChangeMfaResponse = {
   changeMfa?: Maybe<{
     id: string;
     userId: string;
@@ -675,7 +1898,7 @@ export type ConfigEmailTemplateVariables = Exact<{
   input: ConfigEmailTemplateInput;
 }>;
 
-export type ConfigEmailTemplate = {
+export type ConfigEmailTemplateResponse = {
   configEmailTemplate: {
     type: EmailTemplateType;
     name: string;
@@ -694,7 +1917,7 @@ export type CreateFunctionVariables = Exact<{
   input: CreateFunctionInput;
 }>;
 
-export type CreateFunction = {
+export type CreateFunctionResponse = {
   createFunction?: Maybe<{
     id: string;
     name: string;
@@ -708,7 +1931,7 @@ export type CreateIdentityProviderVariables = Exact<{
   input: IdpInput;
 }>;
 
-export type CreateIdentityProvider = {
+export type CreateIdentityProviderResponse = {
   createIdentityProvider: {
     id?: Maybe<string>;
     domain?: Maybe<string>;
@@ -725,7 +1948,7 @@ export type CreateOrgVariables = Exact<{
   description?: Maybe<Scalars['String']>;
 }>;
 
-export type CreateOrg = {
+export type CreateOrgResponse = {
   createOrg: {
     id: string;
     rootNode: {
@@ -763,7 +1986,7 @@ export type CreatePermissionVariables = Exact<{
   input: CreatePermissionInput;
 }>;
 
-export type CreatePermission = {
+export type CreatePermissionResponse = {
   createPermission: {
     id: string;
     code: string;
@@ -780,7 +2003,7 @@ export type CreatePermissionsVariables = Exact<{
   input: Array<CreatePermissionInput>;
 }>;
 
-export type CreatePermissions = {
+export type CreatePermissionsResponse = {
   createPermissions: Array<{
     id: string;
     code: string;
@@ -797,7 +2020,7 @@ export type CreatePipelineVariables = Exact<{
   input: CreatePipelineInput;
 }>;
 
-export type CreatePipeline = {
+export type CreatePipelineResponse = {
   createPipeline: {
     id: string;
     name: string;
@@ -816,7 +2039,7 @@ export type CreateResourceVariables = Exact<{
   description?: Maybe<Scalars['String']>;
 }>;
 
-export type CreateResource = {
+export type CreateResourceResponse = {
   createResource: {
     code: string;
     name?: Maybe<string>;
@@ -834,7 +2057,7 @@ export type CreateResourceRuleVariables = Exact<{
   roleCode?: Maybe<Scalars['String']>;
 }>;
 
-export type CreateResourceRule = {
+export type CreateResourceRuleResponse = {
   createResourceRule: {
     action: string;
     allow: boolean;
@@ -935,7 +2158,7 @@ export type CreateRoleVariables = Exact<{
   parent?: Maybe<Scalars['String']>;
 }>;
 
-export type CreateRole = {
+export type CreateRoleResponse = {
   createRole: {
     code: string;
     name?: Maybe<string>;
@@ -969,7 +2192,7 @@ export type CreateSocialConnectionVariables = Exact<{
   input: CreateSocialConnectionInput;
 }>;
 
-export type CreateSocialConnection = {
+export type CreateSocialConnectionResponse = {
   createSocialConnection: {
     provider: string;
     name: string;
@@ -990,7 +2213,7 @@ export type CreateSocialConnectionInstanceVariables = Exact<{
   input: CreateSocialConnectionInstanceInput;
 }>;
 
-export type CreateSocialConnectionInstance = {
+export type CreateSocialConnectionInstanceResponse = {
   createSocialConnectionInstance: {
     provider: string;
     enabled: boolean;
@@ -1005,7 +2228,7 @@ export type CreateUserpoolVariables = Exact<{
   userpoolTypes?: Maybe<Array<Scalars['String']>>;
 }>;
 
-export type CreateUserpool = {
+export type CreateUserpoolResponse = {
   createUserpool: {
     id: string;
     name: string;
@@ -1064,7 +2287,7 @@ export type CreateWebhookVariables = Exact<{
   input: CreateWebhookInput;
 }>;
 
-export type CreateWebhook = {
+export type CreateWebhookResponse = {
   createWebhook: {
     id?: Maybe<string>;
     userPoolId: string;
@@ -1081,7 +2304,7 @@ export type DeleteFunctionVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DeleteFunction = {
+export type DeleteFunctionResponse = {
   deleteFunction: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
@@ -1089,7 +2312,7 @@ export type DeleteIdentityProviderVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DeleteIdentityProvider = {
+export type DeleteIdentityProviderResponse = {
   deleteIdentityProvider: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
@@ -1098,7 +2321,7 @@ export type DeleteNodeVariables = Exact<{
   nodeId: Scalars['String'];
 }>;
 
-export type DeleteNode = {
+export type DeleteNodeResponse = {
   deleteNode: {
     id: string;
     rootNode: {
@@ -1136,7 +2359,7 @@ export type DeleteOrgVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DeleteOrg = {
+export type DeleteOrgResponse = {
   deleteOrg: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
@@ -1144,7 +2367,7 @@ export type DeletePermissionVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DeletePermission = {
+export type DeletePermissionResponse = {
   deletePermission: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
@@ -1152,7 +2375,7 @@ export type DeletePermissionsVariables = Exact<{
   ids: Array<Scalars['String']>;
 }>;
 
-export type DeletePermissions = {
+export type DeletePermissionsResponse = {
   deletePermissions: {
     succeedCount: number;
     failedCount: number;
@@ -1165,7 +2388,7 @@ export type DeleteRoleVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type DeleteRole = {
+export type DeleteRoleResponse = {
   deleteRole: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
@@ -1173,7 +2396,7 @@ export type DeleteRolesVariables = Exact<{
   codes: Array<Scalars['String']>;
 }>;
 
-export type DeleteRoles = {
+export type DeleteRolesResponse = {
   deleteRoles: {
     succeedCount: number;
     failedCount: number;
@@ -1186,13 +2409,13 @@ export type DeleteUserVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DeleteUser = {
+export type DeleteUserResponse = {
   deleteUser?: Maybe<{ message?: Maybe<string>; code?: Maybe<number> }>;
 };
 
 export type DeleteUserpoolVariables = Exact<{ [key: string]: never }>;
 
-export type DeleteUserpool = {
+export type DeleteUserpoolResponse = {
   deleteUserpool: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
@@ -1200,7 +2423,7 @@ export type DeleteUsersVariables = Exact<{
   ids: Array<Scalars['String']>;
 }>;
 
-export type DeleteUsers = {
+export type DeleteUsersResponse = {
   deleteUsers?: Maybe<{ message?: Maybe<string>; code?: Maybe<number> }>;
 };
 
@@ -1208,7 +2431,7 @@ export type DeleteWebhookVariables = Exact<{
   input: DeleteWebhookInput;
 }>;
 
-export type DeleteWebhook = {
+export type DeleteWebhookResponse = {
   deleteWebhook: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
@@ -1217,7 +2440,7 @@ export type DetachPermissionVariables = Exact<{
   permissionIds: Array<Scalars['String']>;
 }>;
 
-export type DetachPermission = {
+export type DetachPermissionResponse = {
   detachPermission: {
     succeedCount: number;
     failedCount: number;
@@ -1230,7 +2453,7 @@ export type DisableEmailTemplateVariables = Exact<{
   type: EmailTemplateType;
 }>;
 
-export type DisableEmailTemplate = {
+export type DisableEmailTemplateResponse = {
   disableEmailTemplate: {
     type: EmailTemplateType;
     name: string;
@@ -1249,7 +2472,7 @@ export type DisableIdentityProviderVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DisableIdentityProvider = {
+export type DisableIdentityProviderResponse = {
   disableIdentityProvider: {
     id?: Maybe<string>;
     domain?: Maybe<string>;
@@ -1264,7 +2487,7 @@ export type DisableSocialConnectionInstanceVariables = Exact<{
   provider: Scalars['String'];
 }>;
 
-export type DisableSocialConnectionInstance = {
+export type DisableSocialConnectionInstanceResponse = {
   disableSocialConnectionInstance: {
     provider: string;
     enabled: boolean;
@@ -1277,7 +2500,7 @@ export type DoRegisterProcessVariables = Exact<{
   keepPassword?: Maybe<Scalars['Boolean']>;
 }>;
 
-export type DoRegisterProcess = {
+export type DoRegisterProcessResponse = {
   doRegisterProcess: {
     id: string;
     userPoolId: string;
@@ -1331,7 +2554,7 @@ export type EnableEmailTemplateVariables = Exact<{
   type: EmailTemplateType;
 }>;
 
-export type EnableEmailTemplate = {
+export type EnableEmailTemplateResponse = {
   enableEmailTemplate: {
     type: EmailTemplateType;
     name: string;
@@ -1350,7 +2573,7 @@ export type EnableIdentityProviderVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type EnableIdentityProvider = {
+export type EnableIdentityProviderResponse = {
   enableIdentityProvider: {
     id?: Maybe<string>;
     domain?: Maybe<string>;
@@ -1365,7 +2588,7 @@ export type EnableSocialConnectionInstanceVariables = Exact<{
   provider: Scalars['String'];
 }>;
 
-export type EnableSocialConnectionInstance = {
+export type EnableSocialConnectionInstanceResponse = {
   enableSocialConnectionInstance: {
     provider: string;
     enabled: boolean;
@@ -1377,7 +2600,7 @@ export type LoginByEmailVariables = Exact<{
   input: LoginByEmailInput;
 }>;
 
-export type LoginByEmail = {
+export type LoginByEmailResponse = {
   loginByEmail?: Maybe<{
     id: string;
     userPoolId: string;
@@ -1431,7 +2654,7 @@ export type LoginByPhoneCodeVariables = Exact<{
   input: LoginByPhoneCodeInput;
 }>;
 
-export type LoginByPhoneCode = {
+export type LoginByPhoneCodeResponse = {
   loginByPhoneCode?: Maybe<{
     id: string;
     userPoolId: string;
@@ -1485,7 +2708,7 @@ export type LoginByPhonePasswordVariables = Exact<{
   input: LoginByPhonePasswordInput;
 }>;
 
-export type LoginByPhonePassword = {
+export type LoginByPhonePasswordResponse = {
   loginByPhonePassword?: Maybe<{
     id: string;
     userPoolId: string;
@@ -1539,7 +2762,7 @@ export type LoginByUsernameVariables = Exact<{
   input: LoginByUsernameInput;
 }>;
 
-export type LoginByUsername = {
+export type LoginByUsernameResponse = {
   loginByUsername?: Maybe<{
     id: string;
     userPoolId: string;
@@ -1591,13 +2814,13 @@ export type LoginByUsername = {
 
 export type RefreshUserpoolSecretVariables = Exact<{ [key: string]: never }>;
 
-export type RefreshUserpoolSecret = { refreshUserpoolSecret: string };
+export type RefreshUserpoolSecretResponse = { refreshUserpoolSecret: string };
 
 export type RegisterByEmailVariables = Exact<{
   input: RegisterByEmailInput;
 }>;
 
-export type RegisterByEmail = {
+export type RegisterByEmailResponse = {
   registerByEmail?: Maybe<{
     id: string;
     userPoolId: string;
@@ -1651,7 +2874,7 @@ export type RegisterByPhonePasswordVariables = Exact<{
   input: RegisterByPhonePasswordInput;
 }>;
 
-export type RegisterByPhonePassword = {
+export type RegisterByPhonePasswordResponse = {
   registerByPhonePassword?: Maybe<{
     id: string;
     userPoolId: string;
@@ -1705,7 +2928,7 @@ export type RegisterByUsernameVariables = Exact<{
   input: RegisterByUsernameInput;
 }>;
 
-export type RegisterByUsername = {
+export type RegisterByUsernameResponse = {
   registerByUsername?: Maybe<{
     id: string;
     userPoolId: string;
@@ -1760,7 +2983,7 @@ export type RemoveCooperatorVariables = Exact<{
   roleId: Scalars['String'];
 }>;
 
-export type RemoveCooperator = {
+export type RemoveCooperatorResponse = {
   removeCooperator: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
@@ -1768,7 +2991,7 @@ export type RemoveFunctionFromPipelineVariables = Exact<{
   input: RemoveFunctionFromPipelineInput;
 }>;
 
-export type RemoveFunctionFromPipeline = {
+export type RemoveFunctionFromPipelineResponse = {
   removeFunctionFromPipeline: {
     id: string;
     name: string;
@@ -1791,7 +3014,7 @@ export type RemoveMemberVariables = Exact<{
   userIds: Array<Scalars['String']>;
 }>;
 
-export type RemoveMember = {
+export type RemoveMemberResponse = {
   removeMember: {
     id: string;
     name: string;
@@ -1814,7 +3037,7 @@ export type RemoveWhitelistVariables = Exact<{
   list: Array<Scalars['String']>;
 }>;
 
-export type RemoveWhitelist = {
+export type RemoveWhitelistResponse = {
   removeWhitelist: Array<
     Maybe<{
       createdAt?: Maybe<string>;
@@ -1831,7 +3054,7 @@ export type RevokeRoleVariables = Exact<{
   nodeCodes?: Maybe<Array<Scalars['String']>>;
 }>;
 
-export type RevokeRole = {
+export type RevokeRoleResponse = {
   revokeRole: {
     code: string;
     name?: Maybe<string>;
@@ -1857,6 +3080,25 @@ export type RevokeRole = {
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
+      permissions: Array<{
+        id: string;
+        code: string;
+        name: string;
+        description?: Maybe<string>;
+        isSystem?: Maybe<boolean>;
+        type?: Maybe<string>;
+        createdAt?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+      }>;
+      users: { totalCount: number };
+      parent?: Maybe<{
+        code: string;
+        name?: Maybe<string>;
+        description?: Maybe<string>;
+        isSystem?: Maybe<boolean>;
+        createdAt?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+      }>;
     }>;
   };
 };
@@ -1865,7 +3107,7 @@ export type SendWebhookTestRequestVariables = Exact<{
   input: SendWebhookTestRequestInput;
 }>;
 
-export type SendWebhookTestRequest = {
+export type SendWebhookTestRequestResponse = {
   sendWebhookTestRequest: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
@@ -1876,7 +3118,7 @@ export type UpdateEmailVariables = Exact<{
   oldEmailCode?: Maybe<Scalars['String']>;
 }>;
 
-export type UpdateEmail = {
+export type UpdateEmailResponse = {
   updateEmail: {
     id: string;
     userPoolId: string;
@@ -1930,7 +3172,7 @@ export type UpdateFunctionVariables = Exact<{
   input: UpdateFunctionInput;
 }>;
 
-export type UpdateFunction = {
+export type UpdateFunctionResponse = {
   updateFunction: {
     id: string;
     name: string;
@@ -1944,7 +3186,7 @@ export type UpdateIdentityProviderVariables = Exact<{
   input: IdpInput;
 }>;
 
-export type UpdateIdentityProvider = {
+export type UpdateIdentityProviderResponse = {
   updateIdentityProvider: {
     id?: Maybe<string>;
     domain?: Maybe<string>;
@@ -1961,7 +3203,7 @@ export type UpdatePasswordVariables = Exact<{
   oldPassword?: Maybe<Scalars['String']>;
 }>;
 
-export type UpdatePassword = {
+export type UpdatePasswordResponse = {
   updatePassword: {
     id: string;
     userPoolId: string;
@@ -2018,7 +3260,7 @@ export type UpdatePhoneVariables = Exact<{
   oldPhoneCode?: Maybe<Scalars['String']>;
 }>;
 
-export type UpdatePhone = {
+export type UpdatePhoneResponse = {
   updatePhone: {
     id: string;
     userPoolId: string;
@@ -2074,7 +3316,7 @@ export type UpdateRoleVariables = Exact<{
   description?: Maybe<Scalars['String']>;
 }>;
 
-export type UpdateRole = {
+export type UpdateRoleResponse = {
   updateRole: {
     code: string;
     name?: Maybe<string>;
@@ -2109,7 +3351,7 @@ export type UpdateUserVariables = Exact<{
   input: UpdateUserInput;
 }>;
 
-export type UpdateUser = {
+export type UpdateUserResponse = {
   updateUser: {
     id: string;
     userPoolId: string;
@@ -2163,7 +3405,7 @@ export type UpdateUserpoolVariables = Exact<{
   input: UpdateUserpoolInput;
 }>;
 
-export type UpdateUserpool = {
+export type UpdateUserpoolResponse = {
   updateUserpool: {
     id: string;
     name: string;
@@ -2222,7 +3464,7 @@ export type UpdateWebhookVariables = Exact<{
   input: UpdateWebhookInput;
 }>;
 
-export type UpdateWebhook = {
+export type UpdateWebhookResponse = {
   updateWebhook: {
     id?: Maybe<string>;
     userPoolId: string;
@@ -2239,7 +3481,7 @@ export type CheckPasswordStrengthVariables = Exact<{
   password: Scalars['String'];
 }>;
 
-export type CheckPasswordStrength = {
+export type CheckPasswordStrengthResponse = {
   checkPasswordStrength: { valid: boolean; message?: Maybe<string> };
 };
 
@@ -2252,7 +3494,7 @@ export type ChildrenNodesVariables = Exact<{
   nodeId: Scalars['String'];
 }>;
 
-export type ChildrenNodes = {
+export type ChildrenNodesResponse = {
   childrenNodes: Array<{
     id: string;
     name: string;
@@ -2276,13 +3518,13 @@ export type CooperatedUserpoolsVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type CooperatedUserpools = {
+export type CooperatedUserpoolsResponse = {
   cooperatedUserpools: { totalCount: number };
 };
 
 export type CooperatorsVariables = Exact<{ [key: string]: never }>;
 
-export type Cooperators = {
+export type CooperatorsResponse = {
   cooperators: Array<{
     roles: Array<{
       code: string;
@@ -2344,7 +3586,7 @@ export type Cooperators = {
 
 export type EmailTemplatesVariables = Exact<{ [key: string]: never }>;
 
-export type EmailTemplates = {
+export type EmailTemplatesResponse = {
   emailTemplates: Array<{
     type: EmailTemplateType;
     name: string;
@@ -2363,7 +3605,7 @@ export type FunctionVariables = Exact<{
   id?: Maybe<Scalars['String']>;
 }>;
 
-export type Function = {
+export type FunctionResponse = {
   function?: Maybe<{
     id: string;
     name: string;
@@ -2379,7 +3621,7 @@ export type FunctionsVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type Functions = {
+export type FunctionsResponse = {
   functions: {
     totalCount: number;
     list: Array<{
@@ -2396,7 +3638,7 @@ export type IdentityProviderVariables = Exact<{
   id?: Maybe<Scalars['String']>;
 }>;
 
-export type IdentityProvider = {
+export type IdentityProviderResponse = {
   identityProvider: {
     id?: Maybe<string>;
     domain?: Maybe<string>;
@@ -2411,7 +3653,7 @@ export type IdentityProviderByDomainVariables = Exact<{
   domain?: Maybe<Scalars['String']>;
 }>;
 
-export type IdentityProviderByDomain = {
+export type IdentityProviderByDomainResponse = {
   identityProviderByDomain: {
     id?: Maybe<string>;
     domain?: Maybe<string>;
@@ -2429,7 +3671,7 @@ export type IdentityProvidersVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type IdentityProviders = {
+export type IdentityProvidersResponse = {
   identityProviders?: Maybe<{
     totalCount: number;
     list: Array<
@@ -2451,7 +3693,7 @@ export type IsActionAllowedVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
-export type IsActionAllowed = { isActionAllowed: boolean };
+export type IsActionAllowedResponse = { isActionAllowed: boolean };
 
 export type IsActionDeniedVariables = Exact<{
   resouceCode: Scalars['String'];
@@ -2459,13 +3701,13 @@ export type IsActionDeniedVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
-export type IsActionDenied = { isActionDenied: boolean };
+export type IsActionDeniedResponse = { isActionDenied: boolean };
 
 export type IsDomainAvaliableVariables = Exact<{
   domain: Scalars['String'];
 }>;
 
-export type IsDomainAvaliable = { isDomainAvaliable?: Maybe<boolean> };
+export type IsDomainAvaliableResponse = { isDomainAvaliable?: Maybe<boolean> };
 
 export type NodeVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -2475,7 +3717,7 @@ export type NodeVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type Node = {
+export type NodeResponse = {
   node: {
     id: string;
     name: string;
@@ -2502,7 +3744,7 @@ export type NodeByCodeVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type NodeByCode = {
+export type NodeByCodeResponse = {
   nodeByCode: {
     id: string;
     name: string;
@@ -2524,7 +3766,7 @@ export type OrgVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type Org = {
+export type OrgResponse = {
   org: {
     id: string;
     rootNode: {
@@ -2564,7 +3806,7 @@ export type OrgsVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type Orgs = {
+export type OrgsResponse = {
   orgs: { totalCount: number; list: Array<{ id: string }> };
 };
 
@@ -2572,7 +3814,7 @@ export type PermissionVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type Permission = {
+export type PermissionResponse = {
   permission: {
     id: string;
     code: string;
@@ -2589,7 +3831,7 @@ export type PermissionByCodeVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type PermissionByCode = {
+export type PermissionByCodeResponse = {
   permissionByCode: {
     id: string;
     code: string;
@@ -2608,7 +3850,7 @@ export type PermissionsVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type Permissions = {
+export type PermissionsResponse = {
   permissions: {
     totalCount: number;
     list: Array<{
@@ -2628,7 +3870,7 @@ export type PipelineVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type Pipeline = {
+export type PipelineResponse = {
   pipeline: {
     id: string;
     name: string;
@@ -2643,7 +3885,7 @@ export type Pipeline = {
 
 export type PipelinesVariables = Exact<{ [key: string]: never }>;
 
-export type Pipelines = {
+export type PipelinesResponse = {
   pipelines: {
     totalCount: number;
     list: Array<{ id: string; name: string; trigger: string }>;
@@ -2654,13 +3896,13 @@ export type PreviewEmailVariables = Exact<{
   type: EmailTemplateType;
 }>;
 
-export type PreviewEmail = { previewEmail: string };
+export type PreviewEmailResponse = { previewEmail: string };
 
 export type QiniuUptokenVariables = Exact<{
   type?: Maybe<Scalars['String']>;
 }>;
 
-export type QiniuUptoken = { qiniuUptoken?: Maybe<string> };
+export type QiniuUptokenResponse = { qiniuUptoken?: Maybe<string> };
 
 export type QueryMfaVariables = Exact<{
   id?: Maybe<Scalars['String']>;
@@ -2668,7 +3910,7 @@ export type QueryMfaVariables = Exact<{
   userPoolId?: Maybe<Scalars['String']>;
 }>;
 
-export type QueryMfa = {
+export type QueryMfaResponse = {
   queryMfa?: Maybe<{
     id: string;
     userId: string;
@@ -2682,7 +3924,7 @@ export type ResouceRulesVariables = Exact<{
   code?: Maybe<Scalars['String']>;
 }>;
 
-export type ResouceRules = {
+export type ResouceRulesResponse = {
   resouceRules: {
     totalCount: number;
     list: Array<{
@@ -2699,7 +3941,7 @@ export type RoleVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type Role = {
+export type RoleResponse = {
   role: {
     code: string;
     name?: Maybe<string>;
@@ -2735,7 +3977,7 @@ export type RolesVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type Roles = {
+export type RolesResponse = {
   roles: {
     totalCount: number;
     list: Array<{
@@ -2756,7 +3998,7 @@ export type SearchUserVariables = Exact<{
   count?: Maybe<Scalars['Int']>;
 }>;
 
-export type SearchUser = {
+export type SearchUserResponse = {
   searchUser: {
     totalCount: number;
     list: Array<{
@@ -2813,7 +4055,7 @@ export type SocialConnectionVariables = Exact<{
   provider: Scalars['String'];
 }>;
 
-export type SocialConnection = {
+export type SocialConnectionResponse = {
   socialConnection?: Maybe<{
     provider: string;
     name: string;
@@ -2834,7 +4076,7 @@ export type SocialConnectionInstanceVariables = Exact<{
   provider: Scalars['String'];
 }>;
 
-export type SocialConnectionInstance = {
+export type SocialConnectionInstanceResponse = {
   socialConnectionInstance: {
     provider: string;
     enabled: boolean;
@@ -2846,7 +4088,7 @@ export type SocialConnectionInstancesVariables = Exact<{
   [key: string]: never;
 }>;
 
-export type SocialConnectionInstances = {
+export type SocialConnectionInstancesResponse = {
   socialConnectionInstances: Array<{
     provider: string;
     enabled: boolean;
@@ -2856,7 +4098,7 @@ export type SocialConnectionInstances = {
 
 export type SocialConnectionsVariables = Exact<{ [key: string]: never }>;
 
-export type SocialConnections = {
+export type SocialConnectionsResponse = {
   socialConnections: Array<{
     provider: string;
     name: string;
@@ -2875,13 +4117,13 @@ export type SocialConnections = {
 
 export type TemplateCodeVariables = Exact<{ [key: string]: never }>;
 
-export type TemplateCode = { templateCode: string };
+export type TemplateCodeResponse = { templateCode: string };
 
 export type UserVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type User = {
+export type UserResponse = {
   user: {
     id: string;
     userPoolId: string;
@@ -2935,7 +4177,7 @@ export type UserBatchVariables = Exact<{
   ids: Array<Scalars['String']>;
 }>;
 
-export type UserBatch = {
+export type UserBatchResponse = {
   userBatch: {
     totalCount: number;
     list: Array<{
@@ -2990,7 +4232,7 @@ export type UserBatch = {
 
 export type UserpoolVariables = Exact<{ [key: string]: never }>;
 
-export type Userpool = {
+export type UserpoolResponse = {
   userpool: {
     id: string;
     name: string;
@@ -3047,7 +4289,7 @@ export type Userpool = {
 
 export type UserpoolTypesVariables = Exact<{ [key: string]: never }>;
 
-export type UserpoolTypes = {
+export type UserpoolTypesResponse = {
   userpoolTypes: Array<{
     code?: Maybe<string>;
     name?: Maybe<string>;
@@ -3063,7 +4305,7 @@ export type UserpoolsVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type Userpools = {
+export type UserpoolsResponse = {
   userpools: {
     totalCount: number;
     list: Array<{
@@ -3091,7 +4333,7 @@ export type UsersVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type Users = {
+export type UsersResponse = {
   users: {
     totalCount: number;
     list: Array<{
@@ -3148,7 +4390,7 @@ export type WebhookVariables = Exact<{
   webhookId?: Maybe<Scalars['String']>;
 }>;
 
-export type Webhook = {
+export type WebhookResponse = {
   webhook: {
     id?: Maybe<string>;
     userPoolId: string;
@@ -3165,7 +4407,7 @@ export type WebhookLogVariables = Exact<{
   webhookLogId?: Maybe<Scalars['String']>;
 }>;
 
-export type WebhookLog = {
+export type WebhookLogResponse = {
   webhookLog: {
     id: string;
     webhookId: string;
@@ -3183,7 +4425,7 @@ export type WebhookLog = {
 
 export type WebhookLogsVariables = Exact<{ [key: string]: never }>;
 
-export type WebhookLogs = {
+export type WebhookLogsResponse = {
   webhookLogs: {
     totalCount: number;
     list: Array<{
@@ -3198,7 +4440,7 @@ export type WebhookLogs = {
 
 export type WebhookOptionsVariables = Exact<{ [key: string]: never }>;
 
-export type WebhookOptions = {
+export type WebhookOptionsResponse = {
   webhookOptions: {
     webhookEvents: Array<
       Maybe<{ name: string; label: string; description?: Maybe<string> }>
@@ -3209,7 +4451,7 @@ export type WebhookOptions = {
 
 export type WebhooksVariables = Exact<{ [key: string]: never }>;
 
-export type Webhooks = {
+export type WebhooksResponse = {
   webhooks: {
     totalCount: number;
     list: Array<{
@@ -3228,7 +4470,7 @@ export type WhitelistVariables = Exact<{
   type: WhitelistType;
 }>;
 
-export type Whitelist = {
+export type WhitelistResponse = {
   whitelist: Array<{
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
@@ -3246,6 +4488,27 @@ export const AddCooperatorDocument = gql`
         isSystem
         createdAt
         updatedAt
+        permissions {
+          id
+          code
+          name
+          description
+          isSystem
+          type
+          createdAt
+          updatedAt
+        }
+        users {
+          totalCount
+        }
+        parent {
+          code
+          name
+          description
+          isSystem
+          createdAt
+          updatedAt
+        }
       }
       user {
         id
@@ -4616,6 +5879,56 @@ export const RevokeRoleDocument = gql`
         isSystem
         createdAt
         updatedAt
+        permissions {
+          id
+          code
+          name
+          description
+          isSystem
+          type
+          createdAt
+          updatedAt
+        }
+        users {
+          totalCount
+        }
+        parent {
+          code
+          name
+          description
+          isSystem
+          createdAt
+          updatedAt
+        }
+      }
+      parent {
+        code
+        name
+        description
+        isSystem
+        createdAt
+        updatedAt
+        permissions {
+          id
+          code
+          name
+          description
+          isSystem
+          type
+          createdAt
+          updatedAt
+        }
+        users {
+          totalCount
+        }
+        parent {
+          code
+          name
+          description
+          isSystem
+          createdAt
+          updatedAt
+        }
       }
     }
   }

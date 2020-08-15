@@ -1,5 +1,5 @@
 import {
-  CheckPasswordStrength,
+  CheckPasswordStrengthResponse,
   CheckPasswordStrengthDocument,
   CheckPasswordStrengthVariables
 } from '../../types/CodeGen.v2';
@@ -10,7 +10,7 @@ export const checkPasswordStrength = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: AuthenticationTokenProvider,
   variables: CheckPasswordStrengthVariables
-): Promise<CheckPasswordStrength> => {
+): Promise<CheckPasswordStrengthResponse> => {
   const query = CheckPasswordStrengthDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
