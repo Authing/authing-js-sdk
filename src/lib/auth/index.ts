@@ -1,9 +1,11 @@
-import { BasicAuthenticationClient } from './BasicAuthenticationClient';
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import { checkLoginStatus } from './../graphqlapi/auth.checkLoginStatus';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
 import { sendVerifyEmail } from '../graphqlapi/auth.sendVerifyEmail';
+import { RegisterProfile } from '../../types/codeGen.v2';
+import { registerByEmail } from '../graphqlapi/auth.registerByEmail';
+import { encrypt } from '../utils/encryption';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,
@@ -19,8 +21,8 @@ GKl64GDcIq3au+aqJQIDAQAB
   enableAccessTokenCache: true,
   host: {
     graphqlApiEndpoint: 'https://core.authing.cn/graphql',
-    restApiBaseHost: 'https://core.authing.cn',
-  },
+    restApiBaseHost: 'https://core.authing.cn'
+  }
 };
 
 export class AuthenticationClient {
@@ -28,8 +30,8 @@ export class AuthenticationClient {
   options: AuthenticationClientOptions;
 
   graphqlClient: GraphqlClient;
+  graphqlClientV2: GraphqlClient;
   tokenProvider: AuthenticationTokenProvider;
-  basic: BasicAuthenticationClient;
 
   constructor(options: AuthenticationClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -38,12 +40,35 @@ export class AuthenticationClient {
       this.options.host.graphqlApiEndpoint,
       this.options.userPoolId
     );
-    this.tokenProvider = new AuthenticationTokenProvider(this.options);
-    this.basic = new BasicAuthenticationClient(
-      this.options,
-      this.graphqlClient,
-      this.tokenProvider
+    this.graphqlClientV2 = new GraphqlClient(
+      this.options.host.graphqlApiEndpointV2,
+      this.options.userPoolId
     );
+    this.tokenProvider = new AuthenticationTokenProvider(this.options);
+  }
+
+  /**
+   * @description 通过邮箱注册
+   *
+   */
+  async registerByEmail(
+    email: string,
+    password: string,
+    profile?: RegisterProfile
+  ) {
+    password = encrypt(password, this.options.encrptionPublicKey);
+    const { registerByEmail: user } = await registerByEmail(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        input: {
+          email,
+          password,
+          profile
+        }
+      }
+    );
+    return user;
   }
 
   /**
@@ -52,7 +77,7 @@ export class AuthenticationClient {
    */
   async checkLoginStatus(token: string) {
     const res = await checkLoginStatus(this.graphqlClient, this.tokenProvider, {
-      token,
+      token
     });
     return res.checkLoginStatus;
   }
@@ -64,7 +89,7 @@ export class AuthenticationClient {
   async sendVerifyEmail(email: string) {
     const res = await sendVerifyEmail(this.graphqlClient, this.tokenProvider, {
       email,
-      client: this.options.userPoolId,
+      client: this.options.userPoolId
     });
     return res.sendVerifyEmail;
   }
