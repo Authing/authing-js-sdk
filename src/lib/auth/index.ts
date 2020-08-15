@@ -126,7 +126,8 @@ export class AuthenticationClient {
       {
         headers: {
           'x-authing-userpool-id': this.options.userPoolId,
-          'x-authing-sdk-version': SDK_VERSION
+          'x-authing-sdk-version': SDK_VERSION,
+          'x-authing-request-from': 'sdk'
         }
       }
     );
