@@ -16,19 +16,25 @@ import {
   orgRootNode,
   searchNodes
 } from '../graphqlapi';
+import Axios from 'axios';
+import { SDK_VERSION } from '../version';
+import { Org } from '../../types/graphql.v2';
 
 export class OrgManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;
+  graphqlClientV2: GraphqlClient;
   tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
     graphqlClient: GraphqlClient,
+    graphqlClientV2: GraphqlClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
     this.graphqlClient = graphqlClient;
+    this.graphqlClientV2 = graphqlClientV2;
     this.tokenProvider = tokenProvider;
   }
 
@@ -86,8 +92,8 @@ export class OrgManagementClient {
    * @memberof OrgManagementClient
    */
   async findById(id: string) {
-    const res = await org(this.graphqlClient, this.tokenProvider, {
-      _id: id
+    const res = await org(this.graphqlClientV2, this.tokenProvider, {
+      id
     });
     return res.org;
   }
@@ -193,5 +199,21 @@ export class OrgManagementClient {
       metadata
     });
     return res.searchOrgNodes;
+  }
+
+  /**
+   * @description 通过一个 JSON 导入树机构
+   *
+   */
+  async import(json: { [x: string]: any }) {
+    const api = `${this.options.host}/v2/api/org/import-by-json`;
+    const res = await Axios.post(api, json, {
+      headers: {
+        'x-authing-userpool-id': this.options.userPoolId,
+        'x-authing-sdk-version': SDK_VERSION,
+        'x-authing-request-from': 'sdk'
+      }
+    });
+    return res.data as Org;
   }
 }
