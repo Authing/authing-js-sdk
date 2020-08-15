@@ -42,6 +42,8 @@ export class ManagementClient {
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
+    const graphqlApiEndpoint = `${this.options.host}/graphql`;
+    const graphqlApiEndpointV2 = `${this.options.host}/v2/graphql`;
 
     if (!this.options.secret && !this.options.accessToken) {
       this.options.onError(
@@ -53,11 +55,11 @@ export class ManagementClient {
 
     // 子模块初始化顺序: GraphqlClient -> ManagementTokenProvider -> Others
     this.graphqlClient = new GraphqlClient(
-      this.options.host.graphqlApiEndpoint,
+      graphqlApiEndpoint,
       this.options.userPoolId
     );
     this.graphqlClientV2 = new GraphqlClient(
-      this.options.host.graphqlApiEndpointV2,
+      graphqlApiEndpointV2,
       this.options.userPoolId
     );
     this.tokenProvider = new ManagementTokenProvider(

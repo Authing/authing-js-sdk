@@ -25,8 +25,9 @@ export class ManagementTokenProvider {
    * @memberof ManagementTokenProvider
    */
   private async getClientWhenSdkInit() {
+    const graphqlApiEndpoint = `${this.options.host}/graphql`;
     const res: any = await graphqlRequest({
-      endpoint: this.options.host.graphqlApiEndpoint,
+      endpoint: graphqlApiEndpoint,
       query: `query getClientWhenSdkInit($clientId: String!, $secret: String!) {\n  getClientWhenSdkInit(clientId: $clientId, secret: $secret) {\n    accessToken\n  }\n}\n`,
       variables: {
         clientId: this.options.userPoolId,
@@ -42,8 +43,10 @@ export class ManagementTokenProvider {
    * @memberof ManagementTokenProvider
    */
   private async refreshToken() {
+    const graphqlApiEndpoint = `${this.options.host}/graphql`;
+
     const res: any = await graphqlRequest({
-      endpoint: this.options.host.graphqlApiEndpoint,
+      endpoint: graphqlApiEndpoint,
       query: `mutation refreshAccessToken($userPoolId: String!, $accessToken: String!){
         refreshAccessToken(userPoolId: $userPoolId, accessToken: $accessToken) {
           accessToken

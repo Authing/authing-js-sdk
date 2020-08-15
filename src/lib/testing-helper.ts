@@ -26,16 +26,7 @@ export const getOptionsFromEnv = (): ManagementClientOptions => {
   return {
     userPoolId: process.env.AUTHING_USERPOOL_ID,
     secret: process.env.AUTHING_USERPOOL_SECRET,
-    host: {
-      graphqlApiEndpoint:
-        process.env.AUTHING_GRAPHQL_ENDPOINT ||
-        'https://core.authing.cn/graphql',
-      graphqlApiEndpointV2:
-        process.env.AUTHING_GRAPHQL_ENDPOINT_V2 ||
-        'https://core.authing.cn/v2/graphql',
-      restApiBaseHost: process.env.AUTHING_RESTAPI_HOST =
-        'https://core.authing.cn'
-    },
+    host: process.env.AUTHING_HOST,
     onError: (err: Error) => {
       throw err;
     }

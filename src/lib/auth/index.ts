@@ -23,10 +23,7 @@ GKl64GDcIq3au+aqJQIDAQAB
     throw err;
   },
   enableAccessTokenCache: true,
-  host: {
-    graphqlApiEndpoint: 'https://core.authing.cn/graphql',
-    restApiBaseHost: 'https://core.authing.cn'
-  }
+  host: 'https://core.authing.cn'
 };
 
 export class AuthenticationClient {
@@ -39,13 +36,15 @@ export class AuthenticationClient {
 
   constructor(options: AuthenticationClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
+    const graphqlApiEndpoint = `${this.options.host}/graphql`;
+    const graphqlApiEndpointV2 = `${this.options.host}/v2/graphql`;
     // 子模块初始化顺序: GraphqlClient -> ManagementTokenProvider -> Others
     this.graphqlClient = new GraphqlClient(
-      this.options.host.graphqlApiEndpoint,
+      graphqlApiEndpoint,
       this.options.userPoolId
     );
     this.graphqlClientV2 = new GraphqlClient(
-      this.options.host.graphqlApiEndpointV2,
+      graphqlApiEndpointV2,
       this.options.userPoolId
     );
     this.tokenProvider = new AuthenticationTokenProvider(this.options);

@@ -9,11 +9,7 @@ export interface AuthenticationClientOptions {
   /** 错误回调函数, 默认为 (err: Error) => { throw err } 直接抛出报错 **/
   onError?: (err: Error) => void;
   encrptionPublicKey?: string;
-  host?: {
-    graphqlApiEndpoint: string;
-    graphqlApiEndpointV2: string;
-    restApiBaseHost: string;
-  };
+  host?: string;
 }
 
 export interface CheckLoginStatusRes {
