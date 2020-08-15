@@ -1,7 +1,7 @@
 import { ManagementClientOptions } from './types';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
-import { PermissionDescriptorsListInputType } from '../../types/codeGen';
+import { PermissionDescriptorsListInputType } from '../../types/graphql.v1';
 import {
   queryPermissionList,
   addCollaborator,

@@ -2,13 +2,17 @@ import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import {
   checkLoginStatus,
   checkPasswordStrength,
+  loginByEmail,
+  loginByPhoneCode,
+  loginByPhonePassword,
+  loginByUsername,
   registerByEmail,
   registerByUsername,
   sendVerifyEmail
 } from './../graphqlapi';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
-import { RegisterProfile } from '../../types/codeGen.v2';
+import { RegisterProfile } from '../../types/graphql.v2';
 import { encrypt } from '../utils';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
@@ -132,6 +136,61 @@ export class AuthenticationClient {
       }
     );
     return res.data;
+  }
+
+  async loginByEmail(email: string, password: string) {
+    password = encrypt(password, this.options.encrptionPublicKey);
+    const { loginByEmail: user } = await loginByEmail(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        input: { email, password }
+      }
+    );
+    const { token } = user;
+    this.tokenProvider.setAccessToken(token);
+    return user;
+  }
+
+  async loginByUsername(username: string, password: string) {
+    password = encrypt(password, this.options.encrptionPublicKey);
+    const { loginByUsername: user } = await loginByUsername(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        input: { username, password }
+      }
+    );
+    const { token } = user;
+    this.tokenProvider.setAccessToken(token);
+    return user;
+  }
+
+  async loginByPhoneCode(phone: string, code: string) {
+    const { loginByPhoneCode: user } = await loginByPhoneCode(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        input: { phone, code }
+      }
+    );
+    const { token } = user;
+    this.tokenProvider.setAccessToken(token);
+    return user;
+  }
+
+  async loginByPhonePassword(phone: string, password: string) {
+    password = encrypt(password, this.options.encrptionPublicKey);
+    const { loginByPhonePassword: user } = await loginByPhonePassword(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        input: { phone, password }
+      }
+    );
+    const { token } = user;
+    this.tokenProvider.setAccessToken(token);
+    return user;
   }
 
   /**

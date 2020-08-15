@@ -101,7 +101,7 @@ import {
   PasswordLessForceLogin,
   PasswordLessForceLoginDocument,
   PasswordLessForceLoginVariables
-} from '../types/CodeGen';
+} from '../types/graphql.v1';
 import { GraphqlClient } from './common/GraphqlClient';
 import { ManagementTokenProvider } from './management/ManagementTokenProvider';
 import { AuthenticationTokenProvider } from './auth/AuthenticationTokenProvider';
@@ -132,8 +132,20 @@ import {
   IsActionDeniedResponse,
   IsActionDeniedVariables,
   CreateRoleVariables,
-  CreateRoleDocument
-} from '../types/codeGen.v2';
+  CreateRoleDocument,
+  LoginByEmailVariables,
+  LoginByEmailDocument,
+  LoginByEmailResponse,
+  LoginByUsernameVariables,
+  LoginByUsernameResponse,
+  LoginByUsernameDocument,
+  LoginByPhoneCodeVariables,
+  LoginByPhoneCodeResponse,
+  LoginByPhoneCodeDocument,
+  LoginByPhonePasswordVariables,
+  LoginByPhonePasswordResponse,
+  LoginByPhonePasswordDocument
+} from '../types/graphql.v2';
 
 export const isAllowed = async (
   garpqhlClient: GraphqlClient,
@@ -618,6 +630,62 @@ export const registerByEmail = async (
 ): Promise<RegisterByEmailResponse> => {
   const query = RegisterByEmailDocument;
   const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const loginByEmail = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: AuthenticationTokenProvider,
+  variables: LoginByEmailVariables
+): Promise<LoginByEmailResponse> => {
+  const query = LoginByEmailDocument;
+  const token = tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const loginByUsername = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: AuthenticationTokenProvider,
+  variables: LoginByUsernameVariables
+): Promise<LoginByUsernameResponse> => {
+  const query = LoginByUsernameDocument;
+  const token = tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const loginByPhoneCode = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: AuthenticationTokenProvider,
+  variables: LoginByPhoneCodeVariables
+): Promise<LoginByPhoneCodeResponse> => {
+  const query = LoginByPhoneCodeDocument;
+  const token = tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const loginByPhonePassword = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: AuthenticationTokenProvider,
+  variables: LoginByPhonePasswordVariables
+): Promise<LoginByPhonePasswordResponse> => {
+  const query = LoginByPhonePasswordDocument;
+  const token = tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
     token,

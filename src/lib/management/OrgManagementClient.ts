@@ -3,7 +3,7 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import buildTree from '../utils';
 import _ from 'lodash';
-import { SearchOrgNodesVariables } from '../../types/codeGen';
+import { SearchOrgNodesVariables } from '../../types/graphql.v1';
 import {
   orgs,
   createOrg,

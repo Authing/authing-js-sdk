@@ -2,7 +2,7 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import _ from 'lodash';
-import { CreateOidcAppVariables } from '../../types/codeGen';
+import { CreateOidcAppVariables } from '../../types/graphql.v1';
 import {
   GetOIDCAppList,
   CreateOIDCApp,

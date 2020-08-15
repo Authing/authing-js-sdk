@@ -2,7 +2,7 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { encrypt } from './../utils';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
-import { UserRegisterInput } from '../../types/codeGen';
+import { UserRegisterInput } from '../../types/graphql.v1';
 import {
   removeUsers,
   user,

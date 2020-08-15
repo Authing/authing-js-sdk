@@ -1,8 +1,8 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
-import { SortByEnum } from '../../types/codeGen';
-import { Role } from '../../types/codeGen.v2';
+import { SortByEnum } from '../../types/graphql.v1';
+import { Role } from '../../types/graphql.v2';
 import {
   createRBACGroup,
   addGroupMetadata,
