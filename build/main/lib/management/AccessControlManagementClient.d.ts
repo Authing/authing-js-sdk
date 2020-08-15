@@ -2,6 +2,7 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { SortByEnum } from '../../types/codeGen';
+import { CreateRole } from '../../types/codeGen.v2';
 export declare class AccessControlManagementClient {
     options: ManagementClientOptions;
     graphqlClient: GraphqlClient;
@@ -140,74 +141,14 @@ export declare class AccessControlManagementClient {
      * @description 添加角色
      *
      */
-    addRole(code: string, name?: string, description?: string): Promise<{
-        code: string;
+    addRole(code: string, parent: string, options?: {
         name?: string;
         description?: string;
-        isSystem?: boolean;
-        createdAt?: string;
-        updatedAt?: string;
-        permissions: {
-            id: string;
-            code: string;
-            name: string;
-            description?: string;
-            isSystem?: boolean;
-            type?: string;
-            createdAt?: string;
-            updatedAt?: string;
-        }[];
-        users: {
-            totalCount: number;
-            list: {
-                id: string;
-                userPoolId: string;
-                username?: string;
-                email?: string;
-                emailVerified?: boolean;
-                phone?: string;
-                phoneVerified?: boolean;
-                unionid?: string;
-                openid?: string;
-                nickname?: string;
-                registerMethod?: string;
-                photo?: string;
-                password?: string;
-                oauth?: string;
-                token?: string;
-                tokenExpiredAt?: string;
-                loginsCount?: number;
-                lastLogin?: string;
-                lastIP?: string;
-                signedUp?: string;
-                blocked?: boolean;
-                isDeleted?: boolean;
-                device?: string;
-                browser?: string;
-                company?: string;
-                name?: string;
-                givenName?: string;
-                familyName?: string;
-                middleName?: string;
-                profile?: string;
-                preferredUsername?: string;
-                website?: string;
-                gender?: string;
-                birthdate?: string;
-                zoneinfo?: string;
-                locale?: string;
-                address?: string;
-                formatted?: string;
-                streetAddress?: string;
-                locality?: string;
-                region?: string;
-                postalCode?: string;
-                country?: string;
-                updatedAt?: string;
-                customData?: string;
-            }[];
-        };
-    }>;
+    }): Promise<CreateRole>;
+    addRole(code: string, options?: {
+        name?: string;
+        description?: string;
+    }): Promise<CreateRole>;
     /**
      * @description 添加资源
      *
@@ -294,19 +235,6 @@ export declare class AccessControlManagementClient {
             isSystem?: boolean;
             createdAt?: string;
             updatedAt?: string;
-            permissions: {
-                id: string;
-                code: string;
-                name: string;
-                description?: string;
-                isSystem?: boolean;
-                type?: string;
-                createdAt?: string;
-                updatedAt?: string;
-            }[];
-            users: {
-                totalCount: number;
-            };
         };
         group?: {
             code: string;
@@ -314,9 +242,6 @@ export declare class AccessControlManagementClient {
             description?: string;
             createdAt?: string;
             updatedAt?: string;
-            users: {
-                totalCount: number;
-            };
         };
         node?: {
             id: string;
@@ -331,9 +256,6 @@ export declare class AccessControlManagementClient {
             createdAt?: string;
             updatedAt?: string;
             children?: string[];
-            users: {
-                totalCount: number;
-            };
         };
     }>;
     /**
@@ -411,19 +333,6 @@ export declare class AccessControlManagementClient {
             isSystem?: boolean;
             createdAt?: string;
             updatedAt?: string;
-            permissions: {
-                id: string;
-                code: string;
-                name: string;
-                description?: string;
-                isSystem?: boolean;
-                type?: string;
-                createdAt?: string;
-                updatedAt?: string;
-            }[];
-            users: {
-                totalCount: number;
-            };
         };
         group?: {
             code: string;
@@ -431,9 +340,6 @@ export declare class AccessControlManagementClient {
             description?: string;
             createdAt?: string;
             updatedAt?: string;
-            users: {
-                totalCount: number;
-            };
         };
         node?: {
             id: string;
@@ -448,9 +354,6 @@ export declare class AccessControlManagementClient {
             createdAt?: string;
             updatedAt?: string;
             children?: string[];
-            users: {
-                totalCount: number;
-            };
         };
     }>;
     /**

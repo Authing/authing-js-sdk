@@ -446,17 +446,6 @@ export type AddCooperator = {
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      permissions: Array<{
-        id: string;
-        code: string;
-        name: string;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        type?: Maybe<string>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
-      users: { totalCount: number };
     }>;
     user: {
       id: string;
@@ -521,13 +510,6 @@ export type AddFunctionToPipeline = {
       funcId: string;
       asynchronous: boolean;
       enabled: boolean;
-      function: {
-        id: string;
-        name: string;
-        sourceCode: string;
-        description?: Maybe<string>;
-        url?: Maybe<string>;
-      };
     }>;
   };
 };
@@ -556,68 +538,11 @@ export type AddMember = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
+    users: { totalCount: number };
   };
 };
 
 export type AddNodeVariables = Exact<{
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
-  page1?: Maybe<Scalars['Int']>;
-  limit1?: Maybe<Scalars['Int']>;
-  sortBy1?: Maybe<SortByEnum>;
-  includeChildrenNodes1?: Maybe<Scalars['Boolean']>;
   orgId: Scalars['String'];
   parentNodeId?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -644,7 +569,6 @@ export type AddNode = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       children?: Maybe<Array<string>>;
-      users: { totalCount: number };
     };
     nodes: Array<{
       id: string;
@@ -659,7 +583,6 @@ export type AddNode = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       children?: Maybe<Array<string>>;
-      users: { totalCount: number };
     }>;
   };
 };
@@ -704,56 +627,15 @@ export type AssignRole = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
     }>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
+    users: { totalCount: number };
+    parent?: Maybe<{
+      code: string;
+      name?: Maybe<string>;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
   };
 };
 
@@ -838,14 +720,6 @@ export type CreateIdentityProvider = {
 };
 
 export type CreateOrgVariables = Exact<{
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
-  page1?: Maybe<Scalars['Int']>;
-  limit1?: Maybe<Scalars['Int']>;
-  sortBy1?: Maybe<SortByEnum>;
-  includeChildrenNodes1?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
   code?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -867,7 +741,6 @@ export type CreateOrg = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       children?: Maybe<Array<string>>;
-      users: { totalCount: number };
     };
     nodes: Array<{
       id: string;
@@ -882,7 +755,6 @@ export type CreateOrg = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       children?: Maybe<Array<string>>;
-      users: { totalCount: number };
     }>;
   };
 };
@@ -934,13 +806,6 @@ export type CreatePipeline = {
       funcId: string;
       asynchronous: boolean;
       enabled: boolean;
-      function: {
-        id: string;
-        name: string;
-        sourceCode: string;
-        description?: Maybe<string>;
-        url?: Maybe<string>;
-      };
     }>;
   };
 };
@@ -962,10 +827,6 @@ export type CreateResource = {
 };
 
 export type CreateResourceRuleVariables = Exact<{
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
   resouceCode: Scalars['String'];
   action: Scalars['String'];
   allow: Scalars['Boolean'];
@@ -1041,17 +902,6 @@ export type CreateResourceRule = {
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      permissions: Array<{
-        id: string;
-        code: string;
-        name: string;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        type?: Maybe<string>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
-      users: { totalCount: number };
     }>;
     group?: Maybe<{
       code: string;
@@ -1059,7 +909,6 @@ export type CreateResourceRule = {
       description?: Maybe<string>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      users: { totalCount: number };
     }>;
     node?: Maybe<{
       id: string;
@@ -1074,7 +923,6 @@ export type CreateResourceRule = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       children?: Maybe<Array<string>>;
-      users: { totalCount: number };
     }>;
   };
 };
@@ -1084,6 +932,7 @@ export type CreateRoleVariables = Exact<{
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   permissions?: Maybe<Array<Scalars['String']>>;
+  parent?: Maybe<Scalars['String']>;
 }>;
 
 export type CreateRole = {
@@ -1104,56 +953,15 @@ export type CreateRole = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
     }>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
+    users: { totalCount: number };
+    parent?: Maybe<{
+      code: string;
+      name?: Maybe<string>;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
   };
 };
 
@@ -1173,16 +981,6 @@ export type CreateSocialConnection = {
         label?: Maybe<string>;
         type?: Maybe<string>;
         placeholder?: Maybe<string>;
-        children?: Maybe<
-          Array<
-            Maybe<{
-              key?: Maybe<string>;
-              label?: Maybe<string>;
-              type?: Maybe<string>;
-              placeholder?: Maybe<string>;
-            }>
-          >
-        >;
       }>
     >;
   };
@@ -1296,14 +1094,6 @@ export type DeleteIdentityProvider = {
 };
 
 export type DeleteNodeVariables = Exact<{
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
-  page1?: Maybe<Scalars['Int']>;
-  limit1?: Maybe<Scalars['Int']>;
-  sortBy1?: Maybe<SortByEnum>;
-  includeChildrenNodes1?: Maybe<Scalars['Boolean']>;
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
 }>;
@@ -1324,7 +1114,6 @@ export type DeleteNode = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       children?: Maybe<Array<string>>;
-      users: { totalCount: number };
     };
     nodes: Array<{
       id: string;
@@ -1339,7 +1128,6 @@ export type DeleteNode = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       children?: Maybe<Array<string>>;
-      users: { totalCount: number };
     }>;
   };
 };
@@ -1989,13 +1777,6 @@ export type RemoveFunctionFromPipeline = {
       funcId: string;
       asynchronous: boolean;
       enabled: boolean;
-      function: {
-        id: string;
-        name: string;
-        sourceCode: string;
-        description?: Maybe<string>;
-        url?: Maybe<string>;
-      };
     }>;
   };
 };
@@ -2024,56 +1805,7 @@ export type RemoveMember = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
+    users: { totalCount: number };
   };
 };
 
@@ -2117,56 +1849,15 @@ export type RevokeRole = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
     }>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
+    users: { totalCount: number };
+    parent?: Maybe<{
+      code: string;
+      name?: Maybe<string>;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
   };
 };
 
@@ -2401,56 +2092,15 @@ export type UpdateRole = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
     }>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
+    users: { totalCount: number };
+    parent?: Maybe<{
+      code: string;
+      name?: Maybe<string>;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
   };
 };
 
@@ -2608,56 +2258,7 @@ export type ChildrenNodes = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
+    users: { totalCount: number };
   }>;
 };
 
@@ -2668,47 +2269,7 @@ export type CooperatedUserpoolsVariables = Exact<{
 }>;
 
 export type CooperatedUserpools = {
-  cooperatedUserpools: {
-    totalCount: number;
-    list: Array<{
-      userpool: {
-        id: string;
-        name: string;
-        description?: Maybe<string>;
-        secret: string;
-        logo: string;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        emailVerifiedDefault: boolean;
-        sendWelcomeEmail: boolean;
-        registerDisabled: boolean;
-        showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>;
-        allowedOrigins?: Maybe<string>;
-        tokenExpiresAfter?: Maybe<number>;
-        isDeleted?: Maybe<boolean>;
-      };
-      role?: Maybe<{
-        code: string;
-        name?: Maybe<string>;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
-      permissions?: Maybe<
-        Array<{
-          id: string;
-          code: string;
-          name: string;
-          description?: Maybe<string>;
-          isSystem?: Maybe<boolean>;
-          type?: Maybe<string>;
-          createdAt?: Maybe<string>;
-          updatedAt?: Maybe<string>;
-        }>
-      >;
-    }>;
-  };
+  cooperatedUserpools: { totalCount: number };
 };
 
 export type CooperatorsVariables = Exact<{ [key: string]: never }>;
@@ -2722,17 +2283,6 @@ export type Cooperators = {
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      permissions: Array<{
-        id: string;
-        code: string;
-        name: string;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        type?: Maybe<string>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
-      users: { totalCount: number };
     }>;
     user: {
       id: string;
@@ -2939,56 +2489,7 @@ export type Node = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
+    users: { totalCount: number };
   };
 };
 
@@ -3015,68 +2516,11 @@ export type NodeByCode = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
+    users: { totalCount: number };
   };
 };
 
 export type OrgVariables = Exact<{
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
-  page1?: Maybe<Scalars['Int']>;
-  limit1?: Maybe<Scalars['Int']>;
-  sortBy1?: Maybe<SortByEnum>;
-  includeChildrenNodes1?: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
 }>;
 
@@ -3096,7 +2540,6 @@ export type Org = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       children?: Maybe<Array<string>>;
-      users: { totalCount: number };
     };
     nodes: Array<{
       id: string;
@@ -3111,7 +2554,6 @@ export type Org = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       children?: Maybe<Array<string>>;
-      users: { totalCount: number };
     }>;
   };
 };
@@ -3123,40 +2565,7 @@ export type OrgsVariables = Exact<{
 }>;
 
 export type Orgs = {
-  orgs: {
-    totalCount: number;
-    list: Array<{
-      id: string;
-      rootNode: {
-        id: string;
-        name: string;
-        nameI18n?: Maybe<string>;
-        description?: Maybe<string>;
-        descriptionI18n?: Maybe<string>;
-        order?: Maybe<number>;
-        code?: Maybe<string>;
-        root?: Maybe<boolean>;
-        depth?: Maybe<number>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        children?: Maybe<Array<string>>;
-      };
-      nodes: Array<{
-        id: string;
-        name: string;
-        nameI18n?: Maybe<string>;
-        description?: Maybe<string>;
-        descriptionI18n?: Maybe<string>;
-        order?: Maybe<number>;
-        code?: Maybe<string>;
-        root?: Maybe<boolean>;
-        depth?: Maybe<number>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        children?: Maybe<Array<string>>;
-      }>;
-    }>;
-  };
+  orgs: { totalCount: number; list: Array<{ id: string }> };
 };
 
 export type PermissionVariables = Exact<{
@@ -3228,13 +2637,6 @@ export type Pipeline = {
       funcId: string;
       asynchronous: boolean;
       enabled: boolean;
-      function: {
-        id: string;
-        name: string;
-        sourceCode: string;
-        description?: Maybe<string>;
-        url?: Maybe<string>;
-      };
     }>;
   };
 };
@@ -3244,16 +2646,7 @@ export type PipelinesVariables = Exact<{ [key: string]: never }>;
 export type Pipelines = {
   pipelines: {
     totalCount: number;
-    list: Array<{
-      id: string;
-      name: string;
-      trigger: string;
-      functions: Array<{
-        funcId: string;
-        asynchronous: boolean;
-        enabled: boolean;
-      }>;
-    }>;
+    list: Array<{ id: string; name: string; trigger: string }>;
   };
 };
 
@@ -3298,89 +2691,6 @@ export type ResouceRules = {
       expiresIn?: Maybe<string>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      resouce: {
-        code: string;
-        name?: Maybe<string>;
-        description?: Maybe<string>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      };
-      user?: Maybe<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-      role?: Maybe<{
-        code: string;
-        name?: Maybe<string>;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
-      group?: Maybe<{
-        code: string;
-        name: string;
-        description?: Maybe<string>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
-      node?: Maybe<{
-        id: string;
-        name: string;
-        nameI18n?: Maybe<string>;
-        description?: Maybe<string>;
-        descriptionI18n?: Maybe<string>;
-        order?: Maybe<number>;
-        code?: Maybe<string>;
-        root?: Maybe<boolean>;
-        depth?: Maybe<number>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        children?: Maybe<Array<string>>;
-      }>;
     }>;
   };
 };
@@ -3407,56 +2717,15 @@ export type Role = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
     }>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
+    users: { totalCount: number };
+    parent?: Maybe<{
+      code: string;
+      name?: Maybe<string>;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
   };
 };
 
@@ -3476,17 +2745,6 @@ export type Roles = {
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      permissions: Array<{
-        id: string;
-        code: string;
-        name: string;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        type?: Maybe<string>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
-      users: { totalCount: number };
     }>;
   };
 };
@@ -3567,16 +2825,6 @@ export type SocialConnection = {
         label?: Maybe<string>;
         type?: Maybe<string>;
         placeholder?: Maybe<string>;
-        children?: Maybe<
-          Array<
-            Maybe<{
-              key?: Maybe<string>;
-              label?: Maybe<string>;
-              type?: Maybe<string>;
-              placeholder?: Maybe<string>;
-            }>
-          >
-        >;
       }>
     >;
   }>;
@@ -3620,16 +2868,6 @@ export type SocialConnections = {
         label?: Maybe<string>;
         type?: Maybe<string>;
         placeholder?: Maybe<string>;
-        children?: Maybe<
-          Array<
-            Maybe<{
-              key?: Maybe<string>;
-              label?: Maybe<string>;
-              type?: Maybe<string>;
-              placeholder?: Maybe<string>;
-            }>
-          >
-        >;
       }>
     >;
   }>;
@@ -3843,42 +3081,6 @@ export type Userpools = {
       allowedOrigins?: Maybe<string>;
       tokenExpiresAfter?: Maybe<number>;
       isDeleted?: Maybe<boolean>;
-      userpoolTypes?: Maybe<
-        Array<{
-          code?: Maybe<string>;
-          name?: Maybe<string>;
-          description?: Maybe<string>;
-          image?: Maybe<string>;
-          sdks?: Maybe<Array<Maybe<string>>>;
-        }>
-      >;
-      frequentRegisterCheck?: Maybe<{
-        timeInterval?: Maybe<number>;
-        limit?: Maybe<number>;
-        enable?: Maybe<boolean>;
-      }>;
-      loginFailCheck?: Maybe<{
-        timeInterval?: Maybe<number>;
-        limit?: Maybe<number>;
-        enable?: Maybe<boolean>;
-      }>;
-      changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>;
-      changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>;
-      qrcodeLoginStrategy?: Maybe<{
-        qrcodeExpiresAfter?: Maybe<number>;
-        returnFullUserInfo?: Maybe<boolean>;
-        allowExchangeUserInfoFromBrowser?: Maybe<boolean>;
-        ticketExpiresAfter?: Maybe<number>;
-      }>;
-      app2WxappLoginStrategy?: Maybe<{
-        ticketExpriresAfter?: Maybe<number>;
-        ticketExchangeUserInfoNeedSecret?: Maybe<boolean>;
-      }>;
-      whitelist?: Maybe<{
-        phoneEnabled?: Maybe<boolean>;
-        emailEnabled?: Maybe<boolean>;
-        usernameEnabled?: Maybe<boolean>;
-      }>;
     }>;
   };
 };
@@ -3990,12 +3192,6 @@ export type WebhookLogs = {
       userPoolId: string;
       event: string;
       errorMessage?: Maybe<string>;
-      request?: Maybe<{ headers?: Maybe<string>; payload?: Maybe<string> }>;
-      response?: Maybe<{
-        headers?: Maybe<string>;
-        body?: Maybe<string>;
-        statusCode?: Maybe<number>;
-      }>;
     }>;
   };
 };
@@ -4024,11 +3220,6 @@ export type Webhooks = {
       contentType: string;
       secret?: Maybe<string>;
       enable: boolean;
-      events: Array<{
-        name: string;
-        label: string;
-        description?: Maybe<string>;
-      }>;
     }>;
   };
 };
@@ -4055,19 +3246,6 @@ export const AddCooperatorDocument = gql`
         isSystem
         createdAt
         updatedAt
-        permissions {
-          id
-          code
-          name
-          description
-          isSystem
-          type
-          createdAt
-          updatedAt
-        }
-        users {
-          totalCount
-        }
       }
       user {
         id
@@ -4129,13 +3307,6 @@ export const AddFunctionToPipelineDocument = gql`
         funcId
         asynchronous
         enabled
-        function {
-          id
-          name
-          sourceCode
-          description
-          url
-        }
       }
     }
   }
@@ -4170,67 +3341,12 @@ export const AddMemberDocument = gql`
         includeChildrenNodes: $includeChildrenNodes
       ) {
         totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
       }
     }
   }
 `;
 export const AddNodeDocument = gql`
   mutation addNode(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $page1: Int
-    $limit1: Int
-    $sortBy1: SortByEnum
-    $includeChildrenNodes1: Boolean
     $orgId: String!
     $parentNodeId: String
     $name: String!
@@ -4264,14 +3380,6 @@ export const AddNodeDocument = gql`
         createdAt
         updatedAt
         children
-        users(
-          page: $page
-          limit: $limit
-          sortBy: $sortBy
-          includeChildrenNodes: $includeChildrenNodes
-        ) {
-          totalCount
-        }
       }
       nodes {
         id
@@ -4286,14 +3394,6 @@ export const AddNodeDocument = gql`
         createdAt
         updatedAt
         children
-        users(
-          page: $page1
-          limit: $limit1
-          sortBy: $sortBy1
-          includeChildrenNodes: $includeChildrenNodes1
-        ) {
-          totalCount
-        }
       }
     }
   }
@@ -4338,53 +3438,14 @@ export const AssignRoleDocument = gql`
       }
       users {
         totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
+      }
+      parent {
+        code
+        name
+        description
+        isSystem
+        createdAt
+        updatedAt
       }
     }
   }
@@ -4462,19 +3523,7 @@ export const CreateIdentityProviderDocument = gql`
   }
 `;
 export const CreateOrgDocument = gql`
-  mutation createOrg(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $page1: Int
-    $limit1: Int
-    $sortBy1: SortByEnum
-    $includeChildrenNodes1: Boolean
-    $name: String!
-    $code: String
-    $description: String
-  ) {
+  mutation createOrg($name: String!, $code: String, $description: String) {
     createOrg(name: $name, code: $code, description: $description) {
       id
       rootNode {
@@ -4490,14 +3539,6 @@ export const CreateOrgDocument = gql`
         createdAt
         updatedAt
         children
-        users(
-          page: $page
-          limit: $limit
-          sortBy: $sortBy
-          includeChildrenNodes: $includeChildrenNodes
-        ) {
-          totalCount
-        }
       }
       nodes {
         id
@@ -4512,14 +3553,6 @@ export const CreateOrgDocument = gql`
         createdAt
         updatedAt
         children
-        users(
-          page: $page1
-          limit: $limit1
-          sortBy: $sortBy1
-          includeChildrenNodes: $includeChildrenNodes1
-        ) {
-          totalCount
-        }
       }
     }
   }
@@ -4562,13 +3595,6 @@ export const CreatePipelineDocument = gql`
         funcId
         asynchronous
         enabled
-        function {
-          id
-          name
-          sourceCode
-          description
-          url
-        }
       }
     }
   }
@@ -4586,10 +3612,6 @@ export const CreateResourceDocument = gql`
 `;
 export const CreateResourceRuleDocument = gql`
   mutation createResourceRule(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
     $resouceCode: String!
     $action: String!
     $allow: Boolean!
@@ -4667,19 +3689,6 @@ export const CreateResourceRuleDocument = gql`
         isSystem
         createdAt
         updatedAt
-        permissions {
-          id
-          code
-          name
-          description
-          isSystem
-          type
-          createdAt
-          updatedAt
-        }
-        users {
-          totalCount
-        }
       }
       group {
         code
@@ -4687,9 +3696,6 @@ export const CreateResourceRuleDocument = gql`
         description
         createdAt
         updatedAt
-        users {
-          totalCount
-        }
       }
       node {
         id
@@ -4704,14 +3710,6 @@ export const CreateResourceRuleDocument = gql`
         createdAt
         updatedAt
         children
-        users(
-          page: $page
-          limit: $limit
-          sortBy: $sortBy
-          includeChildrenNodes: $includeChildrenNodes
-        ) {
-          totalCount
-        }
       }
       createdAt
       updatedAt
@@ -4724,12 +3722,14 @@ export const CreateRoleDocument = gql`
     $name: String
     $description: String
     $permissions: [String!]
+    $parent: String
   ) {
     createRole(
       code: $code
       name: $name
       description: $description
       permissions: $permissions
+      parent: $parent
     ) {
       code
       name
@@ -4749,53 +3749,14 @@ export const CreateRoleDocument = gql`
       }
       users {
         totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
+      }
+      parent {
+        code
+        name
+        description
+        isSystem
+        createdAt
+        updatedAt
       }
     }
   }
@@ -4812,12 +3773,6 @@ export const CreateSocialConnectionDocument = gql`
         label
         type
         placeholder
-        children {
-          key
-          label
-          type
-          placeholder
-        }
       }
     }
   }
@@ -4939,18 +3894,7 @@ export const DeleteIdentityProviderDocument = gql`
   }
 `;
 export const DeleteNodeDocument = gql`
-  mutation deleteNode(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $page1: Int
-    $limit1: Int
-    $sortBy1: SortByEnum
-    $includeChildrenNodes1: Boolean
-    $orgId: String!
-    $nodeId: String!
-  ) {
+  mutation deleteNode($orgId: String!, $nodeId: String!) {
     deleteNode(orgId: $orgId, nodeId: $nodeId) {
       id
       rootNode {
@@ -4966,14 +3910,6 @@ export const DeleteNodeDocument = gql`
         createdAt
         updatedAt
         children
-        users(
-          page: $page
-          limit: $limit
-          sortBy: $sortBy
-          includeChildrenNodes: $includeChildrenNodes
-        ) {
-          totalCount
-        }
       }
       nodes {
         id
@@ -4988,14 +3924,6 @@ export const DeleteNodeDocument = gql`
         createdAt
         updatedAt
         children
-        users(
-          page: $page1
-          limit: $limit1
-          sortBy: $sortBy1
-          includeChildrenNodes: $includeChildrenNodes1
-        ) {
-          totalCount
-        }
       }
     }
   }
@@ -5602,13 +4530,6 @@ export const RemoveFunctionFromPipelineDocument = gql`
         funcId
         asynchronous
         enabled
-        function {
-          id
-          name
-          sourceCode
-          description
-          url
-        }
       }
     }
   }
@@ -5643,53 +4564,6 @@ export const RemoveMemberDocument = gql`
         includeChildrenNodes: $includeChildrenNodes
       ) {
         totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
       }
     }
   }
@@ -5734,53 +4608,14 @@ export const RevokeRoleDocument = gql`
       }
       users {
         totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
+      }
+      parent {
+        code
+        name
+        description
+        isSystem
+        createdAt
+        updatedAt
       }
     }
   }
@@ -6018,53 +4853,14 @@ export const UpdateRoleDocument = gql`
       }
       users {
         totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
+      }
+      parent {
+        code
+        name
+        description
+        isSystem
+        createdAt
+        updatedAt
       }
     }
   }
@@ -6225,53 +5021,6 @@ export const ChildrenNodesDocument = gql`
         includeChildrenNodes: $includeChildrenNodes
       ) {
         totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
       }
     }
   }
@@ -6279,42 +5028,6 @@ export const ChildrenNodesDocument = gql`
 export const CooperatedUserpoolsDocument = gql`
   query cooperatedUserpools($page: Int, $limit: Int, $sortBy: SortByEnum) {
     cooperatedUserpools(page: $page, limit: $limit, sortBy: $sortBy) {
-      list {
-        userpool {
-          id
-          name
-          description
-          secret
-          logo
-          createdAt
-          updatedAt
-          emailVerifiedDefault
-          sendWelcomeEmail
-          registerDisabled
-          showWxQRCodeWhenRegisterDisabled
-          allowedOrigins
-          tokenExpiresAfter
-          isDeleted
-        }
-        role {
-          code
-          name
-          description
-          isSystem
-          createdAt
-          updatedAt
-        }
-        permissions {
-          id
-          code
-          name
-          description
-          isSystem
-          type
-          createdAt
-          updatedAt
-        }
-      }
       totalCount
     }
   }
@@ -6329,19 +5042,6 @@ export const CooperatorsDocument = gql`
         isSystem
         createdAt
         updatedAt
-        permissions {
-          id
-          code
-          name
-          description
-          isSystem
-          type
-          createdAt
-          updatedAt
-        }
-        users {
-          totalCount
-        }
       }
       user {
         id
@@ -6542,53 +5242,6 @@ export const NodeDocument = gql`
         includeChildrenNodes: $includeChildrenNodes
       ) {
         totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
       }
     }
   }
@@ -6622,69 +5275,12 @@ export const NodeByCodeDocument = gql`
         includeChildrenNodes: $includeChildrenNodes
       ) {
         totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
       }
     }
   }
 `;
 export const OrgDocument = gql`
-  query org(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $page1: Int
-    $limit1: Int
-    $sortBy1: SortByEnum
-    $includeChildrenNodes1: Boolean
-    $id: String!
-  ) {
+  query org($id: String!) {
     org(id: $id) {
       id
       rootNode {
@@ -6700,14 +5296,6 @@ export const OrgDocument = gql`
         createdAt
         updatedAt
         children
-        users(
-          page: $page
-          limit: $limit
-          sortBy: $sortBy
-          includeChildrenNodes: $includeChildrenNodes
-        ) {
-          totalCount
-        }
       }
       nodes {
         id
@@ -6722,14 +5310,6 @@ export const OrgDocument = gql`
         createdAt
         updatedAt
         children
-        users(
-          page: $page1
-          limit: $limit1
-          sortBy: $sortBy1
-          includeChildrenNodes: $includeChildrenNodes1
-        ) {
-          totalCount
-        }
       }
     }
   }
@@ -6740,34 +5320,6 @@ export const OrgsDocument = gql`
       totalCount
       list {
         id
-        rootNode {
-          id
-          name
-          nameI18n
-          description
-          descriptionI18n
-          order
-          code
-          root
-          depth
-          createdAt
-          updatedAt
-          children
-        }
-        nodes {
-          id
-          name
-          nameI18n
-          description
-          descriptionI18n
-          order
-          code
-          root
-          depth
-          createdAt
-          updatedAt
-          children
-        }
       }
     }
   }
@@ -6827,13 +5379,6 @@ export const PipelineDocument = gql`
         funcId
         asynchronous
         enabled
-        function {
-          id
-          name
-          sourceCode
-          description
-          url
-        }
       }
     }
   }
@@ -6845,11 +5390,6 @@ export const PipelinesDocument = gql`
         id
         name
         trigger
-        functions {
-          funcId
-          asynchronous
-          enabled
-        }
       }
       totalCount
     }
@@ -6881,92 +5421,9 @@ export const ResouceRulesDocument = gql`
     resouceRules(code: $code) {
       totalCount
       list {
-        resouce {
-          code
-          name
-          description
-          createdAt
-          updatedAt
-        }
         action
         allow
         expiresIn
-        user {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
-        role {
-          code
-          name
-          description
-          isSystem
-          createdAt
-          updatedAt
-        }
-        group {
-          code
-          name
-          description
-          createdAt
-          updatedAt
-        }
-        node {
-          id
-          name
-          nameI18n
-          description
-          descriptionI18n
-          order
-          code
-          root
-          depth
-          createdAt
-          updatedAt
-          children
-        }
         createdAt
         updatedAt
       }
@@ -6994,53 +5451,14 @@ export const RoleDocument = gql`
       }
       users {
         totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
+      }
+      parent {
+        code
+        name
+        description
+        isSystem
+        createdAt
+        updatedAt
       }
     }
   }
@@ -7056,19 +5474,6 @@ export const RolesDocument = gql`
         isSystem
         createdAt
         updatedAt
-        permissions {
-          id
-          code
-          name
-          description
-          isSystem
-          type
-          createdAt
-          updatedAt
-        }
-        users {
-          totalCount
-        }
       }
     }
   }
@@ -7139,12 +5544,6 @@ export const SocialConnectionDocument = gql`
         label
         type
         placeholder
-        children {
-          key
-          label
-          type
-          placeholder
-        }
       }
     }
   }
@@ -7185,12 +5584,6 @@ export const SocialConnectionsDocument = gql`
         label
         type
         placeholder
-        children {
-          key
-          label
-          type
-          placeholder
-        }
       }
     }
   }
@@ -7383,13 +5776,6 @@ export const UserpoolsDocument = gql`
         name
         description
         secret
-        userpoolTypes {
-          code
-          name
-          description
-          image
-          sdks
-        }
         logo
         createdAt
         updatedAt
@@ -7400,37 +5786,6 @@ export const UserpoolsDocument = gql`
         allowedOrigins
         tokenExpiresAfter
         isDeleted
-        frequentRegisterCheck {
-          timeInterval
-          limit
-          enable
-        }
-        loginFailCheck {
-          timeInterval
-          limit
-          enable
-        }
-        changePhoneStrategy {
-          verifyOldPhone
-        }
-        changeEmailStrategy {
-          verifyOldEmail
-        }
-        qrcodeLoginStrategy {
-          qrcodeExpiresAfter
-          returnFullUserInfo
-          allowExchangeUserInfoFromBrowser
-          ticketExpiresAfter
-        }
-        app2WxappLoginStrategy {
-          ticketExpriresAfter
-          ticketExchangeUserInfoNeedSecret
-        }
-        whitelist {
-          phoneEnabled
-          emailEnabled
-          usernameEnabled
-        }
       }
     }
   }
@@ -7535,15 +5890,6 @@ export const WebhookLogsDocument = gql`
         webhookId
         userPoolId
         event
-        request {
-          headers
-          payload
-        }
-        response {
-          headers
-          body
-          statusCode
-        }
         errorMessage
       }
       totalCount
@@ -7571,11 +5917,6 @@ export const WebhooksDocument = gql`
       list {
         id
         userPoolId
-        events {
-          name
-          label
-          description
-        }
         url
         isLastTimeSuccess
         contentType

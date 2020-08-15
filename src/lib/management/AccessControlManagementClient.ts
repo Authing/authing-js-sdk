@@ -8,6 +8,7 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { SortByEnum } from '../../types/codeGen';
+import { CreateRole } from '../../types/codeGen.v2';
 import { addRole } from '../graphqlapi/management.acl.addRole';
 import { addResource } from '../graphqlapi/management.acl.addResource';
 import { allow } from '../graphqlapi/management.acl.allow';
@@ -159,13 +160,43 @@ export class AccessControlManagementClient {
    * @description 添加角色
    *
    */
-  async addRole(code: string, name?: string, description?: string) {
-    const res = await addRole(this.graphqlClientV2, this.tokenProvider, {
-      code,
-      name,
-      description
-    });
-    return res.createRole;
+  async addRole(
+    code: string,
+    parent: string,
+    options?: {
+      name?: string;
+      description?: string;
+    }
+  ): Promise<CreateRole>;
+  async addRole(
+    code: string,
+    options?: {
+      name?: string;
+      description?: string;
+    }
+  ): Promise<CreateRole>;
+  async addRole(arg1: any, arg2: any, arg3?: any) {
+    if (typeof arg2 === 'string') {
+      const code = arg1;
+      const parent = arg2;
+      const { name, description } = arg3 || {};
+      const res = await addRole(this.graphqlClientV2, this.tokenProvider, {
+        code,
+        parent,
+        name,
+        description
+      });
+      return res;
+    } else {
+      const code = arg1;
+      const { name, description } = arg2 || {};
+      const res = await addRole(this.graphqlClientV2, this.tokenProvider, {
+        code,
+        name,
+        description
+      });
+      return res;
+    }
   }
 
   /**
