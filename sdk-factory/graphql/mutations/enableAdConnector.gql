@@ -1,3 +1,0 @@
-mutation enableAdConnector($_id: String!){
-    enableAdConnector(_id: $_id)
-}

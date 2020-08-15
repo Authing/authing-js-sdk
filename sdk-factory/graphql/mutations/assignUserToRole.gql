@@ -1,9 +1,0 @@
-mutation assignUserToRole($client: String!, $user: String!, $group: String!){
-    assignUserToRole(client: $client, user: $user, group: $group){
-        list{
-            _id
-            createdAt
-        }
-        totalCount
-    }
-}

@@ -1,3 +1,0 @@
-query checkAdConnectorStatus($adConnectorId: String!){
-    checkAdConnectorStatus(adConnectorId: $adConnectorId)
-}

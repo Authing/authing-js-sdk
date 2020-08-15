@@ -1,6 +1,0 @@
-query emailDomainTopNList($userPoolId: String!){
-    emailDomainTopNList(userPoolId: $userPoolId){
-        domain
-        count
-    }
-}

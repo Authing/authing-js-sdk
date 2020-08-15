@@ -105,12 +105,14 @@ export class UsersManagementClient {
    * @returns
    * @memberof UsersManagementClient
    */
-  async create(options: {
-    userInfo: UserRegisterInput;
-    invitationCode?: string;
-    keepPassword?: boolean;
-  }) {
-    let { userInfo } = options;
+  async create(
+    userInfo: UserRegisterInput,
+    options?: {
+      invitationCode?: string;
+      keepPassword?: boolean;
+    }
+  ) {
+    options = options || {};
     options.invitationCode = options.invitationCode || '';
     options.keepPassword = options.keepPassword || false;
 
@@ -125,18 +127,17 @@ export class UsersManagementClient {
       );
     }
 
-    if (options.userInfo.password) {
-      options.userInfo.password = encrypt(
-        options.userInfo.password,
+    if (userInfo.password) {
+      userInfo.password = encrypt(
+        userInfo.password,
         this.options.encrptionPublicKey
       );
     }
     userInfo.registerInClient = this.options.userPoolId;
-    const data = await register(
-      this.graphqlClient,
-      this.tokenProvider,
-      options
-    );
+    const data = await register(this.graphqlClient, this.tokenProvider, {
+      userInfo,
+      ...options
+    });
     return data.register;
   }
 

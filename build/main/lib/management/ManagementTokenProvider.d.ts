@@ -15,13 +15,13 @@ export declare class ManagementTokenProvider {
      * @returns
      * @memberof ManagementTokenProvider
      */
-    getClientWhenSdkInit(): Promise<any>;
+    private getClientWhenSdkInit;
     /**
      * 刷新 accessToken
      *
      * @memberof ManagementTokenProvider
      */
-    refreshToken(): Promise<any>;
+    private refreshToken;
     /**
      * 获取用户池 accessToken
      *
@@ -35,5 +35,5 @@ export declare class ManagementTokenProvider {
      * @returns
      * @memberof ManagementTokenProvider
      */
-    getAccessTokenFromServver(): Promise<string>;
+    private getAccessTokenFromServver;
 }

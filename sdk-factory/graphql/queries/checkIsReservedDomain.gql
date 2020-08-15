@@ -1,6 +1,0 @@
-query checkIsReservedDomain($domainValue: String!){
-    checkIsReservedDomain(domainValue: $domainValue){
-        domainValue
-        isReserved
-    }
-}

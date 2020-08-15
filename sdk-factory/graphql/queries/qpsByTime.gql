@@ -1,6 +1,0 @@
-query qpsByTime($startTime: String, $endTime: String, $currentTime: String){
-    qpsByTime(startTime: $startTime, endTime: $endTime, currentTime: $currentTime){
-        qps
-        time
-    }
-}

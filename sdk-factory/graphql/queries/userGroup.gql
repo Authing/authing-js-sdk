@@ -1,9 +1,0 @@
-query userGroup($group: String!, $client: String!, $page: Int, $count: Int){
-    userGroup(group: $group, client: $client, page: $page, count: $count){
-        list{
-            _id
-            createdAt
-        }
-        totalCount
-    }
-}

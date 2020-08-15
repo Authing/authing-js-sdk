@@ -1,7 +1,0 @@
-mutation sendVerifyEmail($email: String!, $client: String!, $token: String){
-    sendVerifyEmail(email: $email, client: $client, token: $token){
-        message
-        code
-        status
-    }
-}

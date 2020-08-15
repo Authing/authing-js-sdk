@@ -1,3 +1,0 @@
-query qiNiuUploadToken($type: String){
-    qiNiuUploadToken(type: $type)
-}

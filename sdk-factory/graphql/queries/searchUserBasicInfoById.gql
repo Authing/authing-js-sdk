@@ -1,8 +1,0 @@
-query searchUserBasicInfoById($userId: String){
-    searchUserBasicInfoById(userId: $userId){
-        _id
-        username
-        photo
-        email
-    }
-}
