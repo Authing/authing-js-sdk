@@ -1,16 +1,18 @@
-import { createUserWithoutAuthentication } from './../graphqlapi/management.users.createUserWithoutAuthentication';
-import { passwordLessForceLogin } from './../graphqlapi/management.users.passwordLessForceLogin';
-import { interConnections } from './../graphqlapi/management.users.interConnections';
-import { removeUsers } from './../graphqlapi/management.users.delete';
-import { user } from './../graphqlapi/management.users.get';
-import { users } from './../graphqlapi/management.users.list';
-import { register } from './../graphqlapi/management.users.create';
 import { GraphqlClient } from './../common/GraphqlClient';
-import { encrypt } from './../utils/encryption';
+import { encrypt } from './../utils';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
-import { createInterConnection } from '../graphqlapi/management.users.createInterConnection';
 import { UserRegisterInput } from '../../types/codeGen';
+import {
+  removeUsers,
+  user,
+  users,
+  register,
+  createInterConnection,
+  interConnections,
+  passwordLessForceLogin,
+  createUserWithoutAuthentication
+} from '../graphqlapi';
 
 export class UsersManagementClient {
   options: ManagementClientOptions;

@@ -1,19 +1,21 @@
-import { searchNodes } from './../graphqlapi/management.org.searchNodes';
-import { orgRootNode } from './../graphqlapi/management.org.rootNode';
-import { orgChildrenNodes } from './../graphqlapi/management.org.children';
-import { isRootNodeOfOrg } from './../graphqlapi/management.org.isRoot';
-import { removeOrgNode } from './../graphqlapi/management.org.removeNode';
-import { org } from './../graphqlapi/management.org.findById';
-import { addOrgNode } from './../graphqlapi/management.org.addNode';
-import { createOrg } from './../graphqlapi/management.org.create';
-import { orgs } from './../graphqlapi/management.org.list';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
-import buildTree from '../utils/tree';
+import buildTree from '../utils';
 import _ from 'lodash';
-import { deleteOrg } from '../graphqlapi/management.org.delete';
 import { SearchOrgNodesVariables } from '../../types/codeGen';
+import {
+  orgs,
+  createOrg,
+  addOrgNode,
+  org,
+  deleteOrg,
+  removeOrgNode,
+  isRootNodeOfOrg,
+  orgChildrenNodes,
+  orgRootNode,
+  searchNodes
+} from '../graphqlapi';
 
 export class OrgManagementClient {
   options: ManagementClientOptions;

@@ -1,20 +1,22 @@
-import { userGroupList } from '../graphqlapi/management.acl.userGroupList';
-import { isUserInGroup } from '../graphqlapi/management.acl.isUserInGroup';
-import { groupUserList } from '../graphqlapi/management.acl.groupUserList';
-import { addUserToRBACGroup } from '../graphqlapi/management.acl.addUserToGroup';
-import { addGroupMetadata } from '../graphqlapi/management.acl.addGroupMetadata';
-import { createRBACGroup } from '../graphqlapi/management.acl.createGroup';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { SortByEnum } from '../../types/codeGen';
 import { Role } from '../../types/codeGen.v2';
-import { addRole } from '../graphqlapi/management.acl.addRole';
-import { addResource } from '../graphqlapi/management.acl.addResource';
-import { allow } from '../graphqlapi/management.acl.allow';
-import { isAllowed } from '../graphqlapi/management.acl.isAllow';
-import { assignRole } from '../graphqlapi/management.acl.assignRole';
-import { isDenied } from '../graphqlapi/management.acl.isDenied';
+import {
+  createRBACGroup,
+  addGroupMetadata,
+  addUserToRBACGroup,
+  isUserInGroup,
+  groupUserList,
+  userGroupList,
+  assignRole,
+  addRole,
+  addResource,
+  allow,
+  isAllowed,
+  isDenied
+} from '../graphqlapi';
 
 export class AccessControlManagementClient {
   options: ManagementClientOptions;

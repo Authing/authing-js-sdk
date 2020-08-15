@@ -1,5 +1,4 @@
 import { ConnectionManagementClient } from './ConnectionManagementClient';
-import { isDomainAvaliable } from './../graphqlapi/management.isDomainAvaliable';
 import { OrgManagementClient } from './OrgManagementClient';
 import { AccessControlManagementClient } from './AccessControlManagementClient';
 import { GraphqlClient } from './../common/GraphqlClient';
@@ -7,6 +6,7 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserPoolManagementClient } from './UserpoolManagementClient';
 import { UsersManagementClient } from './UsersManagementClient';
+import { isDomainAvaliable } from '../graphqlapi';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,

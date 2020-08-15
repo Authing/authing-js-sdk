@@ -1,13 +1,15 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
-import { checkLoginStatus } from './../graphqlapi/auth.checkLoginStatus';
+import {
+  checkLoginStatus,
+  checkPasswordStrength,
+  registerByEmail,
+  registerByUsername,
+  sendVerifyEmail
+} from './../graphqlapi';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
-import { sendVerifyEmail } from '../graphqlapi/auth.sendVerifyEmail';
 import { RegisterProfile } from '../../types/codeGen.v2';
-import { registerByEmail } from '../graphqlapi/auth.registerByEmail';
-import { encrypt } from '../utils/encryption';
-import { registerByUsername } from '../graphqlapi/auth.registerByUsername';
-import { checkPasswordStrength } from '../graphqlapi/auth.checkPasswordStrength';
+import { encrypt } from '../utils';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,

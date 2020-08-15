@@ -1,5 +1,5 @@
 import { GraphqlClient } from './../common/GraphqlClient';
-import { graphqlRequest } from '../utils/graphql';
+import { graphqlRequest } from '../utils';
 import { ManagementClientOptions, DecodedAccessToken } from './types';
 import jwtDecode from 'jwt-decode';
 

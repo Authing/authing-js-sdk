@@ -1,5 +1,5 @@
 import { AuthenticationClient } from './index';
-import { generateRandomString, getOptionsFromEnv } from './../utils/helper';
+import { generateRandomString, getOptionsFromEnv } from '../testing-helper';
 import test from 'ava';
 
 const authing = new AuthenticationClient(getOptionsFromEnv());

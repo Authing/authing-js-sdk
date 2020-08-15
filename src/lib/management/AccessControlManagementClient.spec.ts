@@ -1,5 +1,5 @@
 import { ManagementClient } from './index';
-import { generateRandomString, getOptionsFromEnv } from './../utils/helper';
+import { generateRandomString, getOptionsFromEnv } from '../testing-helper';
 import test from 'ava';
 
 const management = new ManagementClient(getOptionsFromEnv());

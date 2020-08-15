@@ -1,5 +1,5 @@
 import { Variables } from 'graphql-request/dist/src/types';
-import { SDK_VERSION } from '../utils/version';
+import { SDK_VERSION } from '../version';
 import { GraphQLClient } from 'graphql-request';
 import { DocumentNode } from 'graphql';
 

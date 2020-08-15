@@ -1,10 +1,12 @@
-import { getUserPoolDetail } from './../graphqlapi/management.userpool.detail';
-import { queryPermissionList } from './../graphqlapi/management.userpool.getPermissionList';
-import { addCollaborator } from './../graphqlapi/management.userpool.addCollaborator';
 import { ManagementClientOptions } from './types';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { PermissionDescriptorsListInputType } from '../../types/codeGen';
+import {
+  queryPermissionList,
+  addCollaborator,
+  getUserPoolDetail
+} from '../graphqlapi';
 
 export class UserPoolManagementClient {
   options: ManagementClientOptions;

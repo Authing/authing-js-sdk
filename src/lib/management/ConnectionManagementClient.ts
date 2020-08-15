@@ -1,11 +1,13 @@
-import { oidcProviderByDomain } from './../graphqlapi/management.connection.oidcProviderByDomain';
-import { CreateOIDCApp } from './../graphqlapi/management.connection.createOidcProvider';
-import { GetOIDCAppList } from './../graphqlapi/management.connection.oidcProviders';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import _ from 'lodash';
 import { CreateOidcAppVariables } from '../../types/codeGen';
+import {
+  GetOIDCAppList,
+  CreateOIDCApp,
+  oidcProviderByDomain
+} from '../graphqlapi';
 
 export class ConnectionManagementClient {
   options: ManagementClientOptions;

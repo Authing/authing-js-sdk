@@ -1,4 +1,4 @@
-import { ManagementClientOptions } from '../management/types';
+import { ManagementClientOptions } from './management/types';
 
 require('dotenv').config({
   path: '.env'
