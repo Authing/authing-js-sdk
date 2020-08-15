@@ -51,6 +51,7 @@
     "node": ">=8.9"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "graphql-request": "^1.8.2",

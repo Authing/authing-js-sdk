@@ -10,6 +10,8 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
 import { RegisterProfile } from '../../types/codeGen.v2';
 import { encrypt } from '../utils';
+import Axios from 'axios';
+import { SDK_VERSION } from '../version';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,
@@ -109,6 +111,26 @@ export class AuthenticationClient {
       { password }
     );
     return result;
+  }
+
+  /**
+   * @description 发送短信验证码
+   *
+   */
+  async sendSmsCode(phone: string): Promise<{ code: number; message: string }> {
+    // TODO: 这种链接从服务器动态拉取
+    const api = `${this.options.host}/v2/api/send-smscode`;
+    const res = await Axios.post(
+      api,
+      { phone },
+      {
+        headers: {
+          'x-authing-userpool-id': this.options.userPoolId,
+          'x-authing-sdk-version': SDK_VERSION
+        }
+      }
+    );
+    return res.data;
   }
 
   /**

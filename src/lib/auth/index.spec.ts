@@ -40,3 +40,9 @@ test('用户名注册 # 用户名长度不能超过 20', async t => {
   }
   t.assert(failed);
 });
+
+test.skip('发送短信验证码', async t => {
+  const phone = '17670416754';
+  const { code } = await authing.sendSmsCode(phone);
+  t.assert(code === 200);
+});
