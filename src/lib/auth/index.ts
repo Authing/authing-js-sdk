@@ -7,6 +7,7 @@ import { RegisterProfile } from '../../types/codeGen.v2';
 import { registerByEmail } from '../graphqlapi/auth.registerByEmail';
 import { encrypt } from '../utils/encryption';
 import { registerByUsername } from '../graphqlapi/auth.registerByUsername';
+import { checkPasswordStrength } from '../graphqlapi/auth.checkPasswordStrength';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,
@@ -94,6 +95,19 @@ export class AuthenticationClient {
       }
     );
     return user;
+  }
+
+  /**
+   * @description 检查密码强度
+   *
+   */
+  async checkPasswordStrength(password: string) {
+    const { checkPasswordStrength: result } = await checkPasswordStrength(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      { password }
+    );
+    return result;
   }
 
   /**

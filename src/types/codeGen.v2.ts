@@ -2235,6 +2235,14 @@ export type UpdateWebhook = {
   };
 };
 
+export type CheckPasswordStrengthVariables = Exact<{
+  password: Scalars['String'];
+}>;
+
+export type CheckPasswordStrength = {
+  checkPasswordStrength: { valid: boolean; message?: Maybe<string> };
+};
+
 export type ChildrenNodesVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
@@ -2458,14 +2466,6 @@ export type IsDomainAvaliableVariables = Exact<{
 }>;
 
 export type IsDomainAvaliable = { isDomainAvaliable?: Maybe<boolean> };
-
-export type IsPasswordValidVariables = Exact<{
-  password: Scalars['String'];
-}>;
-
-export type IsPasswordValid = {
-  isPasswordValid: { valid: boolean; message?: Maybe<string> };
-};
 
 export type NodeVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -4992,6 +4992,14 @@ export const UpdateWebhookDocument = gql`
     }
   }
 `;
+export const CheckPasswordStrengthDocument = gql`
+  query checkPasswordStrength($password: String!) {
+    checkPasswordStrength(password: $password) {
+      valid
+      message
+    }
+  }
+`;
 export const ChildrenNodesDocument = gql`
   query childrenNodes(
     $page: Int
@@ -5204,14 +5212,6 @@ export const IsActionDeniedDocument = gql`
 export const IsDomainAvaliableDocument = gql`
   query isDomainAvaliable($domain: String!) {
     isDomainAvaliable(domain: $domain)
-  }
-`;
-export const IsPasswordValidDocument = gql`
-  query isPasswordValid($password: String!) {
-    isPasswordValid(password: $password) {
-      valid
-      message
-    }
   }
 `;
 export const NodeDocument = gql`
