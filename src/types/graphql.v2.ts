@@ -607,8 +607,6 @@ export type Mfa = {
 };
 
 export type Node = {
-  /** 节点 ID */
-  id: Scalars['String'];
   /** 节点名称 */
   name: Scalars['String'];
   /** 多语言名称，**key** 为标准 **i18n** 语言编码，**value** 为对应语言的名称。 */
@@ -1722,7 +1720,6 @@ export type AddMemberVariables = Exact<{
 
 export type AddMemberResponse = {
   addMember: {
-    id: string;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -1802,7 +1799,6 @@ export type AddNodeResponse = {
   addNode: {
     id: string;
     rootNode: {
-      id: string;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -1816,7 +1812,6 @@ export type AddNodeResponse = {
       children?: Maybe<Array<string>>;
     };
     nodes: Array<{
-      id: string;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -1973,7 +1968,6 @@ export type CreateOrgResponse = {
   createOrg: {
     id: string;
     rootNode: {
-      id: string;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -1987,7 +1981,6 @@ export type CreateOrgResponse = {
       children?: Maybe<Array<string>>;
     };
     nodes: Array<{
-      id: string;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -2155,7 +2148,6 @@ export type CreateResourceRuleResponse = {
       updatedAt?: Maybe<string>;
     }>;
     node?: Maybe<{
-      id: string;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -2346,7 +2338,6 @@ export type DeleteNodeResponse = {
   deleteNode: {
     id: string;
     rootNode: {
-      id: string;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -2360,7 +2351,6 @@ export type DeleteNodeResponse = {
       children?: Maybe<Array<string>>;
     };
     nodes: Array<{
-      id: string;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -3035,7 +3025,6 @@ export type RemoveMemberVariables = Exact<{
 
 export type RemoveMemberResponse = {
   removeMember: {
-    id: string;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -3534,17 +3523,12 @@ export type CheckPasswordStrengthResponse = {
 };
 
 export type ChildrenNodesVariables = Exact<{
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
 }>;
 
 export type ChildrenNodesResponse = {
   childrenNodes: Array<{
-    id: string;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -3556,7 +3540,6 @@ export type ChildrenNodesResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: { totalCount: number };
   }>;
 };
 
@@ -3747,7 +3730,6 @@ export type NodeVariables = Exact<{
 
 export type NodeResponse = {
   node: {
-    id: string;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -3773,7 +3755,6 @@ export type NodeWithMembersVariables = Exact<{
 
 export type NodeWithMembersResponse = {
   node: {
-    id: string;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -3846,7 +3827,6 @@ export type OrgResponse = {
   org: {
     id: string;
     rootNode: {
-      id: string;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -3860,7 +3840,6 @@ export type OrgResponse = {
       children?: Maybe<Array<string>>;
     };
     nodes: Array<{
-      id: string;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -4640,7 +4619,6 @@ export const AddMemberDocument = gql`
     $userIds: [String!]!
   ) {
     addMember(orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds) {
-      id
       name
       nameI18n
       description
@@ -4733,7 +4711,6 @@ export const AddNodeDocument = gql`
     ) {
       id
       rootNode {
-        id
         name
         nameI18n
         description
@@ -4747,7 +4724,6 @@ export const AddNodeDocument = gql`
         children
       }
       nodes {
-        id
         name
         nameI18n
         description
@@ -4891,7 +4867,6 @@ export const CreateOrgDocument = gql`
     createOrg(name: $name, code: $code, description: $description) {
       id
       rootNode {
-        id
         name
         nameI18n
         description
@@ -4905,7 +4880,6 @@ export const CreateOrgDocument = gql`
         children
       }
       nodes {
-        id
         name
         nameI18n
         description
@@ -5062,7 +5036,6 @@ export const CreateResourceRuleDocument = gql`
         updatedAt
       }
       node {
-        id
         name
         nameI18n
         description
@@ -5262,7 +5235,6 @@ export const DeleteNodeDocument = gql`
     deleteNode(orgId: $orgId, nodeId: $nodeId) {
       id
       rootNode {
-        id
         name
         nameI18n
         description
@@ -5276,7 +5248,6 @@ export const DeleteNodeDocument = gql`
         children
       }
       nodes {
-        id
         name
         nameI18n
         description
@@ -5907,7 +5878,6 @@ export const RemoveMemberDocument = gql`
     $userIds: [String!]!
   ) {
     removeMember(orgId: $orgId, nodeId: $nodeId, userIds: $userIds) {
-      id
       name
       nameI18n
       description
@@ -6409,16 +6379,8 @@ export const CheckPasswordStrengthDocument = gql`
   }
 `;
 export const ChildrenNodesDocument = gql`
-  query childrenNodes(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $orgId: String!
-    $nodeId: String!
-  ) {
+  query childrenNodes($orgId: String!, $nodeId: String!) {
     childrenNodes(orgId: $orgId, nodeId: $nodeId) {
-      id
       name
       nameI18n
       description
@@ -6430,14 +6392,6 @@ export const ChildrenNodesDocument = gql`
       createdAt
       updatedAt
       children
-      users(
-        page: $page
-        limit: $limit
-        sortBy: $sortBy
-        includeChildrenNodes: $includeChildrenNodes
-      ) {
-        totalCount
-      }
     }
   }
 `;
@@ -6611,7 +6565,6 @@ export const IsDomainAvaliableDocument = gql`
 export const NodeDocument = gql`
   query node($orgId: String!, $code: String!) {
     node(orgId: $orgId, code: $code) {
-      id
       name
       nameI18n
       description
@@ -6636,7 +6589,6 @@ export const NodeWithMembersDocument = gql`
     $code: String!
   ) {
     node(orgId: $orgId, code: $code) {
-      id
       name
       nameI18n
       description
@@ -6711,7 +6663,6 @@ export const OrgDocument = gql`
     org(id: $id) {
       id
       rootNode {
-        id
         name
         nameI18n
         description
@@ -6725,7 +6676,6 @@ export const OrgDocument = gql`
         children
       }
       nodes {
-        id
         name
         nameI18n
         description
