@@ -14,11 +14,13 @@ import {
   isRootNodeOfOrg,
   orgChildrenNodes,
   orgRootNode,
-  searchNodes
+  searchNodes,
+  addMember,
+  getMembers
 } from '../graphqlapi';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
-import { Org } from '../../types/graphql.v2';
+import { Org, SortByEnum } from '../../types/graphql.v2';
 
 export class OrgManagementClient {
   options: ManagementClientOptions;
@@ -215,5 +217,54 @@ export class OrgManagementClient {
       }
     });
     return res.data as Org;
+  }
+
+  /**
+   * @description 节点添加成员
+   *
+   */
+  async addMember(orgId: string, nodeCode: string, userId: string) {
+    const res = await addMember(this.graphqlClientV2, this.tokenProvider, {
+      orgId,
+      nodeCode,
+      userIds: [userId]
+    });
+    return res.addMember;
+  }
+
+  /**
+   * @description 节点批量添加成员
+   *
+   */
+  async addMembers(orgId: string, nodeCode: string, userIds: string[]) {
+    const res = await addMember(this.graphqlClientV2, this.tokenProvider, {
+      orgId,
+      nodeCode,
+      userIds
+    });
+    return res.addMember;
+  }
+
+  async getMmebers(
+    orgId: string,
+    nodeCode: string,
+    options?: {
+      page?: number;
+      limit?: number;
+      sortBy?: SortByEnum;
+      includeChildrenNodes?: boolean;
+    }
+  ) {
+    options = options || {};
+    const { node } = await getMembers(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        orgId,
+        code: nodeCode,
+        ...options
+      }
+    );
+    return node.users;
   }
 }

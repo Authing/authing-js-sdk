@@ -1,5 +1,5 @@
 import { ManagementClient } from './index';
-import { getOptionsFromEnv } from '../testing-helper';
+import { generateRandomString, getOptionsFromEnv } from '../testing-helper';
 import test from 'ava';
 
 const management = new ManagementClient(getOptionsFromEnv());
@@ -70,4 +70,51 @@ test('通过 json 导入组织机构', async t => {
 
   const orgTree = await management.org.findById(org.id);
   t.assert(orgTree.id);
+});
+
+test('添加成员', async t => {
+  const tree = {
+    name: '北京非凡科技有限公司',
+    code: 'feifan',
+    order: 10,
+    children: [
+      {
+        code: 'business',
+        name: '商业化',
+        description: '商业化部门',
+        order: 30
+      },
+      {
+        code: 'operation',
+        name: '运营',
+        description: '商业化部门',
+        order: 20
+      },
+      {
+        code: 'hr',
+        name: '人事',
+        description: '人事部门',
+        order: 10
+      }
+    ]
+  };
+  let org = await management.org.import(tree);
+  t.assert(org);
+  const orgTree = await management.org.findById(org.id);
+  t.assert(orgTree.id);
+
+  // 添加成员
+  const user = await management.users.create({
+    username: generateRandomString(),
+    password: '123456'
+  });
+  const rootNode = orgTree.rootNode;
+  await management.org.addMember(org.id, rootNode.code, user._id);
+
+  const { totalCount, list } = await management.org.getMmebers(
+    org.id,
+    rootNode.code
+  );
+  t.assert(totalCount === 1);
+  t.assert(list.length === 1);
 });

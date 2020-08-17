@@ -38,13 +38,10 @@ export type Query = {
   identityProviders?: Maybe<PaginatedIdentityProviders>;
   /** 查看 Identity Provider */
   identityProvider: IdentityProvider;
-  identityProviderByDomain: IdentityProvider;
   /** 查询 MFA 信息 */
   queryMfa?: Maybe<Mfa>;
-  /** 查询节点详情 */
-  node: Node;
   /** 通过 code 查询节点 */
-  nodeByCode: Node;
+  node: Node;
   /** 查询组织机构详情 */
   org: Org;
   /** 查询用户池组织机构列表 */
@@ -131,10 +128,6 @@ export type QueryIdentityProviderArgs = {
   id?: Maybe<Scalars['String']>;
 };
 
-export type QueryIdentityProviderByDomainArgs = {
-  domain?: Maybe<Scalars['String']>;
-};
-
 export type QueryQueryMfaArgs = {
   id?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
@@ -142,10 +135,6 @@ export type QueryQueryMfaArgs = {
 };
 
 export type QueryNodeArgs = {
-  id: Scalars['String'];
-};
-
-export type QueryNodeByCodeArgs = {
   orgId: Scalars['String'];
   code: Scalars['String'];
 };
@@ -594,8 +583,6 @@ export type PaginatedIdentityProviders = {
 export type IdentityProvider = {
   /** Identity Provider Client ID */
   id?: Maybe<Scalars['String']>;
-  /** Identity Provider 标识域名 */
-  domain?: Maybe<Scalars['String']>;
   /** Identity Provider 类型，可选值有 oidc oauth saml ldap */
   type?: Maybe<Scalars['String']>;
   /** Identity Provider 配置信息 */
@@ -983,11 +970,11 @@ export type MutationDeleteFunctionArgs = {
 };
 
 export type MutationCreateIdentityProviderArgs = {
-  input: IdpInput;
+  input: CreateIdentityProviderInput;
 };
 
 export type MutationUpdateIdentityProviderArgs = {
-  input: IdpInput;
+  input: UpdateIdentityProviderInput;
 };
 
 export type MutationDeleteIdentityProviderArgs = {
@@ -1054,7 +1041,7 @@ export type MutationDeleteNodeArgs = {
 
 export type MutationAddMemberArgs = {
   orgId: Scalars['String'];
-  nodeId: Scalars['String'];
+  nodeCode: Scalars['String'];
   userIds: Array<Scalars['String']>;
 };
 
@@ -1318,9 +1305,14 @@ export type UpdateFunctionInput = {
   url?: Maybe<Scalars['String']>;
 };
 
-export type IdpInput = {
-  domain: Scalars['String'];
+export type CreateIdentityProviderInput = {
   type: Scalars['String'];
+  config?: Maybe<Scalars['String']>;
+};
+
+export type UpdateIdentityProviderInput = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
   config?: Maybe<Scalars['String']>;
 };
 
@@ -1650,25 +1642,6 @@ export type AddCooperatorResponse = {
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      permissions: Array<{
-        id: string;
-        code: string;
-        name: string;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        type?: Maybe<string>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
-      users: { totalCount: number };
-      parent?: Maybe<{
-        code: string;
-        name?: Maybe<string>;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
     }>;
     user: {
       id: string;
@@ -1743,7 +1716,7 @@ export type AddMemberVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
   includeChildrenNodes?: Maybe<Scalars['Boolean']>;
   orgId: Scalars['String'];
-  nodeId: Scalars['String'];
+  nodeCode: Scalars['String'];
   userIds: Array<Scalars['String']>;
 }>;
 
@@ -1761,7 +1734,56 @@ export type AddMemberResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: { totalCount: number };
+    users: {
+      totalCount: number;
+      list: Array<{
+        id: string;
+        userPoolId: string;
+        username?: Maybe<string>;
+        email?: Maybe<string>;
+        emailVerified?: Maybe<boolean>;
+        phone?: Maybe<string>;
+        phoneVerified?: Maybe<boolean>;
+        unionid?: Maybe<string>;
+        openid?: Maybe<string>;
+        nickname?: Maybe<string>;
+        registerMethod?: Maybe<string>;
+        photo?: Maybe<string>;
+        password?: Maybe<string>;
+        oauth?: Maybe<string>;
+        token?: Maybe<string>;
+        tokenExpiredAt?: Maybe<string>;
+        loginsCount?: Maybe<number>;
+        lastLogin?: Maybe<string>;
+        lastIP?: Maybe<string>;
+        signedUp?: Maybe<string>;
+        blocked?: Maybe<boolean>;
+        isDeleted?: Maybe<boolean>;
+        device?: Maybe<string>;
+        browser?: Maybe<string>;
+        company?: Maybe<string>;
+        name?: Maybe<string>;
+        givenName?: Maybe<string>;
+        familyName?: Maybe<string>;
+        middleName?: Maybe<string>;
+        profile?: Maybe<string>;
+        preferredUsername?: Maybe<string>;
+        website?: Maybe<string>;
+        gender?: Maybe<string>;
+        birthdate?: Maybe<string>;
+        zoneinfo?: Maybe<string>;
+        locale?: Maybe<string>;
+        address?: Maybe<string>;
+        formatted?: Maybe<string>;
+        streetAddress?: Maybe<string>;
+        locality?: Maybe<string>;
+        region?: Maybe<string>;
+        postalCode?: Maybe<string>;
+        country?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        customData?: Maybe<string>;
+      }>;
+    };
   };
 };
 
@@ -1928,13 +1950,12 @@ export type CreateFunctionResponse = {
 };
 
 export type CreateIdentityProviderVariables = Exact<{
-  input: IdpInput;
+  input: CreateIdentityProviderInput;
 }>;
 
 export type CreateIdentityProviderResponse = {
   createIdentityProvider: {
     id?: Maybe<string>;
-    domain?: Maybe<string>;
     type?: Maybe<string>;
     config?: Maybe<string>;
     enabled?: Maybe<boolean>;
@@ -2475,7 +2496,6 @@ export type DisableIdentityProviderVariables = Exact<{
 export type DisableIdentityProviderResponse = {
   disableIdentityProvider: {
     id?: Maybe<string>;
-    domain?: Maybe<string>;
     type?: Maybe<string>;
     config?: Maybe<string>;
     enabled?: Maybe<boolean>;
@@ -2576,7 +2596,6 @@ export type EnableIdentityProviderVariables = Exact<{
 export type EnableIdentityProviderResponse = {
   enableIdentityProvider: {
     id?: Maybe<string>;
-    domain?: Maybe<string>;
     type?: Maybe<string>;
     config?: Maybe<string>;
     enabled?: Maybe<boolean>;
@@ -3028,7 +3047,56 @@ export type RemoveMemberResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: { totalCount: number };
+    users: {
+      totalCount: number;
+      list: Array<{
+        id: string;
+        userPoolId: string;
+        username?: Maybe<string>;
+        email?: Maybe<string>;
+        emailVerified?: Maybe<boolean>;
+        phone?: Maybe<string>;
+        phoneVerified?: Maybe<boolean>;
+        unionid?: Maybe<string>;
+        openid?: Maybe<string>;
+        nickname?: Maybe<string>;
+        registerMethod?: Maybe<string>;
+        photo?: Maybe<string>;
+        password?: Maybe<string>;
+        oauth?: Maybe<string>;
+        token?: Maybe<string>;
+        tokenExpiredAt?: Maybe<string>;
+        loginsCount?: Maybe<number>;
+        lastLogin?: Maybe<string>;
+        lastIP?: Maybe<string>;
+        signedUp?: Maybe<string>;
+        blocked?: Maybe<boolean>;
+        isDeleted?: Maybe<boolean>;
+        device?: Maybe<string>;
+        browser?: Maybe<string>;
+        company?: Maybe<string>;
+        name?: Maybe<string>;
+        givenName?: Maybe<string>;
+        familyName?: Maybe<string>;
+        middleName?: Maybe<string>;
+        profile?: Maybe<string>;
+        preferredUsername?: Maybe<string>;
+        website?: Maybe<string>;
+        gender?: Maybe<string>;
+        birthdate?: Maybe<string>;
+        zoneinfo?: Maybe<string>;
+        locale?: Maybe<string>;
+        address?: Maybe<string>;
+        formatted?: Maybe<string>;
+        streetAddress?: Maybe<string>;
+        locality?: Maybe<string>;
+        region?: Maybe<string>;
+        postalCode?: Maybe<string>;
+        country?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        customData?: Maybe<string>;
+      }>;
+    };
   };
 };
 
@@ -3080,25 +3148,6 @@ export type RevokeRoleResponse = {
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      permissions: Array<{
-        id: string;
-        code: string;
-        name: string;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        type?: Maybe<string>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
-      users: { totalCount: number };
-      parent?: Maybe<{
-        code: string;
-        name?: Maybe<string>;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
     }>;
   };
 };
@@ -3183,13 +3232,12 @@ export type UpdateFunctionResponse = {
 };
 
 export type UpdateIdentityProviderVariables = Exact<{
-  input: IdpInput;
+  input: UpdateIdentityProviderInput;
 }>;
 
 export type UpdateIdentityProviderResponse = {
   updateIdentityProvider: {
     id?: Maybe<string>;
-    domain?: Maybe<string>;
     type?: Maybe<string>;
     config?: Maybe<string>;
     enabled?: Maybe<boolean>;
@@ -3641,22 +3689,6 @@ export type IdentityProviderVariables = Exact<{
 export type IdentityProviderResponse = {
   identityProvider: {
     id?: Maybe<string>;
-    domain?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
-
-export type IdentityProviderByDomainVariables = Exact<{
-  domain?: Maybe<Scalars['String']>;
-}>;
-
-export type IdentityProviderByDomainResponse = {
-  identityProviderByDomain: {
-    id?: Maybe<string>;
-    domain?: Maybe<string>;
     type?: Maybe<string>;
     config?: Maybe<string>;
     enabled?: Maybe<boolean>;
@@ -3677,7 +3709,6 @@ export type IdentityProvidersResponse = {
     list: Array<
       Maybe<{
         id?: Maybe<string>;
-        domain?: Maybe<string>;
         type?: Maybe<string>;
         config?: Maybe<string>;
         enabled?: Maybe<boolean>;
@@ -3710,11 +3741,8 @@ export type IsDomainAvaliableVariables = Exact<{
 export type IsDomainAvaliableResponse = { isDomainAvaliable?: Maybe<boolean> };
 
 export type NodeVariables = Exact<{
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
-  id: Scalars['String'];
+  orgId: Scalars['String'];
+  code: Scalars['String'];
 }>;
 
 export type NodeResponse = {
@@ -3731,11 +3759,10 @@ export type NodeResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: { totalCount: number };
   };
 };
 
-export type NodeByCodeVariables = Exact<{
+export type NodeWithMembersVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -3744,8 +3771,8 @@ export type NodeByCodeVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type NodeByCodeResponse = {
-  nodeByCode: {
+export type NodeWithMembersResponse = {
+  node: {
     id: string;
     name: string;
     nameI18n?: Maybe<string>;
@@ -3758,7 +3785,56 @@ export type NodeByCodeResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: { totalCount: number };
+    users: {
+      totalCount: number;
+      list: Array<{
+        id: string;
+        userPoolId: string;
+        username?: Maybe<string>;
+        email?: Maybe<string>;
+        emailVerified?: Maybe<boolean>;
+        phone?: Maybe<string>;
+        phoneVerified?: Maybe<boolean>;
+        unionid?: Maybe<string>;
+        openid?: Maybe<string>;
+        nickname?: Maybe<string>;
+        registerMethod?: Maybe<string>;
+        photo?: Maybe<string>;
+        password?: Maybe<string>;
+        oauth?: Maybe<string>;
+        token?: Maybe<string>;
+        tokenExpiredAt?: Maybe<string>;
+        loginsCount?: Maybe<number>;
+        lastLogin?: Maybe<string>;
+        lastIP?: Maybe<string>;
+        signedUp?: Maybe<string>;
+        blocked?: Maybe<boolean>;
+        isDeleted?: Maybe<boolean>;
+        device?: Maybe<string>;
+        browser?: Maybe<string>;
+        company?: Maybe<string>;
+        name?: Maybe<string>;
+        givenName?: Maybe<string>;
+        familyName?: Maybe<string>;
+        middleName?: Maybe<string>;
+        profile?: Maybe<string>;
+        preferredUsername?: Maybe<string>;
+        website?: Maybe<string>;
+        gender?: Maybe<string>;
+        birthdate?: Maybe<string>;
+        zoneinfo?: Maybe<string>;
+        locale?: Maybe<string>;
+        address?: Maybe<string>;
+        formatted?: Maybe<string>;
+        streetAddress?: Maybe<string>;
+        locality?: Maybe<string>;
+        region?: Maybe<string>;
+        postalCode?: Maybe<string>;
+        country?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        customData?: Maybe<string>;
+      }>;
+    };
   };
 };
 
@@ -4488,27 +4564,6 @@ export const AddCooperatorDocument = gql`
         isSystem
         createdAt
         updatedAt
-        permissions {
-          id
-          code
-          name
-          description
-          isSystem
-          type
-          createdAt
-          updatedAt
-        }
-        users {
-          totalCount
-        }
-        parent {
-          code
-          name
-          description
-          isSystem
-          createdAt
-          updatedAt
-        }
       }
       user {
         id
@@ -4581,10 +4636,10 @@ export const AddMemberDocument = gql`
     $sortBy: SortByEnum
     $includeChildrenNodes: Boolean
     $orgId: String!
-    $nodeId: String!
+    $nodeCode: String!
     $userIds: [String!]!
   ) {
-    addMember(orgId: $orgId, nodeId: $nodeId, userIds: $userIds) {
+    addMember(orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds) {
       id
       name
       nameI18n
@@ -4604,6 +4659,53 @@ export const AddMemberDocument = gql`
         includeChildrenNodes: $includeChildrenNodes
       ) {
         totalCount
+        list {
+          id
+          userPoolId
+          username
+          email
+          emailVerified
+          phone
+          phoneVerified
+          unionid
+          openid
+          nickname
+          registerMethod
+          photo
+          password
+          oauth
+          token
+          tokenExpiredAt
+          loginsCount
+          lastLogin
+          lastIP
+          signedUp
+          blocked
+          isDeleted
+          device
+          browser
+          company
+          name
+          givenName
+          familyName
+          middleName
+          profile
+          preferredUsername
+          website
+          gender
+          birthdate
+          zoneinfo
+          locale
+          address
+          formatted
+          streetAddress
+          locality
+          region
+          postalCode
+          country
+          updatedAt
+          customData
+        }
       }
     }
   }
@@ -4774,10 +4876,9 @@ export const CreateFunctionDocument = gql`
   }
 `;
 export const CreateIdentityProviderDocument = gql`
-  mutation createIdentityProvider($input: IdpInput!) {
+  mutation createIdentityProvider($input: CreateIdentityProviderInput!) {
     createIdentityProvider(input: $input) {
       id
-      domain
       type
       config
       enabled
@@ -5297,7 +5398,6 @@ export const DisableIdentityProviderDocument = gql`
   mutation disableIdentityProvider($id: String!) {
     disableIdentityProvider(id: $id) {
       id
-      domain
       type
       config
       enabled
@@ -5391,7 +5491,6 @@ export const EnableIdentityProviderDocument = gql`
   mutation enableIdentityProvider($id: String!) {
     enableIdentityProvider(id: $id) {
       id
-      domain
       type
       config
       enabled
@@ -5827,6 +5926,53 @@ export const RemoveMemberDocument = gql`
         includeChildrenNodes: $includeChildrenNodes
       ) {
         totalCount
+        list {
+          id
+          userPoolId
+          username
+          email
+          emailVerified
+          phone
+          phoneVerified
+          unionid
+          openid
+          nickname
+          registerMethod
+          photo
+          password
+          oauth
+          token
+          tokenExpiredAt
+          loginsCount
+          lastLogin
+          lastIP
+          signedUp
+          blocked
+          isDeleted
+          device
+          browser
+          company
+          name
+          givenName
+          familyName
+          middleName
+          profile
+          preferredUsername
+          website
+          gender
+          birthdate
+          zoneinfo
+          locale
+          address
+          formatted
+          streetAddress
+          locality
+          region
+          postalCode
+          country
+          updatedAt
+          customData
+        }
       }
     }
   }
@@ -5879,56 +6025,6 @@ export const RevokeRoleDocument = gql`
         isSystem
         createdAt
         updatedAt
-        permissions {
-          id
-          code
-          name
-          description
-          isSystem
-          type
-          createdAt
-          updatedAt
-        }
-        users {
-          totalCount
-        }
-        parent {
-          code
-          name
-          description
-          isSystem
-          createdAt
-          updatedAt
-        }
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-        permissions {
-          id
-          code
-          name
-          description
-          isSystem
-          type
-          createdAt
-          updatedAt
-        }
-        users {
-          totalCount
-        }
-        parent {
-          code
-          name
-          description
-          isSystem
-          createdAt
-          updatedAt
-        }
       }
     }
   }
@@ -6014,10 +6110,9 @@ export const UpdateFunctionDocument = gql`
   }
 `;
 export const UpdateIdentityProviderDocument = gql`
-  mutation updateIdentityProvider($input: IdpInput!) {
+  mutation updateIdentityProvider($input: UpdateIdentityProviderInput!) {
     updateIdentityProvider(input: $input) {
       id
-      domain
       type
       config
       enabled
@@ -6459,19 +6554,6 @@ export const IdentityProviderDocument = gql`
   query identityProvider($id: String) {
     identityProvider(id: $id) {
       id
-      domain
-      type
-      config
-      enabled
-      userPoolId
-    }
-  }
-`;
-export const IdentityProviderByDomainDocument = gql`
-  query identityProviderByDomain($domain: String) {
-    identityProviderByDomain(domain: $domain) {
-      id
-      domain
       type
       config
       enabled
@@ -6494,7 +6576,6 @@ export const IdentityProvidersDocument = gql`
     ) {
       list {
         id
-        domain
         type
         config
         enabled
@@ -6528,14 +6609,8 @@ export const IsDomainAvaliableDocument = gql`
   }
 `;
 export const NodeDocument = gql`
-  query node(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $id: String!
-  ) {
-    node(id: $id) {
+  query node($orgId: String!, $code: String!) {
+    node(orgId: $orgId, code: $code) {
       id
       name
       nameI18n
@@ -6548,19 +6623,11 @@ export const NodeDocument = gql`
       createdAt
       updatedAt
       children
-      users(
-        page: $page
-        limit: $limit
-        sortBy: $sortBy
-        includeChildrenNodes: $includeChildrenNodes
-      ) {
-        totalCount
-      }
     }
   }
 `;
-export const NodeByCodeDocument = gql`
-  query nodeByCode(
+export const NodeWithMembersDocument = gql`
+  query nodeWithMembers(
     $page: Int
     $limit: Int
     $sortBy: SortByEnum
@@ -6568,7 +6635,7 @@ export const NodeByCodeDocument = gql`
     $orgId: String!
     $code: String!
   ) {
-    nodeByCode(orgId: $orgId, code: $code) {
+    node(orgId: $orgId, code: $code) {
       id
       name
       nameI18n
@@ -6588,6 +6655,53 @@ export const NodeByCodeDocument = gql`
         includeChildrenNodes: $includeChildrenNodes
       ) {
         totalCount
+        list {
+          id
+          userPoolId
+          username
+          email
+          emailVerified
+          phone
+          phoneVerified
+          unionid
+          openid
+          nickname
+          registerMethod
+          photo
+          password
+          oauth
+          token
+          tokenExpiredAt
+          loginsCount
+          lastLogin
+          lastIP
+          signedUp
+          blocked
+          isDeleted
+          device
+          browser
+          company
+          name
+          givenName
+          familyName
+          middleName
+          profile
+          preferredUsername
+          website
+          gender
+          birthdate
+          zoneinfo
+          locale
+          address
+          formatted
+          streetAddress
+          locality
+          region
+          postalCode
+          country
+          updatedAt
+          customData
+        }
       }
     }
   }

@@ -144,7 +144,13 @@ import {
   LoginByPhonePasswordDocument,
   OrgDocument,
   OrgResponse,
-  OrgVariables
+  OrgVariables,
+  AddMemberVariables,
+  AddMemberDocument,
+  AddMemberResponse,
+  NodeWithMembersDocument,
+  NodeWithMembersResponse,
+  NodeWithMembersVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -797,6 +803,34 @@ export const assignRole = async (
   variables: AssignRoleVariables
 ): Promise<AssignRoleResponse> => {
   const query = AssignRoleDocument;
+  const token = await tokenProvider.getAccessToken();
+  return await garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const addMember = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider,
+  variables: AddMemberVariables
+): Promise<AddMemberResponse> => {
+  const query = AddMemberDocument;
+  const token = await tokenProvider.getAccessToken();
+  return await garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const getMembers = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider,
+  variables: NodeWithMembersVariables
+): Promise<NodeWithMembersResponse> => {
+  const query = NodeWithMembersDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,
