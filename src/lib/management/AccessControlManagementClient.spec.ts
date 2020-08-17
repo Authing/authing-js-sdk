@@ -76,6 +76,7 @@ test('有层级的 role + user + resource', async t => {
 });
 
 test('组织机构 + user + resource', async t => {
+  // 1. 导入一个组织机构
   const tree = {
     name: '北京非凡科技有限公司',
     code: 'feifan',
@@ -138,4 +139,31 @@ test('组织机构 + user + resource', async t => {
   };
   let org = await management.org.import(tree);
   t.assert(org);
+
+  const orgTree = await management.org.findById(org.id);
+  t.assert(orgTree.id);
+
+  // 添加成员
+  const user = await management.users.create({
+    username: generateRandomString(),
+    password: '123456'
+  });
+  const rootNode = orgTree.rootNode;
+  await management.org.addMember(org.id, rootNode.code, user._id);
+
+  // 2. 创建一个资源
+  const door = generateRandomString();
+  const resouce = await acl.addResource(door);
+  t.assert(resouce);
+
+  // 3. 将这个资源授权给根节点
+  const action = 'open';
+  await acl.allow(org.id, rootNode.code, action, door);
+
+  // 4. 判断 user 是否具备 open door 的权限
+  const allowed = await acl.isAllowed(user._id, action, door);
+  t.assert(allowed);
+
+  const allowed2 = await acl.isAllowed(user._id, 'xxxx', door);
+  t.assert(allowed2 === false);
 });

@@ -1147,6 +1147,8 @@ export type MutationCreateResourceRuleArgs = {
   allow: Scalars['Boolean'];
   userId?: Maybe<Scalars['String']>;
   roleCode?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
+  nodeCode?: Maybe<Scalars['String']>;
 };
 
 export type MutationDoRegisterProcessArgs = {
@@ -2069,6 +2071,8 @@ export type CreateResourceRuleVariables = Exact<{
   allow: Scalars['Boolean'];
   userId?: Maybe<Scalars['String']>;
   roleCode?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
+  nodeCode?: Maybe<Scalars['String']>;
 }>;
 
 export type CreateResourceRuleResponse = {
@@ -4955,6 +4959,8 @@ export const CreateResourceRuleDocument = gql`
     $allow: Boolean!
     $userId: String
     $roleCode: String
+    $orgId: String
+    $nodeCode: String
   ) {
     createResourceRule(
       resouceCode: $resouceCode
@@ -4962,6 +4968,8 @@ export const CreateResourceRuleDocument = gql`
       allow: $allow
       userId: $userId
       roleCode: $roleCode
+      orgId: $orgId
+      nodeCode: $nodeCode
     ) {
       resouce {
         code

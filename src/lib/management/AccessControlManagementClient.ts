@@ -2,7 +2,7 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { SortByEnum } from '../../types/graphql.v1';
-import { Role } from '../../types/graphql.v2';
+import { ResourceRule, Role } from '../../types/graphql.v2';
 import {
   createRBACGroup,
   addGroupMetadata,
@@ -219,25 +219,68 @@ export class AccessControlManagementClient {
   }
 
   /**
-   * @description 允许某个用户/角色操作某个资源
+   * @description 允许某个用户/角色/组织机构节点操作某个资源
    *
    * @param roleCode: 角色代码
    * @param action: 操作
    * @param resouceCode: 资源代码
    *
    */
-  async allow(roleCode: string, action: string, resouceCode: string) {
-    const { createResourceRule } = await allow(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        resouceCode,
-        action,
-        allow: true,
-        roleCode
-      }
-    );
-    return createResourceRule;
+  async allow(
+    orgId: string,
+    nodeCode: string,
+    action: string,
+    resouceCode: string
+  ): Promise<ResourceRule>;
+  async allow(
+    roleCode: string,
+    action: string,
+    resouceCode: string
+  ): Promise<ResourceRule>;
+  async allow(
+    arg1: any,
+    arg2: any,
+    arg3: any,
+    arg4?: any
+  ): Promise<ResourceRule> {
+    // 角色
+    if (!arg4) {
+      const roleCode = arg1;
+      const action = arg2;
+      const resouceCode = arg3;
+      const { createResourceRule } = await allow(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          resouceCode,
+          action,
+          allow: true,
+          roleCode
+        }
+      );
+      // @ts-ignore
+      return createResourceRule;
+    }
+    // 组织机构
+    else {
+      const orgId = arg1;
+      const nodeCode = arg2;
+      const action = arg3;
+      const resouceCode = arg4;
+      const { createResourceRule } = await allow(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          resouceCode,
+          action,
+          allow: true,
+          orgId,
+          nodeCode
+        }
+      );
+      // @ts-ignore
+      return createResourceRule;
+    }
   }
 
   /**
