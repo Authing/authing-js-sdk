@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Authing 小程序扫码登录</title>
+</head>
+
+<body>
+  <div id="root"> </div>
+
+  <script src="../build/umd/index.js"></script>
+  <script>
+    const authing = new Authing({ userPoolId: '59f86b4832eb28071bdd9214', host: 'http://localhost:3000' });
+    authing.qr.startScanning()
+  </script>
+</body>
+
+</html>
