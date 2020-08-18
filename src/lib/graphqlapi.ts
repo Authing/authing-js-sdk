@@ -150,7 +150,10 @@ import {
   AddMemberResponse,
   NodeWithMembersDocument,
   NodeWithMembersResponse,
-  NodeWithMembersVariables
+  NodeWithMembersVariables,
+  SendEmailResponse,
+  SendEmailVariables,
+  SendEmailDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -831,6 +834,20 @@ export const getMembers = async (
   variables: NodeWithMembersVariables
 ): Promise<NodeWithMembersResponse> => {
   const query = NodeWithMembersDocument;
+  const token = await tokenProvider.getAccessToken();
+  return await garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const sendEmail = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: AuthenticationTokenProvider | ManagementTokenProvider,
+  variables: SendEmailVariables
+): Promise<SendEmailResponse> => {
+  const query = SendEmailDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,

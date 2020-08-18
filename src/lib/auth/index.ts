@@ -8,11 +8,11 @@ import {
   loginByUsername,
   registerByEmail,
   registerByUsername,
-  sendVerifyEmail
+  sendEmail
 } from './../graphqlapi';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
-import { RegisterProfile } from '../../types/graphql.v2';
+import { EmailScene, RegisterProfile } from '../../types/graphql.v2';
 import { encrypt } from '../utils';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
@@ -205,14 +205,17 @@ export class AuthenticationClient {
   }
 
   /**
-   * 想邮箱中发送验证邮件
-   * @param email 用户邮箱
+   * @description 发送邮件
+   * @param email: 邮件
+   * @param scene: 发送场景
+   *
    */
-  async sendVerifyEmail(email: string) {
-    const res = await sendVerifyEmail(this.graphqlClient, this.tokenProvider, {
-      email,
-      client: this.options.userPoolId
-    });
-    return res.sendVerifyEmail;
+  async sendEmail(email: string, scene: EmailScene) {
+    const { sendEmail: data } = await sendEmail(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      { email, scene }
+    );
+    return data;
   }
 }

@@ -1,6 +1,7 @@
 import { AuthenticationClient } from './index';
 import { generateRandomString, getOptionsFromEnv } from '../testing-helper';
 import test from 'ava';
+import { EmailScene } from '../../types/graphql.v2';
 
 // @ts-ignore
 global.localStorage = {
@@ -61,5 +62,11 @@ test('用户名注册 # 用户名长度不能超过 20', async t => {
 test.skip('发送短信验证码', async t => {
   const phone = '17670416754';
   const { code } = await authing.sendSmsCode(phone);
+  t.assert(code === 200);
+});
+
+test('发送重置密码邮件', async t => {
+  const email = 'cj@authing.cn';
+  const { code } = await authing.sendEmail(email, EmailScene.ResetPassword);
   t.assert(code === 200);
 });

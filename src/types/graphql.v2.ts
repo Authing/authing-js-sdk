@@ -81,21 +81,26 @@ export type Query = {
   whitelist: Array<WhiteList>;
 };
 
+
 export type QueryQiniuUptokenArgs = {
   type?: Maybe<Scalars['String']>;
 };
+
 
 export type QueryIsDomainAvaliableArgs = {
   domain: Scalars['String'];
 };
 
+
 export type QuerySocialConnectionArgs = {
   provider: Scalars['String'];
 };
 
+
 export type QuerySocialConnectionInstanceArgs = {
   provider: Scalars['String'];
 };
+
 
 export type QueryCooperatedUserpoolsArgs = {
   page?: Maybe<Scalars['Int']>;
@@ -103,19 +108,23 @@ export type QueryCooperatedUserpoolsArgs = {
   sortBy?: Maybe<SortByEnum>;
 };
 
+
 export type QueryPreviewEmailArgs = {
   type: EmailTemplateType;
 };
 
+
 export type QueryFunctionArgs = {
   id?: Maybe<Scalars['String']>;
 };
+
 
 export type QueryFunctionsArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
 };
+
 
 export type QueryIdentityProvidersArgs = {
   protocol: IdentityProviderProtocol;
@@ -124,9 +133,11 @@ export type QueryIdentityProvidersArgs = {
   sortBy?: Maybe<SortByEnum>;
 };
 
+
 export type QueryIdentityProviderArgs = {
   id?: Maybe<Scalars['String']>;
 };
+
 
 export type QueryQueryMfaArgs = {
   id?: Maybe<Scalars['String']>;
@@ -134,14 +145,17 @@ export type QueryQueryMfaArgs = {
   userPoolId?: Maybe<Scalars['String']>;
 };
 
+
 export type QueryNodeArgs = {
   orgId: Scalars['String'];
   code: Scalars['String'];
 };
 
+
 export type QueryOrgArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryOrgsArgs = {
   page?: Maybe<Scalars['Int']>;
@@ -149,22 +163,27 @@ export type QueryOrgsArgs = {
   sortBy?: Maybe<SortByEnum>;
 };
 
+
 export type QueryChildrenNodesArgs = {
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
 };
 
+
 export type QueryCheckPasswordStrengthArgs = {
   password: Scalars['String'];
 };
+
 
 export type QueryPermissionArgs = {
   id: Scalars['String'];
 };
 
+
 export type QueryPermissionByCodeArgs = {
   code: Scalars['String'];
 };
+
 
 export type QueryPermissionsArgs = {
   page?: Maybe<Scalars['Int']>;
@@ -172,13 +191,16 @@ export type QueryPermissionsArgs = {
   sortBy?: Maybe<SortByEnum>;
 };
 
+
 export type QueryPipelineArgs = {
   id: Scalars['String'];
 };
 
+
 export type QueryRoleArgs = {
   code: Scalars['String'];
 };
+
 
 export type QueryRolesArgs = {
   page?: Maybe<Scalars['Int']>;
@@ -186,11 +208,13 @@ export type QueryRolesArgs = {
   sortBy?: Maybe<SortByEnum>;
 };
 
+
 export type QueryIsActionAllowedArgs = {
   resouceCode: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
 };
+
 
 export type QueryIsActionDeniedArgs = {
   resouceCode: Scalars['String'];
@@ -198,23 +222,28 @@ export type QueryIsActionDeniedArgs = {
   userId: Scalars['String'];
 };
 
+
 export type QueryResouceRulesArgs = {
   code?: Maybe<Scalars['String']>;
 };
+
 
 export type QueryUserArgs = {
   id: Scalars['String'];
 };
 
+
 export type QueryUserBatchArgs = {
   ids: Array<Scalars['String']>;
 };
+
 
 export type QueryUsersArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
 };
+
 
 export type QuerySearchUserArgs = {
   query: Scalars['String'];
@@ -223,19 +252,23 @@ export type QuerySearchUserArgs = {
   count?: Maybe<Scalars['Int']>;
 };
 
+
 export type QueryUserpoolsArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
 };
 
+
 export type QueryWebhookArgs = {
   webhookId?: Maybe<Scalars['String']>;
 };
 
+
 export type QueryWebhookLogArgs = {
   webhookLogId?: Maybe<Scalars['String']>;
 };
+
 
 export type QueryWhitelistArgs = {
   type: WhitelistType;
@@ -631,6 +664,7 @@ export type Node = {
   users: PaginatedUsers;
 };
 
+
 export type NodeUsersArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
@@ -825,6 +859,8 @@ export type Mutation = {
   enableEmailTemplate: EmailTemplate;
   /** 停用自定义邮件模版（将会使用系统默认邮件模版） */
   disableEmailTemplate: EmailTemplate;
+  /** 发送邮件 */
+  sendEmail: CommonMessage;
   /** 创建函数 */
   createFunction?: Maybe<Function>;
   /** 修改函数 */
@@ -917,91 +953,119 @@ export type Mutation = {
   removeWhitelist: Array<Maybe<WhiteList>>;
 };
 
+
 export type MutationCreateSocialConnectionArgs = {
   input: CreateSocialConnectionInput;
 };
+
 
 export type MutationCreateSocialConnectionInstanceArgs = {
   input: CreateSocialConnectionInstanceInput;
 };
 
+
 export type MutationEnableSocialConnectionInstanceArgs = {
   provider: Scalars['String'];
 };
 
+
 export type MutationDisableSocialConnectionInstanceArgs = {
   provider: Scalars['String'];
 };
+
 
 export type MutationAddCooperatorArgs = {
   userId: Scalars['String'];
   roleId: Scalars['String'];
 };
 
+
 export type MutationRemoveCooperatorArgs = {
   userId: Scalars['String'];
   roleId: Scalars['String'];
 };
 
+
 export type MutationConfigEmailTemplateArgs = {
   input: ConfigEmailTemplateInput;
 };
+
 
 export type MutationEnableEmailTemplateArgs = {
   type: EmailTemplateType;
 };
 
+
 export type MutationDisableEmailTemplateArgs = {
   type: EmailTemplateType;
 };
+
+
+export type MutationSendEmailArgs = {
+  email: Scalars['String'];
+  scene: EmailScene;
+};
+
 
 export type MutationCreateFunctionArgs = {
   input: CreateFunctionInput;
 };
 
+
 export type MutationUpdateFunctionArgs = {
   input: UpdateFunctionInput;
 };
+
 
 export type MutationDeleteFunctionArgs = {
   id: Scalars['String'];
 };
 
+
 export type MutationCreateIdentityProviderArgs = {
   input: CreateIdentityProviderInput;
 };
+
 
 export type MutationUpdateIdentityProviderArgs = {
   input: UpdateIdentityProviderInput;
 };
 
+
 export type MutationDeleteIdentityProviderArgs = {
   id: Scalars['String'];
 };
+
 
 export type MutationEnableIdentityProviderArgs = {
   id: Scalars['String'];
 };
 
+
 export type MutationDisableIdentityProviderArgs = {
   id: Scalars['String'];
 };
+
 
 export type MutationLoginByEmailArgs = {
   input: LoginByEmailInput;
 };
 
+
 export type MutationLoginByUsernameArgs = {
   input: LoginByUsernameInput;
 };
+
 
 export type MutationLoginByPhoneCodeArgs = {
   input: LoginByPhoneCodeInput;
 };
 
+
 export type MutationLoginByPhonePasswordArgs = {
   input: LoginByPhonePasswordInput;
 };
+
 
 export type MutationChangeMfaArgs = {
   enable?: Maybe<Scalars['Boolean']>;
@@ -1011,15 +1075,18 @@ export type MutationChangeMfaArgs = {
   refresh?: Maybe<Scalars['Boolean']>;
 };
 
+
 export type MutationCreateOrgArgs = {
   name: Scalars['String'];
   code?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 };
 
+
 export type MutationDeleteOrgArgs = {
   id: Scalars['String'];
 };
+
 
 export type MutationAddNodeArgs = {
   orgId: Scalars['String'];
@@ -1032,10 +1099,12 @@ export type MutationAddNodeArgs = {
   code?: Maybe<Scalars['String']>;
 };
 
+
 export type MutationDeleteNodeArgs = {
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
 };
+
 
 export type MutationAddMemberArgs = {
   orgId: Scalars['String'];
@@ -1043,57 +1112,70 @@ export type MutationAddMemberArgs = {
   userIds: Array<Scalars['String']>;
 };
 
+
 export type MutationRemoveMemberArgs = {
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
   userIds: Array<Scalars['String']>;
 };
 
+
 export type MutationCreatePermissionArgs = {
   input: CreatePermissionInput;
 };
+
 
 export type MutationCreatePermissionsArgs = {
   input: Array<CreatePermissionInput>;
 };
 
+
 export type MutationDeletePermissionArgs = {
   id: Scalars['String'];
 };
+
 
 export type MutationDeletePermissionsArgs = {
   ids: Array<Scalars['String']>;
 };
 
+
 export type MutationCreatePipelineArgs = {
   input: CreatePipelineInput;
 };
+
 
 export type MutationAddFunctionToPipelineArgs = {
   input: AddFunctionToPipelineInput;
 };
 
+
 export type MutationRemoveFunctionFromPipelineArgs = {
   input: RemoveFunctionFromPipelineInput;
 };
+
 
 export type MutationRegisterByUsernameArgs = {
   input: RegisterByUsernameInput;
 };
 
+
 export type MutationRegisterByEmailArgs = {
   input: RegisterByEmailInput;
 };
 
+
 export type MutationRegisterByPhonePasswordArgs = {
   input: RegisterByPhonePasswordInput;
 };
+
 
 export type MutationCreateResourceArgs = {
   code: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 };
+
 
 export type MutationCreateRoleArgs = {
   code: Scalars['String'];
@@ -1103,19 +1185,23 @@ export type MutationCreateRoleArgs = {
   parent?: Maybe<Scalars['String']>;
 };
 
+
 export type MutationUpdateRoleArgs = {
   code: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 };
 
+
 export type MutationDeleteRoleArgs = {
   code: Scalars['String'];
 };
 
+
 export type MutationDeleteRolesArgs = {
   codes: Array<Scalars['String']>;
 };
+
 
 export type MutationAssignRoleArgs = {
   code: Scalars['String'];
@@ -1124,6 +1210,7 @@ export type MutationAssignRoleArgs = {
   nodeCodes?: Maybe<Array<Scalars['String']>>;
 };
 
+
 export type MutationRevokeRoleArgs = {
   code: Scalars['String'];
   userIds?: Maybe<Array<Scalars['String']>>;
@@ -1131,15 +1218,18 @@ export type MutationRevokeRoleArgs = {
   nodeCodes?: Maybe<Array<Scalars['String']>>;
 };
 
+
 export type MutationAttachPermissionArgs = {
   code: Scalars['String'];
   permissionIds: Array<Scalars['String']>;
 };
 
+
 export type MutationDetachPermissionArgs = {
   roleId: Scalars['String'];
   permissionIds: Array<Scalars['String']>;
 };
+
 
 export type MutationCreateResourceRuleArgs = {
   resouceCode: Scalars['String'];
@@ -1151,21 +1241,25 @@ export type MutationCreateResourceRuleArgs = {
   nodeCode?: Maybe<Scalars['String']>;
 };
 
+
 export type MutationDoRegisterProcessArgs = {
   userInfo: CreateUserInput;
   keepPassword?: Maybe<Scalars['Boolean']>;
 };
+
 
 export type MutationUpdateUserArgs = {
   id: Scalars['String'];
   input: UpdateUserInput;
 };
 
+
 export type MutationUpdatePasswordArgs = {
   id: Scalars['String'];
   newPassword: Scalars['String'];
   oldPassword?: Maybe<Scalars['String']>;
 };
+
 
 export type MutationUpdatePhoneArgs = {
   phone: Scalars['String'];
@@ -1174,6 +1268,7 @@ export type MutationUpdatePhoneArgs = {
   oldPhoneCode?: Maybe<Scalars['String']>;
 };
 
+
 export type MutationUpdateEmailArgs = {
   email: Scalars['String'];
   emailCode: Scalars['String'];
@@ -1181,13 +1276,16 @@ export type MutationUpdateEmailArgs = {
   oldEmailCode?: Maybe<Scalars['String']>;
 };
 
+
 export type MutationDeleteUserArgs = {
   id: Scalars['String'];
 };
 
+
 export type MutationDeleteUsersArgs = {
   ids: Array<Scalars['String']>;
 };
+
 
 export type MutationCreateUserpoolArgs = {
   name: Scalars['String'];
@@ -1196,30 +1294,37 @@ export type MutationCreateUserpoolArgs = {
   userpoolTypes?: Maybe<Array<Scalars['String']>>;
 };
 
+
 export type MutationUpdateUserpoolArgs = {
   input: UpdateUserpoolInput;
 };
+
 
 export type MutationCreateWebhookArgs = {
   input: CreateWebhookInput;
 };
 
+
 export type MutationUpdateWebhookArgs = {
   input: UpdateWebhookInput;
 };
+
 
 export type MutationDeleteWebhookArgs = {
   input: DeleteWebhookInput;
 };
 
+
 export type MutationSendWebhookTestRequestArgs = {
   input: SendWebhookTestRequestInput;
 };
+
 
 export type MutationAddWhitelistArgs = {
   type: WhitelistType;
   list: Array<Scalars['String']>;
 };
+
 
 export type MutationRemoveWhitelistArgs = {
   type: WhitelistType;
@@ -1281,6 +1386,12 @@ export type ConfigEmailTemplateInput = {
   expiresIn?: Maybe<Scalars['Int']>;
 };
 
+/** 邮件使用场景 */
+export enum EmailScene {
+  /** 发送重置密码邮件，邮件中包含验证码 */
+  ResetPassword = 'RESET_PASSWORD'
+}
+
 export type CreateFunctionInput = {
   /** 函数名称 */
   name: Scalars['String'];
@@ -1321,15 +1432,19 @@ export type LoginByEmailInput = {
   password: Scalars['String'];
 };
 
+
 export type LoginByUsernameInput = {
   username: Scalars['username_String_NotNull_minLength_4_maxLength_20'];
   password: Scalars['String'];
 };
 
+
 export type LoginByPhoneCodeInput = {
   phone: Scalars['phone_String_NotNull_pattern_130911457911503591166170358118091198911d8'];
   code: Scalars['code_String_NotNull_minLength_4_maxLength_6'];
 };
+
+
 
 export type LoginByPhonePasswordInput = {
   phone: Scalars['phone_String_NotNull_pattern_130911457911503591166170358118091198911d8'];
@@ -1422,6 +1537,13 @@ export type RegisterProfile = {
   region?: Maybe<Scalars['String']>;
   postalCode?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
+  udf?: Maybe<Array<UserDdfInput>>;
+};
+
+
+export type UserDdfInput = {
+  key: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type RegisterByEmailInput = {
@@ -1628,87 +1750,25 @@ export type SendWebhookTestRequestInput = {
   webhookId: Scalars['String'];
 };
 
+export type KeyValuePair = {
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type AddCooperatorVariables = Exact<{
   userId: Scalars['String'];
   roleId: Scalars['String'];
 }>;
 
-export type AddCooperatorResponse = {
-  addCooperator: {
-    roles: Array<{
-      code: string;
-      name?: Maybe<string>;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    user: {
-      id: string;
-      userPoolId: string;
-      username?: Maybe<string>;
-      email?: Maybe<string>;
-      emailVerified?: Maybe<boolean>;
-      phone?: Maybe<string>;
-      phoneVerified?: Maybe<boolean>;
-      unionid?: Maybe<string>;
-      openid?: Maybe<string>;
-      nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
-      photo?: Maybe<string>;
-      password?: Maybe<string>;
-      oauth?: Maybe<string>;
-      token?: Maybe<string>;
-      tokenExpiredAt?: Maybe<string>;
-      loginsCount?: Maybe<number>;
-      lastLogin?: Maybe<string>;
-      lastIP?: Maybe<string>;
-      signedUp?: Maybe<string>;
-      blocked?: Maybe<boolean>;
-      isDeleted?: Maybe<boolean>;
-      device?: Maybe<string>;
-      browser?: Maybe<string>;
-      company?: Maybe<string>;
-      name?: Maybe<string>;
-      givenName?: Maybe<string>;
-      familyName?: Maybe<string>;
-      middleName?: Maybe<string>;
-      profile?: Maybe<string>;
-      preferredUsername?: Maybe<string>;
-      website?: Maybe<string>;
-      gender?: Maybe<string>;
-      birthdate?: Maybe<string>;
-      zoneinfo?: Maybe<string>;
-      locale?: Maybe<string>;
-      address?: Maybe<string>;
-      formatted?: Maybe<string>;
-      streetAddress?: Maybe<string>;
-      locality?: Maybe<string>;
-      region?: Maybe<string>;
-      postalCode?: Maybe<string>;
-      country?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
-    };
-  };
-};
+
+export type AddCooperatorResponse = { addCooperator: { roles: Array<{ code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }>, user: { id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> } } };
 
 export type AddFunctionToPipelineVariables = Exact<{
   input: AddFunctionToPipelineInput;
 }>;
 
-export type AddFunctionToPipelineResponse = {
-  addFunctionToPipeline: {
-    id: string;
-    name: string;
-    trigger: string;
-    functions: Array<{
-      funcId: string;
-      asynchronous: boolean;
-      enabled: boolean;
-    }>;
-  };
-};
+
+export type AddFunctionToPipelineResponse = { addFunctionToPipeline: { id: string, name: string, trigger: string, functions: Array<{ funcId: string, asynchronous: boolean, enabled: boolean }> } };
 
 export type AddMemberVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -1720,71 +1780,8 @@ export type AddMemberVariables = Exact<{
   userIds: Array<Scalars['String']>;
 }>;
 
-export type AddMemberResponse = {
-  addMember: {
-    name: string;
-    nameI18n?: Maybe<string>;
-    description?: Maybe<string>;
-    descriptionI18n?: Maybe<string>;
-    order?: Maybe<number>;
-    code?: Maybe<string>;
-    root?: Maybe<boolean>;
-    depth?: Maybe<number>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    children?: Maybe<Array<string>>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
-  };
-};
+
+export type AddMemberResponse = { addMember: { name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>>, users: { totalCount: number, list: Array<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> } } };
 
 export type AddNodeVariables = Exact<{
   orgId: Scalars['String'];
@@ -1797,52 +1794,16 @@ export type AddNodeVariables = Exact<{
   code?: Maybe<Scalars['String']>;
 }>;
 
-export type AddNodeResponse = {
-  addNode: {
-    id: string;
-    rootNode: {
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    };
-    nodes: Array<{
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    }>;
-  };
-};
+
+export type AddNodeResponse = { addNode: { id: string, rootNode: { name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }, nodes: Array<{ name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }> } };
 
 export type AddWhitelistVariables = Exact<{
   type: WhitelistType;
   list: Array<Scalars['String']>;
 }>;
 
-export type AddWhitelistResponse = {
-  addWhitelist: Array<
-    Maybe<{
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      value: string;
-    }>
-  >;
-};
+
+export type AddWhitelistResponse = { addWhitelist: Array<Maybe<{ createdAt?: Maybe<string>, updatedAt?: Maybe<string>, value: string }>> };
 
 export type AssignRoleVariables = Exact<{
   code: Scalars['String'];
@@ -1851,49 +1812,16 @@ export type AssignRoleVariables = Exact<{
   nodeCodes?: Maybe<Array<Scalars['String']>>;
 }>;
 
-export type AssignRoleResponse = {
-  assignRole: {
-    code: string;
-    name?: Maybe<string>;
-    description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    permissions: Array<{
-      id: string;
-      code: string;
-      name: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      type?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    users: { totalCount: number };
-    parent?: Maybe<{
-      code: string;
-      name?: Maybe<string>;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-  };
-};
+
+export type AssignRoleResponse = { assignRole: { code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, permissions: Array<{ id: string, code: string, name: string, description?: Maybe<string>, isSystem?: Maybe<boolean>, type?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }>, users: { totalCount: number }, parent?: Maybe<{ code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type AttachPermissionVariables = Exact<{
   code: Scalars['String'];
   permissionIds: Array<Scalars['String']>;
 }>;
 
-export type AttachPermissionResponse = {
-  attachPermission: {
-    succeedCount: number;
-    failedCount: number;
-    message?: Maybe<string>;
-    errors?: Maybe<Array<string>>;
-  };
-};
+
+export type AttachPermissionResponse = { attachPermission: { succeedCount: number, failedCount: number, message?: Maybe<string>, errors?: Maybe<Array<string>> } };
 
 export type ChangeMfaVariables = Exact<{
   enable?: Maybe<Scalars['Boolean']>;
@@ -1903,62 +1831,29 @@ export type ChangeMfaVariables = Exact<{
   refresh?: Maybe<Scalars['Boolean']>;
 }>;
 
-export type ChangeMfaResponse = {
-  changeMfa?: Maybe<{
-    id: string;
-    userId: string;
-    userPoolId: string;
-    enable: boolean;
-    secret?: Maybe<string>;
-  }>;
-};
+
+export type ChangeMfaResponse = { changeMfa?: Maybe<{ id: string, userId: string, userPoolId: string, enable: boolean, secret?: Maybe<string> }> };
 
 export type ConfigEmailTemplateVariables = Exact<{
   input: ConfigEmailTemplateInput;
 }>;
 
-export type ConfigEmailTemplateResponse = {
-  configEmailTemplate: {
-    type: EmailTemplateType;
-    name: string;
-    subject: string;
-    sender: string;
-    content: string;
-    redirectTo?: Maybe<string>;
-    hasURL?: Maybe<boolean>;
-    expiresIn?: Maybe<number>;
-    enabled?: Maybe<boolean>;
-    isSystem?: Maybe<boolean>;
-  };
-};
+
+export type ConfigEmailTemplateResponse = { configEmailTemplate: { type: EmailTemplateType, name: string, subject: string, sender: string, content: string, redirectTo?: Maybe<string>, hasURL?: Maybe<boolean>, expiresIn?: Maybe<number>, enabled?: Maybe<boolean>, isSystem?: Maybe<boolean> } };
 
 export type CreateFunctionVariables = Exact<{
   input: CreateFunctionInput;
 }>;
 
-export type CreateFunctionResponse = {
-  createFunction?: Maybe<{
-    id: string;
-    name: string;
-    sourceCode: string;
-    description?: Maybe<string>;
-    url?: Maybe<string>;
-  }>;
-};
+
+export type CreateFunctionResponse = { createFunction?: Maybe<{ id: string, name: string, sourceCode: string, description?: Maybe<string>, url?: Maybe<string> }> };
 
 export type CreateIdentityProviderVariables = Exact<{
   input: CreateIdentityProviderInput;
 }>;
 
-export type CreateIdentityProviderResponse = {
-  createIdentityProvider: {
-    id?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
+
+export type CreateIdentityProviderResponse = { createIdentityProvider: { id?: Maybe<string>, type?: Maybe<string>, config?: Maybe<string>, enabled?: Maybe<boolean>, userPoolId?: Maybe<string> } };
 
 export type CreateOrgVariables = Exact<{
   name: Scalars['String'];
@@ -1966,88 +1861,29 @@ export type CreateOrgVariables = Exact<{
   description?: Maybe<Scalars['String']>;
 }>;
 
-export type CreateOrgResponse = {
-  createOrg: {
-    id: string;
-    rootNode: {
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    };
-    nodes: Array<{
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    }>;
-  };
-};
+
+export type CreateOrgResponse = { createOrg: { id: string, rootNode: { name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }, nodes: Array<{ name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }> } };
 
 export type CreatePermissionVariables = Exact<{
   input: CreatePermissionInput;
 }>;
 
-export type CreatePermissionResponse = {
-  createPermission: {
-    id: string;
-    code: string;
-    name: string;
-    description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
-    type?: Maybe<string>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-  };
-};
+
+export type CreatePermissionResponse = { createPermission: { id: string, code: string, name: string, description?: Maybe<string>, isSystem?: Maybe<boolean>, type?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> } };
 
 export type CreatePermissionsVariables = Exact<{
   input: Array<CreatePermissionInput>;
 }>;
 
-export type CreatePermissionsResponse = {
-  createPermissions: Array<{
-    id: string;
-    code: string;
-    name: string;
-    description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
-    type?: Maybe<string>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-  }>;
-};
+
+export type CreatePermissionsResponse = { createPermissions: Array<{ id: string, code: string, name: string, description?: Maybe<string>, isSystem?: Maybe<boolean>, type?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> };
 
 export type CreatePipelineVariables = Exact<{
   input: CreatePipelineInput;
 }>;
 
-export type CreatePipelineResponse = {
-  createPipeline: {
-    id: string;
-    name: string;
-    trigger: string;
-    functions: Array<{
-      funcId: string;
-      asynchronous: boolean;
-      enabled: boolean;
-    }>;
-  };
-};
+
+export type CreatePipelineResponse = { createPipeline: { id: string, name: string, trigger: string, functions: Array<{ funcId: string, asynchronous: boolean, enabled: boolean }> } };
 
 export type CreateResourceVariables = Exact<{
   code: Scalars['String'];
@@ -2055,15 +1891,8 @@ export type CreateResourceVariables = Exact<{
   description?: Maybe<Scalars['String']>;
 }>;
 
-export type CreateResourceResponse = {
-  createResource: {
-    code: string;
-    name?: Maybe<string>;
-    description?: Maybe<string>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-  };
-};
+
+export type CreateResourceResponse = { createResource: { code: string, name?: Maybe<string>, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> } };
 
 export type CreateResourceRuleVariables = Exact<{
   resouceCode: Scalars['String'];
@@ -2075,97 +1904,8 @@ export type CreateResourceRuleVariables = Exact<{
   nodeCode?: Maybe<Scalars['String']>;
 }>;
 
-export type CreateResourceRuleResponse = {
-  createResourceRule: {
-    action: string;
-    allow: boolean;
-    expiresIn?: Maybe<string>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    resouce: {
-      code: string;
-      name?: Maybe<string>;
-      description?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    };
-    user?: Maybe<{
-      id: string;
-      userPoolId: string;
-      username?: Maybe<string>;
-      email?: Maybe<string>;
-      emailVerified?: Maybe<boolean>;
-      phone?: Maybe<string>;
-      phoneVerified?: Maybe<boolean>;
-      unionid?: Maybe<string>;
-      openid?: Maybe<string>;
-      nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
-      photo?: Maybe<string>;
-      password?: Maybe<string>;
-      oauth?: Maybe<string>;
-      token?: Maybe<string>;
-      tokenExpiredAt?: Maybe<string>;
-      loginsCount?: Maybe<number>;
-      lastLogin?: Maybe<string>;
-      lastIP?: Maybe<string>;
-      signedUp?: Maybe<string>;
-      blocked?: Maybe<boolean>;
-      isDeleted?: Maybe<boolean>;
-      device?: Maybe<string>;
-      browser?: Maybe<string>;
-      company?: Maybe<string>;
-      name?: Maybe<string>;
-      givenName?: Maybe<string>;
-      familyName?: Maybe<string>;
-      middleName?: Maybe<string>;
-      profile?: Maybe<string>;
-      preferredUsername?: Maybe<string>;
-      website?: Maybe<string>;
-      gender?: Maybe<string>;
-      birthdate?: Maybe<string>;
-      zoneinfo?: Maybe<string>;
-      locale?: Maybe<string>;
-      address?: Maybe<string>;
-      formatted?: Maybe<string>;
-      streetAddress?: Maybe<string>;
-      locality?: Maybe<string>;
-      region?: Maybe<string>;
-      postalCode?: Maybe<string>;
-      country?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
-    }>;
-    role?: Maybe<{
-      code: string;
-      name?: Maybe<string>;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    group?: Maybe<{
-      code: string;
-      name: string;
-      description?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    node?: Maybe<{
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    }>;
-  };
-};
+
+export type CreateResourceRuleResponse = { createResourceRule: { action: string, allow: boolean, expiresIn?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, resouce: { code: string, name?: Maybe<string>, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }, user?: Maybe<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }>, role?: Maybe<{ code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }>, group?: Maybe<{ code: string, name: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }>, node?: Maybe<{ name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }> } };
 
 export type CreateRoleVariables = Exact<{
   code: Scalars['String'];
@@ -2175,68 +1915,22 @@ export type CreateRoleVariables = Exact<{
   parent?: Maybe<Scalars['String']>;
 }>;
 
-export type CreateRoleResponse = {
-  createRole: {
-    code: string;
-    name?: Maybe<string>;
-    description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    permissions: Array<{
-      id: string;
-      code: string;
-      name: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      type?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    users: { totalCount: number };
-    parent?: Maybe<{
-      code: string;
-      name?: Maybe<string>;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-  };
-};
+
+export type CreateRoleResponse = { createRole: { code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, permissions: Array<{ id: string, code: string, name: string, description?: Maybe<string>, isSystem?: Maybe<boolean>, type?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }>, users: { totalCount: number }, parent?: Maybe<{ code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type CreateSocialConnectionVariables = Exact<{
   input: CreateSocialConnectionInput;
 }>;
 
-export type CreateSocialConnectionResponse = {
-  createSocialConnection: {
-    provider: string;
-    name: string;
-    logo: string;
-    description?: Maybe<string>;
-    fields?: Maybe<
-      Array<{
-        key?: Maybe<string>;
-        label?: Maybe<string>;
-        type?: Maybe<string>;
-        placeholder?: Maybe<string>;
-      }>
-    >;
-  };
-};
+
+export type CreateSocialConnectionResponse = { createSocialConnection: { provider: string, name: string, logo: string, description?: Maybe<string>, fields?: Maybe<Array<{ key?: Maybe<string>, label?: Maybe<string>, type?: Maybe<string>, placeholder?: Maybe<string> }>> } };
 
 export type CreateSocialConnectionInstanceVariables = Exact<{
   input: CreateSocialConnectionInstanceInput;
 }>;
 
-export type CreateSocialConnectionInstanceResponse = {
-  createSocialConnectionInstance: {
-    provider: string;
-    enabled: boolean;
-    fields?: Maybe<Array<Maybe<{ key: string; value: string }>>>;
-  };
-};
+
+export type CreateSocialConnectionInstanceResponse = { createSocialConnectionInstance: { provider: string, enabled: boolean, fields?: Maybe<Array<Maybe<{ key: string, value: string }>>> } };
 
 export type CreateUserpoolVariables = Exact<{
   name: Scalars['String'];
@@ -2245,587 +1939,187 @@ export type CreateUserpoolVariables = Exact<{
   userpoolTypes?: Maybe<Array<Scalars['String']>>;
 }>;
 
-export type CreateUserpoolResponse = {
-  createUserpool: {
-    id: string;
-    name: string;
-    description?: Maybe<string>;
-    secret: string;
-    logo: string;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    emailVerifiedDefault: boolean;
-    sendWelcomeEmail: boolean;
-    registerDisabled: boolean;
-    showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>;
-    allowedOrigins?: Maybe<string>;
-    tokenExpiresAfter?: Maybe<number>;
-    isDeleted?: Maybe<boolean>;
-    userpoolTypes?: Maybe<
-      Array<{
-        code?: Maybe<string>;
-        name?: Maybe<string>;
-        description?: Maybe<string>;
-        image?: Maybe<string>;
-        sdks?: Maybe<Array<Maybe<string>>>;
-      }>
-    >;
-    frequentRegisterCheck?: Maybe<{
-      timeInterval?: Maybe<number>;
-      limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
-    }>;
-    loginFailCheck?: Maybe<{
-      timeInterval?: Maybe<number>;
-      limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
-    }>;
-    changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>;
-    changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>;
-    qrcodeLoginStrategy?: Maybe<{
-      qrcodeExpiresAfter?: Maybe<number>;
-      returnFullUserInfo?: Maybe<boolean>;
-      allowExchangeUserInfoFromBrowser?: Maybe<boolean>;
-      ticketExpiresAfter?: Maybe<number>;
-    }>;
-    app2WxappLoginStrategy?: Maybe<{
-      ticketExpriresAfter?: Maybe<number>;
-      ticketExchangeUserInfoNeedSecret?: Maybe<boolean>;
-    }>;
-    whitelist?: Maybe<{
-      phoneEnabled?: Maybe<boolean>;
-      emailEnabled?: Maybe<boolean>;
-      usernameEnabled?: Maybe<boolean>;
-    }>;
-  };
-};
+
+export type CreateUserpoolResponse = { createUserpool: { id: string, name: string, description?: Maybe<string>, secret: string, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, userpoolTypes?: Maybe<Array<{ code?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string>, image?: Maybe<string>, sdks?: Maybe<Array<Maybe<string>>> }>>, frequentRegisterCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enable?: Maybe<boolean> }>, loginFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enable?: Maybe<boolean> }>, changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>, changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>, qrcodeLoginStrategy?: Maybe<{ qrcodeExpiresAfter?: Maybe<number>, returnFullUserInfo?: Maybe<boolean>, allowExchangeUserInfoFromBrowser?: Maybe<boolean>, ticketExpiresAfter?: Maybe<number> }>, app2WxappLoginStrategy?: Maybe<{ ticketExpriresAfter?: Maybe<number>, ticketExchangeUserInfoNeedSecret?: Maybe<boolean> }>, whitelist?: Maybe<{ phoneEnabled?: Maybe<boolean>, emailEnabled?: Maybe<boolean>, usernameEnabled?: Maybe<boolean> }> } };
 
 export type CreateWebhookVariables = Exact<{
   input: CreateWebhookInput;
 }>;
 
-export type CreateWebhookResponse = {
-  createWebhook: {
-    id?: Maybe<string>;
-    userPoolId: string;
-    url: string;
-    isLastTimeSuccess?: Maybe<boolean>;
-    contentType: string;
-    secret?: Maybe<string>;
-    enable: boolean;
-    events: Array<{ name: string; label: string; description?: Maybe<string> }>;
-  };
-};
+
+export type CreateWebhookResponse = { createWebhook: { id?: Maybe<string>, userPoolId: string, url: string, isLastTimeSuccess?: Maybe<boolean>, contentType: string, secret?: Maybe<string>, enable: boolean, events: Array<{ name: string, label: string, description?: Maybe<string> }> } };
 
 export type DeleteFunctionVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DeleteFunctionResponse = {
-  deleteFunction: { message?: Maybe<string>; code?: Maybe<number> };
-};
+
+export type DeleteFunctionResponse = { deleteFunction: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type DeleteIdentityProviderVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DeleteIdentityProviderResponse = {
-  deleteIdentityProvider: { message?: Maybe<string>; code?: Maybe<number> };
-};
+
+export type DeleteIdentityProviderResponse = { deleteIdentityProvider: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type DeleteNodeVariables = Exact<{
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
 }>;
 
-export type DeleteNodeResponse = {
-  deleteNode: {
-    id: string;
-    rootNode: {
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    };
-    nodes: Array<{
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    }>;
-  };
-};
+
+export type DeleteNodeResponse = { deleteNode: { id: string, rootNode: { name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }, nodes: Array<{ name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }> } };
 
 export type DeleteOrgVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DeleteOrgResponse = {
-  deleteOrg: { message?: Maybe<string>; code?: Maybe<number> };
-};
+
+export type DeleteOrgResponse = { deleteOrg: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type DeletePermissionVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DeletePermissionResponse = {
-  deletePermission: { message?: Maybe<string>; code?: Maybe<number> };
-};
+
+export type DeletePermissionResponse = { deletePermission: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type DeletePermissionsVariables = Exact<{
   ids: Array<Scalars['String']>;
 }>;
 
-export type DeletePermissionsResponse = {
-  deletePermissions: {
-    succeedCount: number;
-    failedCount: number;
-    message?: Maybe<string>;
-    errors?: Maybe<Array<string>>;
-  };
-};
+
+export type DeletePermissionsResponse = { deletePermissions: { succeedCount: number, failedCount: number, message?: Maybe<string>, errors?: Maybe<Array<string>> } };
 
 export type DeleteRoleVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type DeleteRoleResponse = {
-  deleteRole: { message?: Maybe<string>; code?: Maybe<number> };
-};
+
+export type DeleteRoleResponse = { deleteRole: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type DeleteRolesVariables = Exact<{
   codes: Array<Scalars['String']>;
 }>;
 
-export type DeleteRolesResponse = {
-  deleteRoles: {
-    succeedCount: number;
-    failedCount: number;
-    message?: Maybe<string>;
-    errors?: Maybe<Array<string>>;
-  };
-};
+
+export type DeleteRolesResponse = { deleteRoles: { succeedCount: number, failedCount: number, message?: Maybe<string>, errors?: Maybe<Array<string>> } };
 
 export type DeleteUserVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DeleteUserResponse = {
-  deleteUser?: Maybe<{ message?: Maybe<string>; code?: Maybe<number> }>;
-};
 
-export type DeleteUserpoolVariables = Exact<{ [key: string]: never }>;
+export type DeleteUserResponse = { deleteUser?: Maybe<{ message?: Maybe<string>, code?: Maybe<number> }> };
 
-export type DeleteUserpoolResponse = {
-  deleteUserpool: { message?: Maybe<string>; code?: Maybe<number> };
-};
+export type DeleteUserpoolVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeleteUserpoolResponse = { deleteUserpool: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type DeleteUsersVariables = Exact<{
   ids: Array<Scalars['String']>;
 }>;
 
-export type DeleteUsersResponse = {
-  deleteUsers?: Maybe<{ message?: Maybe<string>; code?: Maybe<number> }>;
-};
+
+export type DeleteUsersResponse = { deleteUsers?: Maybe<{ message?: Maybe<string>, code?: Maybe<number> }> };
 
 export type DeleteWebhookVariables = Exact<{
   input: DeleteWebhookInput;
 }>;
 
-export type DeleteWebhookResponse = {
-  deleteWebhook: { message?: Maybe<string>; code?: Maybe<number> };
-};
+
+export type DeleteWebhookResponse = { deleteWebhook: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type DetachPermissionVariables = Exact<{
   roleId: Scalars['String'];
   permissionIds: Array<Scalars['String']>;
 }>;
 
-export type DetachPermissionResponse = {
-  detachPermission: {
-    succeedCount: number;
-    failedCount: number;
-    message?: Maybe<string>;
-    errors?: Maybe<Array<string>>;
-  };
-};
+
+export type DetachPermissionResponse = { detachPermission: { succeedCount: number, failedCount: number, message?: Maybe<string>, errors?: Maybe<Array<string>> } };
 
 export type DisableEmailTemplateVariables = Exact<{
   type: EmailTemplateType;
 }>;
 
-export type DisableEmailTemplateResponse = {
-  disableEmailTemplate: {
-    type: EmailTemplateType;
-    name: string;
-    subject: string;
-    sender: string;
-    content: string;
-    redirectTo?: Maybe<string>;
-    hasURL?: Maybe<boolean>;
-    expiresIn?: Maybe<number>;
-    enabled?: Maybe<boolean>;
-    isSystem?: Maybe<boolean>;
-  };
-};
+
+export type DisableEmailTemplateResponse = { disableEmailTemplate: { type: EmailTemplateType, name: string, subject: string, sender: string, content: string, redirectTo?: Maybe<string>, hasURL?: Maybe<boolean>, expiresIn?: Maybe<number>, enabled?: Maybe<boolean>, isSystem?: Maybe<boolean> } };
 
 export type DisableIdentityProviderVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type DisableIdentityProviderResponse = {
-  disableIdentityProvider: {
-    id?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
+
+export type DisableIdentityProviderResponse = { disableIdentityProvider: { id?: Maybe<string>, type?: Maybe<string>, config?: Maybe<string>, enabled?: Maybe<boolean>, userPoolId?: Maybe<string> } };
 
 export type DisableSocialConnectionInstanceVariables = Exact<{
   provider: Scalars['String'];
 }>;
 
-export type DisableSocialConnectionInstanceResponse = {
-  disableSocialConnectionInstance: {
-    provider: string;
-    enabled: boolean;
-    fields?: Maybe<Array<Maybe<{ key: string; value: string }>>>;
-  };
-};
+
+export type DisableSocialConnectionInstanceResponse = { disableSocialConnectionInstance: { provider: string, enabled: boolean, fields?: Maybe<Array<Maybe<{ key: string, value: string }>>> } };
 
 export type DoRegisterProcessVariables = Exact<{
   userInfo: CreateUserInput;
   keepPassword?: Maybe<Scalars['Boolean']>;
 }>;
 
-export type DoRegisterProcessResponse = {
-  doRegisterProcess: {
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  };
-};
+
+export type DoRegisterProcessResponse = { doRegisterProcess: { id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> } };
 
 export type EnableEmailTemplateVariables = Exact<{
   type: EmailTemplateType;
 }>;
 
-export type EnableEmailTemplateResponse = {
-  enableEmailTemplate: {
-    type: EmailTemplateType;
-    name: string;
-    subject: string;
-    sender: string;
-    content: string;
-    redirectTo?: Maybe<string>;
-    hasURL?: Maybe<boolean>;
-    expiresIn?: Maybe<number>;
-    enabled?: Maybe<boolean>;
-    isSystem?: Maybe<boolean>;
-  };
-};
+
+export type EnableEmailTemplateResponse = { enableEmailTemplate: { type: EmailTemplateType, name: string, subject: string, sender: string, content: string, redirectTo?: Maybe<string>, hasURL?: Maybe<boolean>, expiresIn?: Maybe<number>, enabled?: Maybe<boolean>, isSystem?: Maybe<boolean> } };
 
 export type EnableIdentityProviderVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type EnableIdentityProviderResponse = {
-  enableIdentityProvider: {
-    id?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
+
+export type EnableIdentityProviderResponse = { enableIdentityProvider: { id?: Maybe<string>, type?: Maybe<string>, config?: Maybe<string>, enabled?: Maybe<boolean>, userPoolId?: Maybe<string> } };
 
 export type EnableSocialConnectionInstanceVariables = Exact<{
   provider: Scalars['String'];
 }>;
 
-export type EnableSocialConnectionInstanceResponse = {
-  enableSocialConnectionInstance: {
-    provider: string;
-    enabled: boolean;
-    fields?: Maybe<Array<Maybe<{ key: string; value: string }>>>;
-  };
-};
+
+export type EnableSocialConnectionInstanceResponse = { enableSocialConnectionInstance: { provider: string, enabled: boolean, fields?: Maybe<Array<Maybe<{ key: string, value: string }>>> } };
 
 export type LoginByEmailVariables = Exact<{
   input: LoginByEmailInput;
 }>;
 
-export type LoginByEmailResponse = {
-  loginByEmail?: Maybe<{
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  }>;
-};
+
+export type LoginByEmailResponse = { loginByEmail?: Maybe<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> };
 
 export type LoginByPhoneCodeVariables = Exact<{
   input: LoginByPhoneCodeInput;
 }>;
 
-export type LoginByPhoneCodeResponse = {
-  loginByPhoneCode?: Maybe<{
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  }>;
-};
+
+export type LoginByPhoneCodeResponse = { loginByPhoneCode?: Maybe<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> };
 
 export type LoginByPhonePasswordVariables = Exact<{
   input: LoginByPhonePasswordInput;
 }>;
 
-export type LoginByPhonePasswordResponse = {
-  loginByPhonePassword?: Maybe<{
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  }>;
-};
+
+export type LoginByPhonePasswordResponse = { loginByPhonePassword?: Maybe<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> };
 
 export type LoginByUsernameVariables = Exact<{
   input: LoginByUsernameInput;
 }>;
 
-export type LoginByUsernameResponse = {
-  loginByUsername?: Maybe<{
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  }>;
-};
 
-export type RefreshUserpoolSecretVariables = Exact<{ [key: string]: never }>;
+export type LoginByUsernameResponse = { loginByUsername?: Maybe<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> };
+
+export type RefreshUserpoolSecretVariables = Exact<{ [key: string]: never; }>;
+
 
 export type RefreshUserpoolSecretResponse = { refreshUserpoolSecret: string };
 
@@ -2833,189 +2127,37 @@ export type RegisterByEmailVariables = Exact<{
   input: RegisterByEmailInput;
 }>;
 
-export type RegisterByEmailResponse = {
-  registerByEmail?: Maybe<{
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  }>;
-};
+
+export type RegisterByEmailResponse = { registerByEmail?: Maybe<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> };
 
 export type RegisterByPhonePasswordVariables = Exact<{
   input: RegisterByPhonePasswordInput;
 }>;
 
-export type RegisterByPhonePasswordResponse = {
-  registerByPhonePassword?: Maybe<{
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  }>;
-};
+
+export type RegisterByPhonePasswordResponse = { registerByPhonePassword?: Maybe<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> };
 
 export type RegisterByUsernameVariables = Exact<{
   input: RegisterByUsernameInput;
 }>;
 
-export type RegisterByUsernameResponse = {
-  registerByUsername?: Maybe<{
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  }>;
-};
+
+export type RegisterByUsernameResponse = { registerByUsername?: Maybe<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> };
 
 export type RemoveCooperatorVariables = Exact<{
   userId: Scalars['String'];
   roleId: Scalars['String'];
 }>;
 
-export type RemoveCooperatorResponse = {
-  removeCooperator: { message?: Maybe<string>; code?: Maybe<number> };
-};
+
+export type RemoveCooperatorResponse = { removeCooperator: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type RemoveFunctionFromPipelineVariables = Exact<{
   input: RemoveFunctionFromPipelineInput;
 }>;
 
-export type RemoveFunctionFromPipelineResponse = {
-  removeFunctionFromPipeline: {
-    id: string;
-    name: string;
-    trigger: string;
-    functions: Array<{
-      funcId: string;
-      asynchronous: boolean;
-      enabled: boolean;
-    }>;
-  };
-};
+
+export type RemoveFunctionFromPipelineResponse = { removeFunctionFromPipeline: { id: string, name: string, trigger: string, functions: Array<{ funcId: string, asynchronous: boolean, enabled: boolean }> } };
 
 export type RemoveMemberVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -3027,86 +2169,16 @@ export type RemoveMemberVariables = Exact<{
   userIds: Array<Scalars['String']>;
 }>;
 
-export type RemoveMemberResponse = {
-  removeMember: {
-    name: string;
-    nameI18n?: Maybe<string>;
-    description?: Maybe<string>;
-    descriptionI18n?: Maybe<string>;
-    order?: Maybe<number>;
-    code?: Maybe<string>;
-    root?: Maybe<boolean>;
-    depth?: Maybe<number>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    children?: Maybe<Array<string>>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
-  };
-};
+
+export type RemoveMemberResponse = { removeMember: { name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>>, users: { totalCount: number, list: Array<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> } } };
 
 export type RemoveWhitelistVariables = Exact<{
   type: WhitelistType;
   list: Array<Scalars['String']>;
 }>;
 
-export type RemoveWhitelistResponse = {
-  removeWhitelist: Array<
-    Maybe<{
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      value: string;
-    }>
-  >;
-};
+
+export type RemoveWhitelistResponse = { removeWhitelist: Array<Maybe<{ createdAt?: Maybe<string>, updatedAt?: Maybe<string>, value: string }>> };
 
 export type RevokeRoleVariables = Exact<{
   code: Scalars['String'];
@@ -3115,43 +2187,23 @@ export type RevokeRoleVariables = Exact<{
   nodeCodes?: Maybe<Array<Scalars['String']>>;
 }>;
 
-export type RevokeRoleResponse = {
-  revokeRole: {
-    code: string;
-    name?: Maybe<string>;
-    description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    permissions: Array<{
-      id: string;
-      code: string;
-      name: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      type?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    users: { totalCount: number };
-    parent?: Maybe<{
-      code: string;
-      name?: Maybe<string>;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-  };
-};
+
+export type RevokeRoleResponse = { revokeRole: { code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, permissions: Array<{ id: string, code: string, name: string, description?: Maybe<string>, isSystem?: Maybe<boolean>, type?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }>, users: { totalCount: number }, parent?: Maybe<{ code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
+
+export type SendEmailVariables = Exact<{
+  email: Scalars['String'];
+  scene: EmailScene;
+}>;
+
+
+export type SendEmailResponse = { sendEmail: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type SendWebhookTestRequestVariables = Exact<{
   input: SendWebhookTestRequestInput;
 }>;
 
-export type SendWebhookTestRequestResponse = {
-  sendWebhookTestRequest: { message?: Maybe<string>; code?: Maybe<number> };
-};
+
+export type SendWebhookTestRequestResponse = { sendWebhookTestRequest: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type UpdateEmailVariables = Exact<{
   email: Scalars['String'];
@@ -3160,83 +2212,22 @@ export type UpdateEmailVariables = Exact<{
   oldEmailCode?: Maybe<Scalars['String']>;
 }>;
 
-export type UpdateEmailResponse = {
-  updateEmail: {
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  };
-};
+
+export type UpdateEmailResponse = { updateEmail: { id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> } };
 
 export type UpdateFunctionVariables = Exact<{
   input: UpdateFunctionInput;
 }>;
 
-export type UpdateFunctionResponse = {
-  updateFunction: {
-    id: string;
-    name: string;
-    sourceCode: string;
-    description?: Maybe<string>;
-    url?: Maybe<string>;
-  };
-};
+
+export type UpdateFunctionResponse = { updateFunction: { id: string, name: string, sourceCode: string, description?: Maybe<string>, url?: Maybe<string> } };
 
 export type UpdateIdentityProviderVariables = Exact<{
   input: UpdateIdentityProviderInput;
 }>;
 
-export type UpdateIdentityProviderResponse = {
-  updateIdentityProvider: {
-    id?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
+
+export type UpdateIdentityProviderResponse = { updateIdentityProvider: { id?: Maybe<string>, type?: Maybe<string>, config?: Maybe<string>, enabled?: Maybe<boolean>, userPoolId?: Maybe<string> } };
 
 export type UpdatePasswordVariables = Exact<{
   id: Scalars['String'];
@@ -3244,55 +2235,8 @@ export type UpdatePasswordVariables = Exact<{
   oldPassword?: Maybe<Scalars['String']>;
 }>;
 
-export type UpdatePasswordResponse = {
-  updatePassword: {
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  };
-};
+
+export type UpdatePasswordResponse = { updatePassword: { id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> } };
 
 export type UpdatePhoneVariables = Exact<{
   phone: Scalars['String'];
@@ -3301,55 +2245,8 @@ export type UpdatePhoneVariables = Exact<{
   oldPhoneCode?: Maybe<Scalars['String']>;
 }>;
 
-export type UpdatePhoneResponse = {
-  updatePhone: {
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  };
-};
+
+export type UpdatePhoneResponse = { updatePhone: { id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> } };
 
 export type UpdateRoleVariables = Exact<{
   code: Scalars['String'];
@@ -3357,195 +2254,45 @@ export type UpdateRoleVariables = Exact<{
   description?: Maybe<Scalars['String']>;
 }>;
 
-export type UpdateRoleResponse = {
-  updateRole: {
-    code: string;
-    name?: Maybe<string>;
-    description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    permissions: Array<{
-      id: string;
-      code: string;
-      name: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      type?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    users: { totalCount: number };
-    parent?: Maybe<{
-      code: string;
-      name?: Maybe<string>;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-  };
-};
+
+export type UpdateRoleResponse = { updateRole: { code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, permissions: Array<{ id: string, code: string, name: string, description?: Maybe<string>, isSystem?: Maybe<boolean>, type?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }>, users: { totalCount: number }, parent?: Maybe<{ code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type UpdateUserVariables = Exact<{
   id: Scalars['String'];
   input: UpdateUserInput;
 }>;
 
-export type UpdateUserResponse = {
-  updateUser: {
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  };
-};
+
+export type UpdateUserResponse = { updateUser: { id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> } };
 
 export type UpdateUserpoolVariables = Exact<{
   input: UpdateUserpoolInput;
 }>;
 
-export type UpdateUserpoolResponse = {
-  updateUserpool: {
-    id: string;
-    name: string;
-    description?: Maybe<string>;
-    secret: string;
-    logo: string;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    emailVerifiedDefault: boolean;
-    sendWelcomeEmail: boolean;
-    registerDisabled: boolean;
-    showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>;
-    allowedOrigins?: Maybe<string>;
-    tokenExpiresAfter?: Maybe<number>;
-    isDeleted?: Maybe<boolean>;
-    userpoolTypes?: Maybe<
-      Array<{
-        code?: Maybe<string>;
-        name?: Maybe<string>;
-        description?: Maybe<string>;
-        image?: Maybe<string>;
-        sdks?: Maybe<Array<Maybe<string>>>;
-      }>
-    >;
-    frequentRegisterCheck?: Maybe<{
-      timeInterval?: Maybe<number>;
-      limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
-    }>;
-    loginFailCheck?: Maybe<{
-      timeInterval?: Maybe<number>;
-      limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
-    }>;
-    changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>;
-    changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>;
-    qrcodeLoginStrategy?: Maybe<{
-      qrcodeExpiresAfter?: Maybe<number>;
-      returnFullUserInfo?: Maybe<boolean>;
-      allowExchangeUserInfoFromBrowser?: Maybe<boolean>;
-      ticketExpiresAfter?: Maybe<number>;
-    }>;
-    app2WxappLoginStrategy?: Maybe<{
-      ticketExpriresAfter?: Maybe<number>;
-      ticketExchangeUserInfoNeedSecret?: Maybe<boolean>;
-    }>;
-    whitelist?: Maybe<{
-      phoneEnabled?: Maybe<boolean>;
-      emailEnabled?: Maybe<boolean>;
-      usernameEnabled?: Maybe<boolean>;
-    }>;
-  };
-};
+
+export type UpdateUserpoolResponse = { updateUserpool: { id: string, name: string, description?: Maybe<string>, secret: string, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, userpoolTypes?: Maybe<Array<{ code?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string>, image?: Maybe<string>, sdks?: Maybe<Array<Maybe<string>>> }>>, frequentRegisterCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enable?: Maybe<boolean> }>, loginFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enable?: Maybe<boolean> }>, changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>, changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>, qrcodeLoginStrategy?: Maybe<{ qrcodeExpiresAfter?: Maybe<number>, returnFullUserInfo?: Maybe<boolean>, allowExchangeUserInfoFromBrowser?: Maybe<boolean>, ticketExpiresAfter?: Maybe<number> }>, app2WxappLoginStrategy?: Maybe<{ ticketExpriresAfter?: Maybe<number>, ticketExchangeUserInfoNeedSecret?: Maybe<boolean> }>, whitelist?: Maybe<{ phoneEnabled?: Maybe<boolean>, emailEnabled?: Maybe<boolean>, usernameEnabled?: Maybe<boolean> }> } };
 
 export type UpdateWebhookVariables = Exact<{
   input: UpdateWebhookInput;
 }>;
 
-export type UpdateWebhookResponse = {
-  updateWebhook: {
-    id?: Maybe<string>;
-    userPoolId: string;
-    url: string;
-    isLastTimeSuccess?: Maybe<boolean>;
-    contentType: string;
-    secret?: Maybe<string>;
-    enable: boolean;
-    events: Array<{ name: string; label: string; description?: Maybe<string> }>;
-  };
-};
+
+export type UpdateWebhookResponse = { updateWebhook: { id?: Maybe<string>, userPoolId: string, url: string, isLastTimeSuccess?: Maybe<boolean>, contentType: string, secret?: Maybe<string>, enable: boolean, events: Array<{ name: string, label: string, description?: Maybe<string> }> } };
 
 export type CheckPasswordStrengthVariables = Exact<{
   password: Scalars['String'];
 }>;
 
-export type CheckPasswordStrengthResponse = {
-  checkPasswordStrength: { valid: boolean; message?: Maybe<string> };
-};
+
+export type CheckPasswordStrengthResponse = { checkPasswordStrength: { valid: boolean, message?: Maybe<string> } };
 
 export type ChildrenNodesVariables = Exact<{
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
 }>;
 
-export type ChildrenNodesResponse = {
-  childrenNodes: Array<{
-    name: string;
-    nameI18n?: Maybe<string>;
-    description?: Maybe<string>;
-    descriptionI18n?: Maybe<string>;
-    order?: Maybe<number>;
-    code?: Maybe<string>;
-    root?: Maybe<boolean>;
-    depth?: Maybe<number>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    children?: Maybe<Array<string>>;
-  }>;
-};
+
+export type ChildrenNodesResponse = { childrenNodes: Array<{ name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }> };
 
 export type CooperatedUserpoolsVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -3553,102 +2300,25 @@ export type CooperatedUserpoolsVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type CooperatedUserpoolsResponse = {
-  cooperatedUserpools: { totalCount: number };
-};
 
-export type CooperatorsVariables = Exact<{ [key: string]: never }>;
+export type CooperatedUserpoolsResponse = { cooperatedUserpools: { totalCount: number } };
 
-export type CooperatorsResponse = {
-  cooperators: Array<{
-    roles: Array<{
-      code: string;
-      name?: Maybe<string>;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    user: {
-      id: string;
-      userPoolId: string;
-      username?: Maybe<string>;
-      email?: Maybe<string>;
-      emailVerified?: Maybe<boolean>;
-      phone?: Maybe<string>;
-      phoneVerified?: Maybe<boolean>;
-      unionid?: Maybe<string>;
-      openid?: Maybe<string>;
-      nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
-      photo?: Maybe<string>;
-      password?: Maybe<string>;
-      oauth?: Maybe<string>;
-      token?: Maybe<string>;
-      tokenExpiredAt?: Maybe<string>;
-      loginsCount?: Maybe<number>;
-      lastLogin?: Maybe<string>;
-      lastIP?: Maybe<string>;
-      signedUp?: Maybe<string>;
-      blocked?: Maybe<boolean>;
-      isDeleted?: Maybe<boolean>;
-      device?: Maybe<string>;
-      browser?: Maybe<string>;
-      company?: Maybe<string>;
-      name?: Maybe<string>;
-      givenName?: Maybe<string>;
-      familyName?: Maybe<string>;
-      middleName?: Maybe<string>;
-      profile?: Maybe<string>;
-      preferredUsername?: Maybe<string>;
-      website?: Maybe<string>;
-      gender?: Maybe<string>;
-      birthdate?: Maybe<string>;
-      zoneinfo?: Maybe<string>;
-      locale?: Maybe<string>;
-      address?: Maybe<string>;
-      formatted?: Maybe<string>;
-      streetAddress?: Maybe<string>;
-      locality?: Maybe<string>;
-      region?: Maybe<string>;
-      postalCode?: Maybe<string>;
-      country?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
-    };
-  }>;
-};
+export type CooperatorsVariables = Exact<{ [key: string]: never; }>;
 
-export type EmailTemplatesVariables = Exact<{ [key: string]: never }>;
 
-export type EmailTemplatesResponse = {
-  emailTemplates: Array<{
-    type: EmailTemplateType;
-    name: string;
-    subject: string;
-    sender: string;
-    content: string;
-    redirectTo?: Maybe<string>;
-    hasURL?: Maybe<boolean>;
-    expiresIn?: Maybe<number>;
-    enabled?: Maybe<boolean>;
-    isSystem?: Maybe<boolean>;
-  }>;
-};
+export type CooperatorsResponse = { cooperators: Array<{ roles: Array<{ code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }>, user: { id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> } }> };
+
+export type EmailTemplatesVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EmailTemplatesResponse = { emailTemplates: Array<{ type: EmailTemplateType, name: string, subject: string, sender: string, content: string, redirectTo?: Maybe<string>, hasURL?: Maybe<boolean>, expiresIn?: Maybe<number>, enabled?: Maybe<boolean>, isSystem?: Maybe<boolean> }> };
 
 export type FunctionVariables = Exact<{
   id?: Maybe<Scalars['String']>;
 }>;
 
-export type FunctionResponse = {
-  function?: Maybe<{
-    id: string;
-    name: string;
-    sourceCode: string;
-    description?: Maybe<string>;
-    url?: Maybe<string>;
-  }>;
-};
+
+export type FunctionResponse = { function?: Maybe<{ id: string, name: string, sourceCode: string, description?: Maybe<string>, url?: Maybe<string> }> };
 
 export type FunctionsVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -3656,32 +2326,15 @@ export type FunctionsVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type FunctionsResponse = {
-  functions: {
-    totalCount: number;
-    list: Array<{
-      id: string;
-      name: string;
-      sourceCode: string;
-      description?: Maybe<string>;
-      url?: Maybe<string>;
-    }>;
-  };
-};
+
+export type FunctionsResponse = { functions: { totalCount: number, list: Array<{ id: string, name: string, sourceCode: string, description?: Maybe<string>, url?: Maybe<string> }> } };
 
 export type IdentityProviderVariables = Exact<{
   id?: Maybe<Scalars['String']>;
 }>;
 
-export type IdentityProviderResponse = {
-  identityProvider: {
-    id?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
+
+export type IdentityProviderResponse = { identityProvider: { id?: Maybe<string>, type?: Maybe<string>, config?: Maybe<string>, enabled?: Maybe<boolean>, userPoolId?: Maybe<string> } };
 
 export type IdentityProvidersVariables = Exact<{
   protocol: IdentityProviderProtocol;
@@ -3690,26 +2343,15 @@ export type IdentityProvidersVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type IdentityProvidersResponse = {
-  identityProviders?: Maybe<{
-    totalCount: number;
-    list: Array<
-      Maybe<{
-        id?: Maybe<string>;
-        type?: Maybe<string>;
-        config?: Maybe<string>;
-        enabled?: Maybe<boolean>;
-        userPoolId?: Maybe<string>;
-      }>
-    >;
-  }>;
-};
+
+export type IdentityProvidersResponse = { identityProviders?: Maybe<{ totalCount: number, list: Array<Maybe<{ id?: Maybe<string>, type?: Maybe<string>, config?: Maybe<string>, enabled?: Maybe<boolean>, userPoolId?: Maybe<string> }>> }> };
 
 export type IsActionAllowedVariables = Exact<{
   resouceCode: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
 }>;
+
 
 export type IsActionAllowedResponse = { isActionAllowed: boolean };
 
@@ -3719,11 +2361,13 @@ export type IsActionDeniedVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
+
 export type IsActionDeniedResponse = { isActionDenied: boolean };
 
 export type IsDomainAvaliableVariables = Exact<{
   domain: Scalars['String'];
 }>;
+
 
 export type IsDomainAvaliableResponse = { isDomainAvaliable?: Maybe<boolean> };
 
@@ -3732,21 +2376,8 @@ export type NodeVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type NodeResponse = {
-  node: {
-    name: string;
-    nameI18n?: Maybe<string>;
-    description?: Maybe<string>;
-    descriptionI18n?: Maybe<string>;
-    order?: Maybe<number>;
-    code?: Maybe<string>;
-    root?: Maybe<boolean>;
-    depth?: Maybe<number>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    children?: Maybe<Array<string>>;
-  };
-};
+
+export type NodeResponse = { node: { name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> } };
 
 export type NodeWithMembersVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -3757,107 +2388,15 @@ export type NodeWithMembersVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type NodeWithMembersResponse = {
-  node: {
-    name: string;
-    nameI18n?: Maybe<string>;
-    description?: Maybe<string>;
-    descriptionI18n?: Maybe<string>;
-    order?: Maybe<number>;
-    code?: Maybe<string>;
-    root?: Maybe<boolean>;
-    depth?: Maybe<number>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    children?: Maybe<Array<string>>;
-    users: {
-      totalCount: number;
-      list: Array<{
-        id: string;
-        userPoolId: string;
-        username?: Maybe<string>;
-        email?: Maybe<string>;
-        emailVerified?: Maybe<boolean>;
-        phone?: Maybe<string>;
-        phoneVerified?: Maybe<boolean>;
-        unionid?: Maybe<string>;
-        openid?: Maybe<string>;
-        nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
-        photo?: Maybe<string>;
-        password?: Maybe<string>;
-        oauth?: Maybe<string>;
-        token?: Maybe<string>;
-        tokenExpiredAt?: Maybe<string>;
-        loginsCount?: Maybe<number>;
-        lastLogin?: Maybe<string>;
-        lastIP?: Maybe<string>;
-        signedUp?: Maybe<string>;
-        blocked?: Maybe<boolean>;
-        isDeleted?: Maybe<boolean>;
-        device?: Maybe<string>;
-        browser?: Maybe<string>;
-        company?: Maybe<string>;
-        name?: Maybe<string>;
-        givenName?: Maybe<string>;
-        familyName?: Maybe<string>;
-        middleName?: Maybe<string>;
-        profile?: Maybe<string>;
-        preferredUsername?: Maybe<string>;
-        website?: Maybe<string>;
-        gender?: Maybe<string>;
-        birthdate?: Maybe<string>;
-        zoneinfo?: Maybe<string>;
-        locale?: Maybe<string>;
-        address?: Maybe<string>;
-        formatted?: Maybe<string>;
-        streetAddress?: Maybe<string>;
-        locality?: Maybe<string>;
-        region?: Maybe<string>;
-        postalCode?: Maybe<string>;
-        country?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
-      }>;
-    };
-  };
-};
+
+export type NodeWithMembersResponse = { node: { name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>>, users: { totalCount: number, list: Array<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> } } };
 
 export type OrgVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type OrgResponse = {
-  org: {
-    id: string;
-    rootNode: {
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    };
-    nodes: Array<{
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    }>;
-  };
-};
+
+export type OrgResponse = { org: { id: string, rootNode: { name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }, nodes: Array<{ name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }> } };
 
 export type OrgsVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -3865,43 +2404,22 @@ export type OrgsVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type OrgsResponse = {
-  orgs: { totalCount: number; list: Array<{ id: string }> };
-};
+
+export type OrgsResponse = { orgs: { totalCount: number, list: Array<{ id: string }> } };
 
 export type PermissionVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type PermissionResponse = {
-  permission: {
-    id: string;
-    code: string;
-    name: string;
-    description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
-    type?: Maybe<string>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-  };
-};
+
+export type PermissionResponse = { permission: { id: string, code: string, name: string, description?: Maybe<string>, isSystem?: Maybe<boolean>, type?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> } };
 
 export type PermissionByCodeVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type PermissionByCodeResponse = {
-  permissionByCode: {
-    id: string;
-    code: string;
-    name: string;
-    description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
-    type?: Maybe<string>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-  };
-};
+
+export type PermissionByCodeResponse = { permissionByCode: { id: string, code: string, name: string, description?: Maybe<string>, isSystem?: Maybe<boolean>, type?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> } };
 
 export type PermissionsVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -3909,57 +2427,32 @@ export type PermissionsVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type PermissionsResponse = {
-  permissions: {
-    totalCount: number;
-    list: Array<{
-      id: string;
-      code: string;
-      name: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      type?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-  };
-};
+
+export type PermissionsResponse = { permissions: { totalCount: number, list: Array<{ id: string, code: string, name: string, description?: Maybe<string>, isSystem?: Maybe<boolean>, type?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type PipelineVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type PipelineResponse = {
-  pipeline: {
-    id: string;
-    name: string;
-    trigger: string;
-    functions: Array<{
-      funcId: string;
-      asynchronous: boolean;
-      enabled: boolean;
-    }>;
-  };
-};
 
-export type PipelinesVariables = Exact<{ [key: string]: never }>;
+export type PipelineResponse = { pipeline: { id: string, name: string, trigger: string, functions: Array<{ funcId: string, asynchronous: boolean, enabled: boolean }> } };
 
-export type PipelinesResponse = {
-  pipelines: {
-    totalCount: number;
-    list: Array<{ id: string; name: string; trigger: string }>;
-  };
-};
+export type PipelinesVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PipelinesResponse = { pipelines: { totalCount: number, list: Array<{ id: string, name: string, trigger: string }> } };
 
 export type PreviewEmailVariables = Exact<{
   type: EmailTemplateType;
 }>;
+
 
 export type PreviewEmailResponse = { previewEmail: string };
 
 export type QiniuUptokenVariables = Exact<{
   type?: Maybe<Scalars['String']>;
 }>;
+
 
 export type QiniuUptokenResponse = { qiniuUptoken?: Maybe<string> };
 
@@ -3969,66 +2462,22 @@ export type QueryMfaVariables = Exact<{
   userPoolId?: Maybe<Scalars['String']>;
 }>;
 
-export type QueryMfaResponse = {
-  queryMfa?: Maybe<{
-    id: string;
-    userId: string;
-    userPoolId: string;
-    enable: boolean;
-    secret?: Maybe<string>;
-  }>;
-};
+
+export type QueryMfaResponse = { queryMfa?: Maybe<{ id: string, userId: string, userPoolId: string, enable: boolean, secret?: Maybe<string> }> };
 
 export type ResouceRulesVariables = Exact<{
   code?: Maybe<Scalars['String']>;
 }>;
 
-export type ResouceRulesResponse = {
-  resouceRules: {
-    totalCount: number;
-    list: Array<{
-      action: string;
-      allow: boolean;
-      expiresIn?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-  };
-};
+
+export type ResouceRulesResponse = { resouceRules: { totalCount: number, list: Array<{ action: string, allow: boolean, expiresIn?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type RoleVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type RoleResponse = {
-  role: {
-    code: string;
-    name?: Maybe<string>;
-    description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    permissions: Array<{
-      id: string;
-      code: string;
-      name: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      type?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    users: { totalCount: number };
-    parent?: Maybe<{
-      code: string;
-      name?: Maybe<string>;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-  };
-};
+
+export type RoleResponse = { role: { code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, permissions: Array<{ id: string, code: string, name: string, description?: Maybe<string>, isSystem?: Maybe<boolean>, type?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }>, users: { totalCount: number }, parent?: Maybe<{ code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type RolesVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -4036,19 +2485,8 @@ export type RolesVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type RolesResponse = {
-  roles: {
-    totalCount: number;
-    list: Array<{
-      code: string;
-      name?: Maybe<string>;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-  };
-};
+
+export type RolesResponse = { roles: { totalCount: number, list: Array<{ code: string, name?: Maybe<string>, description?: Maybe<string>, isSystem?: Maybe<boolean>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type SearchUserVariables = Exact<{
   query: Scalars['String'];
@@ -4057,124 +2495,35 @@ export type SearchUserVariables = Exact<{
   count?: Maybe<Scalars['Int']>;
 }>;
 
-export type SearchUserResponse = {
-  searchUser: {
-    totalCount: number;
-    list: Array<{
-      id: string;
-      userPoolId: string;
-      username?: Maybe<string>;
-      email?: Maybe<string>;
-      emailVerified?: Maybe<boolean>;
-      phone?: Maybe<string>;
-      phoneVerified?: Maybe<boolean>;
-      unionid?: Maybe<string>;
-      openid?: Maybe<string>;
-      nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
-      photo?: Maybe<string>;
-      password?: Maybe<string>;
-      oauth?: Maybe<string>;
-      token?: Maybe<string>;
-      tokenExpiredAt?: Maybe<string>;
-      loginsCount?: Maybe<number>;
-      lastLogin?: Maybe<string>;
-      lastIP?: Maybe<string>;
-      signedUp?: Maybe<string>;
-      blocked?: Maybe<boolean>;
-      isDeleted?: Maybe<boolean>;
-      device?: Maybe<string>;
-      browser?: Maybe<string>;
-      company?: Maybe<string>;
-      name?: Maybe<string>;
-      givenName?: Maybe<string>;
-      familyName?: Maybe<string>;
-      middleName?: Maybe<string>;
-      profile?: Maybe<string>;
-      preferredUsername?: Maybe<string>;
-      website?: Maybe<string>;
-      gender?: Maybe<string>;
-      birthdate?: Maybe<string>;
-      zoneinfo?: Maybe<string>;
-      locale?: Maybe<string>;
-      address?: Maybe<string>;
-      formatted?: Maybe<string>;
-      streetAddress?: Maybe<string>;
-      locality?: Maybe<string>;
-      region?: Maybe<string>;
-      postalCode?: Maybe<string>;
-      country?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
-    }>;
-  };
-};
+
+export type SearchUserResponse = { searchUser: { totalCount: number, list: Array<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> } };
 
 export type SocialConnectionVariables = Exact<{
   provider: Scalars['String'];
 }>;
 
-export type SocialConnectionResponse = {
-  socialConnection?: Maybe<{
-    provider: string;
-    name: string;
-    logo: string;
-    description?: Maybe<string>;
-    fields?: Maybe<
-      Array<{
-        key?: Maybe<string>;
-        label?: Maybe<string>;
-        type?: Maybe<string>;
-        placeholder?: Maybe<string>;
-      }>
-    >;
-  }>;
-};
+
+export type SocialConnectionResponse = { socialConnection?: Maybe<{ provider: string, name: string, logo: string, description?: Maybe<string>, fields?: Maybe<Array<{ key?: Maybe<string>, label?: Maybe<string>, type?: Maybe<string>, placeholder?: Maybe<string> }>> }> };
 
 export type SocialConnectionInstanceVariables = Exact<{
   provider: Scalars['String'];
 }>;
 
-export type SocialConnectionInstanceResponse = {
-  socialConnectionInstance: {
-    provider: string;
-    enabled: boolean;
-    fields?: Maybe<Array<Maybe<{ key: string; value: string }>>>;
-  };
-};
 
-export type SocialConnectionInstancesVariables = Exact<{
-  [key: string]: never;
-}>;
+export type SocialConnectionInstanceResponse = { socialConnectionInstance: { provider: string, enabled: boolean, fields?: Maybe<Array<Maybe<{ key: string, value: string }>>> } };
 
-export type SocialConnectionInstancesResponse = {
-  socialConnectionInstances: Array<{
-    provider: string;
-    enabled: boolean;
-    fields?: Maybe<Array<Maybe<{ key: string; value: string }>>>;
-  }>;
-};
+export type SocialConnectionInstancesVariables = Exact<{ [key: string]: never; }>;
 
-export type SocialConnectionsVariables = Exact<{ [key: string]: never }>;
 
-export type SocialConnectionsResponse = {
-  socialConnections: Array<{
-    provider: string;
-    name: string;
-    logo: string;
-    description?: Maybe<string>;
-    fields?: Maybe<
-      Array<{
-        key?: Maybe<string>;
-        label?: Maybe<string>;
-        type?: Maybe<string>;
-        placeholder?: Maybe<string>;
-      }>
-    >;
-  }>;
-};
+export type SocialConnectionInstancesResponse = { socialConnectionInstances: Array<{ provider: string, enabled: boolean, fields?: Maybe<Array<Maybe<{ key: string, value: string }>>> }> };
 
-export type TemplateCodeVariables = Exact<{ [key: string]: never }>;
+export type SocialConnectionsVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SocialConnectionsResponse = { socialConnections: Array<{ provider: string, name: string, logo: string, description?: Maybe<string>, fields?: Maybe<Array<{ key?: Maybe<string>, label?: Maybe<string>, type?: Maybe<string>, placeholder?: Maybe<string> }>> }> };
+
+export type TemplateCodeVariables = Exact<{ [key: string]: never; }>;
+
 
 export type TemplateCodeResponse = { templateCode: string };
 
@@ -4182,181 +2531,25 @@ export type UserVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type UserResponse = {
-  user: {
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-  };
-};
+
+export type UserResponse = { user: { id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> } };
 
 export type UserBatchVariables = Exact<{
   ids: Array<Scalars['String']>;
 }>;
 
-export type UserBatchResponse = {
-  userBatch: {
-    totalCount: number;
-    list: Array<{
-      id: string;
-      userPoolId: string;
-      username?: Maybe<string>;
-      email?: Maybe<string>;
-      emailVerified?: Maybe<boolean>;
-      phone?: Maybe<string>;
-      phoneVerified?: Maybe<boolean>;
-      unionid?: Maybe<string>;
-      openid?: Maybe<string>;
-      nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
-      photo?: Maybe<string>;
-      password?: Maybe<string>;
-      oauth?: Maybe<string>;
-      token?: Maybe<string>;
-      tokenExpiredAt?: Maybe<string>;
-      loginsCount?: Maybe<number>;
-      lastLogin?: Maybe<string>;
-      lastIP?: Maybe<string>;
-      signedUp?: Maybe<string>;
-      blocked?: Maybe<boolean>;
-      isDeleted?: Maybe<boolean>;
-      device?: Maybe<string>;
-      browser?: Maybe<string>;
-      company?: Maybe<string>;
-      name?: Maybe<string>;
-      givenName?: Maybe<string>;
-      familyName?: Maybe<string>;
-      middleName?: Maybe<string>;
-      profile?: Maybe<string>;
-      preferredUsername?: Maybe<string>;
-      website?: Maybe<string>;
-      gender?: Maybe<string>;
-      birthdate?: Maybe<string>;
-      zoneinfo?: Maybe<string>;
-      locale?: Maybe<string>;
-      address?: Maybe<string>;
-      formatted?: Maybe<string>;
-      streetAddress?: Maybe<string>;
-      locality?: Maybe<string>;
-      region?: Maybe<string>;
-      postalCode?: Maybe<string>;
-      country?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
-    }>;
-  };
-};
 
-export type UserpoolVariables = Exact<{ [key: string]: never }>;
+export type UserBatchResponse = { userBatch: { totalCount: number, list: Array<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> } };
 
-export type UserpoolResponse = {
-  userpool: {
-    id: string;
-    name: string;
-    description?: Maybe<string>;
-    secret: string;
-    logo: string;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    emailVerifiedDefault: boolean;
-    sendWelcomeEmail: boolean;
-    registerDisabled: boolean;
-    showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>;
-    allowedOrigins?: Maybe<string>;
-    tokenExpiresAfter?: Maybe<number>;
-    isDeleted?: Maybe<boolean>;
-    userpoolTypes?: Maybe<
-      Array<{
-        code?: Maybe<string>;
-        name?: Maybe<string>;
-        description?: Maybe<string>;
-        image?: Maybe<string>;
-        sdks?: Maybe<Array<Maybe<string>>>;
-      }>
-    >;
-    frequentRegisterCheck?: Maybe<{
-      timeInterval?: Maybe<number>;
-      limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
-    }>;
-    loginFailCheck?: Maybe<{
-      timeInterval?: Maybe<number>;
-      limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
-    }>;
-    changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>;
-    changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>;
-    qrcodeLoginStrategy?: Maybe<{
-      qrcodeExpiresAfter?: Maybe<number>;
-      returnFullUserInfo?: Maybe<boolean>;
-      allowExchangeUserInfoFromBrowser?: Maybe<boolean>;
-      ticketExpiresAfter?: Maybe<number>;
-    }>;
-    app2WxappLoginStrategy?: Maybe<{
-      ticketExpriresAfter?: Maybe<number>;
-      ticketExchangeUserInfoNeedSecret?: Maybe<boolean>;
-    }>;
-    whitelist?: Maybe<{
-      phoneEnabled?: Maybe<boolean>;
-      emailEnabled?: Maybe<boolean>;
-      usernameEnabled?: Maybe<boolean>;
-    }>;
-  };
-};
+export type UserpoolVariables = Exact<{ [key: string]: never; }>;
 
-export type UserpoolTypesVariables = Exact<{ [key: string]: never }>;
 
-export type UserpoolTypesResponse = {
-  userpoolTypes: Array<{
-    code?: Maybe<string>;
-    name?: Maybe<string>;
-    description?: Maybe<string>;
-    image?: Maybe<string>;
-    sdks?: Maybe<Array<Maybe<string>>>;
-  }>;
-};
+export type UserpoolResponse = { userpool: { id: string, name: string, description?: Maybe<string>, secret: string, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, userpoolTypes?: Maybe<Array<{ code?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string>, image?: Maybe<string>, sdks?: Maybe<Array<Maybe<string>>> }>>, frequentRegisterCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enable?: Maybe<boolean> }>, loginFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enable?: Maybe<boolean> }>, changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>, changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>, qrcodeLoginStrategy?: Maybe<{ qrcodeExpiresAfter?: Maybe<number>, returnFullUserInfo?: Maybe<boolean>, allowExchangeUserInfoFromBrowser?: Maybe<boolean>, ticketExpiresAfter?: Maybe<number> }>, app2WxappLoginStrategy?: Maybe<{ ticketExpriresAfter?: Maybe<number>, ticketExchangeUserInfoNeedSecret?: Maybe<boolean> }>, whitelist?: Maybe<{ phoneEnabled?: Maybe<boolean>, emailEnabled?: Maybe<boolean>, usernameEnabled?: Maybe<boolean> }> } };
+
+export type UserpoolTypesVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserpoolTypesResponse = { userpoolTypes: Array<{ code?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string>, image?: Maybe<string>, sdks?: Maybe<Array<Maybe<string>>> }> };
 
 export type UserpoolsVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -4364,27 +2557,8 @@ export type UserpoolsVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type UserpoolsResponse = {
-  userpools: {
-    totalCount: number;
-    list: Array<{
-      id: string;
-      name: string;
-      description?: Maybe<string>;
-      secret: string;
-      logo: string;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      emailVerifiedDefault: boolean;
-      sendWelcomeEmail: boolean;
-      registerDisabled: boolean;
-      showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>;
-      allowedOrigins?: Maybe<string>;
-      tokenExpiresAfter?: Maybe<number>;
-      isDeleted?: Maybe<boolean>;
-    }>;
-  };
-};
+
+export type UserpoolsResponse = { userpools: { totalCount: number, list: Array<{ id: string, name: string, description?: Maybe<string>, secret: string, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean> }> } };
 
 export type UsersVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -4392,1500 +2566,327 @@ export type UsersVariables = Exact<{
   sortBy?: Maybe<SortByEnum>;
 }>;
 
-export type UsersResponse = {
-  users: {
-    totalCount: number;
-    list: Array<{
-      id: string;
-      userPoolId: string;
-      username?: Maybe<string>;
-      email?: Maybe<string>;
-      emailVerified?: Maybe<boolean>;
-      phone?: Maybe<string>;
-      phoneVerified?: Maybe<boolean>;
-      unionid?: Maybe<string>;
-      openid?: Maybe<string>;
-      nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
-      photo?: Maybe<string>;
-      password?: Maybe<string>;
-      oauth?: Maybe<string>;
-      token?: Maybe<string>;
-      tokenExpiredAt?: Maybe<string>;
-      loginsCount?: Maybe<number>;
-      lastLogin?: Maybe<string>;
-      lastIP?: Maybe<string>;
-      signedUp?: Maybe<string>;
-      blocked?: Maybe<boolean>;
-      isDeleted?: Maybe<boolean>;
-      device?: Maybe<string>;
-      browser?: Maybe<string>;
-      company?: Maybe<string>;
-      name?: Maybe<string>;
-      givenName?: Maybe<string>;
-      familyName?: Maybe<string>;
-      middleName?: Maybe<string>;
-      profile?: Maybe<string>;
-      preferredUsername?: Maybe<string>;
-      website?: Maybe<string>;
-      gender?: Maybe<string>;
-      birthdate?: Maybe<string>;
-      zoneinfo?: Maybe<string>;
-      locale?: Maybe<string>;
-      address?: Maybe<string>;
-      formatted?: Maybe<string>;
-      streetAddress?: Maybe<string>;
-      locality?: Maybe<string>;
-      region?: Maybe<string>;
-      postalCode?: Maybe<string>;
-      country?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
-    }>;
-  };
-};
+
+export type UsersResponse = { users: { totalCount: number, list: Array<{ id: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerMethod?: Maybe<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, country?: Maybe<string>, updatedAt?: Maybe<string>, customData?: Maybe<string> }> } };
 
 export type WebhookVariables = Exact<{
   webhookId?: Maybe<Scalars['String']>;
 }>;
 
-export type WebhookResponse = {
-  webhook: {
-    id?: Maybe<string>;
-    userPoolId: string;
-    url: string;
-    isLastTimeSuccess?: Maybe<boolean>;
-    contentType: string;
-    secret?: Maybe<string>;
-    enable: boolean;
-    events: Array<{ name: string; label: string; description?: Maybe<string> }>;
-  };
-};
+
+export type WebhookResponse = { webhook: { id?: Maybe<string>, userPoolId: string, url: string, isLastTimeSuccess?: Maybe<boolean>, contentType: string, secret?: Maybe<string>, enable: boolean, events: Array<{ name: string, label: string, description?: Maybe<string> }> } };
 
 export type WebhookLogVariables = Exact<{
   webhookLogId?: Maybe<Scalars['String']>;
 }>;
 
-export type WebhookLogResponse = {
-  webhookLog: {
-    id: string;
-    webhookId: string;
-    userPoolId: string;
-    event: string;
-    errorMessage?: Maybe<string>;
-    request?: Maybe<{ headers?: Maybe<string>; payload?: Maybe<string> }>;
-    response?: Maybe<{
-      headers?: Maybe<string>;
-      body?: Maybe<string>;
-      statusCode?: Maybe<number>;
-    }>;
-  };
-};
 
-export type WebhookLogsVariables = Exact<{ [key: string]: never }>;
+export type WebhookLogResponse = { webhookLog: { id: string, webhookId: string, userPoolId: string, event: string, errorMessage?: Maybe<string>, request?: Maybe<{ headers?: Maybe<string>, payload?: Maybe<string> }>, response?: Maybe<{ headers?: Maybe<string>, body?: Maybe<string>, statusCode?: Maybe<number> }> } };
 
-export type WebhookLogsResponse = {
-  webhookLogs: {
-    totalCount: number;
-    list: Array<{
-      id: string;
-      webhookId: string;
-      userPoolId: string;
-      event: string;
-      errorMessage?: Maybe<string>;
-    }>;
-  };
-};
+export type WebhookLogsVariables = Exact<{ [key: string]: never; }>;
 
-export type WebhookOptionsVariables = Exact<{ [key: string]: never }>;
 
-export type WebhookOptionsResponse = {
-  webhookOptions: {
-    webhookEvents: Array<
-      Maybe<{ name: string; label: string; description?: Maybe<string> }>
-    >;
-    contentTypes: Array<Maybe<{ name: string; label: string }>>;
-  };
-};
+export type WebhookLogsResponse = { webhookLogs: { totalCount: number, list: Array<{ id: string, webhookId: string, userPoolId: string, event: string, errorMessage?: Maybe<string> }> } };
 
-export type WebhooksVariables = Exact<{ [key: string]: never }>;
+export type WebhookOptionsVariables = Exact<{ [key: string]: never; }>;
 
-export type WebhooksResponse = {
-  webhooks: {
-    totalCount: number;
-    list: Array<{
-      id?: Maybe<string>;
-      userPoolId: string;
-      url: string;
-      isLastTimeSuccess?: Maybe<boolean>;
-      contentType: string;
-      secret?: Maybe<string>;
-      enable: boolean;
-    }>;
-  };
-};
+
+export type WebhookOptionsResponse = { webhookOptions: { webhookEvents: Array<Maybe<{ name: string, label: string, description?: Maybe<string> }>>, contentTypes: Array<Maybe<{ name: string, label: string }>> } };
+
+export type WebhooksVariables = Exact<{ [key: string]: never; }>;
+
+
+export type WebhooksResponse = { webhooks: { totalCount: number, list: Array<{ id?: Maybe<string>, userPoolId: string, url: string, isLastTimeSuccess?: Maybe<boolean>, contentType: string, secret?: Maybe<string>, enable: boolean }> } };
 
 export type WhitelistVariables = Exact<{
   type: WhitelistType;
 }>;
 
-export type WhitelistResponse = {
-  whitelist: Array<{
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    value: string;
-  }>;
-};
+
+export type WhitelistResponse = { whitelist: Array<{ createdAt?: Maybe<string>, updatedAt?: Maybe<string>, value: string }> };
+
 
 export const AddCooperatorDocument = gql`
-  mutation addCooperator($userId: String!, $roleId: String!) {
-    addCooperator(userId: $userId, roleId: $roleId) {
-      roles {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-      user {
-        id
-        userPoolId
-        username
-        email
-        emailVerified
-        phone
-        phoneVerified
-        unionid
-        openid
-        nickname
-        registerMethod
-        photo
-        password
-        oauth
-        token
-        tokenExpiredAt
-        loginsCount
-        lastLogin
-        lastIP
-        signedUp
-        blocked
-        isDeleted
-        device
-        browser
-        company
-        name
-        givenName
-        familyName
-        middleName
-        profile
-        preferredUsername
-        website
-        gender
-        birthdate
-        zoneinfo
-        locale
-        address
-        formatted
-        streetAddress
-        locality
-        region
-        postalCode
-        country
-        updatedAt
-        customData
-      }
+    mutation addCooperator($userId: String!, $roleId: String!) {
+  addCooperator(userId: $userId, roleId: $roleId) {
+    roles {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+    user {
+      id
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
     }
   }
-`;
+}
+    `;
 export const AddFunctionToPipelineDocument = gql`
-  mutation addFunctionToPipeline($input: AddFunctionToPipelineInput!) {
-    addFunctionToPipeline(input: $input) {
-      id
-      name
-      trigger
-      functions {
-        funcId
-        asynchronous
-        enabled
-      }
+    mutation addFunctionToPipeline($input: AddFunctionToPipelineInput!) {
+  addFunctionToPipeline(input: $input) {
+    id
+    name
+    trigger
+    functions {
+      funcId
+      asynchronous
+      enabled
     }
   }
-`;
+}
+    `;
 export const AddMemberDocument = gql`
-  mutation addMember(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $orgId: String!
-    $nodeCode: String!
-    $userIds: [String!]!
-  ) {
-    addMember(orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds) {
-      name
-      nameI18n
-      description
-      descriptionI18n
-      order
-      code
-      root
-      depth
-      createdAt
-      updatedAt
-      children
-      users(
-        page: $page
-        limit: $limit
-        sortBy: $sortBy
-        includeChildrenNodes: $includeChildrenNodes
-      ) {
-        totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
+    mutation addMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $nodeCode: String!, $userIds: [String!]!) {
+  addMember(orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds) {
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    createdAt
+    updatedAt
+    children
+    users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
+      totalCount
+      list {
+        id
+        userPoolId
+        username
+        email
+        emailVerified
+        phone
+        phoneVerified
+        unionid
+        openid
+        nickname
+        registerMethod
+        photo
+        password
+        oauth
+        token
+        tokenExpiredAt
+        loginsCount
+        lastLogin
+        lastIP
+        signedUp
+        blocked
+        isDeleted
+        device
+        browser
+        company
+        name
+        givenName
+        familyName
+        middleName
+        profile
+        preferredUsername
+        website
+        gender
+        birthdate
+        zoneinfo
+        locale
+        address
+        formatted
+        streetAddress
+        locality
+        region
+        postalCode
+        country
+        updatedAt
+        customData
       }
     }
   }
-`;
+}
+    `;
 export const AddNodeDocument = gql`
-  mutation addNode(
-    $orgId: String!
-    $parentNodeId: String
-    $name: String!
-    $nameI18n: String
-    $description: String
-    $descriptionI18n: String
-    $order: Int
-    $code: String
-  ) {
-    addNode(
-      orgId: $orgId
-      parentNodeId: $parentNodeId
-      name: $name
-      nameI18n: $nameI18n
-      description: $description
-      descriptionI18n: $descriptionI18n
-      order: $order
-      code: $code
-    ) {
-      id
-      rootNode {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-      nodes {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
+    mutation addNode($orgId: String!, $parentNodeId: String, $name: String!, $nameI18n: String, $description: String, $descriptionI18n: String, $order: Int, $code: String) {
+  addNode(orgId: $orgId, parentNodeId: $parentNodeId, name: $name, nameI18n: $nameI18n, description: $description, descriptionI18n: $descriptionI18n, order: $order, code: $code) {
+    id
+    rootNode {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+    nodes {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
     }
   }
-`;
+}
+    `;
 export const AddWhitelistDocument = gql`
-  mutation addWhitelist($type: WhitelistType!, $list: [String!]!) {
-    addWhitelist(type: $type, list: $list) {
-      createdAt
-      updatedAt
-      value
-    }
+    mutation addWhitelist($type: WhitelistType!, $list: [String!]!) {
+  addWhitelist(type: $type, list: $list) {
+    createdAt
+    updatedAt
+    value
   }
-`;
+}
+    `;
 export const AssignRoleDocument = gql`
-  mutation assignRole(
-    $code: String!
-    $userIds: [String!]
-    $groupCodes: [String!]
-    $nodeCodes: [String!]
-  ) {
-    assignRole(
-      code: $code
-      userIds: $userIds
-      groupCodes: $groupCodes
-      nodeCodes: $nodeCodes
-    ) {
+    mutation assignRole($code: String!, $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
+  assignRole(code: $code, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+    users {
+      totalCount
+    }
+    parent {
       code
       name
       description
       isSystem
       createdAt
       updatedAt
-      permissions {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-      users {
-        totalCount
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
     }
   }
-`;
+}
+    `;
 export const AttachPermissionDocument = gql`
-  mutation attachPermission($code: String!, $permissionIds: [String!]!) {
-    attachPermission(code: $code, permissionIds: $permissionIds) {
-      succeedCount
-      failedCount
-      message
-      errors
-    }
+    mutation attachPermission($code: String!, $permissionIds: [String!]!) {
+  attachPermission(code: $code, permissionIds: $permissionIds) {
+    succeedCount
+    failedCount
+    message
+    errors
   }
-`;
+}
+    `;
 export const ChangeMfaDocument = gql`
-  mutation changeMfa(
-    $enable: Boolean
-    $id: String
-    $userId: String
-    $userPoolId: String
-    $refresh: Boolean
-  ) {
-    changeMfa(
-      enable: $enable
-      id: $id
-      userId: $userId
-      userPoolId: $userPoolId
-      refresh: $refresh
-    ) {
-      id
-      userId
-      userPoolId
-      enable
-      secret
-    }
+    mutation changeMfa($enable: Boolean, $id: String, $userId: String, $userPoolId: String, $refresh: Boolean) {
+  changeMfa(enable: $enable, id: $id, userId: $userId, userPoolId: $userPoolId, refresh: $refresh) {
+    id
+    userId
+    userPoolId
+    enable
+    secret
   }
-`;
+}
+    `;
 export const ConfigEmailTemplateDocument = gql`
-  mutation configEmailTemplate($input: ConfigEmailTemplateInput!) {
-    configEmailTemplate(input: $input) {
-      type
-      name
-      subject
-      sender
-      content
-      redirectTo
-      hasURL
-      expiresIn
-      enabled
-      isSystem
-    }
+    mutation configEmailTemplate($input: ConfigEmailTemplateInput!) {
+  configEmailTemplate(input: $input) {
+    type
+    name
+    subject
+    sender
+    content
+    redirectTo
+    hasURL
+    expiresIn
+    enabled
+    isSystem
   }
-`;
+}
+    `;
 export const CreateFunctionDocument = gql`
-  mutation createFunction($input: CreateFunctionInput!) {
-    createFunction(input: $input) {
-      id
-      name
-      sourceCode
-      description
-      url
-    }
+    mutation createFunction($input: CreateFunctionInput!) {
+  createFunction(input: $input) {
+    id
+    name
+    sourceCode
+    description
+    url
   }
-`;
+}
+    `;
 export const CreateIdentityProviderDocument = gql`
-  mutation createIdentityProvider($input: CreateIdentityProviderInput!) {
-    createIdentityProvider(input: $input) {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
+    mutation createIdentityProvider($input: CreateIdentityProviderInput!) {
+  createIdentityProvider(input: $input) {
+    id
+    type
+    config
+    enabled
+    userPoolId
   }
-`;
+}
+    `;
 export const CreateOrgDocument = gql`
-  mutation createOrg($name: String!, $code: String, $description: String) {
-    createOrg(name: $name, code: $code, description: $description) {
-      id
-      rootNode {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-      nodes {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-    }
-  }
-`;
-export const CreatePermissionDocument = gql`
-  mutation createPermission($input: CreatePermissionInput!) {
-    createPermission(input: $input) {
-      id
-      code
-      name
-      description
-      isSystem
-      type
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const CreatePermissionsDocument = gql`
-  mutation createPermissions($input: [CreatePermissionInput!]!) {
-    createPermissions(input: $input) {
-      id
-      code
-      name
-      description
-      isSystem
-      type
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const CreatePipelineDocument = gql`
-  mutation createPipeline($input: CreatePipelineInput!) {
-    createPipeline(input: $input) {
-      id
-      name
-      trigger
-      functions {
-        funcId
-        asynchronous
-        enabled
-      }
-    }
-  }
-`;
-export const CreateResourceDocument = gql`
-  mutation createResource($code: String!, $name: String, $description: String) {
-    createResource(code: $code, name: $name, description: $description) {
-      code
-      name
-      description
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const CreateResourceRuleDocument = gql`
-  mutation createResourceRule(
-    $resouceCode: String!
-    $action: String!
-    $allow: Boolean!
-    $userId: String
-    $roleCode: String
-    $orgId: String
-    $nodeCode: String
-  ) {
-    createResourceRule(
-      resouceCode: $resouceCode
-      action: $action
-      allow: $allow
-      userId: $userId
-      roleCode: $roleCode
-      orgId: $orgId
-      nodeCode: $nodeCode
-    ) {
-      resouce {
-        code
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      action
-      allow
-      expiresIn
-      user {
-        id
-        userPoolId
-        username
-        email
-        emailVerified
-        phone
-        phoneVerified
-        unionid
-        openid
-        nickname
-        registerMethod
-        photo
-        password
-        oauth
-        token
-        tokenExpiredAt
-        loginsCount
-        lastLogin
-        lastIP
-        signedUp
-        blocked
-        isDeleted
-        device
-        browser
-        company
-        name
-        givenName
-        familyName
-        middleName
-        profile
-        preferredUsername
-        website
-        gender
-        birthdate
-        zoneinfo
-        locale
-        address
-        formatted
-        streetAddress
-        locality
-        region
-        postalCode
-        country
-        updatedAt
-        customData
-      }
-      role {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-      group {
-        code
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      node {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const CreateRoleDocument = gql`
-  mutation createRole(
-    $code: String!
-    $name: String
-    $description: String
-    $permissions: [String!]
-    $parent: String
-  ) {
-    createRole(
-      code: $code
-      name: $name
-      description: $description
-      permissions: $permissions
-      parent: $parent
-    ) {
-      code
-      name
-      description
-      isSystem
-      createdAt
-      updatedAt
-      permissions {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-      users {
-        totalCount
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const CreateSocialConnectionDocument = gql`
-  mutation createSocialConnection($input: CreateSocialConnectionInput!) {
-    createSocialConnection(input: $input) {
-      provider
-      name
-      logo
-      description
-      fields {
-        key
-        label
-        type
-        placeholder
-      }
-    }
-  }
-`;
-export const CreateSocialConnectionInstanceDocument = gql`
-  mutation createSocialConnectionInstance(
-    $input: CreateSocialConnectionInstanceInput!
-  ) {
-    createSocialConnectionInstance(input: $input) {
-      provider
-      enabled
-      fields {
-        key
-        value
-      }
-    }
-  }
-`;
-export const CreateUserpoolDocument = gql`
-  mutation createUserpool(
-    $name: String!
-    $description: String
-    $logo: String
-    $userpoolTypes: [String!]
-  ) {
-    createUserpool(
-      name: $name
-      description: $description
-      logo: $logo
-      userpoolTypes: $userpoolTypes
-    ) {
-      id
-      name
-      description
-      secret
-      userpoolTypes {
-        code
-        name
-        description
-        image
-        sdks
-      }
-      logo
-      createdAt
-      updatedAt
-      emailVerifiedDefault
-      sendWelcomeEmail
-      registerDisabled
-      showWxQRCodeWhenRegisterDisabled
-      allowedOrigins
-      tokenExpiresAfter
-      isDeleted
-      frequentRegisterCheck {
-        timeInterval
-        limit
-        enable
-      }
-      loginFailCheck {
-        timeInterval
-        limit
-        enable
-      }
-      changePhoneStrategy {
-        verifyOldPhone
-      }
-      changeEmailStrategy {
-        verifyOldEmail
-      }
-      qrcodeLoginStrategy {
-        qrcodeExpiresAfter
-        returnFullUserInfo
-        allowExchangeUserInfoFromBrowser
-        ticketExpiresAfter
-      }
-      app2WxappLoginStrategy {
-        ticketExpriresAfter
-        ticketExchangeUserInfoNeedSecret
-      }
-      whitelist {
-        phoneEnabled
-        emailEnabled
-        usernameEnabled
-      }
-    }
-  }
-`;
-export const CreateWebhookDocument = gql`
-  mutation createWebhook($input: CreateWebhookInput!) {
-    createWebhook(input: $input) {
-      id
-      userPoolId
-      events {
-        name
-        label
-        description
-      }
-      url
-      isLastTimeSuccess
-      contentType
-      secret
-      enable
-    }
-  }
-`;
-export const DeleteFunctionDocument = gql`
-  mutation deleteFunction($id: String!) {
-    deleteFunction(id: $id) {
-      message
-      code
-    }
-  }
-`;
-export const DeleteIdentityProviderDocument = gql`
-  mutation deleteIdentityProvider($id: String!) {
-    deleteIdentityProvider(id: $id) {
-      message
-      code
-    }
-  }
-`;
-export const DeleteNodeDocument = gql`
-  mutation deleteNode($orgId: String!, $nodeId: String!) {
-    deleteNode(orgId: $orgId, nodeId: $nodeId) {
-      id
-      rootNode {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-      nodes {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-    }
-  }
-`;
-export const DeleteOrgDocument = gql`
-  mutation deleteOrg($id: String!) {
-    deleteOrg(id: $id) {
-      message
-      code
-    }
-  }
-`;
-export const DeletePermissionDocument = gql`
-  mutation deletePermission($id: String!) {
-    deletePermission(id: $id) {
-      message
-      code
-    }
-  }
-`;
-export const DeletePermissionsDocument = gql`
-  mutation deletePermissions($ids: [String!]!) {
-    deletePermissions(ids: $ids) {
-      succeedCount
-      failedCount
-      message
-      errors
-    }
-  }
-`;
-export const DeleteRoleDocument = gql`
-  mutation deleteRole($code: String!) {
-    deleteRole(code: $code) {
-      message
-      code
-    }
-  }
-`;
-export const DeleteRolesDocument = gql`
-  mutation deleteRoles($codes: [String!]!) {
-    deleteRoles(codes: $codes) {
-      succeedCount
-      failedCount
-      message
-      errors
-    }
-  }
-`;
-export const DeleteUserDocument = gql`
-  mutation deleteUser($id: String!) {
-    deleteUser(id: $id) {
-      message
-      code
-    }
-  }
-`;
-export const DeleteUserpoolDocument = gql`
-  mutation deleteUserpool {
-    deleteUserpool {
-      message
-      code
-    }
-  }
-`;
-export const DeleteUsersDocument = gql`
-  mutation deleteUsers($ids: [String!]!) {
-    deleteUsers(ids: $ids) {
-      message
-      code
-    }
-  }
-`;
-export const DeleteWebhookDocument = gql`
-  mutation deleteWebhook($input: DeleteWebhookInput!) {
-    deleteWebhook(input: $input) {
-      message
-      code
-    }
-  }
-`;
-export const DetachPermissionDocument = gql`
-  mutation detachPermission($roleId: String!, $permissionIds: [String!]!) {
-    detachPermission(roleId: $roleId, permissionIds: $permissionIds) {
-      succeedCount
-      failedCount
-      message
-      errors
-    }
-  }
-`;
-export const DisableEmailTemplateDocument = gql`
-  mutation disableEmailTemplate($type: EmailTemplateType!) {
-    disableEmailTemplate(type: $type) {
-      type
-      name
-      subject
-      sender
-      content
-      redirectTo
-      hasURL
-      expiresIn
-      enabled
-      isSystem
-    }
-  }
-`;
-export const DisableIdentityProviderDocument = gql`
-  mutation disableIdentityProvider($id: String!) {
-    disableIdentityProvider(id: $id) {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
-  }
-`;
-export const DisableSocialConnectionInstanceDocument = gql`
-  mutation disableSocialConnectionInstance($provider: String!) {
-    disableSocialConnectionInstance(provider: $provider) {
-      provider
-      enabled
-      fields {
-        key
-        value
-      }
-    }
-  }
-`;
-export const DoRegisterProcessDocument = gql`
-  mutation doRegisterProcess(
-    $userInfo: CreateUserInput!
-    $keepPassword: Boolean
-  ) {
-    doRegisterProcess(userInfo: $userInfo, keepPassword: $keepPassword) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const EnableEmailTemplateDocument = gql`
-  mutation enableEmailTemplate($type: EmailTemplateType!) {
-    enableEmailTemplate(type: $type) {
-      type
-      name
-      subject
-      sender
-      content
-      redirectTo
-      hasURL
-      expiresIn
-      enabled
-      isSystem
-    }
-  }
-`;
-export const EnableIdentityProviderDocument = gql`
-  mutation enableIdentityProvider($id: String!) {
-    enableIdentityProvider(id: $id) {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
-  }
-`;
-export const EnableSocialConnectionInstanceDocument = gql`
-  mutation enableSocialConnectionInstance($provider: String!) {
-    enableSocialConnectionInstance(provider: $provider) {
-      provider
-      enabled
-      fields {
-        key
-        value
-      }
-    }
-  }
-`;
-export const LoginByEmailDocument = gql`
-  mutation loginByEmail($input: LoginByEmailInput!) {
-    loginByEmail(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const LoginByPhoneCodeDocument = gql`
-  mutation loginByPhoneCode($input: LoginByPhoneCodeInput!) {
-    loginByPhoneCode(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const LoginByPhonePasswordDocument = gql`
-  mutation loginByPhonePassword($input: LoginByPhonePasswordInput!) {
-    loginByPhonePassword(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const LoginByUsernameDocument = gql`
-  mutation loginByUsername($input: LoginByUsernameInput!) {
-    loginByUsername(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const RefreshUserpoolSecretDocument = gql`
-  mutation refreshUserpoolSecret {
-    refreshUserpoolSecret
-  }
-`;
-export const RegisterByEmailDocument = gql`
-  mutation registerByEmail($input: RegisterByEmailInput!) {
-    registerByEmail(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const RegisterByPhonePasswordDocument = gql`
-  mutation registerByPhonePassword($input: RegisterByPhonePasswordInput!) {
-    registerByPhonePassword(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const RegisterByUsernameDocument = gql`
-  mutation registerByUsername($input: RegisterByUsernameInput!) {
-    registerByUsername(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const RemoveCooperatorDocument = gql`
-  mutation removeCooperator($userId: String!, $roleId: String!) {
-    removeCooperator(userId: $userId, roleId: $roleId) {
-      message
-      code
-    }
-  }
-`;
-export const RemoveFunctionFromPipelineDocument = gql`
-  mutation removeFunctionFromPipeline(
-    $input: RemoveFunctionFromPipelineInput!
-  ) {
-    removeFunctionFromPipeline(input: $input) {
-      id
-      name
-      trigger
-      functions {
-        funcId
-        asynchronous
-        enabled
-      }
-    }
-  }
-`;
-export const RemoveMemberDocument = gql`
-  mutation removeMember(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $orgId: String!
-    $nodeId: String!
-    $userIds: [String!]!
-  ) {
-    removeMember(orgId: $orgId, nodeId: $nodeId, userIds: $userIds) {
+    mutation createOrg($name: String!, $code: String, $description: String) {
+  createOrg(name: $name, code: $code, description: $description) {
+    id
+    rootNode {
       name
       nameI18n
       description
@@ -5897,1252 +2898,237 @@ export const RemoveMemberDocument = gql`
       createdAt
       updatedAt
       children
-      users(
-        page: $page
-        limit: $limit
-        sortBy: $sortBy
-        includeChildrenNodes: $includeChildrenNodes
-      ) {
-        totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
-      }
     }
-  }
-`;
-export const RemoveWhitelistDocument = gql`
-  mutation removeWhitelist($type: WhitelistType!, $list: [String!]!) {
-    removeWhitelist(type: $type, list: $list) {
+    nodes {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
       createdAt
       updatedAt
+      children
+    }
+  }
+}
+    `;
+export const CreatePermissionDocument = gql`
+    mutation createPermission($input: CreatePermissionInput!) {
+  createPermission(input: $input) {
+    id
+    code
+    name
+    description
+    isSystem
+    type
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const CreatePermissionsDocument = gql`
+    mutation createPermissions($input: [CreatePermissionInput!]!) {
+  createPermissions(input: $input) {
+    id
+    code
+    name
+    description
+    isSystem
+    type
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const CreatePipelineDocument = gql`
+    mutation createPipeline($input: CreatePipelineInput!) {
+  createPipeline(input: $input) {
+    id
+    name
+    trigger
+    functions {
+      funcId
+      asynchronous
+      enabled
+    }
+  }
+}
+    `;
+export const CreateResourceDocument = gql`
+    mutation createResource($code: String!, $name: String, $description: String) {
+  createResource(code: $code, name: $name, description: $description) {
+    code
+    name
+    description
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const CreateResourceRuleDocument = gql`
+    mutation createResourceRule($resouceCode: String!, $action: String!, $allow: Boolean!, $userId: String, $roleCode: String, $orgId: String, $nodeCode: String) {
+  createResourceRule(resouceCode: $resouceCode, action: $action, allow: $allow, userId: $userId, roleCode: $roleCode, orgId: $orgId, nodeCode: $nodeCode) {
+    resouce {
+      code
+      name
+      description
+      createdAt
+      updatedAt
+    }
+    action
+    allow
+    expiresIn
+    user {
+      id
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+    role {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+    group {
+      code
+      name
+      description
+      createdAt
+      updatedAt
+    }
+    node {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const CreateRoleDocument = gql`
+    mutation createRole($code: String!, $name: String, $description: String, $permissions: [String!], $parent: String) {
+  createRole(code: $code, name: $name, description: $description, permissions: $permissions, parent: $parent) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+    users {
+      totalCount
+    }
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const CreateSocialConnectionDocument = gql`
+    mutation createSocialConnection($input: CreateSocialConnectionInput!) {
+  createSocialConnection(input: $input) {
+    provider
+    name
+    logo
+    description
+    fields {
+      key
+      label
+      type
+      placeholder
+    }
+  }
+}
+    `;
+export const CreateSocialConnectionInstanceDocument = gql`
+    mutation createSocialConnectionInstance($input: CreateSocialConnectionInstanceInput!) {
+  createSocialConnectionInstance(input: $input) {
+    provider
+    enabled
+    fields {
+      key
       value
     }
   }
-`;
-export const RevokeRoleDocument = gql`
-  mutation revokeRole(
-    $code: String!
-    $userIds: [String!]
-    $groupCodes: [String!]
-    $nodeCodes: [String!]
-  ) {
-    revokeRole(
-      code: $code
-      userIds: $userIds
-      groupCodes: $groupCodes
-      nodeCodes: $nodeCodes
-    ) {
-      code
-      name
-      description
-      isSystem
-      createdAt
-      updatedAt
-      permissions {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-      users {
-        totalCount
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const SendWebhookTestRequestDocument = gql`
-  mutation sendWebhookTestRequest($input: SendWebhookTestRequestInput!) {
-    sendWebhookTestRequest(input: $input) {
-      message
-      code
-    }
-  }
-`;
-export const UpdateEmailDocument = gql`
-  mutation updateEmail(
-    $email: String!
-    $emailCode: String!
-    $oldEmail: String
-    $oldEmailCode: String
-  ) {
-    updateEmail(
-      email: $email
-      emailCode: $emailCode
-      oldEmail: $oldEmail
-      oldEmailCode: $oldEmailCode
-    ) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const UpdateFunctionDocument = gql`
-  mutation updateFunction($input: UpdateFunctionInput!) {
-    updateFunction(input: $input) {
-      id
-      name
-      sourceCode
-      description
-      url
-    }
-  }
-`;
-export const UpdateIdentityProviderDocument = gql`
-  mutation updateIdentityProvider($input: UpdateIdentityProviderInput!) {
-    updateIdentityProvider(input: $input) {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
-  }
-`;
-export const UpdatePasswordDocument = gql`
-  mutation updatePassword(
-    $id: String!
-    $newPassword: String!
-    $oldPassword: String
-  ) {
-    updatePassword(
-      id: $id
-      newPassword: $newPassword
-      oldPassword: $oldPassword
-    ) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const UpdatePhoneDocument = gql`
-  mutation updatePhone(
-    $phone: String!
-    $phoneCode: String!
-    $oldPhone: String
-    $oldPhoneCode: String
-  ) {
-    updatePhone(
-      phone: $phone
-      phoneCode: $phoneCode
-      oldPhone: $oldPhone
-      oldPhoneCode: $oldPhoneCode
-    ) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const UpdateRoleDocument = gql`
-  mutation updateRole($code: String!, $name: String, $description: String) {
-    updateRole(code: $code, name: $name, description: $description) {
-      code
-      name
-      description
-      isSystem
-      createdAt
-      updatedAt
-      permissions {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-      users {
-        totalCount
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const UpdateUserDocument = gql`
-  mutation updateUser($id: String!, $input: UpdateUserInput!) {
-    updateUser(id: $id, input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const UpdateUserpoolDocument = gql`
-  mutation updateUserpool($input: UpdateUserpoolInput!) {
-    updateUserpool(input: $input) {
-      id
-      name
-      description
-      secret
-      userpoolTypes {
-        code
-        name
-        description
-        image
-        sdks
-      }
-      logo
-      createdAt
-      updatedAt
-      emailVerifiedDefault
-      sendWelcomeEmail
-      registerDisabled
-      showWxQRCodeWhenRegisterDisabled
-      allowedOrigins
-      tokenExpiresAfter
-      isDeleted
-      frequentRegisterCheck {
-        timeInterval
-        limit
-        enable
-      }
-      loginFailCheck {
-        timeInterval
-        limit
-        enable
-      }
-      changePhoneStrategy {
-        verifyOldPhone
-      }
-      changeEmailStrategy {
-        verifyOldEmail
-      }
-      qrcodeLoginStrategy {
-        qrcodeExpiresAfter
-        returnFullUserInfo
-        allowExchangeUserInfoFromBrowser
-        ticketExpiresAfter
-      }
-      app2WxappLoginStrategy {
-        ticketExpriresAfter
-        ticketExchangeUserInfoNeedSecret
-      }
-      whitelist {
-        phoneEnabled
-        emailEnabled
-        usernameEnabled
-      }
-    }
-  }
-`;
-export const UpdateWebhookDocument = gql`
-  mutation updateWebhook($input: UpdateWebhookInput!) {
-    updateWebhook(input: $input) {
-      id
-      userPoolId
-      events {
-        name
-        label
-        description
-      }
-      url
-      isLastTimeSuccess
-      contentType
-      secret
-      enable
-    }
-  }
-`;
-export const CheckPasswordStrengthDocument = gql`
-  query checkPasswordStrength($password: String!) {
-    checkPasswordStrength(password: $password) {
-      valid
-      message
-    }
-  }
-`;
-export const ChildrenNodesDocument = gql`
-  query childrenNodes($orgId: String!, $nodeId: String!) {
-    childrenNodes(orgId: $orgId, nodeId: $nodeId) {
-      name
-      nameI18n
-      description
-      descriptionI18n
-      order
-      code
-      root
-      depth
-      createdAt
-      updatedAt
-      children
-    }
-  }
-`;
-export const CooperatedUserpoolsDocument = gql`
-  query cooperatedUserpools($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    cooperatedUserpools(page: $page, limit: $limit, sortBy: $sortBy) {
-      totalCount
-    }
-  }
-`;
-export const CooperatorsDocument = gql`
-  query cooperators {
-    cooperators {
-      roles {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-      user {
-        id
-        userPoolId
-        username
-        email
-        emailVerified
-        phone
-        phoneVerified
-        unionid
-        openid
-        nickname
-        registerMethod
-        photo
-        password
-        oauth
-        token
-        tokenExpiredAt
-        loginsCount
-        lastLogin
-        lastIP
-        signedUp
-        blocked
-        isDeleted
-        device
-        browser
-        company
-        name
-        givenName
-        familyName
-        middleName
-        profile
-        preferredUsername
-        website
-        gender
-        birthdate
-        zoneinfo
-        locale
-        address
-        formatted
-        streetAddress
-        locality
-        region
-        postalCode
-        country
-        updatedAt
-        customData
-      }
-    }
-  }
-`;
-export const EmailTemplatesDocument = gql`
-  query emailTemplates {
-    emailTemplates {
-      type
-      name
-      subject
-      sender
-      content
-      redirectTo
-      hasURL
-      expiresIn
-      enabled
-      isSystem
-    }
-  }
-`;
-export const FunctionDocument = gql`
-  query function($id: String) {
-    function(id: $id) {
-      id
-      name
-      sourceCode
-      description
-      url
-    }
-  }
-`;
-export const FunctionsDocument = gql`
-  query functions($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    functions(page: $page, limit: $limit, sortBy: $sortBy) {
-      list {
-        id
-        name
-        sourceCode
-        description
-        url
-      }
-      totalCount
-    }
-  }
-`;
-export const IdentityProviderDocument = gql`
-  query identityProvider($id: String) {
-    identityProvider(id: $id) {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
-  }
-`;
-export const IdentityProvidersDocument = gql`
-  query identityProviders(
-    $protocol: IdentityProviderProtocol!
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-  ) {
-    identityProviders(
-      protocol: $protocol
-      page: $page
-      limit: $limit
-      sortBy: $sortBy
-    ) {
-      list {
-        id
-        type
-        config
-        enabled
-        userPoolId
-      }
-      totalCount
-    }
-  }
-`;
-export const IsActionAllowedDocument = gql`
-  query isActionAllowed(
-    $resouceCode: String!
-    $action: String!
-    $userId: String!
-  ) {
-    isActionAllowed(resouceCode: $resouceCode, action: $action, userId: $userId)
-  }
-`;
-export const IsActionDeniedDocument = gql`
-  query isActionDenied(
-    $resouceCode: String!
-    $action: String!
-    $userId: String!
-  ) {
-    isActionDenied(resouceCode: $resouceCode, action: $action, userId: $userId)
-  }
-`;
-export const IsDomainAvaliableDocument = gql`
-  query isDomainAvaliable($domain: String!) {
-    isDomainAvaliable(domain: $domain)
-  }
-`;
-export const NodeDocument = gql`
-  query node($orgId: String!, $code: String!) {
-    node(orgId: $orgId, code: $code) {
-      name
-      nameI18n
-      description
-      descriptionI18n
-      order
-      code
-      root
-      depth
-      createdAt
-      updatedAt
-      children
-    }
-  }
-`;
-export const NodeWithMembersDocument = gql`
-  query nodeWithMembers(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $orgId: String!
-    $code: String!
-  ) {
-    node(orgId: $orgId, code: $code) {
-      name
-      nameI18n
-      description
-      descriptionI18n
-      order
-      code
-      root
-      depth
-      createdAt
-      updatedAt
-      children
-      users(
-        page: $page
-        limit: $limit
-        sortBy: $sortBy
-        includeChildrenNodes: $includeChildrenNodes
-      ) {
-        totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
-      }
-    }
-  }
-`;
-export const OrgDocument = gql`
-  query org($id: String!) {
-    org(id: $id) {
-      id
-      rootNode {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-      nodes {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-    }
-  }
-`;
-export const OrgsDocument = gql`
-  query orgs($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    orgs(page: $page, limit: $limit, sortBy: $sortBy) {
-      totalCount
-      list {
-        id
-      }
-    }
-  }
-`;
-export const PermissionDocument = gql`
-  query permission($id: String!) {
-    permission(id: $id) {
-      id
-      code
-      name
-      description
-      isSystem
-      type
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const PermissionByCodeDocument = gql`
-  query permissionByCode($code: String!) {
-    permissionByCode(code: $code) {
-      id
-      code
-      name
-      description
-      isSystem
-      type
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const PermissionsDocument = gql`
-  query permissions($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    permissions(page: $page, limit: $limit, sortBy: $sortBy) {
-      totalCount
-      list {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const PipelineDocument = gql`
-  query pipeline($id: String!) {
-    pipeline(id: $id) {
-      id
-      name
-      trigger
-      functions {
-        funcId
-        asynchronous
-        enabled
-      }
-    }
-  }
-`;
-export const PipelinesDocument = gql`
-  query pipelines {
-    pipelines {
-      list {
-        id
-        name
-        trigger
-      }
-      totalCount
-    }
-  }
-`;
-export const PreviewEmailDocument = gql`
-  query previewEmail($type: EmailTemplateType!) {
-    previewEmail(type: $type)
-  }
-`;
-export const QiniuUptokenDocument = gql`
-  query qiniuUptoken($type: String) {
-    qiniuUptoken(type: $type)
-  }
-`;
-export const QueryMfaDocument = gql`
-  query queryMfa($id: String, $userId: String, $userPoolId: String) {
-    queryMfa(id: $id, userId: $userId, userPoolId: $userPoolId) {
-      id
-      userId
-      userPoolId
-      enable
-      secret
-    }
-  }
-`;
-export const ResouceRulesDocument = gql`
-  query resouceRules($code: String) {
-    resouceRules(code: $code) {
-      totalCount
-      list {
-        action
-        allow
-        expiresIn
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const RoleDocument = gql`
-  query role($code: String!) {
-    role(code: $code) {
-      code
-      name
-      description
-      isSystem
-      createdAt
-      updatedAt
-      permissions {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-      users {
-        totalCount
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const RolesDocument = gql`
-  query roles($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    roles(page: $page, limit: $limit, sortBy: $sortBy) {
-      totalCount
-      list {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const SearchUserDocument = gql`
-  query searchUser($query: String!, $fields: String, $page: Int, $count: Int) {
-    searchUser(query: $query, fields: $fields, page: $page, count: $count) {
-      totalCount
-      list {
-        id
-        userPoolId
-        username
-        email
-        emailVerified
-        phone
-        phoneVerified
-        unionid
-        openid
-        nickname
-        registerMethod
-        photo
-        password
-        oauth
-        token
-        tokenExpiredAt
-        loginsCount
-        lastLogin
-        lastIP
-        signedUp
-        blocked
-        isDeleted
-        device
-        browser
-        company
-        name
-        givenName
-        familyName
-        middleName
-        profile
-        preferredUsername
-        website
-        gender
-        birthdate
-        zoneinfo
-        locale
-        address
-        formatted
-        streetAddress
-        locality
-        region
-        postalCode
-        country
-        updatedAt
-        customData
-      }
-    }
-  }
-`;
-export const SocialConnectionDocument = gql`
-  query socialConnection($provider: String!) {
-    socialConnection(provider: $provider) {
-      provider
-      name
-      logo
-      description
-      fields {
-        key
-        label
-        type
-        placeholder
-      }
-    }
-  }
-`;
-export const SocialConnectionInstanceDocument = gql`
-  query socialConnectionInstance($provider: String!) {
-    socialConnectionInstance(provider: $provider) {
-      provider
-      enabled
-      fields {
-        key
-        value
-      }
-    }
-  }
-`;
-export const SocialConnectionInstancesDocument = gql`
-  query socialConnectionInstances {
-    socialConnectionInstances {
-      provider
-      enabled
-      fields {
-        key
-        value
-      }
-    }
-  }
-`;
-export const SocialConnectionsDocument = gql`
-  query socialConnections {
-    socialConnections {
-      provider
-      name
-      logo
-      description
-      fields {
-        key
-        label
-        type
-        placeholder
-      }
-    }
-  }
-`;
-export const TemplateCodeDocument = gql`
-  query templateCode {
-    templateCode
-  }
-`;
-export const UserDocument = gql`
-  query user($id: String!) {
-    user(id: $id) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const UserBatchDocument = gql`
-  query userBatch($ids: [String!]!) {
-    userBatch(ids: $ids) {
-      totalCount
-      list {
-        id
-        userPoolId
-        username
-        email
-        emailVerified
-        phone
-        phoneVerified
-        unionid
-        openid
-        nickname
-        registerMethod
-        photo
-        password
-        oauth
-        token
-        tokenExpiredAt
-        loginsCount
-        lastLogin
-        lastIP
-        signedUp
-        blocked
-        isDeleted
-        device
-        browser
-        company
-        name
-        givenName
-        familyName
-        middleName
-        profile
-        preferredUsername
-        website
-        gender
-        birthdate
-        zoneinfo
-        locale
-        address
-        formatted
-        streetAddress
-        locality
-        region
-        postalCode
-        country
-        updatedAt
-        customData
-      }
-    }
-  }
-`;
-export const UserpoolDocument = gql`
-  query userpool {
-    userpool {
-      id
-      name
-      description
-      secret
-      userpoolTypes {
-        code
-        name
-        description
-        image
-        sdks
-      }
-      logo
-      createdAt
-      updatedAt
-      emailVerifiedDefault
-      sendWelcomeEmail
-      registerDisabled
-      showWxQRCodeWhenRegisterDisabled
-      allowedOrigins
-      tokenExpiresAfter
-      isDeleted
-      frequentRegisterCheck {
-        timeInterval
-        limit
-        enable
-      }
-      loginFailCheck {
-        timeInterval
-        limit
-        enable
-      }
-      changePhoneStrategy {
-        verifyOldPhone
-      }
-      changeEmailStrategy {
-        verifyOldEmail
-      }
-      qrcodeLoginStrategy {
-        qrcodeExpiresAfter
-        returnFullUserInfo
-        allowExchangeUserInfoFromBrowser
-        ticketExpiresAfter
-      }
-      app2WxappLoginStrategy {
-        ticketExpriresAfter
-        ticketExchangeUserInfoNeedSecret
-      }
-      whitelist {
-        phoneEnabled
-        emailEnabled
-        usernameEnabled
-      }
-    }
-  }
-`;
-export const UserpoolTypesDocument = gql`
-  query userpoolTypes {
+}
+    `;
+export const CreateUserpoolDocument = gql`
+    mutation createUserpool($name: String!, $description: String, $logo: String, $userpoolTypes: [String!]) {
+  createUserpool(name: $name, description: $description, logo: $logo, userpoolTypes: $userpoolTypes) {
+    id
+    name
+    description
+    secret
     userpoolTypes {
       code
       name
@@ -7150,34 +3136,731 @@ export const UserpoolTypesDocument = gql`
       image
       sdks
     }
-  }
-`;
-export const UserpoolsDocument = gql`
-  query userpools($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    userpools(page: $page, limit: $limit, sortBy: $sortBy) {
-      totalCount
-      list {
-        id
-        name
-        description
-        secret
-        logo
-        createdAt
-        updatedAt
-        emailVerifiedDefault
-        sendWelcomeEmail
-        registerDisabled
-        showWxQRCodeWhenRegisterDisabled
-        allowedOrigins
-        tokenExpiresAfter
-        isDeleted
-      }
+    logo
+    createdAt
+    updatedAt
+    emailVerifiedDefault
+    sendWelcomeEmail
+    registerDisabled
+    showWxQRCodeWhenRegisterDisabled
+    allowedOrigins
+    tokenExpiresAfter
+    isDeleted
+    frequentRegisterCheck {
+      timeInterval
+      limit
+      enable
+    }
+    loginFailCheck {
+      timeInterval
+      limit
+      enable
+    }
+    changePhoneStrategy {
+      verifyOldPhone
+    }
+    changeEmailStrategy {
+      verifyOldEmail
+    }
+    qrcodeLoginStrategy {
+      qrcodeExpiresAfter
+      returnFullUserInfo
+      allowExchangeUserInfoFromBrowser
+      ticketExpiresAfter
+    }
+    app2WxappLoginStrategy {
+      ticketExpriresAfter
+      ticketExchangeUserInfoNeedSecret
+    }
+    whitelist {
+      phoneEnabled
+      emailEnabled
+      usernameEnabled
     }
   }
-`;
-export const UsersDocument = gql`
-  query users($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    users(page: $page, limit: $limit, sortBy: $sortBy) {
+}
+    `;
+export const CreateWebhookDocument = gql`
+    mutation createWebhook($input: CreateWebhookInput!) {
+  createWebhook(input: $input) {
+    id
+    userPoolId
+    events {
+      name
+      label
+      description
+    }
+    url
+    isLastTimeSuccess
+    contentType
+    secret
+    enable
+  }
+}
+    `;
+export const DeleteFunctionDocument = gql`
+    mutation deleteFunction($id: String!) {
+  deleteFunction(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteIdentityProviderDocument = gql`
+    mutation deleteIdentityProvider($id: String!) {
+  deleteIdentityProvider(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteNodeDocument = gql`
+    mutation deleteNode($orgId: String!, $nodeId: String!) {
+  deleteNode(orgId: $orgId, nodeId: $nodeId) {
+    id
+    rootNode {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+    nodes {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+  }
+}
+    `;
+export const DeleteOrgDocument = gql`
+    mutation deleteOrg($id: String!) {
+  deleteOrg(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeletePermissionDocument = gql`
+    mutation deletePermission($id: String!) {
+  deletePermission(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeletePermissionsDocument = gql`
+    mutation deletePermissions($ids: [String!]!) {
+  deletePermissions(ids: $ids) {
+    succeedCount
+    failedCount
+    message
+    errors
+  }
+}
+    `;
+export const DeleteRoleDocument = gql`
+    mutation deleteRole($code: String!) {
+  deleteRole(code: $code) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteRolesDocument = gql`
+    mutation deleteRoles($codes: [String!]!) {
+  deleteRoles(codes: $codes) {
+    succeedCount
+    failedCount
+    message
+    errors
+  }
+}
+    `;
+export const DeleteUserDocument = gql`
+    mutation deleteUser($id: String!) {
+  deleteUser(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteUserpoolDocument = gql`
+    mutation deleteUserpool {
+  deleteUserpool {
+    message
+    code
+  }
+}
+    `;
+export const DeleteUsersDocument = gql`
+    mutation deleteUsers($ids: [String!]!) {
+  deleteUsers(ids: $ids) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteWebhookDocument = gql`
+    mutation deleteWebhook($input: DeleteWebhookInput!) {
+  deleteWebhook(input: $input) {
+    message
+    code
+  }
+}
+    `;
+export const DetachPermissionDocument = gql`
+    mutation detachPermission($roleId: String!, $permissionIds: [String!]!) {
+  detachPermission(roleId: $roleId, permissionIds: $permissionIds) {
+    succeedCount
+    failedCount
+    message
+    errors
+  }
+}
+    `;
+export const DisableEmailTemplateDocument = gql`
+    mutation disableEmailTemplate($type: EmailTemplateType!) {
+  disableEmailTemplate(type: $type) {
+    type
+    name
+    subject
+    sender
+    content
+    redirectTo
+    hasURL
+    expiresIn
+    enabled
+    isSystem
+  }
+}
+    `;
+export const DisableIdentityProviderDocument = gql`
+    mutation disableIdentityProvider($id: String!) {
+  disableIdentityProvider(id: $id) {
+    id
+    type
+    config
+    enabled
+    userPoolId
+  }
+}
+    `;
+export const DisableSocialConnectionInstanceDocument = gql`
+    mutation disableSocialConnectionInstance($provider: String!) {
+  disableSocialConnectionInstance(provider: $provider) {
+    provider
+    enabled
+    fields {
+      key
+      value
+    }
+  }
+}
+    `;
+export const DoRegisterProcessDocument = gql`
+    mutation doRegisterProcess($userInfo: CreateUserInput!, $keepPassword: Boolean) {
+  doRegisterProcess(userInfo: $userInfo, keepPassword: $keepPassword) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const EnableEmailTemplateDocument = gql`
+    mutation enableEmailTemplate($type: EmailTemplateType!) {
+  enableEmailTemplate(type: $type) {
+    type
+    name
+    subject
+    sender
+    content
+    redirectTo
+    hasURL
+    expiresIn
+    enabled
+    isSystem
+  }
+}
+    `;
+export const EnableIdentityProviderDocument = gql`
+    mutation enableIdentityProvider($id: String!) {
+  enableIdentityProvider(id: $id) {
+    id
+    type
+    config
+    enabled
+    userPoolId
+  }
+}
+    `;
+export const EnableSocialConnectionInstanceDocument = gql`
+    mutation enableSocialConnectionInstance($provider: String!) {
+  enableSocialConnectionInstance(provider: $provider) {
+    provider
+    enabled
+    fields {
+      key
+      value
+    }
+  }
+}
+    `;
+export const LoginByEmailDocument = gql`
+    mutation loginByEmail($input: LoginByEmailInput!) {
+  loginByEmail(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const LoginByPhoneCodeDocument = gql`
+    mutation loginByPhoneCode($input: LoginByPhoneCodeInput!) {
+  loginByPhoneCode(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const LoginByPhonePasswordDocument = gql`
+    mutation loginByPhonePassword($input: LoginByPhonePasswordInput!) {
+  loginByPhonePassword(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const LoginByUsernameDocument = gql`
+    mutation loginByUsername($input: LoginByUsernameInput!) {
+  loginByUsername(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const RefreshUserpoolSecretDocument = gql`
+    mutation refreshUserpoolSecret {
+  refreshUserpoolSecret
+}
+    `;
+export const RegisterByEmailDocument = gql`
+    mutation registerByEmail($input: RegisterByEmailInput!) {
+  registerByEmail(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const RegisterByPhonePasswordDocument = gql`
+    mutation registerByPhonePassword($input: RegisterByPhonePasswordInput!) {
+  registerByPhonePassword(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const RegisterByUsernameDocument = gql`
+    mutation registerByUsername($input: RegisterByUsernameInput!) {
+  registerByUsername(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const RemoveCooperatorDocument = gql`
+    mutation removeCooperator($userId: String!, $roleId: String!) {
+  removeCooperator(userId: $userId, roleId: $roleId) {
+    message
+    code
+  }
+}
+    `;
+export const RemoveFunctionFromPipelineDocument = gql`
+    mutation removeFunctionFromPipeline($input: RemoveFunctionFromPipelineInput!) {
+  removeFunctionFromPipeline(input: $input) {
+    id
+    name
+    trigger
+    functions {
+      funcId
+      asynchronous
+      enabled
+    }
+  }
+}
+    `;
+export const RemoveMemberDocument = gql`
+    mutation removeMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $nodeId: String!, $userIds: [String!]!) {
+  removeMember(orgId: $orgId, nodeId: $nodeId, userIds: $userIds) {
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    createdAt
+    updatedAt
+    children
+    users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
       totalCount
       list {
         id
@@ -7228,96 +3911,1311 @@ export const UsersDocument = gql`
       }
     }
   }
-`;
-export const WebhookDocument = gql`
-  query webhook($webhookId: String) {
-    webhook(webhookId: $webhookId) {
+}
+    `;
+export const RemoveWhitelistDocument = gql`
+    mutation removeWhitelist($type: WhitelistType!, $list: [String!]!) {
+  removeWhitelist(type: $type, list: $list) {
+    createdAt
+    updatedAt
+    value
+  }
+}
+    `;
+export const RevokeRoleDocument = gql`
+    mutation revokeRole($code: String!, $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
+  revokeRole(code: $code, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+    users {
+      totalCount
+    }
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const SendEmailDocument = gql`
+    mutation sendEmail($email: String!, $scene: EmailScene!) {
+  sendEmail(email: $email, scene: $scene) {
+    message
+    code
+  }
+}
+    `;
+export const SendWebhookTestRequestDocument = gql`
+    mutation sendWebhookTestRequest($input: SendWebhookTestRequestInput!) {
+  sendWebhookTestRequest(input: $input) {
+    message
+    code
+  }
+}
+    `;
+export const UpdateEmailDocument = gql`
+    mutation updateEmail($email: String!, $emailCode: String!, $oldEmail: String, $oldEmailCode: String) {
+  updateEmail(email: $email, emailCode: $emailCode, oldEmail: $oldEmail, oldEmailCode: $oldEmailCode) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const UpdateFunctionDocument = gql`
+    mutation updateFunction($input: UpdateFunctionInput!) {
+  updateFunction(input: $input) {
+    id
+    name
+    sourceCode
+    description
+    url
+  }
+}
+    `;
+export const UpdateIdentityProviderDocument = gql`
+    mutation updateIdentityProvider($input: UpdateIdentityProviderInput!) {
+  updateIdentityProvider(input: $input) {
+    id
+    type
+    config
+    enabled
+    userPoolId
+  }
+}
+    `;
+export const UpdatePasswordDocument = gql`
+    mutation updatePassword($id: String!, $newPassword: String!, $oldPassword: String) {
+  updatePassword(id: $id, newPassword: $newPassword, oldPassword: $oldPassword) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const UpdatePhoneDocument = gql`
+    mutation updatePhone($phone: String!, $phoneCode: String!, $oldPhone: String, $oldPhoneCode: String) {
+  updatePhone(phone: $phone, phoneCode: $phoneCode, oldPhone: $oldPhone, oldPhoneCode: $oldPhoneCode) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const UpdateRoleDocument = gql`
+    mutation updateRole($code: String!, $name: String, $description: String) {
+  updateRole(code: $code, name: $name, description: $description) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+    users {
+      totalCount
+    }
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const UpdateUserDocument = gql`
+    mutation updateUser($id: String!, $input: UpdateUserInput!) {
+  updateUser(id: $id, input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const UpdateUserpoolDocument = gql`
+    mutation updateUserpool($input: UpdateUserpoolInput!) {
+  updateUserpool(input: $input) {
+    id
+    name
+    description
+    secret
+    userpoolTypes {
+      code
+      name
+      description
+      image
+      sdks
+    }
+    logo
+    createdAt
+    updatedAt
+    emailVerifiedDefault
+    sendWelcomeEmail
+    registerDisabled
+    showWxQRCodeWhenRegisterDisabled
+    allowedOrigins
+    tokenExpiresAfter
+    isDeleted
+    frequentRegisterCheck {
+      timeInterval
+      limit
+      enable
+    }
+    loginFailCheck {
+      timeInterval
+      limit
+      enable
+    }
+    changePhoneStrategy {
+      verifyOldPhone
+    }
+    changeEmailStrategy {
+      verifyOldEmail
+    }
+    qrcodeLoginStrategy {
+      qrcodeExpiresAfter
+      returnFullUserInfo
+      allowExchangeUserInfoFromBrowser
+      ticketExpiresAfter
+    }
+    app2WxappLoginStrategy {
+      ticketExpriresAfter
+      ticketExchangeUserInfoNeedSecret
+    }
+    whitelist {
+      phoneEnabled
+      emailEnabled
+      usernameEnabled
+    }
+  }
+}
+    `;
+export const UpdateWebhookDocument = gql`
+    mutation updateWebhook($input: UpdateWebhookInput!) {
+  updateWebhook(input: $input) {
+    id
+    userPoolId
+    events {
+      name
+      label
+      description
+    }
+    url
+    isLastTimeSuccess
+    contentType
+    secret
+    enable
+  }
+}
+    `;
+export const CheckPasswordStrengthDocument = gql`
+    query checkPasswordStrength($password: String!) {
+  checkPasswordStrength(password: $password) {
+    valid
+    message
+  }
+}
+    `;
+export const ChildrenNodesDocument = gql`
+    query childrenNodes($orgId: String!, $nodeId: String!) {
+  childrenNodes(orgId: $orgId, nodeId: $nodeId) {
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    createdAt
+    updatedAt
+    children
+  }
+}
+    `;
+export const CooperatedUserpoolsDocument = gql`
+    query cooperatedUserpools($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  cooperatedUserpools(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+  }
+}
+    `;
+export const CooperatorsDocument = gql`
+    query cooperators {
+  cooperators {
+    roles {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+    user {
       id
       userPoolId
-      events {
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+  }
+}
+    `;
+export const EmailTemplatesDocument = gql`
+    query emailTemplates {
+  emailTemplates {
+    type
+    name
+    subject
+    sender
+    content
+    redirectTo
+    hasURL
+    expiresIn
+    enabled
+    isSystem
+  }
+}
+    `;
+export const FunctionDocument = gql`
+    query function($id: String) {
+  function(id: $id) {
+    id
+    name
+    sourceCode
+    description
+    url
+  }
+}
+    `;
+export const FunctionsDocument = gql`
+    query functions($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  functions(page: $page, limit: $limit, sortBy: $sortBy) {
+    list {
+      id
+      name
+      sourceCode
+      description
+      url
+    }
+    totalCount
+  }
+}
+    `;
+export const IdentityProviderDocument = gql`
+    query identityProvider($id: String) {
+  identityProvider(id: $id) {
+    id
+    type
+    config
+    enabled
+    userPoolId
+  }
+}
+    `;
+export const IdentityProvidersDocument = gql`
+    query identityProviders($protocol: IdentityProviderProtocol!, $page: Int, $limit: Int, $sortBy: SortByEnum) {
+  identityProviders(protocol: $protocol, page: $page, limit: $limit, sortBy: $sortBy) {
+    list {
+      id
+      type
+      config
+      enabled
+      userPoolId
+    }
+    totalCount
+  }
+}
+    `;
+export const IsActionAllowedDocument = gql`
+    query isActionAllowed($resouceCode: String!, $action: String!, $userId: String!) {
+  isActionAllowed(resouceCode: $resouceCode, action: $action, userId: $userId)
+}
+    `;
+export const IsActionDeniedDocument = gql`
+    query isActionDenied($resouceCode: String!, $action: String!, $userId: String!) {
+  isActionDenied(resouceCode: $resouceCode, action: $action, userId: $userId)
+}
+    `;
+export const IsDomainAvaliableDocument = gql`
+    query isDomainAvaliable($domain: String!) {
+  isDomainAvaliable(domain: $domain)
+}
+    `;
+export const NodeDocument = gql`
+    query node($orgId: String!, $code: String!) {
+  node(orgId: $orgId, code: $code) {
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    createdAt
+    updatedAt
+    children
+  }
+}
+    `;
+export const NodeWithMembersDocument = gql`
+    query nodeWithMembers($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $code: String!) {
+  node(orgId: $orgId, code: $code) {
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    createdAt
+    updatedAt
+    children
+    users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
+      totalCount
+      list {
+        id
+        userPoolId
+        username
+        email
+        emailVerified
+        phone
+        phoneVerified
+        unionid
+        openid
+        nickname
+        registerMethod
+        photo
+        password
+        oauth
+        token
+        tokenExpiredAt
+        loginsCount
+        lastLogin
+        lastIP
+        signedUp
+        blocked
+        isDeleted
+        device
+        browser
+        company
         name
-        label
-        description
+        givenName
+        familyName
+        middleName
+        profile
+        preferredUsername
+        website
+        gender
+        birthdate
+        zoneinfo
+        locale
+        address
+        formatted
+        streetAddress
+        locality
+        region
+        postalCode
+        country
+        updatedAt
+        customData
       }
+    }
+  }
+}
+    `;
+export const OrgDocument = gql`
+    query org($id: String!) {
+  org(id: $id) {
+    id
+    rootNode {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+    nodes {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+  }
+}
+    `;
+export const OrgsDocument = gql`
+    query orgs($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  orgs(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      id
+    }
+  }
+}
+    `;
+export const PermissionDocument = gql`
+    query permission($id: String!) {
+  permission(id: $id) {
+    id
+    code
+    name
+    description
+    isSystem
+    type
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const PermissionByCodeDocument = gql`
+    query permissionByCode($code: String!) {
+  permissionByCode(code: $code) {
+    id
+    code
+    name
+    description
+    isSystem
+    type
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const PermissionsDocument = gql`
+    query permissions($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  permissions(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const PipelineDocument = gql`
+    query pipeline($id: String!) {
+  pipeline(id: $id) {
+    id
+    name
+    trigger
+    functions {
+      funcId
+      asynchronous
+      enabled
+    }
+  }
+}
+    `;
+export const PipelinesDocument = gql`
+    query pipelines {
+  pipelines {
+    list {
+      id
+      name
+      trigger
+    }
+    totalCount
+  }
+}
+    `;
+export const PreviewEmailDocument = gql`
+    query previewEmail($type: EmailTemplateType!) {
+  previewEmail(type: $type)
+}
+    `;
+export const QiniuUptokenDocument = gql`
+    query qiniuUptoken($type: String) {
+  qiniuUptoken(type: $type)
+}
+    `;
+export const QueryMfaDocument = gql`
+    query queryMfa($id: String, $userId: String, $userPoolId: String) {
+  queryMfa(id: $id, userId: $userId, userPoolId: $userPoolId) {
+    id
+    userId
+    userPoolId
+    enable
+    secret
+  }
+}
+    `;
+export const ResouceRulesDocument = gql`
+    query resouceRules($code: String) {
+  resouceRules(code: $code) {
+    totalCount
+    list {
+      action
+      allow
+      expiresIn
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const RoleDocument = gql`
+    query role($code: String!) {
+  role(code: $code) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+    users {
+      totalCount
+    }
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const RolesDocument = gql`
+    query roles($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  roles(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const SearchUserDocument = gql`
+    query searchUser($query: String!, $fields: String, $page: Int, $count: Int) {
+  searchUser(query: $query, fields: $fields, page: $page, count: $count) {
+    totalCount
+    list {
+      id
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+  }
+}
+    `;
+export const SocialConnectionDocument = gql`
+    query socialConnection($provider: String!) {
+  socialConnection(provider: $provider) {
+    provider
+    name
+    logo
+    description
+    fields {
+      key
+      label
+      type
+      placeholder
+    }
+  }
+}
+    `;
+export const SocialConnectionInstanceDocument = gql`
+    query socialConnectionInstance($provider: String!) {
+  socialConnectionInstance(provider: $provider) {
+    provider
+    enabled
+    fields {
+      key
+      value
+    }
+  }
+}
+    `;
+export const SocialConnectionInstancesDocument = gql`
+    query socialConnectionInstances {
+  socialConnectionInstances {
+    provider
+    enabled
+    fields {
+      key
+      value
+    }
+  }
+}
+    `;
+export const SocialConnectionsDocument = gql`
+    query socialConnections {
+  socialConnections {
+    provider
+    name
+    logo
+    description
+    fields {
+      key
+      label
+      type
+      placeholder
+    }
+  }
+}
+    `;
+export const TemplateCodeDocument = gql`
+    query templateCode {
+  templateCode
+}
+    `;
+export const UserDocument = gql`
+    query user($id: String!) {
+  user(id: $id) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const UserBatchDocument = gql`
+    query userBatch($ids: [String!]!) {
+  userBatch(ids: $ids) {
+    totalCount
+    list {
+      id
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+  }
+}
+    `;
+export const UserpoolDocument = gql`
+    query userpool {
+  userpool {
+    id
+    name
+    description
+    secret
+    userpoolTypes {
+      code
+      name
+      description
+      image
+      sdks
+    }
+    logo
+    createdAt
+    updatedAt
+    emailVerifiedDefault
+    sendWelcomeEmail
+    registerDisabled
+    showWxQRCodeWhenRegisterDisabled
+    allowedOrigins
+    tokenExpiresAfter
+    isDeleted
+    frequentRegisterCheck {
+      timeInterval
+      limit
+      enable
+    }
+    loginFailCheck {
+      timeInterval
+      limit
+      enable
+    }
+    changePhoneStrategy {
+      verifyOldPhone
+    }
+    changeEmailStrategy {
+      verifyOldEmail
+    }
+    qrcodeLoginStrategy {
+      qrcodeExpiresAfter
+      returnFullUserInfo
+      allowExchangeUserInfoFromBrowser
+      ticketExpiresAfter
+    }
+    app2WxappLoginStrategy {
+      ticketExpriresAfter
+      ticketExchangeUserInfoNeedSecret
+    }
+    whitelist {
+      phoneEnabled
+      emailEnabled
+      usernameEnabled
+    }
+  }
+}
+    `;
+export const UserpoolTypesDocument = gql`
+    query userpoolTypes {
+  userpoolTypes {
+    code
+    name
+    description
+    image
+    sdks
+  }
+}
+    `;
+export const UserpoolsDocument = gql`
+    query userpools($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  userpools(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      id
+      name
+      description
+      secret
+      logo
+      createdAt
+      updatedAt
+      emailVerifiedDefault
+      sendWelcomeEmail
+      registerDisabled
+      showWxQRCodeWhenRegisterDisabled
+      allowedOrigins
+      tokenExpiresAfter
+      isDeleted
+    }
+  }
+}
+    `;
+export const UsersDocument = gql`
+    query users($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  users(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      id
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+  }
+}
+    `;
+export const WebhookDocument = gql`
+    query webhook($webhookId: String) {
+  webhook(webhookId: $webhookId) {
+    id
+    userPoolId
+    events {
+      name
+      label
+      description
+    }
+    url
+    isLastTimeSuccess
+    contentType
+    secret
+    enable
+  }
+}
+    `;
+export const WebhookLogDocument = gql`
+    query webhookLog($webhookLogId: String) {
+  webhookLog(webhookLogId: $webhookLogId) {
+    id
+    webhookId
+    userPoolId
+    event
+    request {
+      headers
+      payload
+    }
+    response {
+      headers
+      body
+      statusCode
+    }
+    errorMessage
+  }
+}
+    `;
+export const WebhookLogsDocument = gql`
+    query webhookLogs {
+  webhookLogs {
+    list {
+      id
+      webhookId
+      userPoolId
+      event
+      errorMessage
+    }
+    totalCount
+  }
+}
+    `;
+export const WebhookOptionsDocument = gql`
+    query webhookOptions {
+  webhookOptions {
+    webhookEvents {
+      name
+      label
+      description
+    }
+    contentTypes {
+      name
+      label
+    }
+  }
+}
+    `;
+export const WebhooksDocument = gql`
+    query webhooks {
+  webhooks {
+    list {
+      id
+      userPoolId
       url
       isLastTimeSuccess
       contentType
       secret
       enable
     }
+    totalCount
   }
-`;
-export const WebhookLogDocument = gql`
-  query webhookLog($webhookLogId: String) {
-    webhookLog(webhookLogId: $webhookLogId) {
-      id
-      webhookId
-      userPoolId
-      event
-      request {
-        headers
-        payload
-      }
-      response {
-        headers
-        body
-        statusCode
-      }
-      errorMessage
-    }
-  }
-`;
-export const WebhookLogsDocument = gql`
-  query webhookLogs {
-    webhookLogs {
-      list {
-        id
-        webhookId
-        userPoolId
-        event
-        errorMessage
-      }
-      totalCount
-    }
-  }
-`;
-export const WebhookOptionsDocument = gql`
-  query webhookOptions {
-    webhookOptions {
-      webhookEvents {
-        name
-        label
-        description
-      }
-      contentTypes {
-        name
-        label
-      }
-    }
-  }
-`;
-export const WebhooksDocument = gql`
-  query webhooks {
-    webhooks {
-      list {
-        id
-        userPoolId
-        url
-        isLastTimeSuccess
-        contentType
-        secret
-        enable
-      }
-      totalCount
-    }
-  }
-`;
+}
+    `;
 export const WhitelistDocument = gql`
-  query whitelist($type: WhitelistType!) {
-    whitelist(type: $type) {
-      createdAt
-      updatedAt
-      value
-    }
+    query whitelist($type: WhitelistType!) {
+  whitelist(type: $type) {
+    createdAt
+    updatedAt
+    value
   }
-`;
+}
+    `;
