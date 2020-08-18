@@ -16,6 +16,7 @@ import { EmailScene, RegisterProfile } from '../../types/graphql.v2';
 import { encrypt } from '../utils';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
+import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,
@@ -39,6 +40,8 @@ export class AuthenticationClient {
   graphqlClient: GraphqlClient;
   graphqlClientV2: GraphqlClient;
   tokenProvider: AuthenticationTokenProvider;
+  wxqr: QrCodeAuthenticationClient;
+  qr: QrCodeAuthenticationClient;
 
   constructor(options: AuthenticationClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -54,6 +57,16 @@ export class AuthenticationClient {
       this.options.userPoolId
     );
     this.tokenProvider = new AuthenticationTokenProvider(this.options);
+    this.wxqr = new QrCodeAuthenticationClient(
+      this.options,
+      this.tokenProvider,
+      'WXAPP_AUTH'
+    );
+    this.qr = new QrCodeAuthenticationClient(
+      this.options,
+      this.tokenProvider,
+      'APP_AUTH'
+    );
   }
 
   /**
