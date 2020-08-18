@@ -7,6 +7,8 @@ import {
   QRCodeUserInfo
 } from './types';
 import { createCssClassStyleSheet } from './utils';
+import { SDK_VERSION } from '../version';
+import { User } from '../../types/graphql.v2';
 
 export class QrCodeAuthenticationClient {
   options: AuthenticationClientOptions;
@@ -31,7 +33,17 @@ export class QrCodeAuthenticationClient {
     customData: { [x: string]: any } = {}
   ): Promise<QRCodeGenarateResult> {
     const api = `${this.options.host}/v2/api/qrcode/gene`;
-    const { data } = await Axios.post(api, { scene: this.scene, customData });
+    const { data } = await Axios.post(
+      api,
+      { scene: this.scene, customData },
+      {
+        headers: {
+          'x-authing-userpool-id': this.options.userPoolId,
+          'x-authing-sdk-version': SDK_VERSION,
+          'x-authing-request-from': 'sdk'
+        }
+      }
+    );
     return data;
   }
 
@@ -43,8 +55,34 @@ export class QrCodeAuthenticationClient {
     random: string
   ): Promise<{ code: number; message: string; data: QRCodeStatus }> {
     const api = `${this.options.host}/v2/api/qrcode/check?random=${random}`;
-    const { data } = await Axios.post(api);
+    const { data } = await Axios.get(api, {
+      headers: {
+        'x-authing-userpool-id': this.options.userPoolId,
+        'x-authing-sdk-version': SDK_VERSION,
+        'x-authing-request-from': 'sdk'
+      }
+    });
     return data;
+  }
+
+  async exchangeUserInfo(ticket: string): Promise<Partial<User>> {
+    const api = `${this.options.host}/v2/api/qrcode/userinfo`;
+    const { data } = await Axios.post(
+      api,
+      {
+        ticket
+      },
+      {
+        headers: {
+          'x-authing-userpool-id': this.options.userPoolId,
+          'x-authing-sdk-version': SDK_VERSION,
+          'x-authing-request-from': 'sdk'
+        }
+      }
+    );
+    const { code, message, data: userInfo } = data;
+    if (code === 200) return userInfo;
+    else throw new Error(message);
   }
 
   /**
@@ -242,7 +280,9 @@ export class QrCodeAuthenticationClient {
       tips = {}
     } = options;
     const {
-      title = '使用 <strong> APP </strong> 扫码登录',
+      title = `使用 <strong> ${
+        this.scene === 'WXAPP_AUTH' ? '微信' : 'APP'
+      } </strong> 扫码登录`,
       // scanned = '用户已扫码，等待确认',
       canceled = '用户取消授权',
       expired = '二维码已过期',
@@ -295,7 +335,7 @@ export class QrCodeAuthenticationClient {
 
     const unloading = () => {
       const child = document.getElementById('authing__spinner');
-      node.removeChild(child);
+      if (child) node.removeChild(child);
     };
 
     const genTip = (text: string) => {
@@ -440,6 +480,7 @@ export class QrCodeAuthenticationClient {
           if (onCodeLoadFailed) {
             onCodeLoadFailed(code, message);
           }
+        } else {
           random = data.random;
           url = data.url;
         }
@@ -468,8 +509,10 @@ export class QrCodeAuthenticationClient {
         }
 
         // 需要对用户的 onSuccess, onScanned, onExpired, onCancel 进行加工从而在页面上展示相关提示
-        let decoratedOnSuccess = function(data: any) {
-          const { userInfo, ticket } = data;
+        let decoratedOnSuccess = function(
+          userInfo: QRCodeUserInfo,
+          ticket: string
+        ) {
           const shadow = genShadow(succeed, null, '__authing_success_tip');
           nodeWrapper.appendChild(shadow);
           if (onSuccess) {
@@ -526,5 +569,7 @@ export class QrCodeAuthenticationClient {
         node.appendChild(nodeWrapper);
       };
     };
+
+    start();
   }
 }
