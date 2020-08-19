@@ -1,4 +1,3 @@
-import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -403,7 +402,7 @@ export enum SortByEnum {
   /** 按照更新时间降序（最近更新的在前面） */
   UpdatedatDesc = 'UPDATEDAT_DESC',
   /** 按照更新时间升序（最近更新的在后面） */
-  UpdatedatAsc = 'UPDATEDAT_ASC',
+  UpdatedatAsc = 'UPDATEDAT_ASC'
 }
 
 export type PaginatedUserPoolCooperation = {
@@ -545,7 +544,7 @@ export enum EmailTemplateType {
   /** 验证邮箱 */
   VerifyEmail = 'VERIFY_EMAIL',
   /** 修改绑定邮箱 */
-  ChangeEmail = 'CHANGE_EMAIL',
+  ChangeEmail = 'CHANGE_EMAIL'
 }
 
 /** 函数 */
@@ -572,7 +571,7 @@ export enum IdentityProviderProtocol {
   Ad = 'AD',
   Ldap = 'LDAP',
   Oidc = 'OIDC',
-  Oauth = 'OAUTH',
+  Oauth = 'OAUTH'
 }
 
 export type PaginatedIdentityProviders = {
@@ -798,7 +797,7 @@ export type WebhookContentType = {
 export enum WhitelistType {
   Username = 'USERNAME',
   Email = 'EMAIL',
-  Phone = 'PHONE',
+  Phone = 'PHONE'
 }
 
 export type WhiteList = {
@@ -1299,7 +1298,7 @@ export type ConfigEmailTemplateInput = {
 /** 邮件使用场景 */
 export enum EmailScene {
   /** 发送重置密码邮件，邮件中包含验证码 */
-  ResetPassword = 'RESET_PASSWORD',
+  ResetPassword = 'RESET_PASSWORD'
 }
 
 export type CreateFunctionInput = {
@@ -1390,7 +1389,7 @@ export enum EPipelineTrigger {
   PostRegister = 'POST_REGISTER',
   PreAuthentication = 'PRE_AUTHENTICATION',
   PostAuthentication = 'POST_AUTHENTICATION',
-  PreOidctokenissued = 'PRE_OIDCTOKENISSUED',
+  PreOidctokenissued = 'PRE_OIDCTOKENISSUED'
 }
 
 export type PipelineFunctionInput = {
@@ -4589,18 +4588,98 @@ export type WhitelistResponse = {
   }>;
 };
 
-export const AddCooperatorDocument = gql`
-  mutation addCooperator($userId: String!, $roleId: String!) {
-    addCooperator(userId: $userId, roleId: $roleId) {
-      roles {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-      user {
+export const AddCooperatorDocument = `
+    mutation addCooperator($userId: String!, $roleId: String!) {
+  addCooperator(userId: $userId, roleId: $roleId) {
+    roles {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+    user {
+      id
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+  }
+}
+    `;
+export const AddFunctionToPipelineDocument = `
+    mutation addFunctionToPipeline($input: AddFunctionToPipelineInput!) {
+  addFunctionToPipeline(input: $input) {
+    id
+    name
+    trigger
+    functions {
+      funcId
+      asynchronous
+      enabled
+    }
+  }
+}
+    `;
+export const AddMemberDocument = `
+    mutation addMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $nodeCode: String!, $userIds: [String!]!) {
+  addMember(orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds) {
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    createdAt
+    updatedAt
+    children
+    users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
+      totalCount
+      list {
         id
         userPoolId
         username
@@ -4649,32 +4728,13 @@ export const AddCooperatorDocument = gql`
       }
     }
   }
-`;
-export const AddFunctionToPipelineDocument = gql`
-  mutation addFunctionToPipeline($input: AddFunctionToPipelineInput!) {
-    addFunctionToPipeline(input: $input) {
-      id
-      name
-      trigger
-      functions {
-        funcId
-        asynchronous
-        enabled
-      }
-    }
-  }
-`;
-export const AddMemberDocument = gql`
-  mutation addMember(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $orgId: String!
-    $nodeCode: String!
-    $userIds: [String!]!
-  ) {
-    addMember(orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds) {
+}
+    `;
+export const AddNodeDocument = `
+    mutation addNode($orgId: String!, $parentNodeId: String, $name: String!, $nameI18n: String, $description: String, $descriptionI18n: String, $order: Int, $code: String) {
+  addNode(orgId: $orgId, parentNodeId: $parentNodeId, name: $name, nameI18n: $nameI18n, description: $description, descriptionI18n: $descriptionI18n, order: $order, code: $code) {
+    id
+    rootNode {
       name
       nameI18n
       description
@@ -4686,2541 +4746,371 @@ export const AddMemberDocument = gql`
       createdAt
       updatedAt
       children
-      users(
-        page: $page
-        limit: $limit
-        sortBy: $sortBy
-        includeChildrenNodes: $includeChildrenNodes
-      ) {
-        totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
-      }
     }
-  }
-`;
-export const AddNodeDocument = gql`
-  mutation addNode(
-    $orgId: String!
-    $parentNodeId: String
-    $name: String!
-    $nameI18n: String
-    $description: String
-    $descriptionI18n: String
-    $order: Int
-    $code: String
-  ) {
-    addNode(
-      orgId: $orgId
-      parentNodeId: $parentNodeId
-      name: $name
-      nameI18n: $nameI18n
-      description: $description
-      descriptionI18n: $descriptionI18n
-      order: $order
-      code: $code
-    ) {
-      id
-      rootNode {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-      nodes {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-    }
-  }
-`;
-export const AddWhitelistDocument = gql`
-  mutation addWhitelist($type: WhitelistType!, $list: [String!]!) {
-    addWhitelist(type: $type, list: $list) {
+    nodes {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
       createdAt
       updatedAt
+      children
+    }
+  }
+}
+    `;
+export const AddWhitelistDocument = `
+    mutation addWhitelist($type: WhitelistType!, $list: [String!]!) {
+  addWhitelist(type: $type, list: $list) {
+    createdAt
+    updatedAt
+    value
+  }
+}
+    `;
+export const AssignRoleDocument = `
+    mutation assignRole($code: String!, $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
+  assignRole(code: $code, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+    users {
+      totalCount
+    }
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const AttachPermissionDocument = `
+    mutation attachPermission($code: String!, $permissionIds: [String!]!) {
+  attachPermission(code: $code, permissionIds: $permissionIds) {
+    succeedCount
+    failedCount
+    message
+    errors
+  }
+}
+    `;
+export const ChangeMfaDocument = `
+    mutation changeMfa($enable: Boolean, $id: String, $userId: String, $userPoolId: String, $refresh: Boolean) {
+  changeMfa(enable: $enable, id: $id, userId: $userId, userPoolId: $userPoolId, refresh: $refresh) {
+    id
+    userId
+    userPoolId
+    enable
+    secret
+  }
+}
+    `;
+export const ConfigEmailTemplateDocument = `
+    mutation configEmailTemplate($input: ConfigEmailTemplateInput!) {
+  configEmailTemplate(input: $input) {
+    type
+    name
+    subject
+    sender
+    content
+    redirectTo
+    hasURL
+    expiresIn
+    enabled
+    isSystem
+  }
+}
+    `;
+export const CreateFunctionDocument = `
+    mutation createFunction($input: CreateFunctionInput!) {
+  createFunction(input: $input) {
+    id
+    name
+    sourceCode
+    description
+    url
+  }
+}
+    `;
+export const CreateIdentityProviderDocument = `
+    mutation createIdentityProvider($input: CreateIdentityProviderInput!) {
+  createIdentityProvider(input: $input) {
+    id
+    type
+    config
+    enabled
+    userPoolId
+  }
+}
+    `;
+export const CreateOrgDocument = `
+    mutation createOrg($name: String!, $code: String, $description: String) {
+  createOrg(name: $name, code: $code, description: $description) {
+    id
+    rootNode {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+    nodes {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+  }
+}
+    `;
+export const CreatePermissionDocument = `
+    mutation createPermission($input: CreatePermissionInput!) {
+  createPermission(input: $input) {
+    id
+    code
+    name
+    description
+    isSystem
+    type
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const CreatePermissionsDocument = `
+    mutation createPermissions($input: [CreatePermissionInput!]!) {
+  createPermissions(input: $input) {
+    id
+    code
+    name
+    description
+    isSystem
+    type
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const CreatePipelineDocument = `
+    mutation createPipeline($input: CreatePipelineInput!) {
+  createPipeline(input: $input) {
+    id
+    name
+    trigger
+    functions {
+      funcId
+      asynchronous
+      enabled
+    }
+  }
+}
+    `;
+export const CreateResourceDocument = `
+    mutation createResource($code: String!, $name: String, $description: String) {
+  createResource(code: $code, name: $name, description: $description) {
+    code
+    name
+    description
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const CreateResourceRuleDocument = `
+    mutation createResourceRule($resouceCode: String!, $action: String!, $allow: Boolean!, $userId: String, $roleCode: String, $orgId: String, $nodeCode: String) {
+  createResourceRule(resouceCode: $resouceCode, action: $action, allow: $allow, userId: $userId, roleCode: $roleCode, orgId: $orgId, nodeCode: $nodeCode) {
+    resouce {
+      code
+      name
+      description
+      createdAt
+      updatedAt
+    }
+    action
+    allow
+    expiresIn
+    user {
+      id
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+    role {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+    group {
+      code
+      name
+      description
+      createdAt
+      updatedAt
+    }
+    node {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const CreateRoleDocument = `
+    mutation createRole($code: String!, $name: String, $description: String, $permissions: [String!], $parent: String) {
+  createRole(code: $code, name: $name, description: $description, permissions: $permissions, parent: $parent) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+    users {
+      totalCount
+    }
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const CreateSocialConnectionDocument = `
+    mutation createSocialConnection($input: CreateSocialConnectionInput!) {
+  createSocialConnection(input: $input) {
+    provider
+    name
+    logo
+    description
+    fields {
+      key
+      label
+      type
+      placeholder
+    }
+  }
+}
+    `;
+export const CreateSocialConnectionInstanceDocument = `
+    mutation createSocialConnectionInstance($input: CreateSocialConnectionInstanceInput!) {
+  createSocialConnectionInstance(input: $input) {
+    provider
+    enabled
+    fields {
+      key
       value
     }
   }
-`;
-export const AssignRoleDocument = gql`
-  mutation assignRole(
-    $code: String!
-    $userIds: [String!]
-    $groupCodes: [String!]
-    $nodeCodes: [String!]
-  ) {
-    assignRole(
-      code: $code
-      userIds: $userIds
-      groupCodes: $groupCodes
-      nodeCodes: $nodeCodes
-    ) {
-      code
-      name
-      description
-      isSystem
-      createdAt
-      updatedAt
-      permissions {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-      users {
-        totalCount
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const AttachPermissionDocument = gql`
-  mutation attachPermission($code: String!, $permissionIds: [String!]!) {
-    attachPermission(code: $code, permissionIds: $permissionIds) {
-      succeedCount
-      failedCount
-      message
-      errors
-    }
-  }
-`;
-export const ChangeMfaDocument = gql`
-  mutation changeMfa(
-    $enable: Boolean
-    $id: String
-    $userId: String
-    $userPoolId: String
-    $refresh: Boolean
-  ) {
-    changeMfa(
-      enable: $enable
-      id: $id
-      userId: $userId
-      userPoolId: $userPoolId
-      refresh: $refresh
-    ) {
-      id
-      userId
-      userPoolId
-      enable
-      secret
-    }
-  }
-`;
-export const ConfigEmailTemplateDocument = gql`
-  mutation configEmailTemplate($input: ConfigEmailTemplateInput!) {
-    configEmailTemplate(input: $input) {
-      type
-      name
-      subject
-      sender
-      content
-      redirectTo
-      hasURL
-      expiresIn
-      enabled
-      isSystem
-    }
-  }
-`;
-export const CreateFunctionDocument = gql`
-  mutation createFunction($input: CreateFunctionInput!) {
-    createFunction(input: $input) {
-      id
-      name
-      sourceCode
-      description
-      url
-    }
-  }
-`;
-export const CreateIdentityProviderDocument = gql`
-  mutation createIdentityProvider($input: CreateIdentityProviderInput!) {
-    createIdentityProvider(input: $input) {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
-  }
-`;
-export const CreateOrgDocument = gql`
-  mutation createOrg($name: String!, $code: String, $description: String) {
-    createOrg(name: $name, code: $code, description: $description) {
-      id
-      rootNode {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-      nodes {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-    }
-  }
-`;
-export const CreatePermissionDocument = gql`
-  mutation createPermission($input: CreatePermissionInput!) {
-    createPermission(input: $input) {
-      id
-      code
-      name
-      description
-      isSystem
-      type
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const CreatePermissionsDocument = gql`
-  mutation createPermissions($input: [CreatePermissionInput!]!) {
-    createPermissions(input: $input) {
-      id
-      code
-      name
-      description
-      isSystem
-      type
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const CreatePipelineDocument = gql`
-  mutation createPipeline($input: CreatePipelineInput!) {
-    createPipeline(input: $input) {
-      id
-      name
-      trigger
-      functions {
-        funcId
-        asynchronous
-        enabled
-      }
-    }
-  }
-`;
-export const CreateResourceDocument = gql`
-  mutation createResource($code: String!, $name: String, $description: String) {
-    createResource(code: $code, name: $name, description: $description) {
-      code
-      name
-      description
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const CreateResourceRuleDocument = gql`
-  mutation createResourceRule(
-    $resouceCode: String!
-    $action: String!
-    $allow: Boolean!
-    $userId: String
-    $roleCode: String
-    $orgId: String
-    $nodeCode: String
-  ) {
-    createResourceRule(
-      resouceCode: $resouceCode
-      action: $action
-      allow: $allow
-      userId: $userId
-      roleCode: $roleCode
-      orgId: $orgId
-      nodeCode: $nodeCode
-    ) {
-      resouce {
-        code
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      action
-      allow
-      expiresIn
-      user {
-        id
-        userPoolId
-        username
-        email
-        emailVerified
-        phone
-        phoneVerified
-        unionid
-        openid
-        nickname
-        registerMethod
-        photo
-        password
-        oauth
-        token
-        tokenExpiredAt
-        loginsCount
-        lastLogin
-        lastIP
-        signedUp
-        blocked
-        isDeleted
-        device
-        browser
-        company
-        name
-        givenName
-        familyName
-        middleName
-        profile
-        preferredUsername
-        website
-        gender
-        birthdate
-        zoneinfo
-        locale
-        address
-        formatted
-        streetAddress
-        locality
-        region
-        postalCode
-        country
-        updatedAt
-        customData
-      }
-      role {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-      group {
-        code
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      node {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const CreateRoleDocument = gql`
-  mutation createRole(
-    $code: String!
-    $name: String
-    $description: String
-    $permissions: [String!]
-    $parent: String
-  ) {
-    createRole(
-      code: $code
-      name: $name
-      description: $description
-      permissions: $permissions
-      parent: $parent
-    ) {
-      code
-      name
-      description
-      isSystem
-      createdAt
-      updatedAt
-      permissions {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-      users {
-        totalCount
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const CreateSocialConnectionDocument = gql`
-  mutation createSocialConnection($input: CreateSocialConnectionInput!) {
-    createSocialConnection(input: $input) {
-      provider
-      name
-      logo
-      description
-      fields {
-        key
-        label
-        type
-        placeholder
-      }
-    }
-  }
-`;
-export const CreateSocialConnectionInstanceDocument = gql`
-  mutation createSocialConnectionInstance(
-    $input: CreateSocialConnectionInstanceInput!
-  ) {
-    createSocialConnectionInstance(input: $input) {
-      provider
-      enabled
-      fields {
-        key
-        value
-      }
-    }
-  }
-`;
-export const CreateUserpoolDocument = gql`
-  mutation createUserpool(
-    $name: String!
-    $description: String
-    $logo: String
-    $userpoolTypes: [String!]
-  ) {
-    createUserpool(
-      name: $name
-      description: $description
-      logo: $logo
-      userpoolTypes: $userpoolTypes
-    ) {
-      id
-      name
-      description
-      secret
-      userpoolTypes {
-        code
-        name
-        description
-        image
-        sdks
-      }
-      logo
-      createdAt
-      updatedAt
-      emailVerifiedDefault
-      sendWelcomeEmail
-      registerDisabled
-      showWxQRCodeWhenRegisterDisabled
-      allowedOrigins
-      tokenExpiresAfter
-      isDeleted
-      frequentRegisterCheck {
-        timeInterval
-        limit
-        enable
-      }
-      loginFailCheck {
-        timeInterval
-        limit
-        enable
-      }
-      changePhoneStrategy {
-        verifyOldPhone
-      }
-      changeEmailStrategy {
-        verifyOldEmail
-      }
-      qrcodeLoginStrategy {
-        qrcodeExpiresAfter
-        returnFullUserInfo
-        allowExchangeUserInfoFromBrowser
-        ticketExpiresAfter
-      }
-      app2WxappLoginStrategy {
-        ticketExpriresAfter
-        ticketExchangeUserInfoNeedSecret
-      }
-      whitelist {
-        phoneEnabled
-        emailEnabled
-        usernameEnabled
-      }
-    }
-  }
-`;
-export const CreateWebhookDocument = gql`
-  mutation createWebhook($input: CreateWebhookInput!) {
-    createWebhook(input: $input) {
-      id
-      userPoolId
-      events {
-        name
-        label
-        description
-      }
-      url
-      isLastTimeSuccess
-      contentType
-      secret
-      enable
-    }
-  }
-`;
-export const DeleteFunctionDocument = gql`
-  mutation deleteFunction($id: String!) {
-    deleteFunction(id: $id) {
-      message
-      code
-    }
-  }
-`;
-export const DeleteIdentityProviderDocument = gql`
-  mutation deleteIdentityProvider($id: String!) {
-    deleteIdentityProvider(id: $id) {
-      message
-      code
-    }
-  }
-`;
-export const DeleteNodeDocument = gql`
-  mutation deleteNode($orgId: String!, $nodeId: String!) {
-    deleteNode(orgId: $orgId, nodeId: $nodeId) {
-      id
-      rootNode {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-      nodes {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-    }
-  }
-`;
-export const DeleteOrgDocument = gql`
-  mutation deleteOrg($id: String!) {
-    deleteOrg(id: $id) {
-      message
-      code
-    }
-  }
-`;
-export const DeletePermissionDocument = gql`
-  mutation deletePermission($id: String!) {
-    deletePermission(id: $id) {
-      message
-      code
-    }
-  }
-`;
-export const DeletePermissionsDocument = gql`
-  mutation deletePermissions($ids: [String!]!) {
-    deletePermissions(ids: $ids) {
-      succeedCount
-      failedCount
-      message
-      errors
-    }
-  }
-`;
-export const DeleteRoleDocument = gql`
-  mutation deleteRole($code: String!) {
-    deleteRole(code: $code) {
-      message
-      code
-    }
-  }
-`;
-export const DeleteRolesDocument = gql`
-  mutation deleteRoles($codes: [String!]!) {
-    deleteRoles(codes: $codes) {
-      succeedCount
-      failedCount
-      message
-      errors
-    }
-  }
-`;
-export const DeleteUserDocument = gql`
-  mutation deleteUser($id: String!) {
-    deleteUser(id: $id) {
-      message
-      code
-    }
-  }
-`;
-export const DeleteUserpoolDocument = gql`
-  mutation deleteUserpool {
-    deleteUserpool {
-      message
-      code
-    }
-  }
-`;
-export const DeleteUsersDocument = gql`
-  mutation deleteUsers($ids: [String!]!) {
-    deleteUsers(ids: $ids) {
-      message
-      code
-    }
-  }
-`;
-export const DeleteWebhookDocument = gql`
-  mutation deleteWebhook($input: DeleteWebhookInput!) {
-    deleteWebhook(input: $input) {
-      message
-      code
-    }
-  }
-`;
-export const DetachPermissionDocument = gql`
-  mutation detachPermission($roleId: String!, $permissionIds: [String!]!) {
-    detachPermission(roleId: $roleId, permissionIds: $permissionIds) {
-      succeedCount
-      failedCount
-      message
-      errors
-    }
-  }
-`;
-export const DisableEmailTemplateDocument = gql`
-  mutation disableEmailTemplate($type: EmailTemplateType!) {
-    disableEmailTemplate(type: $type) {
-      type
-      name
-      subject
-      sender
-      content
-      redirectTo
-      hasURL
-      expiresIn
-      enabled
-      isSystem
-    }
-  }
-`;
-export const DisableIdentityProviderDocument = gql`
-  mutation disableIdentityProvider($id: String!) {
-    disableIdentityProvider(id: $id) {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
-  }
-`;
-export const DisableSocialConnectionInstanceDocument = gql`
-  mutation disableSocialConnectionInstance($provider: String!) {
-    disableSocialConnectionInstance(provider: $provider) {
-      provider
-      enabled
-      fields {
-        key
-        value
-      }
-    }
-  }
-`;
-export const DoRegisterProcessDocument = gql`
-  mutation doRegisterProcess(
-    $userInfo: CreateUserInput!
-    $keepPassword: Boolean
-  ) {
-    doRegisterProcess(userInfo: $userInfo, keepPassword: $keepPassword) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const EnableEmailTemplateDocument = gql`
-  mutation enableEmailTemplate($type: EmailTemplateType!) {
-    enableEmailTemplate(type: $type) {
-      type
-      name
-      subject
-      sender
-      content
-      redirectTo
-      hasURL
-      expiresIn
-      enabled
-      isSystem
-    }
-  }
-`;
-export const EnableIdentityProviderDocument = gql`
-  mutation enableIdentityProvider($id: String!) {
-    enableIdentityProvider(id: $id) {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
-  }
-`;
-export const EnableSocialConnectionInstanceDocument = gql`
-  mutation enableSocialConnectionInstance($provider: String!) {
-    enableSocialConnectionInstance(provider: $provider) {
-      provider
-      enabled
-      fields {
-        key
-        value
-      }
-    }
-  }
-`;
-export const LoginByEmailDocument = gql`
-  mutation loginByEmail($input: LoginByEmailInput!) {
-    loginByEmail(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const LoginByPhoneCodeDocument = gql`
-  mutation loginByPhoneCode($input: LoginByPhoneCodeInput!) {
-    loginByPhoneCode(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const LoginByPhonePasswordDocument = gql`
-  mutation loginByPhonePassword($input: LoginByPhonePasswordInput!) {
-    loginByPhonePassword(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const LoginByUsernameDocument = gql`
-  mutation loginByUsername($input: LoginByUsernameInput!) {
-    loginByUsername(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const RefreshUserpoolSecretDocument = gql`
-  mutation refreshUserpoolSecret {
-    refreshUserpoolSecret
-  }
-`;
-export const RegisterByEmailDocument = gql`
-  mutation registerByEmail($input: RegisterByEmailInput!) {
-    registerByEmail(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const RegisterByPhonePasswordDocument = gql`
-  mutation registerByPhonePassword($input: RegisterByPhonePasswordInput!) {
-    registerByPhonePassword(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const RegisterByUsernameDocument = gql`
-  mutation registerByUsername($input: RegisterByUsernameInput!) {
-    registerByUsername(input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const RemoveCooperatorDocument = gql`
-  mutation removeCooperator($userId: String!, $roleId: String!) {
-    removeCooperator(userId: $userId, roleId: $roleId) {
-      message
-      code
-    }
-  }
-`;
-export const RemoveFunctionFromPipelineDocument = gql`
-  mutation removeFunctionFromPipeline(
-    $input: RemoveFunctionFromPipelineInput!
-  ) {
-    removeFunctionFromPipeline(input: $input) {
-      id
-      name
-      trigger
-      functions {
-        funcId
-        asynchronous
-        enabled
-      }
-    }
-  }
-`;
-export const RemoveMemberDocument = gql`
-  mutation removeMember(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $orgId: String!
-    $nodeId: String!
-    $userIds: [String!]!
-  ) {
-    removeMember(orgId: $orgId, nodeId: $nodeId, userIds: $userIds) {
-      name
-      nameI18n
-      description
-      descriptionI18n
-      order
-      code
-      root
-      depth
-      createdAt
-      updatedAt
-      children
-      users(
-        page: $page
-        limit: $limit
-        sortBy: $sortBy
-        includeChildrenNodes: $includeChildrenNodes
-      ) {
-        totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
-      }
-    }
-  }
-`;
-export const RemoveWhitelistDocument = gql`
-  mutation removeWhitelist($type: WhitelistType!, $list: [String!]!) {
-    removeWhitelist(type: $type, list: $list) {
-      createdAt
-      updatedAt
-      value
-    }
-  }
-`;
-export const ResetPasswordDocument = gql`
-  mutation resetPassword(
-    $phone: String
-    $email: String
-    $code: String!
-    $newPassword: String!
-  ) {
-    resetPassword(
-      phone: $phone
-      email: $email
-      code: $code
-      newPassword: $newPassword
-    ) {
-      message
-      code
-    }
-  }
-`;
-export const RevokeRoleDocument = gql`
-  mutation revokeRole(
-    $code: String!
-    $userIds: [String!]
-    $groupCodes: [String!]
-    $nodeCodes: [String!]
-  ) {
-    revokeRole(
-      code: $code
-      userIds: $userIds
-      groupCodes: $groupCodes
-      nodeCodes: $nodeCodes
-    ) {
-      code
-      name
-      description
-      isSystem
-      createdAt
-      updatedAt
-      permissions {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-      users {
-        totalCount
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const SendEmailDocument = gql`
-  mutation sendEmail($email: String!, $scene: EmailScene!) {
-    sendEmail(email: $email, scene: $scene) {
-      message
-      code
-    }
-  }
-`;
-export const SendWebhookTestRequestDocument = gql`
-  mutation sendWebhookTestRequest($input: SendWebhookTestRequestInput!) {
-    sendWebhookTestRequest(input: $input) {
-      message
-      code
-    }
-  }
-`;
-export const UpdateEmailDocument = gql`
-  mutation updateEmail(
-    $email: String!
-    $emailCode: String!
-    $oldEmail: String
-    $oldEmailCode: String
-  ) {
-    updateEmail(
-      email: $email
-      emailCode: $emailCode
-      oldEmail: $oldEmail
-      oldEmailCode: $oldEmailCode
-    ) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const UpdateFunctionDocument = gql`
-  mutation updateFunction($input: UpdateFunctionInput!) {
-    updateFunction(input: $input) {
-      id
-      name
-      sourceCode
-      description
-      url
-    }
-  }
-`;
-export const UpdateIdentityProviderDocument = gql`
-  mutation updateIdentityProvider($input: UpdateIdentityProviderInput!) {
-    updateIdentityProvider(input: $input) {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
-  }
-`;
-export const UpdatePasswordDocument = gql`
-  mutation updatePassword(
-    $id: String!
-    $newPassword: String!
-    $oldPassword: String
-  ) {
-    updatePassword(
-      id: $id
-      newPassword: $newPassword
-      oldPassword: $oldPassword
-    ) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const UpdatePhoneDocument = gql`
-  mutation updatePhone(
-    $phone: String!
-    $phoneCode: String!
-    $oldPhone: String
-    $oldPhoneCode: String
-  ) {
-    updatePhone(
-      phone: $phone
-      phoneCode: $phoneCode
-      oldPhone: $oldPhone
-      oldPhoneCode: $oldPhoneCode
-    ) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const UpdateRoleDocument = gql`
-  mutation updateRole($code: String!, $name: String, $description: String) {
-    updateRole(code: $code, name: $name, description: $description) {
-      code
-      name
-      description
-      isSystem
-      createdAt
-      updatedAt
-      permissions {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-      users {
-        totalCount
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const UpdateUserDocument = gql`
-  mutation updateUser($id: String!, $input: UpdateUserInput!) {
-    updateUser(id: $id, input: $input) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const UpdateUserpoolDocument = gql`
-  mutation updateUserpool($input: UpdateUserpoolInput!) {
-    updateUserpool(input: $input) {
-      id
-      name
-      description
-      secret
-      userpoolTypes {
-        code
-        name
-        description
-        image
-        sdks
-      }
-      logo
-      createdAt
-      updatedAt
-      emailVerifiedDefault
-      sendWelcomeEmail
-      registerDisabled
-      showWxQRCodeWhenRegisterDisabled
-      allowedOrigins
-      tokenExpiresAfter
-      isDeleted
-      frequentRegisterCheck {
-        timeInterval
-        limit
-        enable
-      }
-      loginFailCheck {
-        timeInterval
-        limit
-        enable
-      }
-      changePhoneStrategy {
-        verifyOldPhone
-      }
-      changeEmailStrategy {
-        verifyOldEmail
-      }
-      qrcodeLoginStrategy {
-        qrcodeExpiresAfter
-        returnFullUserInfo
-        allowExchangeUserInfoFromBrowser
-        ticketExpiresAfter
-      }
-      app2WxappLoginStrategy {
-        ticketExpriresAfter
-        ticketExchangeUserInfoNeedSecret
-      }
-      whitelist {
-        phoneEnabled
-        emailEnabled
-        usernameEnabled
-      }
-    }
-  }
-`;
-export const UpdateWebhookDocument = gql`
-  mutation updateWebhook($input: UpdateWebhookInput!) {
-    updateWebhook(input: $input) {
-      id
-      userPoolId
-      events {
-        name
-        label
-        description
-      }
-      url
-      isLastTimeSuccess
-      contentType
-      secret
-      enable
-    }
-  }
-`;
-export const CheckPasswordStrengthDocument = gql`
-  query checkPasswordStrength($password: String!) {
-    checkPasswordStrength(password: $password) {
-      valid
-      message
-    }
-  }
-`;
-export const ChildrenNodesDocument = gql`
-  query childrenNodes($orgId: String!, $nodeId: String!) {
-    childrenNodes(orgId: $orgId, nodeId: $nodeId) {
-      name
-      nameI18n
-      description
-      descriptionI18n
-      order
-      code
-      root
-      depth
-      createdAt
-      updatedAt
-      children
-    }
-  }
-`;
-export const CooperatedUserpoolsDocument = gql`
-  query cooperatedUserpools($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    cooperatedUserpools(page: $page, limit: $limit, sortBy: $sortBy) {
-      totalCount
-    }
-  }
-`;
-export const CooperatorsDocument = gql`
-  query cooperators {
-    cooperators {
-      roles {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-      user {
-        id
-        userPoolId
-        username
-        email
-        emailVerified
-        phone
-        phoneVerified
-        unionid
-        openid
-        nickname
-        registerMethod
-        photo
-        password
-        oauth
-        token
-        tokenExpiredAt
-        loginsCount
-        lastLogin
-        lastIP
-        signedUp
-        blocked
-        isDeleted
-        device
-        browser
-        company
-        name
-        givenName
-        familyName
-        middleName
-        profile
-        preferredUsername
-        website
-        gender
-        birthdate
-        zoneinfo
-        locale
-        address
-        formatted
-        streetAddress
-        locality
-        region
-        postalCode
-        country
-        updatedAt
-        customData
-      }
-    }
-  }
-`;
-export const EmailTemplatesDocument = gql`
-  query emailTemplates {
-    emailTemplates {
-      type
-      name
-      subject
-      sender
-      content
-      redirectTo
-      hasURL
-      expiresIn
-      enabled
-      isSystem
-    }
-  }
-`;
-export const FunctionDocument = gql`
-  query function($id: String) {
-    function(id: $id) {
-      id
-      name
-      sourceCode
-      description
-      url
-    }
-  }
-`;
-export const FunctionsDocument = gql`
-  query functions($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    functions(page: $page, limit: $limit, sortBy: $sortBy) {
-      list {
-        id
-        name
-        sourceCode
-        description
-        url
-      }
-      totalCount
-    }
-  }
-`;
-export const IdentityProviderDocument = gql`
-  query identityProvider($id: String) {
-    identityProvider(id: $id) {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
-  }
-`;
-export const IdentityProvidersDocument = gql`
-  query identityProviders(
-    $protocol: IdentityProviderProtocol!
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-  ) {
-    identityProviders(
-      protocol: $protocol
-      page: $page
-      limit: $limit
-      sortBy: $sortBy
-    ) {
-      list {
-        id
-        type
-        config
-        enabled
-        userPoolId
-      }
-      totalCount
-    }
-  }
-`;
-export const IsActionAllowedDocument = gql`
-  query isActionAllowed(
-    $resouceCode: String!
-    $action: String!
-    $userId: String!
-  ) {
-    isActionAllowed(resouceCode: $resouceCode, action: $action, userId: $userId)
-  }
-`;
-export const IsActionDeniedDocument = gql`
-  query isActionDenied(
-    $resouceCode: String!
-    $action: String!
-    $userId: String!
-  ) {
-    isActionDenied(resouceCode: $resouceCode, action: $action, userId: $userId)
-  }
-`;
-export const IsDomainAvaliableDocument = gql`
-  query isDomainAvaliable($domain: String!) {
-    isDomainAvaliable(domain: $domain)
-  }
-`;
-export const NodeDocument = gql`
-  query node($orgId: String!, $code: String!) {
-    node(orgId: $orgId, code: $code) {
-      name
-      nameI18n
-      description
-      descriptionI18n
-      order
-      code
-      root
-      depth
-      createdAt
-      updatedAt
-      children
-    }
-  }
-`;
-export const NodeWithMembersDocument = gql`
-  query nodeWithMembers(
-    $page: Int
-    $limit: Int
-    $sortBy: SortByEnum
-    $includeChildrenNodes: Boolean
-    $orgId: String!
-    $code: String!
-  ) {
-    node(orgId: $orgId, code: $code) {
-      name
-      nameI18n
-      description
-      descriptionI18n
-      order
-      code
-      root
-      depth
-      createdAt
-      updatedAt
-      children
-      users(
-        page: $page
-        limit: $limit
-        sortBy: $sortBy
-        includeChildrenNodes: $includeChildrenNodes
-      ) {
-        totalCount
-        list {
-          id
-          userPoolId
-          username
-          email
-          emailVerified
-          phone
-          phoneVerified
-          unionid
-          openid
-          nickname
-          registerMethod
-          photo
-          password
-          oauth
-          token
-          tokenExpiredAt
-          loginsCount
-          lastLogin
-          lastIP
-          signedUp
-          blocked
-          isDeleted
-          device
-          browser
-          company
-          name
-          givenName
-          familyName
-          middleName
-          profile
-          preferredUsername
-          website
-          gender
-          birthdate
-          zoneinfo
-          locale
-          address
-          formatted
-          streetAddress
-          locality
-          region
-          postalCode
-          country
-          updatedAt
-          customData
-        }
-      }
-    }
-  }
-`;
-export const OrgDocument = gql`
-  query org($id: String!) {
-    org(id: $id) {
-      id
-      rootNode {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-      nodes {
-        name
-        nameI18n
-        description
-        descriptionI18n
-        order
-        code
-        root
-        depth
-        createdAt
-        updatedAt
-        children
-      }
-    }
-  }
-`;
-export const OrgsDocument = gql`
-  query orgs($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    orgs(page: $page, limit: $limit, sortBy: $sortBy) {
-      totalCount
-      list {
-        id
-      }
-    }
-  }
-`;
-export const PermissionDocument = gql`
-  query permission($id: String!) {
-    permission(id: $id) {
-      id
-      code
-      name
-      description
-      isSystem
-      type
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const PermissionByCodeDocument = gql`
-  query permissionByCode($code: String!) {
-    permissionByCode(code: $code) {
-      id
-      code
-      name
-      description
-      isSystem
-      type
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const PermissionsDocument = gql`
-  query permissions($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    permissions(page: $page, limit: $limit, sortBy: $sortBy) {
-      totalCount
-      list {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const PipelineDocument = gql`
-  query pipeline($id: String!) {
-    pipeline(id: $id) {
-      id
-      name
-      trigger
-      functions {
-        funcId
-        asynchronous
-        enabled
-      }
-    }
-  }
-`;
-export const PipelinesDocument = gql`
-  query pipelines {
-    pipelines {
-      list {
-        id
-        name
-        trigger
-      }
-      totalCount
-    }
-  }
-`;
-export const PreviewEmailDocument = gql`
-  query previewEmail($type: EmailTemplateType!) {
-    previewEmail(type: $type)
-  }
-`;
-export const QiniuUptokenDocument = gql`
-  query qiniuUptoken($type: String) {
-    qiniuUptoken(type: $type)
-  }
-`;
-export const QueryMfaDocument = gql`
-  query queryMfa($id: String, $userId: String, $userPoolId: String) {
-    queryMfa(id: $id, userId: $userId, userPoolId: $userPoolId) {
-      id
-      userId
-      userPoolId
-      enable
-      secret
-    }
-  }
-`;
-export const ResouceRulesDocument = gql`
-  query resouceRules($code: String) {
-    resouceRules(code: $code) {
-      totalCount
-      list {
-        action
-        allow
-        expiresIn
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const RoleDocument = gql`
-  query role($code: String!) {
-    role(code: $code) {
-      code
-      name
-      description
-      isSystem
-      createdAt
-      updatedAt
-      permissions {
-        id
-        code
-        name
-        description
-        isSystem
-        type
-        createdAt
-        updatedAt
-      }
-      users {
-        totalCount
-      }
-      parent {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const RolesDocument = gql`
-  query roles($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    roles(page: $page, limit: $limit, sortBy: $sortBy) {
-      totalCount
-      list {
-        code
-        name
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-export const SearchUserDocument = gql`
-  query searchUser($query: String!, $fields: String, $page: Int, $count: Int) {
-    searchUser(query: $query, fields: $fields, page: $page, count: $count) {
-      totalCount
-      list {
-        id
-        userPoolId
-        username
-        email
-        emailVerified
-        phone
-        phoneVerified
-        unionid
-        openid
-        nickname
-        registerMethod
-        photo
-        password
-        oauth
-        token
-        tokenExpiredAt
-        loginsCount
-        lastLogin
-        lastIP
-        signedUp
-        blocked
-        isDeleted
-        device
-        browser
-        company
-        name
-        givenName
-        familyName
-        middleName
-        profile
-        preferredUsername
-        website
-        gender
-        birthdate
-        zoneinfo
-        locale
-        address
-        formatted
-        streetAddress
-        locality
-        region
-        postalCode
-        country
-        updatedAt
-        customData
-      }
-    }
-  }
-`;
-export const SocialConnectionDocument = gql`
-  query socialConnection($provider: String!) {
-    socialConnection(provider: $provider) {
-      provider
-      name
-      logo
-      description
-      fields {
-        key
-        label
-        type
-        placeholder
-      }
-    }
-  }
-`;
-export const SocialConnectionInstanceDocument = gql`
-  query socialConnectionInstance($provider: String!) {
-    socialConnectionInstance(provider: $provider) {
-      provider
-      enabled
-      fields {
-        key
-        value
-      }
-    }
-  }
-`;
-export const SocialConnectionInstancesDocument = gql`
-  query socialConnectionInstances {
-    socialConnectionInstances {
-      provider
-      enabled
-      fields {
-        key
-        value
-      }
-    }
-  }
-`;
-export const SocialConnectionsDocument = gql`
-  query socialConnections {
-    socialConnections {
-      provider
-      name
-      logo
-      description
-      fields {
-        key
-        label
-        type
-        placeholder
-      }
-    }
-  }
-`;
-export const TemplateCodeDocument = gql`
-  query templateCode {
-    templateCode
-  }
-`;
-export const UserDocument = gql`
-  query user($id: String!) {
-    user(id: $id) {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerMethod
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-`;
-export const UserBatchDocument = gql`
-  query userBatch($ids: [String!]!) {
-    userBatch(ids: $ids) {
-      totalCount
-      list {
-        id
-        userPoolId
-        username
-        email
-        emailVerified
-        phone
-        phoneVerified
-        unionid
-        openid
-        nickname
-        registerMethod
-        photo
-        password
-        oauth
-        token
-        tokenExpiredAt
-        loginsCount
-        lastLogin
-        lastIP
-        signedUp
-        blocked
-        isDeleted
-        device
-        browser
-        company
-        name
-        givenName
-        familyName
-        middleName
-        profile
-        preferredUsername
-        website
-        gender
-        birthdate
-        zoneinfo
-        locale
-        address
-        formatted
-        streetAddress
-        locality
-        region
-        postalCode
-        country
-        updatedAt
-        customData
-      }
-    }
-  }
-`;
-export const UserpoolDocument = gql`
-  query userpool {
-    userpool {
-      id
-      name
-      description
-      secret
-      userpoolTypes {
-        code
-        name
-        description
-        image
-        sdks
-      }
-      logo
-      createdAt
-      updatedAt
-      emailVerifiedDefault
-      sendWelcomeEmail
-      registerDisabled
-      showWxQRCodeWhenRegisterDisabled
-      allowedOrigins
-      tokenExpiresAfter
-      isDeleted
-      frequentRegisterCheck {
-        timeInterval
-        limit
-        enable
-      }
-      loginFailCheck {
-        timeInterval
-        limit
-        enable
-      }
-      changePhoneStrategy {
-        verifyOldPhone
-      }
-      changeEmailStrategy {
-        verifyOldEmail
-      }
-      qrcodeLoginStrategy {
-        qrcodeExpiresAfter
-        returnFullUserInfo
-        allowExchangeUserInfoFromBrowser
-        ticketExpiresAfter
-      }
-      app2WxappLoginStrategy {
-        ticketExpriresAfter
-        ticketExchangeUserInfoNeedSecret
-      }
-      whitelist {
-        phoneEnabled
-        emailEnabled
-        usernameEnabled
-      }
-    }
-  }
-`;
-export const UserpoolTypesDocument = gql`
-  query userpoolTypes {
+}
+    `;
+export const CreateUserpoolDocument = `
+    mutation createUserpool($name: String!, $description: String, $logo: String, $userpoolTypes: [String!]) {
+  createUserpool(name: $name, description: $description, logo: $logo, userpoolTypes: $userpoolTypes) {
+    id
+    name
+    description
+    secret
     userpoolTypes {
       code
       name
@@ -7228,34 +5118,731 @@ export const UserpoolTypesDocument = gql`
       image
       sdks
     }
-  }
-`;
-export const UserpoolsDocument = gql`
-  query userpools($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    userpools(page: $page, limit: $limit, sortBy: $sortBy) {
-      totalCount
-      list {
-        id
-        name
-        description
-        secret
-        logo
-        createdAt
-        updatedAt
-        emailVerifiedDefault
-        sendWelcomeEmail
-        registerDisabled
-        showWxQRCodeWhenRegisterDisabled
-        allowedOrigins
-        tokenExpiresAfter
-        isDeleted
-      }
+    logo
+    createdAt
+    updatedAt
+    emailVerifiedDefault
+    sendWelcomeEmail
+    registerDisabled
+    showWxQRCodeWhenRegisterDisabled
+    allowedOrigins
+    tokenExpiresAfter
+    isDeleted
+    frequentRegisterCheck {
+      timeInterval
+      limit
+      enable
+    }
+    loginFailCheck {
+      timeInterval
+      limit
+      enable
+    }
+    changePhoneStrategy {
+      verifyOldPhone
+    }
+    changeEmailStrategy {
+      verifyOldEmail
+    }
+    qrcodeLoginStrategy {
+      qrcodeExpiresAfter
+      returnFullUserInfo
+      allowExchangeUserInfoFromBrowser
+      ticketExpiresAfter
+    }
+    app2WxappLoginStrategy {
+      ticketExpriresAfter
+      ticketExchangeUserInfoNeedSecret
+    }
+    whitelist {
+      phoneEnabled
+      emailEnabled
+      usernameEnabled
     }
   }
-`;
-export const UsersDocument = gql`
-  query users($page: Int, $count: Int, $sortBy: SortByEnum) {
-    users(page: $page, count: $count, sortBy: $sortBy) {
+}
+    `;
+export const CreateWebhookDocument = `
+    mutation createWebhook($input: CreateWebhookInput!) {
+  createWebhook(input: $input) {
+    id
+    userPoolId
+    events {
+      name
+      label
+      description
+    }
+    url
+    isLastTimeSuccess
+    contentType
+    secret
+    enable
+  }
+}
+    `;
+export const DeleteFunctionDocument = `
+    mutation deleteFunction($id: String!) {
+  deleteFunction(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteIdentityProviderDocument = `
+    mutation deleteIdentityProvider($id: String!) {
+  deleteIdentityProvider(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteNodeDocument = `
+    mutation deleteNode($orgId: String!, $nodeId: String!) {
+  deleteNode(orgId: $orgId, nodeId: $nodeId) {
+    id
+    rootNode {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+    nodes {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+  }
+}
+    `;
+export const DeleteOrgDocument = `
+    mutation deleteOrg($id: String!) {
+  deleteOrg(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeletePermissionDocument = `
+    mutation deletePermission($id: String!) {
+  deletePermission(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeletePermissionsDocument = `
+    mutation deletePermissions($ids: [String!]!) {
+  deletePermissions(ids: $ids) {
+    succeedCount
+    failedCount
+    message
+    errors
+  }
+}
+    `;
+export const DeleteRoleDocument = `
+    mutation deleteRole($code: String!) {
+  deleteRole(code: $code) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteRolesDocument = `
+    mutation deleteRoles($codes: [String!]!) {
+  deleteRoles(codes: $codes) {
+    succeedCount
+    failedCount
+    message
+    errors
+  }
+}
+    `;
+export const DeleteUserDocument = `
+    mutation deleteUser($id: String!) {
+  deleteUser(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteUserpoolDocument = `
+    mutation deleteUserpool {
+  deleteUserpool {
+    message
+    code
+  }
+}
+    `;
+export const DeleteUsersDocument = `
+    mutation deleteUsers($ids: [String!]!) {
+  deleteUsers(ids: $ids) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteWebhookDocument = `
+    mutation deleteWebhook($input: DeleteWebhookInput!) {
+  deleteWebhook(input: $input) {
+    message
+    code
+  }
+}
+    `;
+export const DetachPermissionDocument = `
+    mutation detachPermission($roleId: String!, $permissionIds: [String!]!) {
+  detachPermission(roleId: $roleId, permissionIds: $permissionIds) {
+    succeedCount
+    failedCount
+    message
+    errors
+  }
+}
+    `;
+export const DisableEmailTemplateDocument = `
+    mutation disableEmailTemplate($type: EmailTemplateType!) {
+  disableEmailTemplate(type: $type) {
+    type
+    name
+    subject
+    sender
+    content
+    redirectTo
+    hasURL
+    expiresIn
+    enabled
+    isSystem
+  }
+}
+    `;
+export const DisableIdentityProviderDocument = `
+    mutation disableIdentityProvider($id: String!) {
+  disableIdentityProvider(id: $id) {
+    id
+    type
+    config
+    enabled
+    userPoolId
+  }
+}
+    `;
+export const DisableSocialConnectionInstanceDocument = `
+    mutation disableSocialConnectionInstance($provider: String!) {
+  disableSocialConnectionInstance(provider: $provider) {
+    provider
+    enabled
+    fields {
+      key
+      value
+    }
+  }
+}
+    `;
+export const DoRegisterProcessDocument = `
+    mutation doRegisterProcess($userInfo: CreateUserInput!, $keepPassword: Boolean) {
+  doRegisterProcess(userInfo: $userInfo, keepPassword: $keepPassword) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const EnableEmailTemplateDocument = `
+    mutation enableEmailTemplate($type: EmailTemplateType!) {
+  enableEmailTemplate(type: $type) {
+    type
+    name
+    subject
+    sender
+    content
+    redirectTo
+    hasURL
+    expiresIn
+    enabled
+    isSystem
+  }
+}
+    `;
+export const EnableIdentityProviderDocument = `
+    mutation enableIdentityProvider($id: String!) {
+  enableIdentityProvider(id: $id) {
+    id
+    type
+    config
+    enabled
+    userPoolId
+  }
+}
+    `;
+export const EnableSocialConnectionInstanceDocument = `
+    mutation enableSocialConnectionInstance($provider: String!) {
+  enableSocialConnectionInstance(provider: $provider) {
+    provider
+    enabled
+    fields {
+      key
+      value
+    }
+  }
+}
+    `;
+export const LoginByEmailDocument = `
+    mutation loginByEmail($input: LoginByEmailInput!) {
+  loginByEmail(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const LoginByPhoneCodeDocument = `
+    mutation loginByPhoneCode($input: LoginByPhoneCodeInput!) {
+  loginByPhoneCode(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const LoginByPhonePasswordDocument = `
+    mutation loginByPhonePassword($input: LoginByPhonePasswordInput!) {
+  loginByPhonePassword(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const LoginByUsernameDocument = `
+    mutation loginByUsername($input: LoginByUsernameInput!) {
+  loginByUsername(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const RefreshUserpoolSecretDocument = `
+    mutation refreshUserpoolSecret {
+  refreshUserpoolSecret
+}
+    `;
+export const RegisterByEmailDocument = `
+    mutation registerByEmail($input: RegisterByEmailInput!) {
+  registerByEmail(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const RegisterByPhonePasswordDocument = `
+    mutation registerByPhonePassword($input: RegisterByPhonePasswordInput!) {
+  registerByPhonePassword(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const RegisterByUsernameDocument = `
+    mutation registerByUsername($input: RegisterByUsernameInput!) {
+  registerByUsername(input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const RemoveCooperatorDocument = `
+    mutation removeCooperator($userId: String!, $roleId: String!) {
+  removeCooperator(userId: $userId, roleId: $roleId) {
+    message
+    code
+  }
+}
+    `;
+export const RemoveFunctionFromPipelineDocument = `
+    mutation removeFunctionFromPipeline($input: RemoveFunctionFromPipelineInput!) {
+  removeFunctionFromPipeline(input: $input) {
+    id
+    name
+    trigger
+    functions {
+      funcId
+      asynchronous
+      enabled
+    }
+  }
+}
+    `;
+export const RemoveMemberDocument = `
+    mutation removeMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $nodeId: String!, $userIds: [String!]!) {
+  removeMember(orgId: $orgId, nodeId: $nodeId, userIds: $userIds) {
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    createdAt
+    updatedAt
+    children
+    users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
       totalCount
       list {
         id
@@ -7306,96 +5893,1318 @@ export const UsersDocument = gql`
       }
     }
   }
-`;
-export const WebhookDocument = gql`
-  query webhook($webhookId: String) {
-    webhook(webhookId: $webhookId) {
+}
+    `;
+export const RemoveWhitelistDocument = `
+    mutation removeWhitelist($type: WhitelistType!, $list: [String!]!) {
+  removeWhitelist(type: $type, list: $list) {
+    createdAt
+    updatedAt
+    value
+  }
+}
+    `;
+export const ResetPasswordDocument = `
+    mutation resetPassword($phone: String, $email: String, $code: String!, $newPassword: String!) {
+  resetPassword(phone: $phone, email: $email, code: $code, newPassword: $newPassword) {
+    message
+    code
+  }
+}
+    `;
+export const RevokeRoleDocument = `
+    mutation revokeRole($code: String!, $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
+  revokeRole(code: $code, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+    users {
+      totalCount
+    }
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const SendEmailDocument = `
+    mutation sendEmail($email: String!, $scene: EmailScene!) {
+  sendEmail(email: $email, scene: $scene) {
+    message
+    code
+  }
+}
+    `;
+export const SendWebhookTestRequestDocument = `
+    mutation sendWebhookTestRequest($input: SendWebhookTestRequestInput!) {
+  sendWebhookTestRequest(input: $input) {
+    message
+    code
+  }
+}
+    `;
+export const UpdateEmailDocument = `
+    mutation updateEmail($email: String!, $emailCode: String!, $oldEmail: String, $oldEmailCode: String) {
+  updateEmail(email: $email, emailCode: $emailCode, oldEmail: $oldEmail, oldEmailCode: $oldEmailCode) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const UpdateFunctionDocument = `
+    mutation updateFunction($input: UpdateFunctionInput!) {
+  updateFunction(input: $input) {
+    id
+    name
+    sourceCode
+    description
+    url
+  }
+}
+    `;
+export const UpdateIdentityProviderDocument = `
+    mutation updateIdentityProvider($input: UpdateIdentityProviderInput!) {
+  updateIdentityProvider(input: $input) {
+    id
+    type
+    config
+    enabled
+    userPoolId
+  }
+}
+    `;
+export const UpdatePasswordDocument = `
+    mutation updatePassword($id: String!, $newPassword: String!, $oldPassword: String) {
+  updatePassword(id: $id, newPassword: $newPassword, oldPassword: $oldPassword) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const UpdatePhoneDocument = `
+    mutation updatePhone($phone: String!, $phoneCode: String!, $oldPhone: String, $oldPhoneCode: String) {
+  updatePhone(phone: $phone, phoneCode: $phoneCode, oldPhone: $oldPhone, oldPhoneCode: $oldPhoneCode) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const UpdateRoleDocument = `
+    mutation updateRole($code: String!, $name: String, $description: String) {
+  updateRole(code: $code, name: $name, description: $description) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+    users {
+      totalCount
+    }
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const UpdateUserDocument = `
+    mutation updateUser($id: String!, $input: UpdateUserInput!) {
+  updateUser(id: $id, input: $input) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const UpdateUserpoolDocument = `
+    mutation updateUserpool($input: UpdateUserpoolInput!) {
+  updateUserpool(input: $input) {
+    id
+    name
+    description
+    secret
+    userpoolTypes {
+      code
+      name
+      description
+      image
+      sdks
+    }
+    logo
+    createdAt
+    updatedAt
+    emailVerifiedDefault
+    sendWelcomeEmail
+    registerDisabled
+    showWxQRCodeWhenRegisterDisabled
+    allowedOrigins
+    tokenExpiresAfter
+    isDeleted
+    frequentRegisterCheck {
+      timeInterval
+      limit
+      enable
+    }
+    loginFailCheck {
+      timeInterval
+      limit
+      enable
+    }
+    changePhoneStrategy {
+      verifyOldPhone
+    }
+    changeEmailStrategy {
+      verifyOldEmail
+    }
+    qrcodeLoginStrategy {
+      qrcodeExpiresAfter
+      returnFullUserInfo
+      allowExchangeUserInfoFromBrowser
+      ticketExpiresAfter
+    }
+    app2WxappLoginStrategy {
+      ticketExpriresAfter
+      ticketExchangeUserInfoNeedSecret
+    }
+    whitelist {
+      phoneEnabled
+      emailEnabled
+      usernameEnabled
+    }
+  }
+}
+    `;
+export const UpdateWebhookDocument = `
+    mutation updateWebhook($input: UpdateWebhookInput!) {
+  updateWebhook(input: $input) {
+    id
+    userPoolId
+    events {
+      name
+      label
+      description
+    }
+    url
+    isLastTimeSuccess
+    contentType
+    secret
+    enable
+  }
+}
+    `;
+export const CheckPasswordStrengthDocument = `
+    query checkPasswordStrength($password: String!) {
+  checkPasswordStrength(password: $password) {
+    valid
+    message
+  }
+}
+    `;
+export const ChildrenNodesDocument = `
+    query childrenNodes($orgId: String!, $nodeId: String!) {
+  childrenNodes(orgId: $orgId, nodeId: $nodeId) {
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    createdAt
+    updatedAt
+    children
+  }
+}
+    `;
+export const CooperatedUserpoolsDocument = `
+    query cooperatedUserpools($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  cooperatedUserpools(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+  }
+}
+    `;
+export const CooperatorsDocument = `
+    query cooperators {
+  cooperators {
+    roles {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+    user {
       id
       userPoolId
-      events {
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+  }
+}
+    `;
+export const EmailTemplatesDocument = `
+    query emailTemplates {
+  emailTemplates {
+    type
+    name
+    subject
+    sender
+    content
+    redirectTo
+    hasURL
+    expiresIn
+    enabled
+    isSystem
+  }
+}
+    `;
+export const FunctionDocument = `
+    query function($id: String) {
+  function(id: $id) {
+    id
+    name
+    sourceCode
+    description
+    url
+  }
+}
+    `;
+export const FunctionsDocument = `
+    query functions($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  functions(page: $page, limit: $limit, sortBy: $sortBy) {
+    list {
+      id
+      name
+      sourceCode
+      description
+      url
+    }
+    totalCount
+  }
+}
+    `;
+export const IdentityProviderDocument = `
+    query identityProvider($id: String) {
+  identityProvider(id: $id) {
+    id
+    type
+    config
+    enabled
+    userPoolId
+  }
+}
+    `;
+export const IdentityProvidersDocument = `
+    query identityProviders($protocol: IdentityProviderProtocol!, $page: Int, $limit: Int, $sortBy: SortByEnum) {
+  identityProviders(protocol: $protocol, page: $page, limit: $limit, sortBy: $sortBy) {
+    list {
+      id
+      type
+      config
+      enabled
+      userPoolId
+    }
+    totalCount
+  }
+}
+    `;
+export const IsActionAllowedDocument = `
+    query isActionAllowed($resouceCode: String!, $action: String!, $userId: String!) {
+  isActionAllowed(resouceCode: $resouceCode, action: $action, userId: $userId)
+}
+    `;
+export const IsActionDeniedDocument = `
+    query isActionDenied($resouceCode: String!, $action: String!, $userId: String!) {
+  isActionDenied(resouceCode: $resouceCode, action: $action, userId: $userId)
+}
+    `;
+export const IsDomainAvaliableDocument = `
+    query isDomainAvaliable($domain: String!) {
+  isDomainAvaliable(domain: $domain)
+}
+    `;
+export const NodeDocument = `
+    query node($orgId: String!, $code: String!) {
+  node(orgId: $orgId, code: $code) {
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    createdAt
+    updatedAt
+    children
+  }
+}
+    `;
+export const NodeWithMembersDocument = `
+    query nodeWithMembers($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $code: String!) {
+  node(orgId: $orgId, code: $code) {
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    createdAt
+    updatedAt
+    children
+    users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
+      totalCount
+      list {
+        id
+        userPoolId
+        username
+        email
+        emailVerified
+        phone
+        phoneVerified
+        unionid
+        openid
+        nickname
+        registerMethod
+        photo
+        password
+        oauth
+        token
+        tokenExpiredAt
+        loginsCount
+        lastLogin
+        lastIP
+        signedUp
+        blocked
+        isDeleted
+        device
+        browser
+        company
         name
-        label
-        description
+        givenName
+        familyName
+        middleName
+        profile
+        preferredUsername
+        website
+        gender
+        birthdate
+        zoneinfo
+        locale
+        address
+        formatted
+        streetAddress
+        locality
+        region
+        postalCode
+        country
+        updatedAt
+        customData
       }
+    }
+  }
+}
+    `;
+export const OrgDocument = `
+    query org($id: String!) {
+  org(id: $id) {
+    id
+    rootNode {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+    nodes {
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      createdAt
+      updatedAt
+      children
+    }
+  }
+}
+    `;
+export const OrgsDocument = `
+    query orgs($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  orgs(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      id
+    }
+  }
+}
+    `;
+export const PermissionDocument = `
+    query permission($id: String!) {
+  permission(id: $id) {
+    id
+    code
+    name
+    description
+    isSystem
+    type
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const PermissionByCodeDocument = `
+    query permissionByCode($code: String!) {
+  permissionByCode(code: $code) {
+    id
+    code
+    name
+    description
+    isSystem
+    type
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const PermissionsDocument = `
+    query permissions($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  permissions(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const PipelineDocument = `
+    query pipeline($id: String!) {
+  pipeline(id: $id) {
+    id
+    name
+    trigger
+    functions {
+      funcId
+      asynchronous
+      enabled
+    }
+  }
+}
+    `;
+export const PipelinesDocument = `
+    query pipelines {
+  pipelines {
+    list {
+      id
+      name
+      trigger
+    }
+    totalCount
+  }
+}
+    `;
+export const PreviewEmailDocument = `
+    query previewEmail($type: EmailTemplateType!) {
+  previewEmail(type: $type)
+}
+    `;
+export const QiniuUptokenDocument = `
+    query qiniuUptoken($type: String) {
+  qiniuUptoken(type: $type)
+}
+    `;
+export const QueryMfaDocument = `
+    query queryMfa($id: String, $userId: String, $userPoolId: String) {
+  queryMfa(id: $id, userId: $userId, userPoolId: $userPoolId) {
+    id
+    userId
+    userPoolId
+    enable
+    secret
+  }
+}
+    `;
+export const ResouceRulesDocument = `
+    query resouceRules($code: String) {
+  resouceRules(code: $code) {
+    totalCount
+    list {
+      action
+      allow
+      expiresIn
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const RoleDocument = `
+    query role($code: String!) {
+  role(code: $code) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+    users {
+      totalCount
+    }
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const RolesDocument = `
+    query roles($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  roles(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const SearchUserDocument = `
+    query searchUser($query: String!, $fields: String, $page: Int, $count: Int) {
+  searchUser(query: $query, fields: $fields, page: $page, count: $count) {
+    totalCount
+    list {
+      id
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+  }
+}
+    `;
+export const SocialConnectionDocument = `
+    query socialConnection($provider: String!) {
+  socialConnection(provider: $provider) {
+    provider
+    name
+    logo
+    description
+    fields {
+      key
+      label
+      type
+      placeholder
+    }
+  }
+}
+    `;
+export const SocialConnectionInstanceDocument = `
+    query socialConnectionInstance($provider: String!) {
+  socialConnectionInstance(provider: $provider) {
+    provider
+    enabled
+    fields {
+      key
+      value
+    }
+  }
+}
+    `;
+export const SocialConnectionInstancesDocument = `
+    query socialConnectionInstances {
+  socialConnectionInstances {
+    provider
+    enabled
+    fields {
+      key
+      value
+    }
+  }
+}
+    `;
+export const SocialConnectionsDocument = `
+    query socialConnections {
+  socialConnections {
+    provider
+    name
+    logo
+    description
+    fields {
+      key
+      label
+      type
+      placeholder
+    }
+  }
+}
+    `;
+export const TemplateCodeDocument = `
+    query templateCode {
+  templateCode
+}
+    `;
+export const UserDocument = `
+    query user($id: String!) {
+  user(id: $id) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerMethod
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    updatedAt
+    customData
+  }
+}
+    `;
+export const UserBatchDocument = `
+    query userBatch($ids: [String!]!) {
+  userBatch(ids: $ids) {
+    totalCount
+    list {
+      id
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+  }
+}
+    `;
+export const UserpoolDocument = `
+    query userpool {
+  userpool {
+    id
+    name
+    description
+    secret
+    userpoolTypes {
+      code
+      name
+      description
+      image
+      sdks
+    }
+    logo
+    createdAt
+    updatedAt
+    emailVerifiedDefault
+    sendWelcomeEmail
+    registerDisabled
+    showWxQRCodeWhenRegisterDisabled
+    allowedOrigins
+    tokenExpiresAfter
+    isDeleted
+    frequentRegisterCheck {
+      timeInterval
+      limit
+      enable
+    }
+    loginFailCheck {
+      timeInterval
+      limit
+      enable
+    }
+    changePhoneStrategy {
+      verifyOldPhone
+    }
+    changeEmailStrategy {
+      verifyOldEmail
+    }
+    qrcodeLoginStrategy {
+      qrcodeExpiresAfter
+      returnFullUserInfo
+      allowExchangeUserInfoFromBrowser
+      ticketExpiresAfter
+    }
+    app2WxappLoginStrategy {
+      ticketExpriresAfter
+      ticketExchangeUserInfoNeedSecret
+    }
+    whitelist {
+      phoneEnabled
+      emailEnabled
+      usernameEnabled
+    }
+  }
+}
+    `;
+export const UserpoolTypesDocument = `
+    query userpoolTypes {
+  userpoolTypes {
+    code
+    name
+    description
+    image
+    sdks
+  }
+}
+    `;
+export const UserpoolsDocument = `
+    query userpools($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  userpools(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      id
+      name
+      description
+      secret
+      logo
+      createdAt
+      updatedAt
+      emailVerifiedDefault
+      sendWelcomeEmail
+      registerDisabled
+      showWxQRCodeWhenRegisterDisabled
+      allowedOrigins
+      tokenExpiresAfter
+      isDeleted
+    }
+  }
+}
+    `;
+export const UsersDocument = `
+    query users($page: Int, $count: Int, $sortBy: SortByEnum) {
+  users(page: $page, count: $count, sortBy: $sortBy) {
+    totalCount
+    list {
+      id
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerMethod
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      updatedAt
+      customData
+    }
+  }
+}
+    `;
+export const WebhookDocument = `
+    query webhook($webhookId: String) {
+  webhook(webhookId: $webhookId) {
+    id
+    userPoolId
+    events {
+      name
+      label
+      description
+    }
+    url
+    isLastTimeSuccess
+    contentType
+    secret
+    enable
+  }
+`;
+export const WebhookLogDocument = `
+    query webhookLog($webhookLogId: String) {
+  webhookLog(webhookLogId: $webhookLogId) {
+    id
+    webhookId
+    userPoolId
+    event
+    request {
+      headers
+      payload
+    }
+    response {
+      headers
+      body
+      statusCode
+    }
+    errorMessage
+  }
+}
+    `;
+export const WebhookLogsDocument = `
+    query webhookLogs {
+  webhookLogs {
+    list {
+      id
+      webhookId
+      userPoolId
+      event
+      errorMessage
+    }
+    totalCount
+  }
+}
+    `;
+export const WebhookOptionsDocument = `
+    query webhookOptions {
+  webhookOptions {
+    webhookEvents {
+      name
+      label
+      description
+    }
+    contentTypes {
+      name
+      label
+    }
+  }
+}
+    `;
+export const WebhooksDocument = `
+    query webhooks {
+  webhooks {
+    list {
+      id
+      userPoolId
       url
       isLastTimeSuccess
       contentType
       secret
       enable
     }
+    totalCount
   }
-`;
-export const WebhookLogDocument = gql`
-  query webhookLog($webhookLogId: String) {
-    webhookLog(webhookLogId: $webhookLogId) {
-      id
-      webhookId
-      userPoolId
-      event
-      request {
-        headers
-        payload
-      }
-      response {
-        headers
-        body
-        statusCode
-      }
-      errorMessage
-    }
+}
+    `;
+export const WhitelistDocument = `
+    query whitelist($type: WhitelistType!) {
+  whitelist(type: $type) {
+    createdAt
+    updatedAt
+    value
   }
-`;
-export const WebhookLogsDocument = gql`
-  query webhookLogs {
-    webhookLogs {
-      list {
-        id
-        webhookId
-        userPoolId
-        event
-        errorMessage
-      }
-      totalCount
-    }
-  }
-`;
-export const WebhookOptionsDocument = gql`
-  query webhookOptions {
-    webhookOptions {
-      webhookEvents {
-        name
-        label
-        description
-      }
-      contentTypes {
-        name
-        label
-      }
-    }
-  }
-`;
-export const WebhooksDocument = gql`
-  query webhooks {
-    webhooks {
-      list {
-        id
-        userPoolId
-        url
-        isLastTimeSuccess
-        contentType
-        secret
-        enable
-      }
-      totalCount
-    }
-  }
-`;
-export const WhitelistDocument = gql`
-  query whitelist($type: WhitelistType!) {
-    whitelist(type: $type) {
-      createdAt
-      updatedAt
-      value
-    }
-  }
-`;
+}
+    `;

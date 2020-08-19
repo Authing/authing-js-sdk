@@ -24,7 +24,8 @@ test('平级 role + user + resource', async t => {
   await acl.deny(roleCode, 'close', resouceCode);
   const user = await management.users.create({
     username: generateRandomString(),
-    password: '123456'
+    password: '123456',
+    registerInClient: ''
   });
   const userId = user._id;
   await acl.assignRole(roleCode, [user._id]);
@@ -53,7 +54,8 @@ test('有层级的 role + user + resource', async t => {
   // 创建用户，授予 developer 角色
   const user = await management.users.create({
     username: generateRandomString(),
-    password: '123456'
+    password: '123456',
+    registerInClient: ''
   });
   const userId = user._id;
   await acl.assignRole(developer, [userId]);
@@ -146,7 +148,8 @@ test('组织机构 + user + resource', async t => {
   // 添加成员
   const user = await management.users.create({
     username: generateRandomString(),
-    password: '123456'
+    password: '123456',
+    registerInClient: ''
   });
   const rootNode = orgTree.rootNode;
   await management.org.addMember(org.id, rootNode.code, user._id);

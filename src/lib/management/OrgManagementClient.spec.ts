@@ -106,7 +106,8 @@ test('添加成员', async t => {
   // 添加成员
   const user = await management.users.create({
     username: generateRandomString(),
-    password: '123456'
+    password: '123456',
+    registerInClient: ''
   });
   const rootNode = orgTree.rootNode;
   await management.org.addMember(org.id, rootNode.code, user._id);

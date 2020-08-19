@@ -55,9 +55,7 @@
 		"axios": "^0.19.2",
 		"crypto": "^1.0.1",
 		"dotenv": "^8.2.0",
-		"graphql": "^15.3.0",
 		"graphql-request": "^1.8.2",
-		"graphql-tag": "^2.10.4",
 		"jwt-decode": "^2.2.0",
 		"lodash": "^4.17.15"
 	},

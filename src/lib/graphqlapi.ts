@@ -14,9 +14,9 @@ import {
   CreateRbacGroup,
   CreateRbacGroupDocument,
   CreateRbacGroupVariables,
-  QueryRbacGroupUserList,
-  QueryRbacGroupUserListDocument,
-  QueryRbacGroupUserListVariables,
+  RbacGroup,
+  RbacGroupDocument,
+  RbacGroupVariables,
   IsUserInGroup,
   IsUserInGroupDocument,
   IsUserInGroupVariables,
@@ -570,9 +570,9 @@ export const isDenied = async (
 export const groupUserList = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider,
-  variables: QueryRbacGroupUserListVariables
-): Promise<QueryRbacGroupUserList> => {
-  const query = QueryRbacGroupUserListDocument;
+  variables: RbacGroupVariables
+): Promise<RbacGroup> => {
+  const query = RbacGroupDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,
