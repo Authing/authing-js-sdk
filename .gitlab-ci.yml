@@ -4,6 +4,7 @@ stages:
   - publish
 
 publish:
+  stage: publish
   only:
     - master
   when: manual
