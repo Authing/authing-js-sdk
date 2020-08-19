@@ -103,6 +103,11 @@ import { GraphqlClient } from './common/GraphqlClient';
 import { ManagementTokenProvider } from './management/ManagementTokenProvider';
 import { AuthenticationTokenProvider } from './auth/AuthenticationTokenProvider';
 import {
+  ResetPasswordVariables,
+  ResetPasswordDocument,
+  ResetPasswordResponse
+} from '../types/graphql.v2';
+import {
   CheckPasswordStrengthVariables,
   CheckPasswordStrengthResponse,
   CheckPasswordStrengthDocument,
@@ -850,6 +855,20 @@ export const sendEmail = async (
   const query = SendEmailDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const resetPassword = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: ResetPasswordVariables
+): Promise<ResetPasswordResponse> => {
+  const query = ResetPasswordDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
     query,
     token,
     variables

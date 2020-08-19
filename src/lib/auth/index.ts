@@ -17,6 +17,7 @@ import { encrypt } from '../utils';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
 import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
+import { resetPassword } from '../graphqlapi';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,
@@ -228,6 +229,34 @@ export class AuthenticationClient {
       this.graphqlClientV2,
       this.tokenProvider,
       { email, scene }
+    );
+    return data;
+  }
+
+  async resetPhonePassword(phone: string, code: string, newPassword: string) {
+    newPassword = encrypt(newPassword, this.options.encrptionPublicKey);
+    const { resetPassword: data } = await resetPassword(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        phone,
+        code,
+        newPassword
+      }
+    );
+    return data;
+  }
+
+  async resetEmailPassword(email: string, code: string, newPassword: string) {
+    newPassword = encrypt(newPassword, this.options.encrptionPublicKey);
+    const { resetPassword: data } = await resetPassword(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        email,
+        code,
+        newPassword
+      }
     );
     return data;
   }
