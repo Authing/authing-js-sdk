@@ -55,6 +55,7 @@
 		"axios": "^0.19.2",
 		"crypto": "^1.0.1",
 		"dotenv": "^8.2.0",
+		"graphql": "^15.3.0",
 		"graphql-request": "^1.8.2",
 		"graphql-tag": "^2.10.4",
 		"jwt-decode": "^2.2.0",
@@ -88,8 +89,12 @@
 	},
 	"ava": {
 		"failFast": true,
-		"files": [ "build/main/**/*.spec.js" ],
-		"sources": [ "build/main/**/*.js" ]
+		"files": [
+			"build/main/**/*.spec.js"
+		],
+		"sources": [
+			"build/main/**/*.js"
+		]
 	},
 	"config": {
 		"commitizen": {
@@ -101,6 +106,8 @@
 	},
 	"nyc": {
 		"extends": "@istanbuljs/nyc-config-typescript",
-		"exclude": [ "**/*.spec.js" ]
+		"exclude": [
+			"**/*.spec.js"
+		]
 	}
 }
