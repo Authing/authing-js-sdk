@@ -1,4 +1,5 @@
 {
-  "editor.tabSize": 2,
-  "maven.view": "hierarchical"
+  "typescript.tsdk": "node_modules/typescript/lib"
+  // "typescript.implementationsCodeLens.enabled": true
+  // "typescript.referencesCodeLens.enabled": true
 }

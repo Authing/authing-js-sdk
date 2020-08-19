@@ -1,83 +1,106 @@
 {
 	"name": "authing-js-sdk",
-	"version": "3.20.2",
-	"description": "Official sdk of Authing",
-	"main": "dist/authing-js-sdk-node.js",
-	"browser": "dist/authing-js-sdk-browser.min.js",
-	"unpkg": "dist/authing-js-sdk-browser.min.js",
-	"prepublishOnly": "npm run build",
-	"scripts": {
-		"lint": "eslint --fix .",
-		"test:web": "ava -vs",
-		"test": "export BUILD_TARGET=node && ava -vs --timeout=2m",
-		"coverage": "nyc report --reporter=text-lcov > coverage.lcov | codecov",
-		"start": "nyc --reporter html ava -vs && open ./.nyc_output/index.html",
-		"build": "webpack --config webpack.config.js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Authing/authing-js-sdk.git"
-	},
-	"keywords": [
-		"authing",
-		"auth",
-		"oauth"
-	],
-	"author": "authing",
+	"version": "4.0.0-alpha.0",
+	"description": "Official SDK of Authing",
+	"main": "build/main/index.js",
+	"typings": "build/main/index.d.ts",
+	"module": "build/module/index.js",
+	"repository": "https://github.com/YOUR_GITHUB_USER_NAME/authing-js-sdk",
 	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/Authing/authing-js-sdk/issues"
+	"keywords": [],
+	"scripts": {
+		"describe": "npm-scripts-info",
+		"build": "run-s clean && run-p build:*",
+		"build:main": "tsc -p tsconfig.json",
+		"build:module": "tsc -p tsconfig.module.json",
+		"build:umd": "tsc -p tsconfig.brower.json",
+		"fix": "run-s fix:*",
+		"fix:prettier": "prettier \"src/**/*.ts\" --write",
+		"fix:tslint": "tslint --fix --project .",
+		"test": "run-s build test:*",
+		"test:lint": "tslint --project . && prettier \"src/**/*.ts\" --list-different",
+		"test:unit": "nyc --silent ava",
+		"watch": "run-s clean build:main && run-p \"build:main -- -w\" \"test:unit -- --watch\"",
+		"cov": "run-s build test:unit cov:html && open-cli coverage/index.html",
+		"cov:html": "nyc report --reporter=html",
+		"cov:send": "nyc report --reporter=lcov && codecov",
+		"cov:check": "nyc report && nyc check-coverage --lines 100 --functions 100 --branches 100",
+		"doc": "run-s doc:html && open-cli build/docs/index.html",
+		"doc:html": "typedoc src/ --exclude **/*.spec.ts --target ES6 --mode file --out build/docs",
+		"doc:json": "typedoc src/ --exclude **/*.spec.ts --target ES6 --mode file --json build/docs/typedoc.json",
+		"doc:publish": "gh-pages -m \"[ci skip] Updates\" -d build/docs",
+		"version": "standard-version",
+		"reset": "git clean -dfx && git reset --hard && npm i",
+		"clean": "trash build test",
+		"prepare-release": "run-s reset test cov:check doc:html version doc:publish",
+		"preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('authing-js-sdk must be installed with Yarn: https://yarnpkg.com/')\""
 	},
-	"homepage": "https://github.com/Authing/authing-js-sdk#readme",
+	"scripts-info": {
+		"info": "Display information about the package scripts",
+		"build": "Clean and rebuild the project",
+		"fix": "Try to automatically fix any linting problems",
+		"test": "Lint and unit test the project",
+		"watch": "Watch and rebuild the project on save, then rerun relevant tests",
+		"cov": "Rebuild, run tests, then create and open the coverage report",
+		"doc": "Generate HTML API documentation and open it in a browser",
+		"doc:json": "Generate API documentation in typedoc JSON format",
+		"version": "Bump package.json version, update CHANGELOG.md, tag release",
+		"reset": "Delete all untracked files and reset the repo to the last commit",
+		"prepare-release": "One-step: clean, build, test, publish docs, and prep a release"
+	},
+	"engines": {
+		"node": ">=8.9"
+	},
 	"dependencies": {
-		"axios": "^0.19.0",
-		"core-js": "3",
-		"jsencrypt": "^3.0.0-rc.1",
-		"lodash": "^4.17.15",
-		"querystring": "^0.2.0"
+		"axios": "^0.19.2",
+		"crypto": "^1.0.1",
+		"dotenv": "^8.2.0",
+		"graphql-request": "^1.8.2",
+		"graphql-tag": "^2.10.4",
+		"jwt-decode": "^2.2.0",
+		"lodash": "^4.17.15"
 	},
 	"devDependencies": {
-		"@ava/babel": "^1.0.1",
-		"@babel/core": "^7.6.3",
-		"@babel/polyfill": "^7.6.0",
-		"@babel/preset-env": "^7.6.3",
-		"@babel/register": "^7.6.2",
-		"ava": "^2.4.0",
-		"babel-loader": "^8.0.6",
-		"eslint": "^6.5.1",
-		"esm": "^3.2.25",
-		"webpack": "^4.41.0",
-		"webpack-cli": "^3.3.9",
-		"yaml": "^1.8.3"
+		"@bitjson/npm-scripts-info": "^1.0.0",
+		"@bitjson/typedoc": "^0.15.0-0",
+		"@istanbuljs/nyc-config-typescript": "^0.1.3",
+		"@types/bluebird": "^3.5.32",
+		"@types/jwt-decode": "^2.2.1",
+		"@types/lodash": "^4.14.152",
+		"@types/lru-cache": "^5.1.0",
+		"ava": "2.2.0",
+		"body-parser": "^1.19.0",
+		"codecov": "^3.5.0",
+		"cz-conventional-changelog": "^2.1.0",
+		"express": "^4.17.1",
+		"get-graphql-schema": "^2.1.2",
+		"gh-pages": "^2.0.1",
+		"npm-run-all": "^4.1.5",
+		"nyc": "^14.1.1",
+		"open-cli": "^5.0.0",
+		"prettier": "^1.18.2",
+		"standard-version": "^6.0.1",
+		"trash-cli": "^3.0.0",
+		"tslint": "^5.18.0",
+		"tslint-config-prettier": "^1.18.0",
+		"tslint-immutable": "^6.0.1",
+		"typescript": "^3.9.3"
 	},
 	"ava": {
-		"files": [
-			"tests/*.js"
-		],
-		"require": [
-			"@babel/register",
-			"@babel/polyfill"
-		],
-		"babel": {
-			"testOptions": {
-				"presets": [
-					"@babel/preset-env"
-				]
-			}
+		"failFast": true,
+		"files": [ "build/main/**/*.spec.js" ],
+		"sources": [ "build/main/**/*.js" ]
+	},
+	"config": {
+		"commitizen": {
+			"path": "cz-conventional-changelog"
 		}
 	},
+	"prettier": {
+		"singleQuote": true
+	},
 	"nyc": {
-		"lines": 10,
-		"check-coverage": true,
-		"reporter": [
-			"text-lcov"
-		],
-		"report-dir": "./.nyc_output",
-		"exclude": [
-			"test",
-			"test{,-*}.js",
-			"**/*.test.js",
-			"**/__tests__/**"
-		]
+		"extends": "@istanbuljs/nyc-config-typescript",
+		"exclude": [ "**/*.spec.js" ]
 	}
 }
