@@ -42,6 +42,9 @@ export class ManagementClient {
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
+
+    if (!this.options.userPoolId) throw new Error('请提供 userPoolId !');
+
     const graphqlApiEndpoint = `${this.options.host}/graphql`;
     const graphqlApiEndpointV2 = `${this.options.host}/v2/graphql`;
 
@@ -69,6 +72,7 @@ export class ManagementClient {
     this.users = new UsersManagementClient(
       this.options,
       this.graphqlClient,
+      this.graphqlClientV2,
       this.tokenProvider
     );
     this.userpool = new UserPoolManagementClient(

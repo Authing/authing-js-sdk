@@ -212,7 +212,7 @@ export type QueryUserBatchArgs = {
 
 export type QueryUsersArgs = {
   page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
+  count?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
 };
 
@@ -403,7 +403,7 @@ export enum SortByEnum {
   /** 按照更新时间降序（最近更新的在前面） */
   UpdatedatDesc = 'UPDATEDAT_DESC',
   /** 按照更新时间升序（最近更新的在后面） */
-  UpdatedatAsc = 'UPDATEDAT_ASC'
+  UpdatedatAsc = 'UPDATEDAT_ASC',
 }
 
 export type PaginatedUserPoolCooperation = {
@@ -545,7 +545,7 @@ export enum EmailTemplateType {
   /** 验证邮箱 */
   VerifyEmail = 'VERIFY_EMAIL',
   /** 修改绑定邮箱 */
-  ChangeEmail = 'CHANGE_EMAIL'
+  ChangeEmail = 'CHANGE_EMAIL',
 }
 
 /** 函数 */
@@ -572,7 +572,7 @@ export enum IdentityProviderProtocol {
   Ad = 'AD',
   Ldap = 'LDAP',
   Oidc = 'OIDC',
-  Oauth = 'OAUTH'
+  Oauth = 'OAUTH',
 }
 
 export type PaginatedIdentityProviders = {
@@ -798,7 +798,7 @@ export type WebhookContentType = {
 export enum WhitelistType {
   Username = 'USERNAME',
   Email = 'EMAIL',
-  Phone = 'PHONE'
+  Phone = 'PHONE',
 }
 
 export type WhiteList = {
@@ -1299,7 +1299,7 @@ export type ConfigEmailTemplateInput = {
 /** 邮件使用场景 */
 export enum EmailScene {
   /** 发送重置密码邮件，邮件中包含验证码 */
-  ResetPassword = 'RESET_PASSWORD'
+  ResetPassword = 'RESET_PASSWORD',
 }
 
 export type CreateFunctionInput = {
@@ -1390,7 +1390,7 @@ export enum EPipelineTrigger {
   PostRegister = 'POST_REGISTER',
   PreAuthentication = 'PRE_AUTHENTICATION',
   PostAuthentication = 'POST_AUTHENTICATION',
-  PreOidctokenissued = 'PRE_OIDCTOKENISSUED'
+  PreOidctokenissued = 'PRE_OIDCTOKENISSUED',
 }
 
 export type PipelineFunctionInput = {
@@ -4440,7 +4440,7 @@ export type UserpoolsResponse = {
 
 export type UsersVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
+  count?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
 }>;
 
@@ -7254,8 +7254,8 @@ export const UserpoolsDocument = gql`
   }
 `;
 export const UsersDocument = gql`
-  query users($page: Int, $limit: Int, $sortBy: SortByEnum) {
-    users(page: $page, limit: $limit, sortBy: $sortBy) {
+  query users($page: Int, $count: Int, $sortBy: SortByEnum) {
+    users(page: $page, count: $count, sortBy: $sortBy) {
       totalCount
       list {
         id

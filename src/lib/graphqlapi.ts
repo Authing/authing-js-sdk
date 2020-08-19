@@ -92,9 +92,6 @@ import {
   InterConnections,
   InterConnectionsDocument,
   InterConnectionsVariables,
-  UsersDocument,
-  Users,
-  UsersVariables,
   PasswordLessForceLogin,
   PasswordLessForceLoginDocument,
   PasswordLessForceLoginVariables
@@ -158,7 +155,10 @@ import {
   NodeWithMembersVariables,
   SendEmailResponse,
   SendEmailVariables,
-  SendEmailDocument
+  SendEmailDocument,
+  UsersDocument,
+  UsersResponse,
+  UsersVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -391,20 +391,6 @@ export const interConnections = async (
   variables: InterConnectionsVariables
 ): Promise<InterConnections> => {
   const query = InterConnectionsDocument;
-  const token = await tokenProvider.getAccessToken();
-  return await garpqhlClient.request({
-    query,
-    token,
-    variables
-  });
-};
-
-export const users = async (
-  garpqhlClient: GraphqlClient,
-  tokenProvider: ManagementTokenProvider,
-  variables: UsersVariables
-): Promise<Users> => {
-  const query = UsersDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,
@@ -867,6 +853,20 @@ export const resetPassword = async (
   variables: ResetPasswordVariables
 ): Promise<ResetPasswordResponse> => {
   const query = ResetPasswordDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const users = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UsersVariables
+): Promise<UsersResponse> => {
+  const query = UsersDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

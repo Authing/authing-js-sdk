@@ -17,15 +17,18 @@ import {
 export class UsersManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;
+  graphqlClientV2: GraphqlClient;
   tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
     graphqlClient: GraphqlClient,
+    graphqlClientV2: GraphqlClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
     this.graphqlClient = graphqlClient;
+    this.graphqlClientV2 = graphqlClientV2;
     this.tokenProvider = tokenProvider;
   }
 
@@ -82,18 +85,15 @@ export class UsersManagementClient {
    * @memberof UsersManagementClient
    */
   async list(page?: number, count?: number) {
-    page = page || 0;
-    count = count || 10;
-    const res = await users(
-      this.graphqlClient,
+    const { users: data } = await users(
+      this.graphqlClientV2,
       this.tokenProvider,
-      Object.assign(
-        {},
-        { page, count },
-        { registerInClient: this.options.userPoolId }
-      )
+      {
+        page,
+        count
+      }
     );
-    return res.users;
+    return data;
   }
 
   /**
