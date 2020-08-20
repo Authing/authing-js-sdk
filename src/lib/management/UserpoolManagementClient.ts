@@ -3,7 +3,7 @@ import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { PermissionDescriptorsListInputType } from '../../types/graphql.v1';
 import { updateUserpool } from '../graphqlapi';
-import { UpdateUserpoolInput } from '../../types/graphql.v2';
+import { UpdateUserpoolInput, UserPool } from '../../types/graphql.v2';
 import {
   queryPermissionList,
   addCollaborator,
@@ -72,17 +72,15 @@ export class UserPoolManagementClient {
    * 查询用户池详情
    *
    * @returns
-   * @memberof UserPoolManagementClient
+   * @memberof UserPool
    */
-  async detail() {
+  async detail(): Promise<UserPool> {
     const res = await getUserPoolDetail(
-      this.graphqlClient,
+      this.graphqlClientV2,
       this.tokenProvider,
-      {
-        id: this.options.userPoolId
-      }
+      {}
     );
-    return res.client;
+    return res.userpool;
   }
 
   /**
