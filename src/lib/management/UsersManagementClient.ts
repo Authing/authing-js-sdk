@@ -13,6 +13,7 @@ import {
   passwordLessForceLogin,
   createUserWithoutAuthentication
 } from '../graphqlapi';
+import { User } from '../../types/graphql.v2';
 
 export class UsersManagementClient {
   options: ManagementClientOptions;
@@ -69,12 +70,15 @@ export class UsersManagementClient {
    * @returns
    * @memberof UsersManagementClient
    */
-  async get(userId: string) {
-    const res = await user(this.graphqlClient, this.tokenProvider, {
-      registerInClient: this.options.userPoolId,
-      id: userId
-    });
-    return res.user;
+  async get(userId: string): Promise<User> {
+    const { user: data } = await user(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        id: userId
+      }
+    );
+    return data;
   }
 
   /**
