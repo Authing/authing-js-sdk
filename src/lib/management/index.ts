@@ -77,6 +77,7 @@ export class ManagementClient {
     this.userpool = new UserPoolManagementClient(
       this.options,
       this.graphqlClient,
+      this.graphqlClientV2,
       this.tokenProvider
     );
     this.acl = new AccessControlManagementClient(

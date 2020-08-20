@@ -2,6 +2,8 @@ import { ManagementClientOptions } from './types';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { PermissionDescriptorsListInputType } from '../../types/graphql.v1';
+import { updateUserpool } from '../graphqlapi';
+import { UpdateUserpoolInput } from '../../types/graphql.v2';
 import {
   queryPermissionList,
   addCollaborator,
@@ -11,14 +13,17 @@ import {
 export class UserPoolManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;
+  graphqlClientV2: GraphqlClient;
   tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
     graphqlClient: GraphqlClient,
+    graphqlClientV2: GraphqlClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
+    this.graphqlClientV2 = graphqlClientV2;
     this.graphqlClient = graphqlClient;
     this.tokenProvider = tokenProvider;
   }
@@ -78,5 +83,16 @@ export class UserPoolManagementClient {
       }
     );
     return res.client;
+  }
+
+  /**
+   * 更新用户池配置
+   * @param input 更新内容
+   */
+  async update(input: UpdateUserpoolInput) {
+    const res = await updateUserpool(this.graphqlClientV2, this.tokenProvider, {
+      input
+    });
+    return res.updateUserpool;
   }
 }

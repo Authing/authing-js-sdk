@@ -97,12 +97,13 @@ import { GraphqlClient } from './common/GraphqlClient';
 import { ManagementTokenProvider } from './management/ManagementTokenProvider';
 import { AuthenticationTokenProvider } from './auth/AuthenticationTokenProvider';
 import {
+  UpdateUserpoolVariables,
+  UpdateUserpoolResponse,
+  UpdateUserpoolDocument,
   ResetPasswordVariables,
   ResetPasswordDocument,
   ResetPasswordResponse,
-  UserResponse
-} from '../types/graphql.v2';
-import {
+  UserResponse,
   CheckPasswordStrengthVariables,
   CheckPasswordStrengthResponse,
   CheckPasswordStrengthDocument,
@@ -884,6 +885,20 @@ export const getRolesOfUser = async (
   variables: RolesVariables
 ): Promise<RolesResponse> => {
   const query = RolesDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const updateUserpool = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UpdateUserpoolVariables
+): Promise<UpdateUserpoolResponse> => {
+  const query = UpdateUserpoolDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
