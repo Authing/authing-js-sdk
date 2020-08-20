@@ -16,6 +16,14 @@ export class ManagementTokenProvider {
   constructor(options: ManagementClientOptions, graphqlClient: GraphqlClient) {
     this.options = options;
     this.graphqlClient = graphqlClient;
+
+    const { accessToken } = this.options;
+    if (accessToken) {
+      this._accessToken = accessToken;
+      const decoded: DecodedAccessToken = jwtDecode(accessToken);
+      const { exp } = decoded;
+      this._accessTokenExpriredAt = exp * 1000;
+    }
   }
 
   /**
@@ -70,11 +78,11 @@ export class ManagementTokenProvider {
     // 缓存到 accessToken 过期前 3600 s
     if (
       this._accessToken &&
-      this._accessTokenExpriredAt - +new Date() >= 3600 * 1000
+      this._accessTokenExpriredAt > new Date().getTime() + 3600 * 1000
     ) {
       return this._accessToken;
     }
-    return await this.getAccessTokenFromServver();
+    return await this.getAccessTokenFromServer();
   }
 
   /**
@@ -83,7 +91,7 @@ export class ManagementTokenProvider {
    * @returns
    * @memberof ManagementTokenProvider
    */
-  private async getAccessTokenFromServver() {
+  private async getAccessTokenFromServer() {
     // 如果是通过密钥刷新
     let accessToken = null;
     if (this.options.secret) {
