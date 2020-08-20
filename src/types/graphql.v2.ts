@@ -166,6 +166,7 @@ export type QueryPermissionByCodeArgs = {
 };
 
 export type QueryPermissionsArgs = {
+  userId?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -3956,6 +3957,7 @@ export type PermissionByCodeResponse = {
 };
 
 export type PermissionsVariables = Exact<{
+  userId?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -6628,8 +6630,8 @@ export const PermissionByCodeDocument = `
 }
     `;
 export const PermissionsDocument = `
-    query permissions($page: Int, $limit: Int, $sortBy: SortByEnum) {
-  permissions(page: $page, limit: $limit, sortBy: $sortBy) {
+    query permissions($userId: String, $page: Int, $limit: Int, $sortBy: SortByEnum) {
+  permissions(userId: $userId, page: $page, limit: $limit, sortBy: $sortBy) {
     totalCount
     list {
       id
