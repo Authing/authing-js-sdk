@@ -68,9 +68,6 @@ import {
   AddCollaborator,
   AddCollaboratorDocument,
   AddCollaboratorVariables,
-  Client,
-  ClientDocument,
-  ClientVariables,
   QueryPermissionList,
   QueryPermissionListDocument,
   QueryPermissionListVariables,
@@ -97,6 +94,9 @@ import { GraphqlClient } from './common/GraphqlClient';
 import { ManagementTokenProvider } from './management/ManagementTokenProvider';
 import { AuthenticationTokenProvider } from './auth/AuthenticationTokenProvider';
 import {
+  UserpoolDocument,
+  UserpoolVariables,
+  UserpoolResponse,
   UpdateUserpoolVariables,
   UpdateUserpoolResponse,
   UpdateUserpoolDocument,
@@ -311,9 +311,9 @@ export const addCollaborator = async (
 export const getUserPoolDetail = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
-  variables: ClientVariables
-): Promise<Client> => {
-  const query = ClientDocument;
+  variables: UserpoolVariables
+): Promise<UserpoolResponse> => {
+  const query = UserpoolDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,
