@@ -86,9 +86,6 @@ import {
   RemoveUsers,
   RemoveUsersDocument,
   RemoveUsersVariables,
-  User,
-  UserDocument,
-  UserVariables,
   InterConnections,
   InterConnectionsDocument,
   InterConnectionsVariables,
@@ -106,6 +103,7 @@ import {
   ResetPasswordVariables,
   ResetPasswordDocument,
   ResetPasswordResponse,
+  UserResponse,
   CheckPasswordStrengthVariables,
   CheckPasswordStrengthResponse,
   CheckPasswordStrengthDocument,
@@ -159,7 +157,9 @@ import {
   SendEmailDocument,
   UsersDocument,
   UsersResponse,
-  UsersVariables
+  UsersVariables,
+  UserDocument,
+  UserVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -404,7 +404,7 @@ export const user = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider,
   variables: UserVariables
-): Promise<User> => {
+): Promise<UserResponse> => {
   const query = UserDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
