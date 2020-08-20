@@ -14,7 +14,8 @@ import {
   createUserWithoutAuthentication,
   getRolesOfUser,
   getPermissionsOfUser,
-  getGroupsOfUser
+  getGroupsOfUser,
+  updateUser
 } from '../graphqlapi';
 import { User } from '../../types/graphql.v2';
 
@@ -148,6 +149,22 @@ export class UsersManagementClient {
       ...options
     });
     return data.register;
+  }
+
+  /**
+   * @description 修改用户资料
+   *
+   */
+  async update(id: string, updates: Partial<User>) {
+    const { updateUser: user } = await updateUser(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        id,
+        input: updates
+      }
+    );
+    return user;
   }
 
   /**

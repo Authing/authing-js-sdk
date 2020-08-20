@@ -168,7 +168,10 @@ import {
   PermissionsVariables,
   GroupsDocument,
   GroupsResponse,
-  GroupsVariables
+  GroupsVariables,
+  UpdateUserDocument,
+  UpdateUserResponse,
+  UpdateUserVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -933,6 +936,20 @@ export const updateUserpool = async (
   variables: UpdateUserpoolVariables
 ): Promise<UpdateUserpoolResponse> => {
   const query = UpdateUserpoolDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const updateUser = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UpdateUserVariables
+): Promise<UpdateUserResponse> => {
+  const query = UpdateUserDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
