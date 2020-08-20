@@ -34,6 +34,7 @@ export type Query = {
   templateCode: Scalars['String'];
   function?: Maybe<Function>;
   functions: PaginatedFunctions;
+  groups: PaginatedGroups;
   identityProviders?: Maybe<PaginatedIdentityProviders>;
   /** 查看 Identity Provider */
   identityProvider: IdentityProvider;
@@ -111,6 +112,13 @@ export type QueryFunctionArgs = {
 };
 
 export type QueryFunctionsArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+};
+
+export type QueryGroupsArgs = {
+  userId?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -568,6 +576,26 @@ export type PaginatedFunctions = {
   totalCount: Scalars['Int'];
 };
 
+export type PaginatedGroups = {
+  totalCount: Scalars['Int'];
+  list: Array<Group>;
+};
+
+export type Group = {
+  /** 唯一标志 code */
+  code: Scalars['String'];
+  /** 名称 */
+  name: Scalars['String'];
+  /** 描述 */
+  description?: Maybe<Scalars['String']>;
+  /** 创建时间 */
+  createdAt?: Maybe<Scalars['String']>;
+  /** 修改时间 */
+  updatedAt?: Maybe<Scalars['String']>;
+  /** 包含的用户列表 */
+  users: PaginatedUsers;
+};
+
 export enum IdentityProviderProtocol {
   Saml = 'SAML',
   Ad = 'AD',
@@ -716,21 +744,6 @@ export type Resource = {
   description?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
-};
-
-export type Group = {
-  /** 唯一标志 code */
-  code: Scalars['String'];
-  /** 名称 */
-  name: Scalars['String'];
-  /** 描述 */
-  description?: Maybe<Scalars['String']>;
-  /** 创建时间 */
-  createdAt?: Maybe<Scalars['String']>;
-  /** 修改时间 */
-  updatedAt?: Maybe<Scalars['String']>;
-  /** 包含的用户列表 */
-  users: PaginatedUsers;
 };
 
 export type PaginatedUserpool = {
@@ -3722,6 +3735,26 @@ export type FunctionsResponse = {
   };
 };
 
+export type GroupsVariables = Exact<{
+  userId?: Maybe<Scalars['String']>;
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+}>;
+
+export type GroupsResponse = {
+  groups: {
+    totalCount: number;
+    list: Array<{
+      code: string;
+      name: string;
+      description?: Maybe<string>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
+  };
+};
+
 export type IdentityProviderVariables = Exact<{
   id?: Maybe<Scalars['String']>;
 }>;
@@ -6431,6 +6464,20 @@ export const FunctionsDocument = `
       url
     }
     totalCount
+  }
+}
+    `;
+export const GroupsDocument = `
+    query groups($userId: String, $page: Int, $limit: Int, $sortBy: SortByEnum) {
+  groups(userId: $userId, page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      code
+      name
+      description
+      createdAt
+      updatedAt
+    }
   }
 }
     `;

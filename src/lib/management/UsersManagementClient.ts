@@ -13,7 +13,8 @@ import {
   passwordLessForceLogin,
   createUserWithoutAuthentication,
   getRolesOfUser,
-  getPermissionsOfUser
+  getPermissionsOfUser,
+  getGroupsOfUser
 } from '../graphqlapi';
 import { User } from '../../types/graphql.v2';
 
@@ -228,6 +229,23 @@ export class UsersManagementClient {
       }
     );
     return res.createUserWithoutAuthentication;
+  }
+
+  /**
+   * @description 获取用户的分组列表
+   *
+   */
+  async getGroups(userId: string, page: number = 1, limit: number = 10) {
+    const { groups } = await getGroupsOfUser(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        userId,
+        page,
+        limit
+      }
+    );
+    return groups;
   }
 
   /**
