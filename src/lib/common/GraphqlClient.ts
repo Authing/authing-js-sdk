@@ -1,7 +1,6 @@
 import { Variables } from 'graphql-request/dist/src/types';
 import { SDK_VERSION } from '../version';
 import { GraphQLClient } from 'graphql-request';
-import { DocumentNode } from 'graphql';
 
 export class GraphqlClient {
   endpoint: string;
@@ -13,7 +12,7 @@ export class GraphqlClient {
   }
 
   async request<T>(options: {
-    query: DocumentNode;
+    query: string;
     variables?: Variables;
     token?: string;
   }) {
@@ -28,6 +27,6 @@ export class GraphqlClient {
       headers
     });
     // 这一步可能会报错
-    return await graphQLClient.request<T>(query.loc.source.body, variables);
+    return await graphQLClient.request<T>(query, variables);
   }
 }

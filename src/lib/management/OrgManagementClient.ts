@@ -50,7 +50,7 @@ export class OrgManagementClient {
       userPoolId: this.options.userPoolId
     });
     for (let org of res.orgs.list) {
-      (org as any).tree = buildTree(_.cloneDeep(org.nodes));
+      (org as any).tree = buildTree(_.cloneDeep(org) as any);
     }
     return res.orgs;
   }
