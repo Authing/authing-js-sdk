@@ -158,7 +158,10 @@ import {
   UsersResponse,
   UsersVariables,
   UserDocument,
-  UserVariables
+  UserVariables,
+  RolesDocument,
+  RolesResponse,
+  RolesVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -867,6 +870,20 @@ export const users = async (
   variables: UsersVariables
 ): Promise<UsersResponse> => {
   const query = UsersDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const getRolesOfUser = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RolesVariables
+): Promise<RolesResponse> => {
+  const query = RolesDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

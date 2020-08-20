@@ -57,7 +57,7 @@ export type Query = {
   pipelines: PaginatedPipeline;
   /** 通过 **code** 查询角色详情 */
   role: Role;
-  /** 用户池角色列表 */
+  /** 获取角色列表 */
   roles: PaginatedRoles;
   isActionAllowed: Scalars['Boolean'];
   isActionDenied: Scalars['Boolean'];
@@ -180,6 +180,7 @@ export type QueryRoleArgs = {
 };
 
 export type QueryRolesArgs = {
+  userId?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -4082,6 +4083,7 @@ export type RoleResponse = {
 };
 
 export type RolesVariables = Exact<{
+  userId?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -6737,8 +6739,8 @@ export const RoleDocument = `
 }
     `;
 export const RolesDocument = `
-    query roles($page: Int, $limit: Int, $sortBy: SortByEnum) {
-  roles(page: $page, limit: $limit, sortBy: $sortBy) {
+    query roles($userId: String, $page: Int, $limit: Int, $sortBy: SortByEnum) {
+  roles(userId: $userId, page: $page, limit: $limit, sortBy: $sortBy) {
     totalCount
     list {
       code
@@ -7133,7 +7135,8 @@ export const WebhookDocument = `
     secret
     enable
   }
-`;
+}
+    `;
 export const WebhookLogDocument = `
     query webhookLog($webhookLogId: String) {
   webhookLog(webhookLogId: $webhookLogId) {

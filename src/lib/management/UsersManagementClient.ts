@@ -11,7 +11,8 @@ import {
   createInterConnection,
   interConnections,
   passwordLessForceLogin,
-  createUserWithoutAuthentication
+  createUserWithoutAuthentication,
+  getRolesOfUser
 } from '../graphqlapi';
 import { User } from '../../types/graphql.v2';
 
@@ -226,5 +227,22 @@ export class UsersManagementClient {
       }
     );
     return res.createUserWithoutAuthentication;
+  }
+
+  /**
+   * @description 获取用户的角色列表
+   *
+   */
+  async getRoles(userId: string, page: number = 1, limit: number = 10) {
+    const { roles } = await getRolesOfUser(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        userId,
+        page,
+        limit
+      }
+    );
+    return roles;
   }
 }
