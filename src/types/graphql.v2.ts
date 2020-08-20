@@ -482,13 +482,13 @@ export type UserPoolType = {
 export type FrequentRegisterCheckConfig = {
   timeInterval?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
-  enable?: Maybe<Scalars['Boolean']>;
+  enabled?: Maybe<Scalars['Boolean']>;
 };
 
 export type LoginFailCheckConfig = {
   timeInterval?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
-  enable?: Maybe<Scalars['Boolean']>;
+  enabled?: Maybe<Scalars['Boolean']>;
 };
 
 export type ChangePhoneStrategy = {
@@ -2319,12 +2319,12 @@ export type CreateUserpoolResponse = {
     frequentRegisterCheck?: Maybe<{
       timeInterval?: Maybe<number>;
       limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
+      enabled?: Maybe<boolean>;
     }>;
     loginFailCheck?: Maybe<{
       timeInterval?: Maybe<number>;
       limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
+      enabled?: Maybe<boolean>;
     }>;
     changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>;
     changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>;
@@ -3540,12 +3540,12 @@ export type UpdateUserpoolResponse = {
     frequentRegisterCheck?: Maybe<{
       timeInterval?: Maybe<number>;
       limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
+      enabled?: Maybe<boolean>;
     }>;
     loginFailCheck?: Maybe<{
       timeInterval?: Maybe<number>;
       limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
+      enabled?: Maybe<boolean>;
     }>;
     changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>;
     changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>;
@@ -4407,12 +4407,12 @@ export type UserpoolResponse = {
     frequentRegisterCheck?: Maybe<{
       timeInterval?: Maybe<number>;
       limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
+      enabled?: Maybe<boolean>;
     }>;
     loginFailCheck?: Maybe<{
       timeInterval?: Maybe<number>;
       limit?: Maybe<number>;
-      enable?: Maybe<boolean>;
+      enabled?: Maybe<boolean>;
     }>;
     changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>;
     changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>;
@@ -5168,12 +5168,12 @@ export const CreateUserpoolDocument = `
     frequentRegisterCheck {
       timeInterval
       limit
-      enable
+      enabled
     }
     loginFailCheck {
       timeInterval
       limit
-      enable
+      enabled
     }
     changePhoneStrategy {
       verifyOldPhone
@@ -6284,12 +6284,12 @@ export const UpdateUserpoolDocument = `
     frequentRegisterCheck {
       timeInterval
       limit
-      enable
+      enabled
     }
     loginFailCheck {
       timeInterval
       limit
-      enable
+      enabled
     }
     changePhoneStrategy {
       verifyOldPhone
@@ -7049,12 +7049,12 @@ export const UserpoolDocument = `
     frequentRegisterCheck {
       timeInterval
       limit
-      enable
+      enabled
     }
     loginFailCheck {
       timeInterval
       limit
-      enable
+      enabled
     }
     changePhoneStrategy {
       verifyOldPhone
