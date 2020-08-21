@@ -16,7 +16,11 @@ import {
   allow,
   isAllowed,
   isDenied,
-  roles
+  roles,
+  role,
+  roleWithUserAndPermissions,
+  roleWithPermissions,
+  roleWithUsers
 } from '../graphqlapi';
 
 export class AccessControlManagementClient {
@@ -150,6 +154,62 @@ export class AccessControlManagementClient {
       _id: userId
     });
     return res.userGroupList;
+  }
+
+  /**
+   * @description 获取用户池角色列表
+   *
+   * @param code 角色唯一标志
+   * @param options
+   *
+   */
+  async role(
+    code: string,
+    options: {
+      /** 是否获取权限列表 */
+      getPermissions?: boolean;
+      /** 是否获取用户列表 */
+      getUsers?: boolean;
+    } = {}
+  ): Promise<DeepPartial<Role>> {
+    const { getPermissions = false, getUsers = false } = options;
+    if (!getPermissions && !getUsers) {
+      const { role: data } = await role(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          code
+        }
+      );
+      return data;
+    } else if (getPermissions && getUsers) {
+      const { role: data } = await roleWithUserAndPermissions(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          code
+        }
+      );
+      return data;
+    } else if (getPermissions && !getUsers) {
+      const { role: data } = await roleWithPermissions(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          code
+        }
+      );
+      return data;
+    } else {
+      const { role: data } = await roleWithUsers(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          code
+        }
+      );
+      return data;
+    }
   }
 
   /**

@@ -180,7 +180,19 @@ import {
   DeleteUserDocument,
   DeleteUsersDocument,
   DeleteUsersResponse,
-  DeleteUsersVariables
+  DeleteUsersVariables,
+  RoleVariables,
+  RoleDocument,
+  RoleResponse,
+  RoleWithPermissionsDocument,
+  RoleWithPermissionsResponse,
+  RoleWithPermissionsVariables,
+  RoleWithUserAndPermissionsDocument,
+  RoleWithUserAndPermissionsResponse,
+  RoleWithUserAndPermissionsVariables,
+  RoleWithUsersDocument,
+  RoleWithUsersResponse,
+  RoleWithUsersVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1015,6 +1027,62 @@ export const roles = async (
   variables: RolesVariables
 ): Promise<RolesResponse> => {
   const query = RolesDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const role = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RoleVariables
+): Promise<RoleResponse> => {
+  const query = RoleDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const roleWithUsers = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RoleWithUsersVariables
+): Promise<RoleWithUsersResponse> => {
+  const query = RoleWithUsersDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const roleWithPermissions = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RoleWithPermissionsVariables
+): Promise<RoleWithPermissionsResponse> => {
+  const query = RoleWithPermissionsDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const roleWithUserAndPermissions = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RoleWithUserAndPermissionsVariables
+): Promise<RoleWithUserAndPermissionsResponse> => {
+  const query = RoleWithUserAndPermissionsDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

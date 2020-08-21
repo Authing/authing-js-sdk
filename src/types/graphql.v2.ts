@@ -4097,6 +4097,37 @@ export type RoleResponse = {
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
+    parent?: Maybe<{
+      code: string;
+      name?: Maybe<string>;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
+  };
+};
+
+export type RoleWithPermissionsVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+export type RoleWithPermissionsResponse = {
+  role: {
+    code: string;
+    name?: Maybe<string>;
+    description?: Maybe<string>;
+    isSystem?: Maybe<boolean>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    parent?: Maybe<{
+      code: string;
+      name?: Maybe<string>;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
     permissions: Array<{
       id: string;
       code: string;
@@ -4107,7 +4138,21 @@ export type RoleResponse = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
     }>;
-    users: { totalCount: number };
+  };
+};
+
+export type RoleWithUserAndPermissionsVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+export type RoleWithUserAndPermissionsResponse = {
+  role: {
+    code: string;
+    name?: Maybe<string>;
+    description?: Maybe<string>;
+    isSystem?: Maybe<boolean>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
     parent?: Maybe<{
       code: string;
       name?: Maybe<string>;
@@ -4116,6 +4161,139 @@ export type RoleResponse = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
     }>;
+    permissions: Array<{
+      id: string;
+      code: string;
+      name: string;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      type?: Maybe<string>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
+    users: {
+      totalCount: number;
+      list: Array<{
+        id: string;
+        userPoolId: string;
+        username?: Maybe<string>;
+        email?: Maybe<string>;
+        emailVerified?: Maybe<boolean>;
+        phone?: Maybe<string>;
+        phoneVerified?: Maybe<boolean>;
+        unionid?: Maybe<string>;
+        openid?: Maybe<string>;
+        nickname?: Maybe<string>;
+        registerMethod?: Maybe<string>;
+        photo?: Maybe<string>;
+        password?: Maybe<string>;
+        oauth?: Maybe<string>;
+        token?: Maybe<string>;
+        tokenExpiredAt?: Maybe<string>;
+        loginsCount?: Maybe<number>;
+        lastLogin?: Maybe<string>;
+        lastIP?: Maybe<string>;
+        signedUp?: Maybe<string>;
+        blocked?: Maybe<boolean>;
+        isDeleted?: Maybe<boolean>;
+        device?: Maybe<string>;
+        browser?: Maybe<string>;
+        company?: Maybe<string>;
+        name?: Maybe<string>;
+        givenName?: Maybe<string>;
+        familyName?: Maybe<string>;
+        middleName?: Maybe<string>;
+        profile?: Maybe<string>;
+        preferredUsername?: Maybe<string>;
+        website?: Maybe<string>;
+        gender?: Maybe<string>;
+        birthdate?: Maybe<string>;
+        zoneinfo?: Maybe<string>;
+        locale?: Maybe<string>;
+        address?: Maybe<string>;
+        formatted?: Maybe<string>;
+        streetAddress?: Maybe<string>;
+        locality?: Maybe<string>;
+        region?: Maybe<string>;
+        postalCode?: Maybe<string>;
+        country?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        customData?: Maybe<string>;
+      }>;
+    };
+  };
+};
+
+export type RoleWithUsersVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+export type RoleWithUsersResponse = {
+  role: {
+    code: string;
+    name?: Maybe<string>;
+    description?: Maybe<string>;
+    isSystem?: Maybe<boolean>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    parent?: Maybe<{
+      code: string;
+      name?: Maybe<string>;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
+    users: {
+      totalCount: number;
+      list: Array<{
+        id: string;
+        userPoolId: string;
+        username?: Maybe<string>;
+        email?: Maybe<string>;
+        emailVerified?: Maybe<boolean>;
+        phone?: Maybe<string>;
+        phoneVerified?: Maybe<boolean>;
+        unionid?: Maybe<string>;
+        openid?: Maybe<string>;
+        nickname?: Maybe<string>;
+        registerMethod?: Maybe<string>;
+        photo?: Maybe<string>;
+        password?: Maybe<string>;
+        oauth?: Maybe<string>;
+        token?: Maybe<string>;
+        tokenExpiredAt?: Maybe<string>;
+        loginsCount?: Maybe<number>;
+        lastLogin?: Maybe<string>;
+        lastIP?: Maybe<string>;
+        signedUp?: Maybe<string>;
+        blocked?: Maybe<boolean>;
+        isDeleted?: Maybe<boolean>;
+        device?: Maybe<string>;
+        browser?: Maybe<string>;
+        company?: Maybe<string>;
+        name?: Maybe<string>;
+        givenName?: Maybe<string>;
+        familyName?: Maybe<string>;
+        middleName?: Maybe<string>;
+        profile?: Maybe<string>;
+        preferredUsername?: Maybe<string>;
+        website?: Maybe<string>;
+        gender?: Maybe<string>;
+        birthdate?: Maybe<string>;
+        zoneinfo?: Maybe<string>;
+        locale?: Maybe<string>;
+        address?: Maybe<string>;
+        formatted?: Maybe<string>;
+        streetAddress?: Maybe<string>;
+        locality?: Maybe<string>;
+        region?: Maybe<string>;
+        postalCode?: Maybe<string>;
+        country?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        customData?: Maybe<string>;
+      }>;
+    };
   };
 };
 
@@ -6765,6 +6943,64 @@ export const RoleDocument = `
     isSystem
     createdAt
     updatedAt
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const RoleWithPermissionsDocument = `
+    query roleWithPermissions($code: String!) {
+  role(code: $code) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
+    permissions {
+      id
+      code
+      name
+      description
+      isSystem
+      type
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const RoleWithUserAndPermissionsDocument = `
+    query roleWithUserAndPermissions($code: String!) {
+  role(code: $code) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
+    parent {
+      code
+      name
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
     permissions {
       id
       code
@@ -6777,7 +7013,66 @@ export const RoleDocument = `
     }
     users {
       totalCount
+      list {
+        id
+        userPoolId
+        username
+        email
+        emailVerified
+        phone
+        phoneVerified
+        unionid
+        openid
+        nickname
+        registerMethod
+        photo
+        password
+        oauth
+        token
+        tokenExpiredAt
+        loginsCount
+        lastLogin
+        lastIP
+        signedUp
+        blocked
+        isDeleted
+        device
+        browser
+        company
+        name
+        givenName
+        familyName
+        middleName
+        profile
+        preferredUsername
+        website
+        gender
+        birthdate
+        zoneinfo
+        locale
+        address
+        formatted
+        streetAddress
+        locality
+        region
+        postalCode
+        country
+        updatedAt
+        customData
+      }
     }
+  }
+}
+    `;
+export const RoleWithUsersDocument = `
+    query roleWithUsers($code: String!) {
+  role(code: $code) {
+    code
+    name
+    description
+    isSystem
+    createdAt
+    updatedAt
     parent {
       code
       name
@@ -6785,6 +7080,56 @@ export const RoleDocument = `
       isSystem
       createdAt
       updatedAt
+    }
+    users {
+      totalCount
+      list {
+        id
+        userPoolId
+        username
+        email
+        emailVerified
+        phone
+        phoneVerified
+        unionid
+        openid
+        nickname
+        registerMethod
+        photo
+        password
+        oauth
+        token
+        tokenExpiredAt
+        loginsCount
+        lastLogin
+        lastIP
+        signedUp
+        blocked
+        isDeleted
+        device
+        browser
+        company
+        name
+        givenName
+        familyName
+        middleName
+        profile
+        preferredUsername
+        website
+        gender
+        birthdate
+        zoneinfo
+        locale
+        address
+        formatted
+        streetAddress
+        locality
+        region
+        postalCode
+        country
+        updatedAt
+        customData
+      }
     }
   }
 }
