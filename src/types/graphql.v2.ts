@@ -221,7 +221,7 @@ export type QueryUserBatchArgs = {
 
 export type QueryUsersArgs = {
   page?: Maybe<Scalars['Int']>;
-  count?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
 };
 
@@ -229,7 +229,7 @@ export type QuerySearchUserArgs = {
   query: Scalars['String'];
   fields?: Maybe<Array<Maybe<Scalars['String']>>>;
   page?: Maybe<Scalars['Int']>;
-  count?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 export type QueryUserpoolsArgs = {
@@ -4349,7 +4349,7 @@ export type SearchUserVariables = Exact<{
   query: Scalars['String'];
   fields?: Maybe<Array<Maybe<Scalars['String']>>>;
   page?: Maybe<Scalars['Int']>;
-  count?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 }>;
 
 export type SearchUserResponse = {
@@ -4683,7 +4683,7 @@ export type UserpoolsResponse = {
 
 export type UsersVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
-  count?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
 }>;
 
@@ -7191,8 +7191,8 @@ export const RolesDocument = `
 }
     `;
 export const SearchUserDocument = `
-    query searchUser($query: String!, $fields: [String], $page: Int, $count: Int) {
-  searchUser(query: $query, fields: $fields, page: $page, count: $count) {
+    query searchUser($query: String!, $fields: [String], $page: Int, $limit: Int) {
+  searchUser(query: $query, fields: $fields, page: $page, limit: $limit) {
     totalCount
     list {
       id
@@ -7503,8 +7503,8 @@ export const UserpoolsDocument = `
 }
     `;
 export const UsersDocument = `
-    query users($page: Int, $count: Int, $sortBy: SortByEnum) {
-  users(page: $page, count: $count, sortBy: $sortBy) {
+    query users($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  users(page: $page, limit: $limit, sortBy: $sortBy) {
     totalCount
     list {
       id

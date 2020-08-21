@@ -94,19 +94,21 @@ export class UsersManagementClient {
   }
 
   /**
-   * page: 页码数, 从 0 开始
+   * @description 获取用户池用户列表
+   * @param page: 页码数, 从 1 开始
+   * @param limit: 每页包含的用户数
    *
    * @param {{ page: number, count: number }} options
    * @returns
    * @memberof UsersManagementClient
    */
-  async list(page?: number, count?: number) {
+  async list(page?: number, limit?: number) {
     const { users: data } = await users(
       this.graphqlClientV2,
       this.tokenProvider,
       {
         page,
-        count
+        limit
       }
     );
     return data;
@@ -296,7 +298,7 @@ export class UsersManagementClient {
    */
   async search(
     query: string,
-    options?: { fields?: string[]; page?: number; count?: number }
+    options?: { fields?: string[]; page?: number; limit?: number }
   ): Promise<PaginatedUsers> {
     const { searchUser: users } = await searchUser(
       this.graphqlClientV2,
