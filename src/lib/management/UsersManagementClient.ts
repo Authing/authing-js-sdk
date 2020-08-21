@@ -157,6 +157,12 @@ export class UsersManagementClient {
    *
    */
   async update(id: string, updates: Partial<User>) {
+    if (updates.password) {
+      updates.password = encrypt(
+        updates.password,
+        this.options.encrptionPublicKey
+      );
+    }
     const { updateUser: user } = await updateUser(
       this.graphqlClientV2,
       this.tokenProvider,
