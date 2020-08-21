@@ -15,9 +15,10 @@ import {
   getRolesOfUser,
   getPermissionsOfUser,
   getGroupsOfUser,
-  updateUser
+  updateUser,
+  searchUser
 } from '../graphqlapi';
-import { User } from '../../types/graphql.v2';
+import { User, PaginatedUsers } from '../../types/graphql.v2';
 
 export class UsersManagementClient {
   options: ManagementClientOptions;
@@ -298,5 +299,25 @@ export class UsersManagementClient {
       }
     );
     return permissions;
+  }
+
+  /**
+   * 根据关键字搜索用户
+   * @param query 搜索内容
+   * @param options 选项
+   */
+  async search(
+    query: string,
+    options?: { fields?: string[]; page?: number; count?: number }
+  ): Promise<PaginatedUsers> {
+    const { searchUser: users } = await searchUser(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        query,
+        ...options
+      }
+    );
+    return users;
   }
 }
