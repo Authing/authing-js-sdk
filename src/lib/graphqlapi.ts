@@ -94,6 +94,9 @@ import { GraphqlClient } from './common/GraphqlClient';
 import { ManagementTokenProvider } from './management/ManagementTokenProvider';
 import { AuthenticationTokenProvider } from './auth/AuthenticationTokenProvider';
 import {
+  SearchUserVariables,
+  SearchUserDocument,
+  SearchUserResponse,
   UserpoolDocument,
   UserpoolVariables,
   UserpoolResponse,
@@ -950,6 +953,20 @@ export const updateUser = async (
   variables: UpdateUserVariables
 ): Promise<UpdateUserResponse> => {
   const query = UpdateUserDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const searchUser = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: SearchUserVariables
+): Promise<SearchUserResponse> => {
+  const query = SearchUserDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

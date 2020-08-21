@@ -227,7 +227,7 @@ export type QueryUsersArgs = {
 
 export type QuerySearchUserArgs = {
   query: Scalars['String'];
-  fields?: Maybe<Scalars['String']>;
+  fields?: Maybe<Array<Maybe<Scalars['String']>>>;
   page?: Maybe<Scalars['Int']>;
   count?: Maybe<Scalars['Int']>;
 };
@@ -4142,7 +4142,7 @@ export type RolesResponse = {
 
 export type SearchUserVariables = Exact<{
   query: Scalars['String'];
-  fields?: Maybe<Scalars['String']>;
+  fields?: Maybe<Array<Maybe<Scalars['String']>>>;
   page?: Maybe<Scalars['Int']>;
   count?: Maybe<Scalars['Int']>;
 }>;
@@ -6805,7 +6805,7 @@ export const RolesDocument = `
 }
     `;
 export const SearchUserDocument = `
-    query searchUser($query: String!, $fields: String, $page: Int, $count: Int) {
+    query searchUser($query: String!, $fields: [String], $page: Int, $count: Int) {
   searchUser(query: $query, fields: $fields, page: $page, count: $count) {
     totalCount
     list {
