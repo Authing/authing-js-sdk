@@ -7,7 +7,7 @@ export interface AuthenticationClientOptions {
   /** 请求超时时间 **/
   timeout?: number;
   /** 错误回调函数, 默认为 (err: Error) => { throw err } 直接抛出报错 **/
-  onError?: (err: Error) => void;
+  onError?: (code: number, message: string) => void;
   encrptionPublicKey?: string;
   host?: string;
 }

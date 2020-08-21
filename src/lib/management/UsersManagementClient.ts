@@ -133,7 +133,8 @@ export class UsersManagementClient {
       !userInfo.unionid
     ) {
       this.options.onError(
-        new Error('Please provide at least phone, email, username or unionid')
+        500,
+        'Please provide at least phone, email, username or unionid'
       );
     }
 

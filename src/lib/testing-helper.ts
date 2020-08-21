@@ -26,10 +26,7 @@ export const getOptionsFromEnv = (): ManagementClientOptions => {
   return {
     userPoolId: process.env.AUTHING_USERPOOL_ID,
     secret: process.env.AUTHING_USERPOOL_SECRET,
-    host: process.env.AUTHING_HOST,
-    onError: (err: Error) => {
-      throw err;
-    }
+    host: process.env.AUTHING_HOST
   };
 };
 

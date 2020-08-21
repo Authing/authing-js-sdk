@@ -86,3 +86,5 @@ export default function buildTree(nodes: any[]) {
   });
   return tree[0];
 }
+
+export const formatError = () => {};

@@ -184,7 +184,7 @@ export class OrgManagementClient {
   async searchNodes(options: SearchOrgNodesVariables) {
     let { orgId, name = '', metadata = [] } = options;
     if (!name && metadata.length === 0) {
-      this.options.onError(new Error('Plesas Provide name or metadata'));
+      this.options.onError(500, 'Plesas Provide name or metadata');
     }
 
     if (metadata) {

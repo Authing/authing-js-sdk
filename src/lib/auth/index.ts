@@ -27,8 +27,8 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
 +TiA2BKHbCvloW3w5Lnqm70iSsUi5Fmu9/2+68GZRH9L7Mlh8cFksCicW2Y2W2uM
 GKl64GDcIq3au+aqJQIDAQAB
 -----END PUBLIC KEY-----`,
-  onError: (err: Error) => {
-    throw err;
+  onError: (_: number, message: string) => {
+    throw new Error(message);
   },
   enableAccessTokenCache: true,
   host: 'https://core.authing.cn'
@@ -51,11 +51,13 @@ export class AuthenticationClient {
     // 子模块初始化顺序: GraphqlClient -> ManagementTokenProvider -> Others
     this.graphqlClient = new GraphqlClient(
       graphqlApiEndpoint,
-      this.options.userPoolId
+      this.options.userPoolId,
+      this.options.onError
     );
     this.graphqlClientV2 = new GraphqlClient(
       graphqlApiEndpointV2,
-      this.options.userPoolId
+      this.options.userPoolId,
+      this.options.onError
     );
     this.tokenProvider = new AuthenticationTokenProvider(this.options);
     this.wxqr = new QrCodeAuthenticationClient(
