@@ -20,7 +20,8 @@ import {
   role,
   roleWithUserAndPermissions,
   roleWithPermissions,
-  roleWithUsers
+  roleWithUsers,
+  updateRole
 } from '../graphqlapi';
 
 export class AccessControlManagementClient {
@@ -276,6 +277,27 @@ export class AccessControlManagementClient {
       });
       return res.createRole;
     }
+  }
+
+  /**
+   * @description 修改角色
+   *
+   */
+  async updateRole(
+    code: string,
+    updates: { name: string; description: string }
+  ) {
+    const { name, description } = updates;
+    const { updateRole: data } = await updateRole(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        code,
+        name,
+        description
+      }
+    );
+    return data;
   }
 
   /**
