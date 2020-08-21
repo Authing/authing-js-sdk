@@ -4,7 +4,8 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserRegisterInput } from '../../types/graphql.v1';
 import {
-  removeUsers,
+  deleteUser,
+  deleteUsers,
   user,
   users,
   createInterConnection,
@@ -46,11 +47,14 @@ export class UsersManagementClient {
    * @memberof UsersManagementClient
    */
   async delete(userId: string) {
-    const res = await removeUsers(this.graphqlClient, this.tokenProvider, {
-      registerInClient: this.options.userPoolId,
-      ids: [userId]
-    });
-    return res.removeUsers;
+    const { deleteUser: data } = await deleteUser(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        id: userId
+      }
+    );
+    return data;
   }
 
   /**
@@ -61,11 +65,14 @@ export class UsersManagementClient {
    * @memberof UsersManagementClient
    */
   async deleteMany(userIds: string[]) {
-    const res = await removeUsers(this.graphqlClient, this.tokenProvider, {
-      registerInClient: this.options.userPoolId,
-      ids: userIds
-    });
-    return res.removeUsers;
+    const { deleteUsers: data } = await deleteUsers(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        ids: userIds
+      }
+    );
+    return data;
   }
 
   /**

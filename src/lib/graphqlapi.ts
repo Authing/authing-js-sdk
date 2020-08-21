@@ -80,9 +80,6 @@ import {
   CreateUserWithoutAuthentication,
   CreateUserWithoutAuthenticationDocument,
   CreateUserWithoutAuthenticationVariables,
-  RemoveUsers,
-  RemoveUsersDocument,
-  RemoveUsersVariables,
   InterConnections,
   InterConnectionsDocument,
   InterConnectionsVariables,
@@ -177,7 +174,13 @@ import {
   GroupsVariables,
   UpdateUserDocument,
   UpdateUserResponse,
-  UpdateUserVariables
+  UpdateUserVariables,
+  DeleteUserVariables,
+  DeleteUserResponse,
+  DeleteUserDocument,
+  DeleteUsersDocument,
+  DeleteUsersResponse,
+  DeleteUsersVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -382,20 +385,6 @@ export const createUserWithoutAuthentication = async (
   variables: CreateUserWithoutAuthenticationVariables
 ): Promise<CreateUserWithoutAuthentication> => {
   const query = CreateUserWithoutAuthenticationDocument;
-  const token = await tokenProvider.getAccessToken();
-  return await garpqhlClient.request({
-    query,
-    token,
-    variables
-  });
-};
-
-export const removeUsers = async (
-  garpqhlClient: GraphqlClient,
-  tokenProvider: ManagementTokenProvider,
-  variables: RemoveUsersVariables
-): Promise<RemoveUsers> => {
-  const query = RemoveUsersDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,
@@ -984,6 +973,34 @@ export const createUser = async (
   variables: DoRegisterProcessVariables
 ): Promise<DoRegisterProcessResponse> => {
   const query = DoRegisterProcessDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const deleteUser = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: DeleteUserVariables
+): Promise<DeleteUserResponse> => {
+  const query = DeleteUserDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const deleteUsers = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: DeleteUsersVariables
+): Promise<DeleteUsersResponse> => {
+  const query = DeleteUsersDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
