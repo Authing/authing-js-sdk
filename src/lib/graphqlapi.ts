@@ -1008,3 +1008,17 @@ export const deleteUsers = async (
     variables
   });
 };
+
+export const roles = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RolesVariables
+): Promise<RolesResponse> => {
+  const query = RolesDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};

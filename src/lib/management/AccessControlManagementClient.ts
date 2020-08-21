@@ -15,7 +15,8 @@ import {
   addResource,
   allow,
   isAllowed,
-  isDenied
+  isDenied,
+  roles
 } from '../graphqlapi';
 
 export class AccessControlManagementClient {
@@ -149,6 +150,22 @@ export class AccessControlManagementClient {
       _id: userId
     });
     return res.userGroupList;
+  }
+
+  /**
+   * @description 获取用户池角色列表
+   *
+   */
+  async roles(page: number = 1, limit: number = 10) {
+    const { roles: data } = await roles(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        page,
+        limit
+      }
+    );
+    return data;
   }
 
   async assignRole(roleCode: string, userIds: string[]) {
