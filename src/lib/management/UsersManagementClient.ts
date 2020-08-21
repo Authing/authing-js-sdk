@@ -7,7 +7,6 @@ import {
   removeUsers,
   user,
   users,
-  register,
   createInterConnection,
   interConnections,
   passwordLessForceLogin,
@@ -16,9 +15,10 @@ import {
   getPermissionsOfUser,
   getGroupsOfUser,
   updateUser,
-  searchUser
+  searchUser,
+  createUser
 } from '../graphqlapi';
-import { User, PaginatedUsers } from '../../types/graphql.v2';
+import { User, PaginatedUsers, CreateUserInput } from '../../types/graphql.v2';
 
 export class UsersManagementClient {
   options: ManagementClientOptions;
@@ -106,51 +106,26 @@ export class UsersManagementClient {
   }
 
   /**
-   *
    * 以管理员身份创建用户
-   * @param {{
-   *     userInfo: UserRegisterInput,
-   *     invitationCode?: string,
-   *     keepPassword?: boolean
-   *   }} options
-   * @returns
-   * @memberof UsersManagementClient
+   * @param userInfo
+   * @param keepPassword
    */
-  async create(
-    userInfo: UserRegisterInput,
-    options?: {
-      invitationCode?: string;
-      keepPassword?: boolean;
-    }
-  ) {
-    options = options || {};
-    options.invitationCode = options.invitationCode || '';
-    options.keepPassword = options.keepPassword || false;
-
-    if (
-      !userInfo.phone &&
-      !userInfo.email &&
-      !userInfo.username &&
-      !userInfo.unionid
-    ) {
-      this.options.onError(
-        500,
-        'Please provide at least phone, email, username or unionid'
-      );
-    }
-
-    if (userInfo.password) {
+  async create(userInfo: CreateUserInput, keepPassword?: boolean) {
+    if (userInfo && userInfo.password) {
       userInfo.password = encrypt(
         userInfo.password,
         this.options.encrptionPublicKey
       );
     }
-    userInfo.registerInClient = this.options.userPoolId;
-    const data = await register(this.graphqlClient, this.tokenProvider, {
-      userInfo,
-      ...options
-    });
-    return data.register;
+    const { doRegisterProcess: user } = await createUser(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        userInfo,
+        keepPassword
+      }
+    );
+    return user;
   }
 
   /**
@@ -158,7 +133,7 @@ export class UsersManagementClient {
    *
    */
   async update(id: string, updates: Partial<User>) {
-    if (updates.password) {
+    if (updates && updates.password) {
       updates.password = encrypt(
         updates.password,
         this.options.encrptionPublicKey

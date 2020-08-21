@@ -24,11 +24,10 @@ test('平级 role + user + resource', async t => {
   await acl.deny(roleCode, 'close', resouceCode);
   const user = await management.users.create({
     username: generateRandomString(),
-    password: '123456',
-    registerInClient: ''
+    password: '123456'
   });
-  const userId = user._id;
-  await acl.assignRole(roleCode, [user._id]);
+  const userId = user.id;
+  await acl.assignRole(roleCode, [user.id]);
 
   const allowed = await acl.isAllowed(userId, 'open', resouceCode);
   t.assert(allowed);
@@ -54,10 +53,9 @@ test('有层级的 role + user + resource', async t => {
   // 创建用户，授予 developer 角色
   const user = await management.users.create({
     username: generateRandomString(),
-    password: '123456',
-    registerInClient: ''
+    password: '123456'
   });
-  const userId = user._id;
+  const userId = user.id;
   await acl.assignRole(developer, [userId]);
 
   // 2. 创建一个资源
@@ -148,11 +146,10 @@ test('组织机构 + user + resource', async t => {
   // 添加成员
   const user = await management.users.create({
     username: generateRandomString(),
-    password: '123456',
-    registerInClient: ''
+    password: '123456'
   });
   const rootNode = orgTree.rootNode;
-  await management.org.addMember(org.id, rootNode.code, user._id);
+  await management.org.addMember(org.id, rootNode.code, user.id);
 
   // 2. 创建一个资源
   const door = generateRandomString();
@@ -164,9 +161,9 @@ test('组织机构 + user + resource', async t => {
   await acl.allow(org.id, rootNode.code, action, door);
 
   // 4. 判断 user 是否具备 open door 的权限
-  const allowed = await acl.isAllowed(user._id, action, door);
+  const allowed = await acl.isAllowed(user.id, action, door);
   t.assert(allowed);
 
-  const allowed2 = await acl.isAllowed(user._id, 'xxxx', door);
+  const allowed2 = await acl.isAllowed(user.id, 'xxxx', door);
   t.assert(allowed2 === false);
 });
