@@ -21,7 +21,9 @@ import {
   roleWithUserAndPermissions,
   roleWithPermissions,
   roleWithUsers,
-  updateRole
+  updateRole,
+  permissions,
+  updatePermission
 } from '../graphqlapi';
 
 export class AccessControlManagementClient {
@@ -224,6 +226,43 @@ export class AccessControlManagementClient {
       {
         page,
         limit
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @description 获取用户池权限列表
+   *
+   */
+  async permissions(page: number = 1, limit: number = 10) {
+    const { permissions: data } = await permissions(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        page,
+        limit
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @description 修改角色
+   *
+   */
+  async updatePermission(
+    code: string,
+    updates: { name: string; description: string }
+  ) {
+    const { name, description } = updates;
+    const { updatePermission: data } = await updatePermission(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        code,
+        name,
+        description
       }
     );
     return data;

@@ -883,6 +883,8 @@ export type Mutation = {
   deletePermission: CommonMessage;
   /** 批量删除权限 */
   deletePermissions: BatchOperationResult;
+  /** 修改权限 */
+  updatePermission: Permission;
   createPipeline: Pipeline;
   addFunctionToPipeline: Pipeline;
   removeFunctionFromPipeline: Pipeline;
@@ -1092,6 +1094,12 @@ export type MutationDeletePermissionArgs = {
 
 export type MutationDeletePermissionsArgs = {
   ids: Array<Scalars['String']>;
+};
+
+export type MutationUpdatePermissionArgs = {
+  code: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
 };
 
 export type MutationCreatePipelineArgs = {
@@ -3359,6 +3367,25 @@ export type UpdatePasswordResponse = {
     country?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+  };
+};
+
+export type UpdatePermissionVariables = Exact<{
+  code: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+}>;
+
+export type UpdatePermissionResponse = {
+  updatePermission: {
+    id: string;
+    code: string;
+    name: string;
+    description?: Maybe<string>;
+    isSystem?: Maybe<boolean>;
+    type?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
   };
 };
 
@@ -6299,6 +6326,20 @@ export const UpdatePasswordDocument = `
     country
     updatedAt
     customData
+  }
+}
+    `;
+export const UpdatePermissionDocument = `
+    mutation updatePermission($code: String!, $name: String, $description: String) {
+  updatePermission(code: $code, name: $name, description: $description) {
+    id
+    code
+    name
+    description
+    isSystem
+    type
+    createdAt
+    updatedAt
   }
 }
     `;
