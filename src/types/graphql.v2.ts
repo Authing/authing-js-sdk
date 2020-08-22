@@ -3981,7 +3981,38 @@ export type OrgsVariables = Exact<{
 }>;
 
 export type OrgsResponse = {
-  orgs: { totalCount: number; list: Array<{ id: string }> };
+  orgs: {
+    totalCount: number;
+    list: Array<{
+      id: string;
+      rootNode: {
+        name: string;
+        nameI18n?: Maybe<string>;
+        description?: Maybe<string>;
+        descriptionI18n?: Maybe<string>;
+        order?: Maybe<number>;
+        code?: Maybe<string>;
+        root?: Maybe<boolean>;
+        depth?: Maybe<number>;
+        createdAt?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        children?: Maybe<Array<string>>;
+      };
+      nodes: Array<{
+        name: string;
+        nameI18n?: Maybe<string>;
+        description?: Maybe<string>;
+        descriptionI18n?: Maybe<string>;
+        order?: Maybe<number>;
+        code?: Maybe<string>;
+        root?: Maybe<boolean>;
+        depth?: Maybe<number>;
+        createdAt?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        children?: Maybe<Array<string>>;
+      }>;
+    }>;
+  };
 };
 
 export type PermissionVariables = Exact<{
@@ -6865,6 +6896,32 @@ export const OrgsDocument = `
     totalCount
     list {
       id
+      rootNode {
+        name
+        nameI18n
+        description
+        descriptionI18n
+        order
+        code
+        root
+        depth
+        createdAt
+        updatedAt
+        children
+      }
+      nodes {
+        name
+        nameI18n
+        description
+        descriptionI18n
+        order
+        code
+        root
+        depth
+        createdAt
+        updatedAt
+        children
+      }
     }
   }
 }

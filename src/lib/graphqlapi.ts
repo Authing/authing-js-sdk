@@ -53,9 +53,6 @@ import {
   IsRootNodeOfOrg,
   IsRootNodeOfOrgDocument,
   IsRootNodeOfOrgVariables,
-  Orgs,
-  OrgsDocument,
-  OrgsVariables,
   RemoveOrgNode,
   RemoveOrgNodeDocument,
   RemoveOrgNodeVariables,
@@ -198,7 +195,10 @@ import {
   UpdateRoleVariables,
   UpdatePermissionResponse,
   UpdatePermissionDocument,
-  UpdatePermissionVariables
+  UpdatePermissionVariables,
+  OrgsDocument,
+  OrgsVariables,
+  OrgsResponse
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -289,7 +289,7 @@ export const orgs = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider,
   variables: OrgsVariables
-): Promise<Orgs> => {
+): Promise<OrgsResponse> => {
   const query = OrgsDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({

@@ -41,13 +41,15 @@ export class OrgManagementClient {
   }
 
   /**
-   * 获取用户池组织机构列表
-   * @returns
-   * @memberof OrgManagementClient
+   * @description 获取用户池组织机构列表
+   * @param page 从 1 开始，默认为 1
+   * @param limit 默认为 10
+   *
    */
-  async list() {
-    const res = await orgs(this.graphqlClient, this.tokenProvider, {
-      userPoolId: this.options.userPoolId
+  async list(page: number = 1, limit: number = 10) {
+    const res = await orgs(this.graphqlClientV2, this.tokenProvider, {
+      page,
+      limit
     });
     for (let org of res.orgs.list) {
       (org as any).tree = buildTree(_.cloneDeep(org) as any);
