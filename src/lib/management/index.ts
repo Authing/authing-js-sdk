@@ -8,6 +8,7 @@ import { UserPoolManagementClient } from './UserpoolManagementClient';
 import { UsersManagementClient } from './UsersManagementClient';
 import { isDomainAvaliable, sendEmail } from '../graphqlapi';
 import { EmailScene } from '../../types/graphql.v2';
+import { verifyToken } from '../utils';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,
@@ -55,16 +56,10 @@ export class ManagementClient {
       );
     }
 
-    // 子模块初始化顺序: GraphqlClient -> ManagementTokenProvider -> Others
-    this.graphqlClient = new GraphqlClient(
-      graphqlApiEndpoint,
-      this.options.userPoolId,
-      this.options.onError
-    );
+    this.graphqlClient = new GraphqlClient(graphqlApiEndpoint, this.options);
     this.graphqlClientV2 = new GraphqlClient(
       graphqlApiEndpointV2,
-      this.options.userPoolId,
-      this.options.onError
+      this.options
     );
     this.tokenProvider = new ManagementTokenProvider(
       this.options,
@@ -123,5 +118,18 @@ export class ManagementClient {
       { email, scene }
     );
     return data;
+  }
+
+  /**
+   * @description 检测登录状态
+   *
+   */
+  async checkLoginStatus(token: string) {
+    if (!token) return null;
+    try {
+      return verifyToken(token, this.options.secret);
+    } catch (error) {
+      return null;
+    }
   }
 }

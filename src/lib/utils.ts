@@ -3,6 +3,7 @@ import { SDK_VERSION } from './version';
 import { GraphQLClient } from 'graphql-request';
 import { Variables } from 'graphql-request/dist/src/types';
 import _ from 'lodash';
+import * as jwt from 'jsonwebtoken';
 
 export const encrypt = (plainText: string, publicKey: string) => {
   // jsencrypt 库在加密后使用了base64编码,所以这里要先将base64编码后的密文转成buffer
@@ -87,4 +88,11 @@ export default function buildTree(nodes: any[]) {
   return tree[0];
 }
 
-export const formatError = () => {};
+/**
+ * @description 验证 jwt token
+ *
+ */
+export const verifyToken = (token: string, secret: string) => {
+  const decoded = jwt.verify(token, secret) as any;
+  return decoded;
+};

@@ -3,7 +3,8 @@
  */
 export interface AuthenticationClientOptions {
   /** 用户池 ID **/
-  userPoolId: string;
+  userPoolId?: string;
+  appId?: string;
   /** 请求超时时间 **/
   timeout?: number;
   /** 错误回调函数, 默认为 (err: Error) => { throw err } 直接抛出报错 **/

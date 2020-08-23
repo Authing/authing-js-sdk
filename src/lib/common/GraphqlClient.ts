@@ -1,20 +1,19 @@
 import { Variables } from 'graphql-request/dist/src/types';
 import { SDK_VERSION } from '../version';
 import { GraphQLClient } from 'graphql-request';
+import { ManagementClientOptions } from '../management/types';
+import { AuthenticationClientOptions } from '../auth/types';
 
 export class GraphqlClient {
   endpoint: string;
-  userPoolId: string;
-  onError: (code: number, message: string) => void;
+  options: ManagementClientOptions;
 
   constructor(
     endpoint: string,
-    userPoolId: string,
-    onError: (code: number, message: string) => void
+    options: ManagementClientOptions | AuthenticationClientOptions
   ) {
     this.endpoint = endpoint;
-    this.userPoolId = userPoolId;
-    this.onError = onError;
+    this.options = options;
   }
 
   async request<T>(options: {
@@ -25,8 +24,9 @@ export class GraphqlClient {
     const { query, token, variables } = options;
     let headers: any = {
       'x-authing-sdk-version': SDK_VERSION,
-      'x-authing-userpool-id': this.userPoolId,
-      'x-authing-request-from': 'sdk'
+      'x-authing-userpool-id': this.options.userPoolId,
+      'x-authing-request-from': 'sdk',
+      'x-authing-app-id': this.options.appId
     };
     token && (headers.Authorization = `Bearer ${token}`);
     const graphQLClient = new GraphQLClient(this.endpoint, {
@@ -44,7 +44,7 @@ export class GraphqlClient {
         const { message: msg } = err;
         const { code, message } = msg;
         errmsg = message;
-        this.onError(code, message);
+        this.options.onError(code, message);
       });
       throw new Error(errmsg);
     }
