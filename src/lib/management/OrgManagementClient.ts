@@ -61,14 +61,17 @@ export class OrgManagementClient {
    * 创建组织机构
    * @memberof OrgManagementClient
    */
-  async create(rootNodeId: string) {
-    const res = await createOrg(this.graphqlClient, this.tokenProvider, {
-      input: {
-        rootGroupId: rootNodeId,
-        userPoolId: this.options.userPoolId
+  async create(name: string, description?: string, code?: string) {
+    const { createOrg: org } = await createOrg(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        name,
+        description,
+        code
       }
-    });
-    return res.createOrg;
+    );
+    return org;
   }
 
   /**

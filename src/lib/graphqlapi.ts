@@ -44,9 +44,6 @@ import {
   OrgChildrenNodes,
   OrgChildrenNodesDocument,
   OrgChildrenNodesVariables,
-  CreateOrg,
-  CreateOrgDocument,
-  CreateOrgVariables,
   DeleteOrg,
   DeleteOrgDocument,
   DeleteOrgVariables,
@@ -198,7 +195,10 @@ import {
   UpdatePermissionVariables,
   OrgsDocument,
   OrgsVariables,
-  OrgsResponse
+  OrgsResponse,
+  CreateOrgResponse,
+  CreateOrgDocument,
+  CreateOrgVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -471,7 +471,7 @@ export const createOrg = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider,
   variables: CreateOrgVariables
-): Promise<CreateOrg> => {
+): Promise<CreateOrgResponse> => {
   const query = CreateOrgDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
