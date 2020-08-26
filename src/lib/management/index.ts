@@ -44,7 +44,8 @@ export class ManagementClient {
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
-    if (!this.options.userPoolId) throw new Error('请提供 userPoolId !');
+    if (!this.options.userPoolId && !this.options.appId)
+      throw new Error('请提供 userPoolId 或者 appId!');
 
     const graphqlApiEndpoint = `${this.options.host}/graphql`;
     const graphqlApiEndpointV2 = `${this.options.host}/v2/graphql`;

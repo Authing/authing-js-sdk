@@ -35,9 +35,6 @@ export type Query = {
   function?: Maybe<Function>;
   functions: PaginatedFunctions;
   groups: PaginatedGroups;
-  identityProviders?: Maybe<PaginatedIdentityProviders>;
-  /** 查看 Identity Provider */
-  identityProvider: IdentityProvider;
   /** 查询 MFA 信息 */
   queryMfa?: Maybe<Mfa>;
   /** 通过 code 查询节点 */
@@ -122,17 +119,6 @@ export type QueryGroupsArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
-};
-
-export type QueryIdentityProvidersArgs = {
-  protocol: IdentityProviderProtocol;
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-};
-
-export type QueryIdentityProviderArgs = {
-  id?: Maybe<Scalars['String']>;
 };
 
 export type QueryQueryMfaArgs = {
@@ -355,7 +341,7 @@ export type User = {
   /** 昵称，该字段不唯一。 */
   nickname?: Maybe<Scalars['String']>;
   /** 注册方式 */
-  registerMethod?: Maybe<Scalars['String']>;
+  registerSource: Array<Scalars['String']>;
   /** 头像链接，默认为 https://usercontents.authing.cn/authing-avatar.png */
   photo?: Maybe<Scalars['String']>;
   /** 用户密码，数据库使用密钥加 salt 进行加密，非原文密码。 */
@@ -596,32 +582,6 @@ export type Group = {
   users: PaginatedUsers;
 };
 
-export enum IdentityProviderProtocol {
-  Saml = 'SAML',
-  Ad = 'AD',
-  Ldap = 'LDAP',
-  Oidc = 'OIDC',
-  Oauth = 'OAUTH'
-}
-
-export type PaginatedIdentityProviders = {
-  list: Array<Maybe<IdentityProvider>>;
-  totalCount: Scalars['Int'];
-};
-
-export type IdentityProvider = {
-  /** Identity Provider Client ID */
-  id?: Maybe<Scalars['String']>;
-  /** Identity Provider 类型，可选值有 oidc oauth saml ldap */
-  type?: Maybe<Scalars['String']>;
-  /** Identity Provider 配置信息 */
-  config?: Maybe<Scalars['String']>;
-  /** Identity Provider 启停状态 */
-  enabled?: Maybe<Scalars['Boolean']>;
-  /** Identity Provider 所属用户池 */
-  userPoolId?: Maybe<Scalars['String']>;
-};
-
 export type Mfa = {
   /** MFA ID */
   id: Scalars['String'];
@@ -846,16 +806,6 @@ export type Mutation = {
   /** 修改函数 */
   updateFunction: Function;
   deleteFunction: CommonMessage;
-  /** 创建 Identity Provider */
-  createIdentityProvider: IdentityProvider;
-  /** 编辑 Identity Provider */
-  updateIdentityProvider: IdentityProvider;
-  /** 删除 Identity Provider */
-  deleteIdentityProvider: CommonMessage;
-  /** 开启 IdentityProvider */
-  enableIdentityProvider: IdentityProvider;
-  /** 停用 IdentityProvider */
-  disableIdentityProvider: IdentityProvider;
   loginByEmail?: Maybe<User>;
   loginByUsername?: Maybe<User>;
   loginByPhoneCode?: Maybe<User>;
@@ -988,26 +938,6 @@ export type MutationUpdateFunctionArgs = {
 };
 
 export type MutationDeleteFunctionArgs = {
-  id: Scalars['String'];
-};
-
-export type MutationCreateIdentityProviderArgs = {
-  input: CreateIdentityProviderInput;
-};
-
-export type MutationUpdateIdentityProviderArgs = {
-  input: UpdateIdentityProviderInput;
-};
-
-export type MutationDeleteIdentityProviderArgs = {
-  id: Scalars['String'];
-};
-
-export type MutationEnableIdentityProviderArgs = {
-  id: Scalars['String'];
-};
-
-export type MutationDisableIdentityProviderArgs = {
   id: Scalars['String'];
 };
 
@@ -1350,17 +1280,6 @@ export type UpdateFunctionInput = {
   url?: Maybe<Scalars['String']>;
 };
 
-export type CreateIdentityProviderInput = {
-  type: Scalars['String'];
-  config?: Maybe<Scalars['String']>;
-};
-
-export type UpdateIdentityProviderInput = {
-  id: Scalars['String'];
-  type?: Maybe<Scalars['String']>;
-  config?: Maybe<Scalars['String']>;
-};
-
 export type LoginByEmailInput = {
   email: Scalars['email_String_NotNull_format_email'];
   password: Scalars['String'];
@@ -1506,7 +1425,7 @@ export type CreateUserInput = {
   photo?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
   /** 注册方式 */
-  registerMethod?: Maybe<Scalars['String']>;
+  registerSource?: Maybe<Array<Scalars['String']>>;
   browser?: Maybe<Scalars['String']>;
   /** 用户社会化登录第三方身份提供商返回的原始用户信息，非社会化登录方式注册的用户此字段为空。 */
   oauth?: Maybe<Scalars['String']>;
@@ -1560,7 +1479,7 @@ export type UpdateUserInput = {
   /** 头像链接，默认为 https://usercontents.authing.cn/authing-avatar.png */
   photo?: Maybe<Scalars['String']>;
   /** 注册方式 */
-  registerMethod?: Maybe<Scalars['String']>;
+  registerSource?: Maybe<Array<Scalars['String']>>;
   company?: Maybe<Scalars['String']>;
   browser?: Maybe<Scalars['String']>;
   device?: Maybe<Scalars['String']>;
@@ -1710,7 +1629,7 @@ export type AddCooperatorResponse = {
       unionid?: Maybe<string>;
       openid?: Maybe<string>;
       nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
+      registerSource: Array<string>;
       photo?: Maybe<string>;
       password?: Maybe<string>;
       oauth?: Maybe<string>;
@@ -1802,7 +1721,7 @@ export type AddMemberResponse = {
         unionid?: Maybe<string>;
         openid?: Maybe<string>;
         nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
+        registerSource: Array<string>;
         photo?: Maybe<string>;
         password?: Maybe<string>;
         oauth?: Maybe<string>;
@@ -2002,20 +1921,6 @@ export type CreateFunctionResponse = {
   }>;
 };
 
-export type CreateIdentityProviderVariables = Exact<{
-  input: CreateIdentityProviderInput;
-}>;
-
-export type CreateIdentityProviderResponse = {
-  createIdentityProvider: {
-    id?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
-
 export type CreateOrgVariables = Exact<{
   name: Scalars['String'];
   code?: Maybe<Scalars['String']>;
@@ -2156,7 +2061,7 @@ export type CreateResourceRuleResponse = {
       unionid?: Maybe<string>;
       openid?: Maybe<string>;
       nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
+      registerSource: Array<string>;
       photo?: Maybe<string>;
       password?: Maybe<string>;
       oauth?: Maybe<string>;
@@ -2381,14 +2286,6 @@ export type DeleteFunctionResponse = {
   deleteFunction: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
-export type DeleteIdentityProviderVariables = Exact<{
-  id: Scalars['String'];
-}>;
-
-export type DeleteIdentityProviderResponse = {
-  deleteIdentityProvider: { message?: Maybe<string>; code?: Maybe<number> };
-};
-
 export type DeleteNodeVariables = Exact<{
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
@@ -2539,20 +2436,6 @@ export type DisableEmailTemplateResponse = {
   };
 };
 
-export type DisableIdentityProviderVariables = Exact<{
-  id: Scalars['String'];
-}>;
-
-export type DisableIdentityProviderResponse = {
-  disableIdentityProvider: {
-    id?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
-
 export type DisableSocialConnectionInstanceVariables = Exact<{
   provider: Scalars['String'];
 }>;
@@ -2582,7 +2465,7 @@ export type DoRegisterProcessResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -2639,20 +2522,6 @@ export type EnableEmailTemplateResponse = {
   };
 };
 
-export type EnableIdentityProviderVariables = Exact<{
-  id: Scalars['String'];
-}>;
-
-export type EnableIdentityProviderResponse = {
-  enableIdentityProvider: {
-    id?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
-
 export type EnableSocialConnectionInstanceVariables = Exact<{
   provider: Scalars['String'];
 }>;
@@ -2681,7 +2550,7 @@ export type LoginByEmailResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -2735,7 +2604,7 @@ export type LoginByPhoneCodeResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -2789,7 +2658,7 @@ export type LoginByPhonePasswordResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -2843,7 +2712,7 @@ export type LoginByUsernameResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -2901,7 +2770,7 @@ export type RegisterByEmailResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -2955,7 +2824,7 @@ export type RegisterByPhonePasswordResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -3009,7 +2878,7 @@ export type RegisterByUsernameResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -3109,7 +2978,7 @@ export type RemoveMemberResponse = {
         unionid?: Maybe<string>;
         openid?: Maybe<string>;
         nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
+        registerSource: Array<string>;
         photo?: Maybe<string>;
         password?: Maybe<string>;
         oauth?: Maybe<string>;
@@ -3248,7 +3117,7 @@ export type UpdateEmailResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -3300,20 +3169,6 @@ export type UpdateFunctionResponse = {
   };
 };
 
-export type UpdateIdentityProviderVariables = Exact<{
-  input: UpdateIdentityProviderInput;
-}>;
-
-export type UpdateIdentityProviderResponse = {
-  updateIdentityProvider: {
-    id?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
-
 export type UpdatePasswordVariables = Exact<{
   id: Scalars['String'];
   newPassword: Scalars['String'];
@@ -3332,7 +3187,7 @@ export type UpdatePasswordResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -3408,7 +3263,7 @@ export type UpdatePhoneResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -3499,7 +3354,7 @@ export type UpdateUserResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -3675,7 +3530,7 @@ export type CooperatorsResponse = {
       unionid?: Maybe<string>;
       openid?: Maybe<string>;
       nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
+      registerSource: Array<string>;
       photo?: Maybe<string>;
       password?: Maybe<string>;
       oauth?: Maybe<string>;
@@ -3784,42 +3639,6 @@ export type GroupsResponse = {
   };
 };
 
-export type IdentityProviderVariables = Exact<{
-  id?: Maybe<Scalars['String']>;
-}>;
-
-export type IdentityProviderResponse = {
-  identityProvider: {
-    id?: Maybe<string>;
-    type?: Maybe<string>;
-    config?: Maybe<string>;
-    enabled?: Maybe<boolean>;
-    userPoolId?: Maybe<string>;
-  };
-};
-
-export type IdentityProvidersVariables = Exact<{
-  protocol: IdentityProviderProtocol;
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-}>;
-
-export type IdentityProvidersResponse = {
-  identityProviders?: Maybe<{
-    totalCount: number;
-    list: Array<
-      Maybe<{
-        id?: Maybe<string>;
-        type?: Maybe<string>;
-        config?: Maybe<string>;
-        enabled?: Maybe<boolean>;
-        userPoolId?: Maybe<string>;
-      }>
-    >;
-  }>;
-};
-
 export type IsActionAllowedVariables = Exact<{
   resouceCode: Scalars['String'];
   action: Scalars['String'];
@@ -3898,7 +3717,7 @@ export type NodeWithMembersResponse = {
         unionid?: Maybe<string>;
         openid?: Maybe<string>;
         nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
+        registerSource: Array<string>;
         photo?: Maybe<string>;
         password?: Maybe<string>;
         oauth?: Maybe<string>;
@@ -4242,7 +4061,7 @@ export type RoleWithUserAndPermissionsResponse = {
         unionid?: Maybe<string>;
         openid?: Maybe<string>;
         nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
+        registerSource: Array<string>;
         photo?: Maybe<string>;
         password?: Maybe<string>;
         oauth?: Maybe<string>;
@@ -4315,7 +4134,7 @@ export type RoleWithUsersResponse = {
         unionid?: Maybe<string>;
         openid?: Maybe<string>;
         nickname?: Maybe<string>;
-        registerMethod?: Maybe<string>;
+        registerSource: Array<string>;
         photo?: Maybe<string>;
         password?: Maybe<string>;
         oauth?: Maybe<string>;
@@ -4397,7 +4216,7 @@ export type SearchUserResponse = {
       unionid?: Maybe<string>;
       openid?: Maybe<string>;
       nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
+      registerSource: Array<string>;
       photo?: Maybe<string>;
       password?: Maybe<string>;
       oauth?: Maybe<string>;
@@ -4520,7 +4339,7 @@ export type UserResponse = {
     unionid?: Maybe<string>;
     openid?: Maybe<string>;
     nickname?: Maybe<string>;
-    registerMethod?: Maybe<string>;
+    registerSource: Array<string>;
     photo?: Maybe<string>;
     password?: Maybe<string>;
     oauth?: Maybe<string>;
@@ -4576,7 +4395,7 @@ export type UserBatchResponse = {
       unionid?: Maybe<string>;
       openid?: Maybe<string>;
       nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
+      registerSource: Array<string>;
       photo?: Maybe<string>;
       password?: Maybe<string>;
       oauth?: Maybe<string>;
@@ -4732,7 +4551,7 @@ export type UsersResponse = {
       unionid?: Maybe<string>;
       openid?: Maybe<string>;
       nickname?: Maybe<string>;
-      registerMethod?: Maybe<string>;
+      registerSource: Array<string>;
       photo?: Maybe<string>;
       password?: Maybe<string>;
       oauth?: Maybe<string>;
@@ -4885,7 +4704,7 @@ export const AddCooperatorDocument = `
       unionid
       openid
       nickname
-      registerMethod
+      registerSource
       photo
       password
       oauth
@@ -4965,7 +4784,7 @@ export const AddMemberDocument = `
         unionid
         openid
         nickname
-        registerMethod
+        registerSource
         photo
         password
         oauth
@@ -5128,17 +4947,6 @@ export const CreateFunctionDocument = `
   }
 }
     `;
-export const CreateIdentityProviderDocument = `
-    mutation createIdentityProvider($input: CreateIdentityProviderInput!) {
-  createIdentityProvider(input: $input) {
-    id
-    type
-    config
-    enabled
-    userPoolId
-  }
-}
-    `;
 export const CreateOrgDocument = `
     mutation createOrg($name: String!, $code: String, $description: String) {
   createOrg(name: $name, code: $code, description: $description) {
@@ -5249,7 +5057,7 @@ export const CreateResourceRuleDocument = `
       unionid
       openid
       nickname
-      registerMethod
+      registerSource
       photo
       password
       oauth
@@ -5463,14 +5271,6 @@ export const DeleteFunctionDocument = `
   }
 }
     `;
-export const DeleteIdentityProviderDocument = `
-    mutation deleteIdentityProvider($id: String!) {
-  deleteIdentityProvider(id: $id) {
-    message
-    code
-  }
-}
-    `;
 export const DeleteNodeDocument = `
     mutation deleteNode($orgId: String!, $nodeId: String!) {
   deleteNode(orgId: $orgId, nodeId: $nodeId) {
@@ -5606,17 +5406,6 @@ export const DisableEmailTemplateDocument = `
   }
 }
     `;
-export const DisableIdentityProviderDocument = `
-    mutation disableIdentityProvider($id: String!) {
-  disableIdentityProvider(id: $id) {
-    id
-    type
-    config
-    enabled
-    userPoolId
-  }
-}
-    `;
 export const DisableSocialConnectionInstanceDocument = `
     mutation disableSocialConnectionInstance($provider: String!) {
   disableSocialConnectionInstance(provider: $provider) {
@@ -5642,7 +5431,7 @@ export const DoRegisterProcessDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -5696,17 +5485,6 @@ export const EnableEmailTemplateDocument = `
   }
 }
     `;
-export const EnableIdentityProviderDocument = `
-    mutation enableIdentityProvider($id: String!) {
-  enableIdentityProvider(id: $id) {
-    id
-    type
-    config
-    enabled
-    userPoolId
-  }
-}
-    `;
 export const EnableSocialConnectionInstanceDocument = `
     mutation enableSocialConnectionInstance($provider: String!) {
   enableSocialConnectionInstance(provider: $provider) {
@@ -5732,7 +5510,7 @@ export const LoginByEmailDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -5783,7 +5561,7 @@ export const LoginByPhoneCodeDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -5834,7 +5612,7 @@ export const LoginByPhonePasswordDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -5885,7 +5663,7 @@ export const LoginByUsernameDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -5941,7 +5719,7 @@ export const RegisterByEmailDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -5992,7 +5770,7 @@ export const RegisterByPhonePasswordDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -6043,7 +5821,7 @@ export const RegisterByUsernameDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -6130,7 +5908,7 @@ export const RemoveMemberDocument = `
         unionid
         openid
         nickname
-        registerMethod
+        registerSource
         photo
         password
         oauth
@@ -6249,7 +6027,7 @@ export const UpdateEmailDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -6298,17 +6076,6 @@ export const UpdateFunctionDocument = `
   }
 }
     `;
-export const UpdateIdentityProviderDocument = `
-    mutation updateIdentityProvider($input: UpdateIdentityProviderInput!) {
-  updateIdentityProvider(input: $input) {
-    id
-    type
-    config
-    enabled
-    userPoolId
-  }
-}
-    `;
 export const UpdatePasswordDocument = `
     mutation updatePassword($id: String!, $newPassword: String!, $oldPassword: String) {
   updatePassword(id: $id, newPassword: $newPassword, oldPassword: $oldPassword) {
@@ -6322,7 +6089,7 @@ export const UpdatePasswordDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -6387,7 +6154,7 @@ export const UpdatePhoneDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -6471,7 +6238,7 @@ export const UpdateUserDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -6639,7 +6406,7 @@ export const CooperatorsDocument = `
       unionid
       openid
       nickname
-      registerMethod
+      registerSource
       photo
       password
       oauth
@@ -6733,31 +6500,6 @@ export const GroupsDocument = `
   }
 }
     `;
-export const IdentityProviderDocument = `
-    query identityProvider($id: String) {
-  identityProvider(id: $id) {
-    id
-    type
-    config
-    enabled
-    userPoolId
-  }
-}
-    `;
-export const IdentityProvidersDocument = `
-    query identityProviders($protocol: IdentityProviderProtocol!, $page: Int, $limit: Int, $sortBy: SortByEnum) {
-  identityProviders(protocol: $protocol, page: $page, limit: $limit, sortBy: $sortBy) {
-    list {
-      id
-      type
-      config
-      enabled
-      userPoolId
-    }
-    totalCount
-  }
-}
-    `;
 export const IsActionAllowedDocument = `
     query isActionAllowed($resouceCode: String!, $action: String!, $userId: String!) {
   isActionAllowed(resouceCode: $resouceCode, action: $action, userId: $userId)
@@ -6817,7 +6559,7 @@ export const NodeWithMembersDocument = `
         unionid
         openid
         nickname
-        registerMethod
+        registerSource
         photo
         password
         oauth
@@ -7122,7 +6864,7 @@ export const RoleWithUserAndPermissionsDocument = `
         unionid
         openid
         nickname
-        registerMethod
+        registerSource
         photo
         password
         oauth
@@ -7192,7 +6934,7 @@ export const RoleWithUsersDocument = `
         unionid
         openid
         nickname
-        registerMethod
+        registerSource
         photo
         password
         oauth
@@ -7262,7 +7004,7 @@ export const SearchUserDocument = `
       unionid
       openid
       nickname
-      registerMethod
+      registerSource
       photo
       password
       oauth
@@ -7375,7 +7117,7 @@ export const UserDocument = `
     unionid
     openid
     nickname
-    registerMethod
+    registerSource
     photo
     password
     oauth
@@ -7428,7 +7170,7 @@ export const UserBatchDocument = `
       unionid
       openid
       nickname
-      registerMethod
+      registerSource
       photo
       password
       oauth
@@ -7574,7 +7316,7 @@ export const UsersDocument = `
       unionid
       openid
       nickname
-      registerMethod
+      registerSource
       photo
       password
       oauth
