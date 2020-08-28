@@ -2,7 +2,7 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { SortByEnum } from '../../types/graphql.v1';
-import { ResourceRule, Role } from '../../types/graphql.v2';
+import { ResourcePolicy, Role } from '../../types/graphql.v2';
 import {
   createRBACGroup,
   addGroupMetadata,
@@ -18,12 +18,8 @@ import {
   isDenied,
   roles,
   role,
-  roleWithUserAndPermissions,
-  roleWithPermissions,
   roleWithUsers,
-  updateRole,
-  permissions,
-  updatePermission
+  updateRole
 } from '../graphqlapi';
 
 export class AccessControlManagementClient {
@@ -169,33 +165,13 @@ export class AccessControlManagementClient {
   async role(
     code: string,
     options: {
-      /** 是否获取权限列表 */
-      getPermissions?: boolean;
       /** 是否获取用户列表 */
       getUsers?: boolean;
     } = {}
   ): Promise<DeepPartial<Role>> {
-    const { getPermissions = false, getUsers = false } = options;
-    if (!getPermissions && !getUsers) {
+    const { getUsers = false } = options;
+    if (!getUsers) {
       const { role: data } = await role(
-        this.graphqlClientV2,
-        this.tokenProvider,
-        {
-          code
-        }
-      );
-      return data;
-    } else if (getPermissions && getUsers) {
-      const { role: data } = await roleWithUserAndPermissions(
-        this.graphqlClientV2,
-        this.tokenProvider,
-        {
-          code
-        }
-      );
-      return data;
-    } else if (getPermissions && !getUsers) {
-      const { role: data } = await roleWithPermissions(
         this.graphqlClientV2,
         this.tokenProvider,
         {
@@ -226,43 +202,6 @@ export class AccessControlManagementClient {
       {
         page,
         limit
-      }
-    );
-    return data;
-  }
-
-  /**
-   * @description 获取用户池权限列表
-   *
-   */
-  async permissions(page: number = 1, limit: number = 10) {
-    const { permissions: data } = await permissions(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        page,
-        limit
-      }
-    );
-    return data;
-  }
-
-  /**
-   * @description 修改角色
-   *
-   */
-  async updatePermission(
-    code: string,
-    updates: { name: string; description: string }
-  ) {
-    const { name, description } = updates;
-    const { updatePermission: data } = await updatePermission(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        code,
-        name,
-        description
       }
     );
     return data;
@@ -369,24 +308,24 @@ export class AccessControlManagementClient {
     nodeCode: string,
     action: string,
     resouceCode: string
-  ): Promise<ResourceRule>;
+  ): Promise<ResourcePolicy>;
   async allow(
     roleCode: string,
     action: string,
     resouceCode: string
-  ): Promise<ResourceRule>;
+  ): Promise<ResourcePolicy>;
   async allow(
     arg1: any,
     arg2: any,
     arg3: any,
     arg4?: any
-  ): Promise<ResourceRule> {
+  ): Promise<ResourcePolicy> {
     // 角色
     if (!arg4) {
       const roleCode = arg1;
       const action = arg2;
       const resouceCode = arg3;
-      const { createResourceRule } = await allow(
+      const { createResourcePolicy } = await allow(
         this.graphqlClientV2,
         this.tokenProvider,
         {
@@ -397,7 +336,7 @@ export class AccessControlManagementClient {
         }
       );
       // @ts-ignore
-      return createResourceRule;
+      return createResourcePolicy;
     }
     // 组织机构
     else {
@@ -405,7 +344,7 @@ export class AccessControlManagementClient {
       const nodeCode = arg2;
       const action = arg3;
       const resouceCode = arg4;
-      const { createResourceRule } = await allow(
+      const { createResourcePolicy } = await allow(
         this.graphqlClientV2,
         this.tokenProvider,
         {
@@ -417,7 +356,7 @@ export class AccessControlManagementClient {
         }
       );
       // @ts-ignore
-      return createResourceRule;
+      return createResourcePolicy;
     }
   }
 
@@ -430,7 +369,7 @@ export class AccessControlManagementClient {
    *
    */
   async deny(roleCode: string, action: string, resouceCode: string) {
-    const { createResourceRule } = await allow(
+    const { createResourcePolicy } = await allow(
       this.graphqlClientV2,
       this.tokenProvider,
       {
@@ -440,7 +379,7 @@ export class AccessControlManagementClient {
         roleCode
       }
     );
-    return createResourceRule;
+    return createResourcePolicy;
   }
 
   /**

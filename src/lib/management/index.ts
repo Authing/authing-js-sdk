@@ -1,4 +1,3 @@
-import { ConnectionManagementClient } from './ConnectionManagementClient';
 import { OrgManagementClient } from './OrgManagementClient';
 import { AccessControlManagementClient } from './AccessControlManagementClient';
 import { GraphqlClient } from './../common/GraphqlClient';
@@ -40,7 +39,6 @@ export class ManagementClient {
   userpool: UserPoolManagementClient;
   acl: AccessControlManagementClient;
   org: OrgManagementClient;
-  connections: ConnectionManagementClient;
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -88,11 +86,6 @@ export class ManagementClient {
       this.options,
       this.graphqlClient,
       this.graphqlClientV2,
-      this.tokenProvider
-    );
-    this.connections = new ConnectionManagementClient(
-      this.options,
-      this.graphqlClient,
       this.tokenProvider
     );
   }
