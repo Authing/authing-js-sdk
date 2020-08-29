@@ -183,7 +183,10 @@ import {
   CreatePolicyDocument,
   AddNodeVariables,
   AddNodeResponse,
-  AddNodeDocument
+  AddNodeDocument,
+  UpdateNodeVariables,
+  UpdateNodeResponse,
+  UpdateNodeDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1032,6 +1035,20 @@ export const addNode = async (
   variables: AddNodeVariables
 ): Promise<AddNodeResponse> => {
   const query = AddNodeDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const updateNode = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UpdateNodeVariables
+): Promise<UpdateNodeResponse> => {
+  const query = UpdateNodeDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

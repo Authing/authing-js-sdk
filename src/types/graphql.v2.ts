@@ -760,6 +760,8 @@ export type Mutation = {
   deleteOrg: CommonMessage;
   /** 添加子节点 */
   addNode: Org;
+  /** 修改节点 */
+  updateNode: Node;
   /** 删除节点（会一并删掉子节点） */
   deleteNode: Org;
   /** （批量）将成员添加到节点中 */
@@ -911,6 +913,13 @@ export type MutationAddNodeArgs = {
   descriptionI18n?: Maybe<Scalars['String']>;
   order?: Maybe<Scalars['Int']>;
   code?: Maybe<Scalars['String']>;
+};
+
+export type MutationUpdateNodeArgs = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
 };
 
 export type MutationDeleteNodeArgs = {
@@ -2840,6 +2849,36 @@ export type UpdateFunctionResponse = {
     sourceCode: string;
     description?: Maybe<string>;
     url?: Maybe<string>;
+  };
+};
+
+export type UpdateNodeVariables = Exact<{
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+}>;
+
+export type UpdateNodeResponse = {
+  updateNode: {
+    id: string;
+    name: string;
+    nameI18n?: Maybe<string>;
+    description?: Maybe<string>;
+    descriptionI18n?: Maybe<string>;
+    order?: Maybe<number>;
+    code?: Maybe<string>;
+    root?: Maybe<boolean>;
+    depth?: Maybe<number>;
+    path: Array<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    children?: Maybe<Array<string>>;
+    users: { totalCount: number };
   };
 };
 
@@ -5388,6 +5427,28 @@ export const UpdateFunctionDocument = `
     sourceCode
     description
     url
+  }
+}
+    `;
+export const UpdateNodeDocument = `
+    mutation updateNode($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $id: String!, $name: String, $code: String, $description: String) {
+  updateNode(id: $id, name: $name, code: $code, description: $description) {
+    id
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    path
+    createdAt
+    updatedAt
+    children
+    users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
+      totalCount
+    }
   }
 }
     `;

@@ -16,7 +16,8 @@ import {
   searchNodes,
   addMember,
   getMembers,
-  addNode
+  addNode,
+  updateNode
 } from '../graphqlapi';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
@@ -107,6 +108,31 @@ export class OrgManagementClient {
     );
     (org as any).tree = buildTree(_.cloneDeep(org.nodes) as any);
     return org;
+  }
+
+  async updateNode(
+    id: string,
+    updates: {
+      name: string;
+      code?: string;
+      order?: number;
+      nameI18n?: string;
+      description?: string;
+      descriptionI18n?: string;
+    }
+  ) {
+    const { name, code, description } = updates;
+    const { updateNode: node } = await updateNode(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        id,
+        name,
+        code,
+        description
+      }
+    );
+    return node;
   }
 
   /**
