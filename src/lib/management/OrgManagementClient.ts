@@ -7,7 +7,6 @@ import { SearchOrgNodesVariables } from '../../types/graphql.v1';
 import {
   orgs,
   createOrg,
-  addOrgNode,
   org,
   deleteOrg,
   removeOrgNode,
@@ -16,7 +15,8 @@ import {
   orgRootNode,
   searchNodes,
   addMember,
-  getMembers
+  getMembers,
+  addNode
 } from '../graphqlapi';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
@@ -52,7 +52,7 @@ export class OrgManagementClient {
       limit
     });
     for (let org of res.orgs.list) {
-      (org as any).tree = buildTree(_.cloneDeep(org) as any);
+      (org as any).tree = buildTree(_.cloneDeep(org.nodes) as any);
     }
     return res.orgs;
   }
@@ -78,20 +78,35 @@ export class OrgManagementClient {
    * 往组织机构中添加一个节点
    * @memberof OrgManagementClient
    */
-  async addNode(options: {
-    orgId: string;
-    nodeId: string;
-    parentNodeId: string;
-  }) {
-    const { orgId, nodeId, parentNodeId } = options;
-    const res = await addOrgNode(this.graphqlClient, this.tokenProvider, {
-      input: {
+  async addNode(
+    orgId: string,
+    parentNodeId: string,
+    data: {
+      name: string;
+      code?: string;
+      order?: number;
+      nameI18n?: string;
+      description?: string;
+      descriptionI18n?: string;
+    }
+  ) {
+    const { name, code, order, nameI18n, description, descriptionI18n } = data;
+    const { addNode: org } = await addNode(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
         orgId,
-        groupId: nodeId,
-        parentGroupId: parentNodeId
+        parentNodeId,
+        name,
+        code,
+        order,
+        nameI18n,
+        description,
+        descriptionI18n
       }
-    });
-    return res.addOrgNode;
+    );
+    (org as any).tree = buildTree(_.cloneDeep(org.nodes) as any);
+    return org;
   }
 
   /**
@@ -99,10 +114,11 @@ export class OrgManagementClient {
    * @memberof OrgManagementClient
    */
   async findById(id: string) {
-    const res = await org(this.graphqlClientV2, this.tokenProvider, {
+    const { org: data } = await org(this.graphqlClientV2, this.tokenProvider, {
       id
     });
-    return res.org;
+    (data as any).tree = buildTree(_.cloneDeep(data.nodes) as any);
+    return data;
   }
 
   /**

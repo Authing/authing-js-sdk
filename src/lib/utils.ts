@@ -43,25 +43,25 @@ export const graphqlRequest = async (options: {
 export default function buildTree(nodes: any[]) {
   /* nodes structure
   [
-    {"_id": "1", "children": ["2"], "root": true},
-    {"_id": "2", "children": ["3", "4"], "root": false},
-    {"_id": "3", "children": [], "root": false},
-    {"_id": "4", "children": [], "root": false},
+    {"id": "1", "children": ["2"], "root": true},
+    {"id": "2", "children": ["3", "4"], "root": false},
+    {"id": "3", "children": [], "root": false},
+    {"id": "4", "children": [], "root": false},
   ]
 
   转换成 ->
   {
-    _id: 1,
+    id: 1,
     children: [
       {
-        _id: 2,
+        id: 2,
         children: [
           {
-            _id: 3,
+            id: 3,
             children: []
           },
           {
-            _id: 4,
+            id: 4,
             children: []
           }
         ]
@@ -71,7 +71,7 @@ export default function buildTree(nodes: any[]) {
   */
   const rootNodes = [_.find(nodes, { root: true })];
   const mapChildren = (childId: any) => {
-    const node = _.find(nodes, node => node._id === childId) || null;
+    const node = _.find(nodes, x => x.id === childId) || null;
     if (_.isArray(node.children) && node.children.length > 0) {
       node.children = node.children
         .map(mapChildren)

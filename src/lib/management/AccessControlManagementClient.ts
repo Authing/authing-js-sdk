@@ -2,7 +2,7 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { SortByEnum } from '../../types/graphql.v1';
-import { ResourcePolicy, Role } from '../../types/graphql.v2';
+import { Role } from '../../types/graphql.v2';
 import {
   createRBACGroup,
   addGroupMetadata,
@@ -12,8 +12,6 @@ import {
   userGroupList,
   assignRole,
   addRole,
-  addResource,
-  allow,
   isAllowed,
   isDenied,
   roles,
@@ -276,110 +274,6 @@ export class AccessControlManagementClient {
       }
     );
     return data;
-  }
-
-  /**
-   * @description 添加资源
-   *
-   */
-  async addResource(code: string, name?: string, description?: string) {
-    const { createResource } = await addResource(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        code,
-        name,
-        description
-      }
-    );
-    return createResource;
-  }
-
-  /**
-   * @description 允许某个用户/角色/组织机构节点操作某个资源
-   *
-   * @param roleCode: 角色代码
-   * @param action: 操作
-   * @param resouceCode: 资源代码
-   *
-   */
-  async allow(
-    orgId: string,
-    nodeCode: string,
-    action: string,
-    resouceCode: string
-  ): Promise<ResourcePolicy>;
-  async allow(
-    roleCode: string,
-    action: string,
-    resouceCode: string
-  ): Promise<ResourcePolicy>;
-  async allow(
-    arg1: any,
-    arg2: any,
-    arg3: any,
-    arg4?: any
-  ): Promise<ResourcePolicy> {
-    // 角色
-    if (!arg4) {
-      const roleCode = arg1;
-      const action = arg2;
-      const resouceCode = arg3;
-      const { createResourcePolicy } = await allow(
-        this.graphqlClientV2,
-        this.tokenProvider,
-        {
-          resouceCode,
-          action,
-          allow: true,
-          roleCode
-        }
-      );
-      // @ts-ignore
-      return createResourcePolicy;
-    }
-    // 组织机构
-    else {
-      const orgId = arg1;
-      const nodeCode = arg2;
-      const action = arg3;
-      const resouceCode = arg4;
-      const { createResourcePolicy } = await allow(
-        this.graphqlClientV2,
-        this.tokenProvider,
-        {
-          resouceCode,
-          action,
-          allow: true,
-          orgId,
-          nodeCode
-        }
-      );
-      // @ts-ignore
-      return createResourcePolicy;
-    }
-  }
-
-  /**
-   * @description 允许某个用户/角色操作某个资源
-   *
-   * @param roleCode: 角色代码
-   * @param action: 操作
-   * @param resouceCode: 资源代码
-   *
-   */
-  async deny(roleCode: string, action: string, resouceCode: string) {
-    const { createResourcePolicy } = await allow(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        resouceCode,
-        action,
-        allow: false,
-        roleCode
-      }
-    );
-    return createResourcePolicy;
   }
 
   /**
