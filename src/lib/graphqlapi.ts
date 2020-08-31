@@ -192,7 +192,10 @@ import {
   NodeByIdWithMembersDocument,
   NodeByCodeWithMembersVariables,
   NodeByCodeWithMembersResponse,
-  NodeByCodeWithMembersDocument
+  NodeByCodeWithMembersDocument,
+  RemoveMemberVariables,
+  RemoveMemberResponse,
+  RemoveMemberDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1083,6 +1086,20 @@ export const moveNode = async (
   variables: MoveNodeVariables
 ): Promise<MoveNodeResponse> => {
   const query = MoveNodeDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const removeMembers = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RemoveMemberVariables
+): Promise<RemoveMemberResponse> => {
+  const query = RemoveMemberDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

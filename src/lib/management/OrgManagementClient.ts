@@ -19,7 +19,8 @@ import {
   getMembersById,
   addNode,
   updateNode,
-  moveNode
+  moveNode,
+  removeMembers
 } from '../graphqlapi';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
@@ -291,36 +292,45 @@ export class OrgManagementClient {
    * @description 节点添加成员
    *
    */
-  async addMember(nodeId: string, userId: string): Promise<PaginatedUsers>;
+  async addMember(
+    nodeId: string,
+    userId: string,
+    isLeader?: boolean
+  ): Promise<PaginatedUsers>;
   async addMember(
     orgId: string,
     nodeCode: string,
-    userId: string
+    userId: string,
+    isLeader?: boolean
   ): Promise<PaginatedUsers>;
-  async addMember(arg1: string, arg2: string, arg3?: string) {
-    if (arguments.length === 3) {
+  async addMember(arg1: any, arg2: any, arg3?: any, arg4?: boolean) {
+    if (arguments.length === 4) {
       const orgId = arg1;
       const nodeCode = arg2;
       const userId = arg3;
+      const isLeader = arg4 || false;
       const { addMember: data } = await addMember(
         this.graphqlClientV2,
         this.tokenProvider,
         {
           orgId,
           nodeCode,
-          userIds: [userId]
+          userIds: [userId],
+          isLeader
         }
       );
       return data.users;
     } else {
       const nodeId = arg1;
       const userId = arg2;
+      const isLeader = arg3 || false;
       const { addMember: data } = await addMember(
         this.graphqlClientV2,
         this.tokenProvider,
         {
           nodeId,
-          userIds: [userId]
+          userIds: [userId],
+          isLeader
         }
       );
       return data.users;
@@ -331,29 +341,38 @@ export class OrgManagementClient {
    * @description 节点批量添加成员
    *
    */
-  async addMembers(nodeId: string, userIds: string[]): Promise<PaginatedUsers>;
+  async addMembers(
+    nodeId: string,
+    userIds: string[],
+    isLeader?: boolean
+  ): Promise<PaginatedUsers>;
   async addMembers(
     orgId: string,
     nodeCode: string,
-    userIds: string[]
+    userIds: string[],
+    isLeader?: boolean
   ): Promise<PaginatedUsers>;
-  async addMembers(arg1: any, arg2: any, arg3?: any) {
-    if (arguments.length === 3) {
+  async addMembers(arg1: any, arg2: any, arg3?: any, arg4?: any) {
+    if (typeof arg2 === 'string') {
       const orgId = arg1;
       const nodeCode = arg2;
       const userIds = arg3;
+      const isLeader = arg4 || false;
       const res = await addMember(this.graphqlClientV2, this.tokenProvider, {
         orgId,
         nodeCode,
-        userIds
+        userIds,
+        isLeader
       });
       return res.addMember.users;
     } else {
       const nodeId = arg1;
       const userIds = arg2;
+      const isLeader = arg3 || false;
       const res = await addMember(this.graphqlClientV2, this.tokenProvider, {
         nodeId,
-        userIds
+        userIds,
+        isLeader
       });
       return res.addMember.users;
     }
@@ -405,6 +424,97 @@ export class OrgManagementClient {
         }
       );
       return nodeById.users;
+    }
+  }
+
+  /**
+   * @description 移除用户
+   *
+   */
+  async removeMember(nodeId: string, userId: string): Promise<PaginatedUsers>;
+  async removeMember(
+    orgId: string,
+    nodeCode: string,
+    userId: string
+  ): Promise<PaginatedUsers>;
+  async removeMember(
+    arg1: any,
+    arg2: any,
+    arg3?: any
+  ): Promise<PaginatedUsers> {
+    if (arg3) {
+      const orgId = arg1;
+      const code = arg2;
+      const userId = arg3;
+      const { removeMember: data } = await removeMembers(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          orgId,
+          nodeCode: code,
+          userIds: [userId]
+        }
+      );
+      return data.users;
+    } else {
+      const nodeId = arg1;
+      const userId = arg2;
+      const { removeMember: data } = await removeMembers(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          nodeId,
+          userIds: [userId]
+        }
+      );
+      return data.users;
+    }
+  }
+
+  /**
+   * @description 批量移除用户
+   *
+   */
+  async removeMembers(
+    nodeId: string,
+    userIds: string[]
+  ): Promise<PaginatedUsers>;
+  async removeMembers(
+    orgId: string,
+    nodeCode: string,
+    userIds: string[]
+  ): Promise<PaginatedUsers>;
+  async removeMembers(
+    arg1: any,
+    arg2: any,
+    arg3?: any
+  ): Promise<PaginatedUsers> {
+    if (arg3) {
+      const orgId = arg1;
+      const code = arg2;
+      const userIds = arg3;
+      const { removeMember: data } = await removeMembers(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          orgId,
+          nodeCode: code,
+          userIds
+        }
+      );
+      return data.users;
+    } else {
+      const nodeId = arg1;
+      const userIds = arg2;
+      const { removeMember: data } = await removeMembers(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          nodeId,
+          userIds
+        }
+      );
+      return data.users;
     }
   }
 }
