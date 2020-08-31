@@ -111,7 +111,7 @@ test('添加成员', async t => {
   const rootNode = orgTree.rootNode;
   await management.org.addMember(org.id, rootNode.code, user.id);
 
-  const { totalCount, list } = await management.org.getMmebers(
+  const { totalCount, list } = await management.org.getMembers(
     org.id,
     rootNode.code
   );

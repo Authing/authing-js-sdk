@@ -47,9 +47,6 @@ import {
   IsRootNodeOfOrg,
   IsRootNodeOfOrgDocument,
   IsRootNodeOfOrgVariables,
-  RemoveOrgNode,
-  RemoveOrgNodeDocument,
-  RemoveOrgNodeVariables,
   OrgRootNodeDocument,
   OrgRootNode,
   OrgRootNodeVariables,
@@ -137,9 +134,6 @@ import {
   AddMemberVariables,
   AddMemberDocument,
   AddMemberResponse,
-  NodeWithMembersDocument,
-  NodeWithMembersResponse,
-  NodeWithMembersVariables,
   SendEmailResponse,
   SendEmailVariables,
   SendEmailDocument,
@@ -186,7 +180,19 @@ import {
   AddNodeDocument,
   UpdateNodeVariables,
   UpdateNodeResponse,
-  UpdateNodeDocument
+  UpdateNodeDocument,
+  DeleteNodeVariables,
+  DeleteNodeResponse,
+  DeleteNodeDocument,
+  MoveNodeVariables,
+  MoveNodeResponse,
+  MoveNodeDocument,
+  NodeByIdWithMembersVariables,
+  NodeByIdWithMembersResponse,
+  NodeByIdWithMembersDocument,
+  NodeByCodeWithMembersVariables,
+  NodeByCodeWithMembersResponse,
+  NodeByCodeWithMembersDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -265,20 +271,6 @@ export const orgs = async (
   variables: OrgsVariables
 ): Promise<OrgsResponse> => {
   const query = OrgsDocument;
-  const token = await tokenProvider.getAccessToken();
-  return await garpqhlClient.request({
-    query,
-    token,
-    variables
-  });
-};
-
-export const removeOrgNode = async (
-  garpqhlClient: GraphqlClient,
-  tokenProvider: ManagementTokenProvider,
-  variables: RemoveOrgNodeVariables
-): Promise<RemoveOrgNode> => {
-  const query = RemoveOrgNodeDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,
@@ -805,12 +797,26 @@ export const addMember = async (
   });
 };
 
-export const getMembers = async (
+export const getMembersById = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider,
-  variables: NodeWithMembersVariables
-): Promise<NodeWithMembersResponse> => {
-  const query = NodeWithMembersDocument;
+  variables: NodeByIdWithMembersVariables
+): Promise<NodeByIdWithMembersResponse> => {
+  const query = NodeByIdWithMembersDocument;
+  const token = await tokenProvider.getAccessToken();
+  return await garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const getMembersByCode = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider,
+  variables: NodeByCodeWithMembersVariables
+): Promise<NodeByCodeWithMembersResponse> => {
+  const query = NodeByCodeWithMembersDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,
@@ -1049,6 +1055,34 @@ export const updateNode = async (
   variables: UpdateNodeVariables
 ): Promise<UpdateNodeResponse> => {
   const query = UpdateNodeDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const deleteNode = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: DeleteNodeVariables
+): Promise<DeleteNodeResponse> => {
+  const query = DeleteNodeDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const moveNode = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: MoveNodeVariables
+): Promise<MoveNodeResponse> => {
+  const query = MoveNodeDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

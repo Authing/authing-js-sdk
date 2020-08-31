@@ -37,8 +37,9 @@ export type Query = {
   groups: PaginatedGroups;
   /** 查询 MFA 信息 */
   queryMfa?: Maybe<Mfa>;
+  nodeById?: Maybe<Node>;
   /** 通过 code 查询节点 */
-  node: Node;
+  nodeByCode?: Maybe<Node>;
   /** 查询组织机构详情 */
   org: Org;
   /** 查询用户池组织机构列表 */
@@ -122,7 +123,11 @@ export type QueryQueryMfaArgs = {
   userPoolId?: Maybe<Scalars['String']>;
 };
 
-export type QueryNodeArgs = {
+export type QueryNodeByIdArgs = {
+  id: Scalars['String'];
+};
+
+export type QueryNodeByCodeArgs = {
   orgId: Scalars['String'];
   code: Scalars['String'];
 };
@@ -763,11 +768,12 @@ export type Mutation = {
   /** 修改节点 */
   updateNode: Node;
   /** 删除节点（会一并删掉子节点） */
-  deleteNode: Org;
+  deleteNode: CommonMessage;
   /** （批量）将成员添加到节点中 */
   addMember: Node;
   /** （批量）将成员从节点中移除 */
   removeMember: Node;
+  moveNode: Org;
   resetPassword?: Maybe<CommonMessage>;
   createPipeline: Pipeline;
   addFunctionToPipeline: Pipeline;
@@ -928,15 +934,23 @@ export type MutationDeleteNodeArgs = {
 };
 
 export type MutationAddMemberArgs = {
-  orgId: Scalars['String'];
-  nodeCode: Scalars['String'];
+  nodeId?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
+  nodeCode?: Maybe<Scalars['String']>;
   userIds: Array<Scalars['String']>;
 };
 
 export type MutationRemoveMemberArgs = {
+  nodeId?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
+  nodeCode?: Maybe<Scalars['String']>;
+  userIds: Array<Scalars['String']>;
+};
+
+export type MutationMoveNodeArgs = {
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
-  userIds: Array<Scalars['String']>;
+  targetParentId: Scalars['String'];
 };
 
 export type MutationResetPasswordArgs = {
@@ -1573,8 +1587,9 @@ export type AddMemberVariables = Exact<{
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
   includeChildrenNodes?: Maybe<Scalars['Boolean']>;
-  orgId: Scalars['String'];
-  nodeCode: Scalars['String'];
+  nodeId?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
+  nodeCode?: Maybe<Scalars['String']>;
   userIds: Array<Scalars['String']>;
 }>;
 
@@ -2015,39 +2030,7 @@ export type DeleteNodeVariables = Exact<{
 }>;
 
 export type DeleteNodeResponse = {
-  deleteNode: {
-    id: string;
-    rootNode: {
-      id: string;
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      path: Array<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    };
-    nodes: Array<{
-      id: string;
-      name: string;
-      nameI18n?: Maybe<string>;
-      description?: Maybe<string>;
-      descriptionI18n?: Maybe<string>;
-      order?: Maybe<number>;
-      code?: Maybe<string>;
-      root?: Maybe<boolean>;
-      depth?: Maybe<number>;
-      path: Array<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      children?: Maybe<Array<string>>;
-    }>;
-  };
+  deleteNode: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
 export type DeleteOrgVariables = Exact<{
@@ -2442,6 +2425,48 @@ export type LoginByUsernameResponse = {
   }>;
 };
 
+export type MoveNodeVariables = Exact<{
+  orgId: Scalars['String'];
+  nodeId: Scalars['String'];
+  targetParentId: Scalars['String'];
+}>;
+
+export type MoveNodeResponse = {
+  moveNode: {
+    id: string;
+    rootNode: {
+      id: string;
+      name: string;
+      nameI18n?: Maybe<string>;
+      description?: Maybe<string>;
+      descriptionI18n?: Maybe<string>;
+      order?: Maybe<number>;
+      code?: Maybe<string>;
+      root?: Maybe<boolean>;
+      depth?: Maybe<number>;
+      path: Array<string>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+      children?: Maybe<Array<string>>;
+    };
+    nodes: Array<{
+      id: string;
+      name: string;
+      nameI18n?: Maybe<string>;
+      description?: Maybe<string>;
+      descriptionI18n?: Maybe<string>;
+      order?: Maybe<number>;
+      code?: Maybe<string>;
+      root?: Maybe<boolean>;
+      depth?: Maybe<number>;
+      path: Array<string>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+      children?: Maybe<Array<string>>;
+    }>;
+  };
+};
+
 export type RefreshUserpoolSecretVariables = Exact<{ [key: string]: never }>;
 
 export type RefreshUserpoolSecretResponse = { refreshUserpoolSecret: string };
@@ -2639,8 +2664,9 @@ export type RemoveMemberVariables = Exact<{
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
   includeChildrenNodes?: Maybe<Scalars['Boolean']>;
-  orgId: Scalars['String'];
-  nodeId: Scalars['String'];
+  nodeId?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
+  nodeCode?: Maybe<Scalars['String']>;
   userIds: Array<Scalars['String']>;
 }>;
 
@@ -3167,6 +3193,7 @@ export type ChildrenNodesVariables = Exact<{
 
 export type ChildrenNodesResponse = {
   childrenNodes: Array<{
+    id: string;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -3175,6 +3202,7 @@ export type ChildrenNodesResponse = {
     code?: Maybe<string>;
     root?: Maybe<boolean>;
     depth?: Maybe<number>;
+    path: Array<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
@@ -3345,13 +3373,13 @@ export type IsDomainAvaliableVariables = Exact<{
 
 export type IsDomainAvaliableResponse = { isDomainAvaliable?: Maybe<boolean> };
 
-export type NodeVariables = Exact<{
+export type NodeByCodeVariables = Exact<{
   orgId: Scalars['String'];
   code: Scalars['String'];
 }>;
 
-export type NodeResponse = {
-  node: {
+export type NodeByCodeResponse = {
+  nodeByCode?: Maybe<{
     id: string;
     name: string;
     nameI18n?: Maybe<string>;
@@ -3361,13 +3389,14 @@ export type NodeResponse = {
     code?: Maybe<string>;
     root?: Maybe<boolean>;
     depth?: Maybe<number>;
+    path: Array<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-  };
+  }>;
 };
 
-export type NodeWithMembersVariables = Exact<{
+export type NodeByCodeWithMembersVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -3376,8 +3405,8 @@ export type NodeWithMembersVariables = Exact<{
   code: Scalars['String'];
 }>;
 
-export type NodeWithMembersResponse = {
-  node: {
+export type NodeByCodeWithMembersResponse = {
+  nodeByCode?: Maybe<{
     id: string;
     name: string;
     nameI18n?: Maybe<string>;
@@ -3440,7 +3469,104 @@ export type NodeWithMembersResponse = {
         customData?: Maybe<string>;
       }>;
     };
-  };
+  }>;
+};
+
+export type NodeByIdVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type NodeByIdResponse = {
+  nodeById?: Maybe<{
+    id: string;
+    name: string;
+    nameI18n?: Maybe<string>;
+    description?: Maybe<string>;
+    descriptionI18n?: Maybe<string>;
+    order?: Maybe<number>;
+    code?: Maybe<string>;
+    root?: Maybe<boolean>;
+    depth?: Maybe<number>;
+    path: Array<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    children?: Maybe<Array<string>>;
+  }>;
+};
+
+export type NodeByIdWithMembersVariables = Exact<{
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+}>;
+
+export type NodeByIdWithMembersResponse = {
+  nodeById?: Maybe<{
+    id: string;
+    name: string;
+    nameI18n?: Maybe<string>;
+    description?: Maybe<string>;
+    descriptionI18n?: Maybe<string>;
+    order?: Maybe<number>;
+    code?: Maybe<string>;
+    root?: Maybe<boolean>;
+    depth?: Maybe<number>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    children?: Maybe<Array<string>>;
+    users: {
+      totalCount: number;
+      list: Array<{
+        id: string;
+        userPoolId: string;
+        username?: Maybe<string>;
+        email?: Maybe<string>;
+        emailVerified?: Maybe<boolean>;
+        phone?: Maybe<string>;
+        phoneVerified?: Maybe<boolean>;
+        unionid?: Maybe<string>;
+        openid?: Maybe<string>;
+        nickname?: Maybe<string>;
+        registerSource: Array<string>;
+        photo?: Maybe<string>;
+        password?: Maybe<string>;
+        oauth?: Maybe<string>;
+        token?: Maybe<string>;
+        tokenExpiredAt?: Maybe<string>;
+        loginsCount?: Maybe<number>;
+        lastLogin?: Maybe<string>;
+        lastIP?: Maybe<string>;
+        signedUp?: Maybe<string>;
+        blocked?: Maybe<boolean>;
+        isDeleted?: Maybe<boolean>;
+        device?: Maybe<string>;
+        browser?: Maybe<string>;
+        company?: Maybe<string>;
+        name?: Maybe<string>;
+        givenName?: Maybe<string>;
+        familyName?: Maybe<string>;
+        middleName?: Maybe<string>;
+        profile?: Maybe<string>;
+        preferredUsername?: Maybe<string>;
+        website?: Maybe<string>;
+        gender?: Maybe<string>;
+        birthdate?: Maybe<string>;
+        zoneinfo?: Maybe<string>;
+        locale?: Maybe<string>;
+        address?: Maybe<string>;
+        formatted?: Maybe<string>;
+        streetAddress?: Maybe<string>;
+        locality?: Maybe<string>;
+        region?: Maybe<string>;
+        postalCode?: Maybe<string>;
+        country?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        customData?: Maybe<string>;
+      }>;
+    };
+  }>;
 };
 
 export type OrgVariables = Exact<{
@@ -4286,8 +4412,8 @@ export const AddFunctionToPipelineDocument = `
 }
     `;
 export const AddMemberDocument = `
-    mutation addMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $nodeCode: String!, $userIds: [String!]!) {
-  addMember(orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds) {
+    mutation addMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $nodeId: String, $orgId: String, $nodeCode: String, $userIds: [String!]!) {
+  addMember(nodeId: $nodeId, orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds) {
     id
     name
     nameI18n
@@ -4661,37 +4787,8 @@ export const DeleteFunctionDocument = `
 export const DeleteNodeDocument = `
     mutation deleteNode($orgId: String!, $nodeId: String!) {
   deleteNode(orgId: $orgId, nodeId: $nodeId) {
-    id
-    rootNode {
-      id
-      name
-      nameI18n
-      description
-      descriptionI18n
-      order
-      code
-      root
-      depth
-      path
-      createdAt
-      updatedAt
-      children
-    }
-    nodes {
-      id
-      name
-      nameI18n
-      description
-      descriptionI18n
-      order
-      code
-      root
-      depth
-      path
-      createdAt
-      updatedAt
-      children
-    }
+    message
+    code
   }
 }
     `;
@@ -5064,6 +5161,43 @@ export const LoginByUsernameDocument = `
   }
 }
     `;
+export const MoveNodeDocument = `
+    mutation moveNode($orgId: String!, $nodeId: String!, $targetParentId: String!) {
+  moveNode(orgId: $orgId, nodeId: $nodeId, targetParentId: $targetParentId) {
+    id
+    rootNode {
+      id
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      path
+      createdAt
+      updatedAt
+      children
+    }
+    nodes {
+      id
+      name
+      nameI18n
+      description
+      descriptionI18n
+      order
+      code
+      root
+      depth
+      path
+      createdAt
+      updatedAt
+      children
+    }
+  }
+}
+    `;
 export const RefreshUserpoolSecretDocument = `
     mutation refreshUserpoolSecret {
   refreshUserpoolSecret
@@ -5245,8 +5379,8 @@ export const RemoveFunctionFromPipelineDocument = `
 }
     `;
 export const RemoveMemberDocument = `
-    mutation removeMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $nodeId: String!, $userIds: [String!]!) {
-  removeMember(orgId: $orgId, nodeId: $nodeId, userIds: $userIds) {
+    mutation removeMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $nodeId: String, $orgId: String, $nodeCode: String, $userIds: [String!]!) {
+  removeMember(nodeId: $nodeId, orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds) {
     id
     name
     nameI18n
@@ -5715,6 +5849,7 @@ export const CheckPasswordStrengthDocument = `
 export const ChildrenNodesDocument = `
     query childrenNodes($orgId: String!, $nodeId: String!) {
   childrenNodes(orgId: $orgId, nodeId: $nodeId) {
+    id
     name
     nameI18n
     description
@@ -5723,6 +5858,7 @@ export const ChildrenNodesDocument = `
     code
     root
     depth
+    path
     createdAt
     updatedAt
     children
@@ -5867,9 +6003,28 @@ export const IsDomainAvaliableDocument = `
   isDomainAvaliable(domain: $domain)
 }
     `;
-export const NodeDocument = `
-    query node($orgId: String!, $code: String!) {
-  node(orgId: $orgId, code: $code) {
+export const NodeByCodeDocument = `
+    query nodeByCode($orgId: String!, $code: String!) {
+  nodeByCode(orgId: $orgId, code: $code) {
+    id
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    path
+    createdAt
+    updatedAt
+    children
+  }
+}
+    `;
+export const NodeByCodeWithMembersDocument = `
+    query nodeByCodeWithMembers($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $code: String!) {
+  nodeByCode(orgId: $orgId, code: $code) {
     id
     name
     nameI18n
@@ -5882,12 +6037,81 @@ export const NodeDocument = `
     createdAt
     updatedAt
     children
+    users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
+      totalCount
+      list {
+        id
+        userPoolId
+        username
+        email
+        emailVerified
+        phone
+        phoneVerified
+        unionid
+        openid
+        nickname
+        registerSource
+        photo
+        password
+        oauth
+        token
+        tokenExpiredAt
+        loginsCount
+        lastLogin
+        lastIP
+        signedUp
+        blocked
+        isDeleted
+        device
+        browser
+        company
+        name
+        givenName
+        familyName
+        middleName
+        profile
+        preferredUsername
+        website
+        gender
+        birthdate
+        zoneinfo
+        locale
+        address
+        formatted
+        streetAddress
+        locality
+        region
+        postalCode
+        country
+        updatedAt
+        customData
+      }
+    }
   }
 }
     `;
-export const NodeWithMembersDocument = `
-    query nodeWithMembers($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $code: String!) {
-  node(orgId: $orgId, code: $code) {
+export const NodeByIdDocument = `
+    query nodeById($id: String!) {
+  nodeById(id: $id) {
+    id
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    path
+    createdAt
+    updatedAt
+    children
+  }
+}
+    `;
+export const NodeByIdWithMembersDocument = `
+    query nodeByIdWithMembers($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $id: String!) {
+  nodeById(id: $id) {
     id
     name
     nameI18n

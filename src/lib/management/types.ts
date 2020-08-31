@@ -1,3 +1,5 @@
+import { Org } from '../../types/graphql.v2';
+
 /**
  * 初始化 Authing SDK 的参数，secret 和 accessToken 必须传其中一个。
  */
@@ -109,4 +111,8 @@ export interface CreateOIDCProviderInput {
   access_token_expire?: string;
   cas_expire?: string;
   customStyles?: OIDCProviderCustomStylesInput;
+}
+
+export interface ExtendedOrg extends Org {
+  tree: any;
 }

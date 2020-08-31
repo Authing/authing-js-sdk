@@ -1,6 +1,6 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
-import { ManagementClientOptions } from './types';
+import { ExtendedOrg, ManagementClientOptions } from './types';
 import buildTree from '../utils';
 import _ from 'lodash';
 import { SearchOrgNodesVariables } from '../../types/graphql.v1';
@@ -9,19 +9,21 @@ import {
   createOrg,
   org,
   deleteOrg,
-  removeOrgNode,
+  deleteNode,
   isRootNodeOfOrg,
   orgChildrenNodes,
   orgRootNode,
   searchNodes,
   addMember,
-  getMembers,
+  getMembersByCode,
+  getMembersById,
   addNode,
-  updateNode
+  updateNode,
+  moveNode
 } from '../graphqlapi';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
-import { Org, SortByEnum } from '../../types/graphql.v2';
+import { Org, PaginatedUsers, SortByEnum } from '../../types/graphql.v2';
 
 export class OrgManagementClient {
   options: ManagementClientOptions;
@@ -41,6 +43,11 @@ export class OrgManagementClient {
     this.tokenProvider = tokenProvider;
   }
 
+  buildTree(org: DeepPartial<Org>): ExtendedOrg {
+    (org as any).tree = buildTree(_.cloneDeep(org.nodes) as any);
+    return org as ExtendedOrg;
+  }
+
   /**
    * @description 获取用户池组织机构列表
    * @param page 从 1 开始，默认为 1
@@ -48,14 +55,16 @@ export class OrgManagementClient {
    *
    */
   async list(page: number = 1, limit: number = 10) {
-    const res = await orgs(this.graphqlClientV2, this.tokenProvider, {
+    const {
+      orgs: { list, totalCount }
+    } = await orgs(this.graphqlClientV2, this.tokenProvider, {
       page,
       limit
     });
-    for (let org of res.orgs.list) {
-      (org as any).tree = buildTree(_.cloneDeep(org.nodes) as any);
-    }
-    return res.orgs;
+    return {
+      totalCount,
+      list: list.map(org => this.buildTree(org))
+    };
   }
 
   /**
@@ -106,8 +115,7 @@ export class OrgManagementClient {
         descriptionI18n
       }
     );
-    (org as any).tree = buildTree(_.cloneDeep(org.nodes) as any);
-    return org;
+    return this.buildTree(org);
   }
 
   async updateNode(
@@ -143,8 +151,7 @@ export class OrgManagementClient {
     const { org: data } = await org(this.graphqlClientV2, this.tokenProvider, {
       id
     });
-    (data as any).tree = buildTree(_.cloneDeep(data.nodes) as any);
-    return data;
+    return this.buildTree(data);
   }
 
   /**
@@ -162,19 +169,33 @@ export class OrgManagementClient {
 
   /**
    * 删除组织机构树中的某一个节点
-   * @param {string} orgId
-   * @param {string} nodeId
-   * @returns
-   * @memberof OrgManagementClient
    */
-  async removeNode(orgId: string, nodeId: string) {
-    const res = await removeOrgNode(this.graphqlClient, this.tokenProvider, {
-      input: {
+  async deleteNode(orgId: string, nodeId: string) {
+    const { deleteNode: data } = await deleteNode(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
         orgId,
-        groupId: nodeId
+        nodeId
       }
-    });
-    return res.removeOrgNode;
+    );
+    return data;
+  }
+
+  /**
+   * @description 移动节点
+   */
+  async moveNode(orgId: string, nodeId: string, targetParentId: string) {
+    const { moveNode: org } = await moveNode(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        orgId,
+        nodeId,
+        targetParentId
+      }
+    );
+    return this.buildTree(org);
   }
 
   /**
@@ -270,13 +291,40 @@ export class OrgManagementClient {
    * @description 节点添加成员
    *
    */
-  async addMember(orgId: string, nodeCode: string, userId: string) {
-    const res = await addMember(this.graphqlClientV2, this.tokenProvider, {
-      orgId,
-      nodeCode,
-      userIds: [userId]
-    });
-    return res.addMember;
+  async addMember(nodeId: string, userId: string): Promise<PaginatedUsers>;
+  async addMember(
+    orgId: string,
+    nodeCode: string,
+    userId: string
+  ): Promise<PaginatedUsers>;
+  async addMember(arg1: string, arg2: string, arg3: string) {
+    if (arguments.length === 3) {
+      const orgId = arg1;
+      const nodeCode = arg2;
+      const userId = arg3;
+      const { addMember: data } = await addMember(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          orgId,
+          nodeCode,
+          userIds: [userId]
+        }
+      );
+      return data.users;
+    } else {
+      const nodeId = arg1;
+      const userId = arg2;
+      const { addMember: data } = await addMember(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          nodeId,
+          userIds: [userId]
+        }
+      );
+      return data.users;
+    }
   }
 
   /**
@@ -292,7 +340,16 @@ export class OrgManagementClient {
     return res.addMember;
   }
 
-  async getMmebers(
+  async getMembers(
+    nodeId: string,
+    options?: {
+      page?: number;
+      limit?: number;
+      sortBy?: SortByEnum;
+      includeChildrenNodes?: boolean;
+    }
+  ): Promise<PaginatedUsers>;
+  async getMembers(
     orgId: string,
     nodeCode: string,
     options?: {
@@ -301,17 +358,34 @@ export class OrgManagementClient {
       sortBy?: SortByEnum;
       includeChildrenNodes?: boolean;
     }
-  ) {
-    options = options || {};
-    const { node } = await getMembers(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        orgId,
-        code: nodeCode,
-        ...options
-      }
-    );
-    return node.users;
+  ): Promise<PaginatedUsers>;
+  async getMembers(arg1: any, arg2?: any, arg3?: any): Promise<PaginatedUsers> {
+    if (arg3 || (arg2 && typeof arg2 === 'string')) {
+      const orgId = arg1;
+      const code = arg2;
+      const options = arg3 || {};
+      const { nodeByCode } = await getMembersByCode(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          orgId,
+          code,
+          ...options
+        }
+      );
+      return nodeByCode.users;
+    } else {
+      const id = arg1;
+      const options = arg2 || {};
+      const { nodeById } = await getMembersById(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          id,
+          ...options
+        }
+      );
+      return nodeById.users;
+    }
   }
 }
