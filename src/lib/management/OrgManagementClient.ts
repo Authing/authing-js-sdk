@@ -331,13 +331,32 @@ export class OrgManagementClient {
    * @description 节点批量添加成员
    *
    */
-  async addMembers(orgId: string, nodeCode: string, userIds: string[]) {
-    const res = await addMember(this.graphqlClientV2, this.tokenProvider, {
-      orgId,
-      nodeCode,
-      userIds
-    });
-    return res.addMember;
+  async addMembers(nodeId: string, userIds: string[]): Promise<PaginatedUsers>;
+  async addMembers(
+    orgId: string,
+    nodeCode: string,
+    userIds: string[]
+  ): Promise<PaginatedUsers>;
+  async addMembers(arg1: any, arg2: any, arg3?: any) {
+    if (arguments.length === 3) {
+      const orgId = arg1;
+      const nodeCode = arg2;
+      const userIds = arg3;
+      const res = await addMember(this.graphqlClientV2, this.tokenProvider, {
+        orgId,
+        nodeCode,
+        userIds
+      });
+      return res.addMember.users;
+    } else {
+      const nodeId = arg1;
+      const userIds = arg2;
+      const res = await addMember(this.graphqlClientV2, this.tokenProvider, {
+        nodeId,
+        userIds
+      });
+      return res.addMember.users;
+    }
   }
 
   async getMembers(
