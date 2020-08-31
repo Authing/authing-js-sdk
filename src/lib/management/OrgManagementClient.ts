@@ -297,7 +297,7 @@ export class OrgManagementClient {
     nodeCode: string,
     userId: string
   ): Promise<PaginatedUsers>;
-  async addMember(arg1: string, arg2: string, arg3: string) {
+  async addMember(arg1: string, arg2: string, arg3?: string) {
     if (arguments.length === 3) {
       const orgId = arg1;
       const nodeCode = arg2;
