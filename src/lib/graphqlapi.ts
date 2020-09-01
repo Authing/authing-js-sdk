@@ -1107,3 +1107,17 @@ export const removeMembers = async (
     variables
   });
 };
+
+export const getGroups = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: GroupsVariables
+): Promise<GroupsResponse> => {
+  const query = GroupsDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};

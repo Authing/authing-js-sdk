@@ -17,7 +17,8 @@ import {
   roles,
   role,
   roleWithUsers,
-  updateRole
+  updateRole,
+  getGroups
 } from '../graphqlapi';
 
 export class AccessControlManagementClient {
@@ -316,5 +317,21 @@ export class AccessControlManagementClient {
       }
     );
     return isActionDenied;
+  }
+
+  /**
+   * @description 获取分组列表
+   *
+   */
+  async groups(page: number = 1, limit: number = 10) {
+    const { groups: data } = await getGroups(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        page,
+        limit
+      }
+    );
+    return data;
   }
 }
