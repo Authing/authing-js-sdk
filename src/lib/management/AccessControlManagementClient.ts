@@ -18,7 +18,8 @@ import {
   role,
   roleWithUsers,
   updateRole,
-  getGroups
+  getGroups,
+  revokeRole
 } from '../graphqlapi';
 
 export class AccessControlManagementClient {
@@ -206,71 +207,61 @@ export class AccessControlManagementClient {
     return data;
   }
 
-  async assignRole(roleCode: string, userIds: string[]) {
-    const {} = await assignRole(this.graphqlClientV2, this.tokenProvider, {
+  async assignRole(
+    roleCode: string,
+    targets: {
+      userIds?: string[];
+      groupCodes?: string[];
+    }
+  ) {
+    const { userIds = [], groupCodes = [] } = targets;
+    const res = await assignRole(this.graphqlClientV2, this.tokenProvider, {
       code: roleCode,
-      userIds
+      userIds,
+      groupCodes
     });
+    return res.assignRole;
+  }
+
+  async revokeRole(
+    roleCode: string,
+    targets: {
+      userIds?: string[];
+      groupCodes?: string[];
+    }
+  ) {
+    const { userIds = [], groupCodes = [] } = targets;
+    const res = await revokeRole(this.graphqlClientV2, this.tokenProvider, {
+      code: roleCode,
+      userIds,
+      groupCodes
+    });
+    return res.revokeRole;
   }
 
   /**
    * @description 添加角色
    *
    */
-  async addRole(
-    code: string,
-    parent: string,
-    options?: {
-      name?: string;
-      description?: string;
-    }
-  ): Promise<Role>;
-  async addRole(
-    code: string,
-    options?: {
-      name?: string;
-      description?: string;
-    }
-  ): Promise<Role>;
-  async addRole(arg1: any, arg2: any, arg3?: any) {
-    if (typeof arg2 === 'string') {
-      const code = arg1;
-      const parent = arg2;
-      const { name, description } = arg3 || {};
-      const res = await addRole(this.graphqlClientV2, this.tokenProvider, {
-        code,
-        parent,
-        name,
-        description
-      });
-      return res.createRole;
-    } else {
-      const code = arg1;
-      const { name, description } = arg2 || {};
-      const res = await addRole(this.graphqlClientV2, this.tokenProvider, {
-        code,
-        name,
-        description
-      });
-      return res.createRole;
-    }
+  async addRole(code: string, description?: string, parent?: string) {
+    const res = await addRole(this.graphqlClientV2, this.tokenProvider, {
+      code,
+      parent,
+      description
+    });
+    return res.createRole;
   }
 
   /**
    * @description 修改角色
    *
    */
-  async updateRole(
-    code: string,
-    updates: { name: string; description: string }
-  ) {
-    const { name, description } = updates;
+  async updateRole(code: string, description: string) {
     const { updateRole: data } = await updateRole(
       this.graphqlClientV2,
       this.tokenProvider,
       {
         code,
-        name,
         description
       }
     );

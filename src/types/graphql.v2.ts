@@ -260,8 +260,6 @@ export type Cooperator = {
 export type Role = {
   /** 唯一标志 code */
   code: Scalars['String'];
-  /** 角色名称 */
-  name?: Maybe<Scalars['String']>;
   /** 角色描述 */
   description?: Maybe<Scalars['String']>;
   /** 是否为系统内建，系统内建的角色不能删除 */
@@ -994,14 +992,12 @@ export type MutationRegisterByPhonePasswordArgs = {
 
 export type MutationCreateRoleArgs = {
   code: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   parent?: Maybe<Scalars['String']>;
 };
 
 export type MutationUpdateRoleArgs = {
   code: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 };
 
@@ -1510,7 +1506,6 @@ export type AddCooperatorResponse = {
   addCooperator: {
     roles: Array<{
       code: string;
-      name?: Maybe<string>;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -1686,7 +1681,6 @@ export type AssignRoleVariables = Exact<{
 export type AssignRoleResponse = {
   assignRole: {
     code: string;
-    name?: Maybe<string>;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
@@ -1694,7 +1688,6 @@ export type AssignRoleResponse = {
     users: { totalCount: number };
     parent?: Maybe<{
       code: string;
-      name?: Maybe<string>;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -1833,7 +1826,6 @@ export type CreatePolicyResponse = {
 
 export type CreateRoleVariables = Exact<{
   code: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   parent?: Maybe<Scalars['String']>;
 }>;
@@ -1841,7 +1833,6 @@ export type CreateRoleVariables = Exact<{
 export type CreateRoleResponse = {
   createRole: {
     code: string;
-    name?: Maybe<string>;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
@@ -1849,7 +1840,6 @@ export type CreateRoleResponse = {
     users: { totalCount: number };
     parent?: Maybe<{
       code: string;
-      name?: Maybe<string>;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -2727,7 +2717,6 @@ export type RevokeRoleVariables = Exact<{
 export type RevokeRoleResponse = {
   revokeRole: {
     code: string;
-    name?: Maybe<string>;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
@@ -2735,7 +2724,6 @@ export type RevokeRoleResponse = {
     users: { totalCount: number };
     parent?: Maybe<{
       code: string;
-      name?: Maybe<string>;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -2977,14 +2965,12 @@ export type UpdatePhoneResponse = {
 
 export type UpdateRoleVariables = Exact<{
   code: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 }>;
 
 export type UpdateRoleResponse = {
   updateRole: {
     code: string;
-    name?: Maybe<string>;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
@@ -2992,7 +2978,6 @@ export type UpdateRoleResponse = {
     users: { totalCount: number };
     parent?: Maybe<{
       code: string;
-      name?: Maybe<string>;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -3179,7 +3164,6 @@ export type CooperatorsResponse = {
   cooperators: Array<{
     roles: Array<{
       code: string;
-      name?: Maybe<string>;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -3685,14 +3669,12 @@ export type RoleVariables = Exact<{
 export type RoleResponse = {
   role: {
     code: string;
-    name?: Maybe<string>;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     parent?: Maybe<{
       code: string;
-      name?: Maybe<string>;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -3708,14 +3690,12 @@ export type RoleWithUsersVariables = Exact<{
 export type RoleWithUsersResponse = {
   role: {
     code: string;
-    name?: Maybe<string>;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     parent?: Maybe<{
       code: string;
-      name?: Maybe<string>;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -3786,14 +3766,12 @@ export type RolesResponse = {
     totalCount: number;
     list: Array<{
       code: string;
-      name?: Maybe<string>;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       parent?: Maybe<{
         code: string;
-        name?: Maybe<string>;
         description?: Maybe<string>;
         isSystem?: Maybe<boolean>;
         createdAt?: Maybe<string>;
@@ -4295,7 +4273,6 @@ export const AddCooperatorDocument = `
   addCooperator(userId: $userId, roleId: $roleId) {
     roles {
       code
-      name
       description
       isSystem
       createdAt
@@ -4437,7 +4414,6 @@ export const AssignRoleDocument = `
     mutation assignRole($code: String!, $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
   assignRole(code: $code, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
     code
-    name
     description
     isSystem
     createdAt
@@ -4447,7 +4423,6 @@ export const AssignRoleDocument = `
     }
     parent {
       code
-      name
       description
       isSystem
       createdAt
@@ -4558,10 +4533,9 @@ export const CreatePolicyDocument = `
 }
     `;
 export const CreateRoleDocument = `
-    mutation createRole($code: String!, $name: String, $description: String, $parent: String) {
-  createRole(code: $code, name: $name, description: $description, parent: $parent) {
+    mutation createRole($code: String!, $description: String, $parent: String) {
+  createRole(code: $code, description: $description, parent: $parent) {
     code
-    name
     description
     isSystem
     createdAt
@@ -4571,7 +4545,6 @@ export const CreateRoleDocument = `
     }
     parent {
       code
-      name
       description
       isSystem
       createdAt
@@ -5375,7 +5348,6 @@ export const RevokeRoleDocument = `
     mutation revokeRole($code: String!, $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
   revokeRole(code: $code, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
     code
-    name
     description
     isSystem
     createdAt
@@ -5385,7 +5357,6 @@ export const RevokeRoleDocument = `
     }
     parent {
       code
-      name
       description
       isSystem
       createdAt
@@ -5597,10 +5568,9 @@ export const UpdatePhoneDocument = `
 }
     `;
 export const UpdateRoleDocument = `
-    mutation updateRole($code: String!, $name: String, $description: String) {
-  updateRole(code: $code, name: $name, description: $description) {
+    mutation updateRole($code: String!, $description: String) {
+  updateRole(code: $code, description: $description) {
     code
-    name
     description
     isSystem
     createdAt
@@ -5610,7 +5580,6 @@ export const UpdateRoleDocument = `
     }
     parent {
       code
-      name
       description
       isSystem
       createdAt
@@ -5785,7 +5754,6 @@ export const CooperatorsDocument = `
   cooperators {
     roles {
       code
-      name
       description
       isSystem
       createdAt
@@ -6228,14 +6196,12 @@ export const RoleDocument = `
     query role($code: String!) {
   role(code: $code) {
     code
-    name
     description
     isSystem
     createdAt
     updatedAt
     parent {
       code
-      name
       description
       isSystem
       createdAt
@@ -6248,14 +6214,12 @@ export const RoleWithUsersDocument = `
     query roleWithUsers($code: String!) {
   role(code: $code) {
     code
-    name
     description
     isSystem
     createdAt
     updatedAt
     parent {
       code
-      name
       description
       isSystem
       createdAt
@@ -6320,14 +6284,12 @@ export const RolesDocument = `
     totalCount
     list {
       code
-      name
       description
       isSystem
       createdAt
       updatedAt
       parent {
         code
-        name
         description
         isSystem
         createdAt

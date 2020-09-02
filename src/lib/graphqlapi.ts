@@ -195,7 +195,10 @@ import {
   NodeByCodeWithMembersDocument,
   RemoveMemberVariables,
   RemoveMemberResponse,
-  RemoveMemberDocument
+  RemoveMemberDocument,
+  RevokeRoleVariables,
+  RevokeRoleResponse,
+  RevokeRoleDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -778,6 +781,20 @@ export const assignRole = async (
   variables: AssignRoleVariables
 ): Promise<AssignRoleResponse> => {
   const query = AssignRoleDocument;
+  const token = await tokenProvider.getAccessToken();
+  return await garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const revokeRole = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider,
+  variables: RevokeRoleVariables
+): Promise<RevokeRoleResponse> => {
+  const query = RevokeRoleDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,
