@@ -38,9 +38,6 @@ import {
   IsDomainAvaliable,
   IsDomainAvaliableDocument,
   IsDomainAvaliableVariables,
-  OrgChildrenNodes,
-  OrgChildrenNodesDocument,
-  OrgChildrenNodesVariables,
   DeleteOrg,
   DeleteOrgDocument,
   DeleteOrgVariables,
@@ -198,7 +195,10 @@ import {
   RemoveMemberDocument,
   RevokeRoleVariables,
   RevokeRoleResponse,
-  RevokeRoleDocument
+  RevokeRoleDocument,
+  ChildrenNodesVariables,
+  ChildrenNodesResponse,
+  ChildrenNodesDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -229,12 +229,12 @@ export const isDomainAvaliable = async (
   });
 };
 
-export const orgChildrenNodes = async (
+export const getChildrenNodes = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider,
-  variables: OrgChildrenNodesVariables
-): Promise<OrgChildrenNodes> => {
-  const query = OrgChildrenNodesDocument;
+  variables: ChildrenNodesVariables
+): Promise<ChildrenNodesResponse> => {
+  const query = ChildrenNodesDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,

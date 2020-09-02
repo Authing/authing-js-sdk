@@ -11,7 +11,7 @@ import {
   deleteOrg,
   deleteNode,
   isRootNodeOfOrg,
-  orgChildrenNodes,
+  getChildrenNodes,
   orgRootNode,
   searchNodes,
   addMember,
@@ -223,14 +223,16 @@ export class OrgManagementClient {
    * @returns
    * @memberof OrgManagementClient
    */
-  async children(orgId: string, nodeId: string) {
-    const res = await orgChildrenNodes(this.graphqlClient, this.tokenProvider, {
-      input: {
+  async childrenNodes(orgId: string, nodeId: string) {
+    const res = await getChildrenNodes(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
         orgId,
-        groupId: nodeId
+        nodeId
       }
-    });
-    return res.orgChildrenNodes;
+    );
+    return res.childrenNodes;
   }
 
   /**
