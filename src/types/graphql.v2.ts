@@ -47,8 +47,6 @@ export type Query = {
   /** 查询子节点列表 */
   childrenNodes: Array<Node>;
   checkPasswordStrength: CheckPasswordStrengthResult;
-  pipeline: Pipeline;
-  pipelines: PaginatedPipeline;
   isActionAllowed: Scalars['Boolean'];
   isActionDenied: Scalars['Boolean'];
   policies: PaginatedPolicies;
@@ -149,10 +147,6 @@ export type QueryChildrenNodesArgs = {
 
 export type QueryCheckPasswordStrengthArgs = {
   password: Scalars['String'];
-};
-
-export type QueryPipelineArgs = {
-  id: Scalars['String'];
 };
 
 export type QueryIsActionAllowedArgs = {
@@ -605,25 +599,6 @@ export type CheckPasswordStrengthResult = {
   message?: Maybe<Scalars['String']>;
 };
 
-export type Pipeline = {
-  id: Scalars['String'];
-  name: Scalars['String'];
-  trigger: Scalars['String'];
-  functions: Array<PipelineFunction>;
-};
-
-export type PipelineFunction = {
-  funcId: Scalars['String'];
-  asynchronous: Scalars['Boolean'];
-  enabled: Scalars['Boolean'];
-  function: Function;
-};
-
-export type PaginatedPipeline = {
-  list: Array<Pipeline>;
-  totalCount: Scalars['Int'];
-};
-
 export type PaginatedPolicies = {
   totalCount: Scalars['Int'];
   list: Array<Policy>;
@@ -773,9 +748,6 @@ export type Mutation = {
   removeMember: Node;
   moveNode: Org;
   resetPassword?: Maybe<CommonMessage>;
-  createPipeline: Pipeline;
-  addFunctionToPipeline: Pipeline;
-  removeFunctionFromPipeline: Pipeline;
   createPolicy: Policy;
   registerByUsername?: Maybe<User>;
   registerByEmail?: Maybe<User>;
@@ -957,18 +929,6 @@ export type MutationResetPasswordArgs = {
   email?: Maybe<Scalars['String']>;
   code: Scalars['String'];
   newPassword: Scalars['String'];
-};
-
-export type MutationCreatePipelineArgs = {
-  input: CreatePipelineInput;
-};
-
-export type MutationAddFunctionToPipelineArgs = {
-  input: AddFunctionToPipelineInput;
-};
-
-export type MutationRemoveFunctionFromPipelineArgs = {
-  input: RemoveFunctionFromPipelineInput;
 };
 
 export type MutationCreatePolicyArgs = {
@@ -1205,43 +1165,11 @@ export type LoginByPhonePasswordInput = {
   password: Scalars['String'];
 };
 
-export type CreatePipelineInput = {
-  name: Scalars['String'];
-  /** 函数触发时机 */
-  trigger: EPipelineTrigger;
-  functions?: Maybe<Array<Maybe<PipelineFunctionInput>>>;
-};
-
-export enum EPipelineTrigger {
-  PreRegister = 'PRE_REGISTER',
-  PostRegister = 'POST_REGISTER',
-  PreAuthentication = 'PRE_AUTHENTICATION',
-  PostAuthentication = 'POST_AUTHENTICATION',
-  PreOidctokenissued = 'PRE_OIDCTOKENISSUED'
-}
-
-export type PipelineFunctionInput = {
-  funcId: Scalars['String'];
-  asynchronous: Scalars['Boolean'];
-  enabled: Scalars['Boolean'];
-};
-
-export type AddFunctionToPipelineInput = {
-  pipelineId: Scalars['String'];
-  funcId: Scalars['String'];
-  asynchronous: Scalars['Boolean'];
-  enabled: Scalars['Boolean'];
-};
-
-export type RemoveFunctionFromPipelineInput = {
-  pipelineId: Scalars['String'];
-  funcId: Scalars['String'];
-};
-
 export type RegisterByUsernameInput = {
   username: Scalars['username_String_NotNull_minLength_4_maxLength_20'];
   password: Scalars['String'];
   profile?: Maybe<RegisterProfile>;
+  forceLogin?: Maybe<Scalars['Boolean']>;
 };
 
 export type RegisterProfile = {
@@ -1282,12 +1210,14 @@ export type RegisterByEmailInput = {
   email: Scalars['email_String_NotNull_format_email'];
   password: Scalars['String'];
   profile?: Maybe<RegisterProfile>;
+  forceLogin?: Maybe<Scalars['Boolean']>;
 };
 
 export type RegisterByPhonePasswordInput = {
   phone: Scalars['phone_String_NotNull_pattern_130911457911503591166170358118091198911d8'];
   password: Scalars['String'];
   profile?: Maybe<RegisterProfile>;
+  forceLogin?: Maybe<Scalars['Boolean']>;
 };
 
 /** 批量删除返回结果 */
@@ -1561,23 +1491,6 @@ export type AddCooperatorResponse = {
   };
 };
 
-export type AddFunctionToPipelineVariables = Exact<{
-  input: AddFunctionToPipelineInput;
-}>;
-
-export type AddFunctionToPipelineResponse = {
-  addFunctionToPipeline: {
-    id: string;
-    name: string;
-    trigger: string;
-    functions: Array<{
-      funcId: string;
-      asynchronous: boolean;
-      enabled: boolean;
-    }>;
-  };
-};
-
 export type AddMemberVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
@@ -1785,23 +1698,6 @@ export type CreateOrgResponse = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       children?: Maybe<Array<string>>;
-    }>;
-  };
-};
-
-export type CreatePipelineVariables = Exact<{
-  input: CreatePipelineInput;
-}>;
-
-export type CreatePipelineResponse = {
-  createPipeline: {
-    id: string;
-    name: string;
-    trigger: string;
-    functions: Array<{
-      funcId: string;
-      asynchronous: boolean;
-      enabled: boolean;
     }>;
   };
 };
@@ -2584,23 +2480,6 @@ export type RemoveCooperatorVariables = Exact<{
 
 export type RemoveCooperatorResponse = {
   removeCooperator: { message?: Maybe<string>; code?: Maybe<number> };
-};
-
-export type RemoveFunctionFromPipelineVariables = Exact<{
-  input: RemoveFunctionFromPipelineInput;
-}>;
-
-export type RemoveFunctionFromPipelineResponse = {
-  removeFunctionFromPipeline: {
-    id: string;
-    name: string;
-    trigger: string;
-    functions: Array<{
-      funcId: string;
-      asynchronous: boolean;
-      enabled: boolean;
-    }>;
-  };
 };
 
 export type RemoveMemberVariables = Exact<{
@@ -3592,32 +3471,6 @@ export type OrgsResponse = {
   };
 };
 
-export type PipelineVariables = Exact<{
-  id: Scalars['String'];
-}>;
-
-export type PipelineResponse = {
-  pipeline: {
-    id: string;
-    name: string;
-    trigger: string;
-    functions: Array<{
-      funcId: string;
-      asynchronous: boolean;
-      enabled: boolean;
-    }>;
-  };
-};
-
-export type PipelinesVariables = Exact<{ [key: string]: never }>;
-
-export type PipelinesResponse = {
-  pipelines: {
-    totalCount: number;
-    list: Array<{ id: string; name: string; trigger: string }>;
-  };
-};
-
 export type PoliciesVariables = Exact<{ [key: string]: never }>;
 
 export type PoliciesResponse = {
@@ -4328,20 +4181,6 @@ export const AddCooperatorDocument = `
   }
 }
     `;
-export const AddFunctionToPipelineDocument = `
-    mutation addFunctionToPipeline($input: AddFunctionToPipelineInput!) {
-  addFunctionToPipeline(input: $input) {
-    id
-    name
-    trigger
-    functions {
-      funcId
-      asynchronous
-      enabled
-    }
-  }
-}
-    `;
 export const AddMemberDocument = `
     mutation addMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $nodeId: String, $orgId: String, $nodeCode: String, $userIds: [String!]!, $isLeader: Boolean) {
   addMember(nodeId: $nodeId, orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds, isLeader: $isLeader) {
@@ -4502,20 +4341,6 @@ export const CreateOrgDocument = `
       createdAt
       updatedAt
       children
-    }
-  }
-}
-    `;
-export const CreatePipelineDocument = `
-    mutation createPipeline($input: CreatePipelineInput!) {
-  createPipeline(input: $input) {
-    id
-    name
-    trigger
-    functions {
-      funcId
-      asynchronous
-      enabled
     }
   }
 }
@@ -5242,20 +5067,6 @@ export const RemoveCooperatorDocument = `
   removeCooperator(userId: $userId, roleId: $roleId) {
     message
     code
-  }
-}
-    `;
-export const RemoveFunctionFromPipelineDocument = `
-    mutation removeFunctionFromPipeline($input: RemoveFunctionFromPipelineInput!) {
-  removeFunctionFromPipeline(input: $input) {
-    id
-    name
-    trigger
-    functions {
-      funcId
-      asynchronous
-      enabled
-    }
   }
 }
     `;
@@ -6127,32 +5938,6 @@ export const OrgsDocument = `
         children
       }
     }
-  }
-}
-    `;
-export const PipelineDocument = `
-    query pipeline($id: String!) {
-  pipeline(id: $id) {
-    id
-    name
-    trigger
-    functions {
-      funcId
-      asynchronous
-      enabled
-    }
-  }
-}
-    `;
-export const PipelinesDocument = `
-    query pipelines {
-  pipelines {
-    list {
-      id
-      name
-      trigger
-    }
-    totalCount
   }
 }
     `;
