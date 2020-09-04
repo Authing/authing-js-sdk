@@ -8,6 +8,7 @@ import { UsersManagementClient } from './UsersManagementClient';
 import { isDomainAvaliable, sendEmail } from '../graphqlapi';
 import { EmailScene } from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
+import { HttpClient } from '../common/HttpClient';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,
@@ -31,6 +32,7 @@ export class ManagementClient {
   // sub classes definitions
   graphqlClient: GraphqlClient;
   graphqlClientV2: GraphqlClient;
+  httpClient: HttpClient;
   tokenProvider: ManagementTokenProvider;
   users: UsersManagementClient;
   userpool: UserPoolManagementClient;
@@ -57,6 +59,7 @@ export class ManagementClient {
       graphqlApiEndpointV2,
       this.options
     );
+    this.httpClient = new HttpClient(this.options, this.tokenProvider);
     this.tokenProvider = new ManagementTokenProvider(
       this.options,
       this.graphqlClient
@@ -69,7 +72,7 @@ export class ManagementClient {
     );
     this.userpool = new UserPoolManagementClient(
       this.options,
-      this.graphqlClient,
+      this.httpClient,
       this.graphqlClientV2,
       this.tokenProvider
     );

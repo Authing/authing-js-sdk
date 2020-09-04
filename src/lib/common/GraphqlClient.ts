@@ -32,7 +32,6 @@ export class GraphqlClient {
     const graphQLClient = new GraphQLClient(this.endpoint, {
       headers
     });
-    // 这一步可能会报错
 
     try {
       return await graphQLClient.request<T>(query, variables);
