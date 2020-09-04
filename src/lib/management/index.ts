@@ -21,10 +21,7 @@ GKl64GDcIq3au+aqJQIDAQAB
     throw new Error(message);
   },
   enableAccessTokenCache: true,
-  host: {
-    graphqlApiEndpoint: 'https://core.authing.cn/graphql',
-    restApiBaseHost: 'https://core.authing.cn'
-  }
+  host: 'https://core.authing.cn'
 };
 
 export class ManagementClient {
