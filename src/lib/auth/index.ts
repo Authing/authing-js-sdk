@@ -12,12 +12,16 @@ import {
 } from './../graphqlapi';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
-import { EmailScene, RegisterProfile } from '../../types/graphql.v2';
+import {
+  EmailScene,
+  RegisterProfile,
+  UpdateUserInput
+} from '../../types/graphql.v2';
 import { encrypt } from '../utils';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
 import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
-import { resetPassword } from '../graphqlapi';
+import { resetPassword, updateUser } from '../graphqlapi';
 
 const DEFAULT_OPTIONS = {
   timeout: 10000,
@@ -74,7 +78,8 @@ export class AuthenticationClient {
   async registerByEmail(
     email: string,
     password: string,
-    profile?: RegisterProfile
+    profile?: RegisterProfile,
+    forceLogin?: boolean
   ) {
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByEmail: user } = await registerByEmail(
@@ -84,7 +89,8 @@ export class AuthenticationClient {
         input: {
           email,
           password,
-          profile
+          profile,
+          forceLogin
         }
       }
     );
@@ -98,7 +104,8 @@ export class AuthenticationClient {
   async registerByUsername(
     username: string,
     password: string,
-    profile?: RegisterProfile
+    profile?: RegisterProfile,
+    forceLogin?: boolean
   ) {
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByUsername: user } = await registerByUsername(
@@ -108,7 +115,8 @@ export class AuthenticationClient {
         input: {
           username,
           password,
-          profile
+          profile,
+          forceLogin
         }
       }
     );
@@ -256,5 +264,21 @@ export class AuthenticationClient {
       }
     );
     return data;
+  }
+
+  async updateUser(id: string, updates: UpdateUserInput) {
+    if (updates && updates.password) {
+      delete updates.password;
+    }
+
+    const { updateUser: user } = await updateUser(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        id,
+        input: updates
+      }
+    );
+    return user;
   }
 }
