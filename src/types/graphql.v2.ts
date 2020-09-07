@@ -25,9 +25,6 @@ export type Query = {
   socialConnectionInstance: SocialConnectionInstance;
   /** 获取当前用户池的所有社会化登录配置 */
   socialConnectionInstances: Array<SocialConnectionInstance>;
-  /** 获取所有协作管理员 */
-  cooperators: Array<Cooperator>;
-  cooperatedUserpools: PaginatedUserPoolCooperation;
   emailTemplates: Array<EmailTemplate>;
   previewEmail: Scalars['String'];
   /** 获取函数模版 */
@@ -63,11 +60,6 @@ export type Query = {
   /** 查询用户池列表 */
   userpools: PaginatedUserpool;
   userpoolTypes: Array<UserPoolType>;
-  webhook: Webhook;
-  webhooks: PaginatedWebhook;
-  webhookLog: WebhookLog;
-  webhookLogs: PaginatedWebhookLog;
-  webhookOptions: WebhookOptions;
   /** 用户池注册白名单列表 */
   whitelist: Array<WhiteList>;
 };
@@ -86,12 +78,6 @@ export type QuerySocialConnectionArgs = {
 
 export type QuerySocialConnectionInstanceArgs = {
   provider: Scalars['String'];
-};
-
-export type QueryCooperatedUserpoolsArgs = {
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
 };
 
 export type QueryPreviewEmailArgs = {
@@ -199,14 +185,6 @@ export type QueryUserpoolsArgs = {
   sortBy?: Maybe<SortByEnum>;
 };
 
-export type QueryWebhookArgs = {
-  webhookId?: Maybe<Scalars['String']>;
-};
-
-export type QueryWebhookLogArgs = {
-  webhookLogId?: Maybe<Scalars['String']>;
-};
-
 export type QueryWhitelistArgs = {
   type: WhitelistType;
 };
@@ -243,29 +221,91 @@ export type SocialConnectionInstanceField = {
   value: Scalars['String'];
 };
 
-/** 协作管理员 */
-export type Cooperator = {
-  /** 管理员的角色 */
-  roles: Array<Role>;
-  /** 管理员用户信息 */
-  user: User;
+export type EmailTemplate = {
+  /** 邮件模版类型 */
+  type: EmailTemplateType;
+  /** 模版名称 */
+  name: Scalars['String'];
+  /** 邮件主题 */
+  subject: Scalars['String'];
+  /** 显示的邮件发送人 */
+  sender: Scalars['String'];
+  /** 邮件模版内容 */
+  content: Scalars['String'];
+  /** 重定向链接，操作成功后，用户将被重定向到此 URL。 */
+  redirectTo?: Maybe<Scalars['String']>;
+  hasURL?: Maybe<Scalars['Boolean']>;
+  /** 验证码过期时间（单位为秒） */
+  expiresIn?: Maybe<Scalars['Int']>;
+  /** 是否开启（自定义模版） */
+  enabled?: Maybe<Scalars['Boolean']>;
+  /** 是否是系统默认模版 */
+  isSystem?: Maybe<Scalars['Boolean']>;
 };
 
-export type Role = {
+export enum EmailTemplateType {
+  /** 重置密码确认 */
+  ResetPassword = 'RESET_PASSWORD',
+  /** 重置密码通知 */
+  PasswordResetedNotification = 'PASSWORD_RESETED_NOTIFICATION',
+  /** 修改密码验证码 */
+  ChangePassword = 'CHANGE_PASSWORD',
+  /** 注册欢迎邮件 */
+  Welcome = 'WELCOME',
+  /** 验证邮箱 */
+  VerifyEmail = 'VERIFY_EMAIL',
+  /** 修改绑定邮箱 */
+  ChangeEmail = 'CHANGE_EMAIL'
+}
+
+/** 函数 */
+export type Function = {
+  /** ID */
+  id: Scalars['String'];
+  /** 函数名称 */
+  name: Scalars['String'];
+  /** 源代码 */
+  sourceCode: Scalars['String'];
+  /** 描述信息 */
+  description?: Maybe<Scalars['String']>;
+  /** 云函数链接 */
+  url?: Maybe<Scalars['String']>;
+};
+
+export enum SortByEnum {
+  /** 按照创建时间降序（后创建的在前面） */
+  CreatedatDesc = 'CREATEDAT_DESC',
+  /** 按照创建时间升序（先创建的在前面） */
+  CreatedatAsc = 'CREATEDAT_ASC',
+  /** 按照更新时间降序（最近更新的在前面） */
+  UpdatedatDesc = 'UPDATEDAT_DESC',
+  /** 按照更新时间升序（最近更新的在后面） */
+  UpdatedatAsc = 'UPDATEDAT_ASC'
+}
+
+export type PaginatedFunctions = {
+  list: Array<Function>;
+  totalCount: Scalars['Int'];
+};
+
+export type PaginatedGroups = {
+  totalCount: Scalars['Int'];
+  list: Array<Group>;
+};
+
+export type Group = {
   /** 唯一标志 code */
   code: Scalars['String'];
-  /** 角色描述 */
+  /** 名称 */
+  name: Scalars['String'];
+  /** 描述 */
   description?: Maybe<Scalars['String']>;
-  /** 是否为系统内建，系统内建的角色不能删除 */
-  isSystem?: Maybe<Scalars['Boolean']>;
   /** 创建时间 */
   createdAt?: Maybe<Scalars['String']>;
   /** 修改时间 */
   updatedAt?: Maybe<Scalars['String']>;
-  /** 被授予此角色的用户列表 */
+  /** 包含的用户列表 */
   users: PaginatedUsers;
-  /** 父角色 */
-  parent?: Maybe<Role>;
 };
 
 export type PaginatedUsers = {
@@ -337,33 +377,120 @@ export type User = {
   region?: Maybe<Scalars['String']>;
   postalCode?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   /** 自定义用户数据，是一个 JSON 序列化过后的字符串 */
   customData?: Maybe<Scalars['String']>;
 };
 
-export enum SortByEnum {
-  /** 按照创建时间降序（后创建的在前面） */
-  CreatedatDesc = 'CREATEDAT_DESC',
-  /** 按照创建时间升序（先创建的在前面） */
-  CreatedatAsc = 'CREATEDAT_ASC',
-  /** 按照更新时间降序（最近更新的在前面） */
-  UpdatedatDesc = 'UPDATEDAT_DESC',
-  /** 按照更新时间升序（最近更新的在后面） */
-  UpdatedatAsc = 'UPDATEDAT_ASC'
-}
-
-export type PaginatedUserPoolCooperation = {
-  list: Array<UserPoolCooperation>;
-  totalCount: Scalars['Int'];
+export type Mfa = {
+  /** MFA ID */
+  id: Scalars['String'];
+  /** 用户 ID */
+  userId: Scalars['String'];
+  /** 用户池 ID */
+  userPoolId: Scalars['String'];
+  /** 是否开启 MFA */
+  enable: Scalars['Boolean'];
+  /** 密钥 */
+  secret?: Maybe<Scalars['String']>;
 };
 
-/** 用户池协作关系 */
-export type UserPoolCooperation = {
-  /** 用户池 */
-  userpool: UserPool;
-  /** 在该用户池中具备的角色，未来可以支持多个角色 */
-  role?: Maybe<Role>;
+export type Node = {
+  id: Scalars['String'];
+  /** 节点名称 */
+  name: Scalars['String'];
+  /** 多语言名称，**key** 为标准 **i18n** 语言编码，**value** 为对应语言的名称。 */
+  nameI18n?: Maybe<Scalars['String']>;
+  /** 描述信息 */
+  description?: Maybe<Scalars['String']>;
+  /** 多语言描述信息 */
+  descriptionI18n?: Maybe<Scalars['String']>;
+  /** 在父节点中的次序值。**order** 值大的排序靠前。有效的值范围是[0, 2^32) */
+  order?: Maybe<Scalars['Int']>;
+  /** 节点唯一标志码，可以通过 code 进行搜索 */
+  code?: Maybe<Scalars['String']>;
+  /** 是否为根节点 */
+  root?: Maybe<Scalars['Boolean']>;
+  /** 距离父节点的深度（如果是查询整棵树，返回的 **depth** 为距离根节点的深度，如果是查询某个节点的子节点，返回的 **depath** 指的是距离该节点的深度。） */
+  depth?: Maybe<Scalars['Int']>;
+  path: Array<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  /** 该节点的子节点 **ID** 列表 */
+  children?: Maybe<Array<Scalars['String']>>;
+  /** 节点的用户列表 */
+  users: PaginatedUsers;
+};
+
+export type NodeUsersArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
+};
+
+export type Org = {
+  /** 组织机构 ID */
+  id: Scalars['String'];
+  /** 根节点 */
+  rootNode: Node;
+  /** 组织机构节点列表 */
+  nodes: Array<Node>;
+};
+
+export type PaginatedOrgs = {
+  totalCount: Scalars['Int'];
+  list: Array<Org>;
+};
+
+export type CheckPasswordStrengthResult = {
+  valid: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']>;
+};
+
+export type PaginatedPolicies = {
+  totalCount: Scalars['Int'];
+  list: Array<Policy>;
+};
+
+/** 资源操作规则 */
+export type Policy = {
+  code: Scalars['String'];
+  /** 资源 */
+  resource: Scalars['String'];
+  /** 操作 */
+  actions: Array<Scalars['String']>;
+  effect: PolicyEffect;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+};
+
+export enum PolicyEffect {
+  Allow = 'ALLOW',
+  Deny = 'DENY'
+}
+
+export type Role = {
+  /** 唯一标志 code */
+  code: Scalars['String'];
+  /** 角色描述 */
+  description?: Maybe<Scalars['String']>;
+  /** 是否为系统内建，系统内建的角色不能删除 */
+  isSystem?: Maybe<Scalars['Boolean']>;
+  /** 创建时间 */
+  createdAt?: Maybe<Scalars['String']>;
+  /** 修改时间 */
+  updatedAt?: Maybe<Scalars['String']>;
+  /** 被授予此角色的用户列表 */
+  users: PaginatedUsers;
+  /** 父角色 */
+  parent?: Maybe<Role>;
+};
+
+export type PaginatedRoles = {
+  totalCount: Scalars['Int'];
+  list: Array<Role>;
 };
 
 export type UserPool = {
@@ -457,236 +584,9 @@ export type RegisterWhiteListConfig = {
   usernameEnabled?: Maybe<Scalars['Boolean']>;
 };
 
-export type EmailTemplate = {
-  /** 邮件模版类型 */
-  type: EmailTemplateType;
-  /** 模版名称 */
-  name: Scalars['String'];
-  /** 邮件主题 */
-  subject: Scalars['String'];
-  /** 显示的邮件发送人 */
-  sender: Scalars['String'];
-  /** 邮件模版内容 */
-  content: Scalars['String'];
-  /** 重定向链接，操作成功后，用户将被重定向到此 URL。 */
-  redirectTo?: Maybe<Scalars['String']>;
-  hasURL?: Maybe<Scalars['Boolean']>;
-  /** 验证码过期时间（单位为秒） */
-  expiresIn?: Maybe<Scalars['Int']>;
-  /** 是否开启（自定义模版） */
-  enabled?: Maybe<Scalars['Boolean']>;
-  /** 是否是系统默认模版 */
-  isSystem?: Maybe<Scalars['Boolean']>;
-};
-
-export enum EmailTemplateType {
-  /** 重置密码确认 */
-  ResetPassword = 'RESET_PASSWORD',
-  /** 重置密码通知 */
-  PasswordResetedNotification = 'PASSWORD_RESETED_NOTIFICATION',
-  /** 修改密码验证码 */
-  ChangePassword = 'CHANGE_PASSWORD',
-  /** 注册欢迎邮件 */
-  Welcome = 'WELCOME',
-  /** 验证邮箱 */
-  VerifyEmail = 'VERIFY_EMAIL',
-  /** 修改绑定邮箱 */
-  ChangeEmail = 'CHANGE_EMAIL'
-}
-
-/** 函数 */
-export type Function = {
-  /** ID */
-  id: Scalars['String'];
-  /** 函数名称 */
-  name: Scalars['String'];
-  /** 源代码 */
-  sourceCode: Scalars['String'];
-  /** 描述信息 */
-  description?: Maybe<Scalars['String']>;
-  /** 云函数链接 */
-  url?: Maybe<Scalars['String']>;
-};
-
-export type PaginatedFunctions = {
-  list: Array<Function>;
-  totalCount: Scalars['Int'];
-};
-
-export type PaginatedGroups = {
-  totalCount: Scalars['Int'];
-  list: Array<Group>;
-};
-
-export type Group = {
-  /** 唯一标志 code */
-  code: Scalars['String'];
-  /** 名称 */
-  name: Scalars['String'];
-  /** 描述 */
-  description?: Maybe<Scalars['String']>;
-  /** 创建时间 */
-  createdAt?: Maybe<Scalars['String']>;
-  /** 修改时间 */
-  updatedAt?: Maybe<Scalars['String']>;
-  /** 包含的用户列表 */
-  users: PaginatedUsers;
-};
-
-export type Mfa = {
-  /** MFA ID */
-  id: Scalars['String'];
-  /** 用户 ID */
-  userId: Scalars['String'];
-  /** 用户池 ID */
-  userPoolId: Scalars['String'];
-  /** 是否开启 MFA */
-  enable: Scalars['Boolean'];
-  /** 密钥 */
-  secret?: Maybe<Scalars['String']>;
-};
-
-export type Node = {
-  id: Scalars['String'];
-  /** 节点名称 */
-  name: Scalars['String'];
-  /** 多语言名称，**key** 为标准 **i18n** 语言编码，**value** 为对应语言的名称。 */
-  nameI18n?: Maybe<Scalars['String']>;
-  /** 描述信息 */
-  description?: Maybe<Scalars['String']>;
-  /** 多语言描述信息 */
-  descriptionI18n?: Maybe<Scalars['String']>;
-  /** 在父节点中的次序值。**order** 值大的排序靠前。有效的值范围是[0, 2^32) */
-  order?: Maybe<Scalars['Int']>;
-  /** 节点唯一标志码，可以通过 code 进行搜索 */
-  code?: Maybe<Scalars['String']>;
-  /** 是否为根节点 */
-  root?: Maybe<Scalars['Boolean']>;
-  /** 距离父节点的深度（如果是查询整棵树，返回的 **depth** 为距离根节点的深度，如果是查询某个节点的子节点，返回的 **depath** 指的是距离该节点的深度。） */
-  depth?: Maybe<Scalars['Int']>;
-  path: Array<Scalars['String']>;
-  createdAt?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
-  /** 该节点的子节点 **ID** 列表 */
-  children?: Maybe<Array<Scalars['String']>>;
-  /** 节点的用户列表 */
-  users: PaginatedUsers;
-};
-
-export type NodeUsersArgs = {
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
-};
-
-export type Org = {
-  /** 组织机构 ID */
-  id: Scalars['String'];
-  /** 根节点 */
-  rootNode: Node;
-  /** 组织机构节点列表 */
-  nodes: Array<Node>;
-};
-
-export type PaginatedOrgs = {
-  totalCount: Scalars['Int'];
-  list: Array<Org>;
-};
-
-export type CheckPasswordStrengthResult = {
-  valid: Scalars['Boolean'];
-  message?: Maybe<Scalars['String']>;
-};
-
-export type PaginatedPolicies = {
-  totalCount: Scalars['Int'];
-  list: Array<Policy>;
-};
-
-/** 资源操作规则 */
-export type Policy = {
-  code: Scalars['String'];
-  /** 资源 */
-  resource: Scalars['String'];
-  /** 操作 */
-  actions: Array<Scalars['String']>;
-  effect: PolicyEffect;
-  createdAt?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
-};
-
-export enum PolicyEffect {
-  Allow = 'ALLOW',
-  Deny = 'DENY'
-}
-
-export type PaginatedRoles = {
-  totalCount: Scalars['Int'];
-  list: Array<Role>;
-};
-
 export type PaginatedUserpool = {
   totalCount: Scalars['Int'];
   list: Array<UserPool>;
-};
-
-export type Webhook = {
-  id?: Maybe<Scalars['String']>;
-  userPoolId: Scalars['String'];
-  events: Array<WebhookEvent>;
-  url: Scalars['String'];
-  isLastTimeSuccess?: Maybe<Scalars['Boolean']>;
-  contentType: Scalars['String'];
-  secret?: Maybe<Scalars['String']>;
-  enable: Scalars['Boolean'];
-};
-
-export type WebhookEvent = {
-  name: Scalars['String'];
-  label: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
-export type PaginatedWebhook = {
-  list: Array<Webhook>;
-  totalCount: Scalars['Int'];
-};
-
-export type WebhookLog = {
-  id: Scalars['String'];
-  webhookId: Scalars['String'];
-  userPoolId: Scalars['String'];
-  event: Scalars['String'];
-  request?: Maybe<WebhookRequestType>;
-  response?: Maybe<WebhookResponseType>;
-  errorMessage?: Maybe<Scalars['String']>;
-};
-
-export type WebhookRequestType = {
-  headers?: Maybe<Scalars['String']>;
-  payload?: Maybe<Scalars['String']>;
-};
-
-export type WebhookResponseType = {
-  headers?: Maybe<Scalars['String']>;
-  body?: Maybe<Scalars['String']>;
-  statusCode?: Maybe<Scalars['Int']>;
-};
-
-export type PaginatedWebhookLog = {
-  list: Array<WebhookLog>;
-  totalCount: Scalars['Int'];
-};
-
-export type WebhookOptions = {
-  webhookEvents: Array<Maybe<WebhookEvent>>;
-  contentTypes: Array<Maybe<WebhookContentType>>;
-};
-
-export type WebhookContentType = {
-  name: Scalars['String'];
-  label: Scalars['String'];
 };
 
 export enum WhitelistType {
@@ -710,9 +610,6 @@ export type Mutation = {
   enableSocialConnectionInstance: SocialConnectionInstance;
   /** 关闭社会化登录 */
   disableSocialConnectionInstance: SocialConnectionInstance;
-  /** 添加协作管理员 */
-  addCooperator: Cooperator;
-  removeCooperator: CommonMessage;
   /** 配置自定义邮件模版 */
   configEmailTemplate: EmailTemplate;
   /** 启用自定义邮件模版 */
@@ -783,10 +680,6 @@ export type Mutation = {
   updateUserpool: UserPool;
   refreshUserpoolSecret: Scalars['String'];
   deleteUserpool: CommonMessage;
-  createWebhook: Webhook;
-  updateWebhook: Webhook;
-  deleteWebhook: CommonMessage;
-  sendWebhookTestRequest: CommonMessage;
   addWhitelist: Array<Maybe<WhiteList>>;
   removeWhitelist: Array<Maybe<WhiteList>>;
 };
@@ -805,16 +698,6 @@ export type MutationEnableSocialConnectionInstanceArgs = {
 
 export type MutationDisableSocialConnectionInstanceArgs = {
   provider: Scalars['String'];
-};
-
-export type MutationAddCooperatorArgs = {
-  userId: Scalars['String'];
-  roleId: Scalars['String'];
-};
-
-export type MutationRemoveCooperatorArgs = {
-  userId: Scalars['String'];
-  roleId: Scalars['String'];
 };
 
 export type MutationConfigEmailTemplateArgs = {
@@ -1032,22 +915,6 @@ export type MutationUpdateUserpoolArgs = {
   input: UpdateUserpoolInput;
 };
 
-export type MutationCreateWebhookArgs = {
-  input: CreateWebhookInput;
-};
-
-export type MutationUpdateWebhookArgs = {
-  input: UpdateWebhookInput;
-};
-
-export type MutationDeleteWebhookArgs = {
-  input: DeleteWebhookInput;
-};
-
-export type MutationSendWebhookTestRequestArgs = {
-  input: SendWebhookTestRequestInput;
-};
-
 export type MutationAddWhitelistArgs = {
   type: WhitelistType;
   list: Array<Scalars['String']>;
@@ -1085,16 +952,6 @@ export type CreateSocialConnectionInstanceFieldInput = {
   value: Scalars['String'];
 };
 
-export type CommonMessage = {
-  /** 可读的接口响应说明，请以业务状态码 code 作为判断业务是否成功的标志 */
-  message?: Maybe<Scalars['String']>;
-  /**
-   * 业务状态码（与 HTTP 响应码不同），但且仅当为 200 的时候表示操作成功表示，详细说明请见：
-   * [Authing 错误代码列表](https://docs.authing.co/advanced/error-code.html)
-   */
-  code?: Maybe<Scalars['Int']>;
-};
-
 export type ConfigEmailTemplateInput = {
   /** 邮件模版类型 */
   type: EmailTemplateType;
@@ -1120,6 +977,16 @@ export enum EmailScene {
   /** 发送短信验证邮件 */
   VerifyEmail = 'VERIFY_EMAIL'
 }
+
+export type CommonMessage = {
+  /** 可读的接口响应说明，请以业务状态码 code 作为判断业务是否成功的标志 */
+  message?: Maybe<Scalars['String']>;
+  /**
+   * 业务状态码（与 HTTP 响应码不同），但且仅当为 200 的时候表示操作成功表示，详细说明请见：
+   * [Authing 错误代码列表](https://docs.authing.co/advanced/error-code.html)
+   */
+  code?: Maybe<Scalars['Int']>;
+};
 
 export type CreateFunctionInput = {
   /** 函数名称 */
@@ -1397,98 +1264,9 @@ export type RegisterWhiteListConfigInput = {
   usernameEnabled?: Maybe<Scalars['Boolean']>;
 };
 
-export type CreateWebhookInput = {
-  url: Scalars['String'];
-  secret: Scalars['String'];
-  contentType: Scalars['String'];
-  events: Array<Scalars['String']>;
-  enabled: Scalars['Boolean'];
-};
-
-export type UpdateWebhookInput = {
-  id: Scalars['String'];
-  url?: Maybe<Scalars['String']>;
-  secret?: Maybe<Scalars['String']>;
-  contentType?: Maybe<Scalars['String']>;
-  events?: Maybe<Array<Maybe<Scalars['String']>>>;
-  enabled?: Maybe<Scalars['Boolean']>;
-};
-
-export type DeleteWebhookInput = {
-  id: Scalars['String'];
-};
-
-export type SendWebhookTestRequestInput = {
-  webhookId: Scalars['String'];
-};
-
 export type KeyValuePair = {
   key: Scalars['String'];
   value: Scalars['String'];
-};
-
-export type AddCooperatorVariables = Exact<{
-  userId: Scalars['String'];
-  roleId: Scalars['String'];
-}>;
-
-export type AddCooperatorResponse = {
-  addCooperator: {
-    roles: Array<{
-      code: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    user: {
-      id: string;
-      userPoolId: string;
-      username?: Maybe<string>;
-      email?: Maybe<string>;
-      emailVerified?: Maybe<boolean>;
-      phone?: Maybe<string>;
-      phoneVerified?: Maybe<boolean>;
-      unionid?: Maybe<string>;
-      openid?: Maybe<string>;
-      nickname?: Maybe<string>;
-      registerSource: Array<string>;
-      photo?: Maybe<string>;
-      password?: Maybe<string>;
-      oauth?: Maybe<string>;
-      token?: Maybe<string>;
-      tokenExpiredAt?: Maybe<string>;
-      loginsCount?: Maybe<number>;
-      lastLogin?: Maybe<string>;
-      lastIP?: Maybe<string>;
-      signedUp?: Maybe<string>;
-      blocked?: Maybe<boolean>;
-      isDeleted?: Maybe<boolean>;
-      device?: Maybe<string>;
-      browser?: Maybe<string>;
-      company?: Maybe<string>;
-      name?: Maybe<string>;
-      givenName?: Maybe<string>;
-      familyName?: Maybe<string>;
-      middleName?: Maybe<string>;
-      profile?: Maybe<string>;
-      preferredUsername?: Maybe<string>;
-      website?: Maybe<string>;
-      gender?: Maybe<string>;
-      birthdate?: Maybe<string>;
-      zoneinfo?: Maybe<string>;
-      locale?: Maybe<string>;
-      address?: Maybe<string>;
-      formatted?: Maybe<string>;
-      streetAddress?: Maybe<string>;
-      locality?: Maybe<string>;
-      region?: Maybe<string>;
-      postalCode?: Maybe<string>;
-      country?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
-    };
-  };
 };
 
 export type AddMemberVariables = Exact<{
@@ -1839,23 +1617,6 @@ export type CreateUserpoolResponse = {
   };
 };
 
-export type CreateWebhookVariables = Exact<{
-  input: CreateWebhookInput;
-}>;
-
-export type CreateWebhookResponse = {
-  createWebhook: {
-    id?: Maybe<string>;
-    userPoolId: string;
-    url: string;
-    isLastTimeSuccess?: Maybe<boolean>;
-    contentType: string;
-    secret?: Maybe<string>;
-    enable: boolean;
-    events: Array<{ name: string; label: string; description?: Maybe<string> }>;
-  };
-};
-
 export type DeleteFunctionVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -1922,14 +1683,6 @@ export type DeleteUsersVariables = Exact<{
 
 export type DeleteUsersResponse = {
   deleteUsers?: Maybe<{ message?: Maybe<string>; code?: Maybe<number> }>;
-};
-
-export type DeleteWebhookVariables = Exact<{
-  input: DeleteWebhookInput;
-}>;
-
-export type DeleteWebhookResponse = {
-  deleteWebhook: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
 export type DisableEmailTemplateVariables = Exact<{
@@ -2013,6 +1766,7 @@ export type DoRegisterProcessResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   };
@@ -2098,6 +1852,7 @@ export type LoginByEmailResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   }>;
@@ -2152,6 +1907,7 @@ export type LoginByPhoneCodeResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   }>;
@@ -2206,6 +1962,7 @@ export type LoginByPhonePasswordResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   }>;
@@ -2260,6 +2017,7 @@ export type LoginByUsernameResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   }>;
@@ -2360,6 +2118,7 @@ export type RegisterByEmailResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   }>;
@@ -2414,6 +2173,7 @@ export type RegisterByPhonePasswordResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   }>;
@@ -2468,18 +2228,10 @@ export type RegisterByUsernameResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   }>;
-};
-
-export type RemoveCooperatorVariables = Exact<{
-  userId: Scalars['String'];
-  roleId: Scalars['String'];
-}>;
-
-export type RemoveCooperatorResponse = {
-  removeCooperator: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
 export type RemoveMemberVariables = Exact<{
@@ -2620,14 +2372,6 @@ export type SendEmailResponse = {
   sendEmail: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
-export type SendWebhookTestRequestVariables = Exact<{
-  input: SendWebhookTestRequestInput;
-}>;
-
-export type SendWebhookTestRequestResponse = {
-  sendWebhookTestRequest: { message?: Maybe<string>; code?: Maybe<number> };
-};
-
 export type UpdateEmailVariables = Exact<{
   email: Scalars['String'];
   emailCode: Scalars['String'];
@@ -2680,6 +2424,7 @@ export type UpdateEmailResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   };
@@ -2780,6 +2525,7 @@ export type UpdatePasswordResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   };
@@ -2837,6 +2583,7 @@ export type UpdatePhoneResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   };
@@ -2915,6 +2662,7 @@ export type UpdateUserResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   };
@@ -2979,23 +2727,6 @@ export type UpdateUserpoolResponse = {
   };
 };
 
-export type UpdateWebhookVariables = Exact<{
-  input: UpdateWebhookInput;
-}>;
-
-export type UpdateWebhookResponse = {
-  updateWebhook: {
-    id?: Maybe<string>;
-    userPoolId: string;
-    url: string;
-    isLastTimeSuccess?: Maybe<boolean>;
-    contentType: string;
-    secret?: Maybe<string>;
-    enable: boolean;
-    events: Array<{ name: string; label: string; description?: Maybe<string> }>;
-  };
-};
-
 export type CheckPasswordStrengthVariables = Exact<{
   password: Scalars['String'];
 }>;
@@ -3024,77 +2755,6 @@ export type ChildrenNodesResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-  }>;
-};
-
-export type CooperatedUserpoolsVariables = Exact<{
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-}>;
-
-export type CooperatedUserpoolsResponse = {
-  cooperatedUserpools: { totalCount: number };
-};
-
-export type CooperatorsVariables = Exact<{ [key: string]: never }>;
-
-export type CooperatorsResponse = {
-  cooperators: Array<{
-    roles: Array<{
-      code: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-    user: {
-      id: string;
-      userPoolId: string;
-      username?: Maybe<string>;
-      email?: Maybe<string>;
-      emailVerified?: Maybe<boolean>;
-      phone?: Maybe<string>;
-      phoneVerified?: Maybe<boolean>;
-      unionid?: Maybe<string>;
-      openid?: Maybe<string>;
-      nickname?: Maybe<string>;
-      registerSource: Array<string>;
-      photo?: Maybe<string>;
-      password?: Maybe<string>;
-      oauth?: Maybe<string>;
-      token?: Maybe<string>;
-      tokenExpiredAt?: Maybe<string>;
-      loginsCount?: Maybe<number>;
-      lastLogin?: Maybe<string>;
-      lastIP?: Maybe<string>;
-      signedUp?: Maybe<string>;
-      blocked?: Maybe<boolean>;
-      isDeleted?: Maybe<boolean>;
-      device?: Maybe<string>;
-      browser?: Maybe<string>;
-      company?: Maybe<string>;
-      name?: Maybe<string>;
-      givenName?: Maybe<string>;
-      familyName?: Maybe<string>;
-      middleName?: Maybe<string>;
-      profile?: Maybe<string>;
-      preferredUsername?: Maybe<string>;
-      website?: Maybe<string>;
-      gender?: Maybe<string>;
-      birthdate?: Maybe<string>;
-      zoneinfo?: Maybe<string>;
-      locale?: Maybe<string>;
-      address?: Maybe<string>;
-      formatted?: Maybe<string>;
-      streetAddress?: Maybe<string>;
-      locality?: Maybe<string>;
-      region?: Maybe<string>;
-      postalCode?: Maybe<string>;
-      country?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
-    };
   }>;
 };
 
@@ -3688,6 +3348,7 @@ export type SearchUserResponse = {
       region?: Maybe<string>;
       postalCode?: Maybe<string>;
       country?: Maybe<string>;
+      createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       customData?: Maybe<string>;
     }>;
@@ -3811,6 +3472,7 @@ export type UserResponse = {
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
     country?: Maybe<string>;
+    createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
   };
@@ -3867,6 +3529,7 @@ export type UserBatchResponse = {
       region?: Maybe<string>;
       postalCode?: Maybe<string>;
       country?: Maybe<string>;
+      createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       customData?: Maybe<string>;
     }>;
@@ -4023,88 +3686,9 @@ export type UsersResponse = {
       region?: Maybe<string>;
       postalCode?: Maybe<string>;
       country?: Maybe<string>;
+      createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       customData?: Maybe<string>;
-    }>;
-  };
-};
-
-export type WebhookVariables = Exact<{
-  webhookId?: Maybe<Scalars['String']>;
-}>;
-
-export type WebhookResponse = {
-  webhook: {
-    id?: Maybe<string>;
-    userPoolId: string;
-    url: string;
-    isLastTimeSuccess?: Maybe<boolean>;
-    contentType: string;
-    secret?: Maybe<string>;
-    enable: boolean;
-    events: Array<{ name: string; label: string; description?: Maybe<string> }>;
-  };
-};
-
-export type WebhookLogVariables = Exact<{
-  webhookLogId?: Maybe<Scalars['String']>;
-}>;
-
-export type WebhookLogResponse = {
-  webhookLog: {
-    id: string;
-    webhookId: string;
-    userPoolId: string;
-    event: string;
-    errorMessage?: Maybe<string>;
-    request?: Maybe<{ headers?: Maybe<string>; payload?: Maybe<string> }>;
-    response?: Maybe<{
-      headers?: Maybe<string>;
-      body?: Maybe<string>;
-      statusCode?: Maybe<number>;
-    }>;
-  };
-};
-
-export type WebhookLogsVariables = Exact<{ [key: string]: never }>;
-
-export type WebhookLogsResponse = {
-  webhookLogs: {
-    totalCount: number;
-    list: Array<{
-      id: string;
-      webhookId: string;
-      userPoolId: string;
-      event: string;
-      errorMessage?: Maybe<string>;
-    }>;
-  };
-};
-
-export type WebhookOptionsVariables = Exact<{ [key: string]: never }>;
-
-export type WebhookOptionsResponse = {
-  webhookOptions: {
-    webhookEvents: Array<
-      Maybe<{ name: string; label: string; description?: Maybe<string> }>
-    >;
-    contentTypes: Array<Maybe<{ name: string; label: string }>>;
-  };
-};
-
-export type WebhooksVariables = Exact<{ [key: string]: never }>;
-
-export type WebhooksResponse = {
-  webhooks: {
-    totalCount: number;
-    list: Array<{
-      id?: Maybe<string>;
-      userPoolId: string;
-      url: string;
-      isLastTimeSuccess?: Maybe<boolean>;
-      contentType: string;
-      secret?: Maybe<string>;
-      enable: boolean;
     }>;
   };
 };
@@ -4121,66 +3705,6 @@ export type WhitelistResponse = {
   }>;
 };
 
-export const AddCooperatorDocument = `
-    mutation addCooperator($userId: String!, $roleId: String!) {
-  addCooperator(userId: $userId, roleId: $roleId) {
-    roles {
-      code
-      description
-      isSystem
-      createdAt
-      updatedAt
-    }
-    user {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerSource
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
-  }
-}
-    `;
 export const AddMemberDocument = `
     mutation addMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $nodeId: String, $orgId: String, $nodeCode: String, $userIds: [String!]!, $isLeader: Boolean) {
   addMember(nodeId: $nodeId, orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds, isLeader: $isLeader) {
@@ -4464,24 +3988,6 @@ export const CreateUserpoolDocument = `
   }
 }
     `;
-export const CreateWebhookDocument = `
-    mutation createWebhook($input: CreateWebhookInput!) {
-  createWebhook(input: $input) {
-    id
-    userPoolId
-    events {
-      name
-      label
-      description
-    }
-    url
-    isLastTimeSuccess
-    contentType
-    secret
-    enable
-  }
-}
-    `;
 export const DeleteFunctionDocument = `
     mutation deleteFunction($id: String!) {
   deleteFunction(id: $id) {
@@ -4543,14 +4049,6 @@ export const DeleteUserpoolDocument = `
 export const DeleteUsersDocument = `
     mutation deleteUsers($ids: [String!]!) {
   deleteUsers(ids: $ids) {
-    message
-    code
-  }
-}
-    `;
-export const DeleteWebhookDocument = `
-    mutation deleteWebhook($input: DeleteWebhookInput!) {
-  deleteWebhook(input: $input) {
     message
     code
   }
@@ -4630,6 +4128,7 @@ export const DoRegisterProcessDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -4709,6 +4208,7 @@ export const LoginByEmailDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -4760,6 +4260,7 @@ export const LoginByPhoneCodeDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -4811,6 +4312,7 @@ export const LoginByPhonePasswordDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -4862,6 +4364,7 @@ export const LoginByUsernameDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -4955,6 +4458,7 @@ export const RegisterByEmailDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -5006,6 +4510,7 @@ export const RegisterByPhonePasswordDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -5057,16 +4562,9 @@ export const RegisterByUsernameDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
-  }
-}
-    `;
-export const RemoveCooperatorDocument = `
-    mutation removeCooperator($userId: String!, $roleId: String!) {
-  removeCooperator(userId: $userId, roleId: $roleId) {
-    message
-    code
   }
 }
     `;
@@ -5184,14 +4682,6 @@ export const SendEmailDocument = `
   }
 }
     `;
-export const SendWebhookTestRequestDocument = `
-    mutation sendWebhookTestRequest($input: SendWebhookTestRequestInput!) {
-  sendWebhookTestRequest(input: $input) {
-    message
-    code
-  }
-}
-    `;
 export const UpdateEmailDocument = `
     mutation updateEmail($email: String!, $emailCode: String!, $oldEmail: String, $oldEmailCode: String) {
   updateEmail(email: $email, emailCode: $emailCode, oldEmail: $oldEmail, oldEmailCode: $oldEmailCode) {
@@ -5238,6 +4728,7 @@ export const UpdateEmailDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -5322,6 +4813,7 @@ export const UpdatePasswordDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -5373,6 +4865,7 @@ export const UpdatePhoneDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -5445,6 +4938,7 @@ export const UpdateUserDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -5508,24 +5002,6 @@ export const UpdateUserpoolDocument = `
   }
 }
     `;
-export const UpdateWebhookDocument = `
-    mutation updateWebhook($input: UpdateWebhookInput!) {
-  updateWebhook(input: $input) {
-    id
-    userPoolId
-    events {
-      name
-      label
-      description
-    }
-    url
-    isLastTimeSuccess
-    contentType
-    secret
-    enable
-  }
-}
-    `;
 export const CheckPasswordStrengthDocument = `
     query checkPasswordStrength($password: String!) {
   checkPasswordStrength(password: $password) {
@@ -5550,73 +5026,6 @@ export const ChildrenNodesDocument = `
     createdAt
     updatedAt
     children
-  }
-}
-    `;
-export const CooperatedUserpoolsDocument = `
-    query cooperatedUserpools($page: Int, $limit: Int, $sortBy: SortByEnum) {
-  cooperatedUserpools(page: $page, limit: $limit, sortBy: $sortBy) {
-    totalCount
-  }
-}
-    `;
-export const CooperatorsDocument = `
-    query cooperators {
-  cooperators {
-    roles {
-      code
-      description
-      isSystem
-      createdAt
-      updatedAt
-    }
-    user {
-      id
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
-      openid
-      nickname
-      registerSource
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      updatedAt
-      customData
-    }
   }
 }
     `;
@@ -6132,6 +5541,7 @@ export const SearchUserDocument = `
       region
       postalCode
       country
+      createdAt
       updatedAt
       customData
     }
@@ -6245,6 +5655,7 @@ export const UserDocument = `
     region
     postalCode
     country
+    createdAt
     updatedAt
     customData
   }
@@ -6298,6 +5709,7 @@ export const UserBatchDocument = `
       region
       postalCode
       country
+      createdAt
       updatedAt
       customData
     }
@@ -6444,92 +5856,10 @@ export const UsersDocument = `
       region
       postalCode
       country
+      createdAt
       updatedAt
       customData
     }
-  }
-}
-    `;
-export const WebhookDocument = `
-    query webhook($webhookId: String) {
-  webhook(webhookId: $webhookId) {
-    id
-    userPoolId
-    events {
-      name
-      label
-      description
-    }
-    url
-    isLastTimeSuccess
-    contentType
-    secret
-    enable
-  }
-}
-    `;
-export const WebhookLogDocument = `
-    query webhookLog($webhookLogId: String) {
-  webhookLog(webhookLogId: $webhookLogId) {
-    id
-    webhookId
-    userPoolId
-    event
-    request {
-      headers
-      payload
-    }
-    response {
-      headers
-      body
-      statusCode
-    }
-    errorMessage
-  }
-}
-    `;
-export const WebhookLogsDocument = `
-    query webhookLogs {
-  webhookLogs {
-    list {
-      id
-      webhookId
-      userPoolId
-      event
-      errorMessage
-    }
-    totalCount
-  }
-}
-    `;
-export const WebhookOptionsDocument = `
-    query webhookOptions {
-  webhookOptions {
-    webhookEvents {
-      name
-      label
-      description
-    }
-    contentTypes {
-      name
-      label
-    }
-  }
-}
-    `;
-export const WebhooksDocument = `
-    query webhooks {
-  webhooks {
-    list {
-      id
-      userPoolId
-      url
-      isLastTimeSuccess
-      contentType
-      secret
-      enable
-    }
-    totalCount
   }
 }
     `;

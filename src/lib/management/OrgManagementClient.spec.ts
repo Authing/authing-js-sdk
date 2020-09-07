@@ -4,7 +4,7 @@ import test from 'ava';
 
 const management = new ManagementClient(getOptionsFromEnv());
 
-test('通过 json 导入组织机构', async t => {
+test.skip('通过 json 导入组织机构', async t => {
   const tree = {
     name: '北京非凡科技有限公司',
     code: 'feifan',
@@ -72,7 +72,7 @@ test('通过 json 导入组织机构', async t => {
   t.assert(orgTree.id);
 });
 
-test('添加成员', async t => {
+test.skip('添加成员', async t => {
   const tree = {
     name: '北京非凡科技有限公司',
     code: 'feifan',

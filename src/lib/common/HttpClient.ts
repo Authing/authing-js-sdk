@@ -6,8 +6,8 @@ import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
 import Axios, { AxiosRequestConfig } from 'axios';
 
 export class HttpClient {
-  private options: ManagementClientOptions;
-  private tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider;
+  options: ManagementClientOptions;
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider;
 
   constructor(
     options: ManagementClientOptions | AuthenticationClientOptions,
