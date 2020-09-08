@@ -10,7 +10,7 @@ import { EmailScene } from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
 
-const DEFAULT_OPTIONS = {
+const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
   encrptionPublicKey: `-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
@@ -22,7 +22,8 @@ GKl64GDcIq3au+aqJQIDAQAB
     throw new Error(message);
   },
   enableAccessTokenCache: true,
-  host: 'https://core.authing.cn'
+  host: 'https://core.authing.cn',
+  requestFrom: 'sdk'
 };
 
 export class ManagementClient {

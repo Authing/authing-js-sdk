@@ -198,7 +198,10 @@ import {
   RevokeRoleDocument,
   ChildrenNodesVariables,
   ChildrenNodesResponse,
-  ChildrenNodesDocument
+  ChildrenNodesDocument,
+  RefreshTokenVariables,
+  RefreshTokenDocument,
+  RefreshTokenResponse
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1131,6 +1134,20 @@ export const getGroups = async (
   variables: GroupsVariables
 ): Promise<GroupsResponse> => {
   const query = GroupsDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const refreshToken = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RefreshTokenVariables
+): Promise<RefreshTokenResponse> => {
+  const query = RefreshTokenDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

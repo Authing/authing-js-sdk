@@ -6,6 +6,7 @@ import {
   loginByPhoneCode,
   loginByPhonePassword,
   loginByUsername,
+  refreshToken,
   registerByEmail,
   registerByUsername,
   sendEmail
@@ -14,6 +15,7 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
 import {
   EmailScene,
+  RefreshToken,
   RegisterProfile,
   UpdateUserInput
 } from '../../types/graphql.v2';
@@ -23,7 +25,7 @@ import { SDK_VERSION } from '../version';
 import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { resetPassword, updateUser } from '../graphqlapi';
 
-const DEFAULT_OPTIONS = {
+const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   timeout: 10000,
   encrptionPublicKey: `-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
@@ -35,7 +37,8 @@ GKl64GDcIq3au+aqJQIDAQAB
     throw new Error(message);
   },
   enableAccessTokenCache: true,
-  host: 'https://core.authing.cn'
+  host: 'https://core.authing.cn',
+  requestFrom: 'sdk'
 };
 
 export class AuthenticationClient {
@@ -280,5 +283,14 @@ export class AuthenticationClient {
       }
     );
     return user;
+  }
+
+  async refreshToken(): Promise<RefreshToken> {
+    const { refreshToken: data } = await refreshToken(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {}
+    );
+    return data;
   }
 }

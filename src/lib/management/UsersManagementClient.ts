@@ -8,17 +8,21 @@ import {
   deleteUsers,
   user,
   users,
-  createInterConnection,
-  interConnections,
   passwordLessForceLogin,
   createUserWithoutAuthentication,
   getRolesOfUser,
   getGroupsOfUser,
   updateUser,
   searchUser,
-  createUser
+  createUser,
+  refreshToken
 } from '../graphqlapi';
-import { User, PaginatedUsers, CreateUserInput } from '../../types/graphql.v2';
+import {
+  User,
+  PaginatedUsers,
+  CreateUserInput,
+  RefreshToken
+} from '../../types/graphql.v2';
 
 export class UsersManagementClient {
   options: ManagementClientOptions;
@@ -159,48 +163,6 @@ export class UsersManagementClient {
   }
 
   /**
-   * 建立跨用户池的用户关联
-   *
-   * maxAge 单位为 s
-   *
-   * @param {{
-   *     sourceUserPoolId: string,
-   *     sourceUserId: string,
-   *     targetUserPoolId: string,
-   *     targetUserId: string,
-   *     maxAge: number
-   *   }} options
-   * @memberof UsersManagementClient
-   */
-  async createInterConnection(options: {
-    sourceUserPoolId: string;
-    sourceUserId: string;
-    targetUserPoolId: string;
-    targetUserId: string;
-    maxAge: number;
-  }) {
-    const res = await createInterConnection(
-      this.graphqlClient,
-      this.tokenProvider,
-      options
-    );
-    return res.createInterConnection;
-  }
-
-  /**
-   * 查询用户池具备的跨用户池关联能力
-   *
-   * @returns
-   * @memberof UsersManagementClient
-   */
-  async interConnections() {
-    const res = await interConnections(this.graphqlClient, this.tokenProvider, {
-      userPoolId: this.options.userPoolId
-    });
-    return res.interConnections;
-  }
-
-  /**
    * 管理员让用户强制登录，无需检测任何账号密码、验证码
    *
    * @memberof UsersManagementClient
@@ -291,5 +253,16 @@ export class UsersManagementClient {
       }
     );
     return users;
+  }
+
+  async refreshToken(id: string): Promise<RefreshToken> {
+    const { refreshToken: data } = await refreshToken(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        id
+      }
+    );
+    return data;
   }
 }

@@ -661,6 +661,7 @@ export type Mutation = {
   assignRole: Role;
   /** 撤销角色 */
   revokeRole: Role;
+  refreshToken?: Maybe<RefreshToken>;
   /** 创建用户。此接口需要管理员权限，普通用户注册请使用 **register** 接口。 */
   doRegisterProcess: User;
   /** 更新用户信息。 */
@@ -866,18 +867,21 @@ export type MutationRevokeRoleArgs = {
   nodeCodes?: Maybe<Array<Scalars['String']>>;
 };
 
+export type MutationRefreshTokenArgs = {
+  id?: Maybe<Scalars['String']>;
+};
+
 export type MutationDoRegisterProcessArgs = {
   userInfo: CreateUserInput;
   keepPassword?: Maybe<Scalars['Boolean']>;
 };
 
 export type MutationUpdateUserArgs = {
-  id: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
   input: UpdateUserInput;
 };
 
 export type MutationUpdatePasswordArgs = {
-  id: Scalars['String'];
   newPassword: Scalars['String'];
   oldPassword?: Maybe<Scalars['String']>;
 };
@@ -1095,6 +1099,12 @@ export type BatchOperationResult = {
   failedCount: Scalars['Int'];
   message?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Scalars['String']>>;
+};
+
+export type RefreshToken = {
+  token?: Maybe<Scalars['String']>;
+  iat?: Maybe<Scalars['Int']>;
+  exp?: Maybe<Scalars['Int']>;
 };
 
 export type CreateUserInput = {
@@ -2065,6 +2075,18 @@ export type MoveNodeResponse = {
   };
 };
 
+export type RefreshTokenVariables = Exact<{
+  id?: Maybe<Scalars['String']>;
+}>;
+
+export type RefreshTokenResponse = {
+  refreshToken?: Maybe<{
+    token?: Maybe<string>;
+    iat?: Maybe<number>;
+    exp?: Maybe<number>;
+  }>;
+};
+
 export type RefreshUserpoolSecretVariables = Exact<{ [key: string]: never }>;
 
 export type RefreshUserpoolSecretResponse = { refreshUserpoolSecret: string };
@@ -2475,7 +2497,6 @@ export type UpdateNodeResponse = {
 };
 
 export type UpdatePasswordVariables = Exact<{
-  id: Scalars['String'];
   newPassword: Scalars['String'];
   oldPassword?: Maybe<Scalars['String']>;
 }>;
@@ -2613,7 +2634,7 @@ export type UpdateRoleResponse = {
 };
 
 export type UpdateUserVariables = Exact<{
-  id: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
   input: UpdateUserInput;
 }>;
 
@@ -4407,6 +4428,15 @@ export const MoveNodeDocument = `
   }
 }
     `;
+export const RefreshTokenDocument = `
+    mutation refreshToken($id: String) {
+  refreshToken(id: $id) {
+    token
+    iat
+    exp
+  }
+}
+    `;
 export const RefreshUserpoolSecretDocument = `
     mutation refreshUserpoolSecret {
   refreshUserpoolSecret
@@ -4768,8 +4798,8 @@ export const UpdateNodeDocument = `
 }
     `;
 export const UpdatePasswordDocument = `
-    mutation updatePassword($id: String!, $newPassword: String!, $oldPassword: String) {
-  updatePassword(id: $id, newPassword: $newPassword, oldPassword: $oldPassword) {
+    mutation updatePassword($newPassword: String!, $oldPassword: String) {
+  updatePassword(newPassword: $newPassword, oldPassword: $oldPassword) {
     id
     userPoolId
     username
@@ -4893,7 +4923,7 @@ export const UpdateRoleDocument = `
 }
     `;
 export const UpdateUserDocument = `
-    mutation updateUser($id: String!, $input: UpdateUserInput!) {
+    mutation updateUser($id: String, $input: UpdateUserInput!) {
   updateUser(id: $id, input: $input) {
     id
     userPoolId
