@@ -129,7 +129,7 @@ export class UsersManagementClient {
         this.options.encrptionPublicKey
       );
     }
-    const { doRegisterProcess: user } = await createUser(
+    const { createUser: user } = await createUser(
       this.graphqlClientV2,
       this.tokenProvider,
       {

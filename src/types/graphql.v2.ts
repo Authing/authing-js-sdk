@@ -663,7 +663,7 @@ export type Mutation = {
   revokeRole: Role;
   refreshToken?: Maybe<RefreshToken>;
   /** 创建用户。此接口需要管理员权限，普通用户注册请使用 **register** 接口。 */
-  doRegisterProcess: User;
+  createUser: User;
   /** 更新用户信息。 */
   updateUser: User;
   /** 修改用户密码，此接口需要验证原始密码，管理员直接修改请使用 **updateUser** 接口。 */
@@ -871,7 +871,7 @@ export type MutationRefreshTokenArgs = {
   id?: Maybe<Scalars['String']>;
 };
 
-export type MutationDoRegisterProcessArgs = {
+export type MutationCreateUserArgs = {
   userInfo: CreateUserInput;
   keepPassword?: Maybe<Scalars['Boolean']>;
 };
@@ -1565,6 +1565,62 @@ export type CreateSocialConnectionInstanceResponse = {
   };
 };
 
+export type CreateUserVariables = Exact<{
+  userInfo: CreateUserInput;
+  keepPassword?: Maybe<Scalars['Boolean']>;
+}>;
+
+export type CreateUserResponse = {
+  createUser: {
+    id: string;
+    userPoolId: string;
+    username?: Maybe<string>;
+    email?: Maybe<string>;
+    emailVerified?: Maybe<boolean>;
+    phone?: Maybe<string>;
+    phoneVerified?: Maybe<boolean>;
+    unionid?: Maybe<string>;
+    openid?: Maybe<string>;
+    nickname?: Maybe<string>;
+    registerSource: Array<string>;
+    photo?: Maybe<string>;
+    password?: Maybe<string>;
+    oauth?: Maybe<string>;
+    token?: Maybe<string>;
+    tokenExpiredAt?: Maybe<string>;
+    loginsCount?: Maybe<number>;
+    lastLogin?: Maybe<string>;
+    lastIP?: Maybe<string>;
+    signedUp?: Maybe<string>;
+    blocked?: Maybe<boolean>;
+    isDeleted?: Maybe<boolean>;
+    device?: Maybe<string>;
+    browser?: Maybe<string>;
+    company?: Maybe<string>;
+    name?: Maybe<string>;
+    givenName?: Maybe<string>;
+    familyName?: Maybe<string>;
+    middleName?: Maybe<string>;
+    profile?: Maybe<string>;
+    preferredUsername?: Maybe<string>;
+    website?: Maybe<string>;
+    gender?: Maybe<string>;
+    birthdate?: Maybe<string>;
+    zoneinfo?: Maybe<string>;
+    locale?: Maybe<string>;
+    address?: Maybe<string>;
+    formatted?: Maybe<string>;
+    streetAddress?: Maybe<string>;
+    locality?: Maybe<string>;
+    region?: Maybe<string>;
+    postalCode?: Maybe<string>;
+    country?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    customData?: Maybe<string>;
+  };
+};
+
 export type CreateUserpoolVariables = Exact<{
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
@@ -1723,62 +1779,6 @@ export type DisableSocialConnectionInstanceResponse = {
     provider: string;
     enabled: boolean;
     fields?: Maybe<Array<Maybe<{ key: string; value: string }>>>;
-  };
-};
-
-export type DoRegisterProcessVariables = Exact<{
-  userInfo: CreateUserInput;
-  keepPassword?: Maybe<Scalars['Boolean']>;
-}>;
-
-export type DoRegisterProcessResponse = {
-  doRegisterProcess: {
-    id: string;
-    userPoolId: string;
-    username?: Maybe<string>;
-    email?: Maybe<string>;
-    emailVerified?: Maybe<boolean>;
-    phone?: Maybe<string>;
-    phoneVerified?: Maybe<boolean>;
-    unionid?: Maybe<string>;
-    openid?: Maybe<string>;
-    nickname?: Maybe<string>;
-    registerSource: Array<string>;
-    photo?: Maybe<string>;
-    password?: Maybe<string>;
-    oauth?: Maybe<string>;
-    token?: Maybe<string>;
-    tokenExpiredAt?: Maybe<string>;
-    loginsCount?: Maybe<number>;
-    lastLogin?: Maybe<string>;
-    lastIP?: Maybe<string>;
-    signedUp?: Maybe<string>;
-    blocked?: Maybe<boolean>;
-    isDeleted?: Maybe<boolean>;
-    device?: Maybe<string>;
-    browser?: Maybe<string>;
-    company?: Maybe<string>;
-    name?: Maybe<string>;
-    givenName?: Maybe<string>;
-    familyName?: Maybe<string>;
-    middleName?: Maybe<string>;
-    profile?: Maybe<string>;
-    preferredUsername?: Maybe<string>;
-    website?: Maybe<string>;
-    gender?: Maybe<string>;
-    birthdate?: Maybe<string>;
-    zoneinfo?: Maybe<string>;
-    locale?: Maybe<string>;
-    address?: Maybe<string>;
-    formatted?: Maybe<string>;
-    streetAddress?: Maybe<string>;
-    locality?: Maybe<string>;
-    region?: Maybe<string>;
-    postalCode?: Maybe<string>;
-    country?: Maybe<string>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
   };
 };
 
@@ -3951,6 +3951,58 @@ export const CreateSocialConnectionInstanceDocument = `
   }
 }
     `;
+export const CreateUserDocument = `
+    mutation createUser($userInfo: CreateUserInput!, $keepPassword: Boolean) {
+  createUser(userInfo: $userInfo, keepPassword: $keepPassword) {
+    id
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    createdAt
+    updatedAt
+    customData
+  }
+}
+    `;
 export const CreateUserpoolDocument = `
     mutation createUserpool($name: String!, $description: String, $logo: String, $userpoolTypes: [String!]) {
   createUserpool(name: $name, description: $description, logo: $logo, userpoolTypes: $userpoolTypes) {
@@ -4100,58 +4152,6 @@ export const DisableSocialConnectionInstanceDocument = `
       key
       value
     }
-  }
-}
-    `;
-export const DoRegisterProcessDocument = `
-    mutation doRegisterProcess($userInfo: CreateUserInput!, $keepPassword: Boolean) {
-  doRegisterProcess(userInfo: $userInfo, keepPassword: $keepPassword) {
-    id
-    userPoolId
-    username
-    email
-    emailVerified
-    phone
-    phoneVerified
-    unionid
-    openid
-    nickname
-    registerSource
-    photo
-    password
-    oauth
-    token
-    tokenExpiredAt
-    loginsCount
-    lastLogin
-    lastIP
-    signedUp
-    blocked
-    isDeleted
-    device
-    browser
-    company
-    name
-    givenName
-    familyName
-    middleName
-    profile
-    preferredUsername
-    website
-    gender
-    birthdate
-    zoneinfo
-    locale
-    address
-    formatted
-    streetAddress
-    locality
-    region
-    postalCode
-    country
-    createdAt
-    updatedAt
-    customData
   }
 }
     `;
