@@ -316,6 +316,7 @@ export type PaginatedUsers = {
 export type User = {
   /** 用户 ID */
   id: Scalars['String'];
+  arn: Scalars['String'];
   /** 用户池 ID */
   userPoolId: Scalars['String'];
   /** 用户名，用户池内唯一 */
@@ -1306,7 +1307,57 @@ export type AddMemberResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     children?: Maybe<Array<string>>;
-    users: { totalCount: number };
+    users: {
+      totalCount: number;
+      list: Array<{
+        id: string;
+        arn: string;
+        userPoolId: string;
+        username?: Maybe<string>;
+        email?: Maybe<string>;
+        emailVerified?: Maybe<boolean>;
+        phone?: Maybe<string>;
+        phoneVerified?: Maybe<boolean>;
+        unionid?: Maybe<string>;
+        openid?: Maybe<string>;
+        nickname?: Maybe<string>;
+        registerSource: Array<string>;
+        photo?: Maybe<string>;
+        password?: Maybe<string>;
+        oauth?: Maybe<string>;
+        token?: Maybe<string>;
+        tokenExpiredAt?: Maybe<string>;
+        loginsCount?: Maybe<number>;
+        lastLogin?: Maybe<string>;
+        lastIP?: Maybe<string>;
+        signedUp?: Maybe<string>;
+        blocked?: Maybe<boolean>;
+        isDeleted?: Maybe<boolean>;
+        device?: Maybe<string>;
+        browser?: Maybe<string>;
+        company?: Maybe<string>;
+        name?: Maybe<string>;
+        givenName?: Maybe<string>;
+        familyName?: Maybe<string>;
+        middleName?: Maybe<string>;
+        profile?: Maybe<string>;
+        preferredUsername?: Maybe<string>;
+        website?: Maybe<string>;
+        gender?: Maybe<string>;
+        birthdate?: Maybe<string>;
+        zoneinfo?: Maybe<string>;
+        locale?: Maybe<string>;
+        address?: Maybe<string>;
+        formatted?: Maybe<string>;
+        streetAddress?: Maybe<string>;
+        locality?: Maybe<string>;
+        region?: Maybe<string>;
+        postalCode?: Maybe<string>;
+        country?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        customData?: Maybe<string>;
+      }>;
+    };
   };
 };
 
@@ -1573,6 +1624,7 @@ export type CreateUserVariables = Exact<{
 export type CreateUserResponse = {
   createUser: {
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -1820,6 +1872,7 @@ export type LoginByEmailVariables = Exact<{
 export type LoginByEmailResponse = {
   loginByEmail?: Maybe<{
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -1875,6 +1928,7 @@ export type LoginByPhoneCodeVariables = Exact<{
 export type LoginByPhoneCodeResponse = {
   loginByPhoneCode?: Maybe<{
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -1930,6 +1984,7 @@ export type LoginByPhonePasswordVariables = Exact<{
 export type LoginByPhonePasswordResponse = {
   loginByPhonePassword?: Maybe<{
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -1985,6 +2040,7 @@ export type LoginByUsernameVariables = Exact<{
 export type LoginByUsernameResponse = {
   loginByUsername?: Maybe<{
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -2098,6 +2154,7 @@ export type RegisterByEmailVariables = Exact<{
 export type RegisterByEmailResponse = {
   registerByEmail?: Maybe<{
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -2153,6 +2210,7 @@ export type RegisterByPhonePasswordVariables = Exact<{
 export type RegisterByPhonePasswordResponse = {
   registerByPhonePassword?: Maybe<{
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -2208,6 +2266,7 @@ export type RegisterByUsernameVariables = Exact<{
 export type RegisterByUsernameResponse = {
   registerByUsername?: Maybe<{
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -2285,6 +2344,7 @@ export type RemoveMemberResponse = {
       totalCount: number;
       list: Array<{
         id: string;
+        arn: string;
         userPoolId: string;
         username?: Maybe<string>;
         email?: Maybe<string>;
@@ -2404,6 +2464,7 @@ export type UpdateEmailVariables = Exact<{
 export type UpdateEmailResponse = {
   updateEmail: {
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -2504,6 +2565,7 @@ export type UpdatePasswordVariables = Exact<{
 export type UpdatePasswordResponse = {
   updatePassword: {
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -2562,6 +2624,7 @@ export type UpdatePhoneVariables = Exact<{
 export type UpdatePhoneResponse = {
   updatePhone: {
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -2641,6 +2704,7 @@ export type UpdateUserVariables = Exact<{
 export type UpdateUserResponse = {
   updateUser: {
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -2921,6 +2985,7 @@ export type NodeByCodeWithMembersResponse = {
       totalCount: number;
       list: Array<{
         id: string;
+        arn: string;
         userPoolId: string;
         username?: Maybe<string>;
         email?: Maybe<string>;
@@ -3018,6 +3083,7 @@ export type NodeByIdWithMembersResponse = {
       totalCount: number;
       list: Array<{
         id: string;
+        arn: string;
         userPoolId: string;
         username?: Maybe<string>;
         email?: Maybe<string>;
@@ -3327,6 +3393,7 @@ export type SearchUserResponse = {
     totalCount: number;
     list: Array<{
       id: string;
+      arn: string;
       userPoolId: string;
       username?: Maybe<string>;
       email?: Maybe<string>;
@@ -3451,6 +3518,7 @@ export type UserVariables = Exact<{
 export type UserResponse = {
   user: {
     id: string;
+    arn: string;
     userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
@@ -3508,6 +3576,7 @@ export type UserBatchResponse = {
     totalCount: number;
     list: Array<{
       id: string;
+      arn: string;
       userPoolId: string;
       username?: Maybe<string>;
       email?: Maybe<string>;
@@ -3665,6 +3734,7 @@ export type UsersResponse = {
     totalCount: number;
     list: Array<{
       id: string;
+      arn: string;
       userPoolId: string;
       username?: Maybe<string>;
       email?: Maybe<string>;
@@ -3744,6 +3814,54 @@ export const AddMemberDocument = `
     children
     users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
       totalCount
+      list {
+        id
+        arn
+        userPoolId
+        username
+        email
+        emailVerified
+        phone
+        phoneVerified
+        unionid
+        openid
+        nickname
+        registerSource
+        photo
+        password
+        oauth
+        token
+        tokenExpiredAt
+        loginsCount
+        lastLogin
+        lastIP
+        signedUp
+        blocked
+        isDeleted
+        device
+        browser
+        company
+        name
+        givenName
+        familyName
+        middleName
+        profile
+        preferredUsername
+        website
+        gender
+        birthdate
+        zoneinfo
+        locale
+        address
+        formatted
+        streetAddress
+        locality
+        region
+        postalCode
+        country
+        updatedAt
+        customData
+      }
     }
   }
 }
@@ -3955,6 +4073,7 @@ export const CreateUserDocument = `
     mutation createUser($userInfo: CreateUserInput!, $keepPassword: Boolean) {
   createUser(userInfo: $userInfo, keepPassword: $keepPassword) {
     id
+    arn
     userPoolId
     username
     email
@@ -4187,6 +4306,7 @@ export const LoginByEmailDocument = `
     mutation loginByEmail($input: LoginByEmailInput!) {
   loginByEmail(input: $input) {
     id
+    arn
     userPoolId
     username
     email
@@ -4239,6 +4359,7 @@ export const LoginByPhoneCodeDocument = `
     mutation loginByPhoneCode($input: LoginByPhoneCodeInput!) {
   loginByPhoneCode(input: $input) {
     id
+    arn
     userPoolId
     username
     email
@@ -4291,6 +4412,7 @@ export const LoginByPhonePasswordDocument = `
     mutation loginByPhonePassword($input: LoginByPhonePasswordInput!) {
   loginByPhonePassword(input: $input) {
     id
+    arn
     userPoolId
     username
     email
@@ -4343,6 +4465,7 @@ export const LoginByUsernameDocument = `
     mutation loginByUsername($input: LoginByUsernameInput!) {
   loginByUsername(input: $input) {
     id
+    arn
     userPoolId
     username
     email
@@ -4446,6 +4569,7 @@ export const RegisterByEmailDocument = `
     mutation registerByEmail($input: RegisterByEmailInput!) {
   registerByEmail(input: $input) {
     id
+    arn
     userPoolId
     username
     email
@@ -4498,6 +4622,7 @@ export const RegisterByPhonePasswordDocument = `
     mutation registerByPhonePassword($input: RegisterByPhonePasswordInput!) {
   registerByPhonePassword(input: $input) {
     id
+    arn
     userPoolId
     username
     email
@@ -4550,6 +4675,7 @@ export const RegisterByUsernameDocument = `
     mutation registerByUsername($input: RegisterByUsernameInput!) {
   registerByUsername(input: $input) {
     id
+    arn
     userPoolId
     username
     email
@@ -4617,6 +4743,7 @@ export const RemoveMemberDocument = `
       totalCount
       list {
         id
+        arn
         userPoolId
         username
         email
@@ -4716,6 +4843,7 @@ export const UpdateEmailDocument = `
     mutation updateEmail($email: String!, $emailCode: String!, $oldEmail: String, $oldEmailCode: String) {
   updateEmail(email: $email, emailCode: $emailCode, oldEmail: $oldEmail, oldEmailCode: $oldEmailCode) {
     id
+    arn
     userPoolId
     username
     email
@@ -4801,6 +4929,7 @@ export const UpdatePasswordDocument = `
     mutation updatePassword($newPassword: String!, $oldPassword: String) {
   updatePassword(newPassword: $newPassword, oldPassword: $oldPassword) {
     id
+    arn
     userPoolId
     username
     email
@@ -4853,6 +4982,7 @@ export const UpdatePhoneDocument = `
     mutation updatePhone($phone: String!, $phoneCode: String!, $oldPhone: String, $oldPhoneCode: String) {
   updatePhone(phone: $phone, phoneCode: $phoneCode, oldPhone: $oldPhone, oldPhoneCode: $oldPhoneCode) {
     id
+    arn
     userPoolId
     username
     email
@@ -4926,6 +5056,7 @@ export const UpdateUserDocument = `
     mutation updateUser($id: String, $input: UpdateUserInput!) {
   updateUser(id: $id, input: $input) {
     id
+    arn
     userPoolId
     username
     email
@@ -5167,6 +5298,7 @@ export const NodeByCodeWithMembersDocument = `
       totalCount
       list {
         id
+        arn
         userPoolId
         username
         email
@@ -5254,6 +5386,7 @@ export const NodeByIdWithMembersDocument = `
       totalCount
       list {
         id
+        arn
         userPoolId
         username
         email
@@ -5529,6 +5662,7 @@ export const SearchUserDocument = `
     totalCount
     list {
       id
+      arn
       userPoolId
       username
       email
@@ -5643,6 +5777,7 @@ export const UserDocument = `
     query user($id: String!) {
   user(id: $id) {
     id
+    arn
     userPoolId
     username
     email
@@ -5697,6 +5832,7 @@ export const UserBatchDocument = `
     totalCount
     list {
       id
+      arn
       userPoolId
       username
       email
@@ -5844,6 +5980,7 @@ export const UsersDocument = `
     totalCount
     list {
       id
+      arn
       userPoolId
       username
       email
