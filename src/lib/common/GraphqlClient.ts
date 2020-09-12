@@ -26,7 +26,7 @@ export class GraphqlClient {
       'x-authing-sdk-version': SDK_VERSION,
       'x-authing-userpool-id': this.options.userPoolId,
       'x-authing-request-from': this.options.requestFrom || 'sdk',
-      'x-authing-app-id': this.options.appId
+      'x-authing-app-id': this.options.appId || ''
     };
     token && (headers.Authorization = `Bearer ${token}`);
     const graphQLClient = new GraphQLClient(this.endpoint, {

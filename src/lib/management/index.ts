@@ -9,6 +9,7 @@ import { isDomainAvaliable, sendEmail } from '../graphqlapi';
 import { EmailScene } from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
+import Axios from 'axios';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -55,16 +56,18 @@ export class ManagementClient {
       );
     }
 
+    Axios.defaults.baseURL = this.options.host;
+
     this.graphqlClient = new GraphqlClient(graphqlApiEndpoint, this.options);
     this.graphqlClientV2 = new GraphqlClient(
       graphqlApiEndpointV2,
       this.options
     );
-    this.httpClient = new HttpClient(this.options, this.tokenProvider);
     this.tokenProvider = new ManagementTokenProvider(
       this.options,
       this.graphqlClient
     );
+    this.httpClient = new HttpClient(this.options, this.tokenProvider);
     this.users = new UsersManagementClient(
       this.options,
       this.graphqlClient,
