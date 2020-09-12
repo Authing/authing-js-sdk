@@ -1,15 +1,8 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
-import { SortByEnum } from '../../types/graphql.v1';
 import { Role } from '../../types/graphql.v2';
 import {
-  createRBACGroup,
-  addGroupMetadata,
-  addUserToRBACGroup,
-  isUserInGroup,
-  groupUserList,
-  userGroupList,
   assignRole,
   addRole,
   isAllowed,
@@ -24,135 +17,17 @@ import {
 
 export class AccessControlManagementClient {
   options: ManagementClientOptions;
-  graphqlClient: GraphqlClient;
   graphqlClientV2: GraphqlClient;
   tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
-    graphqlClient: GraphqlClient,
     graphqlClientV2: GraphqlClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
     this.graphqlClientV2 = graphqlClientV2;
-    this.graphqlClient = graphqlClient;
     this.tokenProvider = tokenProvider;
-  }
-
-  /**
-   * 创建 Group
-   *
-   * @param {string} name
-   * @param {string} description
-   * @returns {Promise<AuthingGroup>}
-   * @memberof AccessControlManagementClient
-   */
-  async createGroup(name: string, description: string) {
-    const res = await createRBACGroup(this.graphqlClient, this.tokenProvider, {
-      input: {
-        userPoolId: this.options.userPoolId,
-        name,
-        description
-      }
-    });
-    return res.createRBACGroup;
-  }
-
-  /**
-   * 为 Group 添加自定义数据
-   *
-   * @param {string} groupId
-   * @param {string} key
-   * @param {*} value
-   * @returns {Promise<{ key: string, value: string }>}
-   * @memberof AccessControlManagementClient
-   */
-  async addGroupMetadata(groupId: string, key: string, value: any) {
-    if (typeof value !== 'string') {
-      value = JSON.stringify(value);
-    }
-    const res = await addGroupMetadata(this.graphqlClient, this.tokenProvider, {
-      groupId,
-      key,
-      value
-    });
-    return res.addGroupMetadata[0];
-  }
-
-  /**
-   *  添加用户到分组中
-   *
-   * @param {{
-   *     userId: string,
-   *     groupId: string
-   *   }} options
-   * @returns
-   * @memberof AccessControlManagementClient
-   */
-  async addUserToGroup(options: { userId: string; groupId: string }) {
-    const res = await addUserToRBACGroup(
-      this.graphqlClient,
-      this.tokenProvider,
-      { input: options }
-    );
-    return res.addUserToRBACGroup;
-  }
-
-  /**
-   * 判断用户是否在 Group 中
-   *
-   * @memberof AccessControlManagementClient
-   */
-  async isUserInGroup(options: { userId: string; groupId: string }) {
-    const res = await isUserInGroup(
-      this.graphqlClient,
-      this.tokenProvider,
-      options
-    );
-    return res.isUserInGroup;
-  }
-
-  /**
-   * 查询 Group 用户列表
-   *
-   * @param {string} groupId
-   * @param {{
-   *     sortBy: string, 默认为 CREATEDAT_DESC
-   *     page: number, 默认为 0
-   *     count: number 默认为 10
-   *   }} options
-   * @returns
-   * @memberof AccessControlManagementClient
-   */
-  async groupUserList(
-    groupId: string,
-    options: {
-      sortBy?: SortByEnum;
-      page?: number;
-      count?: number;
-    } = {
-      sortBy: SortByEnum.CreatedatDesc,
-      page: 0,
-      count: 1
-    }
-  ) {
-    const res = await groupUserList(this.graphqlClient, this.tokenProvider, {
-      _id: groupId,
-      ...options
-    });
-    return res.rbacGroup.users;
-  }
-
-  /**
-   * 查询用户所在的分组列表
-   *
-   */
-  async userGroupList(userId: string) {
-    const res = await userGroupList(this.graphqlClient, this.tokenProvider, {
-      _id: userId
-    });
-    return res.userGroupList;
   }
 
   /**
@@ -243,7 +118,7 @@ export class AccessControlManagementClient {
    * @description 添加角色
    *
    */
-  async addRole(code: string, description?: string, parent?: string) {
+  async createRole(code: string, description?: string, parent?: string) {
     const res = await addRole(this.graphqlClientV2, this.tokenProvider, {
       code,
       parent,
@@ -325,4 +200,6 @@ export class AccessControlManagementClient {
     );
     return data;
   }
+
+  async createGroup() {}
 }
