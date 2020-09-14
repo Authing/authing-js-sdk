@@ -331,6 +331,8 @@ export type User = {
   phoneVerified?: Maybe<Scalars['Boolean']>;
   unionid?: Maybe<Scalars['String']>;
   openid?: Maybe<Scalars['String']>;
+  /** 用户的身份信息 */
+  identities?: Maybe<Array<Maybe<Identity>>>;
   /** 昵称，该字段不唯一。 */
   nickname?: Maybe<Scalars['String']>;
   /** 注册方式 */
@@ -382,6 +384,16 @@ export type User = {
   updatedAt?: Maybe<Scalars['String']>;
   /** 自定义用户数据，是一个 JSON 序列化过后的字符串 */
   customData?: Maybe<Scalars['String']>;
+};
+
+export type Identity = {
+  openid?: Maybe<Scalars['String']>;
+  userIdInIdp?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  connectionId?: Maybe<Scalars['String']>;
+  isSocial?: Maybe<Scalars['Boolean']>;
+  provider?: Maybe<Scalars['String']>;
+  userPoolId?: Maybe<Scalars['String']>;
 };
 
 export type Mfa = {
@@ -844,6 +856,7 @@ export type MutationCreateRoleArgs = {
 export type MutationUpdateRoleArgs = {
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  newCode?: Maybe<Scalars['String']>;
 };
 
 export type MutationDeleteRoleArgs = {
@@ -1670,6 +1683,19 @@ export type CreateUserResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   };
 };
 
@@ -1918,6 +1944,19 @@ export type LoginByEmailResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   }>;
 };
 
@@ -1974,6 +2013,19 @@ export type LoginByPhoneCodeResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   }>;
 };
 
@@ -2030,6 +2082,19 @@ export type LoginByPhonePasswordResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   }>;
 };
 
@@ -2086,6 +2151,19 @@ export type LoginByUsernameResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   }>;
 };
 
@@ -2200,6 +2278,19 @@ export type RegisterByEmailResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   }>;
 };
 
@@ -2256,6 +2347,19 @@ export type RegisterByPhonePasswordResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   }>;
 };
 
@@ -2312,6 +2416,19 @@ export type RegisterByUsernameResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   }>;
 };
 
@@ -2510,6 +2627,19 @@ export type UpdateEmailResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   };
 };
 
@@ -2611,6 +2741,19 @@ export type UpdatePasswordResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   };
 };
 
@@ -2670,12 +2813,26 @@ export type UpdatePhoneResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   };
 };
 
 export type UpdateRoleVariables = Exact<{
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  newCode?: Maybe<Scalars['String']>;
 }>;
 
 export type UpdateRoleResponse = {
@@ -2750,6 +2907,19 @@ export type UpdateUserResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   };
 };
 
@@ -3564,6 +3734,19 @@ export type UserResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   };
 };
 
@@ -4082,6 +4265,15 @@ export const CreateUserDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -4315,6 +4507,15 @@ export const LoginByEmailDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -4368,6 +4569,15 @@ export const LoginByPhoneCodeDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -4421,6 +4631,15 @@ export const LoginByPhonePasswordDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -4474,6 +4693,15 @@ export const LoginByUsernameDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -4578,6 +4806,15 @@ export const RegisterByEmailDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -4631,6 +4868,15 @@ export const RegisterByPhonePasswordDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -4684,6 +4930,15 @@ export const RegisterByUsernameDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -4852,6 +5107,15 @@ export const UpdateEmailDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -4938,6 +5202,15 @@ export const UpdatePasswordDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -4991,6 +5264,15 @@ export const UpdatePhoneDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -5032,8 +5314,8 @@ export const UpdatePhoneDocument = `
 }
     `;
 export const UpdateRoleDocument = `
-    mutation updateRole($code: String!, $description: String) {
-  updateRole(code: $code, description: $description) {
+    mutation updateRole($code: String!, $description: String, $newCode: String) {
+  updateRole(code: $code, description: $description, newCode: $newCode) {
     code
     description
     isSystem
@@ -5065,6 +5347,15 @@ export const UpdateUserDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo
@@ -5786,6 +6077,15 @@ export const UserDocument = `
     phoneVerified
     unionid
     openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     nickname
     registerSource
     photo

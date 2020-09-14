@@ -131,13 +131,21 @@ export class AccessControlManagementClient {
    * @description 修改角色
    *
    */
-  async updateRole(code: string, description: string) {
+  async updateRole(
+    code: string,
+    input: {
+      description?: string;
+      newCode?: string;
+    }
+  ) {
+    const { description, newCode } = input;
     const { updateRole: data } = await updateRole(
       this.graphqlClientV2,
       this.tokenProvider,
       {
         code,
-        description
+        description,
+        newCode
       }
     );
     return data;
