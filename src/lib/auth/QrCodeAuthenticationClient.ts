@@ -460,7 +460,6 @@ export class QrCodeAuthenticationClient {
       let url: string = null;
       try {
         const data = await this.geneCode();
-        console.log(data);
         random = data.random;
         url = data.url;
       } catch (error) {
