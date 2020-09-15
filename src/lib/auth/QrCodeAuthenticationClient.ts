@@ -224,7 +224,7 @@ export class QrCodeAuthenticationClient {
       onExpired?: () => any;
       onCodeShow?: (random: string, url: string) => any;
       onCodeLoaded?: (random: string, url: string) => any;
-      onCodeLoadFailed?: (code: number, message: string) => any;
+      onCodeLoadFailed?: (message: string) => any;
       onCodeDestroyed?: (random: string) => any;
 
       /**
@@ -464,9 +464,9 @@ export class QrCodeAuthenticationClient {
         url = data.url;
       } catch (error) {
         error = error;
-        genRetry(node, error);
+        genRetry(node, error.message);
         if (onCodeLoadFailed) {
-          onCodeLoadFailed(500, error);
+          onCodeLoadFailed(error);
         }
         return;
       }
