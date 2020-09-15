@@ -20,10 +20,9 @@ import {
   UpdateUserInput
 } from '../../types/graphql.v2';
 import { encrypt } from '../utils';
-import Axios from 'axios';
-import { SDK_VERSION } from '../version';
 import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { resetPassword, updateUser } from '../graphqlapi';
+import { HttpClient } from '../common/HttpClient';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   timeout: 10000,
@@ -47,6 +46,7 @@ export class AuthenticationClient {
 
   graphqlClient: GraphqlClient;
   graphqlClientV2: GraphqlClient;
+  httpClient: HttpClient;
   tokenProvider: AuthenticationTokenProvider;
   wxqr: QrCodeAuthenticationClient;
   qr: QrCodeAuthenticationClient;
@@ -62,14 +62,17 @@ export class AuthenticationClient {
       this.options
     );
     this.tokenProvider = new AuthenticationTokenProvider(this.options);
+    this.httpClient = new HttpClient(this.options, this.tokenProvider);
     this.wxqr = new QrCodeAuthenticationClient(
       this.options,
       this.tokenProvider,
+      this.httpClient,
       'WXAPP_AUTH'
     );
     this.qr = new QrCodeAuthenticationClient(
       this.options,
       this.tokenProvider,
+      this.httpClient,
       'APP_AUTH'
     );
   }
@@ -146,18 +149,13 @@ export class AuthenticationClient {
   async sendSmsCode(phone: string): Promise<{ code: number; message: string }> {
     // TODO: 这种链接从服务器动态拉取
     const api = `${this.options.host}/v2/api/send-smscode`;
-    const res = await Axios.post(
-      api,
-      { phone },
-      {
-        headers: {
-          'x-authing-userpool-id': this.options.userPoolId,
-          'x-authing-sdk-version': SDK_VERSION,
-          'x-authing-request-from': 'sdk'
-        }
-      }
-    );
-    return res.data;
+    const data = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: { phone }
+    });
+
+    return data;
   }
 
   async loginByEmail(email: string, password: string) {

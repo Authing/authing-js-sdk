@@ -65,10 +65,6 @@ export interface QRCodeStatus {
 }
 
 export interface QRCodeGenarateResult {
-  code: number;
-  message: string;
-  data: {
-    random: string;
-    url: string;
-  };
+  random: string;
+  url: string;
 }

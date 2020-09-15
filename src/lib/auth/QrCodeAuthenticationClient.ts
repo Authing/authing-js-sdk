@@ -1,4 +1,3 @@
-import Axios from 'axios';
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import {
   AuthenticationClientOptions,
@@ -7,21 +6,24 @@ import {
   QRCodeUserInfo
 } from './types';
 import { createCssClassStyleSheet } from './utils';
-import { SDK_VERSION } from '../version';
 import { User } from '../../types/graphql.v2';
+import { HttpClient } from '../common/HttpClient';
 
 export class QrCodeAuthenticationClient {
   options: AuthenticationClientOptions;
   tokenProvider: AuthenticationTokenProvider;
   scene: string;
+  httpClient: HttpClient;
 
   constructor(
     options: AuthenticationClientOptions,
     tokenProvider: AuthenticationTokenProvider,
+    httpClient: HttpClient,
     scene: 'WXAPP_AUTH' | 'APP_AUTH'
   ) {
     this.options = options;
     this.tokenProvider = tokenProvider;
+    this.httpClient = httpClient;
     this.scene = scene;
   }
 
@@ -33,17 +35,14 @@ export class QrCodeAuthenticationClient {
     customData: { [x: string]: any } = {}
   ): Promise<QRCodeGenarateResult> {
     const api = `${this.options.host}/v2/api/qrcode/gene`;
-    const { data } = await Axios.post(
-      api,
-      { scene: this.scene, customData },
-      {
-        headers: {
-          'x-authing-userpool-id': this.options.userPoolId,
-          'x-authing-sdk-version': SDK_VERSION,
-          'x-authing-request-from': 'sdk'
-        }
+    const data = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
+        scene: this.scene,
+        customData
       }
-    );
+    });
     return data;
   }
 
@@ -51,38 +50,25 @@ export class QrCodeAuthenticationClient {
    * @description 检查二维码状态
    *
    */
-  async checkStatus(
-    random: string
-  ): Promise<{ code: number; message: string; data: QRCodeStatus }> {
+  async checkStatus(random: string): Promise<QRCodeStatus> {
     const api = `${this.options.host}/v2/api/qrcode/check?random=${random}`;
-    const { data } = await Axios.get(api, {
-      headers: {
-        'x-authing-userpool-id': this.options.userPoolId,
-        'x-authing-sdk-version': SDK_VERSION,
-        'x-authing-request-from': 'sdk'
-      }
+    const data = await this.httpClient.request({
+      method: 'GET',
+      url: api
     });
     return data;
   }
 
   async exchangeUserInfo(ticket: string): Promise<Partial<User>> {
     const api = `${this.options.host}/v2/api/qrcode/userinfo`;
-    const { data } = await Axios.post(
-      api,
-      {
+    const userInfo = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
         ticket
-      },
-      {
-        headers: {
-          'x-authing-userpool-id': this.options.userPoolId,
-          'x-authing-sdk-version': SDK_VERSION,
-          'x-authing-request-from': 'sdk'
-        }
       }
-    );
-    const { code, message, data: userInfo } = data;
-    if (code === 200) return userInfo;
-    else throw new Error(message);
+    });
+    return userInfo;
   }
 
   /**
@@ -113,7 +99,7 @@ export class QrCodeAuthenticationClient {
       /**
        * 获取二维码状态失败事件回调函数。常见原因为网络失败等，每次查询失败时都会回调。回调参数 data 示例如 {"code": 2241,"message": "二维码不存在","data": null}。完整错误代码请见 https://docs.authing.co/advanced/error-code.html。
        */
-      onError?: (code: number, message: string) => any;
+      onError?: (message: string) => any;
       /**
        * 二维码失效时被回调，只回调一次，之后轮询结束。
        */
@@ -142,54 +128,54 @@ export class QrCodeAuthenticationClient {
         callOnPoolingStart = true;
       }
 
-      const { code, message, data } = await this.checkStatus(random);
-      const { status, ticket, userInfo } = data;
-      if (code !== 200) {
+      try {
+        const data = await this.checkStatus(random);
+        const { status, ticket, userInfo } = data;
+        // 每次获取到数据都回调 onResult 函数
+        if (onResult) {
+          onResult(data);
+        }
+
+        // 过期
+        if (status === -1) {
+          clearInterval(timer);
+          if (onExpired) {
+            onExpired();
+          }
+        }
+
+        // 未扫码
+        if (status === 0) {
+        }
+
+        // 已扫码
+        if (status === 1) {
+          if (onScanned && !calledOnScanned) {
+            onScanned(userInfo);
+            calledOnScanned = true;
+          }
+        }
+
+        // 已授权
+        if (status === 2) {
+          clearInterval(timer);
+          if (onSuccess) {
+            onSuccess(userInfo, ticket);
+          }
+        }
+
+        // 已取消
+        if (status === 3) {
+          clearInterval(timer);
+          if (onCancel) {
+            onCancel();
+          }
+        }
+      } catch (error) {
         if (onError) {
-          onError(code, message);
+          onError(error);
         }
         return;
-      }
-
-      // 每次获取到数据都回调 onResult 函数
-      if (onResult) {
-        onResult(data);
-      }
-
-      // 过期
-      if (status === -1) {
-        clearInterval(timer);
-        if (onExpired) {
-          onExpired();
-        }
-      }
-
-      // 未扫码
-      if (status === 0) {
-      }
-
-      // 已扫码
-      if (status === 1) {
-        if (onScanned && !calledOnScanned) {
-          onScanned(userInfo);
-          calledOnScanned = true;
-        }
-      }
-
-      // 已授权
-      if (status === 2) {
-        clearInterval(timer);
-        if (onSuccess) {
-          onSuccess(userInfo, ticket);
-        }
-      }
-
-      // 已取消
-      if (status === 3) {
-        clearInterval(timer);
-        if (onCancel) {
-          onCancel();
-        }
       }
     }, interval);
     return timer;
@@ -231,7 +217,7 @@ export class QrCodeAuthenticationClient {
       /**
        * 获取二维码状态失败事件回调函数。常见原因为网络失败等，每次查询失败时都会回调。回调参数 data 示例如 {"code": 2241,"message": "二维码不存在","data": null}。完整错误代码请见 https://docs.authing.co/advanced/error-code.html。
        */
-      onError?: (code: number, message: string) => any;
+      onError?: (message: string) => any;
       /**
        * 二维码失效时被回调，只回调一次，之后轮询结束。
        */
@@ -287,8 +273,7 @@ export class QrCodeAuthenticationClient {
       canceled = '用户取消授权',
       expired = '二维码已过期',
       succeed = '扫码成功',
-      retry = '重试',
-      failed = '网络出错，请重试'
+      retry = '重试'
     } = tips;
 
     let node = document.getElementById(domId);
@@ -474,21 +459,15 @@ export class QrCodeAuthenticationClient {
       let random: string = null;
       let url: string = null;
       try {
-        const { code, message, data } = await this.geneCode();
-        if (code !== 200) {
-          genRetry(node, message);
-          if (onCodeLoadFailed) {
-            onCodeLoadFailed(code, message);
-          }
-        } else {
-          random = data.random;
-          url = data.url;
-        }
+        const data = await this.geneCode();
+        console.log(data);
+        random = data.random;
+        url = data.url;
       } catch (error) {
         error = error;
-        genRetry(node, failed);
+        genRetry(node, error);
         if (onCodeLoadFailed) {
-          onCodeLoadFailed(500, failed);
+          onCodeLoadFailed(500, error);
         }
         return;
       }
@@ -545,9 +524,9 @@ export class QrCodeAuthenticationClient {
         };
 
         let decoratedOnError = function(data: any) {
-          const { code, message } = data;
+          const { message } = data;
           if (onError) {
-            onError(code, message);
+            onError(message);
           }
         };
 
