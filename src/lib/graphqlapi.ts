@@ -201,7 +201,10 @@ import {
   ChildrenNodesDocument,
   RefreshTokenVariables,
   RefreshTokenDocument,
-  RefreshTokenResponse
+  RefreshTokenResponse,
+  RegisterByPhoneCodeResponse,
+  RegisterByPhoneCodeDocument,
+  RegisterByPhoneCodeVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -700,7 +703,21 @@ export const registerByUsername = async (
   variables: RegisterByUsernameVariables
 ): Promise<RegisterByUsernameResponse> => {
   const query = RegisterByUsernameDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const registerByPhoneCode = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: AuthenticationTokenProvider,
+  variables: RegisterByPhoneCodeVariables
+): Promise<RegisterByPhoneCodeResponse> => {
+  const query = RegisterByPhoneCodeDocument;
+  const token = tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
     token,

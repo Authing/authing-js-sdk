@@ -9,7 +9,8 @@ import {
   refreshToken,
   registerByEmail,
   registerByUsername,
-  sendEmail
+  sendEmail,
+  registerByPhoneCode
 } from './../graphqlapi';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
@@ -120,6 +121,34 @@ export class AuthenticationClient {
       {
         input: {
           username,
+          password,
+          profile,
+          forceLogin
+        }
+      }
+    );
+    return user;
+  }
+
+  /**
+   * @description 通过手机号注册
+   *
+   */
+  async registerByPhoneCode(
+    phone: string,
+    code: string,
+    password?: string,
+    profile?: RegisterProfile,
+    forceLogin?: boolean
+  ) {
+    password = encrypt(password, this.options.encrptionPublicKey);
+    const { registerByPhoneCode: user } = await registerByPhoneCode(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        input: {
+          phone,
+          code,
           password,
           profile,
           forceLogin

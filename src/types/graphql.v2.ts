@@ -661,7 +661,7 @@ export type Mutation = {
   createPolicy: Policy;
   registerByUsername?: Maybe<User>;
   registerByEmail?: Maybe<User>;
-  registerByPhonePassword?: Maybe<User>;
+  registerByPhoneCode?: Maybe<User>;
   /** 创建角色 */
   createRole: Role;
   /** 修改角色 */
@@ -843,8 +843,8 @@ export type MutationRegisterByEmailArgs = {
   input: RegisterByEmailInput;
 };
 
-export type MutationRegisterByPhonePasswordArgs = {
-  input: RegisterByPhonePasswordInput;
+export type MutationRegisterByPhoneCodeArgs = {
+  input: RegisterByPhoneCodeInput;
 };
 
 export type MutationCreateRoleArgs = {
@@ -1098,9 +1098,10 @@ export type RegisterByEmailInput = {
   forceLogin?: Maybe<Scalars['Boolean']>;
 };
 
-export type RegisterByPhonePasswordInput = {
+export type RegisterByPhoneCodeInput = {
   phone: Scalars['phone_String_NotNull_pattern_130911457911503591166170358118091198911d8'];
-  password: Scalars['String'];
+  code: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
 };
@@ -2294,12 +2295,12 @@ export type RegisterByEmailResponse = {
   }>;
 };
 
-export type RegisterByPhonePasswordVariables = Exact<{
-  input: RegisterByPhonePasswordInput;
+export type RegisterByPhoneCodeVariables = Exact<{
+  input: RegisterByPhoneCodeInput;
 }>;
 
-export type RegisterByPhonePasswordResponse = {
-  registerByPhonePassword?: Maybe<{
+export type RegisterByPhoneCodeResponse = {
+  registerByPhoneCode?: Maybe<{
     id: string;
     arn: string;
     userPoolId: string;
@@ -4855,9 +4856,9 @@ export const RegisterByEmailDocument = `
   }
 }
     `;
-export const RegisterByPhonePasswordDocument = `
-    mutation registerByPhonePassword($input: RegisterByPhonePasswordInput!) {
-  registerByPhonePassword(input: $input) {
+export const RegisterByPhoneCodeDocument = `
+    mutation registerByPhoneCode($input: RegisterByPhoneCodeInput!) {
+  registerByPhoneCode(input: $input) {
     id
     arn
     userPoolId
