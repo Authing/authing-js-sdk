@@ -82,6 +82,7 @@ export class ManagementClient {
     );
     this.acl = new AccessControlManagementClient(
       this.options,
+      this.graphqlClient,
       this.graphqlClientV2,
       this.tokenProvider
     );
