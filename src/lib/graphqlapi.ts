@@ -73,7 +73,10 @@ import {
   PasswordLessForceLoginVariables,
   UserExistVariables,
   UserExist,
-  UserExistDocument
+  UserExistDocument,
+  UserPermissionListVariables,
+  UserPermissionList,
+  UserPermissionListDocument
 } from '../types/graphql.v1';
 import { GraphqlClient } from './common/GraphqlClient';
 import { ManagementTokenProvider } from './management/ManagementTokenProvider';
@@ -207,7 +210,10 @@ import {
   RefreshTokenResponse,
   AddUserToGroupDocument,
   AddUserToGroupResponse,
-  AddUserToGroupVariables
+  AddUserToGroupVariables,
+  RegisterByPhoneCodeResponse,
+  RegisterByPhoneCodeDocument,
+  RegisterByPhoneCodeVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -706,7 +712,21 @@ export const registerByUsername = async (
   variables: RegisterByUsernameVariables
 ): Promise<RegisterByUsernameResponse> => {
   const query = RegisterByUsernameDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const registerByPhoneCode = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: AuthenticationTokenProvider,
+  variables: RegisterByPhoneCodeVariables
+): Promise<RegisterByPhoneCodeResponse> => {
+  const query = RegisterByPhoneCodeDocument;
+  const token = tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1182,6 +1202,20 @@ export const userExists = async (
   variables: UserExistVariables
 ): Promise<UserExist> => {
   const query = UserExistDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const userPermissionList = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UserPermissionListVariables
+): Promise<UserPermissionList> => {
+  const query = UserPermissionListDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
