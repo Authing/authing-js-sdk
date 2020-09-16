@@ -1,7 +1,7 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
-import { Role } from '../../types/graphql.v2';
+import { PaginatedGroups, Role } from '../../types/graphql.v2';
 import {
   assignRole,
   addRole,
@@ -12,7 +12,8 @@ import {
   roleWithUsers,
   updateRole,
   getGroups,
-  revokeRole
+  revokeRole,
+  addUserToGroup
 } from '../graphqlapi';
 
 export class AccessControlManagementClient {
@@ -197,13 +198,46 @@ export class AccessControlManagementClient {
    * @description 获取分组列表
    *
    */
-  async groups(page: number = 1, limit: number = 10) {
-    const { groups: data } = await getGroups(
+
+  async groups(userId: string): Promise<PaginatedGroups>;
+  async groups(page: number, limit: number): Promise<PaginatedGroups>;
+  async groups(arg1: any, arg2?: any): Promise<PaginatedGroups> {
+    if (arg2) {
+      const page = 1;
+      const limit = 2;
+      const { groups: data } = await getGroups(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          page,
+          limit
+        }
+      );
+      // @ts-ignore
+      return data;
+    } else {
+      const userId = arg1;
+      const { groups: data } = await getGroups(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {
+          userId,
+          page: 1,
+          limit: -1
+        }
+      );
+      // @ts-ignore
+      return data;
+    }
+  }
+
+  async addUserToGroup(userId: string, groupId: string) {
+    const { addUserToGroup: data } = await addUserToGroup(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        page,
-        limit
+        groupId,
+        userId
       }
     );
     return data;

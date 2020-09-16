@@ -11,6 +11,7 @@ export type Scalars = {
   username_String_NotNull_minLength_4_maxLength_20: any;
   phone_String_NotNull_pattern_130911457911503591166170358118091198911d8: any;
   code_String_NotNull_minLength_4_maxLength_6: any;
+  username_String_NotNull_minLength_4_maxLength_50: any;
   ip_String_format_ipv4: any;
 };
 
@@ -32,6 +33,7 @@ export type Query = {
   function?: Maybe<Function>;
   functions: PaginatedFunctions;
   groups: PaginatedGroups;
+  addUserToGroup: PaginatedGroups;
   /** 查询 MFA 信息 */
   queryMfa?: Maybe<Mfa>;
   nodeById?: Maybe<Node>;
@@ -99,6 +101,11 @@ export type QueryGroupsArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
+};
+
+export type QueryAddUserToGroupArgs = {
+  userId?: Maybe<Scalars['String']>;
+  groupId?: Maybe<Scalars['String']>;
 };
 
 export type QueryQueryMfaArgs = {
@@ -661,7 +668,7 @@ export type Mutation = {
   createPolicy: Policy;
   registerByUsername?: Maybe<User>;
   registerByEmail?: Maybe<User>;
-  registerByPhonePassword?: Maybe<User>;
+  registerByPhoneCode?: Maybe<User>;
   /** 创建角色 */
   createRole: Role;
   /** 修改角色 */
@@ -843,8 +850,8 @@ export type MutationRegisterByEmailArgs = {
   input: RegisterByEmailInput;
 };
 
-export type MutationRegisterByPhonePasswordArgs = {
-  input: RegisterByPhonePasswordInput;
+export type MutationRegisterByPhoneCodeArgs = {
+  input: RegisterByPhoneCodeInput;
 };
 
 export type MutationCreateRoleArgs = {
@@ -1051,7 +1058,7 @@ export type LoginByPhonePasswordInput = {
 };
 
 export type RegisterByUsernameInput = {
-  username: Scalars['username_String_NotNull_minLength_4_maxLength_20'];
+  username: Scalars['username_String_NotNull_minLength_4_maxLength_50'];
   password: Scalars['String'];
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
@@ -1098,9 +1105,10 @@ export type RegisterByEmailInput = {
   forceLogin?: Maybe<Scalars['Boolean']>;
 };
 
-export type RegisterByPhonePasswordInput = {
-  phone: Scalars['phone_String_NotNull_pattern_130911457911503591166170358118091198911d8'];
-  password: Scalars['String'];
+export type RegisterByPhoneCodeInput = {
+  phone: Scalars['String'];
+  code: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
 };
@@ -2294,12 +2302,12 @@ export type RegisterByEmailResponse = {
   }>;
 };
 
-export type RegisterByPhonePasswordVariables = Exact<{
-  input: RegisterByPhonePasswordInput;
+export type RegisterByPhoneCodeVariables = Exact<{
+  input: RegisterByPhoneCodeInput;
 }>;
 
-export type RegisterByPhonePasswordResponse = {
-  registerByPhonePassword?: Maybe<{
+export type RegisterByPhoneCodeResponse = {
+  registerByPhoneCode?: Maybe<{
     id: string;
     arn: string;
     userPoolId: string;
@@ -2978,6 +2986,24 @@ export type UpdateUserpoolResponse = {
       phoneEnabled?: Maybe<boolean>;
       emailEnabled?: Maybe<boolean>;
       usernameEnabled?: Maybe<boolean>;
+    }>;
+  };
+};
+
+export type AddUserToGroupVariables = Exact<{
+  userId?: Maybe<Scalars['String']>;
+  groupId?: Maybe<Scalars['String']>;
+}>;
+
+export type AddUserToGroupResponse = {
+  addUserToGroup: {
+    totalCount: number;
+    list: Array<{
+      code: string;
+      name: string;
+      description?: Maybe<string>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
     }>;
   };
 };
@@ -4855,9 +4881,9 @@ export const RegisterByEmailDocument = `
   }
 }
     `;
-export const RegisterByPhonePasswordDocument = `
-    mutation registerByPhonePassword($input: RegisterByPhonePasswordInput!) {
-  registerByPhonePassword(input: $input) {
+export const RegisterByPhoneCodeDocument = `
+    mutation registerByPhoneCode($input: RegisterByPhoneCodeInput!) {
+  registerByPhoneCode(input: $input) {
     id
     arn
     userPoolId
@@ -5450,6 +5476,20 @@ export const UpdateUserpoolDocument = `
       phoneEnabled
       emailEnabled
       usernameEnabled
+    }
+  }
+}
+    `;
+export const AddUserToGroupDocument = `
+    query addUserToGroup($userId: String, $groupId: String) {
+  addUserToGroup(userId: $userId, groupId: $groupId) {
+    totalCount
+    list {
+      code
+      name
+      description
+      createdAt
+      updatedAt
     }
   }
 }

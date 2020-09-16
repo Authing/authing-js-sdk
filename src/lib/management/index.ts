@@ -5,7 +5,7 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserPoolManagementClient } from './UserpoolManagementClient';
 import { UsersManagementClient } from './UsersManagementClient';
-import { isDomainAvaliable, sendEmail } from '../graphqlapi';
+import { isDomainAvaliable, sendEmail, userExists } from '../graphqlapi';
 import { EmailScene } from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
@@ -128,5 +128,18 @@ export class ManagementClient {
     } catch (error) {
       return null;
     }
+  }
+
+  async userExists(options: { username: string }) {
+    const { username } = options;
+    const { userExist } = await userExists(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        userPoolId: this.options.userPoolId,
+        username
+      }
+    );
+    return userExist;
   }
 }

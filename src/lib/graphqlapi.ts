@@ -70,7 +70,10 @@ import {
   InterConnectionsVariables,
   PasswordLessForceLogin,
   PasswordLessForceLoginDocument,
-  PasswordLessForceLoginVariables
+  PasswordLessForceLoginVariables,
+  UserExistVariables,
+  UserExist,
+  UserExistDocument
 } from '../types/graphql.v1';
 import { GraphqlClient } from './common/GraphqlClient';
 import { ManagementTokenProvider } from './management/ManagementTokenProvider';
@@ -201,7 +204,10 @@ import {
   ChildrenNodesDocument,
   RefreshTokenVariables,
   RefreshTokenDocument,
-  RefreshTokenResponse
+  RefreshTokenResponse,
+  AddUserToGroupDocument,
+  AddUserToGroupResponse,
+  AddUserToGroupVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1148,6 +1154,34 @@ export const refreshToken = async (
   variables: RefreshTokenVariables
 ): Promise<RefreshTokenResponse> => {
   const query = RefreshTokenDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const addUserToGroup = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: AddUserToGroupVariables
+): Promise<AddUserToGroupResponse> => {
+  const query = AddUserToGroupDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const userExists = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UserExistVariables
+): Promise<UserExist> => {
+  const query = UserExistDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
