@@ -10,15 +10,20 @@ import {
   registerByEmail,
   registerByUsername,
   sendEmail,
-  registerByPhoneCode
+  registerByPhoneCode,
+  updatePassword,
+  updatePhone,
+  updateEmail
 } from './../graphqlapi';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
 import {
+  CommonMessage,
   EmailScene,
   RefreshToken,
   RegisterProfile,
-  UpdateUserInput
+  UpdateUserInput,
+  User
 } from '../../types/graphql.v2';
 import { encrypt } from '../utils';
 import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
@@ -259,7 +264,7 @@ export class AuthenticationClient {
    * @param scene: 发送场景
    *
    */
-  async sendEmail(email: string, scene: EmailScene) {
+  async sendEmail(email: string, scene: EmailScene): Promise<CommonMessage> {
     const { sendEmail: data } = await sendEmail(
       this.graphqlClientV2,
       this.tokenProvider,
@@ -268,7 +273,11 @@ export class AuthenticationClient {
     return data;
   }
 
-  async resetPhonePassword(phone: string, code: string, newPassword: string) {
+  async resetPhonePassword(
+    phone: string,
+    code: string,
+    newPassword: string
+  ): Promise<CommonMessage> {
     newPassword = encrypt(newPassword, this.options.encrptionPublicKey);
     const { resetPassword: data } = await resetPassword(
       this.graphqlClientV2,
@@ -282,7 +291,11 @@ export class AuthenticationClient {
     return data;
   }
 
-  async resetEmailPassword(email: string, code: string, newPassword: string) {
+  async resetEmailPassword(
+    email: string,
+    code: string,
+    newPassword: string
+  ): Promise<CommonMessage> {
     newPassword = encrypt(newPassword, this.options.encrptionPublicKey);
     const { resetPassword: data } = await resetPassword(
       this.graphqlClientV2,
@@ -296,7 +309,7 @@ export class AuthenticationClient {
     return data;
   }
 
-  async updateUser(id: string, updates: UpdateUserInput) {
+  async updateUser(id: string, updates: UpdateUserInput): Promise<User> {
     if (updates && updates.password) {
       delete updates.password;
     }
@@ -307,6 +320,83 @@ export class AuthenticationClient {
       {
         id,
         input: updates
+      }
+    );
+    return user;
+  }
+
+  /**
+   * 更新用户密码
+   * @param newPassword 新密码
+   * @param oldPassword 旧密码
+   */
+  async updatePassword(
+    newPassword: string,
+    oldPassword?: string
+  ): Promise<User> {
+    newPassword =
+      newPassword && encrypt(newPassword, this.options.encrptionPublicKey);
+    oldPassword =
+      oldPassword && encrypt(oldPassword, this.options.encrptionPublicKey);
+
+    const { updatePassword: user } = await updatePassword(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        newPassword,
+        oldPassword
+      }
+    );
+    return user;
+  }
+
+  /**
+   * 更新用户手机号
+   * @param phone 新手机号
+   * @param phoneCode 新手机号的验证码
+   * @param oldPhone 旧手机号
+   * @param oldPhoneCode 旧手机号的验证码
+   */
+  async updatePhone(
+    phone: string,
+    phoneCode: string,
+    oldPhone?: string,
+    oldPhoneCode?: string
+  ): Promise<User> {
+    const { updatePhone: user } = await updatePhone(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        phone,
+        phoneCode,
+        oldPhone,
+        oldPhoneCode
+      }
+    );
+    return user;
+  }
+
+  /**
+   * 更新用户邮箱
+   * @param email 新邮箱
+   * @param emailCode 新邮箱的验证码
+   * @param oldEmail 旧邮箱
+   * @param oldEmailCode 旧邮箱的验证码
+   */
+  async updateEmail(
+    email: string,
+    emailCode: string,
+    oldEmail?: string,
+    oldEmailCode?: string
+  ): Promise<User> {
+    const { updateEmail: user } = await updateEmail(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        email,
+        emailCode,
+        oldEmail,
+        oldEmailCode
       }
     );
     return user;
