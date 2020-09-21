@@ -1002,7 +1002,9 @@ export enum EmailScene {
   /** 发送重置密码邮件，邮件中包含验证码 */
   ResetPassword = 'RESET_PASSWORD',
   /** 发送短信验证邮件 */
-  VerifyEmail = 'VERIFY_EMAIL'
+  VerifyEmail = 'VERIFY_EMAIL',
+  /** 发送修改邮箱邮件，邮件中包含验证码 */
+  ChangeEmail = 'CHANGE_EMAIL'
 }
 
 export type CommonMessage = {
