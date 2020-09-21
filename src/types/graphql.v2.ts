@@ -516,6 +516,7 @@ export type PaginatedRoles = {
 export type UserPool = {
   id: Scalars['String'];
   name: Scalars['String'];
+  domain: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   secret: Scalars['String'];
   userpoolTypes?: Maybe<Array<UserPoolType>>;
@@ -931,6 +932,7 @@ export type MutationDeleteUsersArgs = {
 
 export type MutationCreateUserpoolArgs = {
   name: Scalars['String'];
+  domain: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   logo?: Maybe<Scalars['String']>;
   userpoolTypes?: Maybe<Array<Scalars['String']>>;
@@ -1240,6 +1242,7 @@ export type UpdateUserInput = {
 export type UpdateUserpoolInput = {
   name?: Maybe<Scalars['String']>;
   logo?: Maybe<Scalars['String']>;
+  domain?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   userpoolTypes?: Maybe<Array<Scalars['String']>>;
   emailVerifiedDefault?: Maybe<Scalars['Boolean']>;
@@ -1709,6 +1712,7 @@ export type CreateUserResponse = {
 
 export type CreateUserpoolVariables = Exact<{
   name: Scalars['String'];
+  domain: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   logo?: Maybe<Scalars['String']>;
   userpoolTypes?: Maybe<Array<Scalars['String']>>;
@@ -1718,6 +1722,7 @@ export type CreateUserpoolResponse = {
   createUserpool: {
     id: string;
     name: string;
+    domain: string;
     description?: Maybe<string>;
     secret: string;
     logo: string;
@@ -2939,6 +2944,7 @@ export type UpdateUserpoolResponse = {
   updateUserpool: {
     id: string;
     name: string;
+    domain: string;
     description?: Maybe<string>;
     secret: string;
     logo: string;
@@ -3841,6 +3847,7 @@ export type UserpoolResponse = {
   userpool: {
     id: string;
     name: string;
+    domain: string;
     description?: Maybe<string>;
     secret: string;
     logo: string;
@@ -3916,6 +3923,7 @@ export type UserpoolsResponse = {
     list: Array<{
       id: string;
       name: string;
+      domain: string;
       description?: Maybe<string>;
       secret: string;
       logo: string;
@@ -4341,10 +4349,11 @@ export const CreateUserDocument = `
 }
     `;
 export const CreateUserpoolDocument = `
-    mutation createUserpool($name: String!, $description: String, $logo: String, $userpoolTypes: [String!]) {
-  createUserpool(name: $name, description: $description, logo: $logo, userpoolTypes: $userpoolTypes) {
+    mutation createUserpool($name: String!, $domain: String!, $description: String, $logo: String, $userpoolTypes: [String!]) {
+  createUserpool(name: $name, domain: $domain, description: $description, logo: $logo, userpoolTypes: $userpoolTypes) {
     id
     name
+    domain
     description
     secret
     userpoolTypes {
@@ -5427,6 +5436,7 @@ export const UpdateUserpoolDocument = `
   updateUserpool(input: $input) {
     id
     name
+    domain
     description
     secret
     userpoolTypes {
@@ -6227,6 +6237,7 @@ export const UserpoolDocument = `
   userpool {
     id
     name
+    domain
     description
     secret
     userpoolTypes {
@@ -6298,6 +6309,7 @@ export const UserpoolsDocument = `
     list {
       id
       name
+      domain
       description
       secret
       logo
