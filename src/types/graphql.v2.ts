@@ -689,6 +689,10 @@ export type Mutation = {
   updateUser: User;
   /** 修改用户密码，此接口需要验证原始密码，管理员直接修改请使用 **updateUser** 接口。 */
   updatePassword: User;
+  /** 绑定手机号，调用此接口需要当前用户未绑定手机号 */
+  bindPhone: User;
+  /** 解绑定手机号，调用此接口需要当前用户已绑定手机号并且绑定了其他登录方式 */
+  unbindPhone: User;
   /** 修改手机号。此接口需要验证手机号验证码，管理员直接修改请使用 **updateUser** 接口。 */
   updatePhone: User;
   /** 修改邮箱。此接口需要验证邮箱验证码，管理员直接修改请使用 updateUser 接口。 */
@@ -906,6 +910,11 @@ export type MutationUpdateUserArgs = {
 export type MutationUpdatePasswordArgs = {
   newPassword: Scalars['String'];
   oldPassword?: Maybe<Scalars['String']>;
+};
+
+export type MutationBindPhoneArgs = {
+  phone: Scalars['String'];
+  phoneCode: Scalars['String'];
 };
 
 export type MutationUpdatePhoneArgs = {
@@ -1471,6 +1480,76 @@ export type AssignRoleResponse = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
     }>;
+  };
+};
+
+export type BindPhoneVariables = Exact<{
+  phone: Scalars['String'];
+  phoneCode: Scalars['String'];
+}>;
+
+export type BindPhoneResponse = {
+  bindPhone: {
+    id: string;
+    arn: string;
+    userPoolId: string;
+    username?: Maybe<string>;
+    email?: Maybe<string>;
+    emailVerified?: Maybe<boolean>;
+    phone?: Maybe<string>;
+    phoneVerified?: Maybe<boolean>;
+    unionid?: Maybe<string>;
+    openid?: Maybe<string>;
+    nickname?: Maybe<string>;
+    registerSource: Array<string>;
+    photo?: Maybe<string>;
+    password?: Maybe<string>;
+    oauth?: Maybe<string>;
+    token?: Maybe<string>;
+    tokenExpiredAt?: Maybe<string>;
+    loginsCount?: Maybe<number>;
+    lastLogin?: Maybe<string>;
+    lastIP?: Maybe<string>;
+    signedUp?: Maybe<string>;
+    blocked?: Maybe<boolean>;
+    isDeleted?: Maybe<boolean>;
+    device?: Maybe<string>;
+    browser?: Maybe<string>;
+    company?: Maybe<string>;
+    name?: Maybe<string>;
+    givenName?: Maybe<string>;
+    familyName?: Maybe<string>;
+    middleName?: Maybe<string>;
+    profile?: Maybe<string>;
+    preferredUsername?: Maybe<string>;
+    website?: Maybe<string>;
+    gender?: Maybe<string>;
+    birthdate?: Maybe<string>;
+    zoneinfo?: Maybe<string>;
+    locale?: Maybe<string>;
+    address?: Maybe<string>;
+    formatted?: Maybe<string>;
+    streetAddress?: Maybe<string>;
+    locality?: Maybe<string>;
+    region?: Maybe<string>;
+    postalCode?: Maybe<string>;
+    country?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   };
 };
 
@@ -2584,6 +2663,73 @@ export type SendEmailVariables = Exact<{
 
 export type SendEmailResponse = {
   sendEmail: { message?: Maybe<string>; code?: Maybe<number> };
+};
+
+export type UnbindPhoneVariables = Exact<{ [key: string]: never }>;
+
+export type UnbindPhoneResponse = {
+  unbindPhone: {
+    id: string;
+    arn: string;
+    userPoolId: string;
+    username?: Maybe<string>;
+    email?: Maybe<string>;
+    emailVerified?: Maybe<boolean>;
+    phone?: Maybe<string>;
+    phoneVerified?: Maybe<boolean>;
+    unionid?: Maybe<string>;
+    openid?: Maybe<string>;
+    nickname?: Maybe<string>;
+    registerSource: Array<string>;
+    photo?: Maybe<string>;
+    password?: Maybe<string>;
+    oauth?: Maybe<string>;
+    token?: Maybe<string>;
+    tokenExpiredAt?: Maybe<string>;
+    loginsCount?: Maybe<number>;
+    lastLogin?: Maybe<string>;
+    lastIP?: Maybe<string>;
+    signedUp?: Maybe<string>;
+    blocked?: Maybe<boolean>;
+    isDeleted?: Maybe<boolean>;
+    device?: Maybe<string>;
+    browser?: Maybe<string>;
+    company?: Maybe<string>;
+    name?: Maybe<string>;
+    givenName?: Maybe<string>;
+    familyName?: Maybe<string>;
+    middleName?: Maybe<string>;
+    profile?: Maybe<string>;
+    preferredUsername?: Maybe<string>;
+    website?: Maybe<string>;
+    gender?: Maybe<string>;
+    birthdate?: Maybe<string>;
+    zoneinfo?: Maybe<string>;
+    locale?: Maybe<string>;
+    address?: Maybe<string>;
+    formatted?: Maybe<string>;
+    streetAddress?: Maybe<string>;
+    locality?: Maybe<string>;
+    region?: Maybe<string>;
+    postalCode?: Maybe<string>;
+    country?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
+  };
 };
 
 export type UpdateEmailVariables = Exact<{
@@ -4152,6 +4298,68 @@ export const AssignRoleDocument = `
   }
 }
     `;
+export const BindPhoneDocument = `
+    mutation bindPhone($phone: String!, $phoneCode: String!) {
+  bindPhone(phone: $phone, phoneCode: $phoneCode) {
+    id
+    arn
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    createdAt
+    updatedAt
+    customData
+  }
+}
+    `;
 export const ChangeMfaDocument = `
     mutation changeMfa($enable: Boolean, $id: String, $userId: String, $userPoolId: String, $refresh: Boolean) {
   changeMfa(enable: $enable, id: $id, userId: $userId, userPoolId: $userPoolId, refresh: $refresh) {
@@ -5128,6 +5336,68 @@ export const SendEmailDocument = `
   sendEmail(email: $email, scene: $scene) {
     message
     code
+  }
+}
+    `;
+export const UnbindPhoneDocument = `
+    mutation unbindPhone {
+  unbindPhone {
+    id
+    arn
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    createdAt
+    updatedAt
+    customData
   }
 }
     `;

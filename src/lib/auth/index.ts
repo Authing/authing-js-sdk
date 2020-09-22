@@ -13,7 +13,9 @@ import {
   registerByPhoneCode,
   updatePassword,
   updatePhone,
-  updateEmail
+  updateEmail,
+  bindPhone,
+  unbindPhone
 } from './../graphqlapi';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
@@ -409,5 +411,26 @@ export class AuthenticationClient {
       {}
     );
     return data;
+  }
+
+  async bindPhone(phone: string, phoneCode: string): Promise<User> {
+    const { bindPhone: user } = await bindPhone(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        phone,
+        phoneCode
+      }
+    );
+    return user;
+  }
+
+  async unbindPhone(): Promise<User> {
+    const { unbindPhone: user } = await unbindPhone(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {}
+    );
+    return user;
   }
 }

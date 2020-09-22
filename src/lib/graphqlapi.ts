@@ -222,7 +222,13 @@ import {
   UpdatePhoneDocument,
   UpdateEmailVariables,
   UpdateEmailResponse,
-  UpdateEmailDocument
+  UpdateEmailDocument,
+  BindPhoneVariables,
+  BindPhoneResponse,
+  BindPhoneDocument,
+  UnbindPhoneVariables,
+  UnbindPhoneResponse,
+  UnbindPhoneDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1267,6 +1273,34 @@ export const updateEmail = async (
   variables: UpdateEmailVariables
 ): Promise<UpdateEmailResponse> => {
   const query = UpdateEmailDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const bindPhone = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: BindPhoneVariables
+): Promise<BindPhoneResponse> => {
+  const query = BindPhoneDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const unbindPhone = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UnbindPhoneVariables
+): Promise<UnbindPhoneResponse> => {
+  const query = UnbindPhoneDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
