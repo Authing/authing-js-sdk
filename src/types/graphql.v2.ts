@@ -494,6 +494,8 @@ export enum PolicyEffect {
 export type Role = {
   /** 唯一标志 code */
   code: Scalars['String'];
+  /** 资源描述符 arn */
+  arn: Scalars['String'];
   /** 角色描述 */
   description?: Maybe<Scalars['String']>;
   /** 是否为系统内建，系统内建的角色不能删除 */
@@ -689,6 +691,10 @@ export type Mutation = {
   updateUser: User;
   /** 修改用户密码，此接口需要验证原始密码，管理员直接修改请使用 **updateUser** 接口。 */
   updatePassword: User;
+  /** 绑定手机号，调用此接口需要当前用户未绑定手机号 */
+  bindPhone: User;
+  /** 解绑定手机号，调用此接口需要当前用户已绑定手机号并且绑定了其他登录方式 */
+  unbindPhone: User;
   /** 修改手机号。此接口需要验证手机号验证码，管理员直接修改请使用 **updateUser** 接口。 */
   updatePhone: User;
   /** 修改邮箱。此接口需要验证邮箱验证码，管理员直接修改请使用 updateUser 接口。 */
@@ -908,6 +914,11 @@ export type MutationUpdatePasswordArgs = {
   oldPassword?: Maybe<Scalars['String']>;
 };
 
+export type MutationBindPhoneArgs = {
+  phone: Scalars['String'];
+  phoneCode: Scalars['String'];
+};
+
 export type MutationUpdatePhoneArgs = {
   phone: Scalars['String'];
   phoneCode: Scalars['String'];
@@ -1002,7 +1013,9 @@ export enum EmailScene {
   /** 发送重置密码邮件，邮件中包含验证码 */
   ResetPassword = 'RESET_PASSWORD',
   /** 发送短信验证邮件 */
-  VerifyEmail = 'VERIFY_EMAIL'
+  VerifyEmail = 'VERIFY_EMAIL',
+  /** 发送修改邮箱邮件，邮件中包含验证码 */
+  ChangeEmail = 'CHANGE_EMAIL'
 }
 
 export type CommonMessage = {
@@ -1457,6 +1470,7 @@ export type AssignRoleVariables = Exact<{
 export type AssignRoleResponse = {
   assignRole: {
     code: string;
+    arn: string;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
@@ -1469,6 +1483,76 @@ export type AssignRoleResponse = {
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
     }>;
+  };
+};
+
+export type BindPhoneVariables = Exact<{
+  phone: Scalars['String'];
+  phoneCode: Scalars['String'];
+}>;
+
+export type BindPhoneResponse = {
+  bindPhone: {
+    id: string;
+    arn: string;
+    userPoolId: string;
+    username?: Maybe<string>;
+    email?: Maybe<string>;
+    emailVerified?: Maybe<boolean>;
+    phone?: Maybe<string>;
+    phoneVerified?: Maybe<boolean>;
+    unionid?: Maybe<string>;
+    openid?: Maybe<string>;
+    nickname?: Maybe<string>;
+    registerSource: Array<string>;
+    photo?: Maybe<string>;
+    password?: Maybe<string>;
+    oauth?: Maybe<string>;
+    token?: Maybe<string>;
+    tokenExpiredAt?: Maybe<string>;
+    loginsCount?: Maybe<number>;
+    lastLogin?: Maybe<string>;
+    lastIP?: Maybe<string>;
+    signedUp?: Maybe<string>;
+    blocked?: Maybe<boolean>;
+    isDeleted?: Maybe<boolean>;
+    device?: Maybe<string>;
+    browser?: Maybe<string>;
+    company?: Maybe<string>;
+    name?: Maybe<string>;
+    givenName?: Maybe<string>;
+    familyName?: Maybe<string>;
+    middleName?: Maybe<string>;
+    profile?: Maybe<string>;
+    preferredUsername?: Maybe<string>;
+    website?: Maybe<string>;
+    gender?: Maybe<string>;
+    birthdate?: Maybe<string>;
+    zoneinfo?: Maybe<string>;
+    locale?: Maybe<string>;
+    address?: Maybe<string>;
+    formatted?: Maybe<string>;
+    streetAddress?: Maybe<string>;
+    locality?: Maybe<string>;
+    region?: Maybe<string>;
+    postalCode?: Maybe<string>;
+    country?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
   };
 };
 
@@ -1592,6 +1676,7 @@ export type CreateRoleVariables = Exact<{
 export type CreateRoleResponse = {
   createRole: {
     code: string;
+    arn: string;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
@@ -2584,6 +2669,73 @@ export type SendEmailResponse = {
   sendEmail: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
+export type UnbindPhoneVariables = Exact<{ [key: string]: never }>;
+
+export type UnbindPhoneResponse = {
+  unbindPhone: {
+    id: string;
+    arn: string;
+    userPoolId: string;
+    username?: Maybe<string>;
+    email?: Maybe<string>;
+    emailVerified?: Maybe<boolean>;
+    phone?: Maybe<string>;
+    phoneVerified?: Maybe<boolean>;
+    unionid?: Maybe<string>;
+    openid?: Maybe<string>;
+    nickname?: Maybe<string>;
+    registerSource: Array<string>;
+    photo?: Maybe<string>;
+    password?: Maybe<string>;
+    oauth?: Maybe<string>;
+    token?: Maybe<string>;
+    tokenExpiredAt?: Maybe<string>;
+    loginsCount?: Maybe<number>;
+    lastLogin?: Maybe<string>;
+    lastIP?: Maybe<string>;
+    signedUp?: Maybe<string>;
+    blocked?: Maybe<boolean>;
+    isDeleted?: Maybe<boolean>;
+    device?: Maybe<string>;
+    browser?: Maybe<string>;
+    company?: Maybe<string>;
+    name?: Maybe<string>;
+    givenName?: Maybe<string>;
+    familyName?: Maybe<string>;
+    middleName?: Maybe<string>;
+    profile?: Maybe<string>;
+    preferredUsername?: Maybe<string>;
+    website?: Maybe<string>;
+    gender?: Maybe<string>;
+    birthdate?: Maybe<string>;
+    zoneinfo?: Maybe<string>;
+    locale?: Maybe<string>;
+    address?: Maybe<string>;
+    formatted?: Maybe<string>;
+    streetAddress?: Maybe<string>;
+    locality?: Maybe<string>;
+    region?: Maybe<string>;
+    postalCode?: Maybe<string>;
+    country?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
+  };
+};
+
 export type UpdateEmailVariables = Exact<{
   email: Scalars['String'];
   emailCode: Scalars['String'];
@@ -3471,6 +3623,7 @@ export type RoleVariables = Exact<{
 export type RoleResponse = {
   role: {
     code: string;
+    arn: string;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
@@ -3492,6 +3645,7 @@ export type RoleWithUsersVariables = Exact<{
 export type RoleWithUsersResponse = {
   role: {
     code: string;
+    arn: string;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
@@ -3568,6 +3722,7 @@ export type RolesResponse = {
     totalCount: number;
     list: Array<{
       code: string;
+      arn: string;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -4133,6 +4288,7 @@ export const AssignRoleDocument = `
     mutation assignRole($code: String!, $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
   assignRole(code: $code, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
     code
+    arn
     description
     isSystem
     createdAt
@@ -4147,6 +4303,68 @@ export const AssignRoleDocument = `
       createdAt
       updatedAt
     }
+  }
+}
+    `;
+export const BindPhoneDocument = `
+    mutation bindPhone($phone: String!, $phoneCode: String!) {
+  bindPhone(phone: $phone, phoneCode: $phoneCode) {
+    id
+    arn
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    createdAt
+    updatedAt
+    customData
   }
 }
     `;
@@ -4241,6 +4459,7 @@ export const CreateRoleDocument = `
     mutation createRole($code: String!, $description: String, $parent: String) {
   createRole(code: $code, description: $description, parent: $parent) {
     code
+    arn
     description
     isSystem
     createdAt
@@ -5129,6 +5348,68 @@ export const SendEmailDocument = `
   }
 }
     `;
+export const UnbindPhoneDocument = `
+    mutation unbindPhone {
+  unbindPhone {
+    id
+    arn
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    createdAt
+    updatedAt
+    customData
+  }
+}
+    `;
 export const UpdateEmailDocument = `
     mutation updateEmail($email: String!, $emailCode: String!, $oldEmail: String, $oldEmailCode: String) {
   updateEmail(email: $email, emailCode: $emailCode, oldEmail: $oldEmail, oldEmailCode: $oldEmailCode) {
@@ -5894,6 +6175,7 @@ export const RoleDocument = `
     query role($code: String!) {
   role(code: $code) {
     code
+    arn
     description
     isSystem
     createdAt
@@ -5912,6 +6194,7 @@ export const RoleWithUsersDocument = `
     query roleWithUsers($code: String!) {
   role(code: $code) {
     code
+    arn
     description
     isSystem
     createdAt
@@ -5982,6 +6265,7 @@ export const RolesDocument = `
     totalCount
     list {
       code
+      arn
       description
       isSystem
       createdAt
