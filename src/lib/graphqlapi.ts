@@ -213,7 +213,22 @@ import {
   AddUserToGroupVariables,
   RegisterByPhoneCodeResponse,
   RegisterByPhoneCodeDocument,
-  RegisterByPhoneCodeVariables
+  RegisterByPhoneCodeVariables,
+  UpdatePasswordVariables,
+  UpdatePasswordResponse,
+  UpdatePasswordDocument,
+  UpdatePhoneVariables,
+  UpdatePhoneResponse,
+  UpdatePhoneDocument,
+  UpdateEmailVariables,
+  UpdateEmailResponse,
+  UpdateEmailDocument,
+  BindPhoneVariables,
+  BindPhoneResponse,
+  BindPhoneDocument,
+  UnbindPhoneVariables,
+  UnbindPhoneResponse,
+  UnbindPhoneDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1216,6 +1231,76 @@ export const userPermissionList = async (
   variables: UserPermissionListVariables
 ): Promise<UserPermissionList> => {
   const query = UserPermissionListDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const updatePassword = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UpdatePasswordVariables
+): Promise<UpdatePasswordResponse> => {
+  const query = UpdatePasswordDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const updatePhone = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UpdatePhoneVariables
+): Promise<UpdatePhoneResponse> => {
+  const query = UpdatePhoneDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const updateEmail = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UpdateEmailVariables
+): Promise<UpdateEmailResponse> => {
+  const query = UpdateEmailDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const bindPhone = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: BindPhoneVariables
+): Promise<BindPhoneResponse> => {
+  const query = BindPhoneDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const unbindPhone = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UnbindPhoneVariables
+): Promise<UnbindPhoneResponse> => {
+  const query = UnbindPhoneDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
