@@ -457,4 +457,10 @@ export class AuthenticationClient {
     );
     return user;
   }
+
+  /**
+   * @description 验证 token 是否有效
+   *
+   */
+  async verifyToken() {}
 }

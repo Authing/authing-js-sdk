@@ -134,3 +134,13 @@ test('修改用户资料 # 不能直接修改 openid', async t => {
   }
   t.assert(failed === true);
 });
+
+test('刷新用户 token', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.registerByUsername(username, password, null, {
+    forceLogin: true
+  });
+  const data = await authing.refreshToken();
+  t.assert(data);
+});
