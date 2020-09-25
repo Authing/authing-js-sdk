@@ -53,7 +53,7 @@ export type Query = {
   role: Role;
   /** 获取角色列表 */
   roles: PaginatedRoles;
-  user: User;
+  user?: Maybe<User>;
   userBatch: Array<User>;
   users: PaginatedUsers;
   searchUser: PaginatedUsers;
@@ -3252,7 +3252,7 @@ export type GetUserRolesVariables = Exact<{
 }>;
 
 export type GetUserRolesResponse = {
-  user: {
+  user?: Maybe<{
     roles?: Maybe<{
       totalCount: number;
       list: Array<{
@@ -3271,7 +3271,7 @@ export type GetUserRolesResponse = {
         }>;
       }>;
     }>;
-  };
+  }>;
 };
 
 export type GroupsVariables = Exact<{
@@ -3899,7 +3899,7 @@ export type UserVariables = Exact<{
 }>;
 
 export type UserResponse = {
-  user: {
+  user?: Maybe<{
     id: string;
     arn: string;
     userPoolId: string;
@@ -3960,7 +3960,7 @@ export type UserResponse = {
         }>
       >
     >;
-  };
+  }>;
 };
 
 export type UserBatchVariables = Exact<{

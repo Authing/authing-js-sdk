@@ -73,3 +73,13 @@ test('获取用户角色列表', async t => {
   t.assert(roles.totalCount === 1);
   t.assert(roles.list[0].code === role.code);
 });
+
+test('删除用户', async t => {
+  const user = await management.users.create({
+    username: generateRandomString(),
+    password: '123456!'
+  });
+  await management.users.delete(user.id);
+  const user2 = await management.users.get(user.id);
+  t.assert(user2 === null);
+});
