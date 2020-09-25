@@ -70,7 +70,6 @@ export class ManagementClient {
     this.httpClient = new HttpClient(this.options, this.tokenProvider);
     this.users = new UsersManagementClient(
       this.options,
-      this.graphqlClient,
       this.graphqlClientV2,
       this.tokenProvider
     );

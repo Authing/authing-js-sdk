@@ -47,25 +47,13 @@ test('用户名注册', async t => {
   t.assert(user);
 });
 
-test('用户名注册 # 用户名长度不能超过 20', async t => {
-  const username = generateRandomString(21);
-  const password = generateRandomString();
-  let failed = false;
-  try {
-    await authing.registerByUsername(username, password);
-  } catch (error) {
-    failed = true;
-  }
-  t.assert(failed);
-});
-
 test.skip('发送短信验证码', async t => {
   const phone = '17670416754';
   const { code } = await authing.sendSmsCode(phone);
   t.assert(code === 200);
 });
 
-test('发送重置密码邮件', async t => {
+test.skip('发送重置密码邮件', async t => {
   const email = 'cj@authing.cn';
   const { code } = await authing.sendEmail(email, EmailScene.ResetPassword);
   t.assert(code === 200);

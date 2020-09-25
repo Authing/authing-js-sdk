@@ -2,20 +2,18 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { encrypt } from './../utils';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
-import { UserRegisterInput } from '../../types/graphql.v1';
 import {
   deleteUser,
   deleteUsers,
   user,
   users,
-  passwordLessForceLogin,
-  createUserWithoutAuthentication,
   getRolesOfUser,
   getGroupsOfUser,
   updateUser,
   searchUser,
   createUser,
-  refreshToken
+  refreshToken,
+  userBatch
 } from '../graphqlapi';
 import {
   User,
@@ -26,18 +24,15 @@ import {
 
 export class UsersManagementClient {
   options: ManagementClientOptions;
-  graphqlClient: GraphqlClient;
   graphqlClientV2: GraphqlClient;
   tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
-    graphqlClient: GraphqlClient,
     graphqlClientV2: GraphqlClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
-    this.graphqlClient = graphqlClient;
     this.graphqlClientV2 = graphqlClientV2;
     this.tokenProvider = tokenProvider;
   }
@@ -91,6 +86,21 @@ export class UsersManagementClient {
       this.tokenProvider,
       {
         id: userId
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @description 通过 ID 批量查询用户
+   *
+   */
+  async batch(ids: string[]) {
+    const { userBatch: data } = await userBatch(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        ids
       }
     );
     return data;
@@ -160,45 +170,6 @@ export class UsersManagementClient {
       }
     );
     return user;
-  }
-
-  /**
-   * 管理员让用户强制登录，无需检测任何账号密码、验证码
-   *
-   * @memberof UsersManagementClient
-   */
-  async passwordLessForceLogin(userId: string) {
-    const res = await passwordLessForceLogin(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        userPoolId: this.options.userPoolId,
-        userId
-      }
-    );
-    return res.passwordLessForceLogin;
-  }
-
-  /**
-   *
-   *
-   * @memberof UsersManagementClient
-   */
-  async createUserWithoutAuthentication(
-    userInfo: UserRegisterInput,
-    forceLogin?: boolean
-  ) {
-    forceLogin = forceLogin || false;
-    const res = await createUserWithoutAuthentication(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        userPoolId: this.options.userPoolId,
-        userInfo,
-        forceLogin
-      }
-    );
-    return res.createUserWithoutAuthentication;
   }
 
   /**

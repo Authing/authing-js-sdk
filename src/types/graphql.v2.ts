@@ -54,7 +54,7 @@ export type Query = {
   /** 获取角色列表 */
   roles: PaginatedRoles;
   user: User;
-  userBatch: PaginatedUsers;
+  userBatch: Array<User>;
   users: PaginatedUsers;
   searchUser: PaginatedUsers;
   /** 查询用户池详情 */
@@ -3942,58 +3942,68 @@ export type UserBatchVariables = Exact<{
 }>;
 
 export type UserBatchResponse = {
-  userBatch: {
-    totalCount: number;
-    list: Array<{
-      id: string;
-      arn: string;
-      userPoolId: string;
-      username?: Maybe<string>;
-      email?: Maybe<string>;
-      emailVerified?: Maybe<boolean>;
-      phone?: Maybe<string>;
-      phoneVerified?: Maybe<boolean>;
-      unionid?: Maybe<string>;
-      openid?: Maybe<string>;
-      nickname?: Maybe<string>;
-      registerSource: Array<string>;
-      photo?: Maybe<string>;
-      password?: Maybe<string>;
-      oauth?: Maybe<string>;
-      token?: Maybe<string>;
-      tokenExpiredAt?: Maybe<string>;
-      loginsCount?: Maybe<number>;
-      lastLogin?: Maybe<string>;
-      lastIP?: Maybe<string>;
-      signedUp?: Maybe<string>;
-      blocked?: Maybe<boolean>;
-      isDeleted?: Maybe<boolean>;
-      device?: Maybe<string>;
-      browser?: Maybe<string>;
-      company?: Maybe<string>;
-      name?: Maybe<string>;
-      givenName?: Maybe<string>;
-      familyName?: Maybe<string>;
-      middleName?: Maybe<string>;
-      profile?: Maybe<string>;
-      preferredUsername?: Maybe<string>;
-      website?: Maybe<string>;
-      gender?: Maybe<string>;
-      birthdate?: Maybe<string>;
-      zoneinfo?: Maybe<string>;
-      locale?: Maybe<string>;
-      address?: Maybe<string>;
-      formatted?: Maybe<string>;
-      streetAddress?: Maybe<string>;
-      locality?: Maybe<string>;
-      region?: Maybe<string>;
-      postalCode?: Maybe<string>;
-      country?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
-    }>;
-  };
+  userBatch: Array<{
+    id: string;
+    arn: string;
+    userPoolId: string;
+    username?: Maybe<string>;
+    email?: Maybe<string>;
+    emailVerified?: Maybe<boolean>;
+    phone?: Maybe<string>;
+    phoneVerified?: Maybe<boolean>;
+    unionid?: Maybe<string>;
+    openid?: Maybe<string>;
+    nickname?: Maybe<string>;
+    registerSource: Array<string>;
+    photo?: Maybe<string>;
+    password?: Maybe<string>;
+    oauth?: Maybe<string>;
+    token?: Maybe<string>;
+    tokenExpiredAt?: Maybe<string>;
+    loginsCount?: Maybe<number>;
+    lastLogin?: Maybe<string>;
+    lastIP?: Maybe<string>;
+    signedUp?: Maybe<string>;
+    blocked?: Maybe<boolean>;
+    isDeleted?: Maybe<boolean>;
+    device?: Maybe<string>;
+    browser?: Maybe<string>;
+    company?: Maybe<string>;
+    name?: Maybe<string>;
+    givenName?: Maybe<string>;
+    familyName?: Maybe<string>;
+    middleName?: Maybe<string>;
+    profile?: Maybe<string>;
+    preferredUsername?: Maybe<string>;
+    website?: Maybe<string>;
+    gender?: Maybe<string>;
+    birthdate?: Maybe<string>;
+    zoneinfo?: Maybe<string>;
+    locale?: Maybe<string>;
+    address?: Maybe<string>;
+    formatted?: Maybe<string>;
+    streetAddress?: Maybe<string>;
+    locality?: Maybe<string>;
+    region?: Maybe<string>;
+    postalCode?: Maybe<string>;
+    country?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
+  }>;
 };
 
 export type UserpoolVariables = Exact<{ [key: string]: never }>;
@@ -6463,56 +6473,62 @@ export const UserDocument = `
 export const UserBatchDocument = `
     query userBatch($ids: [String!]!) {
   userBatch(ids: $ids) {
-    totalCount
-    list {
-      id
-      arn
-      userPoolId
-      username
-      email
-      emailVerified
-      phone
-      phoneVerified
-      unionid
+    id
+    arn
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    identities {
       openid
-      nickname
-      registerSource
-      photo
-      password
-      oauth
-      token
-      tokenExpiredAt
-      loginsCount
-      lastLogin
-      lastIP
-      signedUp
-      blocked
-      isDeleted
-      device
-      browser
-      company
-      name
-      givenName
-      familyName
-      middleName
-      profile
-      preferredUsername
-      website
-      gender
-      birthdate
-      zoneinfo
-      locale
-      address
-      formatted
-      streetAddress
-      locality
-      region
-      postalCode
-      country
-      createdAt
-      updatedAt
-      customData
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
     }
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    createdAt
+    updatedAt
+    customData
   }
 }
     `;

@@ -228,7 +228,10 @@ import {
   BindPhoneDocument,
   UnbindPhoneVariables,
   UnbindPhoneResponse,
-  UnbindPhoneDocument
+  UnbindPhoneDocument,
+  UserBatchVariables,
+  UserBatchResponse,
+  UserBatchDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1301,6 +1304,20 @@ export const unbindPhone = async (
   variables: UnbindPhoneVariables
 ): Promise<UnbindPhoneResponse> => {
   const query = UnbindPhoneDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const userBatch = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UserBatchVariables
+): Promise<UserBatchResponse> => {
+  const query = UserBatchDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
