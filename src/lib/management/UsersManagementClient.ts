@@ -7,13 +7,13 @@ import {
   deleteUsers,
   user,
   users,
-  getRolesOfUser,
   getGroupsOfUser,
   updateUser,
   searchUser,
   createUser,
   refreshToken,
-  userBatch
+  userBatch,
+  getUserRoles
 } from '../graphqlapi';
 import {
   User,
@@ -193,16 +193,12 @@ export class UsersManagementClient {
    * @description 获取用户的角色列表
    *
    */
-  async getRoles(userId: string, page: number = 1, limit: number = 10) {
-    const { roles } = await getRolesOfUser(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        userId,
-        page,
-        limit
-      }
-    );
+  async getRoles(userId: string) {
+    const {
+      user: { roles }
+    } = await getUserRoles(this.graphqlClientV2, this.tokenProvider, {
+      id: userId
+    });
     return roles;
   }
 
@@ -223,6 +219,7 @@ export class UsersManagementClient {
         ...options
       }
     );
+    // @ts-ignore
     return users;
   }
 

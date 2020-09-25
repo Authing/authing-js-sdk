@@ -13,24 +13,20 @@ import {
   updateRole,
   getGroups,
   revokeRole,
-  addUserToGroup,
-  userPermissionList
+  addUserToGroup
 } from '../graphqlapi';
 
 export class AccessControlManagementClient {
   options: ManagementClientOptions;
-  graphqlClient: GraphqlClient;
   graphqlClientV2: GraphqlClient;
   tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
-    graphqlClient: GraphqlClient,
     graphqlClientV2: GraphqlClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
-    this.graphqlClient = graphqlClient;
     this.graphqlClientV2 = graphqlClientV2;
     this.tokenProvider = tokenProvider;
   }
@@ -245,22 +241,5 @@ export class AccessControlManagementClient {
       }
     );
     return data;
-  }
-
-  async createGroup() {}
-
-  /**
-   * 获取用户权限列表
-   * @param id 用户 id
-   */
-  async userPermissionList(id: string) {
-    const { userPermissionList: list } = await userPermissionList(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        _id: id
-      }
-    );
-    return list;
   }
 }

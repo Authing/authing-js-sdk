@@ -159,7 +159,6 @@ export type QueryRoleArgs = {
 };
 
 export type QueryRolesArgs = {
-  userId?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -391,6 +390,7 @@ export type User = {
   updatedAt?: Maybe<Scalars['String']>;
   /** 自定义用户数据，是一个 JSON 序列化过后的字符串 */
   customData?: Maybe<Scalars['String']>;
+  roles?: Maybe<PaginatedRoles>;
 };
 
 export type Identity = {
@@ -401,6 +401,30 @@ export type Identity = {
   isSocial?: Maybe<Scalars['Boolean']>;
   provider?: Maybe<Scalars['String']>;
   userPoolId?: Maybe<Scalars['String']>;
+};
+
+export type PaginatedRoles = {
+  totalCount: Scalars['Int'];
+  list: Array<Role>;
+};
+
+export type Role = {
+  /** 唯一标志 code */
+  code: Scalars['String'];
+  /** 资源描述符 arn */
+  arn: Scalars['String'];
+  /** 角色描述 */
+  description?: Maybe<Scalars['String']>;
+  /** 是否为系统内建，系统内建的角色不能删除 */
+  isSystem?: Maybe<Scalars['Boolean']>;
+  /** 创建时间 */
+  createdAt?: Maybe<Scalars['String']>;
+  /** 修改时间 */
+  updatedAt?: Maybe<Scalars['String']>;
+  /** 被授予此角色的用户列表 */
+  users: PaginatedUsers;
+  /** 父角色 */
+  parent?: Maybe<Role>;
 };
 
 export type Mfa = {
@@ -490,30 +514,6 @@ export enum PolicyEffect {
   Allow = 'ALLOW',
   Deny = 'DENY'
 }
-
-export type Role = {
-  /** 唯一标志 code */
-  code: Scalars['String'];
-  /** 资源描述符 arn */
-  arn: Scalars['String'];
-  /** 角色描述 */
-  description?: Maybe<Scalars['String']>;
-  /** 是否为系统内建，系统内建的角色不能删除 */
-  isSystem?: Maybe<Scalars['Boolean']>;
-  /** 创建时间 */
-  createdAt?: Maybe<Scalars['String']>;
-  /** 修改时间 */
-  updatedAt?: Maybe<Scalars['String']>;
-  /** 被授予此角色的用户列表 */
-  users: PaginatedUsers;
-  /** 父角色 */
-  parent?: Maybe<Role>;
-};
-
-export type PaginatedRoles = {
-  totalCount: Scalars['Int'];
-  list: Array<Role>;
-};
 
 export type UserPool = {
   id: Scalars['String'];
@@ -3247,6 +3247,33 @@ export type FunctionsResponse = {
   };
 };
 
+export type GetUserRolesVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type GetUserRolesResponse = {
+  user: {
+    roles?: Maybe<{
+      totalCount: number;
+      list: Array<{
+        code: string;
+        arn: string;
+        description?: Maybe<string>;
+        isSystem?: Maybe<boolean>;
+        createdAt?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        parent?: Maybe<{
+          code: string;
+          description?: Maybe<string>;
+          isSystem?: Maybe<boolean>;
+          createdAt?: Maybe<string>;
+          updatedAt?: Maybe<string>;
+        }>;
+      }>;
+    }>;
+  };
+};
+
 export type GroupsVariables = Exact<{
   userId?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
@@ -3711,7 +3738,6 @@ export type RoleWithUsersResponse = {
 };
 
 export type RolesVariables = Exact<{
-  userId?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -5863,6 +5889,30 @@ export const FunctionsDocument = `
   }
 }
     `;
+export const GetUserRolesDocument = `
+    query getUserRoles($id: String!) {
+  user(id: $id) {
+    roles {
+      totalCount
+      list {
+        code
+        arn
+        description
+        isSystem
+        createdAt
+        updatedAt
+        parent {
+          code
+          description
+          isSystem
+          createdAt
+          updatedAt
+        }
+      }
+    }
+  }
+}
+    `;
 export const GroupsDocument = `
     query groups($userId: String, $page: Int, $limit: Int, $sortBy: SortByEnum) {
   groups(userId: $userId, page: $page, limit: $limit, sortBy: $sortBy) {
@@ -6270,8 +6320,8 @@ export const RoleWithUsersDocument = `
 }
     `;
 export const RolesDocument = `
-    query roles($userId: String, $page: Int, $limit: Int, $sortBy: SortByEnum) {
-  roles(userId: $userId, page: $page, limit: $limit, sortBy: $sortBy) {
+    query roles($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  roles(page: $page, limit: $limit, sortBy: $sortBy) {
     totalCount
     list {
       code

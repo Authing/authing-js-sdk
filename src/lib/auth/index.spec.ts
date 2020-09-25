@@ -1,5 +1,9 @@
 import { AuthenticationClient } from './index';
-import { generateRandomString, getOptionsFromEnv } from '../testing-helper';
+import {
+  generateRandomPhone,
+  generateRandomString,
+  getOptionsFromEnv
+} from '../testing-helper';
 import test from 'ava';
 import { EmailScene } from '../../types/graphql.v2';
 
@@ -47,14 +51,86 @@ test('用户名注册', async t => {
   t.assert(user);
 });
 
-test.skip('发送短信验证码', async t => {
+test.skip('发送短信验证码', async () => {
   const phone = '17670416754';
-  const { code } = await authing.sendSmsCode(phone);
-  t.assert(code === 200);
+  await authing.sendSmsCode(phone);
 });
 
 test.skip('发送重置密码邮件', async t => {
   const email = 'cj@authing.cn';
   const { code } = await authing.sendEmail(email, EmailScene.ResetPassword);
   t.assert(code === 200);
+});
+
+test('修改用户资料', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.registerByUsername(username, password, null, {
+    forceLogin: true
+  });
+  const nickname = generateRandomString();
+  const updates = await authing.updateProfile({ nickname });
+  t.assert(updates.nickname === nickname);
+});
+
+test('修改用户资料 # 不能直接修改手机号', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.registerByUsername(username, password, null, {
+    forceLogin: true
+  });
+  let failed = false;
+  try {
+    await authing.updateProfile({ phone: generateRandomPhone() });
+  } catch (error) {
+    failed = true;
+  }
+  t.assert(failed === true);
+});
+
+test('修改用户资料 # 不能直接修改邮箱', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.registerByUsername(username, password, null, {
+    forceLogin: true
+  });
+  let failed = false;
+  try {
+    await authing.updateProfile({
+      email: generateRandomString() + '@test.com'
+    });
+  } catch (error) {
+    failed = true;
+  }
+  t.assert(failed === true);
+});
+
+test('修改用户资料 # 不能直接修改 unionid', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.registerByUsername(username, password, null, {
+    forceLogin: true
+  });
+  let failed = false;
+  try {
+    await authing.updateProfile({ unionid: generateRandomString() });
+  } catch (error) {
+    failed = true;
+  }
+  t.assert(failed === true);
+});
+
+test('修改用户资料 # 不能直接修改 openid', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.registerByUsername(username, password, null, {
+    forceLogin: true
+  });
+  let failed = false;
+  try {
+    await authing.updateProfile({ openid: generateRandomString() });
+  } catch (error) {
+    failed = true;
+  }
+  t.assert(failed === true);
 });

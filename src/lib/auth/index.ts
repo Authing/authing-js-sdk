@@ -85,6 +85,14 @@ export class AuthenticationClient {
     );
   }
 
+  private checkLoggedIn() {
+    const user = this.tokenProvider.getUser();
+    if (!user) {
+      throw new Error('请先登录！');
+    }
+    return user;
+  }
+
   /**
    * @description 通过邮箱注册
    *
@@ -93,8 +101,13 @@ export class AuthenticationClient {
     email: string,
     password: string,
     profile?: RegisterProfile,
-    forceLogin?: boolean
+    options?: {
+      forceLogin?: boolean;
+    }
   ) {
+    options = options || {};
+    profile = profile || {};
+    const { forceLogin } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByEmail: user } = await registerByEmail(
       this.graphqlClientV2,
@@ -108,6 +121,7 @@ export class AuthenticationClient {
         }
       }
     );
+    this.tokenProvider.setUser(user);
     return user;
   }
 
@@ -119,8 +133,13 @@ export class AuthenticationClient {
     username: string,
     password: string,
     profile?: RegisterProfile,
-    forceLogin?: boolean
+    options?: {
+      forceLogin?: boolean;
+    }
   ) {
+    options = options || {};
+    profile = profile || {};
+    const { forceLogin } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByUsername: user } = await registerByUsername(
       this.graphqlClientV2,
@@ -134,6 +153,7 @@ export class AuthenticationClient {
         }
       }
     );
+    this.tokenProvider.setUser(user);
     return user;
   }
 
@@ -146,8 +166,13 @@ export class AuthenticationClient {
     code: string,
     password?: string,
     profile?: RegisterProfile,
-    forceLogin?: boolean
+    options?: {
+      forceLogin?: boolean;
+    }
   ) {
+    options = options || {};
+    profile = profile || {};
+    const { forceLogin } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByPhoneCode: user } = await registerByPhoneCode(
       this.graphqlClientV2,
@@ -162,6 +187,7 @@ export class AuthenticationClient {
         }
       }
     );
+    this.tokenProvider.setUser(user);
     return user;
   }
 
@@ -184,7 +210,7 @@ export class AuthenticationClient {
    */
   async sendSmsCode(phone: string): Promise<{ code: number; message: string }> {
     // TODO: 这种链接从服务器动态拉取
-    const api = `${this.options.host}/v2/api/send-smscode`;
+    const api = `${this.options.host}/api/v2/sms/send`;
     const data = await this.httpClient.request({
       method: 'POST',
       url: api,
@@ -203,8 +229,7 @@ export class AuthenticationClient {
         input: { email, password }
       }
     );
-    const { token } = user;
-    this.tokenProvider.setAccessToken(token);
+    this.tokenProvider.setUser(user);
     return user;
   }
 
@@ -217,8 +242,7 @@ export class AuthenticationClient {
         input: { username, password }
       }
     );
-    const { token } = user;
-    this.tokenProvider.setAccessToken(token);
+    this.tokenProvider.setUser(user);
     return user;
   }
 
@@ -230,8 +254,7 @@ export class AuthenticationClient {
         input: { phone, code }
       }
     );
-    const { token } = user;
-    this.tokenProvider.setAccessToken(token);
+    this.tokenProvider.setUser(user);
     return user;
   }
 
@@ -244,8 +267,7 @@ export class AuthenticationClient {
         input: { phone, password }
       }
     );
-    const { token } = user;
-    this.tokenProvider.setAccessToken(token);
+    this.tokenProvider.setUser(user);
     return user;
   }
 
@@ -311,20 +333,21 @@ export class AuthenticationClient {
     return data;
   }
 
-  async updateUser(id: string, updates: UpdateUserInput): Promise<User> {
+  async updateProfile(updates: UpdateUserInput): Promise<User> {
+    const user = this.checkLoggedIn();
     if (updates && updates.password) {
       delete updates.password;
     }
-
-    const { updateUser: user } = await updateUser(
+    const { updateUser: updated } = await updateUser(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        id,
+        id: user.id,
         input: updates
       }
     );
-    return user;
+    this.tokenProvider.setUser(updated);
+    return updated;
   }
 
   /**
@@ -405,6 +428,7 @@ export class AuthenticationClient {
   }
 
   async refreshToken(): Promise<RefreshToken> {
+    this.checkLoggedIn();
     const { refreshToken: data } = await refreshToken(
       this.graphqlClientV2,
       this.tokenProvider,

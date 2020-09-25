@@ -231,7 +231,10 @@ import {
   UnbindPhoneDocument,
   UserBatchVariables,
   UserBatchResponse,
-  UserBatchDocument
+  UserBatchDocument,
+  GetUserRolesDocument,
+  GetUserRolesResponse,
+  GetUserRolesVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -948,20 +951,6 @@ export const getGroupsOfUser = async (
   });
 };
 
-export const getRolesOfUser = async (
-  garpqhlClient: GraphqlClient,
-  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
-  variables: RolesVariables
-): Promise<RolesResponse> => {
-  const query = RolesDocument;
-  const token = await tokenProvider.getAccessToken();
-  return garpqhlClient.request({
-    query,
-    token,
-    variables
-  });
-};
-
 export const updateUserpool = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
@@ -1318,6 +1307,20 @@ export const userBatch = async (
   variables: UserBatchVariables
 ): Promise<UserBatchResponse> => {
   const query = UserBatchDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const getUserRoles = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: GetUserRolesVariables
+): Promise<GetUserRolesResponse> => {
+  const query = GetUserRolesDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
