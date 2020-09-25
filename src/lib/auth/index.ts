@@ -463,4 +463,11 @@ export class AuthenticationClient {
    *
    */
   async verifyToken() {}
+
+  /**
+   * 获取当前登录的用户信息
+   */
+  async currentUser() {
+    return this.tokenProvider.getUser();
+  }
 }
