@@ -467,7 +467,7 @@ export class AuthenticationClient {
   /**
    * 获取当前登录的用户信息
    */
-  async currentUser() {
+  async currentUser(): Promise<User | null> {
     return this.tokenProvider.getUser();
   }
 }
