@@ -220,26 +220,44 @@ export class AuthenticationClient {
     return data;
   }
 
-  async loginByEmail(email: string, password: string) {
+  async loginByEmail(
+    email: string,
+    password: string,
+    options?: {
+      /** 如果用户不存在，是否自动创建一个账号 */
+      autoRegister?: boolean;
+    }
+  ) {
+    options = options || {};
+    const { autoRegister = false } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByEmail: user } = await loginByEmail(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { email, password }
+        input: { email, password, autoRegister }
       }
     );
     this.tokenProvider.setUser(user);
     return user;
   }
 
-  async loginByUsername(username: string, password: string) {
+  async loginByUsername(
+    username: string,
+    password: string,
+    options?: {
+      /** 如果用户不存在，是否自动创建一个账号 */
+      autoRegister?: boolean;
+    }
+  ) {
+    options = options || {};
+    const { autoRegister = false } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByUsername: user } = await loginByUsername(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { username, password }
+        input: { username, password, autoRegister }
       }
     );
     this.tokenProvider.setUser(user);
@@ -258,13 +276,22 @@ export class AuthenticationClient {
     return user;
   }
 
-  async loginByPhonePassword(phone: string, password: string) {
+  async loginByPhonePassword(
+    phone: string,
+    password: string,
+    options?: {
+      /** 如果用户不存在，是否自动创建一个账号 */
+      autoRegister?: boolean;
+    }
+  ) {
+    options = options || {};
+    const { autoRegister = false } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByPhonePassword: user } = await loginByPhonePassword(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { phone, password }
+        input: { phone, password, autoRegister }
       }
     );
     this.tokenProvider.setUser(user);

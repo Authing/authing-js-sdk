@@ -8,8 +8,6 @@ export type Scalars = {
   Int: number;
   Float: number;
   email_String_NotNull_format_email: any;
-  username_String_NotNull_minLength_4_maxLength_20: any;
-  phone_String_NotNull_pattern_130911457911503591166170358118091198911d8: any;
   code_String_NotNull_minLength_4_maxLength_6: any;
   username_String_NotNull_minLength_4_maxLength_50: any;
   ip_String_format_ipv4: any;
@@ -1055,21 +1053,29 @@ export type UpdateFunctionInput = {
 export type LoginByEmailInput = {
   email: Scalars['email_String_NotNull_format_email'];
   password: Scalars['String'];
+  /** 如果用户不存在，是否自动创建一个账号 */
+  autoRegister?: Maybe<Scalars['Boolean']>;
 };
 
 export type LoginByUsernameInput = {
-  username: Scalars['username_String_NotNull_minLength_4_maxLength_20'];
+  username: Scalars['String'];
   password: Scalars['String'];
+  /** 如果用户不存在，是否自动创建一个账号 */
+  autoRegister?: Maybe<Scalars['Boolean']>;
 };
 
 export type LoginByPhoneCodeInput = {
-  phone: Scalars['phone_String_NotNull_pattern_130911457911503591166170358118091198911d8'];
+  phone: Scalars['String'];
   code: Scalars['code_String_NotNull_minLength_4_maxLength_6'];
+  /** 如果用户不存在，是否自动创建一个账号 */
+  autoRegister?: Maybe<Scalars['Boolean']>;
 };
 
 export type LoginByPhonePasswordInput = {
-  phone: Scalars['phone_String_NotNull_pattern_130911457911503591166170358118091198911d8'];
+  phone: Scalars['String'];
   password: Scalars['String'];
+  /** 如果用户不存在，是否自动创建一个账号 */
+  autoRegister?: Maybe<Scalars['Boolean']>;
 };
 
 export type RegisterByUsernameInput = {

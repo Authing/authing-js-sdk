@@ -144,3 +144,36 @@ test('刷新用户 token', async t => {
   const data = await authing.refreshToken();
   t.assert(data);
 });
+
+test('用户名注册 # autoRegister', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  const user = await authing.loginByUsername(username, password, {
+    autoRegister: true
+  });
+  t.assert(user);
+  t.assert(user.username === username);
+  t.assert(user.token);
+});
+
+test('邮箱 # autoRegister', async t => {
+  const email = generateRandomString(12) + '@qq.com';
+  const password = generateRandomString();
+  const user = await authing.loginByEmail(email, password, {
+    autoRegister: true
+  });
+  t.assert(user);
+  t.assert(user.email === email);
+  t.assert(user.token);
+});
+
+test('手机号密码 # autoRegister', async t => {
+  const phone = generateRandomPhone();
+  const password = generateRandomString();
+  const user = await authing.loginByPhonePassword(phone, password, {
+    autoRegister: true
+  });
+  t.assert(user);
+  t.assert(user.phone === phone);
+  t.assert(user.token);
+});
