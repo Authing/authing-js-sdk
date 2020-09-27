@@ -150,22 +150,40 @@ export class ManagementClient {
   }
 
   async getWhiteList(type: WhitelistType) {
-    const {} = await getWhiteList(this.graphqlClientV2, this.tokenProvider, {
-      type
-    });
+    const { whitelist } = await getWhiteList(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        type
+      }
+    );
+
+    return whitelist;
   }
 
   async addWhiteList(type: WhitelistType, list: string[]) {
-    const {} = await addWhiteList(this.graphqlClientV2, this.tokenProvider, {
-      type,
-      list
-    });
+    const { addWhitelist: whiteList } = await addWhiteList(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        type,
+        list
+      }
+    );
+
+    return whiteList;
   }
 
   async removeWhiteList(type: WhitelistType, list: string[]) {
-    const {} = await removeWhiteList(this.graphqlClientV2, this.tokenProvider, {
-      type,
-      list
-    });
+    const { removeWhitelist: whiteList } = await removeWhiteList(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        type,
+        list
+      }
+    );
+
+    return whiteList;
   }
 }
