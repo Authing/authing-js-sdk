@@ -5,8 +5,15 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserPoolManagementClient } from './UserpoolManagementClient';
 import { UsersManagementClient } from './UsersManagementClient';
-import { isDomainAvaliable, sendEmail, userExists } from '../graphqlapi';
-import { EmailScene } from '../../types/graphql.v2';
+import {
+  addWhiteList,
+  getWhiteList,
+  isDomainAvaliable,
+  removeWhiteList,
+  sendEmail,
+  userExists
+} from '../graphqlapi';
+import { EmailScene, WhitelistType } from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
 import Axios from 'axios';
@@ -140,5 +147,25 @@ export class ManagementClient {
       }
     );
     return userExist;
+  }
+
+  async getWhiteList(type: WhitelistType) {
+    const {} = await getWhiteList(this.graphqlClientV2, this.tokenProvider, {
+      type
+    });
+  }
+
+  async addWhiteList(type: WhitelistType, list: string[]) {
+    const {} = await addWhiteList(this.graphqlClientV2, this.tokenProvider, {
+      type,
+      list
+    });
+  }
+
+  async removeWhiteList(type: WhitelistType, list: string[]) {
+    const {} = await removeWhiteList(this.graphqlClientV2, this.tokenProvider, {
+      type,
+      list
+    });
   }
 }
