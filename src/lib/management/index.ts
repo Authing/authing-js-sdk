@@ -13,7 +13,7 @@ import {
   sendEmail,
   userExists
 } from '../graphqlapi';
-import { EmailScene, WhitelistType } from '../../types/graphql.v2';
+import { EmailScene, WhiteList, WhitelistType } from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
 import Axios from 'axios';
@@ -149,7 +149,7 @@ export class ManagementClient {
     return userExist;
   }
 
-  async getWhiteList(type: WhitelistType) {
+  async getWhiteList(type: WhitelistType): Promise<WhiteList[]> {
     const { whitelist } = await getWhiteList(
       this.graphqlClientV2,
       this.tokenProvider,
@@ -161,7 +161,10 @@ export class ManagementClient {
     return whitelist;
   }
 
-  async addWhiteList(type: WhitelistType, list: string[]) {
+  async addWhiteList(
+    type: WhitelistType,
+    list: string[]
+  ): Promise<WhiteList[]> {
     const { addWhitelist: whiteList } = await addWhiteList(
       this.graphqlClientV2,
       this.tokenProvider,
@@ -174,7 +177,10 @@ export class ManagementClient {
     return whiteList;
   }
 
-  async removeWhiteList(type: WhitelistType, list: string[]) {
+  async removeWhiteList(
+    type: WhitelistType,
+    list: string[]
+  ): Promise<WhiteList[]> {
     const { removeWhitelist: whiteList } = await removeWhiteList(
       this.graphqlClientV2,
       this.tokenProvider,
