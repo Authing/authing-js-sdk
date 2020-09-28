@@ -496,11 +496,15 @@ export class AuthenticationClient {
    * 获取当前登录的用户信息
    */
   async currentUser(): Promise<User | null> {
-    const { user: data } = await user(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {}
-    );
-    return data;
+    try {
+      const { user: data } = await user(
+        this.graphqlClientV2,
+        this.tokenProvider,
+        {}
+      );
+      return data;
+    } catch {
+      return null;
+    }
   }
 }
