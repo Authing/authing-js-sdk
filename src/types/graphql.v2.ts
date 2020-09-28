@@ -163,7 +163,7 @@ export type QueryRolesArgs = {
 };
 
 export type QueryUserArgs = {
-  id: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
 };
 
 export type QueryUserBatchArgs = {
@@ -1095,6 +1095,7 @@ export type RegisterByUsernameInput = {
   password: Scalars['String'];
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
+  generateToken?: Maybe<Scalars['Boolean']>;
 };
 
 export type RegisterProfile = {
@@ -1136,6 +1137,7 @@ export type RegisterByEmailInput = {
   password: Scalars['String'];
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
+  generateToken?: Maybe<Scalars['Boolean']>;
 };
 
 export type RegisterByPhoneCodeInput = {
@@ -1144,6 +1146,7 @@ export type RegisterByPhoneCodeInput = {
   password?: Maybe<Scalars['String']>;
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
+  generateToken?: Maybe<Scalars['Boolean']>;
 };
 
 /** 批量删除返回结果 */
@@ -3926,7 +3929,7 @@ export type TemplateCodeVariables = Exact<{ [key: string]: never }>;
 export type TemplateCodeResponse = { templateCode: string };
 
 export type UserVariables = Exact<{
-  id: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
 }>;
 
 export type UserResponse = {
@@ -6500,7 +6503,7 @@ export const TemplateCodeDocument = `
 }
     `;
 export const UserDocument = `
-    query user($id: String!) {
+    query user($id: String) {
   user(id: $id) {
     id
     arn

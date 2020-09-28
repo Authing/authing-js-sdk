@@ -177,3 +177,13 @@ test('手机号密码 # autoRegister', async t => {
   t.assert(user.phone === phone);
   t.assert(user.token);
 });
+
+test('注册 # generateToken', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  const user = await authing.registerByUsername(username, password, null, {
+    generateToken: true
+  });
+  t.assert(user);
+  t.assert(user.token !== '');
+});

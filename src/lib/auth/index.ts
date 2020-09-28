@@ -103,11 +103,12 @@ export class AuthenticationClient {
     profile?: RegisterProfile,
     options?: {
       forceLogin?: boolean;
+      generateToken?: boolean;
     }
   ) {
     options = options || {};
     profile = profile || {};
-    const { forceLogin } = options;
+    const { forceLogin = false, generateToken = false } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByEmail: user } = await registerByEmail(
       this.graphqlClientV2,
@@ -117,7 +118,8 @@ export class AuthenticationClient {
           email,
           password,
           profile,
-          forceLogin
+          forceLogin,
+          generateToken
         }
       }
     );
@@ -135,11 +137,12 @@ export class AuthenticationClient {
     profile?: RegisterProfile,
     options?: {
       forceLogin?: boolean;
+      generateToken?: boolean;
     }
   ) {
     options = options || {};
     profile = profile || {};
-    const { forceLogin } = options;
+    const { forceLogin = false, generateToken = false } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByUsername: user } = await registerByUsername(
       this.graphqlClientV2,
@@ -149,7 +152,8 @@ export class AuthenticationClient {
           username,
           password,
           profile,
-          forceLogin
+          forceLogin,
+          generateToken
         }
       }
     );
@@ -168,11 +172,12 @@ export class AuthenticationClient {
     profile?: RegisterProfile,
     options?: {
       forceLogin?: boolean;
+      generateToken?: boolean;
     }
   ) {
     options = options || {};
     profile = profile || {};
-    const { forceLogin } = options;
+    const { forceLogin = false, generateToken = false } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByPhoneCode: user } = await registerByPhoneCode(
       this.graphqlClientV2,
@@ -183,7 +188,8 @@ export class AuthenticationClient {
           code,
           password,
           profile,
-          forceLogin
+          forceLogin,
+          generateToken
         }
       }
     );
