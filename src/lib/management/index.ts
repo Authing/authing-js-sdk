@@ -15,10 +15,10 @@ import {
 } from '../graphqlapi';
 import {
   EmailScene,
-  WhiteList,
-  WhitelistType,
   User,
-  UserPool
+  UserPool,
+  WhiteList,
+  WhitelistType
 } from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';

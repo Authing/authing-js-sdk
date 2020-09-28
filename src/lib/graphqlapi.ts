@@ -444,7 +444,7 @@ export const interConnections = async (
 
 export const user = async (
   garpqhlClient: GraphqlClient,
-  tokenProvider: ManagementTokenProvider,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
   variables: UserVariables
 ): Promise<UserResponse> => {
   const query = UserDocument;
