@@ -163,7 +163,7 @@ export type QueryRolesArgs = {
 };
 
 export type QueryUserArgs = {
-  id: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
 };
 
 export type QueryUserBatchArgs = {
@@ -3926,7 +3926,7 @@ export type TemplateCodeVariables = Exact<{ [key: string]: never }>;
 export type TemplateCodeResponse = { templateCode: string };
 
 export type UserVariables = Exact<{
-  id: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
 }>;
 
 export type UserResponse = {
@@ -6500,7 +6500,7 @@ export const TemplateCodeDocument = `
 }
     `;
 export const UserDocument = `
-    query user($id: String!) {
+    query user($id: String) {
   user(id: $id) {
     id
     arn

@@ -5,10 +5,6 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserPoolManagementClient } from './UserpoolManagementClient';
 import { UsersManagementClient } from './UsersManagementClient';
-<<<<<<< HEAD
-import { isDomainAvaliable, sendEmail, userExists } from '../graphqlapi';
-import { EmailScene, User, UserPool } from '../../types/graphql.v2';
-=======
 import {
   addWhiteList,
   getWhiteList,
@@ -17,8 +13,13 @@ import {
   sendEmail,
   userExists
 } from '../graphqlapi';
-import { EmailScene, WhiteList, WhitelistType } from '../../types/graphql.v2';
->>>>>>> ba1285d77260dd0fbcfc93739b23cfcde2e43d0b
+import {
+  EmailScene,
+  User,
+  UserPool,
+  WhiteList,
+  WhitelistType
+} from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
 import Axios from 'axios';

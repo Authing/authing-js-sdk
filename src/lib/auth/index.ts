@@ -15,7 +15,8 @@ import {
   updatePhone,
   updateEmail,
   bindPhone,
-  unbindPhone
+  unbindPhone,
+  user
 } from './../graphqlapi';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
@@ -495,6 +496,11 @@ export class AuthenticationClient {
    * 获取当前登录的用户信息
    */
   async currentUser(): Promise<User | null> {
-    return this.tokenProvider.getUser();
+    const { user: data } = await user(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {}
+    );
+    return data;
   }
 }
