@@ -5,8 +5,20 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserPoolManagementClient } from './UserpoolManagementClient';
 import { UsersManagementClient } from './UsersManagementClient';
+<<<<<<< HEAD
 import { isDomainAvaliable, sendEmail, userExists } from '../graphqlapi';
 import { EmailScene, User, UserPool } from '../../types/graphql.v2';
+=======
+import {
+  addWhiteList,
+  getWhiteList,
+  isDomainAvaliable,
+  removeWhiteList,
+  sendEmail,
+  userExists
+} from '../graphqlapi';
+import { EmailScene, WhiteList, WhitelistType } from '../../types/graphql.v2';
+>>>>>>> ba1285d77260dd0fbcfc93739b23cfcde2e43d0b
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
 import Axios from 'axios';
@@ -172,5 +184,49 @@ export class ManagementClient {
       }
     );
     return userExist;
+  }
+
+  async getWhiteList(type: WhitelistType): Promise<WhiteList[]> {
+    const { whitelist } = await getWhiteList(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        type
+      }
+    );
+
+    return whitelist;
+  }
+
+  async addWhiteList(
+    type: WhitelistType,
+    list: string[]
+  ): Promise<WhiteList[]> {
+    const { addWhitelist: whiteList } = await addWhiteList(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        type,
+        list
+      }
+    );
+
+    return whiteList;
+  }
+
+  async removeWhiteList(
+    type: WhitelistType,
+    list: string[]
+  ): Promise<WhiteList[]> {
+    const { removeWhitelist: whiteList } = await removeWhiteList(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        type,
+        list
+      }
+    );
+
+    return whiteList;
   }
 }

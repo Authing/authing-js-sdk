@@ -234,7 +234,16 @@ import {
   GetUserRolesVariables,
   AllowVariables,
   AllowResponse,
-  AllowDocument
+  AllowDocument,
+  WhitelistVariables,
+  WhitelistDocument,
+  WhitelistResponse,
+  RemoveWhitelistVariables,
+  RemoveWhitelistResponse,
+  RemoveWhitelistDocument,
+  AddWhitelistVariables,
+  AddWhitelistResponse,
+  AddWhitelistDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1321,6 +1330,48 @@ export const allow = async (
   variables: AllowVariables
 ): Promise<AllowResponse> => {
   const query = AllowDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const getWhiteList = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: WhitelistVariables
+): Promise<WhitelistResponse> => {
+  const query = WhitelistDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const removeWhiteList = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RemoveWhitelistVariables
+): Promise<RemoveWhitelistResponse> => {
+  const query = RemoveWhitelistDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const addWhiteList = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: AddWhitelistVariables
+): Promise<AddWhitelistResponse> => {
+  const query = AddWhitelistDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
