@@ -13,7 +13,8 @@ import {
   updateRole,
   getGroups,
   revokeRole,
-  addUserToGroup
+  addUserToGroup,
+  allow
 } from '../graphqlapi';
 
 export class AccessControlManagementClient {
@@ -160,12 +161,12 @@ export class AccessControlManagementClient {
    * @param resouceCode: 资源代码
    *
    */
-  async isAllowed(userId: string, action: string, resouceCode: string) {
+  async isAllowed(userId: string, action: string, resource: string) {
     const { isActionAllowed } = await isAllowed(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        resouceCode,
+        resource,
         action,
         userId
       }
@@ -181,12 +182,12 @@ export class AccessControlManagementClient {
    * @param resouceCode: 资源代码
    *
    */
-  async isDenied(userId: string, action: string, resouceCode: string) {
+  async isDenied(userId: string, action: string, resource: string) {
     const { isActionDenied } = await isDenied(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        resouceCode,
+        resource,
         action,
         userId
       }
@@ -241,5 +242,20 @@ export class AccessControlManagementClient {
       }
     );
     return data;
+  }
+
+  async allow(
+    /** 用户 ID */
+    userId: string,
+    /** 资源 */
+    resource: string,
+    /** 操作 */
+    action: string
+  ) {
+    await allow(this.graphqlClientV2, this.tokenProvider, {
+      resource,
+      action,
+      userId
+    });
   }
 }

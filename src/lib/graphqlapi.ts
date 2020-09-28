@@ -175,9 +175,6 @@ import {
   CreateOrgResponse,
   CreateOrgDocument,
   CreateOrgVariables,
-  CreatePolicyVariables,
-  CreatePolicyResponse,
-  CreatePolicyDocument,
   AddNodeVariables,
   AddNodeResponse,
   AddNodeDocument,
@@ -234,7 +231,10 @@ import {
   UserBatchDocument,
   GetUserRolesDocument,
   GetUserRolesResponse,
-  GetUserRolesVariables
+  GetUserRolesVariables,
+  AllowVariables,
+  AllowResponse,
+  AllowDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -811,20 +811,6 @@ export const addUserToRBACGroup = async (
   });
 };
 
-export const allow = async (
-  garpqhlClient: GraphqlClient,
-  tokenProvider: ManagementTokenProvider,
-  variables: CreatePolicyVariables
-): Promise<CreatePolicyResponse> => {
-  const query = CreatePolicyDocument;
-  const token = await tokenProvider.getAccessToken();
-  return await garpqhlClient.request({
-    query,
-    token,
-    variables
-  });
-};
-
 export const assignRole = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider,
@@ -1321,6 +1307,20 @@ export const getUserRoles = async (
   variables: GetUserRolesVariables
 ): Promise<GetUserRolesResponse> => {
   const query = GetUserRolesDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const allow = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: AllowVariables
+): Promise<AllowResponse> => {
+  const query = AllowDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

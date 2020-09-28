@@ -141,13 +141,13 @@ export type QueryCheckPasswordStrengthArgs = {
 };
 
 export type QueryIsActionAllowedArgs = {
-  resouceCode: Scalars['String'];
+  resource: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
 };
 
 export type QueryIsActionDeniedArgs = {
-  resouceCode: Scalars['String'];
+  resource: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
 };
@@ -519,6 +519,7 @@ export type UserPool = {
   domain: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   secret: Scalars['String'];
+  jwtSecret: Scalars['String'];
   userpoolTypes?: Maybe<Array<UserPoolType>>;
   logo: Scalars['String'];
   createdAt?: Maybe<Scalars['String']>;
@@ -667,6 +668,8 @@ export type Mutation = {
   moveNode: Org;
   resetPassword?: Maybe<CommonMessage>;
   createPolicy: Policy;
+  /** 允许操作某个资源 */
+  allow: CommonMessage;
   registerByUsername?: Maybe<User>;
   registerByEmail?: Maybe<User>;
   registerByPhoneCode?: Maybe<User>;
@@ -845,6 +848,15 @@ export type MutationCreatePolicyArgs = {
   resource: Scalars['String'];
   actions: Array<Scalars['String']>;
   effect: PolicyEffect;
+};
+
+export type MutationAllowArgs = {
+  resource: Scalars['String'];
+  action: Scalars['String'];
+  userId?: Maybe<Scalars['String']>;
+  userIds?: Maybe<Array<Scalars['String']>>;
+  roleCode?: Maybe<Scalars['String']>;
+  roleCodes?: Maybe<Array<Scalars['String']>>;
 };
 
 export type MutationRegisterByUsernameArgs = {
@@ -1464,6 +1476,19 @@ export type AddWhitelistResponse = {
       value: string;
     }>
   >;
+};
+
+export type AllowVariables = Exact<{
+  resource: Scalars['String'];
+  action: Scalars['String'];
+  userId?: Maybe<Scalars['String']>;
+  userIds?: Maybe<Array<Scalars['String']>>;
+  roleCode?: Maybe<Scalars['String']>;
+  roleCodes?: Maybe<Array<Scalars['String']>>;
+}>;
+
+export type AllowResponse = {
+  allow: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
 export type AssignRoleVariables = Exact<{
@@ -3301,7 +3326,7 @@ export type GroupsResponse = {
 };
 
 export type IsActionAllowedVariables = Exact<{
-  resouceCode: Scalars['String'];
+  resource: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
 }>;
@@ -3309,7 +3334,7 @@ export type IsActionAllowedVariables = Exact<{
 export type IsActionAllowedResponse = { isActionAllowed: boolean };
 
 export type IsActionDeniedVariables = Exact<{
-  resouceCode: Scalars['String'];
+  resource: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
 }>;
@@ -4047,6 +4072,7 @@ export type UserpoolResponse = {
     domain: string;
     description?: Maybe<string>;
     secret: string;
+    jwtSecret: string;
     logo: string;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
@@ -4123,6 +4149,7 @@ export type UserpoolsResponse = {
       domain: string;
       description?: Maybe<string>;
       secret: string;
+      jwtSecret: string;
       logo: string;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
@@ -4323,6 +4350,14 @@ export const AddWhitelistDocument = `
     createdAt
     updatedAt
     value
+  }
+}
+    `;
+export const AllowDocument = `
+    mutation allow($resource: String!, $action: String!, $userId: String, $userIds: [String!], $roleCode: String, $roleCodes: [String!]) {
+  allow(resource: $resource, action: $action, userId: $userId, userIds: $userIds, roleCode: $roleCode, roleCodes: $roleCodes) {
+    message
+    code
   }
 }
     `;
@@ -5934,13 +5969,13 @@ export const GroupsDocument = `
 }
     `;
 export const IsActionAllowedDocument = `
-    query isActionAllowed($resouceCode: String!, $action: String!, $userId: String!) {
-  isActionAllowed(resouceCode: $resouceCode, action: $action, userId: $userId)
+    query isActionAllowed($resource: String!, $action: String!, $userId: String!) {
+  isActionAllowed(resource: $resource, action: $action, userId: $userId)
 }
     `;
 export const IsActionDeniedDocument = `
-    query isActionDenied($resouceCode: String!, $action: String!, $userId: String!) {
-  isActionDenied(resouceCode: $resouceCode, action: $action, userId: $userId)
+    query isActionDenied($resource: String!, $action: String!, $userId: String!) {
+  isActionDenied(resource: $resource, action: $action, userId: $userId)
 }
     `;
 export const IsDomainAvaliableDocument = `
@@ -6596,6 +6631,7 @@ export const UserpoolDocument = `
     domain
     description
     secret
+    jwtSecret
     userpoolTypes {
       code
       name
@@ -6668,6 +6704,7 @@ export const UserpoolsDocument = `
       domain
       description
       secret
+      jwtSecret
       logo
       createdAt
       updatedAt

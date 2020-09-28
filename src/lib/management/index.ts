@@ -6,7 +6,7 @@ import { ManagementClientOptions } from './types';
 import { UserPoolManagementClient } from './UserpoolManagementClient';
 import { UsersManagementClient } from './UsersManagementClient';
 import { isDomainAvaliable, sendEmail, userExists } from '../graphqlapi';
-import { EmailScene } from '../../types/graphql.v2';
+import { EmailScene, User, UserPool } from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
 import Axios from 'axios';
@@ -30,6 +30,9 @@ GKl64GDcIq3au+aqJQIDAQAB
 export class ManagementClient {
   // 初始化参数
   options: ManagementClientOptions;
+
+  /** 用户池配置 */
+  userpoolConfig: UserPool;
 
   // sub classes definitions
   graphqlClient: GraphqlClient;
@@ -92,6 +95,16 @@ export class ManagementClient {
     );
   }
 
+  private async getConfig(): Promise<UserPool> {
+    if (this.userpoolConfig) {
+      return this.userpoolConfig;
+    }
+
+    const detail = await this.userpool.detail();
+    this.userpoolConfig = detail;
+    return detail;
+  }
+
   async isDomainAvaliable(domain: string) {
     const res = await isDomainAvaliable(
       this.graphqlClient,
@@ -120,12 +133,31 @@ export class ManagementClient {
    * @description 检测登录状态
    *
    */
-  async checkLoginStatus(token: string) {
+  async checkLoginStatus(
+    token: string,
+    options?: {
+      fetchUserDetail?: boolean;
+    }
+  ): Promise<User> {
+    options = options || {};
+    const { fetchUserDetail = false } = options;
     if (!token) return null;
+
+    let decoded = null;
     try {
-      return verifyToken(token, this.options.secret);
+      const config = await this.getConfig();
+      decoded = verifyToken(token, config.jwtSecret);
     } catch (error) {
       return null;
+    }
+
+    const { data } = decoded;
+    if (!fetchUserDetail) {
+      return data;
+    } else {
+      const { id } = data;
+      const user = await this.users.get(id);
+      return user;
     }
   }
 
