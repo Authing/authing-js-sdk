@@ -503,7 +503,8 @@ export class AuthenticationClient {
   }
 
   /**
-   * 获取当前登录的用户信息
+   * @description 获取当前登录的用户信息
+   *
    */
   async currentUser(): Promise<User | null> {
     try {
@@ -517,6 +518,25 @@ export class AuthenticationClient {
     } catch {
       return null;
     }
+  }
+
+  /**
+   * @description 设置当前用户，适合社会化登录手动 set 的接口
+   *
+   */
+  async setCurrentUser(user: User) {
+    this.tokenProvider.setUser(user);
+  }
+
+  /**
+   * @description 退出登录，清空 localStorage 里的 user 和 token
+   *
+   */
+  async logout() {
+    this.updateProfile({
+      tokenExpiredAt: '0'
+    });
+    this.tokenProvider.clearUser();
   }
 
   async udv() {
