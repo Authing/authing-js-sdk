@@ -533,7 +533,7 @@ export class AuthenticationClient {
    *
    */
   async logout() {
-    this.updateProfile({
+    await this.updateProfile({
       tokenExpiredAt: '0'
     });
     this.tokenProvider.clearUser();
