@@ -16,7 +16,10 @@ import {
   updateEmail,
   bindPhone,
   unbindPhone,
-  user
+  user,
+  setUdv,
+  removeUdv,
+  udv
 } from './../graphqlapi';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
@@ -25,6 +28,7 @@ import {
   EmailScene,
   RefreshToken,
   RegisterProfile,
+  UdfTargetType,
   UpdateUserInput,
   User
 } from '../../types/graphql.v2';
@@ -493,12 +497,6 @@ export class AuthenticationClient {
   }
 
   /**
-   * @description 验证 token 是否有效
-   *
-   */
-  async verifyToken() {}
-
-  /**
    * 获取当前登录的用户信息
    */
   async currentUser(): Promise<User | null> {
@@ -508,9 +506,49 @@ export class AuthenticationClient {
         this.tokenProvider,
         {}
       );
+      this.tokenProvider.setUser(data);
       return data;
     } catch {
       return null;
     }
+  }
+
+  async udv() {
+    const user = this.checkLoggedIn();
+    const { udv: list } = await udv(this.graphqlClientV2, this.tokenProvider, {
+      targetType: UdfTargetType.User,
+      targetId: user.id
+    });
+    return list;
+  }
+
+  async setUdv(key: string, value: any) {
+    const user = this.checkLoggedIn();
+    value = JSON.stringify(value);
+    const { setUdv: list } = await setUdv(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        targetType: UdfTargetType.User,
+        targetId: user.id,
+        key,
+        value
+      }
+    );
+    return list;
+  }
+
+  async removeUdv(key: string) {
+    const user = this.checkLoggedIn();
+    const { removeUdv: list } = await removeUdv(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        targetType: UdfTargetType.User,
+        targetId: user.id,
+        key
+      }
+    );
+    return list;
   }
 }

@@ -5,7 +5,8 @@ import {
   getOptionsFromEnv
 } from '../testing-helper';
 import test from 'ava';
-import { EmailScene } from '../../types/graphql.v2';
+import { EmailScene, UdfDataType, UdfTargetType } from '../../types/graphql.v2';
+import { ManagementClient } from '../management';
 
 // @ts-ignore
 global.localStorage = {
@@ -25,6 +26,7 @@ global.localStorage = {
 };
 
 const authing = new AuthenticationClient(getOptionsFromEnv());
+const management = new ManagementClient(getOptionsFromEnv());
 
 test('邮箱注册', async t => {
   const email = generateRandomString() + '@test.com';
@@ -186,4 +188,127 @@ test('注册 # generateToken', async t => {
   });
   t.assert(user);
   t.assert(user.token !== '');
+});
+
+test('添加自定义数据', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.loginByUsername(username, password, {
+    autoRegister: true
+  });
+
+  const key = generateRandomString(10);
+  await management.addUdf(
+    UdfTargetType.User,
+    key,
+    UdfDataType.String,
+    generateRandomString(5)
+  );
+
+  await authing.setUdv(key, '123');
+  const list = await authing.udv();
+  t.assert(list.length);
+});
+
+test('添加自定义数据 # 不存在的 key', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.loginByUsername(username, password, {
+    autoRegister: true
+  });
+
+  let faild = false;
+  try {
+    const key = generateRandomString(10);
+    await authing.setUdv(key, '123');
+  } catch {
+    faild = true;
+  }
+  t.assert(faild === true);
+});
+
+test('添加自定义数据 # 非法的数据类型', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.loginByUsername(username, password, {
+    autoRegister: true
+  });
+
+  const key = generateRandomString(10);
+  await management.addUdf(
+    UdfTargetType.User,
+    key,
+    UdfDataType.String,
+    generateRandomString(5)
+  );
+
+  let faild = false;
+  try {
+    const key = generateRandomString(10);
+    await authing.setUdv(key, 123);
+  } catch (error) {
+    faild = true;
+  }
+  t.assert(faild === true);
+});
+
+test('删除自定义数据', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.loginByUsername(username, password, {
+    autoRegister: true
+  });
+
+  const key = generateRandomString(10);
+  await management.addUdf(
+    UdfTargetType.User,
+    key,
+    UdfDataType.String,
+    generateRandomString(5)
+  );
+
+  await authing.setUdv(key, '123');
+  await authing.removeUdv(key);
+  const list = await authing.udv();
+  t.assert(list.length === 0);
+});
+
+test('添加自定义数据 # 字符串', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.loginByUsername(username, password, {
+    autoRegister: true
+  });
+  const key = generateRandomString(10);
+  await management.addUdf(
+    UdfTargetType.User,
+    key,
+    UdfDataType.String,
+    generateRandomString(5)
+  );
+  await authing.setUdv(key, '123');
+  const list = await authing.udv();
+  t.assert(list.length === 1);
+  const value = list[0].value;
+  t.assert(typeof value === 'string');
+});
+
+test.only('添加自定义数据 # 数字', async t => {
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.loginByUsername(username, password, {
+    autoRegister: true
+  });
+  const key = generateRandomString(10);
+  await management.addUdf(
+    UdfTargetType.User,
+    key,
+    UdfDataType.Number,
+    generateRandomString(5)
+  );
+  await authing.setUdv(key, 123);
+  const list = await authing.udv();
+  t.assert(list.length === 1);
+  const value = list[0].value;
+  t.assert(typeof value === 'number');
 });

@@ -243,7 +243,25 @@ import {
   RemoveWhitelistDocument,
   AddWhitelistVariables,
   AddWhitelistResponse,
-  AddWhitelistDocument
+  AddWhitelistDocument,
+  UdfVariables,
+  UdfResponse,
+  UdfDocument,
+  UdvVariables,
+  UdvDocument,
+  UdvResponse,
+  SetUdvVariables,
+  SetUdvResponse,
+  SetUdvDocument,
+  RemoveUdvVariables,
+  RemoveUdvResponse,
+  RemoveUdvDocument,
+  AddUdfVariables,
+  AddUdfResponse,
+  AddUdfDocument,
+  RemoveUdfVariables,
+  RemoveUdfResponse,
+  RemoveUdfDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1372,6 +1390,90 @@ export const addWhiteList = async (
   variables: AddWhitelistVariables
 ): Promise<AddWhitelistResponse> => {
   const query = AddWhitelistDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const udv = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UdvVariables
+): Promise<UdvResponse> => {
+  const query = UdvDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const setUdv = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: SetUdvVariables
+): Promise<SetUdvResponse> => {
+  const query = SetUdvDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const removeUdv = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RemoveUdvVariables
+): Promise<RemoveUdvResponse> => {
+  const query = RemoveUdvDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const addUdf = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: AddUdfVariables
+): Promise<AddUdfResponse> => {
+  const query = AddUdfDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const removeUdf = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RemoveUdfVariables
+): Promise<RemoveUdfResponse> => {
+  const query = RemoveUdfDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const udf = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UdfVariables
+): Promise<UdfResponse> => {
+  const query = UdfDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

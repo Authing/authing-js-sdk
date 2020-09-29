@@ -18,7 +18,9 @@ export class AuthenticationTokenProvider {
   }
 
   getUser(): User | null {
-    return JSON.parse(localStorage.getItem(userKey)) || null;
+    return localStorage.getItem(userKey)
+      ? JSON.parse(localStorage.getItem(userKey))
+      : null;
   }
 
   setUser(user: User) {

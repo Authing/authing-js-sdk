@@ -51,6 +51,10 @@ export type Query = {
   role: Role;
   /** 获取角色列表 */
   roles: PaginatedRoles;
+  /** 查询某个实体定义的自定义数据 */
+  udv: Array<UserDefinedData>;
+  /** 查询用户池定义的自定义字段 */
+  udf: Array<UserDefinedField>;
   user?: Maybe<User>;
   userBatch: Array<User>;
   users: PaginatedUsers;
@@ -160,6 +164,15 @@ export type QueryRolesArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
+};
+
+export type QueryUdvArgs = {
+  targetType: UdfTargetType;
+  targetId: Scalars['String'];
+};
+
+export type QueryUdfArgs = {
+  targetType: UdfTargetType;
 };
 
 export type QueryUserArgs = {
@@ -383,6 +396,8 @@ export type User = {
   locality?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   postalCode?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
@@ -512,6 +527,38 @@ export enum PolicyEffect {
   Allow = 'ALLOW',
   Deny = 'DENY'
 }
+
+export enum UdfTargetType {
+  Node = 'NODE',
+  Org = 'ORG',
+  User = 'USER',
+  Userpool = 'USERPOOL',
+  Role = 'ROLE',
+  Permission = 'PERMISSION',
+  Application = 'APPLICATION'
+}
+
+export type UserDefinedData = {
+  key: Scalars['String'];
+  dataType: UdfDataType;
+  value: Scalars['String'];
+};
+
+export enum UdfDataType {
+  String = 'STRING',
+  Number = 'NUMBER',
+  Datetime = 'DATETIME',
+  Boolean = 'BOOLEAN',
+  Object = 'OBJECT'
+}
+
+export type UserDefinedField = {
+  targetType: UdfTargetType;
+  dataType: UdfDataType;
+  key: Scalars['String'];
+  label: Scalars['String'];
+  options?: Maybe<Scalars['String']>;
+};
 
 export type UserPool = {
   id: Scalars['String'];
@@ -685,6 +732,10 @@ export type Mutation = {
   assignRole: Role;
   /** 撤销角色 */
   revokeRole: Role;
+  addUdf: Array<UserDefinedField>;
+  removeUdf: Array<UserDefinedField>;
+  setUdv?: Maybe<Array<UserDefinedData>>;
+  removeUdv?: Maybe<Array<UserDefinedData>>;
   refreshToken?: Maybe<RefreshToken>;
   /** 创建用户。此接口需要管理员权限，普通用户注册请使用 **register** 接口。 */
   createUser: User;
@@ -903,6 +954,32 @@ export type MutationRevokeRoleArgs = {
   userIds?: Maybe<Array<Scalars['String']>>;
   groupCodes?: Maybe<Array<Scalars['String']>>;
   nodeCodes?: Maybe<Array<Scalars['String']>>;
+};
+
+export type MutationAddUdfArgs = {
+  targetType: UdfTargetType;
+  key: Scalars['String'];
+  dataType: UdfDataType;
+  label: Scalars['String'];
+  options?: Maybe<Scalars['String']>;
+};
+
+export type MutationRemoveUdfArgs = {
+  targetType: UdfTargetType;
+  key: Scalars['String'];
+};
+
+export type MutationSetUdvArgs = {
+  targetType: UdfTargetType;
+  targetId: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type MutationRemoveUdvArgs = {
+  targetType: UdfTargetType;
+  targetId: Scalars['String'];
+  key: Scalars['String'];
 };
 
 export type MutationRefreshTokenArgs = {
@@ -1269,6 +1346,8 @@ export type UpdateUserInput = {
   locality?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   postalCode?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
 };
@@ -1464,6 +1543,24 @@ export type AddNodeResponse = {
       children?: Maybe<Array<string>>;
     }>;
   };
+};
+
+export type AddUdfVariables = Exact<{
+  targetType: UdfTargetType;
+  key: Scalars['String'];
+  dataType: UdfDataType;
+  label: Scalars['String'];
+  options?: Maybe<Scalars['String']>;
+}>;
+
+export type AddUdfResponse = {
+  addUdf: Array<{
+    targetType: UdfTargetType;
+    dataType: UdfDataType;
+    key: string;
+    label: string;
+    options?: Maybe<string>;
+  }>;
 };
 
 export type AddWhitelistVariables = Exact<{
@@ -2643,6 +2740,33 @@ export type RemoveMemberResponse = {
   };
 };
 
+export type RemoveUdfVariables = Exact<{
+  targetType: UdfTargetType;
+  key: Scalars['String'];
+}>;
+
+export type RemoveUdfResponse = {
+  removeUdf: Array<{
+    targetType: UdfTargetType;
+    dataType: UdfDataType;
+    key: string;
+    label: string;
+    options?: Maybe<string>;
+  }>;
+};
+
+export type RemoveUdvVariables = Exact<{
+  targetType: UdfTargetType;
+  targetId: Scalars['String'];
+  key: Scalars['String'];
+}>;
+
+export type RemoveUdvResponse = {
+  removeUdv?: Maybe<
+    Array<{ key: string; dataType: UdfDataType; value: string }>
+  >;
+};
+
 export type RemoveWhitelistVariables = Exact<{
   type: WhitelistType;
   list: Array<Scalars['String']>;
@@ -2701,6 +2825,17 @@ export type SendEmailVariables = Exact<{
 
 export type SendEmailResponse = {
   sendEmail: { message?: Maybe<string>; code?: Maybe<number> };
+};
+
+export type SetUdvVariables = Exact<{
+  targetType: UdfTargetType;
+  targetId: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+export type SetUdvResponse = {
+  setUdv?: Maybe<Array<{ key: string; dataType: UdfDataType; value: string }>>;
 };
 
 export type UnbindPhoneVariables = Exact<{ [key: string]: never }>;
@@ -3928,6 +4063,29 @@ export type TemplateCodeVariables = Exact<{ [key: string]: never }>;
 
 export type TemplateCodeResponse = { templateCode: string };
 
+export type UdfVariables = Exact<{
+  targetType: UdfTargetType;
+}>;
+
+export type UdfResponse = {
+  udf: Array<{
+    targetType: UdfTargetType;
+    dataType: UdfDataType;
+    key: string;
+    label: string;
+    options?: Maybe<string>;
+  }>;
+};
+
+export type UdvVariables = Exact<{
+  targetType: UdfTargetType;
+  targetId: Scalars['String'];
+}>;
+
+export type UdvResponse = {
+  udv: Array<{ key: string; dataType: UdfDataType; value: string }>;
+};
+
 export type UserVariables = Exact<{
   id?: Maybe<Scalars['String']>;
 }>;
@@ -4344,6 +4502,17 @@ export const AddNodeDocument = `
       updatedAt
       children
     }
+  }
+}
+    `;
+export const AddUdfDocument = `
+    mutation addUdf($targetType: UDFTargetType!, $key: String!, $dataType: UDFDataType!, $label: String!, $options: String) {
+  addUdf(targetType: $targetType, key: $key, dataType: $dataType, label: $label, options: $options) {
+    targetType
+    dataType
+    key
+    label
+    options
   }
 }
     `;
@@ -5382,6 +5551,26 @@ export const RemoveMemberDocument = `
   }
 }
     `;
+export const RemoveUdfDocument = `
+    mutation removeUdf($targetType: UDFTargetType!, $key: String!) {
+  removeUdf(targetType: $targetType, key: $key) {
+    targetType
+    dataType
+    key
+    label
+    options
+  }
+}
+    `;
+export const RemoveUdvDocument = `
+    mutation removeUdv($targetType: UDFTargetType!, $targetId: String!, $key: String!) {
+  removeUdv(targetType: $targetType, targetId: $targetId, key: $key) {
+    key
+    dataType
+    value
+  }
+}
+    `;
 export const RemoveWhitelistDocument = `
     mutation removeWhitelist($type: WhitelistType!, $list: [String!]!) {
   removeWhitelist(type: $type, list: $list) {
@@ -5425,6 +5614,15 @@ export const SendEmailDocument = `
   sendEmail(email: $email, scene: $scene) {
     message
     code
+  }
+}
+    `;
+export const SetUdvDocument = `
+    mutation setUdv($targetType: UDFTargetType!, $targetId: String!, $key: String!, $value: String!) {
+  setUdv(targetType: $targetType, targetId: $targetId, key: $key, value: $value) {
+    key
+    dataType
+    value
   }
 }
     `;
@@ -6500,6 +6698,26 @@ export const SocialConnectionsDocument = `
 export const TemplateCodeDocument = `
     query templateCode {
   templateCode
+}
+    `;
+export const UdfDocument = `
+    query udf($targetType: UDFTargetType!) {
+  udf(targetType: $targetType) {
+    targetType
+    dataType
+    key
+    label
+    options
+  }
+}
+    `;
+export const UdvDocument = `
+    query udv($targetType: UDFTargetType!, $targetId: String!) {
+  udv(targetType: $targetType, targetId: $targetId) {
+    key
+    dataType
+    value
+  }
 }
     `;
 export const UserDocument = `
