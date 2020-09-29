@@ -533,8 +533,12 @@ export class AuthenticationClient {
    *
    */
   async logout() {
-    await this.updateProfile({
-      tokenExpiredAt: '0'
+    const user = this.checkLoggedIn();
+    await updateUser(this.graphqlClientV2, this.tokenProvider, {
+      id: user.id,
+      input: {
+        tokenExpiredAt: '0'
+      }
     });
     this.tokenProvider.clearUser();
   }
