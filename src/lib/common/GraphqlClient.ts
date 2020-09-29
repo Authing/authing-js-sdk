@@ -37,15 +37,17 @@ export class GraphqlClient {
       return await graphQLClient.request<T>(query, variables);
     } catch (error) {
       let errmsg = null;
+      let errcode = null;
       const response = error.response;
       const errors = response.errors;
       errors.map((err: any) => {
         const { message: msg } = err;
         const { code, message } = msg;
+        errcode = code;
         errmsg = message;
         this.options.onError(code, message);
       });
-      throw new Error(errmsg);
+      throw { code: errcode, message: errmsg };
     }
   }
 }
