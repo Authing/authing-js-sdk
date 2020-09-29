@@ -237,6 +237,8 @@ export class AuthenticationClient {
     options?: {
       /** 如果用户不存在，是否自动创建一个账号 */
       autoRegister?: boolean;
+      /** 图形验证码 */
+      captchaCode?: string;
     }
   ) {
     options = options || {};
@@ -259,16 +261,18 @@ export class AuthenticationClient {
     options?: {
       /** 如果用户不存在，是否自动创建一个账号 */
       autoRegister?: boolean;
+      /** 图形验证码 */
+      captchaCode?: string;
     }
   ) {
     options = options || {};
-    const { autoRegister = false } = options;
+    const { autoRegister = false, captchaCode } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByUsername: user } = await loginByUsername(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { username, password, autoRegister }
+        input: { username, password, autoRegister, captchaCode }
       }
     );
     this.tokenProvider.setUser(user);
@@ -293,16 +297,18 @@ export class AuthenticationClient {
     options?: {
       /** 如果用户不存在，是否自动创建一个账号 */
       autoRegister?: boolean;
+      /** 图形验证码 */
+      captchaCode?: string;
     }
   ) {
     options = options || {};
-    const { autoRegister = false } = options;
+    const { autoRegister = false, captchaCode } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByPhonePassword: user } = await loginByPhonePassword(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { phone, password, autoRegister }
+        input: { phone, password, autoRegister, captchaCode }
       }
     );
     this.tokenProvider.setUser(user);

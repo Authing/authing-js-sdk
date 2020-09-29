@@ -1142,6 +1142,8 @@ export type UpdateFunctionInput = {
 export type LoginByEmailInput = {
   email: Scalars['email_String_NotNull_format_email'];
   password: Scalars['String'];
+  /** 图形验证码 */
+  captchaCode?: Maybe<Scalars['String']>;
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
 };
@@ -1149,6 +1151,8 @@ export type LoginByEmailInput = {
 export type LoginByUsernameInput = {
   username: Scalars['String'];
   password: Scalars['String'];
+  /** 图形验证码 */
+  captchaCode?: Maybe<Scalars['String']>;
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
 };
@@ -1163,6 +1167,8 @@ export type LoginByPhoneCodeInput = {
 export type LoginByPhonePasswordInput = {
   phone: Scalars['String'];
   password: Scalars['String'];
+  /** 图形验证码 */
+  captchaCode?: Maybe<Scalars['String']>;
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
 };
