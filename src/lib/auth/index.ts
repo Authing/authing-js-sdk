@@ -242,13 +242,13 @@ export class AuthenticationClient {
     }
   ) {
     options = options || {};
-    const { autoRegister = false } = options;
+    const { autoRegister = false, captchaCode } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByEmail: user } = await loginByEmail(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { email, password, autoRegister }
+        input: { email, password, autoRegister, captchaCode }
       }
     );
     this.tokenProvider.setUser(user);
