@@ -23,7 +23,7 @@ export class GraphqlClient {
   }) {
     const { query, token, variables } = options;
     let headers: any = {
-      'x-authing-sdk-version': SDK_VERSION,
+      'x-authing-sdk-version': `js:${SDK_VERSION}`,
       'x-authing-userpool-id': this.options.userPoolId,
       'x-authing-request-from': this.options.requestFrom || 'sdk',
       'x-authing-app-id': this.options.appId || ''

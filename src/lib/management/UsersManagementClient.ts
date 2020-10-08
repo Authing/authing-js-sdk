@@ -80,7 +80,7 @@ export class UsersManagementClient {
    * @returns
    * @memberof UsersManagementClient
    */
-  async get(userId: string): Promise<User> {
+  async detail(userId: string): Promise<User> {
     const { user: data } = await user(
       this.graphqlClientV2,
       this.tokenProvider,

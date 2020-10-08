@@ -80,6 +80,6 @@ test('删除用户', async t => {
     password: '123456!'
   });
   await management.users.delete(user.id);
-  const user2 = await management.users.get(user.id);
+  const user2 = await management.users.detail(user.id);
   t.assert(user2 === null);
 });
