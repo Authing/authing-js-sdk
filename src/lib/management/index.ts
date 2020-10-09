@@ -4,7 +4,7 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserPoolManagementClient } from './UserpoolManagementClient';
 import { UsersManagementClient } from './UsersManagementClient';
-import { isDomainAvaliable, sendEmail } from '../graphqlapi';
+import { sendEmail } from '../graphqlapi';
 import { EmailScene, User, UserPool } from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
@@ -132,15 +132,6 @@ export class ManagementClient {
     const detail = await this.userpool.detail();
     this.userpoolConfig = detail;
     return detail;
-  }
-
-  async isDomainAvaliable(domain: string) {
-    const res = await isDomainAvaliable(
-      this.graphqlClient,
-      this.tokenProvider,
-      { domain }
-    );
-    return res.isDomainAvaliable;
   }
 
   /**
