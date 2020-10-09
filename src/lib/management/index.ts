@@ -11,15 +11,10 @@ import {
   isDomainAvaliable,
   removeWhiteList,
   sendEmail,
-  udf,
-  addUdf,
-  removeUdf,
   userExists
 } from '../graphqlapi';
 import {
   EmailScene,
-  UdfDataType,
-  UdfTargetType,
   User,
   UserPool,
   WhiteList,
@@ -30,6 +25,7 @@ import { HttpClient } from '../common/HttpClient';
 import Axios from 'axios';
 import { RolesManagementClient } from './RolesManagementClient';
 import { PoliciesManagementClient } from './PoliciesManagementClient';
+import { UdfManagementClient } from './UdfManagementClient';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -65,6 +61,7 @@ export class ManagementClient {
   org: OrgManagementClient;
   roles: RolesManagementClient;
   policies: PoliciesManagementClient;
+  udf: UdfManagementClient;
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -121,6 +118,11 @@ export class ManagementClient {
       this.tokenProvider
     );
     this.policies = new PoliciesManagementClient(
+      this.options,
+      this.graphqlClientV2,
+      this.tokenProvider
+    );
+    this.udf = new UdfManagementClient(
       this.options,
       this.graphqlClientV2,
       this.tokenProvider
@@ -248,64 +250,5 @@ export class ManagementClient {
     );
 
     return whiteList;
-  }
-
-  /**
-   * @description 查询用户池定义的自定义字段
-   *
-   */
-  async udf(targetType: UdfTargetType) {
-    const { udf: list } = await udf(this.graphqlClientV2, this.tokenProvider, {
-      targetType
-    });
-    return list;
-  }
-
-  /**
-   * @description 添加自定义字段
-   *
-   */
-  async addUdf(
-    /** 目标类型 */
-    targetType: UdfTargetType,
-    /** 字段 key */
-    key: string,
-    /** 数据类型 */
-    dataType: UdfDataType,
-    /** 字段 label */
-    label: string
-  ) {
-    const { addUdf: list } = await addUdf(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        targetType,
-        dataType,
-        key,
-        label
-      }
-    );
-    return list;
-  }
-
-  /**
-   * @description 删除自定义字段
-   *
-   */
-  async removeUdf(
-    /** 目标类型 */
-    targetType: UdfTargetType,
-    /** 字段 key */
-    key: string
-  ) {
-    const { removeUdf: list } = await removeUdf(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        targetType,
-        key
-      }
-    );
-    return list;
   }
 }
