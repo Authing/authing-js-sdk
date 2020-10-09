@@ -267,7 +267,34 @@ import {
   DeleteRoleDocument,
   DeleteRolesResponse,
   DeleteRolesVariables,
-  DeleteRolesDocument
+  DeleteRolesDocument,
+  PoliciesVariables,
+  PoliciesResponse,
+  PoliciesDocument,
+  CreatePolicyVariables,
+  CreatePolicyDocument,
+  PolicyVariables,
+  CreatePolicyResponse,
+  PolicyResponse,
+  PolicyDocument,
+  UpdatePolicyVariables,
+  UpdatePolicyResponse,
+  UpdatePolicyDocument,
+  DeletePolicyVariables,
+  DeletePoliciesResponse,
+  DeletePolicyDocument,
+  DeletePoliciesVariables,
+  DeletePolicyResponse,
+  DeletePoliciesDocument,
+  PolicyAssignmentsVariables,
+  PolicyAssignmentsResponse,
+  PolicyAssignmentsDocument,
+  AddPolicyAssignmentsVariables,
+  AddPolicyAssignmentsResponse,
+  AddPolicyAssignmentsDocument,
+  RemovePolicyAssignmentsVariables,
+  RemovePolicyAssignmentsResponse,
+  RemovePolicyAssignmentsDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1508,6 +1535,132 @@ export const deleteRoles = async (
   variables: DeleteRolesVariables
 ): Promise<DeleteRolesResponse> => {
   const query = DeleteRolesDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const policies = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: PoliciesVariables
+): Promise<PoliciesResponse> => {
+  const query = PoliciesDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const createPolicy = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: CreatePolicyVariables
+): Promise<CreatePolicyResponse> => {
+  const query = CreatePolicyDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const policy = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: PolicyVariables
+): Promise<PolicyResponse> => {
+  const query = PolicyDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const updatePolicy = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UpdatePolicyVariables
+): Promise<UpdatePolicyResponse> => {
+  const query = UpdatePolicyDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const deletePolicy = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: DeletePolicyVariables
+): Promise<DeletePolicyResponse> => {
+  const query = DeletePolicyDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const deletePolicies = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: DeletePoliciesVariables
+): Promise<DeletePoliciesResponse> => {
+  const query = DeletePoliciesDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const policyAssignments = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: PolicyAssignmentsVariables
+): Promise<PolicyAssignmentsResponse> => {
+  const query = PolicyAssignmentsDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const addPolicyAssignments = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: AddPolicyAssignmentsVariables
+): Promise<AddPolicyAssignmentsResponse> => {
+  const query = AddPolicyAssignmentsDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const removePolicyAssignments = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RemovePolicyAssignmentsVariables
+): Promise<RemovePolicyAssignmentsResponse> => {
+  const query = RemovePolicyAssignmentsDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

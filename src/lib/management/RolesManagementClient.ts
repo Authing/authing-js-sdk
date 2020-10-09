@@ -30,21 +30,7 @@ export class RolesManagementClient {
   }
 
   /**
-   * @description 获取用户池角色列表
-   *
-   * @param code 角色唯一标志
-   * @param options
-   *
-   */
-  async detail(code: string): Promise<DeepPartial<Role>> {
-    const { role: data } = await role(this.graphqlClient, this.tokenProvider, {
-      code
-    });
-    return data;
-  }
-
-  /**
-   * @description 获取用户池角色列表
+   * @description 获取角色列表
    *
    */
   async list(page: number = 1, limit: number = 10) {
@@ -56,6 +42,18 @@ export class RolesManagementClient {
         limit
       }
     );
+    return data;
+  }
+
+  /**
+   * @description 获取角色详情
+   *
+   *
+   */
+  async detail(code: string): Promise<DeepPartial<Role>> {
+    const { role: data } = await role(this.graphqlClient, this.tokenProvider, {
+      code
+    });
     return data;
   }
 
@@ -112,7 +110,7 @@ export class RolesManagementClient {
   }
 
   /**
-   * @description 删除角色
+   * @description 批量删除角色
    *
    */
   async deleteMany(codeList: string[]) {
