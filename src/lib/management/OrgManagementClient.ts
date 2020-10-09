@@ -3,24 +3,22 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ExtendedOrg, ManagementClientOptions } from './types';
 import buildTree from '../utils';
 import _ from 'lodash';
-import { SearchOrgNodesVariables } from '../../types/graphql.v1';
 import {
   orgs,
   createOrg,
   org,
   deleteOrg,
   deleteNode,
-  isRootNodeOfOrg,
   getChildrenNodes,
-  orgRootNode,
-  searchNodes,
   addMember,
   getMembersByCode,
   getMembersById,
   addNode,
   updateNode,
   moveNode,
-  removeMembers
+  removeMembers,
+  isRootNode,
+  rootNode
 } from '../graphqlapi';
 import Axios from 'axios';
 import { SDK_VERSION } from '../version';
@@ -29,18 +27,15 @@ import { Org, PaginatedUsers, SortByEnum } from '../../types/graphql.v2';
 export class OrgManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;
-  graphqlClientV2: GraphqlClient;
   tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
     graphqlClient: GraphqlClient,
-    graphqlClientV2: GraphqlClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
     this.graphqlClient = graphqlClient;
-    this.graphqlClientV2 = graphqlClientV2;
     this.tokenProvider = tokenProvider;
   }
 
@@ -58,7 +53,7 @@ export class OrgManagementClient {
   async list(page: number = 1, limit: number = 10) {
     const {
       orgs: { list, totalCount }
-    } = await orgs(this.graphqlClientV2, this.tokenProvider, {
+    } = await orgs(this.graphqlClient, this.tokenProvider, {
       page,
       limit
     });
@@ -74,7 +69,7 @@ export class OrgManagementClient {
    */
   async create(name: string, description?: string, code?: string) {
     const { createOrg: org } = await createOrg(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         name,
@@ -103,7 +98,7 @@ export class OrgManagementClient {
   ) {
     const { name, code, order, nameI18n, description, descriptionI18n } = data;
     const { addNode: org } = await addNode(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         orgId,
@@ -132,7 +127,7 @@ export class OrgManagementClient {
   ) {
     const { name, code, description } = updates;
     const { updateNode: node } = await updateNode(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         id,
@@ -149,7 +144,7 @@ export class OrgManagementClient {
    * @memberof OrgManagementClient
    */
   async findById(id: string) {
-    const { org: data } = await org(this.graphqlClientV2, this.tokenProvider, {
+    const { org: data } = await org(this.graphqlClient, this.tokenProvider, {
       id
     });
     return this.buildTree(data);
@@ -163,7 +158,7 @@ export class OrgManagementClient {
    */
   async delete(id: string) {
     const res = await deleteOrg(this.graphqlClient, this.tokenProvider, {
-      _id: id
+      id
     });
     return res.deleteOrg;
   }
@@ -173,7 +168,7 @@ export class OrgManagementClient {
    */
   async deleteNode(orgId: string, nodeId: string) {
     const { deleteNode: data } = await deleteNode(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         orgId,
@@ -188,7 +183,7 @@ export class OrgManagementClient {
    */
   async moveNode(orgId: string, nodeId: string, targetParentId: string) {
     const { moveNode: org } = await moveNode(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         orgId,
@@ -206,14 +201,12 @@ export class OrgManagementClient {
    * @returns
    * @memberof OrgManagementClient
    */
-  async isRoot(orgId: string, nodeId: string) {
-    const res = await isRootNodeOfOrg(this.graphqlClient, this.tokenProvider, {
-      input: {
-        orgId,
-        groupId: nodeId
-      }
+  async isRootNode(orgId: string, nodeId: string) {
+    const res = await isRootNode(this.graphqlClient, this.tokenProvider, {
+      orgId,
+      nodeId
     });
-    return res.isRootNodeOfOrg;
+    return res.isRootNode;
   }
 
   /**
@@ -224,14 +217,10 @@ export class OrgManagementClient {
    * @memberof OrgManagementClient
    */
   async childrenNodes(orgId: string, nodeId: string) {
-    const res = await getChildrenNodes(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        orgId,
-        nodeId
-      }
-    );
+    const res = await getChildrenNodes(this.graphqlClient, this.tokenProvider, {
+      orgId,
+      nodeId
+    });
     return res.childrenNodes;
   }
 
@@ -239,39 +228,11 @@ export class OrgManagementClient {
    * 查询组织机构树根节点
    * @memberof OrgManagementClient
    */
-  async rootNode(id: string) {
-    const res = await orgRootNode(this.graphqlClient, this.tokenProvider, {
-      _id: id
+  async rootNode(orgId: string) {
+    const res = await rootNode(this.graphqlClient, this.tokenProvider, {
+      orgId
     });
-    return res.orgRootNode;
-  }
-
-  /**
-   * 根据 Group 的自定义字段查询节点
-   *
-   * @param {SearchOrgNodesVariables} options
-   * @memberof OrgManagementClient
-   */
-  async searchNodes(options: SearchOrgNodesVariables) {
-    let { orgId, name = '', metadata = [] } = options;
-    if (!name && metadata.length === 0) {
-      this.options.onError(500, 'Plesas Provide name or metadata');
-    }
-
-    if (metadata) {
-      metadata = metadata.map(metadata => {
-        if (typeof metadata.value !== 'string') {
-          metadata.value = JSON.stringify(metadata.value);
-        }
-        return metadata;
-      });
-    }
-    const res = await searchNodes(this.graphqlClient, this.tokenProvider, {
-      orgId,
-      name,
-      metadata
-    });
-    return res.searchOrgNodes;
+    return res.rootNode;
   }
 
   /**
@@ -312,7 +273,7 @@ export class OrgManagementClient {
       const userId = arg3;
       const isLeader = arg4 || false;
       const { addMember: data } = await addMember(
-        this.graphqlClientV2,
+        this.graphqlClient,
         this.tokenProvider,
         {
           orgId,
@@ -327,7 +288,7 @@ export class OrgManagementClient {
       const userId = arg2;
       const isLeader = arg3 || false;
       const { addMember: data } = await addMember(
-        this.graphqlClientV2,
+        this.graphqlClient,
         this.tokenProvider,
         {
           nodeId,
@@ -360,7 +321,7 @@ export class OrgManagementClient {
       const nodeCode = arg2;
       const userIds = arg3;
       const isLeader = arg4 || false;
-      const res = await addMember(this.graphqlClientV2, this.tokenProvider, {
+      const res = await addMember(this.graphqlClient, this.tokenProvider, {
         orgId,
         nodeCode,
         userIds,
@@ -371,7 +332,7 @@ export class OrgManagementClient {
       const nodeId = arg1;
       const userIds = arg2;
       const isLeader = arg3 || false;
-      const res = await addMember(this.graphqlClientV2, this.tokenProvider, {
+      const res = await addMember(this.graphqlClient, this.tokenProvider, {
         nodeId,
         userIds,
         isLeader
@@ -405,7 +366,7 @@ export class OrgManagementClient {
       const code = arg2;
       const options = arg3 || {};
       const { nodeByCode } = await getMembersByCode(
-        this.graphqlClientV2,
+        this.graphqlClient,
         this.tokenProvider,
         {
           orgId,
@@ -418,7 +379,7 @@ export class OrgManagementClient {
       const id = arg1;
       const options = arg2 || {};
       const { nodeById } = await getMembersById(
-        this.graphqlClientV2,
+        this.graphqlClient,
         this.tokenProvider,
         {
           id,
@@ -449,7 +410,7 @@ export class OrgManagementClient {
       const code = arg2;
       const userId = arg3;
       const { removeMember: data } = await removeMembers(
-        this.graphqlClientV2,
+        this.graphqlClient,
         this.tokenProvider,
         {
           orgId,
@@ -462,7 +423,7 @@ export class OrgManagementClient {
       const nodeId = arg1;
       const userId = arg2;
       const { removeMember: data } = await removeMembers(
-        this.graphqlClientV2,
+        this.graphqlClient,
         this.tokenProvider,
         {
           nodeId,
@@ -496,7 +457,7 @@ export class OrgManagementClient {
       const code = arg2;
       const userIds = arg3;
       const { removeMember: data } = await removeMembers(
-        this.graphqlClientV2,
+        this.graphqlClient,
         this.tokenProvider,
         {
           orgId,
@@ -509,7 +470,7 @@ export class OrgManagementClient {
       const nodeId = arg1;
       const userIds = arg2;
       const { removeMember: data } = await removeMembers(
-        this.graphqlClientV2,
+        this.graphqlClient,
         this.tokenProvider,
         {
           nodeId,

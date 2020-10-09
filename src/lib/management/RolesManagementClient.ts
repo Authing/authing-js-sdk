@@ -1,7 +1,7 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
-import { Role } from '../../types/graphql.v2';
+import { PolicyAssignmentTargetType, Role } from '../../types/graphql.v2';
 import {
   assignRole,
   addRole,
@@ -11,7 +11,10 @@ import {
   updateRole,
   revokeRole,
   deleteRole,
-  deleteRoles
+  deleteRoles,
+  policyAssignments,
+  addPolicyAssignments,
+  removePolicyAssignments
 } from '../graphqlapi';
 
 export class RolesManagementClient {
@@ -161,5 +164,57 @@ export class RolesManagementClient {
       userIds
     });
     return res.revokeRole;
+  }
+
+  /**
+   * @description 获取策略列表
+   *
+   */
+  async listPolicies(code: string, page: number = 1, limit: number = 10) {
+    const { policyAssignments: data } = await policyAssignments(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        targetType: PolicyAssignmentTargetType.User,
+        targetIdentifier: code,
+        page,
+        limit
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @description 添加策略
+   *
+   */
+  async addPolicies(code: string, policies: string[]) {
+    const res = await addPolicyAssignments(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        targetType: PolicyAssignmentTargetType.User,
+        targetIdentifiers: [code],
+        policies
+      }
+    );
+    return res.addPolicyAssignments;
+  }
+
+  /**
+   * @description 移除策略
+   *
+   */
+  async removePolicies(code: string, policies: string[]) {
+    const res = await removePolicyAssignments(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        targetType: PolicyAssignmentTargetType.User,
+        targetIdentifiers: [code],
+        policies
+      }
+    );
+    return res.removePolicyAssignments;
   }
 }

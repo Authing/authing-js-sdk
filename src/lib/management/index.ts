@@ -1,5 +1,4 @@
 import { OrgManagementClient } from './OrgManagementClient';
-import { AccessControlManagementClient } from './AccessControlManagementClient';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
@@ -26,6 +25,8 @@ import Axios from 'axios';
 import { RolesManagementClient } from './RolesManagementClient';
 import { PoliciesManagementClient } from './PoliciesManagementClient';
 import { UdfManagementClient } from './UdfManagementClient';
+import { GroupsManagementClient } from './GroupsManagementClient';
+import { AclManagementClient } from './AclManagementClient';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -57,11 +58,12 @@ export class ManagementClient {
   tokenProvider: ManagementTokenProvider;
   users: UsersManagementClient;
   userpool: UserPoolManagementClient;
-  acl: AccessControlManagementClient;
+  acl: AclManagementClient;
   org: OrgManagementClient;
   roles: RolesManagementClient;
   policies: PoliciesManagementClient;
   udf: UdfManagementClient;
+  groups: GroupsManagementClient;
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -101,14 +103,8 @@ export class ManagementClient {
       this.graphqlClientV2,
       this.tokenProvider
     );
-    this.acl = new AccessControlManagementClient(
-      this.options,
-      this.graphqlClientV2,
-      this.tokenProvider
-    );
     this.org = new OrgManagementClient(
       this.options,
-      this.graphqlClient,
       this.graphqlClientV2,
       this.tokenProvider
     );
@@ -123,6 +119,11 @@ export class ManagementClient {
       this.tokenProvider
     );
     this.udf = new UdfManagementClient(
+      this.options,
+      this.graphqlClientV2,
+      this.tokenProvider
+    );
+    this.acl = new AclManagementClient(
       this.options,
       this.graphqlClientV2,
       this.tokenProvider

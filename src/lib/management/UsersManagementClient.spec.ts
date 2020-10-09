@@ -66,10 +66,10 @@ test('获取用户角色列表', async t => {
     password: '123456!'
   });
 
-  const role = await management.acl.createRole(generateRandomString());
-  await management.acl.assignRole(role.code, { userIds: [user.id] });
+  const role = await management.roles.create(generateRandomString());
+  await management.roles.addUsers(role.code, [user.id]);
 
-  const roles = await management.users.getRoles(user.id);
+  const roles = await management.users.listRoles(user.id);
   t.assert(roles.totalCount === 1);
   t.assert(roles.list[0].code === role.code);
 });

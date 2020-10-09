@@ -137,12 +137,14 @@ export class PoliciesManagementClient {
    * @description 获取策略授权列表
    *
    */
-  async listAssignments(code: string) {
+  async listAssignments(code: string, page: number = 1, limit: number = 10) {
     const { policyAssignments: data } = await policyAssignments(
       this.graphqlClient,
       this.tokenProvider,
       {
-        code
+        code,
+        page,
+        limit
       }
     );
     return data;

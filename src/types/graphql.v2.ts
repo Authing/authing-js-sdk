@@ -43,6 +43,8 @@ export type Query = {
   orgs: PaginatedOrgs;
   /** 查询子节点列表 */
   childrenNodes: Array<Node>;
+  rootNode: Node;
+  isRootNode?: Maybe<Scalars['Boolean']>;
   checkPasswordStrength: CheckPasswordStrengthResult;
   isActionAllowed: Scalars['Boolean'];
   isActionDenied: Scalars['Boolean'];
@@ -143,6 +145,15 @@ export type QueryOrgsArgs = {
 export type QueryChildrenNodesArgs = {
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
+};
+
+export type QueryRootNodeArgs = {
+  orgId: Scalars['String'];
+};
+
+export type QueryIsRootNodeArgs = {
+  nodeId: Scalars['String'];
+  orgId: Scalars['String'];
 };
 
 export type QueryCheckPasswordStrengthArgs = {
@@ -3699,6 +3710,13 @@ export type IsDomainAvaliableVariables = Exact<{
 
 export type IsDomainAvaliableResponse = { isDomainAvaliable?: Maybe<boolean> };
 
+export type IsRootNodeVariables = Exact<{
+  nodeId: Scalars['String'];
+  orgId: Scalars['String'];
+}>;
+
+export type IsRootNodeResponse = { isRootNode?: Maybe<boolean> };
+
 export type NodeByCodeVariables = Exact<{
   orgId: Scalars['String'];
   code: Scalars['String'];
@@ -4220,6 +4238,33 @@ export type RolesResponse = {
         updatedAt?: Maybe<string>;
       }>;
     }>;
+  };
+};
+
+export type RootNodeVariables = Exact<{
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
+  orgId: Scalars['String'];
+}>;
+
+export type RootNodeResponse = {
+  rootNode: {
+    id: string;
+    name: string;
+    nameI18n?: Maybe<string>;
+    description?: Maybe<string>;
+    descriptionI18n?: Maybe<string>;
+    order?: Maybe<number>;
+    code?: Maybe<string>;
+    root?: Maybe<boolean>;
+    depth?: Maybe<number>;
+    path: Array<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    children?: Maybe<Array<string>>;
+    users: { totalCount: number };
   };
 };
 
@@ -6535,6 +6580,11 @@ export const IsDomainAvaliableDocument = `
   isDomainAvaliable(domain: $domain)
 }
     `;
+export const IsRootNodeDocument = `
+    query isRootNode($nodeId: String!, $orgId: String!) {
+  isRootNode(nodeId: $nodeId, orgId: $orgId)
+}
+    `;
 export const NodeByCodeDocument = `
     query nodeByCode($orgId: String!, $code: String!) {
   nodeByCode(orgId: $orgId, code: $code) {
@@ -6990,6 +7040,28 @@ export const RolesDocument = `
         createdAt
         updatedAt
       }
+    }
+  }
+}
+    `;
+export const RootNodeDocument = `
+    query rootNode($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!) {
+  rootNode(orgId: $orgId) {
+    id
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    path
+    createdAt
+    updatedAt
+    children
+    users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
+      totalCount
     }
   }
 }

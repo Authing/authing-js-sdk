@@ -13,7 +13,9 @@ import {
   createUser,
   refreshToken,
   userBatch,
-  getUserRoles
+  getUserRoles,
+  assignRole,
+  revokeRole
 } from '../graphqlapi';
 import {
   User,
@@ -173,36 +175,6 @@ export class UsersManagementClient {
   }
 
   /**
-   * @description 获取用户的分组列表
-   *
-   */
-  async getGroups(userId: string, page: number = 1, limit: number = 10) {
-    const { groups } = await getGroupsOfUser(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        userId,
-        page,
-        limit
-      }
-    );
-    return groups;
-  }
-
-  /**
-   * @description 获取用户的角色列表
-   *
-   */
-  async getRoles(userId: string) {
-    const {
-      user: { roles }
-    } = await getUserRoles(this.graphqlClientV2, this.tokenProvider, {
-      id: userId
-    });
-    return roles;
-  }
-
-  /**
    * 根据关键字搜索用户
    * @param query 搜索内容
    * @param options 选项
@@ -229,6 +201,68 @@ export class UsersManagementClient {
       this.tokenProvider,
       {
         id
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @description 获取用户的分组列表
+   *
+   */
+  async listGroups(userId: string, page: number = 1, limit: number = 10) {
+    const { groups } = await getGroupsOfUser(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        userId,
+        page,
+        limit
+      }
+    );
+    return groups;
+  }
+
+  /**
+   * @description 获取用户的角色列表
+   *
+   */
+  async listRoles(userId: string) {
+    const {
+      user: { roles }
+    } = await getUserRoles(this.graphqlClientV2, this.tokenProvider, {
+      id: userId
+    });
+    return roles;
+  }
+
+  /**
+   * @description 添加角色
+   *
+   */
+  async addRoles(userId: string, roles: string[]) {
+    const { assignRole: data } = await assignRole(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        roleCodes: roles,
+        userIds: [userId]
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @description 移除角色
+   *
+   */
+  async removeRoles(userId: string, roles: string[]) {
+    const { revokeRole: data } = await revokeRole(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {
+        roleCodes: roles,
+        userIds: [userId]
       }
     );
     return data;

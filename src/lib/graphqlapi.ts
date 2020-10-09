@@ -38,12 +38,6 @@ import {
   IsDomainAvaliable,
   IsDomainAvaliableDocument,
   IsDomainAvaliableVariables,
-  DeleteOrg,
-  DeleteOrgDocument,
-  DeleteOrgVariables,
-  IsRootNodeOfOrg,
-  IsRootNodeOfOrgDocument,
-  IsRootNodeOfOrgVariables,
   OrgRootNodeDocument,
   OrgRootNode,
   OrgRootNodeVariables,
@@ -294,7 +288,16 @@ import {
   AddPolicyAssignmentsDocument,
   RemovePolicyAssignmentsVariables,
   RemovePolicyAssignmentsResponse,
-  RemovePolicyAssignmentsDocument
+  RemovePolicyAssignmentsDocument,
+  DeleteOrgResponse,
+  DeleteOrgDocument,
+  DeleteOrgVariables,
+  RootNodeDocument,
+  RootNodeResponse,
+  RootNodeVariables,
+  IsRootNodeDocument,
+  IsRootNodeResponse,
+  IsRootNodeVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -353,12 +356,26 @@ export const org = async (
   });
 };
 
-export const isRootNodeOfOrg = async (
+export const isRootNode = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider,
-  variables: IsRootNodeOfOrgVariables
-): Promise<IsRootNodeOfOrg> => {
-  const query = IsRootNodeOfOrgDocument;
+  variables: IsRootNodeVariables
+): Promise<IsRootNodeResponse> => {
+  const query = IsRootNodeDocument;
+  const token = await tokenProvider.getAccessToken();
+  return await garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const rootNode = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider,
+  variables: RootNodeVariables
+): Promise<RootNodeResponse> => {
+  const query = RootNodeDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
     query,
@@ -553,7 +570,7 @@ export const deleteOrg = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider,
   variables: DeleteOrgVariables
-): Promise<DeleteOrg> => {
+): Promise<DeleteOrgResponse> => {
   const query = DeleteOrgDocument;
   const token = await tokenProvider.getAccessToken();
   return await garpqhlClient.request({
