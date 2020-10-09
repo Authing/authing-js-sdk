@@ -28,6 +28,7 @@ import {
   EmailScene,
   RefreshToken,
   RegisterProfile,
+  UdfDataType,
   UdfTargetType,
   UpdateUserInput,
   User
@@ -341,7 +342,7 @@ export class AuthenticationClient {
     return data;
   }
 
-  async resetPhonePassword(
+  async resetPasswordByPhoneCode(
     phone: string,
     code: string,
     newPassword: string
@@ -359,7 +360,7 @@ export class AuthenticationClient {
     return data;
   }
 
-  async resetEmailPassword(
+  async resetPasswordByEmailCode(
     email: string,
     code: string,
     newPassword: string
@@ -543,16 +544,34 @@ export class AuthenticationClient {
     this.tokenProvider.clearUser();
   }
 
-  async udv() {
+  private convertUdv(
+    data: Array<{ key: string; dataType: UdfDataType; value: any }>
+  ) {
+    for (const item of data) {
+      const { dataType, value } = item;
+      if (dataType === UdfDataType.Number) {
+        item.value = JSON.parse(value);
+      } else if (dataType === UdfDataType.Boolean) {
+        item.value = JSON.parse(value);
+      } else if (dataType === UdfDataType.Datetime) {
+        item.value = new Date(parseInt(value));
+      } else if (dataType === UdfDataType.Object) {
+        item.value = JSON.parse(value);
+      }
+    }
+    return data;
+  }
+
+  async listUdv() {
     const user = this.checkLoggedIn();
     const { udv: list } = await udv(this.graphqlClientV2, this.tokenProvider, {
       targetType: UdfTargetType.User,
       targetId: user.id
     });
-    return list;
+    return this.convertUdv(list);
   }
 
-  async setUdv(key: string, value: any) {
+  async addUdv(key: string, value: any) {
     const user = this.checkLoggedIn();
     value = JSON.stringify(value);
     const { setUdv: list } = await setUdv(
@@ -565,7 +584,7 @@ export class AuthenticationClient {
         value
       }
     );
-    return list;
+    return this.convertUdv(list);
   }
 
   async removeUdv(key: string) {
@@ -579,6 +598,6 @@ export class AuthenticationClient {
         key
       }
     );
-    return list;
+    return this.convertUdv(list);
   }
 }
