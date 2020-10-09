@@ -261,7 +261,13 @@ import {
   AddUdfDocument,
   RemoveUdfVariables,
   RemoveUdfResponse,
-  RemoveUdfDocument
+  RemoveUdfDocument,
+  DeleteRoleVariables,
+  DeleteRoleResponse,
+  DeleteRoleDocument,
+  DeleteRolesResponse,
+  DeleteRolesVariables,
+  DeleteRolesDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1474,6 +1480,34 @@ export const udf = async (
   variables: UdfVariables
 ): Promise<UdfResponse> => {
   const query = UdfDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const deleteRole = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: DeleteRoleVariables
+): Promise<DeleteRoleResponse> => {
+  const query = DeleteRoleDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const deleteRoles = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: DeleteRolesVariables
+): Promise<DeleteRolesResponse> => {
+  const query = DeleteRolesDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,

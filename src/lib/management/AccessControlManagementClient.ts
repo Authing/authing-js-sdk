@@ -93,7 +93,7 @@ export class AccessControlManagementClient {
   ) {
     const { userIds = [], groupCodes = [] } = targets;
     const res = await assignRole(this.graphqlClientV2, this.tokenProvider, {
-      code: roleCode,
+      roleCode,
       userIds,
       groupCodes
     });
@@ -109,7 +109,7 @@ export class AccessControlManagementClient {
   ) {
     const { userIds = [], groupCodes = [] } = targets;
     const res = await revokeRole(this.graphqlClientV2, this.tokenProvider, {
-      code: roleCode,
+      roleCode,
       userIds,
       groupCodes
     });

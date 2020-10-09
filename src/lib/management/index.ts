@@ -28,6 +28,7 @@ import {
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
 import Axios from 'axios';
+import { RolesManagementClient } from './RolesManagementClient';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -61,6 +62,7 @@ export class ManagementClient {
   userpool: UserPoolManagementClient;
   acl: AccessControlManagementClient;
   org: OrgManagementClient;
+  roles: RolesManagementClient;
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -108,6 +110,11 @@ export class ManagementClient {
     this.org = new OrgManagementClient(
       this.options,
       this.graphqlClient,
+      this.graphqlClientV2,
+      this.tokenProvider
+    );
+    this.roles = new RolesManagementClient(
+      this.options,
       this.graphqlClientV2,
       this.tokenProvider
     );
