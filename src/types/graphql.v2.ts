@@ -64,6 +64,7 @@ export type Query = {
   users: PaginatedUsers;
   searchUser: PaginatedUsers;
   checkLoginStatus?: Maybe<JwtTokenStatus>;
+  isUserExists?: Maybe<Scalars['Boolean']>;
   /** 查询用户池详情 */
   userpool: UserPool;
   /** 查询用户池列表 */
@@ -231,6 +232,12 @@ export type QuerySearchUserArgs = {
 
 export type QueryCheckLoginStatusArgs = {
   token?: Maybe<Scalars['String']>;
+};
+
+export type QueryIsUserExistsArgs = {
+  email?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
 };
 
 export type QueryUserpoolsArgs = {
@@ -3717,6 +3724,14 @@ export type IsRootNodeVariables = Exact<{
 
 export type IsRootNodeResponse = { isRootNode?: Maybe<boolean> };
 
+export type IsUserExistsVariables = Exact<{
+  email?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+}>;
+
+export type IsUserExistsResponse = { isUserExists?: Maybe<boolean> };
+
 export type NodeByCodeVariables = Exact<{
   orgId: Scalars['String'];
   code: Scalars['String'];
@@ -6583,6 +6598,11 @@ export const IsDomainAvaliableDocument = `
 export const IsRootNodeDocument = `
     query isRootNode($nodeId: String!, $orgId: String!) {
   isRootNode(nodeId: $nodeId, orgId: $orgId)
+}
+    `;
+export const IsUserExistsDocument = `
+    query isUserExists($email: String, $phone: String, $username: String) {
+  isUserExists(email: $email, phone: $phone, username: $username)
 }
     `;
 export const NodeByCodeDocument = `

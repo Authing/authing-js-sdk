@@ -15,7 +15,8 @@ import {
   userBatch,
   getUserRoles,
   assignRole,
-  revokeRole
+  revokeRole,
+  isUserExists
 } from '../graphqlapi';
 import {
   User,
@@ -26,16 +27,16 @@ import {
 
 export class UsersManagementClient {
   options: ManagementClientOptions;
-  graphqlClientV2: GraphqlClient;
+  graphqlClient: GraphqlClient;
   tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
-    graphqlClientV2: GraphqlClient,
+    graphqlClient: GraphqlClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
-    this.graphqlClientV2 = graphqlClientV2;
+    this.graphqlClient = graphqlClient;
     this.tokenProvider = tokenProvider;
   }
 
@@ -48,7 +49,7 @@ export class UsersManagementClient {
    */
   async delete(userId: string) {
     const { deleteUser: data } = await deleteUser(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         id: userId
@@ -66,7 +67,7 @@ export class UsersManagementClient {
    */
   async deleteMany(userIds: string[]) {
     const { deleteUsers: data } = await deleteUsers(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         ids: userIds
@@ -83,13 +84,9 @@ export class UsersManagementClient {
    * @memberof UsersManagementClient
    */
   async detail(userId: string): Promise<User> {
-    const { user: data } = await user(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        id: userId
-      }
-    );
+    const { user: data } = await user(this.graphqlClient, this.tokenProvider, {
+      id: userId
+    });
     return data;
   }
 
@@ -99,7 +96,7 @@ export class UsersManagementClient {
    */
   async batch(ids: string[]) {
     const { userBatch: data } = await userBatch(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         ids
@@ -119,7 +116,7 @@ export class UsersManagementClient {
    */
   async list(page?: number, limit?: number) {
     const { users: data } = await users(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         page,
@@ -142,7 +139,7 @@ export class UsersManagementClient {
       );
     }
     const { createUser: user } = await createUser(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         userInfo,
@@ -164,7 +161,7 @@ export class UsersManagementClient {
       );
     }
     const { updateUser: user } = await updateUser(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         id,
@@ -172,6 +169,24 @@ export class UsersManagementClient {
       }
     );
     return user;
+  }
+
+  async isExists(options: {
+    username?: string;
+    email?: string;
+    phone?: string;
+  }) {
+    const { username, email, phone } = options;
+    const { isUserExists: data } = await isUserExists(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        username,
+        email,
+        phone
+      }
+    );
+    return data;
   }
 
   /**
@@ -184,7 +199,7 @@ export class UsersManagementClient {
     options?: { fields?: string[]; page?: number; limit?: number }
   ): Promise<PaginatedUsers> {
     const { searchUser: users } = await searchUser(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         query,
@@ -197,7 +212,7 @@ export class UsersManagementClient {
 
   async refreshToken(id: string): Promise<RefreshToken> {
     const { refreshToken: data } = await refreshToken(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         id
@@ -212,7 +227,7 @@ export class UsersManagementClient {
    */
   async listGroups(userId: string, page: number = 1, limit: number = 10) {
     const { groups } = await getGroupsOfUser(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         userId,
@@ -230,7 +245,7 @@ export class UsersManagementClient {
   async listRoles(userId: string) {
     const {
       user: { roles }
-    } = await getUserRoles(this.graphqlClientV2, this.tokenProvider, {
+    } = await getUserRoles(this.graphqlClient, this.tokenProvider, {
       id: userId
     });
     return roles;
@@ -242,7 +257,7 @@ export class UsersManagementClient {
    */
   async addRoles(userId: string, roles: string[]) {
     const { assignRole: data } = await assignRole(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         roleCodes: roles,
@@ -258,7 +273,7 @@ export class UsersManagementClient {
    */
   async removeRoles(userId: string, roles: string[]) {
     const { revokeRole: data } = await revokeRole(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         roleCodes: roles,

@@ -4,21 +4,8 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserPoolManagementClient } from './UserpoolManagementClient';
 import { UsersManagementClient } from './UsersManagementClient';
-import {
-  addWhiteList,
-  getWhiteList,
-  isDomainAvaliable,
-  removeWhiteList,
-  sendEmail,
-  userExists
-} from '../graphqlapi';
-import {
-  EmailScene,
-  User,
-  UserPool,
-  WhiteList,
-  WhitelistType
-} from '../../types/graphql.v2';
+import { isDomainAvaliable, sendEmail } from '../graphqlapi';
+import { EmailScene, User, UserPool } from '../../types/graphql.v2';
 import { verifyToken } from '../utils';
 import { HttpClient } from '../common/HttpClient';
 import Axios from 'axios';
@@ -27,6 +14,7 @@ import { PoliciesManagementClient } from './PoliciesManagementClient';
 import { UdfManagementClient } from './UdfManagementClient';
 import { GroupsManagementClient } from './GroupsManagementClient';
 import { AclManagementClient } from './AclManagementClient';
+import { WhitelistManagementClient } from './WhitelistManagementClient';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -64,6 +52,7 @@ export class ManagementClient {
   policies: PoliciesManagementClient;
   udf: UdfManagementClient;
   groups: GroupsManagementClient;
+  whitelist: WhitelistManagementClient;
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -124,6 +113,11 @@ export class ManagementClient {
       this.tokenProvider
     );
     this.acl = new AclManagementClient(
+      this.options,
+      this.graphqlClientV2,
+      this.tokenProvider
+    );
+    this.whitelist = new WhitelistManagementClient(
       this.options,
       this.graphqlClientV2,
       this.tokenProvider
@@ -194,62 +188,5 @@ export class ManagementClient {
       const user = await this.users.detail(id);
       return user;
     }
-  }
-
-  async userExists(options: { username: string }) {
-    const { username } = options;
-    const { userExist } = await userExists(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        userPoolId: this.options.userPoolId,
-        username
-      }
-    );
-    return userExist;
-  }
-
-  async getWhiteList(type: WhitelistType): Promise<WhiteList[]> {
-    const { whitelist } = await getWhiteList(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        type
-      }
-    );
-
-    return whitelist;
-  }
-
-  async addWhiteList(
-    type: WhitelistType,
-    list: string[]
-  ): Promise<WhiteList[]> {
-    const { addWhitelist: whiteList } = await addWhiteList(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        type,
-        list
-      }
-    );
-
-    return whiteList;
-  }
-
-  async removeWhiteList(
-    type: WhitelistType,
-    list: string[]
-  ): Promise<WhiteList[]> {
-    const { removeWhitelist: whiteList } = await removeWhiteList(
-      this.graphqlClientV2,
-      this.tokenProvider,
-      {
-        type,
-        list
-      }
-    );
-
-    return whiteList;
   }
 }

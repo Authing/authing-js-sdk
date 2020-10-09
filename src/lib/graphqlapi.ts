@@ -65,9 +65,6 @@ import {
   PasswordLessForceLogin,
   PasswordLessForceLoginDocument,
   PasswordLessForceLoginVariables,
-  UserExistVariables,
-  UserExist,
-  UserExistDocument,
   UserPermissionListVariables,
   UserPermissionList,
   UserPermissionListDocument
@@ -297,7 +294,10 @@ import {
   RootNodeVariables,
   IsRootNodeDocument,
   IsRootNodeResponse,
-  IsRootNodeVariables
+  IsRootNodeVariables,
+  IsUserExistsVariables,
+  IsUserExistsResponse,
+  IsUserExistsDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1266,12 +1266,12 @@ export const addUserToGroup = async (
   });
 };
 
-export const userExists = async (
+export const isUserExists = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
-  variables: UserExistVariables
-): Promise<UserExist> => {
-  const query = UserExistDocument;
+  variables: IsUserExistsVariables
+): Promise<IsUserExistsResponse> => {
+  const query = IsUserExistsDocument;
   const token = await tokenProvider.getAccessToken();
   return garpqhlClient.request({
     query,
