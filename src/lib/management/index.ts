@@ -174,7 +174,7 @@ export class ManagementClient {
       return data;
     } else {
       const { id } = data;
-      const user = await this.users.detail(id);
+      const user = await this.users.get(id);
       return user;
     }
   }
