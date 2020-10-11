@@ -261,7 +261,10 @@ import {
   AddUdfDocument,
   RemoveUdfVariables,
   RemoveUdfResponse,
-  RemoveUdfDocument
+  RemoveUdfDocument,
+  UnbindEmailVariables,
+  UnbindEmailDocument,
+  UnbindEmailResponse
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1481,3 +1484,17 @@ export const udf = async (
     variables
   });
 };
+
+export const unbindEmail = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UnbindEmailVariables
+): Promise<UnbindEmailResponse> => {
+  const query = UnbindEmailDocument;
+  const token = await tokenProvider.getAccessToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+}

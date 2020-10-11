@@ -19,7 +19,8 @@ import {
   user,
   setUdv,
   removeUdv,
-  udv
+  udv,
+  unbindEmail
 } from './../graphqlapi';
 import { GraphqlClient } from './../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
@@ -471,6 +472,9 @@ export class AuthenticationClient {
     return user;
   }
 
+  /**
+   * 刷新 token
+   */
   async refreshToken(): Promise<RefreshToken> {
     this.checkLoggedIn();
     const { refreshToken: data } = await refreshToken(
@@ -481,6 +485,9 @@ export class AuthenticationClient {
     return data;
   }
 
+  /**
+   * 绑定手机号
+   */
   async bindPhone(phone: string, phoneCode: string): Promise<User> {
     const { bindPhone: user } = await bindPhone(
       this.graphqlClientV2,
@@ -493,8 +500,23 @@ export class AuthenticationClient {
     return user;
   }
 
+  /**
+   * 解绑定手机号，需要已经绑定其他登录方式
+   */
   async unbindPhone(): Promise<User> {
     const { unbindPhone: user } = await unbindPhone(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {}
+    );
+    return user;
+  }
+
+  /**
+   * 解绑定邮箱，需要已经绑定其他登录方式
+   */
+  async unbindEmail(): Promise<User> {
+    const { unbindEmail: user } = await unbindEmail(
       this.graphqlClientV2,
       this.tokenProvider,
       {}

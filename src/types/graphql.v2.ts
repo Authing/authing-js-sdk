@@ -751,6 +751,8 @@ export type Mutation = {
   updatePhone: User;
   /** 修改邮箱。此接口需要验证邮箱验证码，管理员直接修改请使用 updateUser 接口。 */
   updateEmail: User;
+  /** 解绑邮箱。 */
+  unbindEmail: User;
   /** 删除用户 */
   deleteUser?: Maybe<CommonMessage>;
   /** 批量删除用户 */
@@ -1939,7 +1941,71 @@ export type CreateUserpoolVariables = Exact<{
   logo?: Maybe<Scalars['String']>;
   userpoolTypes?: Maybe<Array<Scalars['String']>>;
 }>;
-
+export type UnbindEmailVariables = Exact<{ [key: string]: never }>;
+export type UnbindEmailResponse = {
+  unbindEmail: User
+}
+export const UnbindEmailDocument = `
+mutation unbindEmail{
+  unbindEmail{
+      id
+      arn
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      identities{
+          openid
+          userIdInIdp
+          userId
+          connectionId
+          isSocial
+          provider
+          userPoolId
+      }
+      nickname
+      registerSource
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      country
+      createdAt
+      updatedAt
+      customData
+  }
+}`
 export type CreateUserpoolResponse = {
   createUserpool: {
     id: string;
