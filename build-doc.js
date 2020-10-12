@@ -6,8 +6,8 @@ const fs = require('fs');
 const glob = require('glob');
 const _ = require('lodash');
 
-// const files = glob.sync(__dirname + '/src/lib/management/!(*.spec).ts');
-const files = glob.sync(__dirname + '/src/lib/authentication/!(*.spec).ts');
+const files = glob.sync(__dirname + '/src/lib/management/!(*.spec).ts');
+// const files = glob.sync(__dirname + '/src/lib/authentication/!(*.spec).ts');
 // const files = glob.sync(__dirname + '/src/lib/management/RolesManagementClient.ts');
 
 for (let file of files) {

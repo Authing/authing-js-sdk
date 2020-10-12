@@ -7,10 +7,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  email_String_NotNull_format_email: any;
-  code_String_NotNull_minLength_4_maxLength_6: any;
   username_String_NotNull_minLength_4_maxLength_50: any;
   ip_String_format_ipv4: any;
+  email_String_NotNull_format_email: any;
 };
 
 export type Query = {
@@ -30,8 +29,8 @@ export type Query = {
   templateCode: Scalars['String'];
   function?: Maybe<Function>;
   functions: PaginatedFunctions;
+  group?: Maybe<Group>;
   groups: PaginatedGroups;
-  addUserToGroup: PaginatedGroups;
   /** 查询 MFA 信息 */
   queryMfa?: Maybe<Mfa>;
   nodeById?: Maybe<Node>;
@@ -106,16 +105,15 @@ export type QueryFunctionsArgs = {
   sortBy?: Maybe<SortByEnum>;
 };
 
+export type QueryGroupArgs = {
+  code: Scalars['String'];
+};
+
 export type QueryGroupsArgs = {
   userId?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
-};
-
-export type QueryAddUserToGroupArgs = {
-  userId?: Maybe<Scalars['String']>;
-  groupId?: Maybe<Scalars['String']>;
 };
 
 export type QueryQueryMfaArgs = {
@@ -354,11 +352,6 @@ export type PaginatedFunctions = {
   totalCount: Scalars['Int'];
 };
 
-export type PaginatedGroups = {
-  totalCount: Scalars['Int'];
-  list: Array<Group>;
-};
-
 export type Group = {
   /** 唯一标志 code */
   code: Scalars['String'];
@@ -372,6 +365,11 @@ export type Group = {
   updatedAt?: Maybe<Scalars['String']>;
   /** 包含的用户列表 */
   users: PaginatedUsers;
+};
+
+export type GroupUsersArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 export type PaginatedUsers = {
@@ -453,6 +451,7 @@ export type User = {
   /** 自定义用户数据，是一个 JSON 序列化过后的字符串 */
   customData?: Maybe<Scalars['String']>;
   roles?: Maybe<PaginatedRoles>;
+  groups?: Maybe<PaginatedGroups>;
 };
 
 export type Identity = {
@@ -487,6 +486,11 @@ export type Role = {
   users: PaginatedUsers;
   /** 父角色 */
   parent?: Maybe<Role>;
+};
+
+export type PaginatedGroups = {
+  totalCount: Scalars['Int'];
+  list: Array<Group>;
 };
 
 export type Mfa = {
@@ -790,6 +794,14 @@ export type Mutation = {
   /** 修改函数 */
   updateFunction: Function;
   deleteFunction: CommonMessage;
+  addUserToGroup: CommonMessage;
+  removeUserFromGroup: CommonMessage;
+  /** 创建角色 */
+  createGroup: Role;
+  /** 修改角色 */
+  updateGroup: Role;
+  /** 批量删除角色 */
+  deleteGroups: CommonMessage;
   loginByEmail?: Maybe<User>;
   loginByUsername?: Maybe<User>;
   loginByPhoneCode?: Maybe<User>;
@@ -854,6 +866,8 @@ export type Mutation = {
   updatePhone: User;
   /** 修改邮箱。此接口需要验证邮箱验证码，管理员直接修改请使用 updateUser 接口。 */
   updateEmail: User;
+  /** 解绑定邮箱 */
+  unbindEmail: User;
   /** 删除用户 */
   deleteUser?: Maybe<CommonMessage>;
   /** 批量删除用户 */
@@ -911,6 +925,33 @@ export type MutationUpdateFunctionArgs = {
 
 export type MutationDeleteFunctionArgs = {
   id: Scalars['String'];
+};
+
+export type MutationAddUserToGroupArgs = {
+  userId?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+};
+
+export type MutationRemoveUserFromGroupArgs = {
+  userId?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+};
+
+export type MutationCreateGroupArgs = {
+  code: Scalars['String'];
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+};
+
+export type MutationUpdateGroupArgs = {
+  code: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  newCode?: Maybe<Scalars['String']>;
+};
+
+export type MutationDeleteGroupsArgs = {
+  code: Scalars['String'];
 };
 
 export type MutationLoginByEmailArgs = {
@@ -1234,7 +1275,7 @@ export type ConfigEmailTemplateInput = {
 export enum EmailScene {
   /** 发送重置密码邮件，邮件中包含验证码 */
   ResetPassword = 'RESET_PASSWORD',
-  /** 发送短信验证邮件 */
+  /** 发送验证邮箱的邮件 */
   VerifyEmail = 'VERIFY_EMAIL',
   /** 发送修改邮箱邮件，邮件中包含验证码 */
   ChangeEmail = 'CHANGE_EMAIL'
@@ -1275,7 +1316,7 @@ export type UpdateFunctionInput = {
 };
 
 export type LoginByEmailInput = {
-  email: Scalars['email_String_NotNull_format_email'];
+  email: Scalars['String'];
   password: Scalars['String'];
   /** 图形验证码 */
   captchaCode?: Maybe<Scalars['String']>;
@@ -1294,7 +1335,7 @@ export type LoginByUsernameInput = {
 
 export type LoginByPhoneCodeInput = {
   phone: Scalars['String'];
-  code: Scalars['code_String_NotNull_minLength_4_maxLength_6'];
+  code: Scalars['String'];
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
 };
@@ -1462,7 +1503,6 @@ export type UpdateUserInput = {
   /** 头像链接，默认为 https://usercontents.authing.cn/authing-avatar.png */
   photo?: Maybe<Scalars['String']>;
   /** 注册方式 */
-  registerSource?: Maybe<Array<Scalars['String']>>;
   company?: Maybe<Scalars['String']>;
   browser?: Maybe<Scalars['String']>;
   device?: Maybe<Scalars['String']>;
@@ -1473,9 +1513,7 @@ export type UpdateUserInput = {
   lastLogin?: Maybe<Scalars['String']>;
   lastIP?: Maybe<Scalars['String']>;
   /** 用户注册时间，当你从你原有用户系统向 Authing 迁移的时候可以设置此字段。 */
-  signedUp?: Maybe<Scalars['String']>;
   blocked?: Maybe<Scalars['Boolean']>;
-  isDeleted?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
   givenName?: Maybe<Scalars['String']>;
   familyName?: Maybe<Scalars['String']>;
@@ -1496,7 +1534,6 @@ export type UpdateUserInput = {
   city?: Maybe<Scalars['String']>;
   province?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
 };
 
 export type UpdateUserpoolInput = {
@@ -1726,6 +1763,15 @@ export type AddUdfResponse = {
   }>;
 };
 
+export type AddUserToGroupVariables = Exact<{
+  userId?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+}>;
+
+export type AddUserToGroupResponse = {
+  addUserToGroup: { message?: Maybe<string>; code?: Maybe<number> };
+};
+
 export type AddWhitelistVariables = Exact<{
   type: WhitelistType;
   list: Array<Scalars['String']>;
@@ -1885,6 +1931,32 @@ export type CreateFunctionResponse = {
     description?: Maybe<string>;
     url?: Maybe<string>;
   }>;
+};
+
+export type CreateGroupVariables = Exact<{
+  code: Scalars['String'];
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+}>;
+
+export type CreateGroupResponse = {
+  createGroup: {
+    code: string;
+    arn: string;
+    description?: Maybe<string>;
+    isSystem?: Maybe<boolean>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    users: { totalCount: number };
+    parent?: Maybe<{
+      code: string;
+      arn: string;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
+  };
 };
 
 export type CreateOrgVariables = Exact<{
@@ -2149,6 +2221,14 @@ export type DeleteFunctionVariables = Exact<{
 
 export type DeleteFunctionResponse = {
   deleteFunction: { message?: Maybe<string>; code?: Maybe<number> };
+};
+
+export type DeleteGroupsVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+export type DeleteGroupsResponse = {
+  deleteGroups: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
 export type DeleteNodeVariables = Exact<{
@@ -2958,6 +3038,15 @@ export type RemoveUdvResponse = {
   >;
 };
 
+export type RemoveUserFromGroupVariables = Exact<{
+  userId?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+}>;
+
+export type RemoveUserFromGroupResponse = {
+  removeUserFromGroup: { message?: Maybe<string>; code?: Maybe<number> };
+};
+
 export type RemoveWhitelistVariables = Exact<{
   type: WhitelistType;
   list: Array<Scalars['String']>;
@@ -3014,6 +3103,76 @@ export type SetUdvVariables = Exact<{
 
 export type SetUdvResponse = {
   setUdv?: Maybe<Array<{ key: string; dataType: UdfDataType; value: string }>>;
+};
+
+export type UnbindEmailVariables = Exact<{ [key: string]: never }>;
+
+export type UnbindEmailResponse = {
+  unbindEmail: {
+    id: string;
+    arn: string;
+    userPoolId: string;
+    username?: Maybe<string>;
+    email?: Maybe<string>;
+    emailVerified?: Maybe<boolean>;
+    phone?: Maybe<string>;
+    phoneVerified?: Maybe<boolean>;
+    unionid?: Maybe<string>;
+    openid?: Maybe<string>;
+    nickname?: Maybe<string>;
+    registerSource: Array<string>;
+    photo?: Maybe<string>;
+    password?: Maybe<string>;
+    oauth?: Maybe<string>;
+    token?: Maybe<string>;
+    tokenExpiredAt?: Maybe<string>;
+    loginsCount?: Maybe<number>;
+    lastLogin?: Maybe<string>;
+    lastIP?: Maybe<string>;
+    signedUp?: Maybe<string>;
+    blocked?: Maybe<boolean>;
+    isDeleted?: Maybe<boolean>;
+    device?: Maybe<string>;
+    browser?: Maybe<string>;
+    company?: Maybe<string>;
+    name?: Maybe<string>;
+    givenName?: Maybe<string>;
+    familyName?: Maybe<string>;
+    middleName?: Maybe<string>;
+    profile?: Maybe<string>;
+    preferredUsername?: Maybe<string>;
+    website?: Maybe<string>;
+    gender?: Maybe<string>;
+    birthdate?: Maybe<string>;
+    zoneinfo?: Maybe<string>;
+    locale?: Maybe<string>;
+    address?: Maybe<string>;
+    formatted?: Maybe<string>;
+    streetAddress?: Maybe<string>;
+    locality?: Maybe<string>;
+    region?: Maybe<string>;
+    postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
+    country?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    customData?: Maybe<string>;
+    identities?: Maybe<
+      Array<
+        Maybe<{
+          openid?: Maybe<string>;
+          userIdInIdp?: Maybe<string>;
+          userId?: Maybe<string>;
+          connectionId?: Maybe<string>;
+          isSocial?: Maybe<boolean>;
+          provider?: Maybe<string>;
+          userPoolId?: Maybe<string>;
+        }>
+      >
+    >;
+    roles?: Maybe<{ totalCount: number }>;
+  };
 };
 
 export type UnbindPhoneVariables = Exact<{ [key: string]: never }>;
@@ -3166,6 +3325,33 @@ export type UpdateFunctionResponse = {
     sourceCode: string;
     description?: Maybe<string>;
     url?: Maybe<string>;
+  };
+};
+
+export type UpdateGroupVariables = Exact<{
+  code: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  newCode?: Maybe<Scalars['String']>;
+}>;
+
+export type UpdateGroupResponse = {
+  updateGroup: {
+    code: string;
+    arn: string;
+    description?: Maybe<string>;
+    isSystem?: Maybe<boolean>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    users: { totalCount: number };
+    parent?: Maybe<{
+      code: string;
+      arn: string;
+      description?: Maybe<string>;
+      isSystem?: Maybe<boolean>;
+      createdAt?: Maybe<string>;
+      updatedAt?: Maybe<string>;
+    }>;
   };
 };
 
@@ -3530,24 +3716,6 @@ export type AccessTokenResponse = {
   };
 };
 
-export type AddUserToGroupVariables = Exact<{
-  userId?: Maybe<Scalars['String']>;
-  groupId?: Maybe<Scalars['String']>;
-}>;
-
-export type AddUserToGroupResponse = {
-  addUserToGroup: {
-    totalCount: number;
-    list: Array<{
-      code: string;
-      name: string;
-      description?: Maybe<string>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
-  };
-};
-
 export type CheckLoginStatusVariables = Exact<{
   token?: Maybe<Scalars['String']>;
 }>;
@@ -3672,6 +3840,82 @@ export type GetUserRolesResponse = {
         }>;
       }>;
     }>;
+  }>;
+};
+
+export type GroupVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+export type GroupResponse = {
+  group?: Maybe<{
+    code: string;
+    name: string;
+    description?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+    users: { totalCount: number };
+  }>;
+};
+
+export type GroupWithUsersVariables = Exact<{
+  code: Scalars['String'];
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+}>;
+
+export type GroupWithUsersResponse = {
+  group?: Maybe<{
+    users: {
+      totalCount: number;
+      list: Array<{
+        id: string;
+        userPoolId: string;
+        username?: Maybe<string>;
+        email?: Maybe<string>;
+        emailVerified?: Maybe<boolean>;
+        phone?: Maybe<string>;
+        phoneVerified?: Maybe<boolean>;
+        unionid?: Maybe<string>;
+        openid?: Maybe<string>;
+        nickname?: Maybe<string>;
+        registerSource: Array<string>;
+        photo?: Maybe<string>;
+        password?: Maybe<string>;
+        oauth?: Maybe<string>;
+        token?: Maybe<string>;
+        tokenExpiredAt?: Maybe<string>;
+        loginsCount?: Maybe<number>;
+        lastLogin?: Maybe<string>;
+        lastIP?: Maybe<string>;
+        signedUp?: Maybe<string>;
+        blocked?: Maybe<boolean>;
+        isDeleted?: Maybe<boolean>;
+        device?: Maybe<string>;
+        browser?: Maybe<string>;
+        company?: Maybe<string>;
+        name?: Maybe<string>;
+        givenName?: Maybe<string>;
+        familyName?: Maybe<string>;
+        middleName?: Maybe<string>;
+        profile?: Maybe<string>;
+        preferredUsername?: Maybe<string>;
+        website?: Maybe<string>;
+        gender?: Maybe<string>;
+        birthdate?: Maybe<string>;
+        zoneinfo?: Maybe<string>;
+        locale?: Maybe<string>;
+        address?: Maybe<string>;
+        formatted?: Maybe<string>;
+        streetAddress?: Maybe<string>;
+        locality?: Maybe<string>;
+        region?: Maybe<string>;
+        postalCode?: Maybe<string>;
+        country?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+        customData?: Maybe<string>;
+      }>;
+    };
   }>;
 };
 
@@ -4163,19 +4407,6 @@ export type RoleWithUsersVariables = Exact<{
 
 export type RoleWithUsersResponse = {
   role?: Maybe<{
-    code: string;
-    arn: string;
-    description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
-    createdAt?: Maybe<string>;
-    updatedAt?: Maybe<string>;
-    parent?: Maybe<{
-      code: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
     users: {
       totalCount: number;
       list: Array<{
@@ -4874,6 +5105,14 @@ export const AddUdfDocument = `
   }
 }
     `;
+export const AddUserToGroupDocument = `
+    mutation addUserToGroup($userId: String, $code: String) {
+  addUserToGroup(userId: $userId, code: $code) {
+    message
+    code
+  }
+}
+    `;
 export const AddWhitelistDocument = `
     mutation addWhitelist($type: WhitelistType!, $list: [String!]!) {
   addWhitelist(type: $type, list: $list) {
@@ -4996,6 +5235,29 @@ export const CreateFunctionDocument = `
     sourceCode
     description
     url
+  }
+}
+    `;
+export const CreateGroupDocument = `
+    mutation createGroup($code: String!, $name: String!, $description: String) {
+  createGroup(code: $code, name: $name, description: $description) {
+    code
+    arn
+    description
+    isSystem
+    createdAt
+    updatedAt
+    users {
+      totalCount
+    }
+    parent {
+      code
+      arn
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
   }
 }
     `;
@@ -5227,6 +5489,14 @@ export const CreateUserpoolDocument = `
 export const DeleteFunctionDocument = `
     mutation deleteFunction($id: String!) {
   deleteFunction(id: $id) {
+    message
+    code
+  }
+}
+    `;
+export const DeleteGroupsDocument = `
+    mutation deleteGroups($code: String!) {
+  deleteGroups(code: $code) {
     message
     code
   }
@@ -5953,6 +6223,14 @@ export const RemoveUdvDocument = `
   }
 }
     `;
+export const RemoveUserFromGroupDocument = `
+    mutation removeUserFromGroup($userId: String, $code: String) {
+  removeUserFromGroup(userId: $userId, code: $code) {
+    message
+    code
+  }
+}
+    `;
 export const RemoveWhitelistDocument = `
     mutation removeWhitelist($type: WhitelistType!, $list: [String!]!) {
   removeWhitelist(type: $type, list: $list) {
@@ -5992,6 +6270,73 @@ export const SetUdvDocument = `
     key
     dataType
     value
+  }
+}
+    `;
+export const UnbindEmailDocument = `
+    mutation unbindEmail {
+  unbindEmail {
+    id
+    arn
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    city
+    province
+    country
+    createdAt
+    updatedAt
+    customData
+    roles {
+      totalCount
+    }
   }
 }
     `;
@@ -6127,6 +6472,29 @@ export const UpdateFunctionDocument = `
     sourceCode
     description
     url
+  }
+}
+    `;
+export const UpdateGroupDocument = `
+    mutation updateGroup($code: String!, $name: String, $description: String, $newCode: String) {
+  updateGroup(code: $code, name: $name, description: $description, newCode: $newCode) {
+    code
+    arn
+    description
+    isSystem
+    createdAt
+    updatedAt
+    users {
+      totalCount
+    }
+    parent {
+      code
+      arn
+      description
+      isSystem
+      createdAt
+      updatedAt
+    }
   }
 }
     `;
@@ -6444,20 +6812,6 @@ export const AccessTokenDocument = `
   }
 }
     `;
-export const AddUserToGroupDocument = `
-    query addUserToGroup($userId: String, $groupId: String) {
-  addUserToGroup(userId: $userId, groupId: $groupId) {
-    totalCount
-    list {
-      code
-      name
-      description
-      createdAt
-      updatedAt
-    }
-  }
-}
-    `;
 export const CheckLoginStatusDocument = `
     query checkLoginStatus($token: String) {
   checkLoginStatus(token: $token) {
@@ -6561,6 +6915,76 @@ export const GetUserRolesDocument = `
           createdAt
           updatedAt
         }
+      }
+    }
+  }
+}
+    `;
+export const GroupDocument = `
+    query group($code: String!) {
+  group(code: $code) {
+    code
+    name
+    description
+    createdAt
+    updatedAt
+    users {
+      totalCount
+    }
+  }
+}
+    `;
+export const GroupWithUsersDocument = `
+    query groupWithUsers($code: String!, $page: Int, $limit: Int) {
+  group(code: $code) {
+    users(page: $page, limit: $limit) {
+      totalCount
+      list {
+        id
+        userPoolId
+        username
+        email
+        emailVerified
+        phone
+        phoneVerified
+        unionid
+        openid
+        nickname
+        registerSource
+        photo
+        password
+        oauth
+        token
+        tokenExpiredAt
+        loginsCount
+        lastLogin
+        lastIP
+        signedUp
+        blocked
+        isDeleted
+        device
+        browser
+        company
+        name
+        givenName
+        familyName
+        middleName
+        profile
+        preferredUsername
+        website
+        gender
+        birthdate
+        zoneinfo
+        locale
+        address
+        formatted
+        streetAddress
+        locality
+        region
+        postalCode
+        country
+        updatedAt
+        customData
       }
     }
   }
@@ -6976,19 +7400,6 @@ export const RoleDocument = `
 export const RoleWithUsersDocument = `
     query roleWithUsers($code: String!) {
   role(code: $code) {
-    code
-    arn
-    description
-    isSystem
-    createdAt
-    updatedAt
-    parent {
-      code
-      description
-      isSystem
-      createdAt
-      updatedAt
-    }
     users {
       totalCount
       list {

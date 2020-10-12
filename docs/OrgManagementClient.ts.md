@@ -5,9 +5,120 @@
 
 undefined
 
+undefined().undefined(page, limit)
+
+> 获取用户池组织机构列表
+
+
+#### Arguments
+
+- `page` \<null\> 从 1 开始，默认为 1 
+- `limit` \<null\> 默认为 10 
+
+#### Returns
+
+
+
+#### Examples
+
+
+      
+
+## undefined
+
+undefined
+
+OrgManagementClient().undefined()
+
+> 创建组织机构
+
+
+#### Arguments
+
+
+
+#### Returns
+
+
+
+#### Examples
+
+
+      
+
+## undefined
+
+undefined
+
+OrgManagementClient().undefined()
+
+> 往组织机构中添加一个节点
+
+
+#### Arguments
+
+
+
+#### Returns
+
+
+
+#### Examples
+
+
+      
+
+## undefined
+
+undefined
+
+OrgManagementClient().undefined()
+
+> 通过 ID 查询组织机构
+
+
+#### Arguments
+
+
+
+#### Returns
+
+
+
+#### Examples
+
+
+      
+
+## undefined
+
+undefined
+
+OrgManagementClient().undefined(id)
+
+> 删除组织机构树
+
+
+#### Arguments
+
+- `id` \<string\>  
+
+#### Returns
+
+-  `null` 
+
+#### Examples
+
+
+      
+
+## undefined
+
+undefined
+
 undefined().undefined()
 
-> 初始化 Authing SDK 的参数，secret 和 accessToken 必须传其中一个。
+> 删除组织机构树中的某一个节点
 
 
 #### Arguments
@@ -29,7 +140,75 @@ undefined
 
 undefined().undefined()
 
-> 用户池 ID *
+> 移动节点
+
+
+#### Arguments
+
+
+
+#### Returns
+
+
+
+#### Examples
+
+
+      
+
+## undefined
+
+undefined
+
+OrgManagementClient().undefined(orgId, nodeId)
+
+> 判断一个节点是不是组织树的根节点
+
+
+#### Arguments
+
+- `orgId` \<string\>  
+- `nodeId` \<string\>  
+
+#### Returns
+
+-  `null` 
+
+#### Examples
+
+
+      
+
+## undefined
+
+undefined
+
+OrgManagementClient().undefined(orgId, nodeId)
+
+> 查询节点子节点列表
+
+
+#### Arguments
+
+- `orgId` \<string\>  
+- `nodeId` \<string\>  
+
+#### Returns
+
+-  `null` 
+
+#### Examples
+
+
+      
+
+## undefined
+
+undefined
+
+OrgManagementClient().undefined()
+
+> 查询组织机构树根节点
 
 
 #### Arguments
@@ -51,7 +230,7 @@ undefined
 
 undefined().undefined()
 
-> 应用 ID
+> 通过一个 JSON 导入树机构
 
 
 #### Arguments
@@ -73,7 +252,7 @@ undefined
 
 undefined().undefined()
 
-> 用户池/应用密钥 *
+> 节点添加成员
 
 
 #### Arguments
@@ -95,7 +274,7 @@ undefined
 
 undefined().undefined()
 
-> 用户池 accessToken，如果传入，请注意 token 过期状态，你需要自己维护此 Token 的状态，SDK 不会自动更新  *
+> 节点批量添加成员
 
 
 #### Arguments
@@ -117,7 +296,7 @@ undefined
 
 undefined().undefined()
 
-> 请求超时时间 *
+> 移除用户
 
 
 #### Arguments
@@ -139,205 +318,7 @@ undefined
 
 undefined().undefined()
 
-> 错误回调函数, 默认为 (err: Error) => { throw err } 直接抛出报错 *
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> 密码加密的公钥
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> Authing 服务器地址
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> 请求来源
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> Decode 过后的用户池 accessToken
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> 签发时间 *
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> 过期时间 *
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> 用户池管理员邮箱 *
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> 用户池管理员用户 ID *
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> Authing 分组
+> 批量移除用户
 
 
 #### Arguments

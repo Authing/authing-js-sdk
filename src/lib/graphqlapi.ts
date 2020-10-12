@@ -229,7 +229,22 @@ import {
   IsUserExistsDocument,
   CheckLoginStatusResponse,
   CheckLoginStatusDocument,
-  CheckLoginStatusVariables
+  CheckLoginStatusVariables,
+  GroupVariables,
+  GroupResponse,
+  GroupDocument,
+  CreateGroupVariables,
+  CreateGroupResponse,
+  CreateGroupDocument,
+  UpdateGroupVariables,
+  UpdateGroupResponse,
+  UpdateGroupDocument,
+  DeleteGroupsVariables,
+  DeleteGroupsResponse,
+  DeleteGroupsDocument,
+  RemoveUserFromGroupVariables,
+  RemoveUserFromGroupResponse,
+  RemoveUserFromGroupDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -848,40 +863,12 @@ export const removeMembers = async (
   });
 };
 
-export const getGroups = async (
-  garpqhlClient: GraphqlClient,
-  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
-  variables: GroupsVariables
-): Promise<GroupsResponse> => {
-  const query = GroupsDocument;
-  const token = await tokenProvider.getToken();
-  return garpqhlClient.request({
-    query,
-    token,
-    variables
-  });
-};
-
 export const refreshToken = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
   variables: RefreshTokenVariables
 ): Promise<RefreshTokenResponse> => {
   const query = RefreshTokenDocument;
-  const token = await tokenProvider.getToken();
-  return garpqhlClient.request({
-    query,
-    token,
-    variables
-  });
-};
-
-export const addUserToGroup = async (
-  garpqhlClient: GraphqlClient,
-  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
-  variables: AddUserToGroupVariables
-): Promise<AddUserToGroupResponse> => {
-  const query = AddUserToGroupDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
@@ -1302,6 +1289,102 @@ export const checkLoginStatus = async (
   variables: CheckLoginStatusVariables
 ): Promise<CheckLoginStatusResponse> => {
   const query = CheckLoginStatusDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const getGroups = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: GroupsVariables
+): Promise<GroupsResponse> => {
+  const query = GroupsDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const group = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: GroupVariables
+): Promise<GroupResponse> => {
+  const query = GroupDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+export const createGroup = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: CreateGroupVariables
+): Promise<CreateGroupResponse> => {
+  const query = CreateGroupDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+export const updateGroup = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UpdateGroupVariables
+): Promise<UpdateGroupResponse> => {
+  const query = UpdateGroupDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const deleteGroups = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: DeleteGroupsVariables
+): Promise<DeleteGroupsResponse> => {
+  const query = DeleteGroupsDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const addUserToGroup = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: AddUserToGroupVariables
+): Promise<AddUserToGroupResponse> => {
+  const query = AddUserToGroupDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const removeUserFromGroup = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RemoveUserFromGroupVariables
+): Promise<RemoveUserFromGroupResponse> => {
+  const query = RemoveUserFromGroupDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
