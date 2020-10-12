@@ -1,4 +1,4 @@
-import { ManagementClient } from '../../management';
+import { ManagementClient } from '../../management/ManagementClient';
 import { Request, Response, NextFunction } from 'express';
 
 const getToken = (req: Request, cookieKey: string) => {

@@ -1,5 +1,5 @@
 import { User } from '../../types/graphql.v2';
-import { GraphqlClient } from './../common/GraphqlClient';
+import { GraphqlClient } from '../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
 
 const tokenKey = '_authing_token';
@@ -20,7 +20,15 @@ export class AuthenticationTokenProvider {
     this.user = null;
   }
 
-  getAccessToken() {
+  setToken(token: string) {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(tokenKey, token);
+    } else {
+      this.token = token;
+    }
+  }
+
+  getToken() {
     return typeof localStorage !== 'undefined'
       ? localStorage.getItem(tokenKey) || ''
       : this.token;

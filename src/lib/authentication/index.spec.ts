@@ -1,4 +1,4 @@
-import { AuthenticationClient } from './index';
+import { AuthenticationClient } from './AuthenticationClient';
 import {
   generateRandomPhone,
   generateRandomString,
@@ -6,7 +6,7 @@ import {
 } from '../testing-helper';
 import test from 'ava';
 import { EmailScene, UdfDataType, UdfTargetType } from '../../types/graphql.v2';
-import { ManagementClient } from '../management';
+import { ManagementClient } from '../management/ManagementClient';
 
 const management = new ManagementClient(getOptionsFromEnv());
 
@@ -172,9 +172,7 @@ test('手机号密码 # autoRegister', async t => {
   const authing = new AuthenticationClient(getOptionsFromEnv());
   const phone = generateRandomPhone();
   const password = generateRandomString();
-  const user = await authing.loginByPhonePassword(phone, password, {
-    autoRegister: true
-  });
+  const user = await authing.loginByPhonePassword(phone, password);
   t.assert(user);
   t.assert(user.phone === phone);
   t.assert(user.token);
@@ -366,6 +364,7 @@ test('添加自定义数据 # DATETIME', async t => {
   const list = await authing.listUdv();
   t.assert(list.length === 1);
   const value = list[0].value;
+  // @ts-ignore
   t.assert(value instanceof Date);
 });
 

@@ -1,5 +1,5 @@
 import { OrgManagementClient } from './OrgManagementClient';
-import { GraphqlClient } from './../common/GraphqlClient';
+import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import { UserPoolManagementClient } from './UserpoolManagementClient';
@@ -27,7 +27,6 @@ GKl64GDcIq3au+aqJQIDAQAB
   onError: (_: number, message: string) => {
     throw new Error(message);
   },
-  enableAccessTokenCache: true,
   host: 'https://core.authing.cn',
   requestFrom: 'sdk'
 };

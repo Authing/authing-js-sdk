@@ -2,6 +2,7 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import {
+  PaginatedPolicies,
   PolicyAssignmentTargetType,
   PolicyStatement,
   Role
@@ -36,8 +37,15 @@ export class PoliciesManagementClient {
   /**
    * @description 获取策略列表
    *
+   * @param {number} [page=1]
+   * @param {number} [limit=10]
+   * @returns {Promise<DeepPartial<PaginatedPolicies>>}
+   * @memberof PoliciesManagementClient
    */
-  async list(page: number = 1, limit: number = 10) {
+  async list(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<DeepPartial<PaginatedPolicies>> {
     const { policies: data } = await policies(
       this.graphqlClient,
       this.tokenProvider,

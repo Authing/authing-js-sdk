@@ -1,6 +1,6 @@
 import { GraphqlClient } from './common/GraphqlClient';
 import { ManagementTokenProvider } from './management/ManagementTokenProvider';
-import { AuthenticationTokenProvider } from './auth/AuthenticationTokenProvider';
+import { AuthenticationTokenProvider } from './authentication/AuthenticationTokenProvider';
 import {
   CreateUserResponse,
   CreateUserDocument,
@@ -238,7 +238,7 @@ export const isAllowed = async (
   variables: IsActionAllowedVariables
 ): Promise<IsActionAllowedResponse> => {
   const query = IsActionAllowedDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -252,7 +252,7 @@ export const getChildrenNodes = async (
   variables: ChildrenNodesVariables
 ): Promise<ChildrenNodesResponse> => {
   const query = ChildrenNodesDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -266,7 +266,7 @@ export const org = async (
   variables: OrgVariables
 ): Promise<OrgResponse> => {
   const query = OrgDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -280,7 +280,7 @@ export const isRootNode = async (
   variables: IsRootNodeVariables
 ): Promise<IsRootNodeResponse> => {
   const query = IsRootNodeDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -294,7 +294,7 @@ export const rootNode = async (
   variables: RootNodeVariables
 ): Promise<RootNodeResponse> => {
   const query = RootNodeDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -308,7 +308,7 @@ export const orgs = async (
   variables: OrgsVariables
 ): Promise<OrgsResponse> => {
   const query = OrgsDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -322,7 +322,7 @@ export const getUserPoolDetail = async (
   variables: UserpoolVariables
 ): Promise<UserpoolResponse> => {
   const query = UserpoolDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -336,7 +336,7 @@ export const user = async (
   variables: UserVariables
 ): Promise<UserResponse> => {
   const query = UserDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -350,7 +350,7 @@ export const createOrg = async (
   variables: CreateOrgVariables
 ): Promise<CreateOrgResponse> => {
   const query = CreateOrgDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -364,7 +364,7 @@ export const deleteOrg = async (
   variables: DeleteOrgVariables
 ): Promise<DeleteOrgResponse> => {
   const query = DeleteOrgDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -378,7 +378,7 @@ export const isDenied = async (
   variables: IsActionDeniedVariables
 ): Promise<IsActionDeniedResponse> => {
   const query = IsActionDeniedDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -392,7 +392,7 @@ export const checkPasswordStrength = async (
   variables: CheckPasswordStrengthVariables
 ): Promise<CheckPasswordStrengthResponse> => {
   const query = CheckPasswordStrengthDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -406,7 +406,7 @@ export const registerByEmail = async (
   variables: RegisterByEmailVariables
 ): Promise<RegisterByEmailResponse> => {
   const query = RegisterByEmailDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -420,7 +420,7 @@ export const loginByEmail = async (
   variables: LoginByEmailVariables
 ): Promise<LoginByEmailResponse> => {
   const query = LoginByEmailDocument;
-  const token = tokenProvider.getAccessToken();
+  const token = tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -434,7 +434,7 @@ export const loginByUsername = async (
   variables: LoginByUsernameVariables
 ): Promise<LoginByUsernameResponse> => {
   const query = LoginByUsernameDocument;
-  const token = tokenProvider.getAccessToken();
+  const token = tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -448,7 +448,7 @@ export const loginByPhoneCode = async (
   variables: LoginByPhoneCodeVariables
 ): Promise<LoginByPhoneCodeResponse> => {
   const query = LoginByPhoneCodeDocument;
-  const token = tokenProvider.getAccessToken();
+  const token = tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -462,7 +462,7 @@ export const loginByPhonePassword = async (
   variables: LoginByPhonePasswordVariables
 ): Promise<LoginByPhonePasswordResponse> => {
   const query = LoginByPhonePasswordDocument;
-  const token = tokenProvider.getAccessToken();
+  const token = tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -476,7 +476,7 @@ export const registerByUsername = async (
   variables: RegisterByUsernameVariables
 ): Promise<RegisterByUsernameResponse> => {
   const query = RegisterByUsernameDocument;
-  const token = tokenProvider.getAccessToken();
+  const token = tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -490,7 +490,7 @@ export const registerByPhoneCode = async (
   variables: RegisterByPhoneCodeVariables
 ): Promise<RegisterByPhoneCodeResponse> => {
   const query = RegisterByPhoneCodeDocument;
-  const token = tokenProvider.getAccessToken();
+  const token = tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -504,7 +504,7 @@ export const addRole = async (
   variables: CreateRoleVariables
 ): Promise<CreateRoleResponse> => {
   const query = CreateRoleDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -518,7 +518,7 @@ export const assignRole = async (
   variables: AssignRoleVariables
 ): Promise<AssignRoleResponse> => {
   const query = AssignRoleDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -532,7 +532,7 @@ export const revokeRole = async (
   variables: RevokeRoleVariables
 ): Promise<RevokeRoleResponse> => {
   const query = RevokeRoleDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -546,7 +546,7 @@ export const addMember = async (
   variables: AddMemberVariables
 ): Promise<AddMemberResponse> => {
   const query = AddMemberDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -560,7 +560,7 @@ export const getMembersById = async (
   variables: NodeByIdWithMembersVariables
 ): Promise<NodeByIdWithMembersResponse> => {
   const query = NodeByIdWithMembersDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -574,7 +574,7 @@ export const getMembersByCode = async (
   variables: NodeByCodeWithMembersVariables
 ): Promise<NodeByCodeWithMembersResponse> => {
   const query = NodeByCodeWithMembersDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -588,7 +588,7 @@ export const sendEmail = async (
   variables: SendEmailVariables
 ): Promise<SendEmailResponse> => {
   const query = SendEmailDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
     token,
@@ -602,7 +602,7 @@ export const resetPassword = async (
   variables: ResetPasswordVariables
 ): Promise<ResetPasswordResponse> => {
   const query = ResetPasswordDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -616,7 +616,7 @@ export const users = async (
   variables: UsersVariables
 ): Promise<UsersResponse> => {
   const query = UsersDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -630,7 +630,7 @@ export const getGroupsOfUser = async (
   variables: GroupsVariables
 ): Promise<GroupsResponse> => {
   const query = GroupsDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -644,7 +644,7 @@ export const updateUserpool = async (
   variables: UpdateUserpoolVariables
 ): Promise<UpdateUserpoolResponse> => {
   const query = UpdateUserpoolDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -658,7 +658,7 @@ export const updateUser = async (
   variables: UpdateUserVariables
 ): Promise<UpdateUserResponse> => {
   const query = UpdateUserDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -672,7 +672,7 @@ export const searchUser = async (
   variables: SearchUserVariables
 ): Promise<SearchUserResponse> => {
   const query = SearchUserDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -686,7 +686,7 @@ export const createUser = async (
   variables: CreateUserVariables
 ): Promise<CreateUserResponse> => {
   const query = CreateUserDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -700,7 +700,7 @@ export const deleteUser = async (
   variables: DeleteUserVariables
 ): Promise<DeleteUserResponse> => {
   const query = DeleteUserDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -714,7 +714,7 @@ export const deleteUsers = async (
   variables: DeleteUsersVariables
 ): Promise<DeleteUsersResponse> => {
   const query = DeleteUsersDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -728,7 +728,7 @@ export const roles = async (
   variables: RolesVariables
 ): Promise<RolesResponse> => {
   const query = RolesDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -742,7 +742,7 @@ export const role = async (
   variables: RoleVariables
 ): Promise<RoleResponse> => {
   const query = RoleDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -756,7 +756,7 @@ export const roleWithUsers = async (
   variables: RoleWithUsersVariables
 ): Promise<RoleWithUsersResponse> => {
   const query = RoleWithUsersDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -770,7 +770,7 @@ export const updateRole = async (
   variables: UpdateRoleVariables
 ): Promise<UpdateRoleResponse> => {
   const query = UpdateRoleDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -784,7 +784,7 @@ export const addNode = async (
   variables: AddNodeVariables
 ): Promise<AddNodeResponse> => {
   const query = AddNodeDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -798,7 +798,7 @@ export const updateNode = async (
   variables: UpdateNodeVariables
 ): Promise<UpdateNodeResponse> => {
   const query = UpdateNodeDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -812,7 +812,7 @@ export const deleteNode = async (
   variables: DeleteNodeVariables
 ): Promise<DeleteNodeResponse> => {
   const query = DeleteNodeDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -826,7 +826,7 @@ export const moveNode = async (
   variables: MoveNodeVariables
 ): Promise<MoveNodeResponse> => {
   const query = MoveNodeDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -840,7 +840,7 @@ export const removeMembers = async (
   variables: RemoveMemberVariables
 ): Promise<RemoveMemberResponse> => {
   const query = RemoveMemberDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -854,7 +854,7 @@ export const getGroups = async (
   variables: GroupsVariables
 ): Promise<GroupsResponse> => {
   const query = GroupsDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -868,7 +868,7 @@ export const refreshToken = async (
   variables: RefreshTokenVariables
 ): Promise<RefreshTokenResponse> => {
   const query = RefreshTokenDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -882,7 +882,7 @@ export const addUserToGroup = async (
   variables: AddUserToGroupVariables
 ): Promise<AddUserToGroupResponse> => {
   const query = AddUserToGroupDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -896,7 +896,7 @@ export const isUserExists = async (
   variables: IsUserExistsVariables
 ): Promise<IsUserExistsResponse> => {
   const query = IsUserExistsDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -910,7 +910,7 @@ export const updatePassword = async (
   variables: UpdatePasswordVariables
 ): Promise<UpdatePasswordResponse> => {
   const query = UpdatePasswordDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -924,7 +924,7 @@ export const updatePhone = async (
   variables: UpdatePhoneVariables
 ): Promise<UpdatePhoneResponse> => {
   const query = UpdatePhoneDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -938,7 +938,7 @@ export const updateEmail = async (
   variables: UpdateEmailVariables
 ): Promise<UpdateEmailResponse> => {
   const query = UpdateEmailDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -952,7 +952,7 @@ export const bindPhone = async (
   variables: BindPhoneVariables
 ): Promise<BindPhoneResponse> => {
   const query = BindPhoneDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -966,7 +966,7 @@ export const unbindPhone = async (
   variables: UnbindPhoneVariables
 ): Promise<UnbindPhoneResponse> => {
   const query = UnbindPhoneDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -980,7 +980,7 @@ export const userBatch = async (
   variables: UserBatchVariables
 ): Promise<UserBatchResponse> => {
   const query = UserBatchDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -994,7 +994,7 @@ export const getUserRoles = async (
   variables: GetUserRolesVariables
 ): Promise<GetUserRolesResponse> => {
   const query = GetUserRolesDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1008,7 +1008,7 @@ export const allow = async (
   variables: AllowVariables
 ): Promise<AllowResponse> => {
   const query = AllowDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1022,7 +1022,7 @@ export const getWhiteList = async (
   variables: WhitelistVariables
 ): Promise<WhitelistResponse> => {
   const query = WhitelistDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1036,7 +1036,7 @@ export const removeWhiteList = async (
   variables: RemoveWhitelistVariables
 ): Promise<RemoveWhitelistResponse> => {
   const query = RemoveWhitelistDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1050,7 +1050,7 @@ export const addWhiteList = async (
   variables: AddWhitelistVariables
 ): Promise<AddWhitelistResponse> => {
   const query = AddWhitelistDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1064,7 +1064,7 @@ export const udv = async (
   variables: UdvVariables
 ): Promise<UdvResponse> => {
   const query = UdvDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1078,7 +1078,7 @@ export const setUdv = async (
   variables: SetUdvVariables
 ): Promise<SetUdvResponse> => {
   const query = SetUdvDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1092,7 +1092,7 @@ export const removeUdv = async (
   variables: RemoveUdvVariables
 ): Promise<RemoveUdvResponse> => {
   const query = RemoveUdvDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1106,7 +1106,7 @@ export const addUdf = async (
   variables: AddUdfVariables
 ): Promise<AddUdfResponse> => {
   const query = AddUdfDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1120,7 +1120,7 @@ export const removeUdf = async (
   variables: RemoveUdfVariables
 ): Promise<RemoveUdfResponse> => {
   const query = RemoveUdfDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1134,7 +1134,7 @@ export const udf = async (
   variables: UdfVariables
 ): Promise<UdfResponse> => {
   const query = UdfDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1148,7 +1148,7 @@ export const deleteRole = async (
   variables: DeleteRoleVariables
 ): Promise<DeleteRoleResponse> => {
   const query = DeleteRoleDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1162,7 +1162,7 @@ export const deleteRoles = async (
   variables: DeleteRolesVariables
 ): Promise<DeleteRolesResponse> => {
   const query = DeleteRolesDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1176,7 +1176,7 @@ export const policies = async (
   variables: PoliciesVariables
 ): Promise<PoliciesResponse> => {
   const query = PoliciesDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1190,7 +1190,7 @@ export const createPolicy = async (
   variables: CreatePolicyVariables
 ): Promise<CreatePolicyResponse> => {
   const query = CreatePolicyDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1204,7 +1204,7 @@ export const policy = async (
   variables: PolicyVariables
 ): Promise<PolicyResponse> => {
   const query = PolicyDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1218,7 +1218,7 @@ export const updatePolicy = async (
   variables: UpdatePolicyVariables
 ): Promise<UpdatePolicyResponse> => {
   const query = UpdatePolicyDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1232,7 +1232,7 @@ export const deletePolicy = async (
   variables: DeletePolicyVariables
 ): Promise<DeletePolicyResponse> => {
   const query = DeletePolicyDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1246,7 +1246,7 @@ export const deletePolicies = async (
   variables: DeletePoliciesVariables
 ): Promise<DeletePoliciesResponse> => {
   const query = DeletePoliciesDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1260,7 +1260,7 @@ export const policyAssignments = async (
   variables: PolicyAssignmentsVariables
 ): Promise<PolicyAssignmentsResponse> => {
   const query = PolicyAssignmentsDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1274,7 +1274,7 @@ export const addPolicyAssignments = async (
   variables: AddPolicyAssignmentsVariables
 ): Promise<AddPolicyAssignmentsResponse> => {
   const query = AddPolicyAssignmentsDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1288,7 +1288,7 @@ export const removePolicyAssignments = async (
   variables: RemovePolicyAssignmentsVariables
 ): Promise<RemovePolicyAssignmentsResponse> => {
   const query = RemovePolicyAssignmentsDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,
@@ -1302,7 +1302,7 @@ export const checkLoginStatus = async (
   variables: CheckLoginStatusVariables
 ): Promise<CheckLoginStatusResponse> => {
   const query = CheckLoginStatusDocument;
-  const token = await tokenProvider.getAccessToken();
+  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
     token,

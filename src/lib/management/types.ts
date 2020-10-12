@@ -22,7 +22,6 @@ export interface ManagementClientOptions {
   host?: string;
   /** 请求来源 */
   requestFrom?: string;
-  enableAccessTokenCache?: boolean;
 }
 
 /**

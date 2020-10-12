@@ -1,4 +1,4 @@
-import { ManagementClient } from './index';
+import { ManagementClient } from './ManagementClient';
 import {
   generateRandomPhone,
   generateRandomString,

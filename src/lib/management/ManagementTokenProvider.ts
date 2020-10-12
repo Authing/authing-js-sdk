@@ -74,7 +74,7 @@ export class ManagementTokenProvider {
    * @returns {Promise<string>}
    * @memberof ManagementTokenProvider
    */
-  async getAccessToken(): Promise<string> {
+  async getToken(): Promise<string> {
     // 缓存到 accessToken 过期前 3600 s
     if (
       this._accessToken &&

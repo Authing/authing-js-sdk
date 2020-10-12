@@ -1,7 +1,7 @@
 import { SDK_VERSION } from '../version';
 import { ManagementClientOptions } from '../management/types';
-import { AuthenticationClientOptions } from '../auth/types';
-import { AuthenticationTokenProvider } from '../auth/AuthenticationTokenProvider';
+import { AuthenticationClientOptions } from '../authentication/types';
+import { AuthenticationTokenProvider } from '../authentication/AuthenticationTokenProvider';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
 import Axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
@@ -26,7 +26,7 @@ export class HttpClient {
       'x-authing-request-from': this.options.requestFrom || 'sdk',
       'x-authing-app-id': this.options.appId || ''
     };
-    const token = await this.tokenProvider.getAccessToken();
+    const token = await this.tokenProvider.getToken();
     token && (headers.Authorization = `Bearer ${token}`);
     config.headers = headers;
     const { data } = await this.axios.request(config);

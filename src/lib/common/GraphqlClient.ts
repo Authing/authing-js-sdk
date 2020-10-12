@@ -2,7 +2,7 @@ import { Variables } from 'graphql-request/dist/src/types';
 import { SDK_VERSION } from '../version';
 import { GraphQLClient } from 'graphql-request';
 import { ManagementClientOptions } from '../management/types';
-import { AuthenticationClientOptions } from '../auth/types';
+import { AuthenticationClientOptions } from '../authentication/types';
 
 export class GraphqlClient {
   endpoint: string;
