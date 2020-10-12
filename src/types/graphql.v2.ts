@@ -1360,6 +1360,19 @@ export type UpdateUserInput = {
   updatedAt?: Maybe<Scalars['String']>;
 };
 
+export type SMSConfig253Input = {
+  appId: string;
+  key: string;
+  template: string;
+  ttl: number;
+};
+
+export type CustomSMSProviderInput = {
+  enabled?: string;
+  provider?: string;
+  config253?: SMSConfig253Input;
+};
+
 export type UpdateUserpoolInput = {
   name?: Maybe<Scalars['String']>;
   logo?: Maybe<Scalars['String']>;
@@ -1380,6 +1393,7 @@ export type UpdateUserpoolInput = {
   qrcodeLoginStrategy?: Maybe<QrcodeLoginStrategyInput>;
   app2WxappLoginStrategy?: Maybe<App2WxappLoginStrategyInput>;
   whitelist?: Maybe<RegisterWhiteListConfigInput>;
+  customSMSProvider?: Maybe<CustomSMSProviderInput>;
 };
 
 export type FrequentRegisterCheckConfigInput = {
@@ -1943,8 +1957,8 @@ export type CreateUserpoolVariables = Exact<{
 }>;
 export type UnbindEmailVariables = Exact<{ [key: string]: never }>;
 export type UnbindEmailResponse = {
-  unbindEmail: User
-}
+  unbindEmail: User;
+};
 export const UnbindEmailDocument = `
 mutation unbindEmail{
   unbindEmail{
@@ -2005,7 +2019,7 @@ mutation unbindEmail{
       updatedAt
       customData
   }
-}`
+}`;
 export type CreateUserpoolResponse = {
   createUserpool: {
     id: string;
@@ -3333,6 +3347,19 @@ export type UpdateUserpoolVariables = Exact<{
   input: UpdateUserpoolInput;
 }>;
 
+export type SMSConfig253 = {
+  appId: string;
+  key: string;
+  template: string;
+  ttl: number;
+};
+
+export type CustomSMSProvider = {
+  enabled: String;
+  provider: String;
+  config253: SMSConfig253;
+};
+
 export type UpdateUserpoolResponse = {
   updateUserpool: {
     id: string;
@@ -3386,6 +3413,7 @@ export type UpdateUserpoolResponse = {
       emailEnabled?: Maybe<boolean>;
       usernameEnabled?: Maybe<boolean>;
     }>;
+    customSMSProvider: Maybe<CustomSMSProvider>;
   };
 };
 
