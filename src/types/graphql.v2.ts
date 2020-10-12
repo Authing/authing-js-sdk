@@ -4383,6 +4383,7 @@ export type UserpoolResponse = {
       emailEnabled?: Maybe<boolean>;
       usernameEnabled?: Maybe<boolean>;
     }>;
+    customSMSProvider?: Maybe<CustomSMSProvider>;
   };
 };
 
