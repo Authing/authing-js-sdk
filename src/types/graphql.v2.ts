@@ -3358,8 +3358,8 @@ export type SMSConfig253 = {
 };
 
 export type CustomSMSProvider = {
-  enabled: String;
-  provider: String;
+  enabled: string;
+  provider: string;
   config253: SMSConfig253;
 };
 
