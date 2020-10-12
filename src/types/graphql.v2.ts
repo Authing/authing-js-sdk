@@ -6150,6 +6150,17 @@ export const UpdateUserpoolDocument = `
       emailEnabled
       usernameEnabled
     }
+    customSMSProvider {
+      enabled
+      provider
+      config253 {
+        sendSmsApi
+        appId
+        key
+        template,
+        ttl
+      }
+    }
   }
 }
     `;
@@ -7004,6 +7015,17 @@ export const UserpoolDocument = `
       phoneEnabled
       emailEnabled
       usernameEnabled
+    }
+    customSMSProvider {
+      enabled
+      provider
+      config253 {
+        sendSmsApi
+        appId
+        key
+        template,
+        ttl
+      }
     }
   }
 }
