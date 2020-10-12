@@ -602,6 +602,7 @@ export type UserPool = {
   app2WxappLoginStrategy?: Maybe<App2WxappLoginStrategy>;
   /** 注册白名单配置 */
   whitelist?: Maybe<RegisterWhiteListConfig>;
+  customSMSProvider?: Maybe<CustomSMSProvider>;
 };
 
 export type UserPoolType = {
@@ -1361,6 +1362,7 @@ export type UpdateUserInput = {
 };
 
 export type SMSConfig253Input = {
+  sendSmsApi: string;
   appId: string;
   key: string;
   template: string;
@@ -3348,6 +3350,7 @@ export type UpdateUserpoolVariables = Exact<{
 }>;
 
 export type SMSConfig253 = {
+  sendSmsApi: string;
   appId: string;
   key: string;
   template: string;
