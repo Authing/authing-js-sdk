@@ -64,7 +64,6 @@ ${returns ? `- ${returns.name} \`${returns.type}\` ${returns.description}` : ''}
 ${examples.map(x => `\`\`\`javascript\n${x.value.trim()}\n\`\`\``).join('\n')}
       `
     } else {
-      console.log(block)
       doc = `
 # class ${class_.name}
 
@@ -74,6 +73,5 @@ ${examples.map(x => `\`\`\`javascript\n${x.value.trim()}\n\`\`\``).join('\n')}
     docs.push(doc)
   }
   const filename = `${file.split('/')[file.split('/').length - 1]}`
-  console.log(filename)
   fs.writeFileSync(`docs/${filename}.md`, docs.join('\n'))
 }

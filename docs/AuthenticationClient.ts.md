@@ -322,28 +322,6 @@ AuthenticationClient().loginByPhonePassword('176xxxx7041', 'passw0rd')
 ```
       
 
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> 图形验证码
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
 ## checkLoginStatus
 
 检测 Token 登录状态

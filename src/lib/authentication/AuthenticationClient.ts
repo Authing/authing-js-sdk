@@ -64,8 +64,8 @@ export class AuthenticationClient {
   graphqlClientV2: GraphqlClient;
   httpClient: HttpClient;
   tokenProvider: AuthenticationTokenProvider;
-  wxqr: QrCodeAuthenticationClient;
-  qr: QrCodeAuthenticationClient;
+  wxqrcode: QrCodeAuthenticationClient;
+  qrcode: QrCodeAuthenticationClient;
 
   constructor(options: AuthenticationClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -79,13 +79,13 @@ export class AuthenticationClient {
     );
     this.tokenProvider = new AuthenticationTokenProvider(this.options);
     this.httpClient = new HttpClient(this.options, this.tokenProvider);
-    this.wxqr = new QrCodeAuthenticationClient(
+    this.wxqrcode = new QrCodeAuthenticationClient(
       this.options,
       this.tokenProvider,
       this.httpClient,
       'WXAPP_AUTH'
     );
-    this.qr = new QrCodeAuthenticationClient(
+    this.qrcode = new QrCodeAuthenticationClient(
       this.options,
       this.tokenProvider,
       this.httpClient,
@@ -520,7 +520,6 @@ export class AuthenticationClient {
     phone: string,
     password: string,
     options?: {
-      /** 图形验证码 */
       captchaCode?: string;
     }
   ): Promise<User> {

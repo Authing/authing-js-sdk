@@ -9,6 +9,32 @@ import { createCssClassStyleSheet } from './utils';
 import { User } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
 
+/**
+ * @class QrCodeAuthenticationClient 扫码登录模块。
+ * @description 此模块用于进行扫码登录，扫码登录分为两种小程序扫码登录（wxqrcode）和 APP 扫码登录（qrcode）。两种扫码登录方式 API 完全一致。
+ *
+ * 使用小程序扫码登录：
+ *
+ * \`\`\`javascript
+ * import { AuthenticationClient } from "authing-js-sdk"
+ * const authing = new AuthenticationClient({
+ *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+ * })
+ * authing.wxqrcode.startScanning() # 开始扫码登录
+ * \`\`\`
+ *
+ * 使用 APP 扫码登录
+ *
+ * \`\`\`javascript
+ * import { AuthenticationClient } from "authing-js-sdk"
+ * const authing = new AuthenticationClient({
+ *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+ * })
+ * authing.qrcode.startScanning() # 开始扫码登录
+ * \`\`\`
+ *
+ * @name QrCodeAuthenticationClient
+ */
 export class QrCodeAuthenticationClient {
   options: AuthenticationClientOptions;
   tokenProvider: AuthenticationTokenProvider;
@@ -28,208 +54,88 @@ export class QrCodeAuthenticationClient {
   }
 
   /**
-   * @description 生成二维码
+   * @name startScanning
+   * @name_zh 一键开始扫码
+   * @description 一键开始扫码
+   *
+   * @param {string} domId DOM 元素的 ID。
+   * @param {Object} options
+   * @param {number} options.interval 间隔时间，单位为毫秒，默认为 800 毫秒
+   * @param {Function} options.onStart 开始轮询的事件回调函数, 第一个参数为 setInterval 返回的计时器，可以用 clearInterval 取消此计时器
+   * @param {Function} options.onResult 获取到二维码最新状态事件回调函数，第一个参数为的类型为 QRCodeStatus。
+   * @param {Function} options.onScanned 用户首次扫码事件回调函数。此时用户还没有授权，回调的用户信息中通仅包含昵称和头像，用作展示目的。
+   * 出于安全性考虑，默认情况下，userInfo 只会包含昵称（nickname）和头像（photo）两个字段，开发者也可以在后台配置使其返回完整用户信息，
+   * @param {Function} options.onSuccess 用户同意授权事件回调函数。该函数只会回调一次，之后轮询结束。第一个参数为 userInfo 用户信息，第二个参数为 ticket，用于换取用户的详情。
+   * 详情见 https://docs.authing.co/scan-qrcode/app-qrcode/customize.html。
+   * ticket 可以用来换取完整的用户信息，相关接口见 https://docs.authing.co/scan-qrcode/app-qrcode/full-api-list.html。
+   * @param {Function} options.onCancel 用户取消授权事件回调函数。该事件只会回调一次，之后轮询结束。
+   * @param {Function} options.onError 获取二维码状态失败事件回调函数。常见原因为网络失败等，每次查询失败时都会回调。回调参数 data 示例如 {"code": 2241,"message": "二维码不存在" }
+   * @param {Function} options.onExpired 二维码失效时被回调，只回调一次，之后轮询结束。
+   * @param {Function} options.onCodeShow 二维码首次成功显示的事件。
+   * @param {Function} options.onCodeLoaded 二维码首次成功 Load 的事件。
+   * @param {Function} options.onCodeLoadFailed 二维码加载失败的事件。
+   * @param {Function} options.onCodeDestroyed 二维码被销毁的事件。
+   * @param {Object} options.size 二维码图片大小，默认为 240 * 240，单位为 px 。
+   * @param {number} options.size.height 高度
+   * @param {number} options.size.width 宽度
+   * @param {Object} options.containerSize DOM 容器大小，默认为 300 * 300，单位为 px 。
+   * @param {number} options.containerSize.height 高度
+   * @param {number} options.containerSize.width 宽度
+   * @param {Object} options.tips 自定义提示信息
+   * @param {number} options.tips.title
+   * @param {number} options.tips.scanned
+   * @param {Object} options.tips.succeed
+   * @param {number} options.tips.canceled
+   * @param {number} options.tips.expired
+   * @param {number} options.tips.retry
+   * @param {number} options.tips.failed
+   *
+   * @example
+   *
+   * const authing = new AuthenticationClient({
+   *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+   * })
+   * const onScanningSuccess = async (userInfo: any, ticket: string) => {
+   *  const { token } = userInfo;
+   *  if (!token) {
+   *    userInfo = await authenticationClient.wxqr.exchangeUserInfo(ticket);
+   *  }
+   *  onSuccess && onSuccess(userInfo);
+   * };
+   *
+   * authenticationClient.wxqr.startScanning("qrcode", {
+   *
+   *  onSuccess: onScanningSuccess,
+   *  onError: (message) => onFail && onFail(`${message}`),
+   * });
+   *
+   * @returns {null}
+   * @memberof QrCodeAuthenticationClient
    *
    */
-  async geneCode(
-    customData: { [x: string]: any } = {}
-  ): Promise<QRCodeGenarateResult> {
-    const api = `${this.options.host}/v2/api/qrcode/gene`;
-    const data = await this.httpClient.request({
-      method: 'POST',
-      url: api,
-      data: {
-        scene: this.scene,
-        customData
-      }
-    });
-    return data;
-  }
-
-  /**
-   * @description 检查二维码状态
-   *
-   */
-  async checkStatus(random: string): Promise<QRCodeStatus> {
-    const api = `${this.options.host}/v2/api/qrcode/check?random=${random}`;
-    const data = await this.httpClient.request({
-      method: 'GET',
-      url: api
-    });
-    return data;
-  }
-
-  async exchangeUserInfo(ticket: string): Promise<Partial<User>> {
-    const api = `${this.options.host}/v2/api/qrcode/userinfo`;
-    const userInfo = await this.httpClient.request({
-      method: 'POST',
-      url: api,
-      data: {
-        ticket
-      }
-    });
-    return userInfo;
-  }
-
-  /**
-   * @description 开始轮询二维码状态
-   *
-   */
-  async startPolling(
-    random: string,
-    options?: {
-      /** 间隔时间，单位为毫秒，默认为 800 毫秒 */
-      interval?: number;
-      /** 开始轮询的事件回调函数 */
-      onStart?: (
-        /** setInterval 返回的计时器，可以用 clearInterval 取消此计时器 */
-        timer: any
-      ) => any;
-      /** 获取到二维码最新状态事件回调函数 */
-      onResult?: (data: QRCodeStatus) => any;
-      /** 用户首次扫码事件回调函数。此时用户还没有授权，回调的用户信息中通仅包含昵称和头像，用作展示目的 */
-      onScanned?: (userInfo: QRCodeUserInfo) => any;
-      /** 用户同意授权事件回调函数。该函数只会回调一次，之后轮询结束。参数 data 是一个字典，包含两个字段：ticket 和 userInfo。
-       * 出于安全性考虑，默认情况下，userInfo 只会包含昵称（nickname）和头像（photo）两个字段，开发者也可以在后台配置使其返回完整用户信息，
-       * 详情见 https://docs.authing.co/scan-qrcode/app-qrcode/customize.html。
-       * ticket 可以用来换取完整的用户信息，相关接口见 https://docs.authing.co/scan-qrcode/app-qrcode/full-api-list.html。 */
-      onSuccess?: (userInfo: QRCodeUserInfo, ticket: string) => any;
-      /** 用户取消授权事件回调函数。该事件只会回调一次，之后轮询结束。 */
-      onCancel?: () => any;
-      /**
-       * 获取二维码状态失败事件回调函数。常见原因为网络失败等，每次查询失败时都会回调。回调参数 data 示例如 {"code": 2241,"message": "二维码不存在","data": null}。完整错误代码请见 https://docs.authing.co/advanced/error-code.html。
-       */
-      onError?: (message: string) => any;
-      /**
-       * 二维码失效时被回调，只回调一次，之后轮询结束。
-       */
-      onExpired?: () => any;
-    }
-  ) {
-    options = options || {};
-    const {
-      interval = 800,
-      onStart,
-      onResult,
-      onScanned,
-      onExpired,
-      onSuccess,
-      onCancel,
-      onError
-    } = options;
-
-    let calledOnScanned = false;
-    let callOnPoolingStart = false;
-
-    const timer = setInterval(async () => {
-      // 开始轮询时回调 onPollingStart
-      if (onStart && !callOnPoolingStart) {
-        onStart(timer);
-        callOnPoolingStart = true;
-      }
-
-      try {
-        const data = await this.checkStatus(random);
-        const { status, ticket, userInfo } = data;
-        // 每次获取到数据都回调 onResult 函数
-        if (onResult) {
-          onResult(data);
-        }
-
-        // 过期
-        if (status === -1) {
-          clearInterval(timer);
-          if (onExpired) {
-            onExpired();
-          }
-        }
-
-        // 未扫码
-        if (status === 0) {
-        }
-
-        // 已扫码
-        if (status === 1) {
-          if (onScanned && !calledOnScanned) {
-            onScanned(userInfo);
-            calledOnScanned = true;
-          }
-        }
-
-        // 已授权
-        if (status === 2) {
-          clearInterval(timer);
-          if (onSuccess) {
-            onSuccess(userInfo, ticket);
-          }
-        }
-
-        // 已取消
-        if (status === 3) {
-          clearInterval(timer);
-          if (onCancel) {
-            onCancel();
-          }
-        }
-      } catch (error) {
-        if (onError) {
-          onError(error);
-        }
-        return;
-      }
-    }, interval);
-    return timer;
-  }
-
   async startScanning(
     domId: string,
     options?: {
-      /** 二维码图片大小，默认为 240 * 240 */
       size?: {
         height: number;
         width: number;
       };
-
-      /** DOM 容器大小，默认为 300 * 300 */
       containerSize?: {
         height: number;
         width: number;
       };
-
-      /** 间隔时间，单位为毫秒，默认为 800 毫秒 */
       interval?: number;
-      /** 开始轮询的事件回调函数 */
-      onStart?: (
-        /** setInterval 返回的计时器，可以用 clearInterval 取消此计时器 */
-        timer: any
-      ) => any;
-      /** 获取到二维码最新状态事件回调函数 */
+      onStart?: (timer: any) => any;
       onResult?: (data: QRCodeStatus) => any;
-      /** 用户首次扫码事件回调函数。此时用户还没有授权，回调的用户信息中通仅包含昵称和头像，用作展示目的 */
       onScanned?: (userInfo: QRCodeUserInfo) => any;
-      /** 用户同意授权事件回调函数。该函数只会回调一次，之后轮询结束。参数 data 是一个字典，包含两个字段：ticket 和 userInfo。
-       * 出于安全性考虑，默认情况下，userInfo 只会包含昵称（nickname）和头像（photo）两个字段，开发者也可以在后台配置使其返回完整用户信息，
-       * 详情见 https://docs.authing.co/scan-qrcode/app-qrcode/customize.html。
-       * ticket 可以用来换取完整的用户信息，相关接口见 https://docs.authing.co/scan-qrcode/app-qrcode/full-api-list.html。 */
       onSuccess?: (userInfo: QRCodeUserInfo, ticket: string) => any;
-      /** 用户取消授权事件回调函数。该事件只会回调一次，之后轮询结束。 */
       onCancel?: () => any;
-      /**
-       * 获取二维码状态失败事件回调函数。常见原因为网络失败等，每次查询失败时都会回调。回调参数 data 示例如 {"code": 2241,"message": "二维码不存在","data": null}。完整错误代码请见 https://docs.authing.co/advanced/error-code.html。
-       */
       onError?: (message: string) => any;
-      /**
-       * 二维码失效时被回调，只回调一次，之后轮询结束。
-       */
       onExpired?: () => any;
       onCodeShow?: (random: string, url: string) => any;
       onCodeLoaded?: (random: string, url: string) => any;
       onCodeLoadFailed?: (message: string) => any;
       onCodeDestroyed?: (random: string) => any;
-
-      /**
-       * 提示文字
-       */
       tips?: {
         title?: string;
         scanned?: string;
@@ -549,5 +455,202 @@ export class QrCodeAuthenticationClient {
     };
 
     start();
+  }
+
+  /**
+   * @name geneCode
+   * @name_zh 生成二维码
+   * @description 生成二维码
+   *
+   * @example
+   * const authing = new AuthenticationClient({
+   *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+   * })
+   * const { url, random } = await authing.wxqrcode.geneCode()
+   *
+   * # random 二维码唯一 ID
+   * # url 二维码链接
+   *
+   * @returns {Promise<QRCodeGenarateResult>}
+   * @memberof QrCodeAuthenticationClient
+   */
+  async geneCode(): Promise<QRCodeGenarateResult> {
+    const api = `${this.options.host}/v2/api/qrcode/gene`;
+    const data = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
+        scene: this.scene
+      }
+    });
+    return data;
+  }
+
+  /**
+   * @name checkStatus
+   * @name_zh 检测扫码状态
+   * @description 检测扫码状态
+   *
+   * @param {string} random
+   *
+   * @example
+   *
+   * const authing = new AuthenticationClient({
+   *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+   * })
+   * const { random, status, ticket, userInfo } = await authing.wxqrcode.checkStatus('RANDOM')
+   * # status: 二维码状态: 0 - 未使用, 1 - 已扫码, 2 - 已授权, 3 - 取消授权, -1 - 已过期
+   * # ticket: 用于换取用户信息的一个随机字符串
+   * # userInfo: 用户信息
+   *
+   * @returns {Promise<QRCodeStatus>}
+   * @memberof QrCodeAuthenticationClient
+   */
+  async checkStatus(random: string): Promise<QRCodeStatus> {
+    const api = `${this.options.host}/v2/api/qrcode/check?random=${random}`;
+    const data = await this.httpClient.request({
+      method: 'GET',
+      url: api
+    });
+    return data;
+  }
+
+  /**
+   * @name exchangeUserInfo
+   * @name_zh 使用 ticket 交换用户信息
+   * @description 使用 ticket 交换用户信息
+   *
+   * @example
+   *
+   * const authing = new AuthenticationClient({
+   *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+   * })
+   * const user = await authing.wxqrcode.exchangeUserInfo('TICKET')
+   * # user: 完整的用户信息，其中 user.token 为用户的登录凭证。
+   *
+   * @param {string} ticket ticket
+   * @returns {Promise<Partial<User>>}
+   * @memberof QrCodeAuthenticationClient
+   */
+  async exchangeUserInfo(ticket: string): Promise<Partial<User>> {
+    const api = `${this.options.host}/v2/api/qrcode/userinfo`;
+    const userInfo = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
+        ticket
+      }
+    });
+    return userInfo;
+  }
+
+  /**
+   * @name startPolling
+   * @name_zh 开始轮询二维码状态
+   * @description 开始轮询二维码状态
+   *
+   * @param {string} random 二维码唯一 ID
+   * @param {Object} options
+   * @param {number} options.interval 间隔时间，单位为毫秒，默认为 800 毫秒
+   * @param {Function} options.onStart 开始轮询的事件回调函数, 第一个参数为 setInterval 返回的计时器，可以用 clearInterval 取消此计时器
+   * @param {Function} options.onResult 获取到二维码最新状态事件回调函数，第一个参数为的类型为 QRCodeStatus。
+   * @param {Function} options.onScanned 用户首次扫码事件回调函数。此时用户还没有授权，回调的用户信息中通仅包含昵称和头像，用作展示目的。
+   * 出于安全性考虑，默认情况下，userInfo 只会包含昵称（nickname）和头像（photo）两个字段，开发者也可以在后台配置使其返回完整用户信息，
+   * @param {Function} options.onSuccess 用户同意授权事件回调函数。该函数只会回调一次，之后轮询结束。第一个参数为 userInfo 用户信息，第二个参数为 ticket，用于换取用户的详情。
+   * 详情见 https://docs.authing.co/scan-qrcode/app-qrcode/customize.html。
+   * ticket 可以用来换取完整的用户信息，相关接口见 https://docs.authing.co/scan-qrcode/app-qrcode/full-api-list.html。
+   * @param {Function} options.onCancel 用户取消授权事件回调函数。该事件只会回调一次，之后轮询结束。
+   * @param {Function} options.onError 获取二维码状态失败事件回调函数。常见原因为网络失败等，每次查询失败时都会回调。回调参数 data 示例如 {"code": 2241,"message": "二维码不存在" }
+   * @param {Function} options.onExpired 二维码失效时被回调，只回调一次，之后轮询结束。
+   *
+   * @returns {null}
+   * @memberof QrCodeAuthenticationClient
+   */
+  async startPolling(
+    random: string,
+    options?: {
+      interval?: number;
+      onStart?: (timer: any) => any;
+      onResult?: (data: QRCodeStatus) => any;
+      onScanned?: (userInfo: QRCodeUserInfo) => any;
+      onSuccess?: (userInfo: QRCodeUserInfo, ticket: string) => any;
+      onCancel?: () => any;
+      onError?: (message: string) => any;
+      onExpired?: () => any;
+    }
+  ) {
+    options = options || {};
+    const {
+      interval = 800,
+      onStart,
+      onResult,
+      onScanned,
+      onExpired,
+      onSuccess,
+      onCancel,
+      onError
+    } = options;
+
+    let calledOnScanned = false;
+    let callOnPoolingStart = false;
+
+    const timer = setInterval(async () => {
+      // 开始轮询时回调 onPollingStart
+      if (onStart && !callOnPoolingStart) {
+        onStart(timer);
+        callOnPoolingStart = true;
+      }
+
+      try {
+        const data = await this.checkStatus(random);
+        const { status, ticket, userInfo } = data;
+        // 每次获取到数据都回调 onResult 函数
+        if (onResult) {
+          onResult(data);
+        }
+
+        // 过期
+        if (status === -1) {
+          clearInterval(timer);
+          if (onExpired) {
+            onExpired();
+          }
+        }
+
+        // 未扫码
+        if (status === 0) {
+        }
+
+        // 已扫码
+        if (status === 1) {
+          if (onScanned && !calledOnScanned) {
+            onScanned(userInfo);
+            calledOnScanned = true;
+          }
+        }
+
+        // 已授权
+        if (status === 2) {
+          clearInterval(timer);
+          if (onSuccess) {
+            onSuccess(userInfo, ticket);
+          }
+        }
+
+        // 已取消
+        if (status === 3) {
+          clearInterval(timer);
+          if (onCancel) {
+            onCancel();
+          }
+        }
+      } catch (error) {
+        if (onError) {
+          onError(error);
+        }
+        return;
+      }
+    }, interval);
+    return timer;
   }
 }
