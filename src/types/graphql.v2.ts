@@ -6157,7 +6157,7 @@ export const UpdateUserpoolDocument = `
         sendSmsApi
         appId
         key
-        template,
+        template
         ttl
       }
     }
@@ -7023,7 +7023,7 @@ export const UserpoolDocument = `
         sendSmsApi
         appId
         key
-        template,
+        template
         ttl
       }
     }
