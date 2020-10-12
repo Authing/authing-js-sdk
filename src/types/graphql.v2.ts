@@ -1370,7 +1370,7 @@ export type SMSConfig253Input = {
 };
 
 export type CustomSMSProviderInput = {
-  enabled?: string;
+  enabled?: boolean;
   provider?: string;
   config253?: SMSConfig253Input;
 };
@@ -3358,7 +3358,7 @@ export type SMSConfig253 = {
 };
 
 export type CustomSMSProvider = {
-  enabled: string;
+  enabled: boolean;
   provider: string;
   config253: SMSConfig253;
 };
