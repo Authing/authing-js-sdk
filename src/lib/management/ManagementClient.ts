@@ -36,13 +36,13 @@ export class ManagementClient {
   options: ManagementClientOptions;
 
   /** 用户池配置 */
-  userpoolConfig: UserPool;
+  private userpoolConfig: UserPool;
 
   // sub classes definitions
-  graphqlClient: GraphqlClient;
-  graphqlClientV2: GraphqlClient;
-  httpClient: HttpClient;
-  tokenProvider: ManagementTokenProvider;
+  private graphqlClient: GraphqlClient;
+  private graphqlClientV2: GraphqlClient;
+  private httpClient: HttpClient;
+  private tokenProvider: ManagementTokenProvider;
   users: UsersManagementClient;
   userpool: UserPoolManagementClient;
   acl: AclManagementClient;
@@ -117,6 +117,11 @@ export class ManagementClient {
       this.tokenProvider
     );
     this.whitelist = new WhitelistManagementClient(
+      this.options,
+      this.graphqlClientV2,
+      this.tokenProvider
+    );
+    this.groups = new GroupsManagementClient(
       this.options,
       this.graphqlClientV2,
       this.tokenProvider

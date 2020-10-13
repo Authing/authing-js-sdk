@@ -2,17 +2,21 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import {
-  addRole,
-  assignRole,
-  deleteRole,
-  deleteRoles,
+  addUserToGroup,
+  createGroup,
+  deleteGroups,
   getGroups,
-  revokeRole,
-  role,
-  roleWithUsers,
-  updateRole
+  group,
+  groupWithUsers,
+  removeUserFromGroup,
+  updateGroup
 } from '../graphqlapi';
-import { Role, CommonMessage, PaginatedUsers } from '../..';
+import {
+  CommonMessage,
+  Group,
+  PaginatedGroups,
+  PaginatedUsers
+} from '../../types/graphql.v2';
 
 export class GroupsManagementClient {
   options: ManagementClientOptions;
@@ -30,10 +34,24 @@ export class GroupsManagementClient {
   }
 
   /**
+   * @name list
+   * @name_zh 获取分组列表
    * @description 获取分组列表
    *
+   * @param {number} [page=1] 页码数
+   * @param {number} [limit=10] 每页个数
+   *
+   * @example
+   *
+   * GroupsManagementClient().list(1, 10)
+   *
+   * @returns {Promise<DeepPartial<PaginatedGroups>>}
+   * @memberof GroupsManagementClient
    */
-  async list(page: number = 1, limit: number = 10) {
+  async list(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<DeepPartial<PaginatedGroups>> {
     const { groups: data } = await getGroups(
       this.graphqlClient,
       this.tokenProvider,
@@ -46,78 +64,90 @@ export class GroupsManagementClient {
   }
 
   /**
-   *
    * @name detail
-   * @name_zh 获取角色详情
-   * @description 获取角色详情
+   * @name_zh 获取分组详情
+   * @description 获取分组详情
    *
-   * @param {string} code 角色唯一标志符
+   * @param {string} code 分组唯一标志符
    *
    * @example
-   * RolesManagementClient().detail('manager')
+   * GroupsManagementClient().detail('manager')
    *
-   * @returns {Promise<DeepPartial<Role>>} 角色详情
-   * @memberof RolesManagementClient
+   * @returns {Promise<DeepPartial<Group>>} 分组详情
+   * @memberof GroupsManagementClient
    */
-  async detail(code: string): Promise<DeepPartial<Role>> {
-    const { role: data } = await role(this.graphqlClient, this.tokenProvider, {
-      code
-    });
+  async detail(code: string): Promise<DeepPartial<Group>> {
+    const { group: data } = await group(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        code
+      }
+    );
     return data;
   }
 
   /**
    * @name create
-   * @name_zh 创建角色
-   * @description 创建角色
+   * @name_zh 创建分组
+   * @description 创建分组
    *
-   * @param {string} code 角色唯一标志符
+   * @param {string} code 分组唯一标志符
+   * @param {string} name 分组名称
    * @param {string} [description] 描述
    *
    * @example
-   * RolesManagementClient().create('rolea', 'RoleA')
+   * GroupsManagementClient().create('group', '分组 xxx')
    *
-   * @returns {Promise<DeepPartial<Role>>}
-   * @memberof RolesManagementClient
+   * @returns {Promise<DeepPartial<Group>>}
+   * @memberof GroupsManagementClient
    */
-  async create(code: string, description?: string): Promise<DeepPartial<Role>> {
-    const res = await addRole(this.graphqlClient, this.tokenProvider, {
+  async create(
+    code: string,
+    name: string,
+    description?: string
+  ): Promise<DeepPartial<Group>> {
+    const res = await createGroup(this.graphqlClient, this.tokenProvider, {
       code,
+      name,
       description
     });
-    return res.createRole;
+    return res.createGroup;
   }
 
   /**
    * @name update
-   * @name_zh 修改角色
-   * @description 修改角色
+   * @name_zh 修改分组
+   * @description 修改分组
    *
-   * @param {string} code 角色唯一标志符
+   * @param {string} code 分组唯一标志符
    * @param {Object} input
-   * @param {string} input.description 描述信息
-   * @param {string} input.newCode 新的唯一标志符
+   * @param {string} [input.name] 新的名称
+   * @param {string} [input.description] 新的描述信息
+   * @param {string} [input.newCode] 新的唯一标志符
    *
    * @example
-   * RolesManagementClient().update('rolea', {newCode: 'newcode'})
+   * GroupsManagementClient().update('group', {newCode: 'newcode'})
    *
    *
-   * @returns {Promise<DeepPartial<Role>>}
-   * @memberof RolesManagementClient
+   * @returns {Promise<DeepPartial<Group>>}
+   * @memberof GroupsManagementClient
    */
   async update(
     code: string,
     input: {
       description?: string;
       newCode?: string;
+      name?: string;
     }
-  ): Promise<DeepPartial<Role>> {
-    const { description, newCode } = input;
-    const { updateRole: data } = await updateRole(
+  ): Promise<DeepPartial<Group>> {
+    const { description, newCode, name } = input;
+    const { updateGroup: data } = await updateGroup(
       this.graphqlClient,
       this.tokenProvider,
       {
         code,
+        name,
         description,
         newCode
       }
@@ -127,23 +157,23 @@ export class GroupsManagementClient {
 
   /**
    * @name delete
-   * @name_zh 删除角色
-   * @description 删除角色
+   * @name_zh 删除分组
+   * @description 删除分组
    *
-   * @param {string} code 角色唯一标志符
+   * @param {string} code 分组唯一标志符
    *
    * @example
-   * RolesManagementClient().delete('rolea')
+   * GroupsManagementClient().delete('rolea')
    *
    * @returns {Promise<CommonMessage>}
-   * @memberof RolesManagementClient
+   * @memberof GroupsManagementClient
    */
   async delete(code: string): Promise<CommonMessage> {
-    const { deleteRole: data } = await deleteRole(
+    const { deleteGroups: data } = await deleteGroups(
       this.graphqlClient,
       this.tokenProvider,
       {
-        code
+        codeList: [code]
       }
     );
     return data;
@@ -151,23 +181,23 @@ export class GroupsManagementClient {
 
   /**
    * @name deleteMany
-   * @name_zh 批量删除角色
-   * @description 批量删除角色
+   * @name_zh 批量删除分组
+   * @description 批量删除分组
    *
-   * @param {string[]} codeList 角色唯一标志符列表
+   * @param {string[]} codeList 分组唯一标志符列表
    *
    * @example
-   * RolesManagementClient().delete(['rolea'])
+   * GroupsManagementClient().deleteMany(['groupa', 'groupb'])
    *
    * @returns {Promise<CommonMessage>}
-   * @memberof RolesManagementClient
+   * @memberof GroupsManagementClient
    */
   async deleteMany(codeList: string[]): Promise<CommonMessage> {
-    const { deleteRoles: data } = await deleteRoles(
+    const { deleteGroups: data } = await deleteGroups(
       this.graphqlClient,
       this.tokenProvider,
       {
-        codes: codeList
+        codeList
       }
     );
     return data;
@@ -175,21 +205,31 @@ export class GroupsManagementClient {
 
   /**
    * @name listUsers
-   * @name_zh 获取角色用户列表
-   * @description 获取角色用户列表
-   * @param {string} code 角色唯一标志符
+   * @name_zh 获取分组用户列表
+   * @description 获取分组用户列表
+   * @param {string} code 分组唯一标志符
+   * @param {number} [page=1] 页码数
+   * @param {number} [limit=10] 每页个数
+   *
    * @example
-   * RolesManagementClient().listUsers(code)
+   *
+   * GroupsManagementClient().listUsers(code)
    *
    * @returns {Promise<DeepPartial<PaginatedUsers>>}
-   * @memberof RolesManagementClient
+   * @memberof GroupsManagementClient
    */
-  async listUsers(code: string): Promise<DeepPartial<PaginatedUsers>> {
-    const { role: data } = await roleWithUsers(
+  async listUsers(
+    code: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<DeepPartial<PaginatedUsers>> {
+    const { group: data } = await groupWithUsers(
       this.graphqlClient,
       this.tokenProvider,
       {
-        code
+        code,
+        page,
+        limit
       }
     );
     return data.users;
@@ -200,20 +240,21 @@ export class GroupsManagementClient {
    * @name_zh 添加用户
    * @description 添加用户
    *
-   * @param {string} code 角色唯一标志符
+   * @param {string} code 分组唯一标志符
    * @param {string[]} userIds 用户 ID 列表
+   *
    * @example
-   * RolesManagementClient().addUsers(code, ['USERID1', 'USERID2'])
+   * GroupsManagementClient().addUsers(code, ['USERID1', 'USERID2'])
    *
    * @returns {Promise<CommonMessage>}
-   * @memberof RolesManagementClient
+   * @memberof GroupsManagementClient
    */
   async addUsers(code: string, userIds: string[]): Promise<CommonMessage> {
-    const res = await assignRole(this.graphqlClient, this.tokenProvider, {
-      roleCode: code,
+    const res = await addUserToGroup(this.graphqlClient, this.tokenProvider, {
+      code,
       userIds
     });
-    return res.assignRole;
+    return res.addUserToGroup;
   }
 
   /**
@@ -222,19 +263,23 @@ export class GroupsManagementClient {
    *
    * @description 移除用户
    *
-   * @param {string} code 角色唯一标志符
+   * @param {string} code 分组唯一标志符
    * @param {string[]} userIds 用户 ID 列表
    * @example
-   * RolesManagementClient().removeUsers(code, ['USERID1', 'USERID2'])
+   * GroupsManagementClient().removeUsers(code, ['USERID1', 'USERID2'])
    *
    * @returns {Promise<CommonMessage>}
-   * @memberof RolesManagementClient
+   * @memberof GroupsManagementClient
    */
   async removeUsers(code: string, userIds: string[]): Promise<CommonMessage> {
-    const res = await revokeRole(this.graphqlClient, this.tokenProvider, {
-      roleCode: code,
-      userIds
-    });
-    return res.revokeRole;
+    const res = await removeUserFromGroup(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        code,
+        userIds
+      }
+    );
+    return res.removeUserFromGroup;
   }
 }

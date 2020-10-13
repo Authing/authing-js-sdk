@@ -797,9 +797,9 @@ export type Mutation = {
   addUserToGroup: CommonMessage;
   removeUserFromGroup: CommonMessage;
   /** 创建角色 */
-  createGroup: Role;
+  createGroup: Group;
   /** 修改角色 */
-  updateGroup: Role;
+  updateGroup: Group;
   /** 批量删除角色 */
   deleteGroups: CommonMessage;
   loginByEmail?: Maybe<User>;
@@ -928,12 +928,12 @@ export type MutationDeleteFunctionArgs = {
 };
 
 export type MutationAddUserToGroupArgs = {
-  userId?: Maybe<Scalars['String']>;
+  userIds: Array<Scalars['String']>;
   code?: Maybe<Scalars['String']>;
 };
 
 export type MutationRemoveUserFromGroupArgs = {
-  userId?: Maybe<Scalars['String']>;
+  userIds: Array<Scalars['String']>;
   code?: Maybe<Scalars['String']>;
 };
 
@@ -951,7 +951,7 @@ export type MutationUpdateGroupArgs = {
 };
 
 export type MutationDeleteGroupsArgs = {
-  code: Scalars['String'];
+  codeList: Array<Scalars['String']>;
 };
 
 export type MutationLoginByEmailArgs = {
@@ -1764,7 +1764,7 @@ export type AddUdfResponse = {
 };
 
 export type AddUserToGroupVariables = Exact<{
-  userId?: Maybe<Scalars['String']>;
+  userIds: Array<Scalars['String']>;
   code?: Maybe<Scalars['String']>;
 }>;
 
@@ -1942,20 +1942,10 @@ export type CreateGroupVariables = Exact<{
 export type CreateGroupResponse = {
   createGroup: {
     code: string;
-    arn: string;
+    name: string;
     description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    users: { totalCount: number };
-    parent?: Maybe<{
-      code: string;
-      arn: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
   };
 };
 
@@ -2224,7 +2214,7 @@ export type DeleteFunctionResponse = {
 };
 
 export type DeleteGroupsVariables = Exact<{
-  code: Scalars['String'];
+  codeList: Array<Scalars['String']>;
 }>;
 
 export type DeleteGroupsResponse = {
@@ -3039,7 +3029,7 @@ export type RemoveUdvResponse = {
 };
 
 export type RemoveUserFromGroupVariables = Exact<{
-  userId?: Maybe<Scalars['String']>;
+  userIds: Array<Scalars['String']>;
   code?: Maybe<Scalars['String']>;
 }>;
 
@@ -3338,20 +3328,10 @@ export type UpdateGroupVariables = Exact<{
 export type UpdateGroupResponse = {
   updateGroup: {
     code: string;
-    arn: string;
+    name: string;
     description?: Maybe<string>;
-    isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    users: { totalCount: number };
-    parent?: Maybe<{
-      code: string;
-      arn: string;
-      description?: Maybe<string>;
-      isSystem?: Maybe<boolean>;
-      createdAt?: Maybe<string>;
-      updatedAt?: Maybe<string>;
-    }>;
   };
 };
 
@@ -5106,8 +5086,8 @@ export const AddUdfDocument = `
 }
     `;
 export const AddUserToGroupDocument = `
-    mutation addUserToGroup($userId: String, $code: String) {
-  addUserToGroup(userId: $userId, code: $code) {
+    mutation addUserToGroup($userIds: [String!]!, $code: String) {
+  addUserToGroup(userIds: $userIds, code: $code) {
     message
     code
   }
@@ -5242,22 +5222,10 @@ export const CreateGroupDocument = `
     mutation createGroup($code: String!, $name: String!, $description: String) {
   createGroup(code: $code, name: $name, description: $description) {
     code
-    arn
+    name
     description
-    isSystem
     createdAt
     updatedAt
-    users {
-      totalCount
-    }
-    parent {
-      code
-      arn
-      description
-      isSystem
-      createdAt
-      updatedAt
-    }
   }
 }
     `;
@@ -5495,8 +5463,8 @@ export const DeleteFunctionDocument = `
 }
     `;
 export const DeleteGroupsDocument = `
-    mutation deleteGroups($code: String!) {
-  deleteGroups(code: $code) {
+    mutation deleteGroups($codeList: [String!]!) {
+  deleteGroups(codeList: $codeList) {
     message
     code
   }
@@ -6224,8 +6192,8 @@ export const RemoveUdvDocument = `
 }
     `;
 export const RemoveUserFromGroupDocument = `
-    mutation removeUserFromGroup($userId: String, $code: String) {
-  removeUserFromGroup(userId: $userId, code: $code) {
+    mutation removeUserFromGroup($userIds: [String!]!, $code: String) {
+  removeUserFromGroup(userIds: $userIds, code: $code) {
     message
     code
   }
@@ -6479,22 +6447,10 @@ export const UpdateGroupDocument = `
     mutation updateGroup($code: String!, $name: String, $description: String, $newCode: String) {
   updateGroup(code: $code, name: $name, description: $description, newCode: $newCode) {
     code
-    arn
+    name
     description
-    isSystem
     createdAt
     updatedAt
-    users {
-      totalCount
-    }
-    parent {
-      code
-      arn
-      description
-      isSystem
-      createdAt
-      updatedAt
-    }
   }
 }
     `;
