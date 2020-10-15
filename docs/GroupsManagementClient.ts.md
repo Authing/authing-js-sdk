@@ -1,116 +1,121 @@
 [[toc]]
 
 
-## undefined
+## list
 
-undefined
+获取分组列表
 
-undefined().undefined()
+GroupsManagementClient().list(page, limit)
 
 > 获取分组列表
 
 
 #### Arguments
 
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## detail
-
-获取角色详情
-
-RolesManagementClient().detail(code)
-
-> 获取角色详情
-
-
-#### Arguments
-
-- `code` \<string\> 角色唯一标志符 
+- `page` \<number\> 页码数 默认值为 : `1`。
+- `limit` \<number\> 每页个数 默认值为 : `10`。
 
 #### Returns
 
--  `Promise<DeepPartial<Role>>` 角色详情
+-  `Promise<DeepPartial<PaginatedGroups>>` 
 
 #### Examples
 
 ```javascript
-RolesManagementClient().detail('manager')
+GroupsManagementClient().list(1, 10)
+```
+      
+
+## detail
+
+获取分组详情
+
+GroupsManagementClient().detail(code)
+
+> 获取分组详情
+
+
+#### Arguments
+
+- `code` \<string\> 分组唯一标志符 
+
+#### Returns
+
+-  `Promise<DeepPartial<Group>>` 分组详情
+
+#### Examples
+
+```javascript
+GroupsManagementClient().detail('manager')
 ```
       
 
 ## create
 
-创建角色
+创建分组
 
-RolesManagementClient().create(code, description)
+GroupsManagementClient().create(code, name, description)
 
-> 创建角色
+> 创建分组
 
 
 #### Arguments
 
-- `code` \<string\> 角色唯一标志符 
+- `code` \<string\> 分组唯一标志符 
+- `name` \<string\> 分组名称 
 - `description` \<string\> 描述 
 
 #### Returns
 
--  `Promise<DeepPartial<Role>>` 
+-  `Promise<DeepPartial<Group>>` 
 
 #### Examples
 
 ```javascript
-RolesManagementClient().create('rolea', 'RoleA')
+GroupsManagementClient().create('group', '分组 xxx')
 ```
       
 
 ## update
 
-修改角色
+修改分组
 
-RolesManagementClient().update(code, input)
+GroupsManagementClient().update(code, input)
 
-> 修改角色
+> 修改分组
 
 
 #### Arguments
 
-- `code` \<string\> 角色唯一标志符 
+- `code` \<string\> 分组唯一标志符 
 - `input` \<Object\>  
-- `input.description` \<string\> 描述信息 
+- `input.name` \<string\> 新的名称 
+- `input.description` \<string\> 新的描述信息 
 - `input.newCode` \<string\> 新的唯一标志符 
 
 #### Returns
 
--  `Promise<DeepPartial<Role>>` 
+-  `Promise<DeepPartial<Group>>` 
 
 #### Examples
 
 ```javascript
-RolesManagementClient().update('rolea', {newCode: 'newcode'})
+GroupsManagementClient().update('group', {newCode: 'newcode'})
 ```
       
 
 ## delete
 
-删除角色
+删除分组
 
-RolesManagementClient().delete(code)
+GroupsManagementClient().delete(code)
 
-> 删除角色
+> 删除分组
 
 
 #### Arguments
 
-- `code` \<string\> 角色唯一标志符 
+- `code` \<string\> 分组唯一标志符 
 
 #### Returns
 
@@ -119,22 +124,22 @@ RolesManagementClient().delete(code)
 #### Examples
 
 ```javascript
-RolesManagementClient().delete('rolea')
+GroupsManagementClient().delete('rolea')
 ```
       
 
 ## deleteMany
 
-批量删除角色
+批量删除分组
 
-RolesManagementClient().deleteMany(codeList)
+GroupsManagementClient().deleteMany(codeList)
 
-> 批量删除角色
+> 批量删除分组
 
 
 #### Arguments
 
-- `codeList` \<string[]\> 角色唯一标志符列表 
+- `codeList` \<string[]\> 分组唯一标志符列表 
 
 #### Returns
 
@@ -143,22 +148,24 @@ RolesManagementClient().deleteMany(codeList)
 #### Examples
 
 ```javascript
-RolesManagementClient().delete(['rolea'])
+GroupsManagementClient().deleteMany(['groupa', 'groupb'])
 ```
       
 
 ## listUsers
 
-获取角色用户列表
+获取分组用户列表
 
-RolesManagementClient().listUsers(code)
+GroupsManagementClient().listUsers(code, page, limit)
 
-> 获取角色用户列表
+> 获取分组用户列表
 
 
 #### Arguments
 
-- `code` \<string\> 角色唯一标志符 
+- `code` \<string\> 分组唯一标志符 
+- `page` \<number\> 页码数 默认值为 : `1`。
+- `limit` \<number\> 每页个数 默认值为 : `10`。
 
 #### Returns
 
@@ -167,7 +174,7 @@ RolesManagementClient().listUsers(code)
 #### Examples
 
 ```javascript
-RolesManagementClient().listUsers(code)
+GroupsManagementClient().listUsers(code)
 ```
       
 
@@ -175,14 +182,14 @@ RolesManagementClient().listUsers(code)
 
 添加用户
 
-RolesManagementClient().addUsers(code, userIds)
+GroupsManagementClient().addUsers(code, userIds)
 
 > 添加用户
 
 
 #### Arguments
 
-- `code` \<string\> 角色唯一标志符 
+- `code` \<string\> 分组唯一标志符 
 - `userIds` \<string[]\> 用户 ID 列表 
 
 #### Returns
@@ -192,7 +199,7 @@ RolesManagementClient().addUsers(code, userIds)
 #### Examples
 
 ```javascript
-RolesManagementClient().addUsers(code, ['USERID1', 'USERID2'])
+GroupsManagementClient().addUsers(code, ['USERID1', 'USERID2'])
 ```
       
 
@@ -200,14 +207,14 @@ RolesManagementClient().addUsers(code, ['USERID1', 'USERID2'])
 
 移除用户
 
-RolesManagementClient().removeUsers(code, userIds)
+GroupsManagementClient().removeUsers(code, userIds)
 
 > 移除用户
 
 
 #### Arguments
 
-- `code` \<string\> 角色唯一标志符 
+- `code` \<string\> 分组唯一标志符 
 - `userIds` \<string[]\> 用户 ID 列表 
 
 #### Returns
@@ -217,6 +224,6 @@ RolesManagementClient().removeUsers(code, userIds)
 #### Examples
 
 ```javascript
-RolesManagementClient().removeUsers(code, ['USERID1', 'USERID2'])
+GroupsManagementClient().removeUsers(code, ['USERID1', 'USERID2'])
 ```
       

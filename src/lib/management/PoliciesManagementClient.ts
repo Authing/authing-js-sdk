@@ -5,7 +5,9 @@ import {
   PaginatedPolicies,
   PolicyAssignmentTargetType,
   PolicyStatement,
-  Role
+  Policy,
+  CommonMessage,
+  PaginatedPolicyAssignment
 } from '../../types/graphql.v2';
 import {
   policies,
@@ -19,6 +21,27 @@ import {
   removePolicyAssignments
 } from '../graphqlapi';
 
+/**
+ * @name PoliciesManagementClient Authing 策略管理模块
+ * @description Authing 的访问控制与权限管理模型核心围绕着两个点来设计：**资源（Resource）**和**策略（Policy）**。策略定义了对某个（类）资源的某个（些）操作权限，将策略授权给用户（或角色），就能知道用户（或角色）是否具备对某个资源的某个操作具备操作权限。
+ *
+ * 此模块可以用于对策略进行增删改查，以及管理策略授权，策略可以被授予用户或角色。详细介绍请见 https://docs.authing.co/docs/access-control/index.html
+ *
+ * 请使用以下方式使用该模块：
+ * \`\`\`javascript
+ * import ManagementClient from "authing-js-sdk"
+ * const managementClient = new ManagementClient({
+ *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+ *    secret: process.env.AUTHING_USERPOOL_SECRET,
+ *    host: process.env.AUTHING_HOST
+ * })
+ * managementClient.policies.list // 获取策略列表
+ * managementClient.policies.create // 创建策略
+ * managementClient.policies.listUsers // 获取策略授权记录
+ * \`\`\`
+ *
+ * @class PoliciesManagementClient
+ */
 export class PoliciesManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;
@@ -35,34 +58,56 @@ export class PoliciesManagementClient {
   }
 
   /**
+   * @name list
+   * @name_zh 获取策略列表
    * @description 获取策略列表
    *
-   * @param {number} [page=1]
-   * @param {number} [limit=10]
+   * @param {Object} options
+   * @param {number} [options.page=1]
+   * @param {number} [options.limit=10]
+   * @param {boolean} [options.excludeDefault=true] 是否排除系统默认资源
+   *
+   * @example
+   *
+   * const { list, totalCount } = await management.policies.list({
+   *   excludeDefault: false // 包含系统默认的策略
+   * });
+   *
    * @returns {Promise<DeepPartial<PaginatedPolicies>>}
    * @memberof PoliciesManagementClient
    */
-  async list(
-    page: number = 1,
-    limit: number = 10
-  ): Promise<DeepPartial<PaginatedPolicies>> {
+  async list(options?: {
+    page?: number;
+    limit?: number;
+    excludeDefault?: boolean;
+  }): Promise<DeepPartial<PaginatedPolicies>> {
+    options = options || {};
+    const { page = 1, limit = 10, excludeDefault = true } = options;
     const { policies: data } = await policies(
       this.graphqlClient,
       this.tokenProvider,
       {
         page,
-        limit
+        limit,
+        excludeDefault
       }
     );
     return data;
   }
 
   /**
+   * @name detail
+   * @name_zh 获取策略详情
    * @description 获取策略详情
    *
+   * @param {string} code 策略唯一标志
    *
+   * const policy = await management.policies.detail('CODE');
+   *
+   * @returns {Promise<DeepPartial<Policy>>}
+   * @memberof PoliciesManagementClient
    */
-  async detail(code: string): Promise<DeepPartial<Role>> {
+  async detail(code: string): Promise<DeepPartial<Policy>> {
     const { policy: data } = await policy(
       this.graphqlClient,
       this.tokenProvider,
@@ -74,14 +119,36 @@ export class PoliciesManagementClient {
   }
 
   /**
+   * @name create
+   * @name_zh 添加策略
    * @description 添加策略
    *
+   * @param {string} code 策略唯一标志
+   * @param {PolicyStatement[]} 策略语句，详细格式与说明请见 https://docs.authing.co/docs/access-control/index.html
+   * @param {string} [description] 描述
+   *
+   * @example
+   *
+   * import { PolicyEffect } from "authing-js-sdk"
+   *
+   * const statements = [
+   *   {
+   *     resource: 'books:123',
+   *     effect: PolicyEffect.Allow,
+   *     actions: ['books:edit']
+   *   }
+   * ];
+   *
+   * const policy = await management.policies.create(code, statements);
+   *
+   * @returns {Promise<DeepPartial<Policy>>}
+   * @memberof PoliciesManagementClient
    */
   async create(
     code: string,
     statements: PolicyStatement[],
     description?: string
-  ) {
+  ): Promise<DeepPartial<Policy>> {
     const res = await createPolicy(this.graphqlClient, this.tokenProvider, {
       code,
       statements,
@@ -91,31 +158,62 @@ export class PoliciesManagementClient {
   }
 
   /**
-   * @description 修改策略
+   * @name update
+   * @name_zh 修改策略
+   * @description 修改策略，系统内置策略由 Authing 官方维护，不能修改和删除。
+   *
+   * @param {string} code 策略唯一标志
+   * @param {Object} updates
+   * @param {string} [updates.description] 描述
+   * @param {PolicyStatement[]} [updates.statements] 策略语句，详细格式与说明请见 https://docs.authing.co/docs/access-control/index.html
+   * @param {string} [updates.newCode] 新的唯一标志，如果传入，需要保证其在用户池内是唯一的。
+   *
+   * @example
+   *
+   * const policy = await management.policies.update('CODE', { newCode: 'NEWCODE' });
+   *
+   * @returns {Promise<DeepPartial<Policy>>}
+   * @memberof PoliciesManagementClient
    *
    */
   async update(
     code: string,
-    statements?: PolicyStatement[],
-    description?: string
-  ) {
+    updates: {
+      statements?: PolicyStatement[];
+      description?: string;
+      newCode?: string;
+    }
+  ): Promise<DeepPartial<Policy>> {
+    const { description, statements, newCode } = updates;
     const { updatePolicy: data } = await updatePolicy(
       this.graphqlClient,
       this.tokenProvider,
       {
         code,
         description,
-        statements
+        statements,
+        newCode
       }
     );
     return data;
   }
 
   /**
-   * @description 删除策略
+   * @name delete
+   * @name_zh 删除策略
+   * @description 删除策略，系统内置策略由 Authing 官方维护，不能修改和删除。
+   *
+   * @example
+   *
+   * const { code, message } = await management.policies.delete("CODE"); // 通过 code 是否为 200 判断操作是否成功
+   *
+   *
+   * @param {string} code 策略唯一标志
+   * @returns {Promise<CommonMessage>}
+   * @memberof PoliciesManagementClient
    *
    */
-  async delete(code: string) {
+  async delete(code: string): Promise<CommonMessage> {
     const { deletePolicy: data } = await deletePolicy(
       this.graphqlClient,
       this.tokenProvider,
@@ -127,10 +225,21 @@ export class PoliciesManagementClient {
   }
 
   /**
-   * @description 批量删除策略
+   * @name deleteMany
+   * @name_zh 批量删除策略
+   * @description 批量删除策略，系统内置策略由 Authing 官方维护，不能修改和删除。
+   *
+   * @example
+   *
+   * const { code, message } = await management.policies.deleteMany(["CODE"]); // 通过 code 是否为 200 判断操作是否成功
+   *
+   *
+   * @param {string} codeList 策略唯一标志列表
+   * @returns {Promise<CommonMessage>}
+   * @memberof PoliciesManagementClient
    *
    */
-  async deleteMany(codeList: string[]) {
+  async deleteMany(codeList: string[]): Promise<CommonMessage> {
     const { deletePolicies: data } = await deletePolicies(
       this.graphqlClient,
       this.tokenProvider,
@@ -142,10 +251,41 @@ export class PoliciesManagementClient {
   }
 
   /**
-   * @description 获取策略授权列表
+   * @name listAssignments
+   * @name_zh 获取策略授权记录
+   * @description 获取策略授权记录
    *
+   * @param {string} code 策略唯一标志
+   * @param {number} [page=1]
+   * @param {number} [limit=10]
+   *
+   * @example
+   *
+   * const { totalCount, list } = await management.policies.listAssignments("CODE");
+   *
+   * // list 数据示例
+   *
+   *[
+   *  {
+   *    code: "PolicyCode", // 策略唯一标志
+   *    targetType: 'USER', // 'USER' 表示用户, 'ROLE' 表示角色
+   *    targetIdentifier: '5f8812866795cc0026352fc5' // 用户 ID 或者角色 code
+   *  },
+   *  {
+   *    code: "PolicyCode", // 策略唯一标志
+   *    targetType: 'ROLE', // 'USER' 表示用户, 'ROLE' 表示角色
+   *    targetIdentifier: 'ROLE_CODE' // 用户 ID 或者角色 code
+   *  }
+   *]
+   *
+   * @returns {Promise<PaginatedPolicyAssignment>}
+   * @memberof PoliciesManagementClient
    */
-  async listAssignments(code: string, page: number = 1, limit: number = 10) {
+  async listAssignments(
+    code: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<PaginatedPolicyAssignment> {
     const { policyAssignments: data } = await policyAssignments(
       this.graphqlClient,
       this.tokenProvider,
@@ -159,14 +299,38 @@ export class PoliciesManagementClient {
   }
 
   /**
-   * @description 添加授权
+   * @name addAssignments
+   * @name_zh 添加策略授权
+   * @description 添加策略授权，可以将策略授权给用户和角色，授权给角色的策略会被该角色下的所有用户继承 。此接口可以进行批量操作。
    *
+   * @param {string[]} policies 策略 code 列表
+   * @param {PolicyAssignmentTargetType} targetType 可选值为 USER (用户) 和 ROLE (角色)
+   * @param {string[]} targetIdentifiers 用户 id 列表和角色 code 列表
+   *
+   * @example
+   *
+   * import { PolicyAssignmentTargetType } from "authing-js-sdk"
+   *
+   * await management.policies.addAssignments(
+   *   ["code1", "code2"],
+   *   PolicyAssignmentTargetType.User,
+   *   ['USERID']
+   * );
+   *
+   * await management.policies.addAssignments(
+   *   ["code1", "code2"],
+   *   PolicyAssignmentTargetType.Role,
+   *   ['ROLE_CODE']
+   * );
+   *
+   * @returns {Promise<CommonMessage>}
+   * @memberof PoliciesManagementClient
    */
   async addAssignments(
     policies: string[],
     targetType: PolicyAssignmentTargetType,
     targetIdentifiers: string[]
-  ) {
+  ): Promise<CommonMessage> {
     const res = await addPolicyAssignments(
       this.graphqlClient,
       this.tokenProvider,
@@ -180,14 +344,38 @@ export class PoliciesManagementClient {
   }
 
   /**
-   * @description 移除授权
+   * @name removeAssignments
+   * @name_zh 撤销策略授权
+   * @description 撤销策略授权，此接口可以进行批量操作。
    *
+   * @param {string[]} policies 策略 code 列表
+   * @param {PolicyAssignmentTargetType} targetType 可选值为 USER (用户) 和 ROLE (角色)
+   * @param {string[]} targetIdentifiers 用户 id 列表和角色 code 列表
+   *
+   * @example
+   *
+   * import { PolicyAssignmentTargetType } from "authing-js-sdk"
+   *
+   * await management.policies.removeAssignments(
+   *   ["code1", "code2"],
+   *   PolicyAssignmentTargetType.User,
+   *   ['USERID']
+   * );
+   *
+   * await management.policies.removeAssignments(
+   *   ["code1", "code2"],
+   *   PolicyAssignmentTargetType.Role,
+   *   ['ROLE_CODE']
+   * );
+   *
+   * @returns {Promise<CommonMessage>}
+   * @memberof PoliciesManagementClient
    */
   async removeAssignments(
     policies: string[],
     targetType: PolicyAssignmentTargetType,
     targetIdentifiers: string[]
-  ) {
+  ): Promise<CommonMessage> {
     const res = await removePolicyAssignments(
       this.graphqlClient,
       this.tokenProvider,

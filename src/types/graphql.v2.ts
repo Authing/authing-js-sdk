@@ -7,9 +7,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  username_String_NotNull_minLength_4_maxLength_50: any;
-  ip_String_format_ipv4: any;
-  email_String_NotNull_format_email: any;
 };
 
 export type Query = {
@@ -178,6 +175,7 @@ export type QueryPolicyArgs = {
 export type QueryPoliciesArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
+  excludeDefault?: Maybe<Scalars['Boolean']>;
 };
 
 export type QueryPolicyAssignmentsArgs = {
@@ -698,6 +696,8 @@ export type UserPool = {
   app2WxappLoginStrategy?: Maybe<App2WxappLoginStrategy>;
   /** 注册白名单配置 */
   whitelist?: Maybe<RegisterWhiteListConfig>;
+  /** 自定义短信服务商配置 */
+  customSMSProvider?: Maybe<CustomSmsProvider>;
 };
 
 export type UserPoolType = {
@@ -747,6 +747,20 @@ export type RegisterWhiteListConfig = {
   emailEnabled?: Maybe<Scalars['Boolean']>;
   /** 是否开用户名注册白名单 */
   usernameEnabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type CustomSmsProvider = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  provider?: Maybe<Scalars['String']>;
+  config253?: Maybe<SmsConfig253>;
+};
+
+export type SmsConfig253 = {
+  sendSmsApi: Scalars['String'];
+  appId: Scalars['String'];
+  key: Scalars['String'];
+  template: Scalars['String'];
+  ttl: Scalars['Int'];
 };
 
 export type PaginatedUserpool = {
@@ -1048,7 +1062,8 @@ export type MutationCreatePolicyArgs = {
 export type MutationUpdatePolicyArgs = {
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  statements: Array<PolicyStatementInput>;
+  statements?: Maybe<Array<PolicyStatementInput>>;
+  newCode?: Maybe<Scalars['String']>;
 };
 
 export type MutationDeletePolicyArgs = {
@@ -1356,7 +1371,7 @@ export type PolicyStatementInput = {
 };
 
 export type RegisterByUsernameInput = {
-  username: Scalars['username_String_NotNull_minLength_4_maxLength_50'];
+  username: Scalars['String'];
   password: Scalars['String'];
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
@@ -1364,7 +1379,7 @@ export type RegisterByUsernameInput = {
 };
 
 export type RegisterProfile = {
-  ip?: Maybe<Scalars['ip_String_format_ipv4']>;
+  ip?: Maybe<Scalars['String']>;
   oauth?: Maybe<Scalars['String']>;
   nickname?: Maybe<Scalars['String']>;
   company?: Maybe<Scalars['String']>;
@@ -1398,7 +1413,7 @@ export type UserDdfInput = {
 };
 
 export type RegisterByEmailInput = {
-  email: Scalars['email_String_NotNull_format_email'];
+  email: Scalars['String'];
   password: Scalars['String'];
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
@@ -1556,6 +1571,8 @@ export type UpdateUserpoolInput = {
   qrcodeLoginStrategy?: Maybe<QrcodeLoginStrategyInput>;
   app2WxappLoginStrategy?: Maybe<App2WxappLoginStrategyInput>;
   whitelist?: Maybe<RegisterWhiteListConfigInput>;
+  /** 自定义短信服务商配置 */
+  customSMSProvider?: Maybe<CustomSmsProviderInput>;
 };
 
 export type FrequentRegisterCheckConfigInput = {
@@ -1594,6 +1611,20 @@ export type RegisterWhiteListConfigInput = {
   phoneEnabled?: Maybe<Scalars['Boolean']>;
   emailEnabled?: Maybe<Scalars['Boolean']>;
   usernameEnabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type CustomSmsProviderInput = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  provider?: Maybe<Scalars['String']>;
+  config253?: Maybe<SmsConfig253Input>;
+};
+
+export type SmsConfig253Input = {
+  appId: Scalars['String'];
+  key: Scalars['String'];
+  template: Scalars['String'];
+  ttl: Scalars['Int'];
+  sendSmsApi: Scalars['String'];
 };
 
 export type RefreshAccessTokenRes = {
@@ -3510,17 +3541,18 @@ export type UpdatePhoneResponse = {
 export type UpdatePolicyVariables = Exact<{
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  statements: Array<PolicyStatementInput>;
+  statements?: Maybe<Array<PolicyStatementInput>>;
+  newCode?: Maybe<Scalars['String']>;
 }>;
 
 export type UpdatePolicyResponse = {
   updatePolicy: {
     code: string;
-    assignmentsCount: number;
     isDefault: boolean;
     description?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
+    assignmentsCount: number;
     statements: Array<{
       resource: string;
       actions: Array<string>;
@@ -4242,6 +4274,7 @@ export type OrgsResponse = {
 export type PoliciesVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
+  excludeDefault?: Maybe<Scalars['Boolean']>;
 }>;
 
 export type PoliciesResponse = {
@@ -4249,11 +4282,11 @@ export type PoliciesResponse = {
     totalCount: number;
     list: Array<{
       code: string;
-      assignmentsCount: number;
       isDefault: boolean;
       description?: Maybe<string>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
+      assignmentsCount: number;
       statements: Array<{
         resource: string;
         actions: Array<string>;
@@ -6601,10 +6634,9 @@ export const UpdatePhoneDocument = `
 }
     `;
 export const UpdatePolicyDocument = `
-    mutation updatePolicy($code: String!, $description: String, $statements: [PolicyStatementInput!]!) {
-  updatePolicy(code: $code, description: $description, statements: $statements) {
+    mutation updatePolicy($code: String!, $description: String, $statements: [PolicyStatementInput!], $newCode: String) {
+  updatePolicy(code: $code, description: $description, statements: $statements, newCode: $newCode) {
     code
-    assignmentsCount
     isDefault
     description
     statements {
@@ -6614,6 +6646,7 @@ export const UpdatePolicyDocument = `
     }
     createdAt
     updatedAt
+    assignmentsCount
   }
 }
     `;
@@ -7239,16 +7272,16 @@ export const OrgsDocument = `
 }
     `;
 export const PoliciesDocument = `
-    query policies($page: Int, $limit: Int) {
-  policies(page: $page, limit: $limit) {
+    query policies($page: Int, $limit: Int, $excludeDefault: Boolean) {
+  policies(page: $page, limit: $limit, excludeDefault: $excludeDefault) {
     totalCount
     list {
       code
-      assignmentsCount
       isDefault
       description
       createdAt
       updatedAt
+      assignmentsCount
       statements {
         resource
         actions
