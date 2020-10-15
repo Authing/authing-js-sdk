@@ -50,9 +50,9 @@ UsersManagementClient().create(userInfo)
 - `userInfo.company` \<string\> 公司 
 - `userInfo.browser` \<string\> 浏览器 
 - `userInfo.loginsCount` \<number\> 登录次数，当你从原有用户系统迁移到 Authing 时可以设置该字段。 
-- `userInfo.lastLogin` \<string\> 上次登录时间 
+- `userInfo.lastLogin` \<string\> 上次登录时间, 符合 ISO8601 格式的时间字符串。(如 "2017-06-07T14:34:08.700Z", "2017-06-07T14:34:08.700 or "2017-06-07T14:34:08+04:00") 
 - `userInfo.lastIP` \<string\> 用户最近一次登录（或其他活动）的 IP 
-- `userInfo.signedUp` \<string\> 注册时间 
+- `userInfo.signedUp` \<string\> 注册时间，符合 ISO8601 格式的时间字符串。(如 "2017-06-07T14:34:08.700Z", "2017-06-07T14:34:08.700 or "2017-06-07T14:34:08+04:00") 
 - `userInfo.blocked` \<boolean\> 账号是否被禁用 
 - `userInfo.isDeleted` \<boolean\> 标记账号是否被删除 
 - `userInfo.device` \<string\> 设备 
@@ -79,7 +79,7 @@ UsersManagementClient().create(userInfo)
 
 #### Returns
 
--  `null` 
+-  `Promise<User>` 
 
 #### Examples
 
@@ -99,145 +99,236 @@ const user = await managementClient.users.create({
 ```
       
 
-## undefined
+## update
 
-undefined
+修改用户资料
 
-UsersManagementClient().undefined(userId)
-
-> 删除用户
-
-
-#### Arguments
-
-- `userId` \<string\>  
-
-#### Returns
-
--  `null` 
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-UsersManagementClient().undefined(userIds)
-
-> 批量删除用户
-
-
-#### Arguments
-
-- `userIds` \<string[]\>  
-
-#### Returns
-
--  `null` 
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-UsersManagementClient().undefined(userId)
-
-> 获取用户详情
-
-
-#### Arguments
-
-- `userId` \<string\>  
-
-#### Returns
-
--  `null` 
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> 通过 ID 批量查询用户
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-UsersManagementClient().undefined(page:, limit:, options)
-
-> 获取用户池用户列表
-
-
-#### Arguments
-
-- `page:` \<null\> 页码数, 从 1 开始 
-- `limit:` \<null\> 每页包含的用户数 
-- `options` \<{ page: number, count: number }\>  
-
-#### Returns
-
--  `null` 
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
+UsersManagementClient *().update(id, updates)
 
 > 修改用户资料
 
 
 #### Arguments
 
-
+- `id` \<string\> 用户 ID 
+- `updates` \<UpdateUserInput\> 修改的用户资料 
+- `updates.email` \<string\> 邮箱 
+- `updates.emailVerified` \<boolean\> 邮箱是否已验证 
+- `updates.phone` \<string\> 手机号 
+- `updates.phoneVerified` \<boolean\> 手机号是否验证 
+- `updates.unionid` \<string\> 以社会化登录的用户该字段为用户在第三方社会化登录服务商中的唯一 ID 
+- `updates.openid` \<string\> 微信登录返回的 openid 
+- `updates.password` \<string\> 密码 
+- `updates.registerSource` \<string\> 注册来源，可以多选 
+- `updates.tokenExpiredAt` \<string\> token 过期时间，符合 ISO8601 格式的时间字符串。(如 "2017-06-07T14:34:08.700Z", "2017-06-07T14:34:08.700 or "2017-06-07T14:34:08+04:00")。
+将该字段设置为小于当前时间可以让用户的 token 失效。 
+- `updates.username` \<string\> 用户名 
+- `updates.nickname` \<string\> 昵称 
+- `updates.photo` \<string\> 头像 
+- `updates.company` \<string\> 公司 
+- `updates.browser` \<string\> 浏览器 
+- `updates.loginsCount` \<number\> 登录次数，当你从原有用户系统迁移到 Authing 时可以设置该字段。 
+- `updates.lastLogin` \<string\> 上次登录时间, 符合 ISO8601 格式的时间字符串。(如 "2017-06-07T14:34:08.700Z", "2017-06-07T14:34:08.700 or "2017-06-07T14:34:08+04:00") 
+- `updates.lastIP` \<string\> 用户最近一次登录（或其他活动）的 IP 
+- `updates.signedUp` \<string\> 注册时间，符合 ISO8601 格式的时间字符串。(如 "2017-06-07T14:34:08.700Z", "2017-06-07T14:34:08.700 or "2017-06-07T14:34:08+04:00") 
+- `updates.blocked` \<boolean\> 账号是否被禁用 
+- `updates.device` \<string\> 设备 
+- `updates.lastIP` \<string\> 最近登录的 IP 
+- `updates.name` \<string\> Name 
+- `updates.givenName` \<string\> Given Name 
+- `updates.familyName` \<string\> Family Name 
+- `updates.middleName` \<string\> Middle Name 
+- `updates.profile` \<string\> Profile Url 
+- `updates.preferredUsername` \<string\> Preferred Name 
+- `updates.website` \<string\> 个人网站 
+- `updates.gender` \<string\> 性别, F 表示男性、W 表示女性、未知表示 U 
+- `updates.birthdate` \<string\> 生日 
+- `updates.zoneinfo` \<string\> 时区 
+- `updates.locale` \<string\> 语言 
+- `updates.address` \<string\> 地址 
+- `updates.streetAddress` \<string\> 街道地址 
+- `updates.locality` \<string\>  
+- `updates.region` \<string\> 地域 
+- `updates.postalCode` \<string\> 邮编 
+- `updates.city` \<string\> 城市 
+- `updates.province` \<string\> 省份 
+- `updates.country` \<string\> 国家 
 
 #### Returns
 
-
+-  `Promise<User>` 
 
 #### Examples
 
-
+```javascript
+const user = await managementClient.users.update("USERID", {
+   nickname: "Nick"
+})
+```
+```javascript
+const user = await managementClient.users.update({
+   nickname: 'Nick',
+   phone: '176xxxx7041', // 由于是管理员操作，所以检验手机号验证码, 如果你需要检验，请使用  AuthenticationClient
+   tokenExpiredAt: '2020-10-15T17:55:37+08:00'
+})
+```
       
 
-## undefined
+## detail
 
-undefined
+获取用户详情
 
-undefined().undefined(query, options)
+UsersManagementClient().detail(userId)
+
+> 通过用户 ID 获取用户详情，如果你想通过 token 获取用户详情，请使用 AuthenticationClient SDK 。
+
+
+#### Arguments
+
+- `userId` \<string\> 用户 ID 
+
+#### Returns
+
+-  `Promise<User>` 
+
+#### Examples
+
+```javascript
+const user = await management.users.detail('USERID');
+```
+      
+
+## delete
+
+删除用户
+
+UsersManagementClient().delete(userId)
+
+> 删除用户
+
+
+#### Arguments
+
+- `userId` \<string\> 用户 ID 
+
+#### Returns
+
+-  `Promise<CommonMessage>` 
+
+#### Examples
+
+```javascript
+const user = await management.users.delete('USERID');
+```
+      
+
+## deleteMany
+
+批量删除用户
+
+UsersManagementClient().deleteMany(userIds)
+
+> 批量删除用户
+
+
+#### Arguments
+
+- `userIds` \<string[]\> 用户 ID 列表 
+
+#### Returns
+
+-  `Promise<CommonMessage>` 
+
+#### Examples
+
+```javascript
+const user = await management.users.deleteMany(['USERID']);
+```
+      
+
+## batch
+
+批量获取用户
+
+UsersManagementClient().batch(userIds)
+
+> 通过 ID 批量获取用户详情
+
+
+#### Arguments
+
+- `userIds` \<string[]\> 用户 ID 列表 
+
+#### Returns
+
+-  `Promise<CommonMessage>` 
+
+#### Examples
+
+```javascript
+const users = await management.users.batch(['USERID']);
+```
+      
+
+## list
+
+获取用户列表
+
+UsersManagementClient().list(page, limit)
+
+> 获取用户池用户列表
+
+
+#### Arguments
+
+- `page` \<number\> 页码数, 从 1 开始 默认值为 : `1`。
+- `limit` \<number\> 每页包含的用户数 默认值为 : `1`。
+
+#### Returns
+
+-  `null` 
+
+#### Examples
+
+```javascript
+const user = await management.users.list();
+```
+      
+
+## exists
+
+检查用户是否存在
+
+UsersManagementClient().exists(options)
+
+> 检查用户是否存在
+
+
+#### Arguments
+
+- `options` \<Object\>  
+- `options.username` \<string\> 用户名 
+- `options.email` \<string\> 邮箱 
+- `options.phone` \<string\> 手机号 
+
+#### Returns
+
+-  `Promise<boolean>` 
+
+#### Examples
+
+```javascript
+const exists = await management.users.exists({
+   username: "bob"
+});
+```
+      
+
+## search
+
+搜索用户
+
+undefined().search(query, options)
 
 > 根据关键字搜索用户
 
