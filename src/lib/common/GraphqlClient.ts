@@ -38,16 +38,18 @@ export class GraphqlClient {
     } catch (error) {
       let errmsg = null;
       let errcode = null;
+      let data = null;
       const response = error.response;
       const errors = response.errors;
       errors.map((err: any) => {
         const { message: msg } = err;
-        const { code, message } = msg;
+        const { code, message, data: _data } = msg;
         errcode = code;
         errmsg = message;
-        this.options.onError(code, message);
+        data = _data;
+        this.options.onError(code, message, data);
       });
-      throw { code: errcode, message: errmsg };
+      throw { code: errcode, message: errmsg, data };
     }
   }
 }
