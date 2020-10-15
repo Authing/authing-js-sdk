@@ -656,32 +656,33 @@ export class AuthenticationClient {
    * @name_zh 修改用户资料
    * @description 修改用户资料，此接口不能用于修改手机号、邮箱、密码，如果需要请调用 updatePhone、updateEmail、updatePassword 接口。
    *
-   * @param {UpdateUserInput} updates.username 用户名
-   * @param {UpdateUserInput} updates.nickname 昵称
-   * @param {UpdateUserInput} updates.photo 头像
-   * @param {UpdateUserInput} updates.company 公司
-   * @param {UpdateUserInput} updates.browser 浏览器
-   * @param {UpdateUserInput} updates.device 设备
-   * @param {UpdateUserInput} updates.lastIP 最近登录的 IP
-   * @param {UpdateUserInput} updates.name
-   * @param {UpdateUserInput} updates.givenName
-   * @param {UpdateUserInput} updates.familyName
-   * @param {UpdateUserInput} updates.middleName
-   * @param {UpdateUserInput} updates.profile Profile Url
-   * @param {UpdateUserInput} updates.preferredUsername
-   * @param {UpdateUserInput} updates.website
-   * @param {UpdateUserInput} updates.gender
-   * @param {UpdateUserInput} updates.birthdate
-   * @param {UpdateUserInput} updates.zoneinfo
-   * @param {UpdateUserInput} updates.locale
-   * @param {UpdateUserInput} updates.address
-   * @param {UpdateUserInput} updates.streetAddress
-   * @param {UpdateUserInput} updates.locality
-   * @param {UpdateUserInput} updates.region
-   * @param {UpdateUserInput} updates.postalCode
-   * @param {UpdateUserInput} updates.city
-   * @param {UpdateUserInput} updates.province
-   * @param {UpdateUserInput} updates.country
+   * @param {UpdateUserInput} updates 修改的用户资料
+   * @param {string} updates.username 用户名
+   * @param {string} updates.nickname 昵称
+   * @param {string} updates.photo 头像
+   * @param {string} updates.company 公司
+   * @param {string} updates.browser 浏览器
+   * @param {string} updates.device 设备
+   * @param {string} updates.lastIP 最近登录的 IP
+   * @param {string} updates.name Name
+   * @param {string} updates.givenName Given Name
+   * @param {string} updates.familyName Family Name
+   * @param {string} updates.middleName Middle Name
+   * @param {string} updates.profile Profile Url
+   * @param {string} updates.preferredUsername Preferred Name
+   * @param {string} updates.website 个人网站
+   * @param {string} updates.gender 性别, F 表示男性、W 表示女性、未知表示 U
+   * @param {string} updates.birthdate 生日
+   * @param {string} updates.zoneinfo 时区
+   * @param {string} updates.locale 语言
+   * @param {string} updates.address 地址
+   * @param {string} updates.streetAddress 街道地址
+   * @param {string} updates.locality
+   * @param {string} updates.region 地域
+   * @param {string} updates.postalCode 邮编
+   * @param {string} updates.city 城市
+   * @param {string} updates.province 省份
+   * @param {string} updates.country 国家
    *
    * @example
    *

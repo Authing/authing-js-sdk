@@ -10,7 +10,7 @@
 
 请使用以下方式使用该模块，而不要直接初始化该模块：
 ```javascript
-import ManagementClient from "authing-js-sdk"
+import { ManagementClient } from "authing-js-sdk"
 const managementClient = new ManagementClient({
    userPoolId: process.env.AUTHING_USERPOOL_ID,
    secret: process.env.AUTHING_USERPOOL_SECRET,

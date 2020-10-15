@@ -5,8 +5,85 @@ import {
   getOptionsFromEnv
 } from '../testing-helper';
 import test from 'ava';
+import moment from 'moment';
 
 const management = new ManagementClient(getOptionsFromEnv());
+
+test('创建用户', async t => {
+  const username = generateRandomString(10);
+  const email = generateRandomString(10);
+  const phone = generateRandomPhone();
+  const unionid = generateRandomString(10);
+  const user = await management.users.create({
+    username,
+    email,
+    phone,
+    unionid
+  });
+  t.assert(user);
+  t.assert(user.email === email);
+  t.assert(user.username === username);
+  t.assert(user.phone === phone);
+  t.assert(user.unionid === unionid);
+});
+
+test('创建用户 # 必须指定一种唯一标志', async t => {
+  let failed = false;
+  try {
+    await management.users.create({
+      password: generateRandomString(10)
+    });
+  } catch {
+    failed = true;
+  }
+  t.assert(failed);
+});
+
+test('创建用户 # 时间格式1', async t => {
+  let user = await management.users.create({
+    username: generateRandomString(),
+    lastLogin: '2017-06-07T14:34:08+04:00'
+  });
+  user = await management.users.detail(user.id);
+  t.assert(user);
+});
+
+test('创建用户 # signedUp', async t => {
+  const signedUp = '2017-06-07T14:34:08+04:00';
+  let user = await management.users.create({
+    username: generateRandomString(),
+    signedUp
+  });
+  user = await management.users.detail(user.id);
+  t.assert(moment(user.signedUp).unix() === moment(signedUp).unix());
+});
+
+test('创建用户 # 错误时间格式', async t => {
+  let failed = false;
+  try {
+    await management.users.create({
+      username: generateRandomString(),
+      lastLogin: '1602756997950'
+    });
+  } catch {
+    failed = true;
+  }
+  t.assert(failed);
+});
+
+test('查询用户详情', async t => {
+  const user = await management.users.create({
+    username: generateRandomString(),
+    password: generateRandomString()
+  });
+  const detail = await management.users.detail(user.id);
+  t.assert(user.id === detail.id);
+});
+
+test('查询用户详情 # 不属于该用户池的用户', async t => {
+  const detail = await management.users.detail('xxx');
+  t.assert(detail === null);
+});
 
 test('批量查询用户', async t => {
   const list = [];
