@@ -7,7 +7,7 @@ import {
   deleteUsers,
   user,
   users,
-  getGroupsOfUser,
+  getUserGroups,
   updateUser,
   searchUser,
   createUser,
@@ -16,7 +16,9 @@ import {
   getUserRoles,
   assignRole,
   revokeRole,
-  isUserExists
+  isUserExists,
+  addUserToGroup,
+  removeUserFromGroup
 } from '../graphqlapi';
 import {
   User,
@@ -24,7 +26,9 @@ import {
   CreateUserInput,
   RefreshToken,
   CommonMessage,
-  UpdateUserInput
+  UpdateUserInput,
+  PaginatedGroups,
+  PaginatedRoles
 } from '../../types/graphql.v2';
 
 /**
@@ -360,11 +364,12 @@ export class UsersManagementClient {
   /**
    * @name exists
    * @name_zh 检查用户是否存在
-   * @description 检查用户是否存在
+   * @description 检查用户是否存在，目前可检测的字段有用户名、邮箱、手机号。
+   *
    *
    * @param {Object} options
-   * @param {string} [options.username] 用户名
-   * @param {string} [options.email] 邮箱
+   * @param {string} [options.username] 用户名，区分大小写。
+   * @param {string} [options.email] 邮箱，邮箱不区分大小写。
    * @param {string} [options.phone] 手机号
    *
    * @example
@@ -395,29 +400,76 @@ export class UsersManagementClient {
   }
 
   /**
+   * @name find
+   * @name_zh 查找用户
+   * @description 通过用户名、邮箱、手机号查找用户
+   *
+   * @param {Object} options
+   * @param {string} [options.username] 用户名，区分大小写。
+   * @param {string} [options.email] 邮箱，邮箱不区分大小写。
+   * @param {string} [options.phone] 手机号
+   *
+   * @memberof UsersManagementClient
+   */
+  // async find(options: { username?: string; email?: string; phone?: string }) {}
+
+  /**
    * @name search
    * @name_zh 搜索用户
    * @description 根据关键字搜索用户
    *
    * @param query 搜索内容
    * @param options 选项
+   * @param {string[]} [options.fields] 搜索用户字段，如果不指定，默认会从 username、nickname、email、phone、company、name、givenName、familyName、middleName、profile、preferredUsername 这些字段进行模糊搜索。
+   * 如果你需要精确查找，请使用 find 方法。
+   * @param {number} [page=1]
+   * @param {number} [limit=10]
+   *
+   * @example
+   *
+   * const { totalCount, list } = await management.users.search("Bob");
+   *
+   * @returns {Promise<PaginatedUsers>}
+   * @memberof UsersManagementClient
    */
   async search(
     query: string,
     options?: { fields?: string[]; page?: number; limit?: number }
   ): Promise<PaginatedUsers> {
+    const { fields, page = 1, limit = 10 } = options;
     const { searchUser: users } = await searchUser(
       this.graphqlClient,
       this.tokenProvider,
       {
         query,
-        ...options
+        fields,
+        page,
+        limit
       }
     );
-    // @ts-ignore
     return users;
   }
 
+  /**
+   * @name refreshToken
+   * @name_zh 刷新用户 token
+   * @description 刷新用户 token
+   *
+   * @param {string} id 用户 ID
+   *
+   * @example
+   *
+   * const { token } = await management.users.refreshToken("USERID");
+   *
+   * // 检测 token 的最新状态，能够获取到该用户对应的 token
+   *
+   * const data = await management.checkLoginStatus(token, {
+   *   fetchUserDetail: true
+   * });
+   *
+   * @returns {Promise<RefreshToken>}
+   * @memberof UsersManagementClient
+   */
   async refreshToken(id: string): Promise<RefreshToken> {
     const { refreshToken: data } = await refreshToken(
       this.graphqlClient,
@@ -430,27 +482,95 @@ export class UsersManagementClient {
   }
 
   /**
+   * @name listGroups
+   * @name_zh 获取用户分组列表
    * @description 获取用户的分组列表
    *
+   * @param {string} userId 用户 ID
+   *
+   * @example
+   *
+   * const { list, totalCount} = await management.users.listGroups("USERID");
+   *
+   * @returns {Promise<DeepPartial<PaginatedGroups>>}
+   * @memberof UsersManagementClient
    */
-  async listGroups(userId: string, page: number = 1, limit: number = 10) {
-    const { groups } = await getGroupsOfUser(
+  async listGroups(userId: string): Promise<DeepPartial<PaginatedGroups>> {
+    const { user } = await getUserGroups(
       this.graphqlClient,
       this.tokenProvider,
       {
-        userId,
-        page,
-        limit
+        id: userId
       }
     );
-    return groups;
+    return user.groups;
   }
 
   /**
+   * @name addGroup
+   * @name_zh 加入分组
+   * @description 将用户加入分组
+   *
+   * @param {string} userId 用户 ID
+   * @param {string} group 分组 code
+   *
+   * @example
+   *
+   * const { code, message } = await management.users.addGroup("USERID", "GROUP_CODE");
+   *
+   * @returns {Promise<CommonMessage>}
+   * @memberof UsersManagementClient
+   */
+  async addGroup(userId: string, group: string): Promise<CommonMessage> {
+    const res = await addUserToGroup(this.graphqlClient, this.tokenProvider, {
+      userIds: [userId],
+      code: group
+    });
+    return res.addUserToGroup;
+  }
+
+  /**
+   * @name removeGroup
+   * @name_zh 退出分组
+   * @description 退出分组
+   *
+   * @param {string} userId 用户 ID
+   * @param {string} group 分组 code
+   *
+   * @example
+   *
+   * const { code, message } = await management.users.removeGroup("USERID", "GROUP_CODE");
+   *
+   * @returns {Promise<CommonMessage>}
+   * @memberof UsersManagementClient
+   */
+  async removeGroup(userId: string, group: string): Promise<CommonMessage> {
+    const res = await removeUserFromGroup(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        code: group,
+        userIds: [userId]
+      }
+    );
+    return res.removeUserFromGroup;
+  }
+
+  /**
+   * @name listRoles
+   * @name_zh 获取用户角色列表
    * @description 获取用户的角色列表
    *
+   * @param {string} userId 用户 ID
+   *
+   * @example
+   *
+   * const { list, totalCount} = await management.users.listRoles("USERID");
+   *
+   * @returns {Promise<DeepPartial<PaginatedRoles>>}
+   * @memberof UsersManagementClient
    */
-  async listRoles(userId: string) {
+  async listRoles(userId: string): Promise<DeepPartial<PaginatedRoles>> {
     const {
       user: { roles }
     } = await getUserRoles(this.graphqlClient, this.tokenProvider, {
@@ -460,10 +580,21 @@ export class UsersManagementClient {
   }
 
   /**
-   * @description 添加角色
+   * @name addRoles
+   * @name_zh 添加角色
+   * @description 将用户加入角色
    *
+   * @param {string} userId 用户 ID
+   * @param {string} roles 角色 code 列表
+   *
+   * @example
+   *
+   * const { code, message } = await management.users.addRoles("USERID", ["ROLEA"]);
+   *
+   * @returns {Promise<CommonMessage>}
+   * @memberof UsersManagementClient
    */
-  async addRoles(userId: string, roles: string[]) {
+  async addRoles(userId: string, roles: string[]): Promise<CommonMessage> {
     const { assignRole: data } = await assignRole(
       this.graphqlClient,
       this.tokenProvider,
@@ -476,10 +607,21 @@ export class UsersManagementClient {
   }
 
   /**
-   * @description 移除角色
+   * @name removeRoles
+   * @name_zh 移除角色
+   * @description 将用户从角色中移除
    *
+   * @param {string} userId 用户 ID
+   * @param {string} roles 角色 code 列表
+   *
+   * @example
+   *
+   * const { code, message } = await management.users.removeRoles("USERID", ["ROLEA"]);
+   *
+   * @returns {Promise<CommonMessage>}
+   * @memberof UsersManagementClient
    */
-  async removeRoles(userId: string, roles: string[]) {
+  async removeRoles(userId: string, roles: string[]): Promise<CommonMessage> {
     const { revokeRole: data } = await revokeRole(
       this.graphqlClient,
       this.tokenProvider,

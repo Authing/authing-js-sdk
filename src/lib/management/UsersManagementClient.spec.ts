@@ -21,7 +21,7 @@ test('创建用户', async t => {
     unionid
   });
   t.assert(user);
-  t.assert(user.email === email);
+  t.assert(user.email === email.toLowerCase());
   t.assert(user.username === username);
   t.assert(user.phone === phone);
   t.assert(user.unionid === unionid);
@@ -69,6 +69,25 @@ test('创建用户 # 错误时间格式', async t => {
     failed = true;
   }
   t.assert(failed);
+});
+
+test('检查用户是否存在', async t => {
+  const exists1 = await management.users.exists({
+    username: generateRandomString(10)
+  });
+  t.assert(exists1 === false);
+
+  const username = generateRandomString(10);
+  const email = generateRandomString(10) + '@qq.com';
+  const phone = generateRandomPhone();
+  await management.users.create({
+    username
+  });
+  t.assert(await management.users.exists({ username }));
+  await management.users.create({ email });
+  t.assert(await management.users.exists({ email }));
+  await management.users.create({ phone });
+  t.assert(await management.users.exists({ phone }));
 });
 
 test('查询用户详情', async t => {
@@ -159,4 +178,17 @@ test('删除用户', async t => {
   await management.users.delete(user.id);
   const user2 = await management.users.detail(user.id);
   t.assert(user2 === null);
+});
+
+test('refreshToken', async t => {
+  const user = await management.users.create({
+    username: generateRandomString(),
+    password: '123456!'
+  });
+  const { token } = await management.users.refreshToken(user.id);
+  t.assert(token);
+  const data = await management.checkLoginStatus(token, {
+    fetchUserDetail: true
+  });
+  t.assert(user.id === data.id);
 });

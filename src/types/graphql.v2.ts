@@ -61,6 +61,7 @@ export type Query = {
   searchUser: PaginatedUsers;
   checkLoginStatus?: Maybe<JwtTokenStatus>;
   isUserExists?: Maybe<Scalars['Boolean']>;
+  findUser?: Maybe<User>;
   /** 查询用户池详情 */
   userpool: UserPool;
   /** 查询用户池列表 */
@@ -231,6 +232,12 @@ export type QueryCheckLoginStatusArgs = {
 };
 
 export type QueryIsUserExistsArgs = {
+  email?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type QueryFindUserArgs = {
   email?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
@@ -446,8 +453,6 @@ export type User = {
   country?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
-  /** 自定义用户数据，是一个 JSON 序列化过后的字符串 */
-  customData?: Maybe<Scalars['String']>;
   roles?: Maybe<PaginatedRoles>;
   groups?: Maybe<PaginatedGroups>;
 };
@@ -1448,7 +1453,7 @@ export type RefreshToken = {
 export type CreateUserInput = {
   /** 用户名，用户池内唯一 */
   username?: Maybe<Scalars['String']>;
-  /** 邮箱，用户池内唯一 */
+  /** 邮箱，不区分大小写，如 Bob@example.com 和 bob@example.com 会识别为同一个邮箱。用户池内唯一。 */
   email?: Maybe<Scalars['String']>;
   /** 邮箱是否已验证 */
   emailVerified?: Maybe<Scalars['Boolean']>;
@@ -1711,9 +1716,11 @@ export type AddMemberResponse = {
         locality?: Maybe<string>;
         region?: Maybe<string>;
         postalCode?: Maybe<string>;
+        city?: Maybe<string>;
+        province?: Maybe<string>;
         country?: Maybe<string>;
+        createdAt?: Maybe<string>;
         updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
       }>;
     };
   };
@@ -1893,23 +1900,11 @@ export type BindPhoneResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   };
 };
 
@@ -2058,9 +2053,9 @@ export type CreateRoleResponse = {
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    users: { totalCount: number };
     parent?: Maybe<{
       code: string;
+      arn: string;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -2152,23 +2147,11 @@ export type CreateUserResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   };
 };
 
@@ -2187,6 +2170,7 @@ export type CreateUserpoolResponse = {
     domain: string;
     description?: Maybe<string>;
     secret: string;
+    jwtSecret: string;
     logo: string;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
@@ -2232,6 +2216,10 @@ export type CreateUserpoolResponse = {
       phoneEnabled?: Maybe<boolean>;
       emailEnabled?: Maybe<boolean>;
       usernameEnabled?: Maybe<boolean>;
+    }>;
+    customSMSProvider?: Maybe<{
+      enabled?: Maybe<boolean>;
+      provider?: Maybe<string>;
     }>;
   };
 };
@@ -2439,23 +2427,11 @@ export type LoginByEmailResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   }>;
 };
 
@@ -2508,23 +2484,11 @@ export type LoginByPhoneCodeResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   }>;
 };
 
@@ -2577,23 +2541,11 @@ export type LoginByPhonePasswordResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   }>;
 };
 
@@ -2646,23 +2598,11 @@ export type LoginByUsernameResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   }>;
 };
 
@@ -2785,23 +2725,11 @@ export type RegisterByEmailResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   }>;
 };
 
@@ -2854,23 +2782,11 @@ export type RegisterByPhoneCodeResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   }>;
 };
 
@@ -2923,23 +2839,11 @@ export type RegisterByUsernameResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   }>;
 };
 
@@ -3014,9 +2918,11 @@ export type RemoveMemberResponse = {
         locality?: Maybe<string>;
         region?: Maybe<string>;
         postalCode?: Maybe<string>;
+        city?: Maybe<string>;
+        province?: Maybe<string>;
         country?: Maybe<string>;
+        createdAt?: Maybe<string>;
         updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
       }>;
     };
   };
@@ -3178,21 +3084,6 @@ export type UnbindEmailResponse = {
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
-    roles?: Maybe<{ totalCount: number }>;
   };
 };
 
@@ -3243,23 +3134,11 @@ export type UnbindPhoneResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   };
 };
 
@@ -3315,23 +3194,11 @@ export type UpdateEmailResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   };
 };
 
@@ -3446,23 +3313,11 @@ export type UpdatePasswordResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   };
 };
 
@@ -3518,23 +3373,11 @@ export type UpdatePhoneResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   };
 };
 
@@ -3570,6 +3413,7 @@ export type UpdateRoleVariables = Exact<{
 export type UpdateRoleResponse = {
   updateRole: {
     code: string;
+    arn: string;
     description?: Maybe<string>;
     isSystem?: Maybe<boolean>;
     createdAt?: Maybe<string>;
@@ -3577,6 +3421,7 @@ export type UpdateRoleResponse = {
     users: { totalCount: number };
     parent?: Maybe<{
       code: string;
+      arn: string;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
@@ -3635,23 +3480,11 @@ export type UpdateUserResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   };
 };
 
@@ -3666,6 +3499,7 @@ export type UpdateUserpoolResponse = {
     domain: string;
     description?: Maybe<string>;
     secret: string;
+    jwtSecret: string;
     logo: string;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
@@ -3711,6 +3545,10 @@ export type UpdateUserpoolResponse = {
       phoneEnabled?: Maybe<boolean>;
       emailEnabled?: Maybe<boolean>;
       usernameEnabled?: Maybe<boolean>;
+    }>;
+    customSMSProvider?: Maybe<{
+      enabled?: Maybe<boolean>;
+      provider?: Maybe<string>;
     }>;
   };
 };
@@ -3795,6 +3633,65 @@ export type EmailTemplatesResponse = {
   }>;
 };
 
+export type FindUserVariables = Exact<{
+  email?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+}>;
+
+export type FindUserResponse = {
+  findUser?: Maybe<{
+    id: string;
+    arn: string;
+    userPoolId: string;
+    username?: Maybe<string>;
+    email?: Maybe<string>;
+    emailVerified?: Maybe<boolean>;
+    phone?: Maybe<string>;
+    phoneVerified?: Maybe<boolean>;
+    unionid?: Maybe<string>;
+    openid?: Maybe<string>;
+    nickname?: Maybe<string>;
+    registerSource: Array<string>;
+    photo?: Maybe<string>;
+    password?: Maybe<string>;
+    oauth?: Maybe<string>;
+    token?: Maybe<string>;
+    tokenExpiredAt?: Maybe<string>;
+    loginsCount?: Maybe<number>;
+    lastLogin?: Maybe<string>;
+    lastIP?: Maybe<string>;
+    signedUp?: Maybe<string>;
+    blocked?: Maybe<boolean>;
+    isDeleted?: Maybe<boolean>;
+    device?: Maybe<string>;
+    browser?: Maybe<string>;
+    company?: Maybe<string>;
+    name?: Maybe<string>;
+    givenName?: Maybe<string>;
+    familyName?: Maybe<string>;
+    middleName?: Maybe<string>;
+    profile?: Maybe<string>;
+    preferredUsername?: Maybe<string>;
+    website?: Maybe<string>;
+    gender?: Maybe<string>;
+    birthdate?: Maybe<string>;
+    zoneinfo?: Maybe<string>;
+    locale?: Maybe<string>;
+    address?: Maybe<string>;
+    formatted?: Maybe<string>;
+    streetAddress?: Maybe<string>;
+    locality?: Maybe<string>;
+    region?: Maybe<string>;
+    postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
+    country?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+  }>;
+};
+
 export type FunctionVariables = Exact<{
   id?: Maybe<Scalars['String']>;
 }>;
@@ -3826,6 +3723,25 @@ export type FunctionsResponse = {
       url?: Maybe<string>;
     }>;
   };
+};
+
+export type GetUserGroupsVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type GetUserGroupsResponse = {
+  user?: Maybe<{
+    groups?: Maybe<{
+      totalCount: number;
+      list: Array<{
+        code: string;
+        name: string;
+        description?: Maybe<string>;
+        createdAt?: Maybe<string>;
+        updatedAt?: Maybe<string>;
+      }>;
+    }>;
+  }>;
 };
 
 export type GetUserRolesVariables = Exact<{
@@ -3866,7 +3782,6 @@ export type GroupResponse = {
     description?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    users: { totalCount: number };
   }>;
 };
 
@@ -3882,6 +3797,7 @@ export type GroupWithUsersResponse = {
       totalCount: number;
       list: Array<{
         id: string;
+        arn: string;
         userPoolId: string;
         username?: Maybe<string>;
         email?: Maybe<string>;
@@ -3923,9 +3839,11 @@ export type GroupWithUsersResponse = {
         locality?: Maybe<string>;
         region?: Maybe<string>;
         postalCode?: Maybe<string>;
+        city?: Maybe<string>;
+        province?: Maybe<string>;
         country?: Maybe<string>;
+        createdAt?: Maybe<string>;
         updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
       }>;
     };
   }>;
@@ -4080,9 +3998,11 @@ export type NodeByCodeWithMembersResponse = {
         locality?: Maybe<string>;
         region?: Maybe<string>;
         postalCode?: Maybe<string>;
+        city?: Maybe<string>;
+        province?: Maybe<string>;
         country?: Maybe<string>;
+        createdAt?: Maybe<string>;
         updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
       }>;
     };
   }>;
@@ -4178,9 +4098,11 @@ export type NodeByIdWithMembersResponse = {
         locality?: Maybe<string>;
         region?: Maybe<string>;
         postalCode?: Maybe<string>;
+        city?: Maybe<string>;
+        province?: Maybe<string>;
         country?: Maybe<string>;
+        createdAt?: Maybe<string>;
         updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
       }>;
     };
   }>;
@@ -4424,6 +4346,7 @@ export type RoleWithUsersResponse = {
       totalCount: number;
       list: Array<{
         id: string;
+        arn: string;
         userPoolId: string;
         username?: Maybe<string>;
         email?: Maybe<string>;
@@ -4465,9 +4388,11 @@ export type RoleWithUsersResponse = {
         locality?: Maybe<string>;
         region?: Maybe<string>;
         postalCode?: Maybe<string>;
+        city?: Maybe<string>;
+        province?: Maybe<string>;
         country?: Maybe<string>;
+        createdAt?: Maybe<string>;
         updatedAt?: Maybe<string>;
-        customData?: Maybe<string>;
       }>;
     };
   }>;
@@ -4581,10 +4506,11 @@ export type SearchUserResponse = {
       locality?: Maybe<string>;
       region?: Maybe<string>;
       postalCode?: Maybe<string>;
+      city?: Maybe<string>;
+      province?: Maybe<string>;
       country?: Maybe<string>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
     }>;
   };
 };
@@ -4729,23 +4655,11 @@ export type UserResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   }>;
 };
 
@@ -4798,23 +4712,11 @@ export type UserBatchResponse = {
     locality?: Maybe<string>;
     region?: Maybe<string>;
     postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
     country?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
-    customData?: Maybe<string>;
-    identities?: Maybe<
-      Array<
-        Maybe<{
-          openid?: Maybe<string>;
-          userIdInIdp?: Maybe<string>;
-          userId?: Maybe<string>;
-          connectionId?: Maybe<string>;
-          isSocial?: Maybe<boolean>;
-          provider?: Maybe<string>;
-          userPoolId?: Maybe<string>;
-        }>
-      >
-    >;
   }>;
 };
 
@@ -4873,6 +4775,10 @@ export type UserpoolResponse = {
       phoneEnabled?: Maybe<boolean>;
       emailEnabled?: Maybe<boolean>;
       usernameEnabled?: Maybe<boolean>;
+    }>;
+    customSMSProvider?: Maybe<{
+      enabled?: Maybe<boolean>;
+      provider?: Maybe<string>;
     }>;
   };
 };
@@ -4972,10 +4878,11 @@ export type UsersResponse = {
       locality?: Maybe<string>;
       region?: Maybe<string>;
       postalCode?: Maybe<string>;
+      city?: Maybe<string>;
+      province?: Maybe<string>;
       country?: Maybe<string>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      customData?: Maybe<string>;
     }>;
   };
 };
@@ -5054,9 +4961,11 @@ export const AddMemberDocument = `
         locality
         region
         postalCode
+        city
+        province
         country
+        createdAt
         updatedAt
-        customData
       }
     }
   }
@@ -5164,15 +5073,6 @@ export const BindPhoneDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -5206,10 +5106,11 @@ export const BindPhoneDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -5325,11 +5226,9 @@ export const CreateRoleDocument = `
     isSystem
     createdAt
     updatedAt
-    users {
-      totalCount
-    }
     parent {
       code
+      arn
       description
       isSystem
       createdAt
@@ -5379,15 +5278,6 @@ export const CreateUserDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -5421,10 +5311,11 @@ export const CreateUserDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -5436,6 +5327,7 @@ export const CreateUserpoolDocument = `
     domain
     description
     secret
+    jwtSecret
     userpoolTypes {
       code
       name
@@ -5483,6 +5375,10 @@ export const CreateUserpoolDocument = `
       phoneEnabled
       emailEnabled
       usernameEnabled
+    }
+    customSMSProvider {
+      enabled
+      provider
     }
   }
 }
@@ -5646,15 +5542,6 @@ export const LoginByEmailDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -5688,10 +5575,11 @@ export const LoginByEmailDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -5708,15 +5596,6 @@ export const LoginByPhoneCodeDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -5750,10 +5629,11 @@ export const LoginByPhoneCodeDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -5770,15 +5650,6 @@ export const LoginByPhonePasswordDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -5812,10 +5683,11 @@ export const LoginByPhonePasswordDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -5832,15 +5704,6 @@ export const LoginByUsernameDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -5874,10 +5737,11 @@ export const LoginByUsernameDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -5954,15 +5818,6 @@ export const RegisterByEmailDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -5996,10 +5851,11 @@ export const RegisterByEmailDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -6016,15 +5872,6 @@ export const RegisterByPhoneCodeDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -6058,10 +5905,11 @@ export const RegisterByPhoneCodeDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -6078,15 +5926,6 @@ export const RegisterByUsernameDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -6120,10 +5959,11 @@ export const RegisterByUsernameDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -6188,9 +6028,11 @@ export const RemoveMemberDocument = `
         locality
         region
         postalCode
+        city
+        province
         country
+        createdAt
         updatedAt
-        customData
       }
     }
   }
@@ -6287,15 +6129,6 @@ export const UnbindEmailDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -6334,10 +6167,6 @@ export const UnbindEmailDocument = `
     country
     createdAt
     updatedAt
-    customData
-    roles {
-      totalCount
-    }
   }
 }
     `;
@@ -6354,15 +6183,6 @@ export const UnbindPhoneDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -6396,10 +6216,11 @@ export const UnbindPhoneDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -6416,15 +6237,6 @@ export const UpdateEmailDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -6458,10 +6270,11 @@ export const UpdateEmailDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -6522,15 +6335,6 @@ export const UpdatePasswordDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -6564,10 +6368,11 @@ export const UpdatePasswordDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -6584,15 +6389,6 @@ export const UpdatePhoneDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -6626,10 +6422,11 @@ export const UpdatePhoneDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -6654,6 +6451,7 @@ export const UpdateRoleDocument = `
     mutation updateRole($code: String!, $description: String, $newCode: String) {
   updateRole(code: $code, description: $description, newCode: $newCode) {
     code
+    arn
     description
     isSystem
     createdAt
@@ -6663,6 +6461,7 @@ export const UpdateRoleDocument = `
     }
     parent {
       code
+      arn
       description
       isSystem
       createdAt
@@ -6684,15 +6483,6 @@ export const UpdateUserDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -6726,10 +6516,11 @@ export const UpdateUserDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -6741,6 +6532,7 @@ export const UpdateUserpoolDocument = `
     domain
     description
     secret
+    jwtSecret
     userpoolTypes {
       code
       name
@@ -6788,6 +6580,10 @@ export const UpdateUserpoolDocument = `
       phoneEnabled
       emailEnabled
       usernameEnabled
+    }
+    customSMSProvider {
+      enabled
+      provider
     }
   }
 }
@@ -6860,6 +6656,60 @@ export const EmailTemplatesDocument = `
   }
 }
     `;
+export const FindUserDocument = `
+    query findUser($email: String, $phone: String, $username: String) {
+  findUser(email: $email, phone: $phone, username: $username) {
+    id
+    arn
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    city
+    province
+    country
+    createdAt
+    updatedAt
+  }
+}
+    `;
 export const FunctionDocument = `
     query function($id: String) {
   function(id: $id) {
@@ -6882,6 +6732,22 @@ export const FunctionsDocument = `
       url
     }
     totalCount
+  }
+}
+    `;
+export const GetUserGroupsDocument = `
+    query getUserGroups($id: String!) {
+  user(id: $id) {
+    groups {
+      totalCount
+      list {
+        code
+        name
+        description
+        createdAt
+        updatedAt
+      }
+    }
   }
 }
     `;
@@ -6917,9 +6783,6 @@ export const GroupDocument = `
     description
     createdAt
     updatedAt
-    users {
-      totalCount
-    }
   }
 }
     `;
@@ -6930,6 +6793,7 @@ export const GroupWithUsersDocument = `
       totalCount
       list {
         id
+        arn
         userPoolId
         username
         email
@@ -6971,9 +6835,11 @@ export const GroupWithUsersDocument = `
         locality
         region
         postalCode
+        city
+        province
         country
+        createdAt
         updatedAt
-        customData
       }
     }
   }
@@ -7098,9 +6964,11 @@ export const NodeByCodeWithMembersDocument = `
         locality
         region
         postalCode
+        city
+        province
         country
+        createdAt
         updatedAt
-        customData
       }
     }
   }
@@ -7186,9 +7054,11 @@ export const NodeByIdWithMembersDocument = `
         locality
         region
         postalCode
+        city
+        province
         country
+        createdAt
         updatedAt
-        customData
       }
     }
   }
@@ -7393,6 +7263,7 @@ export const RoleWithUsersDocument = `
       totalCount
       list {
         id
+        arn
         userPoolId
         username
         email
@@ -7434,9 +7305,11 @@ export const RoleWithUsersDocument = `
         locality
         region
         postalCode
+        city
+        province
         country
+        createdAt
         updatedAt
-        customData
       }
     }
   }
@@ -7534,10 +7407,11 @@ export const SearchUserDocument = `
       locality
       region
       postalCode
+      city
+      province
       country
       createdAt
       updatedAt
-      customData
     }
   }
 }
@@ -7636,15 +7510,6 @@ export const UserDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -7678,10 +7543,11 @@ export const UserDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -7698,15 +7564,6 @@ export const UserBatchDocument = `
     phoneVerified
     unionid
     openid
-    identities {
-      openid
-      userIdInIdp
-      userId
-      connectionId
-      isSocial
-      provider
-      userPoolId
-    }
     nickname
     registerSource
     photo
@@ -7740,10 +7597,11 @@ export const UserBatchDocument = `
     locality
     region
     postalCode
+    city
+    province
     country
     createdAt
     updatedAt
-    customData
   }
 }
     `;
@@ -7803,6 +7661,10 @@ export const UserpoolDocument = `
       phoneEnabled
       emailEnabled
       usernameEnabled
+    }
+    customSMSProvider {
+      enabled
+      provider
     }
   }
 }
@@ -7891,10 +7753,11 @@ export const UsersDocument = `
       locality
       region
       postalCode
+      city
+      province
       country
       createdAt
       updatedAt
-      customData
     }
   }
 }
