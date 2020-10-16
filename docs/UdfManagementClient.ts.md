@@ -83,7 +83,7 @@ UdfManagementClient().list(targetType)
 #### Examples
 
 ```javascript
-
+const list = await management.udf.list(UdfTargetType.User);
 ```
       
 
