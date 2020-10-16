@@ -301,14 +301,14 @@ const user = await management.users.list();
 
 UsersManagementClient().exists(options)
 
-> 检查用户是否存在
+> 检查用户是否存在，目前可检测的字段有用户名、邮箱、手机号。
 
 
 #### Arguments
 
 - `options` \<Object\>  
-- `options.username` \<string\> 用户名 
-- `options.email` \<string\> 邮箱 
+- `options.username` \<string\> 用户名，区分大小写。 
+- `options.email` \<string\> 邮箱，邮箱不区分大小写。 
 - `options.phone` \<string\> 手机号 
 
 #### Returns
@@ -324,11 +324,36 @@ const exists = await management.users.exists({
 ```
       
 
+## find
+
+查找用户
+
+UsersManagementClient().find(options)
+
+> 通过用户名、邮箱、手机号查找用户
+
+
+#### Arguments
+
+- `options` \<Object\>  
+- `options.username` \<string\> 用户名，区分大小写。 
+- `options.email` \<string\> 邮箱，邮箱不区分大小写。 
+- `options.phone` \<string\> 手机号 
+
+#### Returns
+
+
+
+#### Examples
+
+
+      
+
 ## search
 
 搜索用户
 
-undefined().search(query, options)
+UsersManagementClient().search(query, options, page, limit)
 
 > 根据关键字搜索用户
 
@@ -336,101 +361,197 @@ undefined().search(query, options)
 #### Arguments
 
 - `query` \<null\> 搜索内容 
-- `options` \<null\> 选项 
+- `options` \<string[]\> 选项 
+- `options.fields` \<string[]\> 搜索用户字段，如果不指定，默认会从 username、nickname、email、phone、company、name、givenName、familyName、middleName、profile、preferredUsername 这些字段进行模糊搜索。
+如果你需要精确查找，请使用 find 方法。 
+- `page` \<number\>  默认值为 : `1`。
+- `limit` \<number\>  默认值为 : `10`。
 
 #### Returns
 
-
+-  `Promise<PaginatedUsers>` 
 
 #### Examples
 
-
+```javascript
+const { totalCount, list } = await management.users.search("Bob");
+```
       
 
-## undefined
+## refreshToken
 
-undefined
+刷新用户 token
 
-undefined().undefined()
+UsersManagementClient().refreshToken(id)
+
+> 刷新用户 token
+
+
+#### Arguments
+
+- `id` \<string\> 用户 ID 
+
+#### Returns
+
+-  `Promise<RefreshToken>` 
+
+#### Examples
+
+```javascript
+const { token } = await management.users.refreshToken("USERID");
+
+// 检测 token 的最新状态，能够获取到该用户对应的 token
+
+const data = await management.checkLoginStatus(token, {
+  fetchUserDetail: true
+});
+```
+      
+
+## listGroups
+
+获取用户分组列表
+
+UsersManagementClient().listGroups(userId)
 
 > 获取用户的分组列表
 
 
 #### Arguments
 
-
+- `userId` \<string\> 用户 ID 
 
 #### Returns
 
-
+-  `Promise<DeepPartial<PaginatedGroups>>` 
 
 #### Examples
 
-
+```javascript
+const { list, totalCount} = await management.users.listGroups("USERID");
+```
       
 
-## undefined
+## addGroup
 
-undefined
+加入分组
 
-undefined().undefined()
+UsersManagementClient().addGroup(userId, group)
+
+> 将用户加入分组
+
+
+#### Arguments
+
+- `userId` \<string\> 用户 ID 
+- `group` \<string\> 分组 code 
+
+#### Returns
+
+-  `Promise<CommonMessage>` 
+
+#### Examples
+
+```javascript
+const { code, message } = await management.users.addGroup("USERID", "GROUP_CODE");
+```
+      
+
+## removeGroup
+
+退出分组
+
+UsersManagementClient().removeGroup(userId, group)
+
+> 退出分组
+
+
+#### Arguments
+
+- `userId` \<string\> 用户 ID 
+- `group` \<string\> 分组 code 
+
+#### Returns
+
+-  `Promise<CommonMessage>` 
+
+#### Examples
+
+```javascript
+const { code, message } = await management.users.removeGroup("USERID", "GROUP_CODE");
+```
+      
+
+## listRoles
+
+获取用户角色列表
+
+UsersManagementClient().listRoles(userId)
 
 > 获取用户的角色列表
 
 
 #### Arguments
 
-
+- `userId` \<string\> 用户 ID 
 
 #### Returns
 
-
+-  `Promise<DeepPartial<PaginatedRoles>>` 
 
 #### Examples
 
-
+```javascript
+const { list, totalCount} = await management.users.listRoles("USERID");
+```
       
 
-## undefined
+## addRoles
 
-undefined
+添加角色
 
-undefined().undefined()
+UsersManagementClient().addRoles(userId, roles)
 
-> 添加角色
+> 将用户加入角色
 
 
 #### Arguments
 
-
+- `userId` \<string\> 用户 ID 
+- `roles` \<string\> 角色 code 列表 
 
 #### Returns
 
-
+-  `Promise<CommonMessage>` 
 
 #### Examples
 
-
+```javascript
+const { code, message } = await management.users.addRoles("USERID", ["ROLEA"]);
+```
       
 
-## undefined
+## removeRoles
 
-undefined
+移除角色
 
-undefined().undefined()
+UsersManagementClient().removeRoles(userId, roles)
 
-> 移除角色
+> 将用户从角色中移除
 
 
 #### Arguments
 
-
+- `userId` \<string\> 用户 ID 
+- `roles` \<string\> 角色 code 列表 
 
 #### Returns
 
-
+-  `Promise<CommonMessage>` 
 
 #### Examples
 
-
+```javascript
+const { code, message } = await management.users.removeRoles("USERID", ["ROLEA"]);
+```
       

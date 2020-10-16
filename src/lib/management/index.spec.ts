@@ -14,11 +14,7 @@ test('添加自定义字段', async t => {
     UdfDataType.String,
     generateRandomString(5)
   );
-  t.assert(
-    _.some(data, item => {
-      return item.key === key;
-    })
-  );
+  t.assert(data.key === key);
 });
 
 test('删除自定义字段', async t => {
@@ -29,7 +25,7 @@ test('删除自定义字段', async t => {
     UdfDataType.String,
     generateRandomString(5)
   );
-  await management.udf.remove(UdfTargetType.User, key);
+  await management.udf.delete(UdfTargetType.User, key);
   const data = await management.udf.list(UdfTargetType.User);
   t.assert(
     _.every(data, item => {

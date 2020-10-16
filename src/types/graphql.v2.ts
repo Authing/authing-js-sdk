@@ -866,8 +866,8 @@ export type Mutation = {
   assignRole?: Maybe<CommonMessage>;
   /** 撤销角色 */
   revokeRole?: Maybe<CommonMessage>;
-  addUdf: Array<UserDefinedField>;
-  removeUdf: Array<UserDefinedField>;
+  addUdf: UserDefinedField;
+  removeUdf?: Maybe<CommonMessage>;
   setUdv?: Maybe<Array<UserDefinedData>>;
   removeUdv?: Maybe<Array<UserDefinedData>>;
   refreshToken?: Maybe<RefreshToken>;
@@ -1792,13 +1792,13 @@ export type AddUdfVariables = Exact<{
 }>;
 
 export type AddUdfResponse = {
-  addUdf: Array<{
+  addUdf: {
     targetType: UdfTargetType;
     dataType: UdfDataType;
     key: string;
     label: string;
     options?: Maybe<string>;
-  }>;
+  };
 };
 
 export type AddUserToGroupVariables = Exact<{
@@ -2944,13 +2944,7 @@ export type RemoveUdfVariables = Exact<{
 }>;
 
 export type RemoveUdfResponse = {
-  removeUdf: Array<{
-    targetType: UdfTargetType;
-    dataType: UdfDataType;
-    key: string;
-    label: string;
-    options?: Maybe<string>;
-  }>;
+  removeUdf?: Maybe<{ message?: Maybe<string>; code?: Maybe<number> }>;
 };
 
 export type RemoveUdvVariables = Exact<{
@@ -6049,11 +6043,8 @@ export const RemovePolicyAssignmentsDocument = `
 export const RemoveUdfDocument = `
     mutation removeUdf($targetType: UDFTargetType!, $key: String!) {
   removeUdf(targetType: $targetType, key: $key) {
-    targetType
-    dataType
-    key
-    label
-    options
+    message
+    code
   }
 }
     `;
