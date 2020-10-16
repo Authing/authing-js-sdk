@@ -45,6 +45,10 @@ export function generateRandomString(length: number = 30) {
   return result;
 }
 
+export function generateRandomEmail() {
+  return generateRandomString() + '@example.com';
+}
+
 /**
  * @description 生成随机手机号
  *

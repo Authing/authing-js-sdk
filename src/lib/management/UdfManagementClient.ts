@@ -106,7 +106,7 @@ export class UdfManagementClient {
    * @param {UdfTargetType} targetType 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
    * @example
    *
-   *
+   * const list = await management.udf.list(UdfTargetType.User);
    *
    * @returns {Promise<UserDefinedField[]>}
    * @memberof UdfManagementClient
