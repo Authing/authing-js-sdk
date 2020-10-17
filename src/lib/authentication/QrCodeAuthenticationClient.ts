@@ -27,10 +27,10 @@ import { HttpClient } from '../common/HttpClient';
  *
  * \`\`\`javascript
  * import { AuthenticationClient } from "authing-js-sdk"
- * const authing = new AuthenticationClient({
+ * const authenticationClient = new AuthenticationClient({
  *    userPoolId: process.env.AUTHING_USERPOOL_ID,
  * })
- * authing.qrcode.startScanning() # 开始扫码登录
+ * authenticationClient.qrcode.startScanning() # 开始扫码登录
  * \`\`\`
  *
  * @name QrCodeAuthenticationClient
@@ -92,20 +92,10 @@ export class QrCodeAuthenticationClient {
    *
    * @example
    *
-   * const authing = new AuthenticationClient({
-   *    userPoolId: process.env.AUTHING_USERPOOL_ID,
-   * })
-   * const onScanningSuccess = async (userInfo: any, ticket: string) => {
-   *  const { token } = userInfo;
-   *  if (!token) {
-   *    userInfo = await authenticationClient.wxqr.exchangeUserInfo(ticket);
-   *  }
-   *  onSuccess && onSuccess(userInfo);
-   * };
-   *
-   * authenticationClient.wxqr.startScanning("qrcode", {
-   *
-   *  onSuccess: onScanningSuccess,
+   * authenticationClient.wxqrcode.startScanning("qrcode", {
+   *  onSuccess: (userInfo, ticket) => {
+   *    console.log(userInfo, ticket)
+   *  },
    *  onError: (message) => onFail && onFail(`${message}`),
    * });
    *

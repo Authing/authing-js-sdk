@@ -29,6 +29,7 @@ export class HttpClient {
     const token = await this.tokenProvider.getToken();
     token && (headers.Authorization = `Bearer ${token}`);
     config.headers = headers;
+    config.timeout = this.options.timeout;
     const { data } = await this.axios.request(config);
     const { code, message } = data;
     if (code !== 200) {

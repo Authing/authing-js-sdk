@@ -29,9 +29,11 @@ export class GraphqlClient {
       'x-authing-app-id': this.options.appId || ''
     };
     token && (headers.Authorization = `Bearer ${token}`);
-    const graphQLClient = new GraphQLClient(this.endpoint, {
+    const graphqlOptions = {
+      timeout: this.options.timeout,
       headers
-    });
+    };
+    const graphQLClient = new GraphQLClient(this.endpoint, graphqlOptions);
 
     try {
       return await graphQLClient.request<T>(query, variables);

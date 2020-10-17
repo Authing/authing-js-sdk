@@ -24,8 +24,8 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
 +TiA2BKHbCvloW3w5Lnqm70iSsUi5Fmu9/2+68GZRH9L7Mlh8cFksCicW2Y2W2uM
 GKl64GDcIq3au+aqJQIDAQAB
 -----END PUBLIC KEY-----`,
-  onError: (_: number, message: string) => {
-    throw new Error(message);
+  onError: (code: number, message: string) => {
+    throw { code, message };
   },
   host: 'https://core.authing.cn',
   requestFrom: 'sdk'
