@@ -1,41 +1,63 @@
 [[toc]]
 
 
-## undefined
+# class OrgManagementClient
 
-undefined
+> 一个 Authing 用户池可以创建多个组织机构。此模块用于管理 Authing 组织机构，可以进行组织机构的增删改查、添加删除移动节点、导入组织机构等操作。
 
-undefined().undefined(page, limit)
+请使用以下方式使用该模块：
+```javascript
+import { ManagementClient } from "authing-js-sdk"
+const managementClient = new ManagementClient({
+   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   secret: process.env.AUTHING_USERPOOL_SECRET,
+   host: process.env.AUTHING_HOST
+})
+managementClient.org.list // 获取用户池组织机构列表
+managementClient.org.moveNode // 获取组织机构详情
+managementClient.org.listMembers // 获取节点用户列表
+```
+
+## list
+
+获取用户池组织机构列表
+
+OrgManagementClient().list(page, limit)
 
 > 获取用户池组织机构列表
 
 
 #### Arguments
 
-- `page` \<null\> 从 1 开始，默认为 1 
-- `limit` \<null\> 默认为 10 
+- `page` \<number\>  默认值为 : `1`。
+- `limit` \<number\>  默认值为 : `10`。
 
 #### Returns
 
-
+-  `null` 
 
 #### Examples
 
-
+```javascript
+const { totalCount, list } = await managementClient.org.list()
+```
       
 
-## undefined
+## create
 
-undefined
+创建组织机构
 
-OrgManagementClient().undefined()
+OrgManagementClient().create(name, description, code)
 
-> 创建组织机构
+> 创建组织机构，会创建一个只有一个节点的组织机构。
+如果你想将一个完整的组织树导入进来，请使用 importByJson 方法。
 
 
 #### Arguments
 
-
+- `name` \<string\> 组织机构名称，该名称会作为该组织机构根节点的名称。 
+- `description` \<string\> 根节点描述 
+- `code` \<string\> 根节点唯一标志，必须为合法的英文字符。 
 
 #### Returns
 
@@ -43,291 +65,353 @@ OrgManagementClient().undefined()
 
 #### Examples
 
-
+```javascript
+const org = await managementClient.org.create('北京非凡科技', '北京非凡科技有限公司', 'feifan');
+```
       
 
-## undefined
+## addNode
 
-undefined
+添加节点
 
-OrgManagementClient().undefined()
+OrgManagementClient().addNode(orgId, parentNodeId, data)
 
-> 往组织机构中添加一个节点
+> 在组织机构中添加一个节点
 
 
 #### Arguments
 
-
+- `orgId` \<string\> 组织机构 ID 
+- `parentNodeId` \<string\> 父节点 ID 
+- `data` \<Object\> 节点数据 
+- `data.name` \<string\> 节点名称 
+- `data.code` \<string\> 节点唯一标志 
+- `data.description` \<string\> 节点描述信息 
 
 #### Returns
 
-
+-  `Promise<Org>` 
 
 #### Examples
 
+```javascript
+const org = await managementClient.org.create('北京非凡科技', '北京非凡科技有限公司', 'feifan');
+const { id: orgId, rootNode } = org
+const newOrg = await managementClient.org.addNode(orgId, rootNode.id, { name: '运营部门' })
 
+// newOrg.nodes.length 现在为 2
+```
       
 
-## undefined
+## updateNode
 
-undefined
+修改节点
 
-OrgManagementClient().undefined()
+OrgManagementClient().updateNode(id, updates)
 
-> 通过 ID 查询组织机构
+> 修改节点数据
 
 
 #### Arguments
 
-
+- `id` \<string\> 节点 ID 
+- `updates` \<Object\> 修改数据 
+- `updates.name` \<string\> 节点名称 
+- `updates.code` \<string\> 节点唯一标志 
+- `updates.description` \<string\> 节点描述信息 
 
 #### Returns
 
+-  `Promise<Org>` 
 
+#### Examples
+
+```javascript
+await managementClient.org.updateNode("NDOEID", {
+   name: '新的节点名称'
+})
+```
+      
+
+## findById
+
+获取组织机构详情
+
+OrgManagementClient().findById(id)
+
+> 通过组织机构 ID 获取组织机构详情
+
+
+#### Arguments
+
+- `id` \<string\> 组织机构 ID 
+
+#### Returns
+
+-  `Promise<Org>` 
 
 #### Examples
 
 
       
 
-## undefined
+## deleteById
 
 undefined
 
-OrgManagementClient().undefined(id)
+OrgManagementClient().deleteById(id)
 
 > 删除组织机构树
 
 
 #### Arguments
 
-- `id` \<string\>  
+- `id` \<string\> 组织机构 ID 
 
 #### Returns
 
--  `null` 
+-  `Promise<CommonMessage>` 
 
 #### Examples
 
 
       
 
-## undefined
+## deleteNode
 
-undefined
+删除节点
 
-undefined().undefined()
+OrgManagementClient().deleteNode(orgId, nodeId)
 
 > 删除组织机构树中的某一个节点
 
 
 #### Arguments
 
-
+- `orgId` \<string\> 组织机构 ID 
+- `nodeId` \<string\> 节点 ID 
 
 #### Returns
 
-
+-  `Promise<CommonMessage>` 
 
 #### Examples
 
 
       
 
-## undefined
+## moveNode
 
-undefined
+移动节点
 
-undefined().undefined()
+OrgManagementClient().moveNode(orgId, nodeId, targetParentId)
 
-> 移动节点
+> 移动组织机构节点，移动某节点时需要指定该节点新的父节点。注意不能将一个节点移动到自己的子节点下面。
 
 
 #### Arguments
 
-
+- `orgId` \<string\> 组织机构 ID 
+- `nodeId` \<string\> 需要移动的节点 ID 
+- `targetParentId` \<string\> 目标父节点 ID 
 
 #### Returns
 
-
+-  `Promise<Org>` 最新的树结构
 
 #### Examples
 
-
+```javascript
+await managementClient.org.moveNode("ORGID", "NODEID", "TRAGET_NODE_ID")
+```
       
 
-## undefined
+## isRootNode
 
-undefined
+判断是否为根节点
 
-OrgManagementClient().undefined(orgId, nodeId)
+OrgManagementClient().isRootNode(orgId, nodeId)
 
 > 判断一个节点是不是组织树的根节点
 
 
 #### Arguments
 
-- `orgId` \<string\>  
-- `nodeId` \<string\>  
+- `orgId` \<string\> 组织机构 ID 
+- `nodeId` \<string\> 组织机构 ID 
 
 #### Returns
 
--  `null` 
+-  `Promise<boolean>` 
 
 #### Examples
 
 
       
 
-## undefined
+## listChildren
 
-undefined
+获取子节点列表
 
-OrgManagementClient().undefined(orgId, nodeId)
+OrgManagementClient().listChildren(orgId, nodeId)
 
-> 查询节点子节点列表
+> 查询一个节点的子节点列表
 
 
 #### Arguments
 
-- `orgId` \<string\>  
-- `nodeId` \<string\>  
+- `orgId` \<string\> 组织机构 ID 
+- `nodeId` \<string\> 组织机构 ID 
 
 #### Returns
 
--  `null` 
+-  `Promise<Node[]>` 
 
 #### Examples
 
-
+```javascript
+// 子节点列表
+cosnt children = await managementClient.org.moveNode("ORGID", "NODEID")
+```
       
 
-## undefined
+## rootNode
 
-undefined
+获取根节点
 
-OrgManagementClient().undefined()
+OrgManagementClient().rootNode(orgId)
 
-> 查询组织机构树根节点
+> 获取一个组织的根节点
 
 
 #### Arguments
 
-
+- `orgId` \<string\> 组织机构 ID 
 
 #### Returns
 
-
+-  `Promise<Node[]>` 
 
 #### Examples
 
-
+```javascript
+const rootNode = await managementClient.org.rootNode("ORGID")
+```
       
 
-## undefined
+## importByJson
 
 undefined
 
-undefined().undefined()
+OrgManagementClient().importByJson(json)
 
-> 通过一个 JSON 导入树机构
+> 通过一个 JSON 树结构导入组织机构
 
 
 #### Arguments
 
-
+- `json` \<Object\> JSON 格式的树结构，详细格式请见示例代码。 
 
 #### Returns
 
-
+-  `Promise<Node[]>` 
 
 #### Examples
 
-
+```javascript
+const tree = {
+  name: '北京非凡科技有限公司',
+  code: 'feifan',
+  children: [
+     {
+         code: 'operation',
+         name: '运营',
+         description: '商业化部门'
+      },
+      {
+        code: 'dev',
+        name: '研发',
+        description: '研发部门',
+        children: [
+          {
+            code: 'backend',
+            name: '后端',
+            description: '后端研发部门'
+          }
+        ]
+      }
+    ]
+  };
+const org = await management.org.importByJson(tree);
+```
       
 
-## undefined
+## addMembers
 
-undefined
+添加成功
 
-undefined().undefined()
+OrgManagementClient().addMembers(nodeId, userIds)
 
 > 节点添加成员
 
 
 #### Arguments
 
-
+- `nodeId` \<string\> 节点 ID 
+- `userIds` \<string[]\> 用户 ID 列表 
 
 #### Returns
 
-
+-  `Promise<PaginatedUsers>` 
 
 #### Examples
 
 
       
 
-## undefined
+## listMembers
 
-undefined
+获取节点成员
 
-undefined().undefined()
+OrgManagementClient().listMembers(nodeId, options)
 
-> 节点批量添加成员
+> 获取节点成员，可以获取直接添加到该节点中的用户，也可以获取到该节点子节点的用户。
 
 
 #### Arguments
 
-
+- `nodeId` \<string\> 节点 ID 
+- `options` \<Object\> 查询参数 
+- `options.page` \<number\>  默认值为 : `1`。
+- `options.limit` \<number\>  默认值为 : `10`。
+- `options.includeChildrenNodes` \<boolean\> 是否获取所有子节点的成员 默认值为 : `false`。
 
 #### Returns
 
-
+-  `Promise<PaginatedUsers>` 
 
 #### Examples
 
 
       
 
-## undefined
+## removeMembers
 
-undefined
+添加成功
 
-undefined().undefined()
+OrgManagementClient().removeMembers(nodeId, userIds)
 
-> 移除用户
-
-
-#### Arguments
-
-
-
-#### Returns
-
-
-
-#### Examples
-
-
-      
-
-## undefined
-
-undefined
-
-undefined().undefined()
-
-> 批量移除用户
+> 节点添加成员
 
 
 #### Arguments
 
-
+- `nodeId` \<string\> 节点 ID 
+- `userIds` \<string[]\> 用户 ID 列表 
 
 #### Returns
 
-
+-  `Promise<PaginatedUsers>` 
 
 #### Examples
 

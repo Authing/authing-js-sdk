@@ -94,6 +94,7 @@ export class ManagementClient {
     this.org = new OrgManagementClient(
       this.options,
       this.graphqlClientV2,
+      this.httpClient,
       this.tokenProvider
     );
     this.roles = new RolesManagementClient(
