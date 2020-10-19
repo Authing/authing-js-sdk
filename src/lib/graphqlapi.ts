@@ -176,9 +176,9 @@ import {
   RemoveUdvVariables,
   RemoveUdvResponse,
   RemoveUdvDocument,
-  AddUdfVariables,
-  AddUdfResponse,
-  AddUdfDocument,
+  SetUdfVariables,
+  SetUdfResponse,
+  SetUdfDocument,
   RemoveUdfVariables,
   RemoveUdfResponse,
   RemoveUdfDocument,
@@ -1079,12 +1079,12 @@ export const removeUdv = async (
   });
 };
 
-export const addUdf = async (
+export const setUdf = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
-  variables: AddUdfVariables
-): Promise<AddUdfResponse> => {
-  const query = AddUdfDocument;
+  variables: SetUdfVariables
+): Promise<SetUdfResponse> => {
+  const query = SetUdfDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,

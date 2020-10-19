@@ -59,55 +59,6 @@ export class RolesManagementClient {
   }
 
   /**
-   * @name list
-   * @name_zh 获取角色列表
-   * @description 获取角色列表
-   *
-   * @param {number} [page=1] 页码数
-   * @param {number} [limit=10] 每页个数
-   * @example
-   * RolesManagementClient().list(2, 10)
-   *
-   * @returns {Promise<DeepPartial<PaginatedRoles>>}
-   * @memberof RolesManagementClient
-   */
-  async list(
-    page: number = 1,
-    limit: number = 10
-  ): Promise<DeepPartial<PaginatedRoles>> {
-    const { roles: data } = await roles(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        page,
-        limit
-      }
-    );
-    return data;
-  }
-
-  /**
-   *
-   * @name detail
-   * @name_zh 获取角色详情
-   * @description 获取角色详情
-   *
-   * @param {string} code 角色唯一标志符
-   *
-   * @example
-   * RolesManagementClient().detail('manager')
-   *
-   * @returns {Promise<DeepPartial<Role>>} 角色详情
-   * @memberof RolesManagementClient
-   */
-  async detail(code: string): Promise<DeepPartial<Role>> {
-    const { role: data } = await role(this.graphqlClient, this.tokenProvider, {
-      code
-    });
-    return data;
-  }
-
-  /**
    * @name create
    * @name_zh 创建角色
    * @description 创建角色
@@ -127,43 +78,6 @@ export class RolesManagementClient {
       description
     });
     return res.createRole;
-  }
-
-  /**
-   * @name update
-   * @name_zh 修改角色
-   * @description 修改角色
-   *
-   * @param {string} code 角色唯一标志符
-   * @param {Object} input
-   * @param {string} input.description 描述信息
-   * @param {string} input.newCode 新的唯一标志符
-   *
-   * @example
-   * RolesManagementClient().update('rolea', {newCode: 'newcode'})
-   *
-   *
-   * @returns {Promise<DeepPartial<Role>>}
-   * @memberof RolesManagementClient
-   */
-  async update(
-    code: string,
-    input: {
-      description?: string;
-      newCode?: string;
-    }
-  ): Promise<DeepPartial<Role>> {
-    const { description, newCode } = input;
-    const { updateRole: data } = await updateRole(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        code,
-        description,
-        newCode
-      }
-    );
-    return data;
   }
 
   /**
@@ -209,6 +123,92 @@ export class RolesManagementClient {
       this.tokenProvider,
       {
         codes: codeList
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @name update
+   * @name_zh 修改角色
+   * @description 修改角色
+   *
+   * @param {string} code 角色唯一标志符
+   * @param {Object} input
+   * @param {string} input.description 描述信息
+   * @param {string} input.newCode 新的唯一标志符
+   *
+   * @example
+   * RolesManagementClient().update('rolea', {newCode: 'newcode'})
+   *
+   *
+   * @returns {Promise<DeepPartial<Role>>}
+   * @memberof RolesManagementClient
+   */
+  async update(
+    code: string,
+    input: {
+      description?: string;
+      newCode?: string;
+    }
+  ): Promise<DeepPartial<Role>> {
+    const { description, newCode } = input;
+    const { updateRole: data } = await updateRole(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        code,
+        description,
+        newCode
+      }
+    );
+    return data;
+  }
+
+  /**
+   *
+   * @name detail
+   * @name_zh 获取角色详情
+   * @description 获取角色详情
+   *
+   * @param {string} code 角色唯一标志符
+   *
+   * @example
+   * RolesManagementClient().detail('manager')
+   *
+   * @returns {Promise<DeepPartial<Role>>} 角色详情
+   * @memberof RolesManagementClient
+   */
+  async detail(code: string): Promise<DeepPartial<Role>> {
+    const { role: data } = await role(this.graphqlClient, this.tokenProvider, {
+      code
+    });
+    return data;
+  }
+
+  /**
+   * @name list
+   * @name_zh 获取角色列表
+   * @description 获取角色列表
+   *
+   * @param {number} [page=1] 页码数
+   * @param {number} [limit=10] 每页个数
+   * @example
+   * RolesManagementClient().list(2, 10)
+   *
+   * @returns {Promise<DeepPartial<PaginatedRoles>>}
+   * @memberof RolesManagementClient
+   */
+  async list(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<DeepPartial<PaginatedRoles>> {
+    const { roles: data } = await roles(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        page,
+        limit
       }
     );
     return data;

@@ -7,7 +7,7 @@ import {
   UdfTargetType,
   UserDefinedField
 } from '../../types/graphql.v2';
-import { addUdf, removeUdf, udf } from '../graphqlapi';
+import { setUdf, removeUdf, udf } from '../graphqlapi';
 
 /**
  * @name UdfManagementClient
@@ -25,7 +25,7 @@ import { addUdf, removeUdf, udf } from '../graphqlapi';
  *    host: process.env.AUTHING_HOST
  * })
  * managementClient.udf.list // 获取自定义字段元数据列表
- * managementClient.udf.create // 创建自定义字段
+ * managementClient.udf.set // 设置自定义字段
  * managementClient.udf.delete // 删除自定义字段
  * \`\`\`
  *
@@ -47,9 +47,9 @@ export class UdfManagementClient {
   }
 
   /**
-   * @name create
-   * @name_zh 添加自定义字段定义
-   * @description 添加自定义字段定义，会返回用户池最新的自定义字段定义列表。
+   * @name set
+   * @name_zh 设置自定义字段元数据
+   * @description 设置自定义字段元数据，如果该字段不存在会自动创建。
    *
    * @param {UdfTargetType} 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
    * @param {string} key 字段 key
@@ -59,7 +59,7 @@ export class UdfManagementClient {
    * @example
    *
    * import { ManagementClient, UdfTargetType, UdfDataType  } from "authing-js-sdk"
-   * const udf = await management.udf.create(
+   * const udf = await management.udf.set(
    *    UdfTargetType.User,
    *    'school',
    *    UdfDataType.String,
@@ -68,24 +68,35 @@ export class UdfManagementClient {
    *
    * @example
    *
+   * // 如果 age 这个自定义字段不存在，第一次会创建
+   *
    * import { ManagementClient, UdfTargetType, UdfDataType  } from "authing-js-sdk"
-   * const udf = await management.udf.create(
+   * const udf = await management.udf.set(
    *    UdfTargetType.User,
    *    'age',
    *    UdfDataType.Number,
    *    '年龄'
    * );
    *
+   * // 如果 age 字段之前创建过，会修改该字段的配置
+   *
+   * const udf = await management.udf.set(
+   *    UdfTargetType.User,
+   *    'age',
+   *    UdfDataType.Number,
+   *    '新的描述信息'
+   * );
+   *
    * @returns {Promise<UserDefinedField[]>}
    * @memberof UdfManagementClient
    */
-  async create(
+  async set(
     targetType: UdfTargetType,
     key: string,
     dataType: UdfDataType,
     label: string
   ): Promise<UserDefinedField> {
-    const { addUdf: data } = await addUdf(
+    const { setUdf: data } = await setUdf(
       this.graphqlClient,
       this.tokenProvider,
       {
@@ -96,26 +107,6 @@ export class UdfManagementClient {
       }
     );
     return data;
-  }
-
-  /**
-   * @name list
-   * @name_zh 获取自定义字段定义
-   * @description 查询用户池定义的自定义字段
-   *
-   * @param {UdfTargetType} targetType 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
-   * @example
-   *
-   * const list = await management.udf.list(UdfTargetType.User);
-   *
-   * @returns {Promise<UserDefinedField[]>}
-   * @memberof UdfManagementClient
-   */
-  async list(targetType: UdfTargetType): Promise<UserDefinedField[]> {
-    const { udf: list } = await udf(this.graphqlClient, this.tokenProvider, {
-      targetType
-    });
-    return list;
   }
 
   /**
@@ -142,6 +133,26 @@ export class UdfManagementClient {
         key
       }
     );
+    return list;
+  }
+
+  /**
+   * @name list
+   * @name_zh 获取自定义字段定义
+   * @description 查询用户池定义的自定义字段
+   *
+   * @param {UdfTargetType} targetType 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
+   * @example
+   *
+   * const list = await management.udf.list(UdfTargetType.User);
+   *
+   * @returns {Promise<UserDefinedField[]>}
+   * @memberof UdfManagementClient
+   */
+  async list(targetType: UdfTargetType): Promise<UserDefinedField[]> {
+    const { udf: list } = await udf(this.graphqlClient, this.tokenProvider, {
+      targetType
+    });
     return list;
   }
 }

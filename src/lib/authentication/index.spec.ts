@@ -198,7 +198,7 @@ test('添加自定义数据', async t => {
   });
 
   const key = generateRandomString(10);
-  await management.udf.create(
+  await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -239,7 +239,7 @@ test('添加自定义数据 # 非法的数据类型', async t => {
   });
 
   const key = generateRandomString(10);
-  await management.udf.create(
+  await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -266,7 +266,7 @@ test('删除自定义数据', async t => {
   });
 
   const key = generateRandomString(10);
-  await management.udf.create(
+  await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -287,7 +287,7 @@ test('添加自定义数据 # 字符串', async t => {
     autoRegister: true
   });
   const key = generateRandomString(10);
-  await management.udf.create(
+  await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -309,7 +309,7 @@ test('添加自定义数据 # 数字', async t => {
     autoRegister: true
   });
   const key = generateRandomString(10);
-  await management.udf.create(
+  await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.Number,
@@ -331,7 +331,7 @@ test('添加自定义数据 # boolean', async t => {
     autoRegister: true
   });
   const key = generateRandomString(10);
-  await management.udf.create(
+  await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.Boolean,
@@ -354,7 +354,7 @@ test('添加自定义数据 # DATETIME', async t => {
     autoRegister: true
   });
   const key = generateRandomString(10);
-  await management.udf.create(
+  await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.Datetime,
@@ -377,7 +377,7 @@ test('添加自定义数据 # OBJECT', async t => {
     autoRegister: true
   });
   const key = generateRandomString(10);
-  await management.udf.create(
+  await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.Object,

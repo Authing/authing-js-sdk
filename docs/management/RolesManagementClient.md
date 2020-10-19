@@ -18,51 +18,6 @@ managementClient.roles.create // 创建角色
 managementClient.roles.listUsers // 获取角色用户列表
 ```
 
-## 获取角色列表
-
-RolesManagementClient().list(page, limit)
-
-> 获取角色列表
-
-
-#### 参数
-
-- `page` \<number\> 页码数 默认值为 : `1`。
-- `limit` \<number\> 每页个数 默认值为 : `10`。
-
-#### 返回值
-
--  `Promise<DeepPartial<PaginatedRoles>>` 
-
-#### 示例
-
-```javascript
-RolesManagementClient().list(2, 10)
-```
-      
-
-## 获取角色详情
-
-RolesManagementClient().detail(code)
-
-> 获取角色详情
-
-
-#### 参数
-
-- `code` \<string\> 角色唯一标志符 
-
-#### 返回值
-
--  `Promise<DeepPartial<Role>>` 角色详情
-
-#### 示例
-
-```javascript
-RolesManagementClient().detail('manager')
-```
-      
-
 ## 创建角色
 
 RolesManagementClient().create(code, description)
@@ -83,31 +38,6 @@ RolesManagementClient().create(code, description)
 
 ```javascript
 RolesManagementClient().create('rolea', 'RoleA')
-```
-      
-
-## 修改角色
-
-RolesManagementClient().update(code, input)
-
-> 修改角色
-
-
-#### 参数
-
-- `code` \<string\> 角色唯一标志符 
-- `input` \<Object\>  
-- `input.description` \<string\> 描述信息 
-- `input.newCode` \<string\> 新的唯一标志符 
-
-#### 返回值
-
--  `Promise<DeepPartial<Role>>` 
-
-#### 示例
-
-```javascript
-RolesManagementClient().update('rolea', {newCode: 'newcode'})
 ```
       
 
@@ -152,6 +82,76 @@ RolesManagementClient().deleteMany(codeList)
 
 ```javascript
 RolesManagementClient().delete(['rolea'])
+```
+      
+
+## 修改角色
+
+RolesManagementClient().update(code, input)
+
+> 修改角色
+
+
+#### 参数
+
+- `code` \<string\> 角色唯一标志符 
+- `input` \<Object\>  
+- `input.description` \<string\> 描述信息 
+- `input.newCode` \<string\> 新的唯一标志符 
+
+#### 返回值
+
+-  `Promise<DeepPartial<Role>>` 
+
+#### 示例
+
+```javascript
+RolesManagementClient().update('rolea', {newCode: 'newcode'})
+```
+      
+
+## 获取角色详情
+
+RolesManagementClient().detail(code)
+
+> 获取角色详情
+
+
+#### 参数
+
+- `code` \<string\> 角色唯一标志符 
+
+#### 返回值
+
+-  `Promise<DeepPartial<Role>>` 角色详情
+
+#### 示例
+
+```javascript
+RolesManagementClient().detail('manager')
+```
+      
+
+## 获取角色列表
+
+RolesManagementClient().list(page, limit)
+
+> 获取角色列表
+
+
+#### 参数
+
+- `page` \<number\> 页码数 默认值为 : `1`。
+- `limit` \<number\> 每页个数 默认值为 : `10`。
+
+#### 返回值
+
+-  `Promise<DeepPartial<PaginatedRoles>>` 
+
+#### 示例
+
+```javascript
+RolesManagementClient().list(2, 10)
 ```
       
 

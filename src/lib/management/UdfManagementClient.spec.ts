@@ -8,7 +8,7 @@ const management = new ManagementClient(getOptionsFromEnv());
 
 test('添加自定义字段', async t => {
   const key = generateRandomString();
-  const udf = await management.udf.create(
+  const udf = await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -20,7 +20,7 @@ test('添加自定义字段', async t => {
 
 test('获取自定义字段列表', async t => {
   const key = generateRandomString();
-  const udf = await management.udf.create(
+  const udf = await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -36,7 +36,7 @@ test('获取自定义字段列表', async t => {
 
 test('删除自定义字段', async t => {
   const key = generateRandomString();
-  const udf = await management.udf.create(
+  const udf = await management.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,

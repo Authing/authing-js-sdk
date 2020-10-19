@@ -65,34 +65,6 @@ export class OrgManagementClient {
   }
 
   /**
-   * @name list
-   * @name_zh 获取用户池组织机构列表
-   * @description 获取用户池组织机构列表
-   *
-   * @param {number} [page=1]
-   * @param {number} [limit=10]
-   *
-   * @example
-   *
-   * const { totalCount, list } = await managementClient.org.list()
-   *
-   * @returns
-   * @memberof OrgManagementClient
-   */
-  async list(page: number = 1, limit: number = 10) {
-    const {
-      orgs: { list, totalCount }
-    } = await orgs(this.graphqlClient, this.tokenProvider, {
-      page,
-      limit
-    });
-    return {
-      totalCount,
-      list: list.map(org => this.buildTree(org))
-    };
-  }
-
-  /**
    * @name create
    * @name_zh 创建组织机构
    * @description 创建组织机构，会创建一个只有一个节点的组织机构。
@@ -119,6 +91,49 @@ export class OrgManagementClient {
       }
     );
     return org;
+  }
+
+  /**
+   * @name deleteById
+   * @description 删除组织机构树
+   * @param {string} id 组织机构 ID
+   *
+   * @returns {Promise<CommonMessage>}
+   * @memberof OrgManagementClient
+   */
+  async deleteById(id: string): Promise<CommonMessage> {
+    const res = await deleteOrg(this.graphqlClient, this.tokenProvider, {
+      id
+    });
+    return res.deleteOrg;
+  }
+
+  /**
+   * @name list
+   * @name_zh 获取用户池组织机构列表
+   * @description 获取用户池组织机构列表
+   *
+   * @param {number} [page=1]
+   * @param {number} [limit=10]
+   *
+   * @example
+   *
+   * const { totalCount, list } = await managementClient.org.list()
+   *
+   * @returns
+   * @memberof OrgManagementClient
+   */
+  async list(page: number = 1, limit: number = 10) {
+    const {
+      orgs: { list, totalCount }
+    } = await orgs(this.graphqlClient, this.tokenProvider, {
+      page,
+      limit
+    });
+    return {
+      totalCount,
+      list: list.map(org => this.buildTree(org))
+    };
   }
 
   /**
@@ -234,21 +249,6 @@ export class OrgManagementClient {
       id
     });
     return this.buildTree(data);
-  }
-
-  /**
-   * @name deleteById
-   * @description 删除组织机构树
-   * @param {string} id 组织机构 ID
-   *
-   * @returns {Promise<CommonMessage>}
-   * @memberof OrgManagementClient
-   */
-  async deleteById(id: string): Promise<CommonMessage> {
-    const res = await deleteOrg(this.graphqlClient, this.tokenProvider, {
-      id
-    });
-    return res.deleteOrg;
   }
 
   /**

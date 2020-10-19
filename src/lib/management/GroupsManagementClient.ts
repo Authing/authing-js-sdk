@@ -53,60 +53,6 @@ export class GroupsManagementClient {
   }
 
   /**
-   * @name list
-   * @name_zh 获取分组列表
-   * @description 获取分组列表
-   *
-   * @param {number} [page=1] 页码数
-   * @param {number} [limit=10] 每页个数
-   *
-   * @example
-   *
-   * GroupsManagementClient().list(1, 10)
-   *
-   * @returns {Promise<DeepPartial<PaginatedGroups>>}
-   * @memberof GroupsManagementClient
-   */
-  async list(
-    page: number = 1,
-    limit: number = 10
-  ): Promise<DeepPartial<PaginatedGroups>> {
-    const { groups: data } = await getGroups(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        page,
-        limit
-      }
-    );
-    return data;
-  }
-
-  /**
-   * @name detail
-   * @name_zh 获取分组详情
-   * @description 获取分组详情
-   *
-   * @param {string} code 分组唯一标志符
-   *
-   * @example
-   * GroupsManagementClient().detail('manager')
-   *
-   * @returns {Promise<DeepPartial<Group>>} 分组详情
-   * @memberof GroupsManagementClient
-   */
-  async detail(code: string): Promise<DeepPartial<Group>> {
-    const { group: data } = await group(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        code
-      }
-    );
-    return data;
-  }
-
-  /**
    * @name create
    * @name_zh 创建分组
    * @description 创建分组
@@ -132,6 +78,30 @@ export class GroupsManagementClient {
       description
     });
     return res.createGroup;
+  }
+
+  /**
+   * @name delete
+   * @name_zh 删除分组
+   * @description 删除分组
+   *
+   * @param {string} code 分组唯一标志符
+   *
+   * @example
+   * GroupsManagementClient().delete('rolea')
+   *
+   * @returns {Promise<CommonMessage>}
+   * @memberof GroupsManagementClient
+   */
+  async delete(code: string): Promise<CommonMessage> {
+    const { deleteGroups: data } = await deleteGroups(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        codeList: [code]
+      }
+    );
+    return data;
   }
 
   /**
@@ -175,24 +145,54 @@ export class GroupsManagementClient {
   }
 
   /**
-   * @name delete
-   * @name_zh 删除分组
-   * @description 删除分组
+   * @name detail
+   * @name_zh 获取分组详情
+   * @description 获取分组详情
    *
    * @param {string} code 分组唯一标志符
    *
    * @example
-   * GroupsManagementClient().delete('rolea')
+   * GroupsManagementClient().detail('manager')
    *
-   * @returns {Promise<CommonMessage>}
+   * @returns {Promise<DeepPartial<Group>>} 分组详情
    * @memberof GroupsManagementClient
    */
-  async delete(code: string): Promise<CommonMessage> {
-    const { deleteGroups: data } = await deleteGroups(
+  async detail(code: string): Promise<DeepPartial<Group>> {
+    const { group: data } = await group(
       this.graphqlClient,
       this.tokenProvider,
       {
-        codeList: [code]
+        code
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @name list
+   * @name_zh 获取分组列表
+   * @description 获取分组列表
+   *
+   * @param {number} [page=1] 页码数
+   * @param {number} [limit=10] 每页个数
+   *
+   * @example
+   *
+   * GroupsManagementClient().list(1, 10)
+   *
+   * @returns {Promise<DeepPartial<PaginatedGroups>>}
+   * @memberof GroupsManagementClient
+   */
+  async list(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<DeepPartial<PaginatedGroups>> {
+    const { groups: data } = await getGroups(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        page,
+        limit
       }
     );
     return data;

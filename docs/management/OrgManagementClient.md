@@ -18,29 +18,6 @@ managementClient.org.moveNode // 获取组织机构详情
 managementClient.org.listMembers // 获取节点用户列表
 ```
 
-## 获取用户池组织机构列表
-
-OrgManagementClient().list(page, limit)
-
-> 获取用户池组织机构列表
-
-
-#### 参数
-
-- `page` \<number\>  默认值为 : `1`。
-- `limit` \<number\>  默认值为 : `10`。
-
-#### 返回值
-
--  `null` 
-
-#### 示例
-
-```javascript
-const { totalCount, list } = await managementClient.org.list()
-```
-      
-
 ## 创建组织机构
 
 OrgManagementClient().create(name, description, code)
@@ -63,6 +40,49 @@ OrgManagementClient().create(name, description, code)
 
 ```javascript
 const org = await managementClient.org.create('北京非凡科技', '北京非凡科技有限公司', 'feifan');
+```
+      
+
+## undefined
+
+OrgManagementClient().deleteById(id)
+
+> 删除组织机构树
+
+
+#### 参数
+
+- `id` \<string\> 组织机构 ID 
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+#### 示例
+
+
+      
+
+## 获取用户池组织机构列表
+
+OrgManagementClient().list(page, limit)
+
+> 获取用户池组织机构列表
+
+
+#### 参数
+
+- `page` \<number\>  默认值为 : `1`。
+- `limit` \<number\>  默认值为 : `10`。
+
+#### 返回值
+
+-  `null` 
+
+#### 示例
+
+```javascript
+const { totalCount, list } = await managementClient.org.list()
 ```
       
 
@@ -139,26 +159,6 @@ OrgManagementClient().findById(id)
 #### 返回值
 
 -  `Promise<Org>` 
-
-#### 示例
-
-
-      
-
-## undefined
-
-OrgManagementClient().deleteById(id)
-
-> 删除组织机构树
-
-
-#### 参数
-
-- `id` \<string\> 组织机构 ID 
-
-#### 返回值
-
--  `Promise<CommonMessage>` 
 
 #### 示例
 

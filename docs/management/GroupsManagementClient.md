@@ -18,51 +18,6 @@ managementClient.groups.create // 创建分组
 managementClient.groups.listUsers // 获取分组用户列表
 ```
 
-## 获取分组列表
-
-GroupsManagementClient().list(page, limit)
-
-> 获取分组列表
-
-
-#### 参数
-
-- `page` \<number\> 页码数 默认值为 : `1`。
-- `limit` \<number\> 每页个数 默认值为 : `10`。
-
-#### 返回值
-
--  `Promise<DeepPartial<PaginatedGroups>>` 
-
-#### 示例
-
-```javascript
-GroupsManagementClient().list(1, 10)
-```
-      
-
-## 获取分组详情
-
-GroupsManagementClient().detail(code)
-
-> 获取分组详情
-
-
-#### 参数
-
-- `code` \<string\> 分组唯一标志符 
-
-#### 返回值
-
--  `Promise<DeepPartial<Group>>` 分组详情
-
-#### 示例
-
-```javascript
-GroupsManagementClient().detail('manager')
-```
-      
-
 ## 创建分组
 
 GroupsManagementClient().create(code, name, description)
@@ -84,6 +39,28 @@ GroupsManagementClient().create(code, name, description)
 
 ```javascript
 GroupsManagementClient().create('group', '分组 xxx')
+```
+      
+
+## 删除分组
+
+GroupsManagementClient().delete(code)
+
+> 删除分组
+
+
+#### 参数
+
+- `code` \<string\> 分组唯一标志符 
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+#### 示例
+
+```javascript
+GroupsManagementClient().delete('rolea')
 ```
       
 
@@ -113,11 +90,11 @@ GroupsManagementClient().update('group', {newCode: 'newcode'})
 ```
       
 
-## 删除分组
+## 获取分组详情
 
-GroupsManagementClient().delete(code)
+GroupsManagementClient().detail(code)
 
-> 删除分组
+> 获取分组详情
 
 
 #### 参数
@@ -126,12 +103,35 @@ GroupsManagementClient().delete(code)
 
 #### 返回值
 
--  `Promise<CommonMessage>` 
+-  `Promise<DeepPartial<Group>>` 分组详情
 
 #### 示例
 
 ```javascript
-GroupsManagementClient().delete('rolea')
+GroupsManagementClient().detail('manager')
+```
+      
+
+## 获取分组列表
+
+GroupsManagementClient().list(page, limit)
+
+> 获取分组列表
+
+
+#### 参数
+
+- `page` \<number\> 页码数 默认值为 : `1`。
+- `limit` \<number\> 每页个数 默认值为 : `10`。
+
+#### 返回值
+
+-  `Promise<DeepPartial<PaginatedGroups>>` 
+
+#### 示例
+
+```javascript
+GroupsManagementClient().list(1, 10)
 ```
       
 

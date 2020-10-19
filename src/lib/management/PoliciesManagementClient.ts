@@ -56,68 +56,6 @@ export class PoliciesManagementClient {
     this.graphqlClient = graphqlClient;
     this.tokenProvider = tokenProvider;
   }
-
-  /**
-   * @name list
-   * @name_zh 获取策略列表
-   * @description 获取策略列表
-   *
-   * @param {Object} options
-   * @param {number} [options.page=1]
-   * @param {number} [options.limit=10]
-   * @param {boolean} [options.excludeDefault=true] 是否排除系统默认资源
-   *
-   * @example
-   *
-   * const { list, totalCount } = await management.policies.list({
-   *   excludeDefault: false // 包含系统默认的策略
-   * });
-   *
-   * @returns {Promise<DeepPartial<PaginatedPolicies>>}
-   * @memberof PoliciesManagementClient
-   */
-  async list(options?: {
-    page?: number;
-    limit?: number;
-    excludeDefault?: boolean;
-  }): Promise<DeepPartial<PaginatedPolicies>> {
-    options = options || {};
-    const { page = 1, limit = 10, excludeDefault = true } = options;
-    const { policies: data } = await policies(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        page,
-        limit,
-        excludeDefault
-      }
-    );
-    return data;
-  }
-
-  /**
-   * @name detail
-   * @name_zh 获取策略详情
-   * @description 获取策略详情
-   *
-   * @param {string} code 策略唯一标志
-   *
-   * const policy = await management.policies.detail('CODE');
-   *
-   * @returns {Promise<DeepPartial<Policy>>}
-   * @memberof PoliciesManagementClient
-   */
-  async detail(code: string): Promise<DeepPartial<Policy>> {
-    const { policy: data } = await policy(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        code
-      }
-    );
-    return data;
-  }
-
   /**
    * @name create
    * @name_zh 添加策略
@@ -155,47 +93,6 @@ export class PoliciesManagementClient {
       description
     });
     return res.createPolicy;
-  }
-
-  /**
-   * @name update
-   * @name_zh 修改策略
-   * @description 修改策略，系统内置策略由 Authing 官方维护，不能修改和删除。
-   *
-   * @param {string} code 策略唯一标志
-   * @param {Object} updates
-   * @param {string} [updates.description] 描述
-   * @param {PolicyStatement[]} [updates.statements] 策略语句，详细格式与说明请见 https://docs.authing.co/docs/access-control/index.html
-   * @param {string} [updates.newCode] 新的唯一标志，如果传入，需要保证其在用户池内是唯一的。
-   *
-   * @example
-   *
-   * const policy = await management.policies.update('CODE', { newCode: 'NEWCODE' });
-   *
-   * @returns {Promise<DeepPartial<Policy>>}
-   * @memberof PoliciesManagementClient
-   *
-   */
-  async update(
-    code: string,
-    updates: {
-      statements?: PolicyStatement[];
-      description?: string;
-      newCode?: string;
-    }
-  ): Promise<DeepPartial<Policy>> {
-    const { description, statements, newCode } = updates;
-    const { updatePolicy: data } = await updatePolicy(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        code,
-        description,
-        statements,
-        newCode
-      }
-    );
-    return data;
   }
 
   /**
@@ -245,6 +142,108 @@ export class PoliciesManagementClient {
       this.tokenProvider,
       {
         codes: codeList
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @name update
+   * @name_zh 修改策略
+   * @description 修改策略，系统内置策略由 Authing 官方维护，不能修改和删除。
+   *
+   * @param {string} code 策略唯一标志
+   * @param {Object} updates
+   * @param {string} [updates.description] 描述
+   * @param {PolicyStatement[]} [updates.statements] 策略语句，详细格式与说明请见 https://docs.authing.co/docs/access-control/index.html
+   * @param {string} [updates.newCode] 新的唯一标志，如果传入，需要保证其在用户池内是唯一的。
+   *
+   * @example
+   *
+   * const policy = await management.policies.update('CODE', { newCode: 'NEWCODE' });
+   *
+   * @returns {Promise<DeepPartial<Policy>>}
+   * @memberof PoliciesManagementClient
+   *
+   */
+  async update(
+    code: string,
+    updates: {
+      statements?: PolicyStatement[];
+      description?: string;
+      newCode?: string;
+    }
+  ): Promise<DeepPartial<Policy>> {
+    const { description, statements, newCode } = updates;
+    const { updatePolicy: data } = await updatePolicy(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        code,
+        description,
+        statements,
+        newCode
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @name detail
+   * @name_zh 获取策略详情
+   * @description 获取策略详情
+   *
+   * @param {string} code 策略唯一标志
+   *
+   * const policy = await management.policies.detail('CODE');
+   *
+   * @returns {Promise<DeepPartial<Policy>>}
+   * @memberof PoliciesManagementClient
+   */
+  async detail(code: string): Promise<DeepPartial<Policy>> {
+    const { policy: data } = await policy(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        code
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @name list
+   * @name_zh 获取策略列表
+   * @description 获取策略列表
+   *
+   * @param {Object} options
+   * @param {number} [options.page=1]
+   * @param {number} [options.limit=10]
+   * @param {boolean} [options.excludeDefault=true] 是否排除系统默认资源
+   *
+   * @example
+   *
+   * const { list, totalCount } = await management.policies.list({
+   *   excludeDefault: false // 包含系统默认的策略
+   * });
+   *
+   * @returns {Promise<DeepPartial<PaginatedPolicies>>}
+   * @memberof PoliciesManagementClient
+   */
+  async list(options?: {
+    page?: number;
+    limit?: number;
+    excludeDefault?: boolean;
+  }): Promise<DeepPartial<PaginatedPolicies>> {
+    options = options || {};
+    const { page = 1, limit = 10, excludeDefault = true } = options;
+    const { policies: data } = await policies(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        page,
+        limit,
+        excludeDefault
       }
     );
     return data;

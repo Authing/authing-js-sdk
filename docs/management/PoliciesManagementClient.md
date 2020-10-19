@@ -20,55 +20,6 @@ managementClient.policies.create // 创建策略
 managementClient.policies.listUsers // 获取策略授权记录
 ```
 
-## 获取策略列表
-
-PoliciesManagementClient().list(options)
-
-> 获取策略列表
-
-
-#### 参数
-
-- `options` \<Object\>  
-- `options.page` \<number\>  默认值为 : `1`。
-- `options.limit` \<number\>  默认值为 : `10`。
-- `options.excludeDefault` \<boolean\> 是否排除系统默认资源 默认值为 : `true`。
-
-#### 返回值
-
--  `Promise<DeepPartial<PaginatedPolicies>>` 
-
-#### 示例
-
-```javascript
-const { list, totalCount } = await management.policies.list({
-  excludeDefault: false // 包含系统默认的策略
-});
-```
-      
-
-## 获取策略详情
-
-PoliciesManagementClient().detail(code)
-
-> 获取策略详情
-
-
-#### 参数
-
-- `code` \<string\> 策略唯一标志
-
-const policy = await management.policies.detail('CODE'); 
-
-#### 返回值
-
--  `Promise<DeepPartial<Policy>>` 
-
-#### 示例
-
-
-      
-
 ## 添加策略
 
 PoliciesManagementClient().create(code, 策略语句，详细格式与说明请见, description)
@@ -100,32 +51,6 @@ const statements = [
 ];
 
 const policy = await management.policies.create(code, statements);
-```
-      
-
-## 修改策略
-
-PoliciesManagementClient().update(code, updates)
-
-> 修改策略，系统内置策略由 Authing 官方维护，不能修改和删除。
-
-
-#### 参数
-
-- `code` \<string\> 策略唯一标志 
-- `updates` \<Object\>  
-- `updates.description` \<string\> 描述 
-- `updates.statements` \<PolicyStatement[]\> 策略语句，详细格式与说明请见 https://docs.authing.co/docs/access-control/index.html 
-- `updates.newCode` \<string\> 新的唯一标志，如果传入，需要保证其在用户池内是唯一的。 
-
-#### 返回值
-
--  `Promise<DeepPartial<Policy>>` 
-
-#### 示例
-
-```javascript
-const policy = await management.policies.update('CODE', { newCode: 'NEWCODE' });
 ```
       
 
@@ -170,6 +95,81 @@ PoliciesManagementClient().deleteMany(codeList)
 
 ```javascript
 const { code, message } = await management.policies.deleteMany(["CODE"]); // 通过 code 是否为 200 判断操作是否成功
+```
+      
+
+## 修改策略
+
+PoliciesManagementClient().update(code, updates)
+
+> 修改策略，系统内置策略由 Authing 官方维护，不能修改和删除。
+
+
+#### 参数
+
+- `code` \<string\> 策略唯一标志 
+- `updates` \<Object\>  
+- `updates.description` \<string\> 描述 
+- `updates.statements` \<PolicyStatement[]\> 策略语句，详细格式与说明请见 https://docs.authing.co/docs/access-control/index.html 
+- `updates.newCode` \<string\> 新的唯一标志，如果传入，需要保证其在用户池内是唯一的。 
+
+#### 返回值
+
+-  `Promise<DeepPartial<Policy>>` 
+
+#### 示例
+
+```javascript
+const policy = await management.policies.update('CODE', { newCode: 'NEWCODE' });
+```
+      
+
+## 获取策略详情
+
+PoliciesManagementClient().detail(code)
+
+> 获取策略详情
+
+
+#### 参数
+
+- `code` \<string\> 策略唯一标志
+
+const policy = await management.policies.detail('CODE'); 
+
+#### 返回值
+
+-  `Promise<DeepPartial<Policy>>` 
+
+#### 示例
+
+
+      
+
+## 获取策略列表
+
+PoliciesManagementClient().list(options)
+
+> 获取策略列表
+
+
+#### 参数
+
+- `options` \<Object\>  
+- `options.page` \<number\>  默认值为 : `1`。
+- `options.limit` \<number\>  默认值为 : `10`。
+- `options.excludeDefault` \<boolean\> 是否排除系统默认资源 默认值为 : `true`。
+
+#### 返回值
+
+-  `Promise<DeepPartial<PaginatedPolicies>>` 
+
+#### 示例
+
+```javascript
+const { list, totalCount } = await management.policies.list({
+  excludeDefault: false // 包含系统默认的策略
+});
 ```
       
 

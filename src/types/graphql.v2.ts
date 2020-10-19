@@ -866,7 +866,7 @@ export type Mutation = {
   assignRole?: Maybe<CommonMessage>;
   /** 撤销角色 */
   revokeRole?: Maybe<CommonMessage>;
-  addUdf: UserDefinedField;
+  setUdf: UserDefinedField;
   removeUdf?: Maybe<CommonMessage>;
   setUdv?: Maybe<Array<UserDefinedData>>;
   removeUdv?: Maybe<Array<UserDefinedData>>;
@@ -1148,7 +1148,7 @@ export type MutationRevokeRoleArgs = {
   nodeCodes?: Maybe<Array<Scalars['String']>>;
 };
 
-export type MutationAddUdfArgs = {
+export type MutationSetUdfArgs = {
   targetType: UdfTargetType;
   key: Scalars['String'];
   dataType: UdfDataType;
@@ -1567,8 +1567,6 @@ export type UpdateUserpoolInput = {
   registerDisabled?: Maybe<Scalars['Boolean']>;
   allowedOrigins?: Maybe<Scalars['String']>;
   tokenExpiresAfter?: Maybe<Scalars['Int']>;
-  emailWhitelistEnabled?: Maybe<Scalars['Boolean']>;
-  phoneWhitelistEnabled?: Maybe<Scalars['Boolean']>;
   frequentRegisterCheck?: Maybe<FrequentRegisterCheckConfigInput>;
   loginFailCheck?: Maybe<LoginFailCheckConfigInput>;
   changePhoneStrategy?: Maybe<ChangePhoneStrategyInput>;
@@ -1781,24 +1779,6 @@ export type AddPolicyAssignmentsVariables = Exact<{
 
 export type AddPolicyAssignmentsResponse = {
   addPolicyAssignments: { message?: Maybe<string>; code?: Maybe<number> };
-};
-
-export type AddUdfVariables = Exact<{
-  targetType: UdfTargetType;
-  key: Scalars['String'];
-  dataType: UdfDataType;
-  label: Scalars['String'];
-  options?: Maybe<Scalars['String']>;
-}>;
-
-export type AddUdfResponse = {
-  addUdf: {
-    targetType: UdfTargetType;
-    dataType: UdfDataType;
-    key: string;
-    label: string;
-    options?: Maybe<string>;
-  };
 };
 
 export type AddUserToGroupVariables = Exact<{
@@ -3013,6 +2993,24 @@ export type SendEmailVariables = Exact<{
 
 export type SendEmailResponse = {
   sendEmail: { message?: Maybe<string>; code?: Maybe<number> };
+};
+
+export type SetUdfVariables = Exact<{
+  targetType: UdfTargetType;
+  key: Scalars['String'];
+  dataType: UdfDataType;
+  label: Scalars['String'];
+  options?: Maybe<Scalars['String']>;
+}>;
+
+export type SetUdfResponse = {
+  setUdf: {
+    targetType: UdfTargetType;
+    dataType: UdfDataType;
+    key: string;
+    label: string;
+    options?: Maybe<string>;
+  };
 };
 
 export type SetUdvVariables = Exact<{
@@ -5010,17 +5008,6 @@ export const AddPolicyAssignmentsDocument = `
   }
 }
     `;
-export const AddUdfDocument = `
-    mutation addUdf($targetType: UDFTargetType!, $key: String!, $dataType: UDFDataType!, $label: String!, $options: String) {
-  addUdf(targetType: $targetType, key: $key, dataType: $dataType, label: $label, options: $options) {
-    targetType
-    dataType
-    key
-    label
-    options
-  }
-}
-    `;
 export const AddUserToGroupDocument = `
     mutation addUserToGroup($userIds: [String!]!, $code: String) {
   addUserToGroup(userIds: $userIds, code: $code) {
@@ -6095,6 +6082,17 @@ export const SendEmailDocument = `
   sendEmail(email: $email, scene: $scene) {
     message
     code
+  }
+}
+    `;
+export const SetUdfDocument = `
+    mutation setUdf($targetType: UDFTargetType!, $key: String!, $dataType: UDFDataType!, $label: String!, $options: String) {
+  setUdf(targetType: $targetType, key: $key, dataType: $dataType, label: $label, options: $options) {
+    targetType
+    dataType
+    key
+    label
+    options
   }
 }
     `;

@@ -17,15 +17,15 @@ const managementClient = new ManagementClient({
    host: process.env.AUTHING_HOST
 })
 managementClient.udf.list // 获取自定义字段元数据列表
-managementClient.udf.create // 创建自定义字段
+managementClient.udf.set // 设置自定义字段
 managementClient.udf.delete // 删除自定义字段
 ```
 
-## 添加自定义字段定义
+## 设置自定义字段元数据
 
-UdfManagementClient().create(自定义字段目标类型，, key, dataType, label)
+UdfManagementClient().set(自定义字段目标类型，, key, dataType, label)
 
-> 添加自定义字段定义，会返回用户池最新的自定义字段定义列表。
+> 设置自定义字段元数据，如果该字段不存在会自动创建。
 
 
 #### 参数
@@ -43,7 +43,7 @@ UdfManagementClient().create(自定义字段目标类型，, key, dataType, labe
 
 ```javascript
 import { ManagementClient, UdfTargetType, UdfDataType  } from "authing-js-sdk"
-const udf = await management.udf.create(
+const udf = await management.udf.set(
    UdfTargetType.User,
    'school',
    UdfDataType.String,
@@ -51,35 +51,24 @@ const udf = await management.udf.create(
 );
 ```
 ```javascript
+// 如果 age 这个自定义字段不存在，第一次会创建
+
 import { ManagementClient, UdfTargetType, UdfDataType  } from "authing-js-sdk"
-const udf = await management.udf.create(
+const udf = await management.udf.set(
    UdfTargetType.User,
    'age',
    UdfDataType.Number,
    '年龄'
 );
-```
-      
 
-## 获取自定义字段定义
+// 如果 age 字段之前创建过，会修改该字段的配置
 
-UdfManagementClient().list(targetType)
-
-> 查询用户池定义的自定义字段
-
-
-#### 参数
-
-- `targetType` \<UdfTargetType\> 自定义字段目标类型， USER 表示用户、ROLE 表示角色。 
-
-#### 返回值
-
--  `Promise<UserDefinedField[]>` 
-
-#### 示例
-
-```javascript
-const list = await management.udf.list(UdfTargetType.User);
+const udf = await management.udf.set(
+   UdfTargetType.User,
+   'age',
+   UdfDataType.Number,
+   '新的描述信息'
+);
 ```
       
 
@@ -103,5 +92,27 @@ UdfManagementClient().delete(自定义字段目标类型，, key)
 
 ```javascript
 await management.udf.delete(UdfTargetType.User, 'school');
+```
+      
+
+## 获取自定义字段定义
+
+UdfManagementClient().list(targetType)
+
+> 查询用户池定义的自定义字段
+
+
+#### 参数
+
+- `targetType` \<UdfTargetType\> 自定义字段目标类型， USER 表示用户、ROLE 表示角色。 
+
+#### 返回值
+
+-  `Promise<UserDefinedField[]>` 
+
+#### 示例
+
+```javascript
+const list = await management.udf.list(UdfTargetType.User);
 ```
       
