@@ -20,24 +20,22 @@ managementClient.whitelist.add // 添加白名单记录
 managementClient.whitelist.remove // 移除白名单记录
 ```
 
-## list
-
-获取白名单记录
+## 获取白名单记录
 
 WhitelistManagementClient().list(type)
 
 > 获取白名单记录
 
 
-#### Arguments
+#### 参数
 
 - `type` \<WhitelistType\> 白名单类型，USERNAME 为用户名、Email 为邮箱、Phone 为手机号。 
 
-#### Returns
+#### 返回值
 
 -  `Promise<WhiteList[]>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 import { WhitelistType } from "authing-js-sdk"
@@ -45,74 +43,68 @@ const list = await management.whitelist.list(WhitelistType.Email);
 ```
       
 
-## add
-
-添加白名单
+## 添加白名单
 
 WhitelistManagementClient().add(type, list)
 
 > 添加白名单
 
 
-#### Arguments
+#### 参数
 
 - `type` \<WhitelistType\> 白名单类型，USERNAME 为用户名、Email 为邮箱、Phone 为手机号。 
 - `list` \<string[]\> 白名单列表，请注意邮箱不区分大小写。 
 
-#### Returns
+#### 返回值
 
 -  `Promise<WhiteList[]>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 await management.whitelist.add(WhitelistType.Email, 'a@example.com');
 ```
       
 
-## remove
-
-移除白名单
+## 移除白名单
 
 WhitelistManagementClient().remove(type, list)
 
 > 移除白名单
 
 
-#### Arguments
+#### 参数
 
 - `type` \<WhitelistType\> 白名单类型，USERNAME 为用户名、Email 为邮箱、Phone 为手机号。 
 - `list` \<string[]\> 白名单列表，请注意邮箱不区分大小写。 
 
-#### Returns
+#### 返回值
 
 -  `Promise<WhiteList[]>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 await management.whitelist.remove(WhitelistType.Email, 'a@example.com');
 ```
       
 
-## enable
-
-开启白名单
+## 开启白名单
 
 WhitelistManagementClient().enable(type)
 
 > 开启白名单
 
 
-#### Arguments
+#### 参数
 
 - `type` \<WhitelistType\> 白名单类型，USERNAME 为用户名、Email 为邮箱、Phone 为手机号。 
 
-#### Returns
+#### 返回值
 
 
 
-#### Examples
+#### 示例
 
 ```javascript
 // 添加白名单
@@ -127,24 +119,22 @@ await authing.registerByEmail(email, 'b@example.com');
 ```
       
 
-## disable
-
-关闭白名单
+## 关闭白名单
 
 WhitelistManagementClient().disable(type)
 
 > 关闭白名单
 
 
-#### Arguments
+#### 参数
 
 - `type` \<WhitelistType\> 白名单类型，USERNAME 为用户名、Email 为邮箱、Phone 为手机号。 
 
-#### Returns
+#### 返回值
 
 
 
-#### Examples
+#### 示例
 
 
       

@@ -18,34 +18,30 @@ managementClient.org.moveNode // 获取组织机构详情
 managementClient.org.listMembers // 获取节点用户列表
 ```
 
-## list
-
-获取用户池组织机构列表
+## 获取用户池组织机构列表
 
 OrgManagementClient().list(page, limit)
 
 > 获取用户池组织机构列表
 
 
-#### Arguments
+#### 参数
 
 - `page` \<number\>  默认值为 : `1`。
 - `limit` \<number\>  默认值为 : `10`。
 
-#### Returns
+#### 返回值
 
 -  `null` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { totalCount, list } = await managementClient.org.list()
 ```
       
 
-## create
-
-创建组织机构
+## 创建组织机构
 
 OrgManagementClient().create(name, description, code)
 
@@ -53,33 +49,31 @@ OrgManagementClient().create(name, description, code)
 如果你想将一个完整的组织树导入进来，请使用 importByJson 方法。
 
 
-#### Arguments
+#### 参数
 
 - `name` \<string\> 组织机构名称，该名称会作为该组织机构根节点的名称。 
 - `description` \<string\> 根节点描述 
 - `code` \<string\> 根节点唯一标志，必须为合法的英文字符。 
 
-#### Returns
+#### 返回值
 
 
 
-#### Examples
+#### 示例
 
 ```javascript
 const org = await managementClient.org.create('北京非凡科技', '北京非凡科技有限公司', 'feifan');
 ```
       
 
-## addNode
-
-添加节点
+## 添加节点
 
 OrgManagementClient().addNode(orgId, parentNodeId, data)
 
 > 在组织机构中添加一个节点
 
 
-#### Arguments
+#### 参数
 
 - `orgId` \<string\> 组织机构 ID 
 - `parentNodeId` \<string\> 父节点 ID 
@@ -88,11 +82,11 @@ OrgManagementClient().addNode(orgId, parentNodeId, data)
 - `data.code` \<string\> 节点唯一标志 
 - `data.description` \<string\> 节点描述信息 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Org>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const org = await managementClient.org.create('北京非凡科技', '北京非凡科技有限公司', 'feifan');
@@ -103,16 +97,14 @@ const newOrg = await managementClient.org.addNode(orgId, rootNode.id, { name: '�
 ```
       
 
-## updateNode
-
-修改节点
+## 修改节点
 
 OrgManagementClient().updateNode(id, updates)
 
 > 修改节点数据
 
 
-#### Arguments
+#### 参数
 
 - `id` \<string\> 节点 ID 
 - `updates` \<Object\> 修改数据 
@@ -120,11 +112,11 @@ OrgManagementClient().updateNode(id, updates)
 - `updates.code` \<string\> 节点唯一标志 
 - `updates.description` \<string\> 节点描述信息 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Org>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 await managementClient.org.updateNode("NDOEID", {
@@ -133,141 +125,129 @@ await managementClient.org.updateNode("NDOEID", {
 ```
       
 
-## findById
-
-获取组织机构详情
+## 获取组织机构详情
 
 OrgManagementClient().findById(id)
 
 > 通过组织机构 ID 获取组织机构详情
 
 
-#### Arguments
+#### 参数
 
 - `id` \<string\> 组织机构 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Org>` 
 
-#### Examples
+#### 示例
 
 
       
 
-## deleteById
-
-undefined
+## undefined
 
 OrgManagementClient().deleteById(id)
 
 > 删除组织机构树
 
 
-#### Arguments
+#### 参数
 
 - `id` \<string\> 组织机构 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 
       
 
-## deleteNode
-
-删除节点
+## 删除节点
 
 OrgManagementClient().deleteNode(orgId, nodeId)
 
 > 删除组织机构树中的某一个节点
 
 
-#### Arguments
+#### 参数
 
 - `orgId` \<string\> 组织机构 ID 
 - `nodeId` \<string\> 节点 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 
       
 
-## moveNode
-
-移动节点
+## 移动节点
 
 OrgManagementClient().moveNode(orgId, nodeId, targetParentId)
 
 > 移动组织机构节点，移动某节点时需要指定该节点新的父节点。注意不能将一个节点移动到自己的子节点下面。
 
 
-#### Arguments
+#### 参数
 
 - `orgId` \<string\> 组织机构 ID 
 - `nodeId` \<string\> 需要移动的节点 ID 
 - `targetParentId` \<string\> 目标父节点 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Org>` 最新的树结构
 
-#### Examples
+#### 示例
 
 ```javascript
 await managementClient.org.moveNode("ORGID", "NODEID", "TRAGET_NODE_ID")
 ```
       
 
-## isRootNode
-
-判断是否为根节点
+## 判断是否为根节点
 
 OrgManagementClient().isRootNode(orgId, nodeId)
 
 > 判断一个节点是不是组织树的根节点
 
 
-#### Arguments
+#### 参数
 
 - `orgId` \<string\> 组织机构 ID 
 - `nodeId` \<string\> 组织机构 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<boolean>` 
 
-#### Examples
+#### 示例
 
 
       
 
-## listChildren
-
-获取子节点列表
+## 获取子节点列表
 
 OrgManagementClient().listChildren(orgId, nodeId)
 
 > 查询一个节点的子节点列表
 
 
-#### Arguments
+#### 参数
 
 - `orgId` \<string\> 组织机构 ID 
 - `nodeId` \<string\> 组织机构 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Node[]>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 // 子节点列表
@@ -275,48 +255,44 @@ cosnt children = await managementClient.org.moveNode("ORGID", "NODEID")
 ```
       
 
-## rootNode
-
-获取根节点
+## 获取根节点
 
 OrgManagementClient().rootNode(orgId)
 
 > 获取一个组织的根节点
 
 
-#### Arguments
+#### 参数
 
 - `orgId` \<string\> 组织机构 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Node[]>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const rootNode = await managementClient.org.rootNode("ORGID")
 ```
       
 
-## importByJson
-
-undefined
+## undefined
 
 OrgManagementClient().importByJson(json)
 
 > 通过一个 JSON 树结构导入组织机构
 
 
-#### Arguments
+#### 参数
 
 - `json` \<Object\> JSON 格式的树结构，详细格式请见示例代码。 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Node[]>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const tree = {
@@ -346,39 +322,35 @@ const org = await management.org.importByJson(tree);
 ```
       
 
-## addMembers
-
-添加成功
+## 添加成功
 
 OrgManagementClient().addMembers(nodeId, userIds)
 
 > 节点添加成员
 
 
-#### Arguments
+#### 参数
 
 - `nodeId` \<string\> 节点 ID 
 - `userIds` \<string[]\> 用户 ID 列表 
 
-#### Returns
+#### 返回值
 
 -  `Promise<PaginatedUsers>` 
 
-#### Examples
+#### 示例
 
 
       
 
-## listMembers
-
-获取节点成员
+## 获取节点成员
 
 OrgManagementClient().listMembers(nodeId, options)
 
 > 获取节点成员，可以获取直接添加到该节点中的用户，也可以获取到该节点子节点的用户。
 
 
-#### Arguments
+#### 参数
 
 - `nodeId` \<string\> 节点 ID 
 - `options` \<Object\> 查询参数 
@@ -386,34 +358,32 @@ OrgManagementClient().listMembers(nodeId, options)
 - `options.limit` \<number\>  默认值为 : `10`。
 - `options.includeChildrenNodes` \<boolean\> 是否获取所有子节点的成员 默认值为 : `false`。
 
-#### Returns
+#### 返回值
 
 -  `Promise<PaginatedUsers>` 
 
-#### Examples
+#### 示例
 
 
       
 
-## removeMembers
-
-添加成功
+## 添加成功
 
 OrgManagementClient().removeMembers(nodeId, userIds)
 
 > 节点添加成员
 
 
-#### Arguments
+#### 参数
 
 - `nodeId` \<string\> 节点 ID 
 - `userIds` \<string[]\> 用户 ID 列表 
 
-#### Returns
+#### 返回值
 
 -  `Promise<PaginatedUsers>` 
 
-#### Examples
+#### 示例
 
 
       

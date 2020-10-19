@@ -24,16 +24,14 @@ managementClient.users.listRoles // 获取用户角色列表
 managementClient.users.search // 搜索用户
 ```
 
-## create
-
-创建用户
+## 创建用户
 
 UsersManagementClient().create(userInfo)
 
 > 此接口将以管理员身份创建用户，不需要进行手机号验证码检验等安全检测。
 
 
-#### Arguments
+#### 参数
 
 - `userInfo` \<CreateUserInput\> 用户资料 
 - `userInfo.email` \<string\> 邮箱，用户池内唯一 
@@ -77,11 +75,11 @@ UsersManagementClient().create(userInfo)
 - `userInfo.province` \<string\> 省份 
 - `userInfo.country` \<string\> 国家 
 
-#### Returns
+#### 返回值
 
 -  `Promise<User>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const user = await managementClient.users.create({
@@ -99,16 +97,14 @@ const user = await managementClient.users.create({
 ```
       
 
-## update
-
-修改用户资料
+## 修改用户资料
 
 UsersManagementClient *().update(id, updates)
 
 > 修改用户资料
 
 
-#### Arguments
+#### 参数
 
 - `id` \<string\> 用户 ID 
 - `updates` \<UpdateUserInput\> 修改的用户资料 
@@ -154,11 +150,11 @@ UsersManagementClient *().update(id, updates)
 - `updates.province` \<string\> 省份 
 - `updates.country` \<string\> 国家 
 
-#### Returns
+#### 返回值
 
 -  `Promise<User>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const user = await managementClient.users.update("USERID", {
@@ -174,148 +170,136 @@ const user = await managementClient.users.update({
 ```
       
 
-## detail
-
-获取用户详情
+## 获取用户详情
 
 UsersManagementClient().detail(userId)
 
 > 通过用户 ID 获取用户详情，如果你想通过 token 获取用户详情，请使用 AuthenticationClient SDK 。
 
 
-#### Arguments
+#### 参数
 
 - `userId` \<string\> 用户 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<User>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const user = await management.users.detail('USERID');
 ```
       
 
-## delete
-
-删除用户
+## 删除用户
 
 UsersManagementClient().delete(userId)
 
 > 删除用户
 
 
-#### Arguments
+#### 参数
 
 - `userId` \<string\> 用户 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const user = await management.users.delete('USERID');
 ```
       
 
-## deleteMany
-
-批量删除用户
+## 批量删除用户
 
 UsersManagementClient().deleteMany(userIds)
 
 > 批量删除用户
 
 
-#### Arguments
+#### 参数
 
 - `userIds` \<string[]\> 用户 ID 列表 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const user = await management.users.deleteMany(['USERID']);
 ```
       
 
-## batch
-
-批量获取用户
+## 批量获取用户
 
 UsersManagementClient().batch(userIds)
 
 > 通过 ID 批量获取用户详情
 
 
-#### Arguments
+#### 参数
 
 - `userIds` \<string[]\> 用户 ID 列表 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const users = await management.users.batch(['USERID']);
 ```
       
 
-## list
-
-获取用户列表
+## 获取用户列表
 
 UsersManagementClient().list(page, limit)
 
 > 获取用户池用户列表
 
 
-#### Arguments
+#### 参数
 
 - `page` \<number\> 页码数, 从 1 开始 默认值为 : `1`。
 - `limit` \<number\> 每页包含的用户数 默认值为 : `1`。
 
-#### Returns
+#### 返回值
 
 -  `null` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const user = await management.users.list();
 ```
       
 
-## exists
-
-检查用户是否存在
+## 检查用户是否存在
 
 UsersManagementClient().exists(options)
 
 > 检查用户是否存在，目前可检测的字段有用户名、邮箱、手机号。
 
 
-#### Arguments
+#### 参数
 
 - `options` \<Object\>  
 - `options.username` \<string\> 用户名，区分大小写。 
 - `options.email` \<string\> 邮箱，邮箱不区分大小写。 
 - `options.phone` \<string\> 手机号 
 
-#### Returns
+#### 返回值
 
 -  `Promise<boolean>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const exists = await management.users.exists({
@@ -324,41 +308,37 @@ const exists = await management.users.exists({
 ```
       
 
-## find
-
-查找用户
+## 查找用户
 
 UsersManagementClient().find(options)
 
 > 通过用户名、邮箱、手机号查找用户
 
 
-#### Arguments
+#### 参数
 
 - `options` \<Object\>  
 - `options.username` \<string\> 用户名，区分大小写。 
 - `options.email` \<string\> 邮箱，邮箱不区分大小写。 
 - `options.phone` \<string\> 手机号 
 
-#### Returns
+#### 返回值
 
 
 
-#### Examples
+#### 示例
 
 
       
 
-## search
-
-搜索用户
+## 搜索用户
 
 UsersManagementClient().search(query, options, page, limit)
 
 > 根据关键字搜索用户
 
 
-#### Arguments
+#### 参数
 
 - `query` \<null\> 搜索内容 
 - `options` \<string[]\> 选项 
@@ -367,35 +347,33 @@ UsersManagementClient().search(query, options, page, limit)
 - `page` \<number\>  默认值为 : `1`。
 - `limit` \<number\>  默认值为 : `10`。
 
-#### Returns
+#### 返回值
 
 -  `Promise<PaginatedUsers>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { totalCount, list } = await management.users.search("Bob");
 ```
       
 
-## refreshToken
-
-刷新用户 token
+## 刷新用户 token
 
 UsersManagementClient().refreshToken(id)
 
 > 刷新用户 token
 
 
-#### Arguments
+#### 参数
 
 - `id` \<string\> 用户 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<RefreshToken>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { token } = await management.users.refreshToken("USERID");
@@ -408,148 +386,136 @@ const data = await management.checkLoginStatus(token, {
 ```
       
 
-## listGroups
-
-获取用户分组列表
+## 获取用户分组列表
 
 UsersManagementClient().listGroups(userId)
 
 > 获取用户的分组列表
 
 
-#### Arguments
+#### 参数
 
 - `userId` \<string\> 用户 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<DeepPartial<PaginatedGroups>>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { list, totalCount} = await management.users.listGroups("USERID");
 ```
       
 
-## addGroup
-
-加入分组
+## 加入分组
 
 UsersManagementClient().addGroup(userId, group)
 
 > 将用户加入分组
 
 
-#### Arguments
+#### 参数
 
 - `userId` \<string\> 用户 ID 
 - `group` \<string\> 分组 code 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { code, message } = await management.users.addGroup("USERID", "GROUP_CODE");
 ```
       
 
-## removeGroup
-
-退出分组
+## 退出分组
 
 UsersManagementClient().removeGroup(userId, group)
 
 > 退出分组
 
 
-#### Arguments
+#### 参数
 
 - `userId` \<string\> 用户 ID 
 - `group` \<string\> 分组 code 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { code, message } = await management.users.removeGroup("USERID", "GROUP_CODE");
 ```
       
 
-## listRoles
-
-获取用户角色列表
+## 获取用户角色列表
 
 UsersManagementClient().listRoles(userId)
 
 > 获取用户的角色列表
 
 
-#### Arguments
+#### 参数
 
 - `userId` \<string\> 用户 ID 
 
-#### Returns
+#### 返回值
 
 -  `Promise<DeepPartial<PaginatedRoles>>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { list, totalCount} = await management.users.listRoles("USERID");
 ```
       
 
-## addRoles
-
-添加角色
+## 添加角色
 
 UsersManagementClient().addRoles(userId, roles)
 
 > 将用户加入角色
 
 
-#### Arguments
+#### 参数
 
 - `userId` \<string\> 用户 ID 
 - `roles` \<string\> 角色 code 列表 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { code, message } = await management.users.addRoles("USERID", ["ROLEA"]);
 ```
       
 
-## removeRoles
-
-移除角色
+## 移除角色
 
 UsersManagementClient().removeRoles(userId, roles)
 
 > 将用户从角色中移除
 
 
-#### Arguments
+#### 参数
 
 - `userId` \<string\> 用户 ID 
 - `roles` \<string\> 角色 code 列表 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { code, message } = await management.users.removeRoles("USERID", ["ROLEA"]);

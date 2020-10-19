@@ -21,27 +21,25 @@ managementClient.udf.create // 创建自定义字段
 managementClient.udf.delete // 删除自定义字段
 ```
 
-## create
-
-添加自定义字段定义
+## 添加自定义字段定义
 
 UdfManagementClient().create(自定义字段目标类型，, key, dataType, label)
 
 > 添加自定义字段定义，会返回用户池最新的自定义字段定义列表。
 
 
-#### Arguments
+#### 参数
 
 - `自定义字段目标类型，` \<UdfTargetType\> USER 表示用户、ROLE 表示角色。 
 - `key` \<string\> 字段 key 
 - `dataType` \<UdfDataType\> 数据类型，目前共支持五种数据类型。STRING 为字符串、NUMBER 为数字、DATETIME 为日期、BOOLEAN 为 boolean 值、OBJECT 为对象。 
 - `label` \<string\> 字段 Label，一般是一个 Human Readable 字符串。 
 
-#### Returns
+#### 返回值
 
 -  `Promise<UserDefinedField[]>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 import { ManagementClient, UdfTargetType, UdfDataType  } from "authing-js-sdk"
@@ -63,49 +61,45 @@ const udf = await management.udf.create(
 ```
       
 
-## list
-
-获取自定义字段定义
+## 获取自定义字段定义
 
 UdfManagementClient().list(targetType)
 
 > 查询用户池定义的自定义字段
 
 
-#### Arguments
+#### 参数
 
 - `targetType` \<UdfTargetType\> 自定义字段目标类型， USER 表示用户、ROLE 表示角色。 
 
-#### Returns
+#### 返回值
 
 -  `Promise<UserDefinedField[]>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const list = await management.udf.list(UdfTargetType.User);
 ```
       
 
-## delete
-
-删除自定义字段
+## 删除自定义字段
 
 UdfManagementClient().delete(自定义字段目标类型，, key)
 
 > 删除自定义字段
 
 
-#### Arguments
+#### 参数
 
 - `自定义字段目标类型，` \<UdfTargetType\> USER 表示用户、ROLE 表示角色。 
 - `key` \<string\> 字段 key 
 
-#### Returns
+#### 返回值
 
 -  `Promise<UserDefinedField[]>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 await management.udf.delete(UdfTargetType.User, 'school');

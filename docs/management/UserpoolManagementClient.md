@@ -21,40 +21,36 @@ managementClient.userpool.update // 修改用户池配置
 managementClient.userpool.env // 获取用户池配置的环境变量列表
 ```
 
-## detail
-
-查询用户池配置
+## 查询用户池配置
 
 UserPoolManagementClient().detail()
 
 > 查询用户池配置
 
 
-#### Arguments
+#### 参数
 
 
 
-#### Returns
+#### 返回值
 
 -  `Promise<UserPool>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const userpool = await managementClient.userpool.detail()
 ```
       
 
-## update
-
-更新用户池配置
+## 更新用户池配置
 
 UserPoolManagementClient().update(updates)
 
 > 更新用户池配置
 
 
-#### Arguments
+#### 参数
 
 - `updates` \<UpdateUserpoolInput\>  
 - `updates.name` \<string\> 用户池名称 
@@ -81,11 +77,11 @@ UserPoolManagementClient().update(updates)
 - `updates.frequentRegisterCheck.timeInterval` \<Object\> 检测周期，单位为秒。 
 - `updates.frequentRegisterCheck.limit` \<Object\> 同一个周期内同一 IP 注册次数达到此数目时会触发频率限制。 
 
-#### Returns
+#### 返回值
 
 -  `Promise<UserPool>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const userpool = await managementClient.userpool.update({
@@ -94,73 +90,67 @@ const userpool = await managementClient.userpool.update({
 ```
       
 
-## listEnv
-
-获取环境变量列表
+## 获取环境变量列表
 
 UserPoolManagementClient().listEnv()
 
 > 获取用户池环境变量列表。用户池配置的环境变量可以在 pipeline 场景下使用，详情请见：https://docs.authing.co/extensibility/pipeline/env.html
 
 
-#### Arguments
+#### 参数
 
 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Env[]>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const envList = await managementClient.userpool.listEnv()
 ```
       
 
-## addEnv
-
-添加环境变量
+## 添加环境变量
 
 UserPoolManagementClient().addEnv(key, value)
 
 > 添加环境变量
 
 
-#### Arguments
+#### 参数
 
 - `key` \<string\> 环境变量键 
 - `value` \<any\> 环境变量值 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Env[]>` 返回最新的环境变量列表
 
-#### Examples
+#### 示例
 
 ```javascript
 const envList = await managementClient.userpool.addEnv('LARK_WEBHOOK', 'xxxxxxx') // 添加一个飞书群机器人 webhook 地址，之后可以在 pipeline 函数中使用（详细请见: https://docs.authing.co/extensibility/pipeline/usage.html）
 ```
       
 
-## removeEnv
-
-删除环境变量
+## 删除环境变量
 
 UserPoolManagementClient().removeEnv(key)
 
 > 删除环境变量
 
 
-#### Arguments
+#### 参数
 
 - `key` \<string\> 环境变量键 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Env[]>` 返回最新的环境变量列表
 
-#### Examples
+#### 示例
 
 ```javascript
 const envList = await managementClient.userpool.removeEnv('LARK_WEBHOOK')

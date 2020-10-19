@@ -20,27 +20,25 @@ managementClient.policies.create // 创建策略
 managementClient.policies.listUsers // 获取策略授权记录
 ```
 
-## list
-
-获取策略列表
+## 获取策略列表
 
 PoliciesManagementClient().list(options)
 
 > 获取策略列表
 
 
-#### Arguments
+#### 参数
 
 - `options` \<Object\>  
 - `options.page` \<number\>  默认值为 : `1`。
 - `options.limit` \<number\>  默认值为 : `10`。
 - `options.excludeDefault` \<boolean\> 是否排除系统默认资源 默认值为 : `true`。
 
-#### Returns
+#### 返回值
 
 -  `Promise<DeepPartial<PaginatedPolicies>>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { list, totalCount } = await management.policies.list({
@@ -49,50 +47,46 @@ const { list, totalCount } = await management.policies.list({
 ```
       
 
-## detail
-
-获取策略详情
+## 获取策略详情
 
 PoliciesManagementClient().detail(code)
 
 > 获取策略详情
 
 
-#### Arguments
+#### 参数
 
 - `code` \<string\> 策略唯一标志
 
 const policy = await management.policies.detail('CODE'); 
 
-#### Returns
+#### 返回值
 
 -  `Promise<DeepPartial<Policy>>` 
 
-#### Examples
+#### 示例
 
 
       
 
-## create
-
-添加策略
+## 添加策略
 
 PoliciesManagementClient().create(code, 策略语句，详细格式与说明请见, description)
 
 > 添加策略
 
 
-#### Arguments
+#### 参数
 
 - `code` \<string\> 策略唯一标志 
 - `策略语句，详细格式与说明请见` \<PolicyStatement[]\> https://docs.authing.co/docs/access-control/index.html 
 - `description` \<string\> 描述 
 
-#### Returns
+#### 返回值
 
 -  `Promise<DeepPartial<Policy>>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 import { PolicyEffect } from "authing-js-sdk"
@@ -109,16 +103,14 @@ const policy = await management.policies.create(code, statements);
 ```
       
 
-## update
-
-修改策略
+## 修改策略
 
 PoliciesManagementClient().update(code, updates)
 
 > 修改策略，系统内置策略由 Authing 官方维护，不能修改和删除。
 
 
-#### Arguments
+#### 参数
 
 - `code` \<string\> 策略唯一标志 
 - `updates` \<Object\>  
@@ -126,85 +118,79 @@ PoliciesManagementClient().update(code, updates)
 - `updates.statements` \<PolicyStatement[]\> 策略语句，详细格式与说明请见 https://docs.authing.co/docs/access-control/index.html 
 - `updates.newCode` \<string\> 新的唯一标志，如果传入，需要保证其在用户池内是唯一的。 
 
-#### Returns
+#### 返回值
 
 -  `Promise<DeepPartial<Policy>>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const policy = await management.policies.update('CODE', { newCode: 'NEWCODE' });
 ```
       
 
-## delete
-
-删除策略
+## 删除策略
 
 PoliciesManagementClient().delete(code)
 
 > 删除策略，系统内置策略由 Authing 官方维护，不能修改和删除。
 
 
-#### Arguments
+#### 参数
 
 - `code` \<string\> 策略唯一标志 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { code, message } = await management.policies.delete("CODE"); // 通过 code 是否为 200 判断操作是否成功
 ```
       
 
-## deleteMany
-
-批量删除策略
+## 批量删除策略
 
 PoliciesManagementClient().deleteMany(codeList)
 
 > 批量删除策略，系统内置策略由 Authing 官方维护，不能修改和删除。
 
 
-#### Arguments
+#### 参数
 
 - `codeList` \<string\> 策略唯一标志列表 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { code, message } = await management.policies.deleteMany(["CODE"]); // 通过 code 是否为 200 判断操作是否成功
 ```
       
 
-## listAssignments
-
-获取策略授权记录
+## 获取策略授权记录
 
 PoliciesManagementClient().listAssignments(code, page, limit)
 
 > 获取策略授权记录
 
 
-#### Arguments
+#### 参数
 
 - `code` \<string\> 策略唯一标志 
 - `page` \<number\>  默认值为 : `1`。
 - `limit` \<number\>  默认值为 : `10`。
 
-#### Returns
+#### 返回值
 
 -  `Promise<PaginatedPolicyAssignment>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const { totalCount, list } = await management.policies.listAssignments("CODE");
@@ -226,26 +212,24 @@ const { totalCount, list } = await management.policies.listAssignments("CODE");
 ```
       
 
-## addAssignments
-
-添加策略授权
+## 添加策略授权
 
 PoliciesManagementClient().addAssignments(policies, targetType, targetIdentifiers)
 
 > 添加策略授权，可以将策略授权给用户和角色，授权给角色的策略会被该角色下的所有用户继承 。此接口可以进行批量操作。
 
 
-#### Arguments
+#### 参数
 
 - `policies` \<string[]\> 策略 code 列表 
 - `targetType` \<PolicyAssignmentTargetType\> 可选值为 USER (用户) 和 ROLE (角色) 
 - `targetIdentifiers` \<string[]\> 用户 id 列表和角色 code 列表 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 import { PolicyAssignmentTargetType } from "authing-js-sdk"
@@ -264,26 +248,24 @@ await management.policies.addAssignments(
 ```
       
 
-## removeAssignments
-
-撤销策略授权
+## 撤销策略授权
 
 PoliciesManagementClient().removeAssignments(policies, targetType, targetIdentifiers)
 
 > 撤销策略授权，此接口可以进行批量操作。
 
 
-#### Arguments
+#### 参数
 
 - `policies` \<string[]\> 策略 code 列表 
 - `targetType` \<PolicyAssignmentTargetType\> 可选值为 USER (用户) 和 ROLE (角色) 
 - `targetIdentifiers` \<string[]\> 用户 id 列表和角色 code 列表 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 import { PolicyAssignmentTargetType } from "authing-js-sdk"

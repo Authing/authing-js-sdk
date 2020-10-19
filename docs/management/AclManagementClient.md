@@ -20,26 +20,24 @@ managementClient.acl.allow // 允许某个用户对某个资源进行某个操�
 managementClient.acl.isAllowed // 判断某个用户是否对某个资源有某个操作权限
 ```
 
-## allow
-
-允许某个用户对某个资源进行某个操作
+## 允许某个用户对某个资源进行某个操作
 
 AclManagementClient().allow(userId, action, resource)
 
 > 允许某个用户对某个资源进行某个操作
 
 
-#### Arguments
+#### 参数
 
 - `userId` \<string\> 用户 ID 
 - `action` \<string\> 操作名称，推荐使用 \<resourceType\>:\<actionName\> 的格式，如 `books:edit`, `books:list` 
 - `resource` \<string\> 资源名称, 必须为 \<resourceType\>:\<resourceId\> 格式或者为 *, 如 `*`, `books:123`, `books:*` 
 
-#### Returns
+#### 返回值
 
 -  `Promise<CommonMessage>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 AclManagementClient().allow('USERID1', 'books:123', 'books:read')
@@ -53,26 +51,24 @@ AclManagementClient().isAllowed('USERID2', 'books:124', 'books:edit') // true
 ```
       
 
-## isAllowed
-
-判断某个用户是否对某个资源有某个操作权限
+## 判断某个用户是否对某个资源有某个操作权限
 
 AclManagementClient().isAllowed(userId, action, resource)
 
 > 判断某个用户是否对某个资源有某个操作权限
 
 
-#### Arguments
+#### 参数
 
 - `userId` \<string\> 用户ID 
 - `action` \<string\> 操作名称，推荐使用 \<resourceType\>:\<actionName\> 的格式，如 `books:edit`, `books:list` 
 - `resource` \<string\> 资源名称, 必须为 \<resourceType\>:\<resourceId\> 格式或者为 *, 如 `*`, `books:123`, `books:*` 
 
-#### Returns
+#### 返回值
 
 -  `Promise<boolean>` 是否具备操作权限
 
-#### Examples
+#### 示例
 
 ```javascript
 AclManagementClient().isAllowed('USERID', 'books:*', 'books:edit')

@@ -25,16 +25,14 @@ const authenticationClient = new AuthenticationClient({
 authenticationClient.qrcode.startScanning() # 开始扫码登录
 ```
 
-## startScanning
-
-一键开始扫码
+## 一键开始扫码
 
 QrCodeAuthenticationClient().startScanning(domId, options)
 
 > 一键开始扫码
 
 
-#### Arguments
+#### 参数
 
 - `domId` \<string\> DOM 元素的 ID。 
 - `options` \<Object\>  
@@ -68,11 +66,11 @@ ticket 可以用来换取完整的用户信息，相关接口见 https://docs.au
 - `options.tips.retry` \<number\>  
 - `options.tips.failed` \<number\>  
 
-#### Returns
+#### 返回值
 
 -  `null` 
 
-#### Examples
+#### 示例
 
 ```javascript
 authenticationClient.wxqrcode.startScanning("qrcode", {
@@ -84,24 +82,22 @@ authenticationClient.wxqrcode.startScanning("qrcode", {
 ```
       
 
-## geneCode
-
-生成二维码
+## 生成二维码
 
 QrCodeAuthenticationClient().geneCode()
 
 > 生成二维码
 
 
-#### Arguments
+#### 参数
 
 
 
-#### Returns
+#### 返回值
 
 -  `Promise<QRCodeGenarateResult>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const authing = new AuthenticationClient({
@@ -114,24 +110,22 @@ const { url, random } = await authing.wxqrcode.geneCode()
 ```
       
 
-## checkStatus
-
-检测扫码状态
+## 检测扫码状态
 
 QrCodeAuthenticationClient().checkStatus(random)
 
 > 检测扫码状态
 
 
-#### Arguments
+#### 参数
 
 - `random` \<string\>  
 
-#### Returns
+#### 返回值
 
 -  `Promise<QRCodeStatus>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const authing = new AuthenticationClient({
@@ -144,24 +138,22 @@ const { random, status, ticket, userInfo } = await authing.wxqrcode.checkStatus(
 ```
       
 
-## exchangeUserInfo
-
-使用 ticket 交换用户信息
+## 使用 ticket 交换用户信息
 
 QrCodeAuthenticationClient().exchangeUserInfo(ticket)
 
 > 使用 ticket 交换用户信息
 
 
-#### Arguments
+#### 参数
 
 - `ticket` \<string\> ticket 
 
-#### Returns
+#### 返回值
 
 -  `Promise<Partial<User>>` 
 
-#### Examples
+#### 示例
 
 ```javascript
 const authing = new AuthenticationClient({
@@ -172,16 +164,14 @@ const user = await authing.wxqrcode.exchangeUserInfo('TICKET')
 ```
       
 
-## startPolling
-
-开始轮询二维码状态
+## 开始轮询二维码状态
 
 QrCodeAuthenticationClient().startPolling(random, options)
 
 > 开始轮询二维码状态
 
 
-#### Arguments
+#### 参数
 
 - `random` \<string\> 二维码唯一 ID 
 - `options` \<Object\>  
@@ -197,11 +187,11 @@ ticket 可以用来换取完整的用户信息，相关接口见 https://docs.au
 - `options.onError` \<Function\> 获取二维码状态失败事件回调函数。常见原因为网络失败等，每次查询失败时都会回调。回调参数 data 示例如 {"code": 2241,"message": "二维码不存在" } 
 - `options.onExpired` \<Function\> 二维码失效时被回调，只回调一次，之后轮询结束。 
 
-#### Returns
+#### 返回值
 
 -  `null` 
 
-#### Examples
+#### 示例
 
 
       

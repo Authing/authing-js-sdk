@@ -49,24 +49,22 @@ for (let file of files) {
     let doc = ''
     if (!class_) {
       doc = `
-## ${name}
-
-${name_zh}
+## ${name_zh}
 
 ${memberof}().${name}(${args})
 
 > ${description}
 
 
-#### Arguments
+#### 参数
 
 ${params.map(param => `- \`${param.name}\` \\<${param.type}\\> ${param.description} ${param.default ? `默认值为 : \`${param.default}\`。` : ''}`).join('\n')}
 
-#### Returns
+#### 返回值
 
 ${returns ? `- ${returns.name} \`${returns.type}\` ${returns.description}` : ''}
 
-#### Examples
+#### 示例
 
 ${examples.map(x => `\`\`\`javascript\n${x.value.trim()}\n\`\`\``).join('\n')}
       `
