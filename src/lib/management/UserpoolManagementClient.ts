@@ -7,7 +7,7 @@ import { getUserPoolDetail } from '../graphqlapi';
 import { HttpClient } from '../common/HttpClient';
 
 /**
- * @name UserPoolManagementClient Authing 用户池配置管理模块
+ * @name UserPoolManagementClient
  * @description Authing 用户池配置管理模块。
  *
  * 此模块可以通过使用 API 管理用户池配置，以及管理环境变量（详细文档请见）。
@@ -26,7 +26,7 @@ import { HttpClient } from '../common/HttpClient';
  * managementClient.userpool.env // 获取用户池配置的环境变量列表
  * \`\`\`
  *
- * @class UsersManagementClient
+ * @class UsersManagementClient 用户池配置管理
  */
 export class UserPoolManagementClient {
   options: ManagementClientOptions;

@@ -18,6 +18,25 @@ import {
   PaginatedUsers
 } from '../../types/graphql.v2';
 
+/**
+ * @class GroupsManagementClient 分组管理
+ * @description 此模块用于管理 Authing 分组，可以进行分组的增删改查、分组添加/删除用户、分组添加/删除策略 等操作。
+ *
+ * 请使用以下方式使用该模块，而不要直接初始化该模块：
+ * \`\`\`javascript
+ * import { ManagementClient } from "authing-js-sdk"
+ * const managementClient = new ManagementClient({
+ *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+ *    secret: process.env.AUTHING_USERPOOL_SECRET,
+ *    host: process.env.AUTHING_HOST
+ * })
+ * managementClient.groups.list // 获取分组列表
+ * managementClient.groups.create // 创建分组
+ * managementClient.groups.listUsers // 获取分组用户列表
+ * \`\`\`
+ *
+ * @name GroupsManagementClient
+ */
 export class GroupsManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;

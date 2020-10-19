@@ -14,7 +14,7 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 
 /**
- * @name WhitelistManagementClient Authing 注册白名单管理
+ * @name WhitelistManagementClient
  * @description 为你的用户池配置一个注册白名单，类似于邀请注册规则，开启后，只有白名单里的用户才能进行注册。 Authing 目前支持的白名单方式有手机号、邮箱、用户名。
  *
  * 此模块可以用于对注册白名单进行管理。
@@ -32,7 +32,7 @@ import { ManagementClientOptions } from './types';
  * managementClient.whitelist.remove // 移除白名单记录
  * \`\`\`
  *
- * @class WhitelistManagementClient
+ * @class WhitelistManagementClient 注册白名单管理
  */
 export class WhitelistManagementClient {
   options: ManagementClientOptions;

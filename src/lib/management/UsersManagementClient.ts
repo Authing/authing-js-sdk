@@ -32,7 +32,7 @@ import {
 } from '../../types/graphql.v2';
 
 /**
- * @name UsersManagementClient Authing 用户管理模块
+ * @name UsersManagementClient
  * @description Authing 用户管理模块。
  *
  * 此模块可以进行用户目录增删改查、搜索用户、刷新用户 token、管理用户分组、管理用户角色、管理用户策略授权等操作。
@@ -54,7 +54,7 @@ import {
  * managementClient.users.search // 搜索用户
  * \`\`\`
  *
- * @class UsersManagementClient
+ * @class UsersManagementClient 用户管理
  */
 export class UsersManagementClient {
   options: ManagementClientOptions;

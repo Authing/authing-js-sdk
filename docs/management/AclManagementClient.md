@@ -1,7 +1,7 @@
+
+# 访问控制管理
+
 [[toc]]
-
-
-# class AclManagementClient
 
 > Authing 基于 PBAC（Policy Based Access Control，基于策略的访问控制）构建权限模型，
 可以和 RBAC （Role Based Access Control，基于角色的访问控制）结合，实现非常灵活、精细化的权限控制。
@@ -43,13 +43,13 @@ AclManagementClient().allow(userId, action, resource)
 
 ```javascript
 AclManagementClient().allow('USERID1', 'books:123', 'books:read')
-AclManagementClient().isAllowed('USERID1', 'books:123', 'books:read') # true
-AclManagementClient().isAllowed('USERID1', 'books:123', 'books:edit') # false
+AclManagementClient().isAllowed('USERID1', 'books:123', 'books:read') // true
+AclManagementClient().isAllowed('USERID1', 'books:123', 'books:edit') // false
 ```
 ```javascript
 AclManagementClient().allow('USERID2', 'books:*', 'books:*')
-AclManagementClient().isAllowed('USERID2', 'books:123', 'books:read') # true
-AclManagementClient().isAllowed('USERID2', 'books:124', 'books:edit') # true
+AclManagementClient().isAllowed('USERID2', 'books:123', 'books:read') // true
+AclManagementClient().isAllowed('USERID2', 'books:124', 'books:edit') // true
 ```
       
 

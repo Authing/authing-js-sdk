@@ -1,7 +1,7 @@
+
+# 组织机构管理
+
 [[toc]]
-
-
-# class OrgManagementClient
 
 > 一个 Authing 用户池可以创建多个组织机构。此模块用于管理 Authing 组织机构，可以进行组织机构的增删改查、添加删除移动节点、导入组织机构等操作。
 

@@ -6,15 +6,21 @@ const fs = require('fs');
 const glob = require('glob');
 const _ = require('lodash');
 
-const files = glob.sync(__dirname + '/src/lib/management/!(*.spec).ts').concat(glob.sync(__dirname + '/src/lib/authentication/!(*.spec).ts')).filter(x => x.toLowerCase().includes('client'))
+const files = glob.sync(__dirname + '/src/lib/management/!(*.spec).ts').concat(glob.sync(__dirname + '/src/lib/authentication/!(*.spec).ts'))
+  .filter(x => x.toLowerCase().includes('client'))
+  .filter(x => !x.toLowerCase().includes('management/managementclient'));
 
-fs.mkdirSync('docs/management')
-fs.mkdirSync('docs/authentication')
+if (!fs.existsSync('docs/management')) {
+  fs.mkdirSync('docs/management')
+}
+if (!fs.existsSync('docs/authentication')) {
+  fs.mkdirSync('docs/authentication')
+}
 
 for (let file of files) {
   const data = fs.readFileSync(file, 'utf8')
   const parsed = parseComments.parse(data);
-  let docs = ['[[toc]]\n']
+  let docs = []
   for (const block of parsed) {
     const { description, tags, examples, raw } = block
     const params = _.filter(tags, { title: 'param' }).map(x => {
@@ -66,7 +72,9 @@ ${examples.map(x => `\`\`\`javascript\n${x.value.trim()}\n\`\`\``).join('\n')}
       `
     } else {
       doc = `
-# class ${class_.name}
+# ${class_.description}
+
+[[toc]]
 
 > ${description.split('\\`\\`\\`').join('```')}`
     }
@@ -75,5 +83,10 @@ ${examples.map(x => `\`\`\`javascript\n${x.value.trim()}\n\`\`\``).join('\n')}
   }
   const filename = `${file.split('/')[file.split('/').length - 1]}`
   const module = `${file.split('/')[file.split('/').length - 2]}`
-  fs.writeFileSync(`docs/${module}/${filename.replace('.ts', '')}.md`, docs.join('\n'))
+  const source = `docs/${module}/${filename.replace('.ts', '')}.md`
+  fs.writeFileSync(source, docs.join('\n'))
+
+  // 移动到 docs
+  const target = `../authing-docs/docs/sdk/sdk-for-node/${module}/${filename.replace('.ts', '')}.md`
+  fs.copyFileSync(source, target)
 }

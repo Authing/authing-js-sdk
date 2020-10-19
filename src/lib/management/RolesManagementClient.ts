@@ -25,7 +25,7 @@ import {
 } from '../graphqlapi';
 
 /**
- * @class RolesManagementClient Authing 角色管理模块
+ * @class RolesManagementClient 角色管理
  * @description 此模块用于管理 Authing 角色，可以进行角色的增删改查、角色添加/删除用户、角色添加/删除策略 等操作。
  *
  * 请使用以下方式使用该模块，而不要直接初始化该模块：

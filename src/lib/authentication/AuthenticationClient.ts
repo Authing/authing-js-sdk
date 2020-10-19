@@ -56,6 +56,24 @@ GKl64GDcIq3au+aqJQIDAQAB
   requestFrom: 'sdk'
 };
 
+/**
+ * @class AuthenticationClient 认证核心模块
+ * @description 此模块包含注册登录、重置手机号邮箱、修改账号信息等方法，是以你的终端用户（End User）的身份进行请求，适合在**浏览器**和后端环境中使用。
+ *
+ * 使用方法：
+ *
+ * \`\`\`javascript
+ * import { AuthenticationClient } from "authing-js-sdk"
+ * const authing = new AuthenticationClient({
+ *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+ * })
+ * authing.registerByEmail // 使用邮箱注册
+ * authing.loginByEmail // 使用邮箱登录
+ * \`\`\`
+ *
+ *
+ * @name AuthenticationClient
+ */
 export class AuthenticationClient {
   // 初始化参数
   options: AuthenticationClientOptions;
@@ -721,11 +739,11 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().updatePassword('passw0rd') # 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
+   * AuthenticationClient().updatePassword('passw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
    *
    * @example
    *
-   * AuthenticationClient().updatePassword('passw0rd', 'oldPassw0rd') # 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
+   * AuthenticationClient().updatePassword('passw0rd', 'oldPassw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
    *
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
@@ -765,11 +783,11 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().updatePhone('176xxxx7041', '1234') # 关闭了“验证原有手机号“选项
+   * AuthenticationClient().updatePhone('176xxxx7041', '1234') // 关闭了“验证原有手机号“选项
    *
    * @example
    *
-   * AuthenticationClient().updatePhone('176xxxx7041', '1234', '156xxxx9876', '1234') # 开启了“验证原有手机号“选项
+   * AuthenticationClient().updatePhone('176xxxx7041', '1234', '156xxxx9876', '1234') // 开启了“验证原有手机号“选项
    *
    *
    * @returns {Promise<User>}
@@ -808,11 +826,11 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().updateEmail('test@example.com', '1234') # 关闭了“验证原有邮箱“选项
+   * AuthenticationClient().updateEmail('test@example.com', '1234') // 关闭了“验证原有邮箱“选项
    *
    * @example
    *
-   * AuthenticationClient().updateEmail('test@example.com', '1234', 'test2@example.com', '1234') # 开启了“验证原有邮箱“选项
+   * AuthenticationClient().updateEmail('test@example.com', '1234', 'test2@example.com', '1234') // 开启了“验证原有邮箱“选项
    *
    *
    * @returns {Promise<User>}
@@ -1005,7 +1023,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().addUdv('school', '清华大学') # 要求用户必须定义了 school 这个字段。
+   * AuthenticationClient().addUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
    *
    * @returns {Promise<Array<UserDefinedData>>}
    * @memberof AuthenticationClient

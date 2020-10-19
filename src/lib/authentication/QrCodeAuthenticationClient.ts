@@ -10,7 +10,7 @@ import { User } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
 
 /**
- * @class QrCodeAuthenticationClient 扫码登录模块。
+ * @class QrCodeAuthenticationClient 扫码登录模块
  * @description 此模块用于进行扫码登录，扫码登录分为两种小程序扫码登录（wxqrcode）和 APP 扫码登录（qrcode）。两种扫码登录方式 API 完全一致。
  *
  * 使用小程序扫码登录：

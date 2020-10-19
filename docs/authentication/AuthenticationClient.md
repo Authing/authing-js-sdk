@@ -1,5 +1,20 @@
+
+# 认证核心模块
+
 [[toc]]
 
+> 此模块包含注册登录、重置手机号邮箱、修改账号信息等方法，是以你的终端用户（End User）的身份进行请求，适合在**浏览器**和后端环境中使用。
+
+使用方法：
+
+```javascript
+import { AuthenticationClient } from "authing-js-sdk"
+const authing = new AuthenticationClient({
+   userPoolId: process.env.AUTHING_USERPOOL_ID,
+})
+authing.registerByEmail // 使用邮箱注册
+authing.loginByEmail // 使用邮箱登录
+```
 
 ## registerByEmail
 
@@ -498,10 +513,10 @@ AuthenticationClient().updatePassword(newPassword, oldPassword)
 #### Examples
 
 ```javascript
-AuthenticationClient().updatePassword('passw0rd') # 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
+AuthenticationClient().updatePassword('passw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
 ```
 ```javascript
-AuthenticationClient().updatePassword('passw0rd', 'oldPassw0rd') # 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
+AuthenticationClient().updatePassword('passw0rd', 'oldPassw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
 ```
       
 
@@ -531,10 +546,10 @@ AuthenticationClient().updatePhone(phone, phoneCode, oldPhone, oldPhoneCode)
 #### Examples
 
 ```javascript
-AuthenticationClient().updatePhone('176xxxx7041', '1234') # 关闭了“验证原有手机号“选项
+AuthenticationClient().updatePhone('176xxxx7041', '1234') // 关闭了“验证原有手机号“选项
 ```
 ```javascript
-AuthenticationClient().updatePhone('176xxxx7041', '1234', '156xxxx9876', '1234') # 开启了“验证原有手机号“选项
+AuthenticationClient().updatePhone('176xxxx7041', '1234', '156xxxx9876', '1234') // 开启了“验证原有手机号“选项
 ```
       
 
@@ -563,10 +578,10 @@ AuthenticationClient().updateEmail(email, emailCode, oldEmail, oldEmailCode)
 #### Examples
 
 ```javascript
-AuthenticationClient().updateEmail('test@example.com', '1234') # 关闭了“验证原有邮箱“选项
+AuthenticationClient().updateEmail('test@example.com', '1234') // 关闭了“验证原有邮箱“选项
 ```
 ```javascript
-AuthenticationClient().updateEmail('test@example.com', '1234', 'test2@example.com', '1234') # 开启了“验证原有邮箱“选项
+AuthenticationClient().updateEmail('test@example.com', '1234', 'test2@example.com', '1234') // 开启了“验证原有邮箱“选项
 ```
       
 
@@ -736,7 +751,7 @@ AuthenticationClient().addUdv(key:, value:)
 #### Examples
 
 ```javascript
-AuthenticationClient().addUdv('school', '清华大学') # 要求用户必须定义了 school 这个字段。
+AuthenticationClient().addUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
 ```
       
 
