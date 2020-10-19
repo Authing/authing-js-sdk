@@ -428,39 +428,40 @@ AuthenticationClient().resetPasswordByEmailCode('test@example.com', '1234', 'pas
 
 修改用户资料
 
-AuthenticationClient().updateProfile()
+AuthenticationClient().updateProfile(updates)
 
 > 修改用户资料，此接口不能用于修改手机号、邮箱、密码，如果需要请调用 updatePhone、updateEmail、updatePassword 接口。
 
 
 #### Arguments
 
-- `updates.username` \<UpdateUserInput\> 用户名 
-- `updates.nickname` \<UpdateUserInput\> 昵称 
-- `updates.photo` \<UpdateUserInput\> 头像 
-- `updates.company` \<UpdateUserInput\> 公司 
-- `updates.browser` \<UpdateUserInput\> 浏览器 
-- `updates.device` \<UpdateUserInput\> 设备 
-- `updates.lastIP` \<UpdateUserInput\> 最近登录的 IP 
-- `updates.name` \<UpdateUserInput\>  
-- `updates.givenName` \<UpdateUserInput\>  
-- `updates.familyName` \<UpdateUserInput\>  
-- `updates.middleName` \<UpdateUserInput\>  
-- `updates.profile` \<UpdateUserInput\> Profile Url 
-- `updates.preferredUsername` \<UpdateUserInput\>  
-- `updates.website` \<UpdateUserInput\>  
-- `updates.gender` \<UpdateUserInput\>  
-- `updates.birthdate` \<UpdateUserInput\>  
-- `updates.zoneinfo` \<UpdateUserInput\>  
-- `updates.locale` \<UpdateUserInput\>  
-- `updates.address` \<UpdateUserInput\>  
-- `updates.streetAddress` \<UpdateUserInput\>  
-- `updates.locality` \<UpdateUserInput\>  
-- `updates.region` \<UpdateUserInput\>  
-- `updates.postalCode` \<UpdateUserInput\>  
-- `updates.city` \<UpdateUserInput\>  
-- `updates.province` \<UpdateUserInput\>  
-- `updates.country` \<UpdateUserInput\>  
+- `updates` \<UpdateUserInput\> 修改的用户资料 
+- `updates.username` \<string\> 用户名 
+- `updates.nickname` \<string\> 昵称 
+- `updates.photo` \<string\> 头像 
+- `updates.company` \<string\> 公司 
+- `updates.browser` \<string\> 浏览器 
+- `updates.device` \<string\> 设备 
+- `updates.lastIP` \<string\> 最近登录的 IP 
+- `updates.name` \<string\> Name 
+- `updates.givenName` \<string\> Given Name 
+- `updates.familyName` \<string\> Family Name 
+- `updates.middleName` \<string\> Middle Name 
+- `updates.profile` \<string\> Profile Url 
+- `updates.preferredUsername` \<string\> Preferred Name 
+- `updates.website` \<string\> 个人网站 
+- `updates.gender` \<string\> 性别, F 表示男性、W 表示女性、未知表示 U 
+- `updates.birthdate` \<string\> 生日 
+- `updates.zoneinfo` \<string\> 时区 
+- `updates.locale` \<string\> 语言 
+- `updates.address` \<string\> 地址 
+- `updates.streetAddress` \<string\> 街道地址 
+- `updates.locality` \<string\>  
+- `updates.region` \<string\> 地域 
+- `updates.postalCode` \<string\> 邮编 
+- `updates.city` \<string\> 城市 
+- `updates.province` \<string\> 省份 
+- `updates.country` \<string\> 国家 
 
 #### Returns
 

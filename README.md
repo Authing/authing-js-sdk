@@ -160,15 +160,15 @@ const userpool = await managementClient.userpool.update({
 
 ### 模块列表
 
-- `UsersManagementClient` 用户管理模块
-- `RolesManagementClient` 角色管理模块
-- `GroupsManagementClient` 分组管理模块
-- `OrgManagementClient` 组织机构管理模块
-- `PoliciesManagementClient` 策略管理模块
-- `AclManagementClient` 访问控制模块
-- `UdfManagementClient` 自定义字段元数据管理模块
-- `WhitelistManagementClient` 白名单管理模块
-- `UserPoolManagementClient` 用户池设置管理模块
+- [UsersManagementClient](./docs/management/UsersManagementClient.md) 用户管理模块
+- [RolesManagementClient](./docs/management/RolesManagementClient.md) 角色管理模块
+- [GroupsManagementClient](./docs/management/GroupsManagementClient.md) 分组管理模块
+- [OrgManagementClient](./docs/management/OrgManagementClient.md) 组织机构管理模块
+- [PoliciesManagementClient](./docs/management/PoliciesManagementClient.md) 策略管理模块
+- [AclManagementClient](./docs/management/AclManagementClient.md) 访问控制模块
+- [UdfManagementClient](./docs/management/UdfManagementClient.md) 自定义字段元数据管理模块
+- [WhitelistManagementClient](./docs/management/WhitelistManagementClient.md) 白名单管理模块
+- [UserPoolManagementClient](./docs/management/UserpoolManagementClient.md) 用户池设置管理模块
 
 ## 错误处理
 
