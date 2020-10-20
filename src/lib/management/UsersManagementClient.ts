@@ -342,7 +342,7 @@ export class UsersManagementClient {
    * @description 获取用户池用户列表
    *
    * @param {number} [page=1] 页码数, 从 1 开始
-   * @param {number} [limit=1] 每页包含的用户数
+   * @param {number} [limit=10] 每页包含的用户数
    *
    * @example
    *
@@ -351,7 +351,7 @@ export class UsersManagementClient {
    * @returns
    * @memberof UsersManagementClient
    */
-  async list(page: number = 1, limit: number = 1) {
+  async list(page: number = 1, limit: number = 10) {
     const { users: data } = await users(
       this.graphqlClient,
       this.tokenProvider,

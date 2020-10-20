@@ -38,6 +38,11 @@ export class GraphqlClient {
     try {
       return await graphQLClient.request<T>(query, variables);
     } catch (error) {
+      if (error.name === 'FetchError') {
+        this.options.onError(500, '网络请求超时', null);
+        throw { code: 500, message: '网络请求超时', data: null };
+      }
+
       let errmsg = null;
       let errcode = null;
       let data = null;
