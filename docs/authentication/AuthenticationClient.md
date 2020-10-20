@@ -36,6 +36,7 @@ AuthenticationClient().registerByEmail(email, password, profile, options)
 - `options` \<Object\>  
 - `options.forceLogin` \<boolean\> 是否走一遍完整的登录的，会触发登录前后的 pipeline 函数以及登录事件 webhook ，同时该用户的累计登录次数会加 1 。默认为 false 。 
 - `options.generateToken` \<boolean\> 是否为该用户生成 token，不会触发登录后的完整流程，用户的累计登录次数不会加 1。默认为 false 。 
+- `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
 #### 返回值
 
@@ -75,6 +76,7 @@ AuthenticationClient().registerByUsername(username, password, profile, options)
 - `options` \<Object\>  
 - `options.forceLogin` \<boolean\> 是否走一遍完整的登录的，会触发登录前后的 pipeline 函数以及登录事件 webhook ，同时该用户的累计登录次数会加 1 。默认为 false 。 
 - `options.generateToken` \<boolean\> 是否为该用户生成 token，不会触发登录后的完整流程，用户的累计登录次数不会加 1。默认为 false 。 
+- `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
 #### 返回值
 
@@ -115,6 +117,7 @@ AuthenticationClient().registerByPhoneCode(phone, code, password, profile, optio
 - `options` \<Object\>  
 - `options.forceLogin` \<boolean\> 是否走一遍完整的登录的，会触发登录前后的 pipeline 函数以及登录事件 webhook ，同时该用户的累计登录次数会加 1 。默认为 false 。 
 - `options.generateToken` \<boolean\> 是否为该用户生成 token，不会触发登录后的完整流程，用户的累计登录次数不会加 1。默认为 false 。 
+- `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
 #### 返回值
 
@@ -203,6 +206,7 @@ AuthenticationClient().loginByEmail(email, password, options)
 - `options` \<Object\>  
 - `options.autoRegister` \<boolean\> 是否自动注册。如果检测到用户不存在，会根据登录账密自动创建一个账号。 
 - `options.captchaCode` \<string\> 图形验证码 
+- `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
 #### 返回值
 
@@ -241,6 +245,7 @@ AuthenticationClient().loginByUsername(username, password, options)
 - `options` \<Object\>  
 - `options.autoRegister` \<boolean\> 是否自动注册。如果检测到用户不存在，会根据登录账密自动创建一个账号。 
 - `options.captchaCode` \<string\> 图形验证码 
+- `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
 #### 返回值
 
@@ -274,6 +279,7 @@ AuthenticationClient().loginByPhoneCode(phone, code)
 
 - `phone` \<string\> 手机号 
 - `code` \<string\> 短信验证码 
+- `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
 #### 返回值
 
@@ -302,6 +308,7 @@ AuthenticationClient().loginByPhonePassword(phone, password, options)
 - `password` \<string\> 密码 
 - `options` \<Object\>  
 - `options.captchaCode` \<string\> 图形验证码 
+- `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
 #### 返回值
 
@@ -314,7 +321,6 @@ authenticationClient.loginByPhonePassword(
  '176xxxx7041',
  'passw0rd',
  {
-   autoRegister: true，
    captchaCode: 'xj72'
  }
 )
@@ -598,6 +604,28 @@ AuthenticationClient().bindPhone(phone, phoneCode)
 
 ```javascript
 authenticationClient.bindPhone('176xxxx7041', '1234')
+```
+      
+
+## 解绑手机号
+
+AuthenticationClient().unbindPhone()
+
+> 用户解绑手机号
+
+
+#### 参数
+
+
+
+#### 返回值
+
+-  `Promise<User>` 
+
+#### 示例
+
+```javascript
+authenticationClient.unbindPhone()
 ```
       
 

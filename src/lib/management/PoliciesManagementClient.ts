@@ -7,7 +7,7 @@ import {
   PolicyStatement,
   Policy,
   CommonMessage,
-  PaginatedPolicyAssignment
+  PaginatedPolicyAssignments
 } from '../../types/graphql.v2';
 import {
   policies,
@@ -143,7 +143,7 @@ export class PoliciesManagementClient {
       this.graphqlClient,
       this.tokenProvider,
       {
-        codes: codeList
+        codeList
       }
     );
     return data;
@@ -279,14 +279,14 @@ export class PoliciesManagementClient {
    *  }
    *]
    *
-   * @returns {Promise<PaginatedPolicyAssignment>}
+   * @returns {Promise<PaginatedPolicyAssignments>}
    * @memberof PoliciesManagementClient
    */
   async listAssignments(
     code: string,
     page: number = 1,
     limit: number = 10
-  ): Promise<PaginatedPolicyAssignment> {
+  ): Promise<PaginatedPolicyAssignments> {
     const { policyAssignments: data } = await policyAssignments(
       this.graphqlClient,
       this.tokenProvider,

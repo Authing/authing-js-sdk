@@ -3,7 +3,7 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import {
   CommonMessage,
-  PaginatedPolicyAssignment,
+  PaginatedPolicyAssignments,
   PaginatedRoles,
   PaginatedUsers,
   PolicyAssignmentTargetType,
@@ -124,7 +124,7 @@ export class RolesManagementClient {
       this.graphqlClient,
       this.tokenProvider,
       {
-        codes: codeList
+        codeList
       }
     );
     return data;
@@ -293,14 +293,14 @@ export class RolesManagementClient {
    * @example
    *  managementClient.roles.listPolicies('codea', 1, 10)
    *
-   * @returns {Promise<PaginatedPolicyAssignment>}
+   * @returns {Promise<PaginatedPolicyAssignments>}
    * @memberof RolesManagementClient
    */
   async listPolicies(
     code: string,
     page: number = 1,
     limit: number = 10
-  ): Promise<PaginatedPolicyAssignment> {
+  ): Promise<PaginatedPolicyAssignments> {
     const { policyAssignments: data } = await policyAssignments(
       this.graphqlClient,
       this.tokenProvider,

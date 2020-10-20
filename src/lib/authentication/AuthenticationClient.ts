@@ -141,6 +141,7 @@ export class AuthenticationClient {
    * @param {Object} [options]
    * @param {boolean} [options.forceLogin] 是否走一遍完整的登录的，会触发登录前后的 pipeline 函数以及登录事件 webhook ，同时该用户的累计登录次数会加 1 。默认为 false 。
    * @param {boolean} [options.generateToken] 是否为该用户生成 token，不会触发登录后的完整流程，用户的累计登录次数不会加 1。默认为 false 。
+   * @param {string} [options.clientIp] 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。
    *
    * @example
    *
@@ -169,11 +170,12 @@ export class AuthenticationClient {
     options?: {
       forceLogin?: boolean;
       generateToken?: boolean;
+      clientIp?: string;
     }
   ): Promise<User> {
     options = options || {};
     profile = profile || {};
-    const { forceLogin = false, generateToken = false } = options;
+    const { forceLogin = false, generateToken = false, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByEmail: user } = await registerByEmail(
       this.graphqlClientV2,
@@ -184,7 +186,8 @@ export class AuthenticationClient {
           password,
           profile,
           forceLogin,
-          generateToken
+          generateToken,
+          clientIp
         }
       }
     );
@@ -203,6 +206,8 @@ export class AuthenticationClient {
    * @param {Object} [options]
    * @param {boolean} [options.forceLogin] 是否走一遍完整的登录的，会触发登录前后的 pipeline 函数以及登录事件 webhook ，同时该用户的累计登录次数会加 1 。默认为 false 。
    * @param {boolean} [options.generateToken] 是否为该用户生成 token，不会触发登录后的完整流程，用户的累计登录次数不会加 1。默认为 false 。
+   * @param {string} [options.clientIp] 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。
+   *
    *
    * @example
    *
@@ -231,11 +236,12 @@ export class AuthenticationClient {
     options?: {
       forceLogin?: boolean;
       generateToken?: boolean;
+      clientIp?: string;
     }
   ): Promise<User> {
     options = options || {};
     profile = profile || {};
-    const { forceLogin = false, generateToken = false } = options;
+    const { forceLogin = false, generateToken = false, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByUsername: user } = await registerByUsername(
       this.graphqlClientV2,
@@ -246,7 +252,8 @@ export class AuthenticationClient {
           password,
           profile,
           forceLogin,
-          generateToken
+          generateToken,
+          clientIp
         }
       }
     );
@@ -266,6 +273,7 @@ export class AuthenticationClient {
    * @param {Object} [options]
    * @param {boolean} [options.forceLogin] 是否走一遍完整的登录的，会触发登录前后的 pipeline 函数以及登录事件 webhook ，同时该用户的累计登录次数会加 1 。默认为 false 。
    * @param {boolean} [options.generateToken] 是否为该用户生成 token，不会触发登录后的完整流程，用户的累计登录次数不会加 1。默认为 false 。
+   * @param {string} [options.clientIp] 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。
    *
    * @example
    *
@@ -296,11 +304,12 @@ export class AuthenticationClient {
     options?: {
       forceLogin?: boolean;
       generateToken?: boolean;
+      clientIp?: string;
     }
   ): Promise<User> {
     options = options || {};
     profile = profile || {};
-    const { forceLogin = false, generateToken = false } = options;
+    const { forceLogin = false, generateToken = false, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByPhoneCode: user } = await registerByPhoneCode(
       this.graphqlClientV2,
@@ -312,7 +321,8 @@ export class AuthenticationClient {
           password,
           profile,
           forceLogin,
-          generateToken
+          generateToken,
+          clientIp
         }
       }
     );
@@ -382,6 +392,7 @@ export class AuthenticationClient {
    * @param {Object} [options]
    * @param {boolean} [options.autoRegister] 是否自动注册。如果检测到用户不存在，会根据登录账密自动创建一个账号。
    * @param {string} [options.captchaCode] 图形验证码
+   * @param {string} [options.clientIp] 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。
    *
    * @example
    *
@@ -407,16 +418,17 @@ export class AuthenticationClient {
     options?: {
       autoRegister?: boolean;
       captchaCode?: string;
+      clientIp?: string;
     }
   ): Promise<User> {
     options = options || {};
-    const { autoRegister = false, captchaCode } = options;
+    const { autoRegister = false, captchaCode, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByEmail: user } = await loginByEmail(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { email, password, autoRegister, captchaCode }
+        input: { email, password, autoRegister, captchaCode, clientIp }
       }
     );
     this.setCurrentUser(user);
@@ -435,6 +447,8 @@ export class AuthenticationClient {
    * @param {Object} [options]
    * @param {boolean} [options.autoRegister] 是否自动注册。如果检测到用户不存在，会根据登录账密自动创建一个账号。
    * @param {string} [options.captchaCode] 图形验证码
+   * @param {string} [options.clientIp] 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。
+   *
    *
    * @example
    *
@@ -460,16 +474,17 @@ export class AuthenticationClient {
     options?: {
       autoRegister?: boolean;
       captchaCode?: string;
+      clientIp?: string;
     }
   ): Promise<User> {
     options = options || {};
-    const { autoRegister = false, captchaCode } = options;
+    const { autoRegister = false, captchaCode, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByUsername: user } = await loginByUsername(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { username, password, autoRegister, captchaCode }
+        input: { username, password, autoRegister, captchaCode, clientIp }
       }
     );
     this.setCurrentUser(user);
@@ -484,6 +499,7 @@ export class AuthenticationClient {
    *
    * @param {string} phone 手机号
    * @param {string} code 短信验证码
+   * @param {string} [options.clientIp] 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。
    *
    * @example
    *
@@ -496,12 +512,20 @@ export class AuthenticationClient {
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
    */
-  async loginByPhoneCode(phone: string, code: string): Promise<User> {
+  async loginByPhoneCode(
+    phone: string,
+    code: string,
+    options?: {
+      clientIp?: string;
+    }
+  ): Promise<User> {
+    options = options || {};
+    const { clientIp } = options;
     const { loginByPhoneCode: user } = await loginByPhoneCode(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { phone, code }
+        input: { phone, code, clientIp }
       }
     );
     this.setCurrentUser(user);
@@ -518,6 +542,7 @@ export class AuthenticationClient {
    * @param {string} password 密码
    * @param {Object} [options]
    * @param {string} [options.captchaCode] 图形验证码
+   * @param {string} [options.clientIp] 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。
    *
    * @example
    *
@@ -542,16 +567,17 @@ export class AuthenticationClient {
     options?: {
       captchaCode?: string;
       autoRegister?: boolean;
+      clientIp?: string;
     }
   ): Promise<User> {
     options = options || {};
-    const { captchaCode, autoRegister = false } = options;
+    const { captchaCode, autoRegister = false, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByPhonePassword: user } = await loginByPhonePassword(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { phone, password, captchaCode, autoRegister }
+        input: { phone, password, captchaCode, autoRegister, clientIp }
       }
     );
     this.setCurrentUser(user);

@@ -46,7 +46,7 @@ export type Query = {
   isActionDenied: Scalars['Boolean'];
   policy?: Maybe<Policy>;
   policies: PaginatedPolicies;
-  policyAssignments: PaginatedPolicyAssignment;
+  policyAssignments: PaginatedPolicyAssignments;
   /** 通过 **code** 查询角色详情 */
   role?: Maybe<Role>;
   /** 获取角色列表 */
@@ -607,7 +607,7 @@ export type PaginatedPolicies = {
   list: Array<Policy>;
 };
 
-export type PaginatedPolicyAssignment = {
+export type PaginatedPolicyAssignments = {
   totalCount: Scalars['Int'];
   list: Array<PolicyAssignment>;
 };
@@ -1076,7 +1076,7 @@ export type MutationDeletePolicyArgs = {
 };
 
 export type MutationDeletePoliciesArgs = {
-  codes: Array<Scalars['String']>;
+  codeList: Array<Scalars['String']>;
 };
 
 export type MutationAddPolicyAssignmentsArgs = {
@@ -1129,7 +1129,7 @@ export type MutationDeleteRoleArgs = {
 };
 
 export type MutationDeleteRolesArgs = {
-  codes: Array<Scalars['String']>;
+  codeList: Array<Scalars['String']>;
 };
 
 export type MutationAssignRoleArgs = {
@@ -1342,6 +1342,7 @@ export type LoginByEmailInput = {
   captchaCode?: Maybe<Scalars['String']>;
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
+  clientIp?: Maybe<Scalars['String']>;
 };
 
 export type LoginByUsernameInput = {
@@ -1351,6 +1352,7 @@ export type LoginByUsernameInput = {
   captchaCode?: Maybe<Scalars['String']>;
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
+  clientIp?: Maybe<Scalars['String']>;
 };
 
 export type LoginByPhoneCodeInput = {
@@ -1358,6 +1360,7 @@ export type LoginByPhoneCodeInput = {
   code: Scalars['String'];
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
+  clientIp?: Maybe<Scalars['String']>;
 };
 
 export type LoginByPhonePasswordInput = {
@@ -1367,6 +1370,7 @@ export type LoginByPhonePasswordInput = {
   captchaCode?: Maybe<Scalars['String']>;
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
+  clientIp?: Maybe<Scalars['String']>;
 };
 
 export type PolicyStatementInput = {
@@ -1381,6 +1385,7 @@ export type RegisterByUsernameInput = {
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
   generateToken?: Maybe<Scalars['Boolean']>;
+  clientIp?: Maybe<Scalars['String']>;
 };
 
 export type RegisterProfile = {
@@ -1423,6 +1428,7 @@ export type RegisterByEmailInput = {
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
   generateToken?: Maybe<Scalars['Boolean']>;
+  clientIp?: Maybe<Scalars['String']>;
 };
 
 export type RegisterByPhoneCodeInput = {
@@ -1432,6 +1438,7 @@ export type RegisterByPhoneCodeInput = {
   profile?: Maybe<RegisterProfile>;
   forceLogin?: Maybe<Scalars['Boolean']>;
   generateToken?: Maybe<Scalars['Boolean']>;
+  clientIp?: Maybe<Scalars['String']>;
 };
 
 export type RefreshToken = {
@@ -2238,7 +2245,7 @@ export type DeleteOrgResponse = {
 };
 
 export type DeletePoliciesVariables = Exact<{
-  codes: Array<Scalars['String']>;
+  codeList: Array<Scalars['String']>;
 }>;
 
 export type DeletePoliciesResponse = {
@@ -2262,7 +2269,7 @@ export type DeleteRoleResponse = {
 };
 
 export type DeleteRolesVariables = Exact<{
-  codes: Array<Scalars['String']>;
+  codeList: Array<Scalars['String']>;
 }>;
 
 export type DeleteRolesResponse = {
@@ -5392,8 +5399,8 @@ export const DeleteOrgDocument = `
 }
     `;
 export const DeletePoliciesDocument = `
-    mutation deletePolicies($codes: [String!]!) {
-  deletePolicies(codes: $codes) {
+    mutation deletePolicies($codeList: [String!]!) {
+  deletePolicies(codeList: $codeList) {
     message
     code
   }
@@ -5416,8 +5423,8 @@ export const DeleteRoleDocument = `
 }
     `;
 export const DeleteRolesDocument = `
-    mutation deleteRoles($codes: [String!]!) {
-  deleteRoles(codes: $codes) {
+    mutation deleteRoles($codeList: [String!]!) {
+  deleteRoles(codeList: $codeList) {
     message
     code
   }

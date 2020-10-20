@@ -191,7 +191,7 @@ PoliciesManagementClient().listAssignments(code, page, limit)
 
 #### 返回值
 
--  `Promise<PaginatedPolicyAssignment>` 
+-  `Promise<PaginatedPolicyAssignments>` 
 
 #### 示例
 
