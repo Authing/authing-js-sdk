@@ -540,16 +540,17 @@ export class AuthenticationClient {
     password: string,
     options?: {
       captchaCode?: string;
+      autoRegister?: boolean;
     }
   ): Promise<User> {
     options = options || {};
-    const { captchaCode } = options;
+    const { captchaCode, autoRegister = false } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByPhonePassword: user } = await loginByPhonePassword(
       this.graphqlClientV2,
       this.tokenProvider,
       {
-        input: { phone, password, captchaCode }
+        input: { phone, password, captchaCode, autoRegister }
       }
     );
     this.setCurrentUser(user);
