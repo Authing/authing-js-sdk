@@ -3,7 +3,9 @@
 
 [[toc]]
 
-> 此模块包含注册登录、重置手机号邮箱、修改账号信息等方法，是以你的终端用户（End User）的身份进行请求，适合在**浏览器**和后端环境中使用。
+> 此模块包含注册登录、重置手机号邮箱、修改账号信息等方法，是以你的终端用户（End User）的身份进行请求，适合在需要验证用户身份的情况下使用。
+
+
 
 使用方法：
 
@@ -15,7 +17,6 @@ const authenticationClient = new AuthenticationClient({
 authenticationClient.registerByEmail // 使用邮箱注册
 authenticationClient.loginByEmail // 使用邮箱登录
 ```
-
 
 
 
@@ -624,7 +625,7 @@ authenticationClient.unbindPhone()
 
 ## 获取当前登录的用户信息
 
-AuthenticationClient().currentUser()
+AuthenticationClient().getCurrentUser()
 
 > 获取当前登录的用户信息
 
@@ -640,7 +641,7 @@ AuthenticationClient().currentUser()
 #### 示例
 
 ```javascript
-authenticationClient.currentUser()
+authenticationClient.getCurrentUser()
 ```
       
 
@@ -690,15 +691,15 @@ authenticationClient.listUdv()
 
 ## 添加自定义数据
 
-AuthenticationClient().setUdv(key:, value:)
+AuthenticationClient().setUdv(key, value)
 
 > 添加自定义数据
 
 
 #### 参数
 
-- `key:` \<string\> 自定义字段的 key 
-- `value:` \<any\> 自定义数据的值，值的类型必须要和用户池定义的自定义字段类型一致。 
+- `key` \<string\> 自定义字段的 key 
+- `value` \<any\> 自定义数据的值，值的类型必须要和用户池定义的自定义字段类型一致。 
 
 #### 返回值
 
@@ -713,14 +714,14 @@ authenticationClient.setUdv('school', '清华大学') // 要求用户必须定�
 
 ## 删除自定义数据
 
-AuthenticationClient().removeUdv(key:)
+AuthenticationClient().removeUdv(key)
 
 > 删除自定义数据
 
 
 #### 参数
 
-- `key:` \<null\> 自定义字段的 key 
+- `key` \<null\> 自定义字段的 key 
 
 #### 返回值
 

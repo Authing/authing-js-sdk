@@ -58,7 +58,9 @@ GKl64GDcIq3au+aqJQIDAQAB
 
 /**
  * @class AuthenticationClient 认证核心模块
- * @description 此模块包含注册登录、重置手机号邮箱、修改账号信息等方法，是以你的终端用户（End User）的身份进行请求，适合在**浏览器**和后端环境中使用。
+ * @description 此模块包含注册登录、重置手机号邮箱、修改账号信息等方法，是以你的终端用户（End User）的身份进行请求，适合在需要验证用户身份的情况下使用。
+ *
+ * @example
  *
  * 使用方法：
  *
@@ -926,18 +928,18 @@ export class AuthenticationClient {
   }
 
   /**
-   * @name currentUser
+   * @name getCurrentUser
    * @name_zh 获取当前登录的用户信息
    * @description 获取当前登录的用户信息
    *
    * @example
    *
-   * authenticationClient.currentUser()
+   * authenticationClient.getCurrentUser()
    *
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
    */
-  async currentUser(): Promise<User | null> {
+  async getCurrentUser(): Promise<User | null> {
     try {
       const { user: data } = await user(
         this.graphqlClientV2,
@@ -1018,8 +1020,8 @@ export class AuthenticationClient {
    * @name_zh 添加自定义数据
    * @description 添加自定义数据
    *
-   * @param {string} key: 自定义字段的 key
-   * @param {any} value: 自定义数据的值，值的类型必须要和用户池定义的自定义字段类型一致。
+   * @param {string} key 自定义字段的 key
+   * @param {any} value 自定义数据的值，值的类型必须要和用户池定义的自定义字段类型一致。
    *
    * @example
    *
@@ -1049,7 +1051,7 @@ export class AuthenticationClient {
    * @name_zh 删除自定义数据
    * @description 删除自定义数据
    *
-   * @param key: 自定义字段的 key
+   * @param key 自定义字段的 key
    *
    * @example
    *
