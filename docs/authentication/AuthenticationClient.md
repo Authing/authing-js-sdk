@@ -490,7 +490,7 @@ AuthenticationClient().updatePassword(newPassword, oldPassword)
 authenticationClient.updatePassword('passw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
 ```
 ```javascript
-authenticationClient.updatePassword('passw0rd', 'oldPassw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
+authenticationClient.updatePassword('passw0rd', 'oldPassw0rd') // 用户之前设置了密码
 ```
       
 
