@@ -19,7 +19,8 @@ import {
   user,
   setUdv,
   removeUdv,
-  udv
+  udv,
+  unbindEmail
 } from '../graphqlapi';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
@@ -903,6 +904,7 @@ export class AuthenticationClient {
         phoneCode
       }
     );
+    this.setCurrentUser(user);
     return user;
   }
 
@@ -924,6 +926,29 @@ export class AuthenticationClient {
       this.tokenProvider,
       {}
     );
+    this.setCurrentUser(user);
+    return user;
+  }
+
+  /**
+   * @name unbindPhone
+   * @name_zh 解绑手机号
+   * @description 用户解绑手机号
+   *
+   * @example
+   *
+   * authenticationClient.unbindPhone()
+   *
+   * @returns {Promise<User>}
+   * @memberof AuthenticationClient
+   */
+  async unbindEmail(): Promise<User> {
+    const { unbindEmail: user } = await unbindEmail(
+      this.graphqlClientV2,
+      this.tokenProvider,
+      {}
+    );
+    this.setCurrentUser(user);
     return user;
   }
 
