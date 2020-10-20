@@ -438,6 +438,7 @@ export class UsersManagementClient {
     query: string,
     options?: { fields?: string[]; page?: number; limit?: number }
   ): Promise<PaginatedUsers> {
+    options = options || {};
     const { fields, page = 1, limit = 10 } = options;
     const { searchUser: users } = await searchUser(
       this.graphqlClient,
