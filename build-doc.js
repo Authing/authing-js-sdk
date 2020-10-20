@@ -130,6 +130,11 @@ for (let file of files) {
     const class_ = _.find(tags, { title: 'class' })
     const memberof = _.find(tags, { title: 'memberof' })?.description
     const name = _.find(tags, { title: 'name' })?.name
+
+    if (name === "checkPasswordStrength") {
+      continue
+    }
+
     const name_zh = _.find(tags, { title: 'name_zh' })?.description
 
 
@@ -144,7 +149,7 @@ for (let file of files) {
       let example = ""
       if (fs.existsSync(exampleFilename)) {
         const lang = 'python'
-        const reg = new RegExp('```' + lang + '\\n([\\s\\S]*)(?!```)\\n```');
+        const reg = new RegExp('```' + lang + '\\n(([\\s\\S](?!```))*)\\n```');
         example = reg.exec(fs.readFileSync(exampleFilename, 'utf-8'))
         example = example[0]
       }
