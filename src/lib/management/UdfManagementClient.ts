@@ -61,7 +61,7 @@ export class UdfManagementClient {
    * @example
    *
    * import { ManagementClient, UdfTargetType, UdfDataType  } from "authing-js-sdk"
-   * const udf = await management.udf.set(
+   * const udf = await managementClient.udf.set(
    *    UdfTargetType.User,
    *    'school',
    *    UdfDataType.String,
@@ -73,7 +73,7 @@ export class UdfManagementClient {
    * // 如果 age 这个自定义字段不存在，第一次会创建
    *
    * import { ManagementClient, UdfTargetType, UdfDataType  } from "authing-js-sdk"
-   * const udf = await management.udf.set(
+   * const udf = await managementClient.udf.set(
    *    UdfTargetType.User,
    *    'age',
    *    UdfDataType.Number,
@@ -82,7 +82,7 @@ export class UdfManagementClient {
    *
    * // 如果 age 字段之前创建过，会修改该字段的配置
    *
-   * const udf = await management.udf.set(
+   * const udf = await managementClient.udf.set(
    *    UdfTargetType.User,
    *    'age',
    *    UdfDataType.Number,
@@ -121,7 +121,7 @@ export class UdfManagementClient {
    *
    * @example
    *
-   * await management.udf.remove(UdfTargetType.User, 'school');
+   * await managementClient.udf.remove(UdfTargetType.User, 'school');
    *
    * @returns {Promise<UserDefinedField[]>}
    * @memberof UdfManagementClient
@@ -146,7 +146,7 @@ export class UdfManagementClient {
    * @param {UdfTargetType} targetType 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
    * @example
    *
-   * const list = await management.udf.list(UdfTargetType.User);
+   * const list = await managementClient.udf.list(UdfTargetType.User);
    *
    * @returns {Promise<UserDefinedField[]>}
    * @memberof UdfManagementClient

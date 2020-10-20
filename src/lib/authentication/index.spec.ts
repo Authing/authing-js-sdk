@@ -8,7 +8,7 @@ import test from 'ava';
 import { EmailScene, UdfDataType, UdfTargetType } from '../../types/graphql.v2';
 import { ManagementClient } from '../management/ManagementClient';
 
-const management = new ManagementClient(getOptionsFromEnv());
+const managementClient = new ManagementClient(getOptionsFromEnv());
 
 test('邮箱注册', async t => {
   const authing = new AuthenticationClient(getOptionsFromEnv());
@@ -188,7 +188,7 @@ test('添加自定义数据', async t => {
   });
 
   const key = generateRandomString(10);
-  await management.udf.set(
+  await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -229,7 +229,7 @@ test('添加自定义数据 # 非法的数据类型', async t => {
   });
 
   const key = generateRandomString(10);
-  await management.udf.set(
+  await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -256,7 +256,7 @@ test('删除自定义数据', async t => {
   });
 
   const key = generateRandomString(10);
-  await management.udf.set(
+  await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -277,7 +277,7 @@ test('添加自定义数据 # 字符串', async t => {
     autoRegister: true
   });
   const key = generateRandomString(10);
-  await management.udf.set(
+  await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -299,7 +299,7 @@ test('添加自定义数据 # 数字', async t => {
     autoRegister: true
   });
   const key = generateRandomString(10);
-  await management.udf.set(
+  await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.Number,
@@ -321,7 +321,7 @@ test('添加自定义数据 # boolean', async t => {
     autoRegister: true
   });
   const key = generateRandomString(10);
-  await management.udf.set(
+  await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.Boolean,
@@ -344,7 +344,7 @@ test('添加自定义数据 # DATETIME', async t => {
     autoRegister: true
   });
   const key = generateRandomString(10);
-  await management.udf.set(
+  await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.Datetime,
@@ -367,7 +367,7 @@ test('添加自定义数据 # OBJECT', async t => {
     autoRegister: true
   });
   const key = generateRandomString(10);
-  await management.udf.set(
+  await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.Object,
@@ -381,10 +381,10 @@ test('添加自定义数据 # OBJECT', async t => {
 });
 
 test('通过 accessToken 初始化', async t => {
-  const user = await management.users.create({
+  const user = await managementClient.users.create({
     username: generateRandomString()
   });
-  const data = await management.users.refreshToken(user.id);
+  const data = await managementClient.users.refreshToken(user.id);
   const authing = new AuthenticationClient({
     ...getOptionsFromEnv(),
     accessToken: data.token

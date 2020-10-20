@@ -249,7 +249,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const user = await management.users.detail('USERID');
+   * const user = await managementClient.users.detail('USERID');
    *
    * @returns {Promise<User>}
    * @memberof UsersManagementClient
@@ -270,7 +270,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const user = await management.users.delete('USERID');
+   * const user = await managementClient.users.delete('USERID');
    *
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
@@ -295,7 +295,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const user = await management.users.deleteMany(['USERID']);
+   * const user = await managementClient.users.deleteMany(['USERID']);
    *
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
@@ -320,7 +320,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const users = await management.users.batch(['USERID']);
+   * const users = await managementClient.users.batch(['USERID']);
    *
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
@@ -346,7 +346,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const user = await management.users.list();
+   * const user = await managementClient.users.list();
    *
    * @returns
    * @memberof UsersManagementClient
@@ -376,7 +376,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const exists = await management.users.exists({
+   * const exists = await managementClient.users.exists({
    *    username: "bob"
    * });
    *
@@ -429,7 +429,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const { totalCount, list } = await management.users.search("Bob");
+   * const { totalCount, list } = await managementClient.users.search("Bob");
    *
    * @returns {Promise<PaginatedUsers>}
    * @memberof UsersManagementClient
@@ -462,11 +462,11 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const { token } = await management.users.refreshToken("USERID");
+   * const { token } = await managementClient.users.refreshToken("USERID");
    *
    * // 检测 token 的最新状态，能够获取到该用户对应的 token
    *
-   * const data = await management.checkLoginStatus(token, {
+   * const data = await managementClient.checkLoginStatus(token, {
    *   fetchUserDetail: true
    * });
    *
@@ -493,7 +493,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const { list, totalCount} = await management.users.listGroups("USERID");
+   * const { list, totalCount} = await managementClient.users.listGroups("USERID");
    *
    * @returns {Promise<DeepPartial<PaginatedGroups>>}
    * @memberof UsersManagementClient
@@ -519,7 +519,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const { code, message } = await management.users.addGroup("USERID", "GROUP_CODE");
+   * const { code, message } = await managementClient.users.addGroup("USERID", "GROUP_CODE");
    *
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
@@ -542,7 +542,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const { code, message } = await management.users.removeGroup("USERID", "GROUP_CODE");
+   * const { code, message } = await managementClient.users.removeGroup("USERID", "GROUP_CODE");
    *
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
@@ -568,7 +568,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const { list, totalCount} = await management.users.listRoles("USERID");
+   * const { list, totalCount} = await managementClient.users.listRoles("USERID");
    *
    * @returns {Promise<DeepPartial<PaginatedRoles>>}
    * @memberof UsersManagementClient
@@ -592,7 +592,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const { code, message } = await management.users.addRoles("USERID", ["ROLEA"]);
+   * const { code, message } = await managementClient.users.addRoles("USERID", ["ROLEA"]);
    *
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
@@ -619,7 +619,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const { code, message } = await management.users.removeRoles("USERID", ["ROLEA"]);
+   * const { code, message } = await managementClient.users.removeRoles("USERID", ["ROLEA"]);
    *
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient

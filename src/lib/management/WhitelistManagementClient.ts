@@ -61,7 +61,7 @@ export class WhitelistManagementClient {
    * @example
    *
    * import { WhitelistType } from "authing-js-sdk"
-   * const list = await management.whitelist.list(WhitelistType.Email);
+   * const list = await managementClient.whitelist.list(WhitelistType.Email);
    *
    * @returns {Promise<WhiteList[]>}
    * @memberof WhitelistManagementClient
@@ -88,7 +88,7 @@ export class WhitelistManagementClient {
    *
    * @example
    *
-   * await management.whitelist.add(WhitelistType.Email, 'a@example.com');
+   * await managementClient.whitelist.add(WhitelistType.Email, 'a@example.com');
    *
    * @returns {Promise<WhiteList[]>}
    * @memberof WhitelistManagementClient
@@ -116,7 +116,7 @@ export class WhitelistManagementClient {
    *
    * @example
    *
-   * await management.whitelist.remove(WhitelistType.Email, 'a@example.com');
+   * await managementClient.whitelist.remove(WhitelistType.Email, 'a@example.com');
    *
    *
    * @returns {Promise<WhiteList[]>}
@@ -148,8 +148,8 @@ export class WhitelistManagementClient {
    * // 添加白名单
    *
    * import { WhitelistType } from "authing-js-sdk"
-   * await management.whitelist.enable(WhitelistType.Email);
-   * await management.whitelist.add(WhitelistType.Email, [‘a@wxample.com’]);
+   * await managementClient.whitelist.enable(WhitelistType.Email);
+   * await managementClient.whitelist.add(WhitelistType.Email, [‘a@wxample.com’]);
    *
    * // 使用不在白名单内的账号注册，不提示无法注册。
    *

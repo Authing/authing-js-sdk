@@ -2,7 +2,7 @@ import { ManagementClient } from './ManagementClient';
 import { generateRandomString, getOptionsFromEnv } from '../testing-helper';
 import test from 'ava';
 
-const management = new ManagementClient(getOptionsFromEnv());
+const managementClient = new ManagementClient(getOptionsFromEnv());
 
 test('通过 json 导入组织机构', async t => {
   const tree = {
@@ -65,9 +65,9 @@ test('通过 json 导入组织机构', async t => {
       }
     ]
   };
-  let org = await management.org.importByJson(tree);
+  let org = await managementClient.org.importByJson(tree);
   t.assert(org);
-  const orgTree = await management.org.findById(org.id);
+  const orgTree = await managementClient.org.findById(org.id);
   t.assert(orgTree.id);
 });
 
@@ -96,20 +96,22 @@ test('添加成员', async t => {
       }
     ]
   };
-  let org = await management.org.importByJson(tree);
+  let org = await managementClient.org.importByJson(tree);
   t.assert(org);
-  const orgTree = await management.org.findById(org.id);
+  const orgTree = await managementClient.org.findById(org.id);
   t.assert(orgTree.id);
 
   // 添加成员
-  const user = await management.users.create({
+  const user = await managementClient.users.create({
     username: generateRandomString(),
     password: '123456'
   });
   const rootNode = orgTree.rootNode;
-  await management.org.addMembers(rootNode.id, [user.id]);
+  await managementClient.org.addMembers(rootNode.id, [user.id]);
 
-  const { totalCount, list } = await management.org.listMembers(rootNode.id);
+  const { totalCount, list } = await managementClient.org.listMembers(
+    rootNode.id
+  );
   t.assert(totalCount === 1);
   t.assert(list.length === 1);
 });
@@ -117,45 +119,51 @@ test('添加成员', async t => {
 test('create', async t => {
   const code = generateRandomString();
   const name = generateRandomString();
-  const org = await management.org.create(name, generateRandomString(), code);
+  const org = await managementClient.org.create(
+    name,
+    generateRandomString(),
+    code
+  );
   t.assert(org.rootNode.code === code);
   t.assert(org.rootNode.name === name);
   t.assert(org.nodes.length === 1);
 });
 
 test('addNode', async t => {
-  const org = await management.org.create(
+  const org = await managementClient.org.create(
     generateRandomString(),
     generateRandomString(),
     generateRandomString()
   );
   const rootNode = org.rootNode;
-  const newOrg = await management.org.addNode(org.id, rootNode.id, {
+  const newOrg = await managementClient.org.addNode(org.id, rootNode.id, {
     name: generateRandomString()
   });
   t.assert(newOrg.nodes.length === 2);
 });
 
 test('updateNode', async t => {
-  const org = await management.org.create(
+  const org = await managementClient.org.create(
     generateRandomString(),
     generateRandomString(),
     generateRandomString()
   );
   const name = generateRandomString();
-  const rootNode = await management.org.updateNode(org.rootNode.id, { name });
+  const rootNode = await managementClient.org.updateNode(org.rootNode.id, {
+    name
+  });
   t.assert(rootNode.name === name);
-  const newOrg = await management.org.findById(org.id);
+  const newOrg = await managementClient.org.findById(org.id);
   t.assert(newOrg.rootNode.name == name);
 });
 
 test('findById', async t => {
-  let org = await management.org.create(
+  let org = await managementClient.org.create(
     generateRandomString(),
     generateRandomString(),
     generateRandomString()
   );
-  org = await management.org.findById(org.id);
+  org = await managementClient.org.findById(org.id);
   t.assert(org);
   t.assert(org.rootNode);
 });

@@ -79,7 +79,7 @@ export class PoliciesManagementClient {
    *   }
    * ];
    *
-   * const policy = await management.policies.create(code, statements);
+   * const policy = await managementClient.policies.create(code, statements);
    *
    * @returns {Promise<DeepPartial<Policy>>}
    * @memberof PoliciesManagementClient
@@ -104,7 +104,7 @@ export class PoliciesManagementClient {
    *
    * @example
    *
-   * const { code, message } = await management.policies.delete("CODE"); // 通过 code 是否为 200 判断操作是否成功
+   * const { code, message } = await managementClient.policies.delete("CODE"); // 通过 code 是否为 200 判断操作是否成功
    *
    *
    * @param {string} code 策略唯一标志
@@ -130,7 +130,7 @@ export class PoliciesManagementClient {
    *
    * @example
    *
-   * const { code, message } = await management.policies.deleteMany(["CODE"]); // 通过 code 是否为 200 判断操作是否成功
+   * const { code, message } = await managementClient.policies.deleteMany(["CODE"]); // 通过 code 是否为 200 判断操作是否成功
    *
    *
    * @param {string} codeList 策略唯一标志列表
@@ -162,7 +162,7 @@ export class PoliciesManagementClient {
    *
    * @example
    *
-   * const policy = await management.policies.update('CODE', { newCode: 'NEWCODE' });
+   * const policy = await managementClient.policies.update('CODE', { newCode: 'NEWCODE' });
    *
    * @returns {Promise<DeepPartial<Policy>>}
    * @memberof PoliciesManagementClient
@@ -197,7 +197,7 @@ export class PoliciesManagementClient {
    *
    * @param {string} code 策略唯一标志
    *
-   * const policy = await management.policies.detail('CODE');
+   * const policy = await managementClient.policies.detail('CODE');
    *
    * @returns {Promise<DeepPartial<Policy>>}
    * @memberof PoliciesManagementClient
@@ -225,7 +225,7 @@ export class PoliciesManagementClient {
    *
    * @example
    *
-   * const { list, totalCount } = await management.policies.list({
+   * const { list, totalCount } = await managementClient.policies.list({
    *   excludeDefault: false // 包含系统默认的策略
    * });
    *
@@ -262,7 +262,7 @@ export class PoliciesManagementClient {
    *
    * @example
    *
-   * const { totalCount, list } = await management.policies.listAssignments("CODE");
+   * const { totalCount, list } = await managementClient.policies.listAssignments("CODE");
    *
    * // list 数据示例
    *
@@ -312,13 +312,13 @@ export class PoliciesManagementClient {
    *
    * import { PolicyAssignmentTargetType } from "authing-js-sdk"
    *
-   * await management.policies.addAssignments(
+   * await managementClient.policies.addAssignments(
    *   ["code1", "code2"],
    *   PolicyAssignmentTargetType.User,
    *   ['USERID']
    * );
    *
-   * await management.policies.addAssignments(
+   * await managementClient.policies.addAssignments(
    *   ["code1", "code2"],
    *   PolicyAssignmentTargetType.Role,
    *   ['ROLE_CODE']
@@ -357,13 +357,13 @@ export class PoliciesManagementClient {
    *
    * import { PolicyAssignmentTargetType } from "authing-js-sdk"
    *
-   * await management.policies.removeAssignments(
+   * await managementClient.policies.removeAssignments(
    *   ["code1", "code2"],
    *   PolicyAssignmentTargetType.User,
    *   ['USERID']
    * );
    *
-   * await management.policies.removeAssignments(
+   * await managementClient.policies.removeAssignments(
    *   ["code1", "code2"],
    *   PolicyAssignmentTargetType.Role,
    *   ['ROLE_CODE']

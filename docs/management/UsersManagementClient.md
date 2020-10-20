@@ -191,7 +191,7 @@ UsersManagementClient().detail(userId)
 #### 示例
 
 ```javascript
-const user = await management.users.detail('USERID');
+const user = await managementClient.users.detail('USERID');
 ```
       
 
@@ -213,7 +213,7 @@ UsersManagementClient().delete(userId)
 #### 示例
 
 ```javascript
-const user = await management.users.delete('USERID');
+const user = await managementClient.users.delete('USERID');
 ```
       
 
@@ -235,7 +235,7 @@ UsersManagementClient().deleteMany(userIds)
 #### 示例
 
 ```javascript
-const user = await management.users.deleteMany(['USERID']);
+const user = await managementClient.users.deleteMany(['USERID']);
 ```
       
 
@@ -257,7 +257,7 @@ UsersManagementClient().batch(userIds)
 #### 示例
 
 ```javascript
-const users = await management.users.batch(['USERID']);
+const users = await managementClient.users.batch(['USERID']);
 ```
       
 
@@ -280,7 +280,7 @@ UsersManagementClient().list(page, limit)
 #### 示例
 
 ```javascript
-const user = await management.users.list();
+const user = await managementClient.users.list();
 ```
       
 
@@ -305,7 +305,7 @@ UsersManagementClient().exists(options)
 #### 示例
 
 ```javascript
-const exists = await management.users.exists({
+const exists = await managementClient.users.exists({
    username: "bob"
 });
 ```
@@ -357,7 +357,7 @@ UsersManagementClient().search(query, options, page, limit)
 #### 示例
 
 ```javascript
-const { totalCount, list } = await management.users.search("Bob");
+const { totalCount, list } = await managementClient.users.search("Bob");
 ```
       
 
@@ -379,11 +379,11 @@ UsersManagementClient().refreshToken(id)
 #### 示例
 
 ```javascript
-const { token } = await management.users.refreshToken("USERID");
+const { token } = await managementClient.users.refreshToken("USERID");
 
 // 检测 token 的最新状态，能够获取到该用户对应的 token
 
-const data = await management.checkLoginStatus(token, {
+const data = await managementClient.checkLoginStatus(token, {
   fetchUserDetail: true
 });
 ```
@@ -407,7 +407,7 @@ UsersManagementClient().listGroups(userId)
 #### 示例
 
 ```javascript
-const { list, totalCount} = await management.users.listGroups("USERID");
+const { list, totalCount} = await managementClient.users.listGroups("USERID");
 ```
       
 
@@ -430,7 +430,7 @@ UsersManagementClient().addGroup(userId, group)
 #### 示例
 
 ```javascript
-const { code, message } = await management.users.addGroup("USERID", "GROUP_CODE");
+const { code, message } = await managementClient.users.addGroup("USERID", "GROUP_CODE");
 ```
       
 
@@ -453,7 +453,7 @@ UsersManagementClient().removeGroup(userId, group)
 #### 示例
 
 ```javascript
-const { code, message } = await management.users.removeGroup("USERID", "GROUP_CODE");
+const { code, message } = await managementClient.users.removeGroup("USERID", "GROUP_CODE");
 ```
       
 
@@ -475,7 +475,7 @@ UsersManagementClient().listRoles(userId)
 #### 示例
 
 ```javascript
-const { list, totalCount} = await management.users.listRoles("USERID");
+const { list, totalCount} = await managementClient.users.listRoles("USERID");
 ```
       
 
@@ -498,7 +498,7 @@ UsersManagementClient().addRoles(userId, roles)
 #### 示例
 
 ```javascript
-const { code, message } = await management.users.addRoles("USERID", ["ROLEA"]);
+const { code, message } = await managementClient.users.addRoles("USERID", ["ROLEA"]);
 ```
       
 
@@ -521,6 +521,6 @@ UsersManagementClient().removeRoles(userId, roles)
 #### 示例
 
 ```javascript
-const { code, message } = await management.users.removeRoles("USERID", ["ROLEA"]);
+const { code, message } = await managementClient.users.removeRoles("USERID", ["ROLEA"]);
 ```
       

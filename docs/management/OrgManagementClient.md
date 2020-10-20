@@ -323,7 +323,7 @@ const tree = {
       }
     ]
   };
-const org = await management.org.importByJson(tree);
+const org = await managementClient.org.importByJson(tree);
 ```
       
 

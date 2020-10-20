@@ -4,11 +4,11 @@ import test from 'ava';
 import { UdfDataType, UdfTargetType } from '../../types/graphql.v2';
 import _ from 'lodash';
 
-const management = new ManagementClient(getOptionsFromEnv());
+const managementClient = new ManagementClient(getOptionsFromEnv());
 
 test('添加自定义字段', async t => {
   const key = generateRandomString();
-  const udf = await management.udf.set(
+  const udf = await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
@@ -20,13 +20,13 @@ test('添加自定义字段', async t => {
 
 test('获取自定义字段列表', async t => {
   const key = generateRandomString();
-  const udf = await management.udf.set(
+  const udf = await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
     '学校'
   );
-  const list = await management.udf.list(UdfTargetType.User);
+  const list = await managementClient.udf.list(UdfTargetType.User);
   t.assert(
     _.some(list, item => {
       return item.key === udf.key;
@@ -36,14 +36,14 @@ test('获取自定义字段列表', async t => {
 
 test('删除自定义字段', async t => {
   const key = generateRandomString();
-  const udf = await management.udf.set(
+  const udf = await managementClient.udf.set(
     UdfTargetType.User,
     key,
     UdfDataType.String,
     '学校'
   );
-  await management.udf.remove(UdfTargetType.User, key);
-  const list = await management.udf.list(UdfTargetType.User);
+  await managementClient.udf.remove(UdfTargetType.User, key);
+  const list = await managementClient.udf.list(UdfTargetType.User);
   t.assert(
     !_.some(list, item => {
       return item.key === udf.key;

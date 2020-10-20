@@ -53,7 +53,7 @@ const statements = [
   }
 ];
 
-const policy = await management.policies.create(code, statements);
+const policy = await managementClient.policies.create(code, statements);
 ```
       
 
@@ -75,7 +75,7 @@ PoliciesManagementClient().delete(code)
 #### 示例
 
 ```javascript
-const { code, message } = await management.policies.delete("CODE"); // 通过 code 是否为 200 判断操作是否成功
+const { code, message } = await managementClient.policies.delete("CODE"); // 通过 code 是否为 200 判断操作是否成功
 ```
       
 
@@ -97,7 +97,7 @@ PoliciesManagementClient().deleteMany(codeList)
 #### 示例
 
 ```javascript
-const { code, message } = await management.policies.deleteMany(["CODE"]); // 通过 code 是否为 200 判断操作是否成功
+const { code, message } = await managementClient.policies.deleteMany(["CODE"]); // 通过 code 是否为 200 判断操作是否成功
 ```
       
 
@@ -123,7 +123,7 @@ PoliciesManagementClient().update(code, updates)
 #### 示例
 
 ```javascript
-const policy = await management.policies.update('CODE', { newCode: 'NEWCODE' });
+const policy = await managementClient.policies.update('CODE', { newCode: 'NEWCODE' });
 ```
       
 
@@ -138,7 +138,7 @@ PoliciesManagementClient().detail(code)
 
 - `code` \<string\> 策略唯一标志
 
-const policy = await management.policies.detail('CODE'); 
+const policy = await managementClient.policies.detail('CODE'); 
 
 #### 返回值
 
@@ -170,7 +170,7 @@ PoliciesManagementClient().list(options)
 #### 示例
 
 ```javascript
-const { list, totalCount } = await management.policies.list({
+const { list, totalCount } = await managementClient.policies.list({
   excludeDefault: false // 包含系统默认的策略
 });
 ```
@@ -196,7 +196,7 @@ PoliciesManagementClient().listAssignments(code, page, limit)
 #### 示例
 
 ```javascript
-const { totalCount, list } = await management.policies.listAssignments("CODE");
+const { totalCount, list } = await managementClient.policies.listAssignments("CODE");
 
 // list 数据示例
 
@@ -237,13 +237,13 @@ PoliciesManagementClient().addAssignments(policies, targetType, targetIdentifier
 ```javascript
 import { PolicyAssignmentTargetType } from "authing-js-sdk"
 
-await management.policies.addAssignments(
+await managementClient.policies.addAssignments(
   ["code1", "code2"],
   PolicyAssignmentTargetType.User,
   ['USERID']
 );
 
-await management.policies.addAssignments(
+await managementClient.policies.addAssignments(
   ["code1", "code2"],
   PolicyAssignmentTargetType.Role,
   ['ROLE_CODE']
@@ -273,13 +273,13 @@ PoliciesManagementClient().removeAssignments(policies, targetType, targetIdentif
 ```javascript
 import { PolicyAssignmentTargetType } from "authing-js-sdk"
 
-await management.policies.removeAssignments(
+await managementClient.policies.removeAssignments(
   ["code1", "code2"],
   PolicyAssignmentTargetType.User,
   ['USERID']
 );
 
-await management.policies.removeAssignments(
+await managementClient.policies.removeAssignments(
   ["code1", "code2"],
   PolicyAssignmentTargetType.Role,
   ['ROLE_CODE']

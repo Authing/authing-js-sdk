@@ -405,7 +405,7 @@ export class OrgManagementClient {
    *       }
    *     ]
    *   };
-   * const org = await management.org.importByJson(tree);
+   * const org = await managementClient.org.importByJson(tree);
    *
    * @returns {Promise<Node[]>}
    * @memberof OrgManagementClient
