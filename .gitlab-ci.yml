@@ -5,8 +5,6 @@ stages:
 
 publish:
   stage: publish
-  only:
-    - master
   when: manual
   script:
     - npm install --registry https://registry.npm.taobao.org/
