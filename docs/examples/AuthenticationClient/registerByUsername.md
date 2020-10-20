@@ -1,7 +1,7 @@
 ```python
-email = 'test@example.com'
-user = authentication_client.register_by_email(
-    email=email,
+username = 'bob'
+user = authentication_client.register_by_username(
+    username=username,
     password='passw0rd',
     profile={
       'nickname': 'Nick'
