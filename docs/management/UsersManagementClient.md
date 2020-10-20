@@ -271,7 +271,7 @@ UsersManagementClient().list(page, limit)
 #### 参数
 
 - `page` \<number\> 页码数, 从 1 开始 默认值为 : `1`。
-- `limit` \<number\> 每页包含的用户数 默认值为 : `1`。
+- `limit` \<number\> 每页包含的用户数 默认值为 : `10`。
 
 #### 返回值
 
