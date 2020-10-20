@@ -3,5 +3,5 @@
 ```
 
 ```c#
-
+await authenticationClient.UnbindPhone();
 ```

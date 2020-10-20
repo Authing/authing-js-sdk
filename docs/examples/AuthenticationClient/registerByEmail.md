@@ -10,5 +10,8 @@ user = authentication_client.register_by_email(
 ```
 
 ```c#
-
+var email = "test@example.com";
+var password = "123456";
+var user = await authenticationClient.RegisterByEmail(email, password);
+Console.WriteLine(user.Email);
 ```
