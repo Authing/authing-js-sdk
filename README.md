@@ -1,10 +1,27 @@
-# authing-js-sdk
+# Authing - Node/JavaScript
 
-Authing JavaScript/Node SDK 由两部分组成：`ManagementClient` 和 `AuthenticationClient`。`AuthenticationClient` 包含注册登录、重置手机号邮箱、修改账号信息等方法，是以你的终端用户（End User）的身份进行请求，适合在浏览器环境使用。`ManagementClient` 适合在后端或者**可信任**的前端环境下使用。一般来说，你在 [Authing 控制台](https://console.authing.cn/console/userpool) 中能做的所有操作，都能用此 SDK 完成。
+Authing JavaScript/Node SDK 由两部分组成：`ManagementClient` 和 `AuthenticationClient`。`AuthenticationClient` 包含注册登录、重置手机号邮箱、修改账号信息等方法，是以你的终端用户（End User）的身份进行请求，适合在浏览器和后端环境中使用。`ManagementClient` 适合在后端或者**可信任**的前端环境下使用。一般来说，你在 [Authing 控制台](https://console.authing.cn/console/userpool) 中能做的所有操作，都能用此 SDK 完成。
+
+> Authing SDK for NodeJS/JavaScript 已经更新至 `4.0.0` 版本，如果你需要使用 `v3` 版本文档，请见 [https://docs.authing.co/sdk/sdk-for-node/old.html](https://docs.authing.co/sdk/sdk-for-node/old.html)
+
+- [安装](#安装)
+- [使用用户认证模块](#使用用户认证模块)
+  - [初始化](#初始化)
+  - [使用方法](#使用方法)
+  - [小程序扫码登录](#小程序扫码登录)
+  - [App 扫码登录](#app-扫码登录)
+  - [模块列表](#模块列表)
+- [使用用户管理模块](#使用用户管理模块)
+  - [初始化](#初始化-1)
+  - [使用方法](#使用方法-1)
+  - [模块列表](#模块列表-1)
+- [错误处理](#错误处理)
+- [获取帮助](#获取帮助)
+- [接口索引](#接口索引)
 
 ## 安装
 
-使用 `nmp`:
+使用 `npm`:
 
 ```
 npm install authing-js-sdk
@@ -16,7 +33,7 @@ npm install authing-js-sdk
 yarn add authing-js-sdk
 ```
 
-## `AuthenticationClient`
+## 使用用户认证模块
 
 ### 初始化
 
@@ -35,6 +52,7 @@ const authing = new AuthenticationClient({
 完整参数列表如下:
 
 - `userPoolId`: 用户池 ID。
+- `accessToken`: 通过用户的 token 初始化 SDK 。
 - `timeout`: 请求超时时间，单位为毫秒，默认为 10000 （10 秒）。
 - `onError`: 错误处理函数，你可以用其来全局捕捉 Authing 客户端请求的所有异常。函数定义为：
 
@@ -96,8 +114,13 @@ authenticationClient.qrcode.startScanning("qrcode", {
 });
 ```
 
+### 模块列表
 
-## `ManagementClient`
+- [AuthenticationClient](./docs/authentication/AuthenticationClient.md) 核心模块
+- [QrCodeAuthenticationClient](./docs/authentication/QrCodeAuthenticationClient.md) 小程序扫码登录和 APP 扫码登录
+
+
+## 使用用户管理模块
 
 ### 初始化
 
@@ -118,6 +141,7 @@ const managementClient = new ManagementClient({
 
 - `userPoolId`: 用户池 ID。
 - `secret`: 用户池密钥。
+- `accessToken`: 通过管理员的 token 初始化 SDK。**secret 和 accessToken 必须填其中一种**。
 - `timeout`: 请求超时时间，单位为毫秒，默认为 10000 （10 秒）。
 - `onError`: 错误处理函数，你可以用其来全局捕捉 Authing 客户端请求的所有异常。函数定义为：
 
@@ -134,7 +158,7 @@ const managementClient = new ManagementClient({
 
 ### 使用方法
 
-`ManagementClient` 可以操作用户、角色、策略、分组、组织机构、用户池配置，任何你在 [Authing 控制台](https://console.authing.cn/console/userpool) 中能做的操作，都能用此 SDK 完成。
+`ManagementClient` 可以用于管理用户、角色、策略、分组、组织机构、用户池配置，理论上任何你在 [Authing 控制台](https://console.authing.cn/console/userpool) 中能做的操作，都能用此 SDK 完成。
 
 获取用户目录列表:
 
@@ -201,4 +225,3 @@ const authing = new AuthenticationClient({
 ## 获取帮助
 
 Join us on Gitter: [#authing-chat](https://gitter.im/authing-chat/community)
-
