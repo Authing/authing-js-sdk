@@ -159,7 +159,9 @@ for (let file of files) {
         const lang = 'python'
         const reg = new RegExp('```' + lang + '\\n(([\\s\\S](?!```))*)\\n```');
         example = reg.exec(fs.readFileSync(exampleFilename, 'utf-8'))
-        example = example[0]
+        if (example) {
+          example = example[0]
+        }
       }
       doc = `
 ## ${name_zh}
@@ -241,7 +243,7 @@ for (let file of files) {
     const memberof = _.find(tags, { title: 'memberof' })?.description
     const name = _.find(tags, { title: 'name' })?.name
 
-    if (name === "checkPasswordStrength" || 'exists') {
+    if (name === "checkPasswordStrength" || name === 'exists') {
       continue
     }
 
@@ -261,7 +263,9 @@ for (let file of files) {
         const lang = 'csharp'
         const reg = new RegExp('```' + lang + '\\n(([\\s\\S](?!```))*)\\n```');
         example = reg.exec(fs.readFileSync(exampleFilename, 'utf-8'))
-        example = example[0]
+        if (example) {
+          example = example[0]
+        }
       }
       doc = `
 ## ${name_zh}
