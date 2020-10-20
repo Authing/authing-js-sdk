@@ -2,6 +2,6 @@
 user = authentication_client.unbind_phone()
 ```
 
-```c#
+```csharp
 await authenticationClient.UnbindPhone();
 ```

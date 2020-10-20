@@ -3,7 +3,7 @@
 user = authentication_client.get_current_user()
 ```
 
-```c#
+```csharp
 var user = await authenticationClient.CurrentUser();
 Console.WriteLine(user.Phone);
 ```

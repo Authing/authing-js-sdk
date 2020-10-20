@@ -6,7 +6,7 @@ authentication_client.reset_password_by_email_code(
 )
 ```
 
-```c#
+```csharp
 var email = "test@example.com";
 var code = "1234";
 var password = "123456";

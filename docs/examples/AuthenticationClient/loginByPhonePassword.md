@@ -6,7 +6,7 @@ user = authentication_client.login_by_phone_password(
 )
 ```
 
-```c#
+```csharp
 var phone = "phone number";
 var password = "123456";
 var user = await authenticationClient.LoginByPhonePassword(phone, password);

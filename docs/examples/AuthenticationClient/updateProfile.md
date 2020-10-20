@@ -4,7 +4,7 @@ user = authentication_client.update_profile({
 })
 ```
 
-```c#
+```csharp
 var user = await authenticationClient.UpdateProfile(new UpdateUserInput()
 {
   Nickname = nickname,

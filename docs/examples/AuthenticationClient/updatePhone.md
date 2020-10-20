@@ -14,6 +14,6 @@ authentication_client.update_email(
 )
 ```
 
-```c#
+```csharp
 await authenticationClient.UpdatePhone("phone number", "1234");
 ```

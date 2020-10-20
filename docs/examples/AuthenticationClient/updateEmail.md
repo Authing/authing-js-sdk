@@ -14,7 +14,7 @@ authentication_client.update_email(
 )
 ```
 
-```c#
+```csharp
 var newEmail = "new@example.com";
 var emailCOde = "1234"
 await authenticationClient.UpdateEmail(newEmail, "1234");

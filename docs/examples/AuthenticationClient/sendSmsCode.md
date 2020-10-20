@@ -4,7 +4,7 @@ authentication_client.send_sms_code(
 )
 ```
 
-```c#
+```csharp
 var phone = "phone number";
 await authenticationClient.SendSmsCode(phone);
 ```

@@ -11,7 +11,7 @@ authentication_client.update_password(
 )
 ```
 
-```c#
+```csharp
 var oldPassword = "111111";
 var newPassword = "123456";
 await authenticationClient.UpdatePassword(newPassword, oldPassword);

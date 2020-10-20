@@ -2,6 +2,6 @@
 authentication_client.logout()
 ```
 
-```c#
+```csharp
 await authenticationClient.Logout();
 ```

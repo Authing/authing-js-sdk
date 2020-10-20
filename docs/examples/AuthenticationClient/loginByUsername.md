@@ -7,7 +7,7 @@ user = authentication_client.register_by_username(
 )
 ```
 
-```c#
+```csharp
 var username = "username";
 var password = "123456";
 var user = await authenticationClient.LoginByUsername(username, password);

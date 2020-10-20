@@ -10,7 +10,7 @@ user = authentication_client.register_by_phone_code(
 )
 ```
 
-```c#
+```csharp
 var phone = "phone number";
 var code = "1234";
 var password = "123456";

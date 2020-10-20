@@ -7,7 +7,7 @@ data = authentication.check_login_status(token="TOKEN")
 data = authentication.check_login_status()
 ```
 
-```c#
+```csharp
 var status = await authenticationClient.CheckLoginStatus();
 Console.WriteLine(status.code == 200);
 ```
