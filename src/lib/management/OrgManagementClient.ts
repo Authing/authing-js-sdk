@@ -23,7 +23,7 @@ import { CommonMessage, Org, PaginatedUsers } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
 
 /**
- * @class OrgManagementClient 组织机构管理
+ * @class OrgManagementClient 管理组织机构
  * @description 一个 Authing 用户池可以创建多个组织机构。此模块用于管理 Authing 组织机构，可以进行组织机构的增删改查、添加删除移动节点、导入组织机构等操作。
  *
  * 请使用以下方式使用该模块：
@@ -95,6 +95,7 @@ export class OrgManagementClient {
 
   /**
    * @name deleteById
+   * @name_zh 删除组织机构
    * @description 删除组织机构树
    * @param {string} id 组织机构 ID
    *
@@ -372,7 +373,7 @@ export class OrgManagementClient {
 
   /**
    * @name importByJson
-   * @name 通过 JSON 导入
+   * @name_zh 通过 JSON 导入
    * @description 通过一个 JSON 树结构导入组织机构
    *
    * @param {Object} json JSON 格式的树结构，详细格式请见示例代码。

@@ -1,5 +1,5 @@
 
-# 访问控制管理
+# 管理权限、访问控制
 
 [[toc]]
 
@@ -40,14 +40,14 @@ AclManagementClient().allow(userId, action, resource)
 #### 示例
 
 ```javascript
-AclManagementClient().allow('USERID1', 'books:123', 'books:read')
-AclManagementClient().isAllowed('USERID1', 'books:123', 'books:read') // true
-AclManagementClient().isAllowed('USERID1', 'books:123', 'books:edit') // false
+managementClient.acl.allow('USERID1', 'books:123', 'books:read')
+managementClient.acl.isAllowed('USERID1', 'books:123', 'books:read') // true
+managementClient.acl.isAllowed('USERID1', 'books:123', 'books:edit') // false
 ```
 ```javascript
-AclManagementClient().allow('USERID2', 'books:*', 'books:*')
-AclManagementClient().isAllowed('USERID2', 'books:123', 'books:read') // true
-AclManagementClient().isAllowed('USERID2', 'books:124', 'books:edit') // true
+managementClient.acl.allow('USERID2', 'books:*', 'books:*')
+managementClient.acl.isAllowed('USERID2', 'books:123', 'books:read') // true
+managementClient.acl.isAllowed('USERID2', 'books:124', 'books:edit') // true
 ```
       
 
@@ -71,6 +71,6 @@ AclManagementClient().isAllowed(userId, action, resource)
 #### 示例
 
 ```javascript
-AclManagementClient().isAllowed('USERID', 'books:*', 'books:edit')
+managementClient.acl.isAllowed('USERID', 'books:*', 'books:edit')
 ```
       

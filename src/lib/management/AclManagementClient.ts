@@ -5,7 +5,7 @@ import { allow, isAllowed } from '../graphqlapi';
 import { CommonMessage } from '../../types/graphql.v2';
 
 /**
- * @class AclManagementClient 访问控制管理
+ * @class AclManagementClient 管理权限、访问控制
  * @description Authing 基于 PBAC（Policy Based Access Control，基于策略的访问控制）构建权限模型，
  * 可以和 RBAC （Role Based Access Control，基于角色的访问控制）结合，实现非常灵活、精细化的权限控制。
  *
@@ -50,14 +50,14 @@ export class AclManagementClient {
    * @param {string} action 操作名称，推荐使用 \<resourceType\>:\<actionName\> 的格式，如 `books:edit`, `books:list`
    * @param {string} resource 资源名称, 必须为 \<resourceType\>:\<resourceId\> 格式或者为 *, 如 `*`, `books:123`, `books:*`
    * @example
-   * AclManagementClient().allow('USERID1', 'books:123', 'books:read')
-   * AclManagementClient().isAllowed('USERID1', 'books:123', 'books:read') // true
-   * AclManagementClient().isAllowed('USERID1', 'books:123', 'books:edit') // false
+   * managementClient.acl.allow('USERID1', 'books:123', 'books:read')
+   * managementClient.acl.isAllowed('USERID1', 'books:123', 'books:read') // true
+   * managementClient.acl.isAllowed('USERID1', 'books:123', 'books:edit') // false
    *
    * @example
-   * AclManagementClient().allow('USERID2', 'books:*', 'books:*')
-   * AclManagementClient().isAllowed('USERID2', 'books:123', 'books:read') // true
-   * AclManagementClient().isAllowed('USERID2', 'books:124', 'books:edit') // true
+   * managementClient.acl.allow('USERID2', 'books:*', 'books:*')
+   * managementClient.acl.isAllowed('USERID2', 'books:123', 'books:read') // true
+   * managementClient.acl.isAllowed('USERID2', 'books:124', 'books:edit') // true
    *
    * @returns {Promise<CommonMessage>}
    * @memberof AclManagementClient
@@ -89,7 +89,7 @@ export class AclManagementClient {
    * @param {string} action 操作名称，推荐使用 \<resourceType\>:\<actionName\> 的格式，如 `books:edit`, `books:list`
    * @param {string} resource 资源名称, 必须为 \<resourceType\>:\<resourceId\> 格式或者为 *, 如 `*`, `books:123`, `books:*`
    * @example
-   * AclManagementClient().isAllowed('USERID', 'books:*', 'books:edit')
+   * managementClient.acl.isAllowed('USERID', 'books:*', 'books:edit')
    *
    * @returns {Promise<boolean>} 是否具备操作权限
    * @memberof AclManagementClient

@@ -9,11 +9,11 @@
 
 ```javascript
 import { AuthenticationClient } from "authing-js-sdk"
-const authing = new AuthenticationClient({
+const authenticationClient = new AuthenticationClient({
    userPoolId: process.env.AUTHING_USERPOOL_ID,
 })
-authing.registerByEmail // 使用邮箱注册
-authing.loginByEmail // 使用邮箱登录
+authenticationClient.registerByEmail // 使用邮箱注册
+authenticationClient.loginByEmail // 使用邮箱登录
 ```
 
 ## 使用邮箱注册
@@ -39,7 +39,7 @@ AuthenticationClient().registerByEmail(email, password, profile, options)
 #### 示例
 
 ```javascript
-AuthenticationClient().registerByEmail(
+authenticationClient.registerByEmail(
  'test@example.com',
  'passw0rd',
  {
@@ -51,7 +51,7 @@ AuthenticationClient().registerByEmail(
 )
 ```
 ```javascript
-AuthenticationClient().registerByEmail('test@example.com', 'passw0rd')
+authenticationClient.registerByEmail('test@example.com', 'passw0rd')
 ```
       
 
@@ -78,7 +78,7 @@ AuthenticationClient().registerByUsername(username, password, profile, options)
 #### 示例
 
 ```javascript
-AuthenticationClient().registerByUsername(
+authenticationClient.registerByUsername(
  'bob',
  'passw0rd',
  {
@@ -90,7 +90,7 @@ AuthenticationClient().registerByUsername(
 )
 ```
 ```javascript
-AuthenticationClient().registerByUsername('bob', 'passw0rd')
+authenticationClient.registerByUsername('bob', 'passw0rd')
 ```
       
 
@@ -118,7 +118,7 @@ AuthenticationClient().registerByPhoneCode(phone, code, password, profile, optio
 #### 示例
 
 ```javascript
-AuthenticationClient().registerByPhoneCode(
+authenticationClient.registerByPhoneCode(
  '176xxxx7041',
  '1234',
  'passw0rd',
@@ -131,7 +131,7 @@ AuthenticationClient().registerByPhoneCode(
 )
 ```
 ```javascript
-AuthenticationClient().registerByPhoneCode('176xxxx7041', '1234')
+authenticationClient.registerByPhoneCode('176xxxx7041', '1234')
 ```
       
 
@@ -153,10 +153,10 @@ AuthenticationClient().checkPasswordStrength(password)
 #### 示例
 
 ```javascript
-AuthenticationClient().checkPasswordStrength('weak')
+authenticationClient.checkPasswordStrength('weak')
 ```
 ```javascript
-AuthenticationClient().checkPasswordStrength('strongPassw0rd!')
+authenticationClient.checkPasswordStrength('strongPassw0rd!')
 ```
       
 
@@ -178,7 +178,7 @@ AuthenticationClient().sendSmsCode(phone)
 #### 示例
 
 ```javascript
-AuthenticationClient().sendSmsCode('176xxxx6754')
+authenticationClient.sendSmsCode('176xxxx6754')
 ```
       
 
@@ -206,7 +206,7 @@ AuthenticationClient().loginByEmail(email, password, options)
 #### 示例
 
 ```javascript
-AuthenticationClient().loginByEmail(
+authenticationClient.loginByEmail(
  'test@example.com',
  'passw0rd',
  {
@@ -216,7 +216,7 @@ AuthenticationClient().loginByEmail(
 )
 ```
 ```javascript
-AuthenticationClient().loginByEmail('test@example.com', 'passw0rd')
+authenticationClient.loginByEmail('test@example.com', 'passw0rd')
 ```
       
 
@@ -244,7 +244,7 @@ AuthenticationClient().loginByUsername(username, password, options)
 #### 示例
 
 ```javascript
-AuthenticationClient().loginByEmail(
+authenticationClient.loginByEmail(
  'test@example.com',
  'passw0rd',
  {
@@ -254,7 +254,7 @@ AuthenticationClient().loginByEmail(
 )
 ```
 ```javascript
-AuthenticationClient().loginByEmail('test@example.com', 'passw0rd')
+authenticationClient.loginByEmail('test@example.com', 'passw0rd')
 ```
       
 
@@ -277,7 +277,7 @@ AuthenticationClient().loginByPhoneCode(phone, code)
 #### 示例
 
 ```javascript
-AuthenticationClient().loginByPhoneCode(
+authenticationClient.loginByPhoneCode(
  '176xxxx7041',
  '1234',
 )
@@ -305,7 +305,7 @@ AuthenticationClient().loginByPhonePassword(phone, password, options)
 #### 示例
 
 ```javascript
-AuthenticationClient().loginByPhonePassword(
+authenticationClient.loginByPhonePassword(
  '176xxxx7041',
  'passw0rd',
  {
@@ -315,7 +315,7 @@ AuthenticationClient().loginByPhonePassword(
 )
 ```
 ```javascript
-AuthenticationClient().loginByPhonePassword('176xxxx7041', 'passw0rd')
+authenticationClient.loginByPhonePassword('176xxxx7041', 'passw0rd')
 ```
       
 
@@ -337,7 +337,7 @@ AuthenticationClient().checkLoginStatus(token)
 #### 示例
 
 ```javascript
-AuthenticationClient().checkLoginStatus('TOKEN')
+authenticationClient.checkLoginStatus('TOKEN')
 ```
       
 
@@ -361,7 +361,7 @@ AuthenticationClient().sendEmail(email, scene)
 
 ```javascript
 import { EmailScene } from "authing-js-sdk"
-AuthenticationClient().sendEmail('test@example.com', EmailScene.RESET_PASSWORD)
+authenticationClient.sendEmail('test@example.com', EmailScene.RESET_PASSWORD)
 ```
       
 
@@ -385,7 +385,7 @@ AuthenticationClient().resetPasswordByPhoneCode(phone, code, newPassword)
 #### 示例
 
 ```javascript
-AuthenticationClient().resetPasswordByPhoneCode('176xxxx7041', '1234', 'passw0rd')
+authenticationClient.resetPasswordByPhoneCode('176xxxx7041', '1234', 'passw0rd')
 ```
       
 
@@ -409,7 +409,7 @@ AuthenticationClient().resetPasswordByEmailCode(phone, code, newPassword)
 #### 示例
 
 ```javascript
-AuthenticationClient().resetPasswordByEmailCode('test@example.com', '1234', 'passw0rd')
+authenticationClient.resetPasswordByEmailCode('test@example.com', '1234', 'passw0rd')
 ```
       
 
@@ -457,7 +457,7 @@ AuthenticationClient().updateProfile(updates)
 #### 示例
 
 ```javascript
-AuthenticationClient().updateProfile({
+authenticationClient.updateProfile({
  nickname: "Nick",
  lastIp: "111.111.111.111"
 })
@@ -483,10 +483,10 @@ AuthenticationClient().updatePassword(newPassword, oldPassword)
 #### 示例
 
 ```javascript
-AuthenticationClient().updatePassword('passw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
+authenticationClient.updatePassword('passw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
 ```
 ```javascript
-AuthenticationClient().updatePassword('passw0rd', 'oldPassw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
+authenticationClient.updatePassword('passw0rd', 'oldPassw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
 ```
       
 
@@ -514,10 +514,10 @@ AuthenticationClient().updatePhone(phone, phoneCode, oldPhone, oldPhoneCode)
 #### 示例
 
 ```javascript
-AuthenticationClient().updatePhone('176xxxx7041', '1234') // 关闭了“验证原有手机号“选项
+authenticationClient.updatePhone('176xxxx7041', '1234') // 关闭了“验证原有手机号“选项
 ```
 ```javascript
-AuthenticationClient().updatePhone('176xxxx7041', '1234', '156xxxx9876', '1234') // 开启了“验证原有手机号“选项
+authenticationClient.updatePhone('176xxxx7041', '1234', '156xxxx9876', '1234') // 开启了“验证原有手机号“选项
 ```
       
 
@@ -544,10 +544,10 @@ AuthenticationClient().updateEmail(email, emailCode, oldEmail, oldEmailCode)
 #### 示例
 
 ```javascript
-AuthenticationClient().updateEmail('test@example.com', '1234') // 关闭了“验证原有邮箱“选项
+authenticationClient.updateEmail('test@example.com', '1234') // 关闭了“验证原有邮箱“选项
 ```
 ```javascript
-AuthenticationClient().updateEmail('test@example.com', '1234', 'test2@example.com', '1234') // 开启了“验证原有邮箱“选项
+authenticationClient.updateEmail('test@example.com', '1234', 'test2@example.com', '1234') // 开启了“验证原有邮箱“选项
 ```
       
 
@@ -569,7 +569,7 @@ AuthenticationClient().refreshToken()
 #### 示例
 
 ```javascript
-AuthenticationClient().updateEmail()
+authenticationClient.updateEmail()
 ```
       
 
@@ -592,7 +592,7 @@ AuthenticationClient().bindPhone(phone, phoneCode)
 #### 示例
 
 ```javascript
-AuthenticationClient().bindPhone('176xxxx7041', '1234')
+authenticationClient.bindPhone('176xxxx7041', '1234')
 ```
       
 
@@ -614,7 +614,7 @@ AuthenticationClient().unbindPhone()
 #### 示例
 
 ```javascript
-AuthenticationClient().unbindPhone()
+authenticationClient.unbindPhone()
 ```
       
 
@@ -636,7 +636,7 @@ AuthenticationClient().currentUser()
 #### 示例
 
 ```javascript
-AuthenticationClient().currentUser()
+authenticationClient.currentUser()
 ```
       
 
@@ -658,7 +658,7 @@ AuthenticationClient().logout()
 #### 示例
 
 ```javascript
-AuthenticationClient().logout()
+authenticationClient.logout()
 ```
       
 
@@ -680,7 +680,7 @@ AuthenticationClient().listUdv()
 #### 示例
 
 ```javascript
-AuthenticationClient().listUdv()
+authenticationClient.listUdv()
 ```
       
 
@@ -703,7 +703,7 @@ AuthenticationClient().addUdv(key:, value:)
 #### 示例
 
 ```javascript
-AuthenticationClient().addUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
+authenticationClient.addUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
 ```
       
 
@@ -725,6 +725,6 @@ AuthenticationClient().removeUdv(key:)
 #### 示例
 
 ```javascript
-AuthenticationClient().removeUdv('school')
+authenticationClient.removeUdv('school')
 ```
       

@@ -54,7 +54,7 @@ import {
  * managementClient.users.search // 搜索用户
  * \`\`\`
  *
- * @class UsersManagementClient 用户管理
+ * @class UsersManagementClient 管理用户
  */
 export class UsersManagementClient {
   options: ManagementClientOptions;

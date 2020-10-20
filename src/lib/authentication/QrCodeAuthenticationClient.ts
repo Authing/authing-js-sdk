@@ -17,10 +17,10 @@ import { HttpClient } from '../common/HttpClient';
  *
  * \`\`\`javascript
  * import { AuthenticationClient } from "authing-js-sdk"
- * const authing = new AuthenticationClient({
+ * const authenticationClient = new AuthenticationClient({
  *    userPoolId: process.env.AUTHING_USERPOOL_ID,
  * })
- * authing.wxqrcode.startScanning() # 开始扫码登录
+ * authenticationClient.wxqrcode.startScanning() # 开始扫码登录
  * \`\`\`
  *
  * 使用 APP 扫码登录
@@ -453,10 +453,10 @@ export class QrCodeAuthenticationClient {
    * @description 生成二维码
    *
    * @example
-   * const authing = new AuthenticationClient({
+   * const authenticationClient = new AuthenticationClient({
    *    userPoolId: process.env.AUTHING_USERPOOL_ID,
    * })
-   * const { url, random } = await authing.wxqrcode.geneCode()
+   * const { url, random } = await authenticationClient.wxqrcode.geneCode()
    *
    * # random 二维码唯一 ID
    * # url 二维码链接
@@ -485,10 +485,10 @@ export class QrCodeAuthenticationClient {
    *
    * @example
    *
-   * const authing = new AuthenticationClient({
+   * const authenticationClient = new AuthenticationClient({
    *    userPoolId: process.env.AUTHING_USERPOOL_ID,
    * })
-   * const { random, status, ticket, userInfo } = await authing.wxqrcode.checkStatus('RANDOM')
+   * const { random, status, ticket, userInfo } = await authenticationClient.wxqrcode.checkStatus('RANDOM')
    * # status: 二维码状态: 0 - 未使用, 1 - 已扫码, 2 - 已授权, 3 - 取消授权, -1 - 已过期
    * # ticket: 用于换取用户信息的一个随机字符串
    * # userInfo: 用户信息
@@ -512,10 +512,10 @@ export class QrCodeAuthenticationClient {
    *
    * @example
    *
-   * const authing = new AuthenticationClient({
+   * const authenticationClient = new AuthenticationClient({
    *    userPoolId: process.env.AUTHING_USERPOOL_ID,
    * })
-   * const user = await authing.wxqrcode.exchangeUserInfo('TICKET')
+   * const user = await authenticationClient.wxqrcode.exchangeUserInfo('TICKET')
    * # user: 完整的用户信息，其中 user.token 为用户的登录凭证。
    *
    * @param {string} ticket ticket

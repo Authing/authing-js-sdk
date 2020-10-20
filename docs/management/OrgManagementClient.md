@@ -1,5 +1,5 @@
 
-# 组织机构管理
+# 管理组织机构
 
 [[toc]]
 
@@ -43,7 +43,7 @@ const org = await managementClient.org.create('北京非凡科技', '北京非�
 ```
       
 
-## undefined
+## 删除组织机构
 
 OrgManagementClient().deleteById(id)
 
@@ -277,7 +277,7 @@ const rootNode = await managementClient.org.rootNode("ORGID")
 ```
       
 
-## undefined
+## 通过 JSON 导入
 
 OrgManagementClient().importByJson(json)
 

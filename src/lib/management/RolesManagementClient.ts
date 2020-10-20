@@ -25,7 +25,7 @@ import {
 } from '../graphqlapi';
 
 /**
- * @class RolesManagementClient 角色管理
+ * @class RolesManagementClient 管理角色
  * @description 此模块用于管理 Authing 角色，可以进行角色的增删改查、角色添加/删除用户、角色添加/删除策略 等操作。
  *
  * 请使用以下方式使用该模块，而不要直接初始化该模块：
@@ -67,7 +67,7 @@ export class RolesManagementClient {
    * @param {string} [description] 描述
    *
    * @example
-   * RolesManagementClient().create('rolea', 'RoleA')
+   * managementClient.roles.create('rolea', 'RoleA')
    *
    * @returns {Promise<DeepPartial<Role>>}
    * @memberof RolesManagementClient
@@ -88,7 +88,7 @@ export class RolesManagementClient {
    * @param {string} code 角色唯一标志符
    *
    * @example
-   * RolesManagementClient().delete('rolea')
+   * managementClient.roles.delete('rolea')
    *
    * @returns {Promise<CommonMessage>}
    * @memberof RolesManagementClient
@@ -112,7 +112,7 @@ export class RolesManagementClient {
    * @param {string[]} codeList 角色唯一标志符列表
    *
    * @example
-   * RolesManagementClient().delete(['rolea'])
+   * managementClient.roles.delete(['rolea'])
    *
    * @returns {Promise<CommonMessage>}
    * @memberof RolesManagementClient
@@ -139,7 +139,7 @@ export class RolesManagementClient {
    * @param {string} input.newCode 新的唯一标志符
    *
    * @example
-   * RolesManagementClient().update('rolea', {newCode: 'newcode'})
+   * managementClient.roles.update('rolea', {newCode: 'newcode'})
    *
    *
    * @returns {Promise<DeepPartial<Role>>}
@@ -174,7 +174,7 @@ export class RolesManagementClient {
    * @param {string} code 角色唯一标志符
    *
    * @example
-   * RolesManagementClient().detail('manager')
+   * managementClient.roles.detail('manager')
    *
    * @returns {Promise<DeepPartial<Role>>} 角色详情
    * @memberof RolesManagementClient
@@ -194,7 +194,7 @@ export class RolesManagementClient {
    * @param {number} [page=1] 页码数
    * @param {number} [limit=10] 每页个数
    * @example
-   * RolesManagementClient().list(2, 10)
+   * managementClient.roles.list(2, 10)
    *
    * @returns {Promise<DeepPartial<PaginatedRoles>>}
    * @memberof RolesManagementClient
@@ -220,7 +220,7 @@ export class RolesManagementClient {
    * @description 获取角色用户列表
    * @param {string} code 角色唯一标志符
    * @example
-   * RolesManagementClient().listUsers(code)
+   * managementClient.roles.listUsers(code)
    *
    * @returns {Promise<DeepPartial<PaginatedUsers>>}
    * @memberof RolesManagementClient
@@ -244,7 +244,7 @@ export class RolesManagementClient {
    * @param {string} code 角色唯一标志符
    * @param {string[]} userIds 用户 ID 列表
    * @example
-   * RolesManagementClient().addUsers(code, ['USERID1', 'USERID2'])
+   * managementClient.roles.addUsers(code, ['USERID1', 'USERID2'])
    *
    * @returns {Promise<CommonMessage>}
    * @memberof RolesManagementClient
@@ -266,7 +266,7 @@ export class RolesManagementClient {
    * @param {string} code 角色唯一标志符
    * @param {string[]} userIds 用户 ID 列表
    * @example
-   * RolesManagementClient().removeUsers(code, ['USERID1', 'USERID2'])
+   * managementClient.roles.removeUsers(code, ['USERID1', 'USERID2'])
    *
    * @returns {Promise<CommonMessage>}
    * @memberof RolesManagementClient
@@ -289,7 +289,7 @@ export class RolesManagementClient {
    * @param {number} [page=1] 页码数
    * @param {number} [limit=10] 页码个数
    * @example
-   *  RolesManagementClient().listPolicies('codea', 1, 10)
+   *  managementClient.roles.listPolicies('codea', 1, 10)
    *
    * @returns {Promise<PaginatedPolicyAssignment>}
    * @memberof RolesManagementClient
@@ -321,7 +321,7 @@ export class RolesManagementClient {
    * @param {string} code 角色唯一标志符
    * @param {string[]} policies 策略列表
    * @example
-   * RolesManagementClient().addPolicies('rolea', ['PolicyA', 'PolicyB'])
+   * managementClient.roles.addPolicies('rolea', ['PolicyA', 'PolicyB'])
    *
    * @returns {Promise<CommonMessage>}
    * @memberof RolesManagementClient
@@ -348,7 +348,7 @@ export class RolesManagementClient {
    * @param {string} code 角色唯一标志符
    * @param {string[]} policies 策略列表
    * @example
-   * RolesManagementClient().removePolicies('rolea', ['PolicyA', 'PolicyB'])
+   * managementClient.roles.removePolicies('rolea', ['PolicyA', 'PolicyB'])
    *
    * @returns {Promise<CommonMessage>}
    * @memberof RolesManagementClient

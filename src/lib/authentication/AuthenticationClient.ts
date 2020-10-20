@@ -64,11 +64,11 @@ GKl64GDcIq3au+aqJQIDAQAB
  *
  * \`\`\`javascript
  * import { AuthenticationClient } from "authing-js-sdk"
- * const authing = new AuthenticationClient({
+ * const authenticationClient = new AuthenticationClient({
  *    userPoolId: process.env.AUTHING_USERPOOL_ID,
  * })
- * authing.registerByEmail // 使用邮箱注册
- * authing.loginByEmail // 使用邮箱登录
+ * authenticationClient.registerByEmail // 使用邮箱注册
+ * authenticationClient.loginByEmail // 使用邮箱登录
  * \`\`\`
  *
  *
@@ -141,7 +141,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().registerByEmail(
+   * authenticationClient.registerByEmail(
    *  'test@example.com',
    *  'passw0rd',
    *  {
@@ -153,7 +153,7 @@ export class AuthenticationClient {
    * )
    *
    * @example
-   * AuthenticationClient().registerByEmail('test@example.com', 'passw0rd')
+   * authenticationClient.registerByEmail('test@example.com', 'passw0rd')
    *
    *
    * @returns {Promise<User>}
@@ -203,7 +203,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().registerByUsername(
+   * authenticationClient.registerByUsername(
    *  'bob',
    *  'passw0rd',
    *  {
@@ -215,7 +215,7 @@ export class AuthenticationClient {
    * )
    *
    * @example
-   * AuthenticationClient().registerByUsername('bob', 'passw0rd')
+   * authenticationClient.registerByUsername('bob', 'passw0rd')
    *
    *
    * @returns {Promise<User>}
@@ -266,7 +266,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().registerByPhoneCode(
+   * authenticationClient.registerByPhoneCode(
    *  '176xxxx7041',
    *  '1234',
    *  'passw0rd',
@@ -279,7 +279,7 @@ export class AuthenticationClient {
    * )
    *
    * @example
-   * AuthenticationClient().registerByPhoneCode('176xxxx7041', '1234')
+   * authenticationClient.registerByPhoneCode('176xxxx7041', '1234')
    *
    *
    * @returns {Promise<User>}
@@ -324,10 +324,10 @@ export class AuthenticationClient {
    *
    * @param {string} password
    * @example
-   * AuthenticationClient().checkPasswordStrength('weak')
+   * authenticationClient.checkPasswordStrength('weak')
    *
    * @example
-   * AuthenticationClient().checkPasswordStrength('strongPassw0rd!')
+   * authenticationClient.checkPasswordStrength('strongPassw0rd!')
    *
    * @returns {Promise<CheckPasswordStrengthResult>}
    * @memberof AuthenticationClient
@@ -350,7 +350,7 @@ export class AuthenticationClient {
    *
    * @param {string} phone
    * @example
-   * AuthenticationClient().sendSmsCode('176xxxx6754')
+   * authenticationClient.sendSmsCode('176xxxx6754')
    *
    * @returns {Promise<CommonMessage>}
    * @memberof AuthenticationClient
@@ -382,7 +382,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().loginByEmail(
+   * authenticationClient.loginByEmail(
    *  'test@example.com',
    *  'passw0rd',
    *  {
@@ -392,7 +392,7 @@ export class AuthenticationClient {
    * )
    *
    * @example
-   * AuthenticationClient().loginByEmail('test@example.com', 'passw0rd')
+   * authenticationClient.loginByEmail('test@example.com', 'passw0rd')
    *
    *
    * @returns {Promise<User>}
@@ -435,7 +435,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().loginByEmail(
+   * authenticationClient.loginByEmail(
    *  'test@example.com',
    *  'passw0rd',
    *  {
@@ -445,7 +445,7 @@ export class AuthenticationClient {
    * )
    *
    * @example
-   * AuthenticationClient().loginByEmail('test@example.com', 'passw0rd')
+   * authenticationClient.loginByEmail('test@example.com', 'passw0rd')
    *
    *
    * @returns {Promise<User>}
@@ -484,7 +484,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().loginByPhoneCode(
+   * authenticationClient.loginByPhoneCode(
    *  '176xxxx7041',
    *  '1234',
    * )
@@ -518,7 +518,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().loginByPhonePassword(
+   * authenticationClient.loginByPhonePassword(
    *  '176xxxx7041',
    *  'passw0rd',
    *  {
@@ -528,7 +528,7 @@ export class AuthenticationClient {
    * )
    *
    * @example
-   * AuthenticationClient().loginByPhonePassword('176xxxx7041', 'passw0rd')
+   * authenticationClient.loginByPhonePassword('176xxxx7041', 'passw0rd')
    *
    *
    * @returns {Promise<User>}
@@ -564,7 +564,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().checkLoginStatus('TOKEN')
+   * authenticationClient.checkLoginStatus('TOKEN')
    *
    * @returns {Promise<JwtTokenStatus>}
    * @memberof AuthenticationClient
@@ -587,7 +587,7 @@ export class AuthenticationClient {
    * @example
    *
    * import { EmailScene } from "authing-js-sdk"
-   * AuthenticationClient().sendEmail('test@example.com', EmailScene.RESET_PASSWORD)
+   * authenticationClient.sendEmail('test@example.com', EmailScene.RESET_PASSWORD)
    *
    * @returns {Promise<CommonMessage>}
    * @memberof AuthenticationClient
@@ -612,7 +612,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().resetPasswordByPhoneCode('176xxxx7041', '1234', 'passw0rd')
+   * authenticationClient.resetPasswordByPhoneCode('176xxxx7041', '1234', 'passw0rd')
    *
    * @returns {Promise<CommonMessage>}
    * @memberof AuthenticationClient
@@ -646,7 +646,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().resetPasswordByEmailCode('test@example.com', '1234', 'passw0rd')
+   * authenticationClient.resetPasswordByEmailCode('test@example.com', '1234', 'passw0rd')
    *
    * @returns {Promise<CommonMessage>}
    * @memberof AuthenticationClient
@@ -704,7 +704,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().updateProfile({
+   * authenticationClient.updateProfile({
    *  nickname: "Nick",
    *  lastIp: "111.111.111.111"
    * })
@@ -739,11 +739,11 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().updatePassword('passw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
+   * authenticationClient.updatePassword('passw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
    *
    * @example
    *
-   * AuthenticationClient().updatePassword('passw0rd', 'oldPassw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
+   * authenticationClient.updatePassword('passw0rd', 'oldPassw0rd') // 由手机号、社会化登录等其他方式注册的，首次没有设置密码，oldPassword 留空。
    *
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
@@ -783,11 +783,11 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().updatePhone('176xxxx7041', '1234') // 关闭了“验证原有手机号“选项
+   * authenticationClient.updatePhone('176xxxx7041', '1234') // 关闭了“验证原有手机号“选项
    *
    * @example
    *
-   * AuthenticationClient().updatePhone('176xxxx7041', '1234', '156xxxx9876', '1234') // 开启了“验证原有手机号“选项
+   * authenticationClient.updatePhone('176xxxx7041', '1234', '156xxxx9876', '1234') // 开启了“验证原有手机号“选项
    *
    *
    * @returns {Promise<User>}
@@ -826,11 +826,11 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().updateEmail('test@example.com', '1234') // 关闭了“验证原有邮箱“选项
+   * authenticationClient.updateEmail('test@example.com', '1234') // 关闭了“验证原有邮箱“选项
    *
    * @example
    *
-   * AuthenticationClient().updateEmail('test@example.com', '1234', 'test2@example.com', '1234') // 开启了“验证原有邮箱“选项
+   * authenticationClient.updateEmail('test@example.com', '1234', 'test2@example.com', '1234') // 开启了“验证原有邮箱“选项
    *
    *
    * @returns {Promise<User>}
@@ -862,7 +862,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().updateEmail()
+   * authenticationClient.updateEmail()
    *
    * @returns {Promise<RefreshToken>}
    * @memberof AuthenticationClient
@@ -887,7 +887,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().bindPhone('176xxxx7041', '1234')
+   * authenticationClient.bindPhone('176xxxx7041', '1234')
    *
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
@@ -911,7 +911,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().unbindPhone()
+   * authenticationClient.unbindPhone()
    *
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
@@ -932,7 +932,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().currentUser()
+   * authenticationClient.currentUser()
    *
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
@@ -958,7 +958,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().logout()
+   * authenticationClient.logout()
    *
    * @returns {null}
    * @memberof AuthenticationClient
@@ -999,7 +999,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().listUdv()
+   * authenticationClient.listUdv()
    *
    * @returns {Promise<Array<UserDefinedData>>}
    * @memberof AuthenticationClient
@@ -1023,7 +1023,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().addUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
+   * authenticationClient.addUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
    *
    * @returns {Promise<Array<UserDefinedData>>}
    * @memberof AuthenticationClient
@@ -1053,7 +1053,7 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * AuthenticationClient().removeUdv('school')
+   * authenticationClient.removeUdv('school')
    *
    *
    * @returns {Promise<Array<UserDefinedData>>}

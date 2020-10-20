@@ -19,7 +19,7 @@ import {
 } from '../../types/graphql.v2';
 
 /**
- * @class GroupsManagementClient 分组管理
+ * @class GroupsManagementClient 管理分组
  * @description 此模块用于管理 Authing 分组，可以进行分组的增删改查、分组添加/删除用户、分组添加/删除策略 等操作。
  *
  * 请使用以下方式使用该模块，而不要直接初始化该模块：
@@ -62,7 +62,7 @@ export class GroupsManagementClient {
    * @param {string} [description] 描述
    *
    * @example
-   * GroupsManagementClient().create('group', '分组 xxx')
+   * managementClient.groups.create('group', '分组 xxx')
    *
    * @returns {Promise<DeepPartial<Group>>}
    * @memberof GroupsManagementClient
@@ -88,7 +88,7 @@ export class GroupsManagementClient {
    * @param {string} code 分组唯一标志符
    *
    * @example
-   * GroupsManagementClient().delete('rolea')
+   * managementClient.groups.delete('rolea')
    *
    * @returns {Promise<CommonMessage>}
    * @memberof GroupsManagementClient
@@ -116,7 +116,7 @@ export class GroupsManagementClient {
    * @param {string} [input.newCode] 新的唯一标志符
    *
    * @example
-   * GroupsManagementClient().update('group', {newCode: 'newcode'})
+   * managementClient.groups.update('group', {newCode: 'newcode'})
    *
    *
    * @returns {Promise<DeepPartial<Group>>}
@@ -152,7 +152,7 @@ export class GroupsManagementClient {
    * @param {string} code 分组唯一标志符
    *
    * @example
-   * GroupsManagementClient().detail('manager')
+   * managementClient.groups.detail('manager')
    *
    * @returns {Promise<DeepPartial<Group>>} 分组详情
    * @memberof GroupsManagementClient
@@ -178,7 +178,7 @@ export class GroupsManagementClient {
    *
    * @example
    *
-   * GroupsManagementClient().list(1, 10)
+   * managementClient.groups.list(1, 10)
    *
    * @returns {Promise<DeepPartial<PaginatedGroups>>}
    * @memberof GroupsManagementClient
@@ -206,7 +206,7 @@ export class GroupsManagementClient {
    * @param {string[]} codeList 分组唯一标志符列表
    *
    * @example
-   * GroupsManagementClient().deleteMany(['groupa', 'groupb'])
+   * managementClient.groups.deleteMany(['groupa', 'groupb'])
    *
    * @returns {Promise<CommonMessage>}
    * @memberof GroupsManagementClient
@@ -232,7 +232,7 @@ export class GroupsManagementClient {
    *
    * @example
    *
-   * GroupsManagementClient().listUsers(code)
+   * managementClient.groups.listUsers(code)
    *
    * @returns {Promise<DeepPartial<PaginatedUsers>>}
    * @memberof GroupsManagementClient
@@ -263,7 +263,7 @@ export class GroupsManagementClient {
    * @param {string[]} userIds 用户 ID 列表
    *
    * @example
-   * GroupsManagementClient().addUsers(code, ['USERID1', 'USERID2'])
+   * managementClient.groups.addUsers(code, ['USERID1', 'USERID2'])
    *
    * @returns {Promise<CommonMessage>}
    * @memberof GroupsManagementClient
@@ -285,7 +285,7 @@ export class GroupsManagementClient {
    * @param {string} code 分组唯一标志符
    * @param {string[]} userIds 用户 ID 列表
    * @example
-   * GroupsManagementClient().removeUsers(code, ['USERID1', 'USERID2'])
+   * managementClient.groups.removeUsers(code, ['USERID1', 'USERID2'])
    *
    * @returns {Promise<CommonMessage>}
    * @memberof GroupsManagementClient

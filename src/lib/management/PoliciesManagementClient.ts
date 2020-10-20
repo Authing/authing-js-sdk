@@ -22,7 +22,7 @@ import {
 } from '../graphqlapi';
 
 /**
- * @class PoliciesManagementClient 策略管理
+ * @class PoliciesManagementClient 管理策略
  * @name PoliciesManagementClient
  * @description Authing 的访问控制与权限管理模型核心围绕着两个点来设计：**资源（Resource）**和**策略（Policy）**。策略定义了对某个（类）资源的某个（些）操作权限，将策略授权给用户（或角色），就能知道用户（或角色）是否具备对某个资源的某个操作具备操作权限。
  *

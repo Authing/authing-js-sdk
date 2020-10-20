@@ -1,5 +1,5 @@
 
-# 分组管理
+# 管理分组
 
 [[toc]]
 
@@ -38,7 +38,7 @@ GroupsManagementClient().create(code, name, description)
 #### 示例
 
 ```javascript
-GroupsManagementClient().create('group', '分组 xxx')
+managementClient.groups.create('group', '分组 xxx')
 ```
       
 
@@ -60,7 +60,7 @@ GroupsManagementClient().delete(code)
 #### 示例
 
 ```javascript
-GroupsManagementClient().delete('rolea')
+managementClient.groups.delete('rolea')
 ```
       
 
@@ -86,7 +86,7 @@ GroupsManagementClient().update(code, input)
 #### 示例
 
 ```javascript
-GroupsManagementClient().update('group', {newCode: 'newcode'})
+managementClient.groups.update('group', {newCode: 'newcode'})
 ```
       
 
@@ -108,7 +108,7 @@ GroupsManagementClient().detail(code)
 #### 示例
 
 ```javascript
-GroupsManagementClient().detail('manager')
+managementClient.groups.detail('manager')
 ```
       
 
@@ -131,7 +131,7 @@ GroupsManagementClient().list(page, limit)
 #### 示例
 
 ```javascript
-GroupsManagementClient().list(1, 10)
+managementClient.groups.list(1, 10)
 ```
       
 
@@ -153,7 +153,7 @@ GroupsManagementClient().deleteMany(codeList)
 #### 示例
 
 ```javascript
-GroupsManagementClient().deleteMany(['groupa', 'groupb'])
+managementClient.groups.deleteMany(['groupa', 'groupb'])
 ```
       
 
@@ -177,7 +177,7 @@ GroupsManagementClient().listUsers(code, page, limit)
 #### 示例
 
 ```javascript
-GroupsManagementClient().listUsers(code)
+managementClient.groups.listUsers(code)
 ```
       
 
@@ -200,7 +200,7 @@ GroupsManagementClient().addUsers(code, userIds)
 #### 示例
 
 ```javascript
-GroupsManagementClient().addUsers(code, ['USERID1', 'USERID2'])
+managementClient.groups.addUsers(code, ['USERID1', 'USERID2'])
 ```
       
 
@@ -223,6 +223,6 @@ GroupsManagementClient().removeUsers(code, userIds)
 #### 示例
 
 ```javascript
-GroupsManagementClient().removeUsers(code, ['USERID1', 'USERID2'])
+managementClient.groups.removeUsers(code, ['USERID1', 'USERID2'])
 ```
       

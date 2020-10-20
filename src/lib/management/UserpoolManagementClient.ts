@@ -26,7 +26,7 @@ import { HttpClient } from '../common/HttpClient';
  * managementClient.userpool.env // 获取用户池配置的环境变量列表
  * \`\`\`
  *
- * @class UsersManagementClient 用户池配置管理
+ * @class UsersManagementClient 管理用户池配置
  */
 export class UserPoolManagementClient {
   options: ManagementClientOptions;

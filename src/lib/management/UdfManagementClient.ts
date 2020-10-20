@@ -29,7 +29,7 @@ import { setUdf, removeUdf, udf } from '../graphqlapi';
  * managementClient.udf.delete // 删除自定义字段
  * \`\`\`
  *
- * @class UdfManagementClient 自定义字段元数据管理
+ * @class UdfManagementClient 管理自定义字段元数据
  */
 export class UdfManagementClient {
   options: ManagementClientOptions;

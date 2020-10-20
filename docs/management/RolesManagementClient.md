@@ -1,5 +1,5 @@
 
-# 角色管理
+# 管理角色
 
 [[toc]]
 
@@ -37,7 +37,7 @@ RolesManagementClient().create(code, description)
 #### 示例
 
 ```javascript
-RolesManagementClient().create('rolea', 'RoleA')
+managementClient.roles.create('rolea', 'RoleA')
 ```
       
 
@@ -59,7 +59,7 @@ RolesManagementClient().delete(code)
 #### 示例
 
 ```javascript
-RolesManagementClient().delete('rolea')
+managementClient.roles.delete('rolea')
 ```
       
 
@@ -81,7 +81,7 @@ RolesManagementClient().deleteMany(codeList)
 #### 示例
 
 ```javascript
-RolesManagementClient().delete(['rolea'])
+managementClient.roles.delete(['rolea'])
 ```
       
 
@@ -106,7 +106,7 @@ RolesManagementClient().update(code, input)
 #### 示例
 
 ```javascript
-RolesManagementClient().update('rolea', {newCode: 'newcode'})
+managementClient.roles.update('rolea', {newCode: 'newcode'})
 ```
       
 
@@ -128,7 +128,7 @@ RolesManagementClient().detail(code)
 #### 示例
 
 ```javascript
-RolesManagementClient().detail('manager')
+managementClient.roles.detail('manager')
 ```
       
 
@@ -151,7 +151,7 @@ RolesManagementClient().list(page, limit)
 #### 示例
 
 ```javascript
-RolesManagementClient().list(2, 10)
+managementClient.roles.list(2, 10)
 ```
       
 
@@ -173,7 +173,7 @@ RolesManagementClient().listUsers(code)
 #### 示例
 
 ```javascript
-RolesManagementClient().listUsers(code)
+managementClient.roles.listUsers(code)
 ```
       
 
@@ -196,7 +196,7 @@ RolesManagementClient().addUsers(code, userIds)
 #### 示例
 
 ```javascript
-RolesManagementClient().addUsers(code, ['USERID1', 'USERID2'])
+managementClient.roles.addUsers(code, ['USERID1', 'USERID2'])
 ```
       
 
@@ -219,7 +219,7 @@ RolesManagementClient().removeUsers(code, userIds)
 #### 示例
 
 ```javascript
-RolesManagementClient().removeUsers(code, ['USERID1', 'USERID2'])
+managementClient.roles.removeUsers(code, ['USERID1', 'USERID2'])
 ```
       
 
@@ -243,7 +243,7 @@ RolesManagementClient().listPolicies(code, page, limit)
 #### 示例
 
 ```javascript
-RolesManagementClient().listPolicies('codea', 1, 10)
+managementClient.roles.listPolicies('codea', 1, 10)
 ```
       
 
@@ -266,7 +266,7 @@ RolesManagementClient().addPolicies(code, policies)
 #### 示例
 
 ```javascript
-RolesManagementClient().addPolicies('rolea', ['PolicyA', 'PolicyB'])
+managementClient.roles.addPolicies('rolea', ['PolicyA', 'PolicyB'])
 ```
       
 
@@ -289,6 +289,6 @@ RolesManagementClient().removePolicies(code, policies)
 #### 示例
 
 ```javascript
-RolesManagementClient().removePolicies('rolea', ['PolicyA', 'PolicyB'])
+managementClient.roles.removePolicies('rolea', ['PolicyA', 'PolicyB'])
 ```
       

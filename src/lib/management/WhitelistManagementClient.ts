@@ -32,7 +32,7 @@ import { ManagementClientOptions } from './types';
  * managementClient.whitelist.remove // 移除白名单记录
  * \`\`\`
  *
- * @class WhitelistManagementClient 注册白名单管理
+ * @class WhitelistManagementClient 管理注册白名单
  */
 export class WhitelistManagementClient {
   options: ManagementClientOptions;
