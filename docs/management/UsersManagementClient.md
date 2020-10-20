@@ -7,7 +7,7 @@
 
 此模块可以进行用户目录增删改查、搜索用户、刷新用户 token、管理用户分组、管理用户角色、管理用户策略授权等操作。
 
-该模块发出的所有操作都将以管理员身份进行，所以不需要进行建议短信验证码等操作，如果你希望以普通用户的身份进行操作，请使用 AuthenticationClient 。
+
 
 请使用以下方式使用该模块：
 ```javascript
@@ -23,6 +23,9 @@ managementClient.users.create // 创建用户
 managementClient.users.listRoles // 获取用户角色列表
 managementClient.users.search // 搜索用户
 ```
+
+
+
 
 ## 创建用户
 

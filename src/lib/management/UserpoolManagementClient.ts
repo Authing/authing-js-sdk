@@ -12,6 +12,8 @@ import { HttpClient } from '../common/HttpClient';
  *
  * 此模块可以通过使用 API 管理用户池配置，以及管理环境变量（详细文档请见）。
  *
+ * @example
+ *
  * 请使用以下方式使用该模块：
  * \`\`\`javascript
  * import { ManagementClient } from "authing-js-sdk"

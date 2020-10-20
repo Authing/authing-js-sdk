@@ -21,6 +21,7 @@ for (let file of files) {
   const data = fs.readFileSync(file, 'utf8')
   const parsed = parseComments.parse(data);
   let docs = []
+
   for (const block of parsed) {
     const { description, tags, examples, raw } = block
     const params = _.filter(tags, { title: 'param' }).map(x => {
@@ -45,6 +46,8 @@ for (let file of files) {
     const name = _.find(tags, { title: 'name' })?.name
     const name_zh = _.find(tags, { title: 'name_zh' })?.description
 
+
+    // 处理 nodejs
     const args = params.map(x => x.name).filter(x => !x.includes('.')).join(', ')
     let doc = ''
     if (!class_) {
@@ -74,11 +77,17 @@ ${examples.map(x => `\`\`\`javascript\n${x.value.trim()}\n\`\`\``).join('\n')}
 
 [[toc]]
 
-> ${description.split('\\`\\`\\`').join('```')}`
+> ${description.split('\\`\\`\\`').join('```')}
+
+${examples.map(x => x.value.split('\\`\\`\\`').join('```'))}
+
+`
     }
 
     docs.push(doc)
   }
+
+
   const filename = `${file.split('/')[file.split('/').length - 1]}`
   const module = `${file.split('/')[file.split('/').length - 2]}`
   const source = `docs/${module}/${filename.replace('.ts', '')}.md`

@@ -5,7 +5,7 @@
 
 > Authing 用户池配置管理模块。
 
-此模块可以通过使用 API 管理用户池配置，以及管理环境变量（详细文档请见）。
+
 
 请使用以下方式使用该模块：
 ```javascript
@@ -20,6 +20,9 @@ managementClient.userpool.detail // 获取用户池配置
 managementClient.userpool.update // 修改用户池配置
 managementClient.userpool.env // 获取用户池配置的环境变量列表
 ```
+
+
+
 
 ## 查询用户池配置
 

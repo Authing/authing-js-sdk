@@ -28,6 +28,8 @@ import {
  *
  * 此模块可以用于对策略进行增删改查，以及管理策略授权，策略可以被授予用户或角色。详细介绍请见 https://docs.authing.co/docs/access-control/index.html
  *
+ * @example
+ *
  * 请使用以下方式使用该模块：
  * \`\`\`javascript
  * import { ManagementClient } from "authing-js-sdk"

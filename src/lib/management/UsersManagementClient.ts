@@ -39,6 +39,8 @@ import {
  *
  * 该模块发出的所有操作都将以管理员身份进行，所以不需要进行建议短信验证码等操作，如果你希望以普通用户的身份进行操作，请使用 AuthenticationClient 。
  *
+ * @example
+ *
  * 请使用以下方式使用该模块：
  * \`\`\`javascript
  * import { ManagementClient } from "authing-js-sdk"

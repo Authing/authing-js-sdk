@@ -19,6 +19,8 @@ import { ManagementClientOptions } from './types';
  *
  * 此模块可以用于对注册白名单进行管理。
  *
+ * @example
+ *
  * 请使用以下方式使用该模块：
  * \`\`\`javascript
  * import { ManagementClient } from "authing-js-sdk"

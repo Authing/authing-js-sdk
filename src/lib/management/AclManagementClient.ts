@@ -8,10 +8,12 @@ import { CommonMessage } from '../../types/graphql.v2';
  * @class AclManagementClient 管理权限、访问控制
  * @description Authing 基于 PBAC（Policy Based Access Control，基于策略的访问控制）构建权限模型，
  * 可以和 RBAC （Role Based Access Control，基于角色的访问控制）结合，实现非常灵活、精细化的权限控制。
- *
  * 此模块将此模型抽象成了两个方法: allow, isAllowed。
  *
+ * @example
+ *
  * 请使用以下方式使用该模块，而不要直接初始化该模块：
+ *
  * \`\`\`javascript
  * import { ManagementClient } from "authing-js-sdk"
  * const managementClient = new ManagementClient({

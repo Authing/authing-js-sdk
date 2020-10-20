@@ -5,6 +5,8 @@
 
 > 此模块用于管理 Authing 角色，可以进行角色的增删改查、角色添加/删除用户、角色添加/删除策略 等操作。
 
+
+
 请使用以下方式使用该模块，而不要直接初始化该模块：
 ```javascript
 import { ManagementClient } from "authing-js-sdk"
@@ -17,6 +19,9 @@ managementClient.roles.list // 获取角色列表
 managementClient.roles.create // 创建角色
 managementClient.roles.listUsers // 获取角色用户列表
 ```
+
+
+
 
 ## 创建角色
 

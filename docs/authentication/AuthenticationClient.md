@@ -16,6 +16,10 @@ authenticationClient.registerByEmail // 使用邮箱注册
 authenticationClient.loginByEmail // 使用邮箱登录
 ```
 
+
+
+
+
 ## 使用邮箱注册
 
 AuthenticationClient().registerByEmail(email, password, profile, options)

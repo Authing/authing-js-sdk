@@ -25,6 +25,10 @@ const authenticationClient = new AuthenticationClient({
 authenticationClient.qrcode.startScanning() # 开始扫码登录
 ```
 
+
+
+
+
 ## 一键开始扫码
 
 QrCodeAuthenticationClient().startScanning(domId, options)

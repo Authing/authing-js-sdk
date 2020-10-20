@@ -5,10 +5,12 @@
 
 > Authing 基于 PBAC（Policy Based Access Control，基于策略的访问控制）构建权限模型，
 可以和 RBAC （Role Based Access Control，基于角色的访问控制）结合，实现非常灵活、精细化的权限控制。
-
 此模块将此模型抽象成了两个方法: allow, isAllowed。
 
+
+
 请使用以下方式使用该模块，而不要直接初始化该模块：
+
 ```javascript
 import { ManagementClient } from "authing-js-sdk"
 const managementClient = new ManagementClient({
@@ -19,6 +21,9 @@ const managementClient = new ManagementClient({
 managementClient.acl.allow // 允许某个用户对某个资源进行某个操作
 managementClient.acl.isAllowed // 判断某个用户是否对某个资源有某个操作权限
 ```
+
+
+
 
 ## 允许某个用户对某个资源进行某个操作
 

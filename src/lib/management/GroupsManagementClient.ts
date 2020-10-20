@@ -22,6 +22,8 @@ import {
  * @class GroupsManagementClient 管理分组
  * @description 此模块用于管理 Authing 分组，可以进行分组的增删改查、分组添加/删除用户、分组添加/删除策略 等操作。
  *
+ * @example
+ *
  * 请使用以下方式使用该模块，而不要直接初始化该模块：
  * \`\`\`javascript
  * import { ManagementClient } from "authing-js-sdk"

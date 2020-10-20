@@ -16,6 +16,8 @@ import { setUdf, removeUdf, udf } from '../graphqlapi';
  *
  * 此模块可以用于对自定义字段元数据进行管理。
  *
+ * @example
+ *
  * 请使用以下方式使用该模块：
  * \`\`\`javascript
  * import { ManagementClient } from "authing-js-sdk"

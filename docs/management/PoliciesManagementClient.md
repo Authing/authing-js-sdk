@@ -5,7 +5,7 @@
 
 > Authing 的访问控制与权限管理模型核心围绕着两个点来设计：**资源（Resource）**和**策略（Policy）**。策略定义了对某个（类）资源的某个（些）操作权限，将策略授权给用户（或角色），就能知道用户（或角色）是否具备对某个资源的某个操作具备操作权限。
 
-此模块可以用于对策略进行增删改查，以及管理策略授权，策略可以被授予用户或角色。详细介绍请见 https://docs.authing.co/docs/access-control/index.html
+
 
 请使用以下方式使用该模块：
 ```javascript
@@ -19,6 +19,9 @@ managementClient.policies.list // 获取策略列表
 managementClient.policies.create // 创建策略
 managementClient.policies.listUsers // 获取策略授权记录
 ```
+
+
+
 
 ## 添加策略
 
