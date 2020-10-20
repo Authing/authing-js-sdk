@@ -4,5 +4,5 @@
 
 ```csharp
 var code = "code";
-var role = await rolesManagementClient.Roles.Create(code, "test role");
+var role = await managementClient.Roles.Create(code, "test role");
 ```

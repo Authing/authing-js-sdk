@@ -3,5 +3,5 @@
 ```
 
 ```csharp
-var roles = await rolesManagementClient.Roles.List();
+var roles = await managementClient.Roles.List();
 ```

@@ -5,5 +5,5 @@
 ```csharp
 var code = "code";
 var desc = "update desc";
-var role = await rolesManagementClient.Roles.Update(code, desc);
+var role = await managementClient.Roles.Update(code, desc);
 ```

@@ -4,5 +4,5 @@
 
 ```csharp
 var code = "code";
-var message = await rolesManagementClient.Roles.Delete(code);
+var message = await managementClient.Roles.Delete(code);
 ```
