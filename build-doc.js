@@ -136,7 +136,7 @@ for (let file of files) {
     const memberof = _.find(tags, { title: 'memberof' })?.description
     const name = _.find(tags, { title: 'name' })?.name
 
-    if (name === "checkPasswordStrength") {
+    if (name === "checkPasswordStrength" || name === 'exists') {
       continue
     }
 
@@ -170,9 +170,6 @@ ${memberof}().${camelToSnakeCase(name)}(${args})
 
 ${params.map(param => `- \`${param.name}\` \\<${param.type}\\> ${param.description} ${param.default ? `默认值为 : \`${param.default}\`。` : ''}`).join('\n')}
 
-#### 返回值
-
-${returns ? `- ${returns.name} \`${returns.type}\` ${returns.description}` : ''}
 
 #### 示例
 
@@ -241,7 +238,7 @@ for (let file of files) {
     const memberof = _.find(tags, { title: 'memberof' })?.description
     const name = _.find(tags, { title: 'name' })?.name
 
-    if (name === "checkPasswordStrength") {
+    if (name === "checkPasswordStrength" || 'exists') {
       continue
     }
 
@@ -273,10 +270,6 @@ ${memberof}().${name}(${args})
 #### 参数
 
 ${params.map(param => `- \`${param.name}\` \\<${param.type}\\> ${param.description} ${param.default ? `默认值为 : \`${param.default}\`。` : ''}`).join('\n')}
-
-#### 返回值
-
-${returns ? `- ${returns.name} \`${returns.type}\` ${returns.description}` : ''}
 
 #### 示例
 
