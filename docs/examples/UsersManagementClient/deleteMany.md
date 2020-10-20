@@ -5,4 +5,5 @@ data = management_client.users.detail(
 ```
 
 ```csharp
+var message = await managementClient.Users.DeleteMany(new string[] { "userId" });
 ```

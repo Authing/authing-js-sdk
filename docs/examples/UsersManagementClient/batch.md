@@ -5,4 +5,5 @@ data = management_client.users.batch(
 ```
 
 ```csharp
+var users = await managementClient.Users.Batch(new string[] { "userId" });
 ```

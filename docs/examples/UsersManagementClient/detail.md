@@ -5,4 +5,5 @@ data = management_client.users.detail(
 ```
 
 ```csharp
+var user = await managementClient.Users.Detail("userId");
 ```

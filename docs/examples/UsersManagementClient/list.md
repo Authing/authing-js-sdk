@@ -5,4 +5,5 @@ users = data['list'] # 当前页
 ```
 
 ```csharp
+var users = await managementClient.Users.List();
 ```

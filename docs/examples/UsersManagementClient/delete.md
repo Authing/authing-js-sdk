@@ -5,4 +5,5 @@ data = management_client.users.delete(
 ```
 
 ```csharp
+var message = await managementClient.Users.Delete("userId");
 ```

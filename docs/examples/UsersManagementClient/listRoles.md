@@ -5,4 +5,5 @@ users = data['list'] # 角色列表
 ```
 
 ```csharp
+var roles = await managementClient.Users.ListRoles("userId");
 ```

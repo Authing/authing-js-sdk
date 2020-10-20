@@ -8,4 +8,5 @@ users = data['list'] # 最新的角色列表
 ```
 
 ```csharp
+var message = await managementClient.Users.AddRoles("userId", new string[] { "roleId" });
 ```

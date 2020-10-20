@@ -5,5 +5,5 @@ code = data['code'] # 200 表示成功
 
 ```csharp
 var code = "code";
-var message = await rolesManagementClient.Roles.Delete(code);
+var message = await managementClient.Roles.Delete(code);
 ```
