@@ -25,7 +25,7 @@ test('删除自定义字段', async t => {
     UdfDataType.String,
     generateRandomString(5)
   );
-  await management.udf.delete(UdfTargetType.User, key);
+  await management.udf.remove(UdfTargetType.User, key);
   const data = await management.udf.list(UdfTargetType.User);
   t.assert(
     _.every(data, item => {

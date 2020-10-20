@@ -108,6 +108,7 @@ for (let file of files) {
   if (file.includes('QrCodeAuthenticationClient')
     || file.includes('OrgManagementClient')
     || file.includes('GroupsManagementClient')
+    || file.includes('WhitelistManagementClient')
   ) {
     continue
   }
@@ -194,7 +195,10 @@ ${example ? example : ""}
 
     docs.push(doc)
   }
-  const filename = `${file.split('/')[file.split('/').length - 1]}`
+  let filename = `${file.split('/')[file.split('/').length - 1]}`
+  if (filename === 'AuthenticationClient.ts') {
+    filename = 'README.ts'
+  }
   const module = `${file.split('/')[file.split('/').length - 2]}`
   // 移动到 docs
   const target = `../authing-docs/docs/sdk/sdk-for-python/${module}/${filename.replace('.ts', '')}.md`
@@ -296,7 +300,10 @@ ${example ? example : ""}
 
     docs.push(doc)
   }
-  const filename = `${file.split('/')[file.split('/').length - 1]}`
+  let filename = `${file.split('/')[file.split('/').length - 1]}`
+  if (filename === 'AuthenticationClient.ts') {
+    filename = 'README.ts'
+  }
   const module = `${file.split('/')[file.split('/').length - 2]}`
   // 移动到 docs
   const target = `../authing-docs/docs/sdk/sdk-for-csharp/${module}/${filename.replace('.ts', '')}.md`

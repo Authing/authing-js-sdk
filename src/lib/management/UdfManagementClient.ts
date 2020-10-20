@@ -28,7 +28,7 @@ import { setUdf, removeUdf, udf } from '../graphqlapi';
  * })
  * managementClient.udf.list // 获取自定义字段元数据列表
  * managementClient.udf.set // 设置自定义字段
- * managementClient.udf.delete // 删除自定义字段
+ * managementClient.udf.remove // 删除自定义字段
  * \`\`\`
  *
  * @class UdfManagementClient 管理自定义字段元数据
@@ -53,7 +53,7 @@ export class UdfManagementClient {
    * @name_zh 设置自定义字段元数据
    * @description 设置自定义字段元数据，如果该字段不存在会自动创建。
    *
-   * @param {UdfTargetType} 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
+   * @param {UdfTargetType} targetType 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
    * @param {string} key 字段 key
    * @param {UdfDataType} dataType 数据类型，目前共支持五种数据类型。STRING 为字符串、NUMBER 为数字、DATETIME 为日期、BOOLEAN 为 boolean 值、OBJECT 为对象。
    * @param {string} label 字段 Label，一般是一个 Human Readable 字符串。
@@ -112,21 +112,21 @@ export class UdfManagementClient {
   }
 
   /**
-   * @name delete
+   * @name remove
    * @name_zh 删除自定义字段
    * @description 删除自定义字段
    *
-   * @param {UdfTargetType} 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
+   * @param {UdfTargetType} targetType 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
    * @param {string} key 字段 key
    *
    * @example
    *
-   * await management.udf.delete(UdfTargetType.User, 'school');
+   * await management.udf.remove(UdfTargetType.User, 'school');
    *
    * @returns {Promise<UserDefinedField[]>}
    * @memberof UdfManagementClient
    */
-  async delete(targetType: UdfTargetType, key: string): Promise<CommonMessage> {
+  async remove(targetType: UdfTargetType, key: string): Promise<CommonMessage> {
     const { removeUdf: list } = await removeUdf(
       this.graphqlClient,
       this.tokenProvider,

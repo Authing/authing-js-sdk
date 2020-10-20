@@ -42,7 +42,7 @@ test('删除自定义字段', async t => {
     UdfDataType.String,
     '学校'
   );
-  await management.udf.delete(UdfTargetType.User, key);
+  await management.udf.remove(UdfTargetType.User, key);
   const list = await management.udf.list(UdfTargetType.User);
   t.assert(
     !_.some(list, item => {
