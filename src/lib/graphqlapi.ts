@@ -1438,28 +1438,22 @@ export const unbindEmail = async (
 
 export const getAccessToken = async (
   garpqhlClient: GraphqlClient,
-  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
   variables: AccessTokenVariables
 ): Promise<AccessTokenResponse> => {
   const query = AccessTokenDocument;
-  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
-    token,
     variables
   });
 };
 
 export const refreshAccessToken = async (
   garpqhlClient: GraphqlClient,
-  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
   variables: RefreshAccessTokenVariables
 ): Promise<RefreshAccessTokenResponse> => {
   const query = RefreshTokenDocument;
-  const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
-    token,
     variables
   });
 };

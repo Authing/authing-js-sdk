@@ -82,7 +82,6 @@ export class AuthenticationClient {
   options: AuthenticationClientOptions;
 
   graphqlClient: GraphqlClient;
-  graphqlClientV2: GraphqlClient;
   httpClient: HttpClient;
   tokenProvider: AuthenticationTokenProvider;
   wxqrcode: QrCodeAuthenticationClient;
@@ -94,10 +93,7 @@ export class AuthenticationClient {
     const graphqlApiEndpointV2 = `${this.options.host}/graphql/v2`;
     // 子模块初始化顺序: GraphqlClient -> ManagementTokenProvider -> Others
     this.graphqlClient = new GraphqlClient(graphqlApiEndpoint, this.options);
-    this.graphqlClientV2 = new GraphqlClient(
-      graphqlApiEndpointV2,
-      this.options
-    );
+    this.graphqlClient = new GraphqlClient(graphqlApiEndpointV2, this.options);
     this.tokenProvider = new AuthenticationTokenProvider(this.options);
     this.httpClient = new HttpClient(this.options, this.tokenProvider);
     this.wxqrcode = new QrCodeAuthenticationClient(
@@ -112,6 +108,10 @@ export class AuthenticationClient {
       this.httpClient,
       'APP_AUTH'
     );
+
+    if (this.options.accessToken) {
+      this.setToken(this.options.accessToken);
+    }
   }
 
   private checkLoggedIn() {
@@ -178,7 +178,7 @@ export class AuthenticationClient {
     const { forceLogin = false, generateToken = false, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByEmail: user } = await registerByEmail(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         input: {
@@ -244,7 +244,7 @@ export class AuthenticationClient {
     const { forceLogin = false, generateToken = false, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByUsername: user } = await registerByUsername(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         input: {
@@ -312,7 +312,7 @@ export class AuthenticationClient {
     const { forceLogin = false, generateToken = false, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { registerByPhoneCode: user } = await registerByPhoneCode(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         input: {
@@ -349,7 +349,7 @@ export class AuthenticationClient {
     password: string
   ): Promise<CheckPasswordStrengthResult> {
     const { checkPasswordStrength: result } = await checkPasswordStrength(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       { password }
     );
@@ -425,7 +425,7 @@ export class AuthenticationClient {
     const { autoRegister = false, captchaCode, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByEmail: user } = await loginByEmail(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         input: { email, password, autoRegister, captchaCode, clientIp }
@@ -481,7 +481,7 @@ export class AuthenticationClient {
     const { autoRegister = false, captchaCode, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByUsername: user } = await loginByUsername(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         input: { username, password, autoRegister, captchaCode, clientIp }
@@ -522,7 +522,7 @@ export class AuthenticationClient {
     options = options || {};
     const { clientIp } = options;
     const { loginByPhoneCode: user } = await loginByPhoneCode(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         input: { phone, code, clientIp }
@@ -574,7 +574,7 @@ export class AuthenticationClient {
     const { captchaCode, autoRegister = false, clientIp } = options;
     password = encrypt(password, this.options.encrptionPublicKey);
     const { loginByPhonePassword: user } = await loginByPhonePassword(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         input: { phone, password, captchaCode, autoRegister, clientIp }
@@ -623,7 +623,7 @@ export class AuthenticationClient {
    */
   async sendEmail(email: string, scene: EmailScene): Promise<CommonMessage> {
     const { sendEmail: data } = await sendEmail(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       { email, scene }
     );
@@ -653,7 +653,7 @@ export class AuthenticationClient {
   ): Promise<CommonMessage> {
     newPassword = encrypt(newPassword, this.options.encrptionPublicKey);
     const { resetPassword: data } = await resetPassword(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         phone,
@@ -687,7 +687,7 @@ export class AuthenticationClient {
   ): Promise<CommonMessage> {
     newPassword = encrypt(newPassword, this.options.encrptionPublicKey);
     const { resetPassword: data } = await resetPassword(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         email,
@@ -747,7 +747,7 @@ export class AuthenticationClient {
       delete updates.password;
     }
     const { updateUser: updated } = await updateUser(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         id: user.id,
@@ -787,7 +787,7 @@ export class AuthenticationClient {
       oldPassword && encrypt(oldPassword, this.options.encrptionPublicKey);
 
     const { updatePassword: user } = await updatePassword(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         newPassword,
@@ -829,7 +829,7 @@ export class AuthenticationClient {
     oldPhoneCode?: string
   ): Promise<User> {
     const { updatePhone: user } = await updatePhone(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         phone,
@@ -872,7 +872,7 @@ export class AuthenticationClient {
     oldEmailCode?: string
   ): Promise<User> {
     const { updateEmail: user } = await updateEmail(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         email,
@@ -898,7 +898,7 @@ export class AuthenticationClient {
    */
   async refreshToken(): Promise<RefreshToken> {
     const { refreshToken: data } = await refreshToken(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {}
     );
@@ -923,7 +923,7 @@ export class AuthenticationClient {
    */
   async bindPhone(phone: string, phoneCode: string): Promise<User> {
     const { bindPhone: user } = await bindPhone(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         phone,
@@ -948,7 +948,7 @@ export class AuthenticationClient {
    */
   async unbindPhone(): Promise<User> {
     const { unbindPhone: user } = await unbindPhone(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {}
     );
@@ -970,7 +970,7 @@ export class AuthenticationClient {
    */
   async unbindEmail(): Promise<User> {
     const { unbindEmail: user } = await unbindEmail(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {}
     );
@@ -993,7 +993,7 @@ export class AuthenticationClient {
   async getCurrentUser(): Promise<User | null> {
     try {
       const { user: data } = await user(
-        this.graphqlClientV2,
+        this.graphqlClient,
         this.tokenProvider,
         {}
       );
@@ -1018,7 +1018,7 @@ export class AuthenticationClient {
    */
   async logout() {
     const user = this.checkLoggedIn();
-    await updateUser(this.graphqlClientV2, this.tokenProvider, {
+    await updateUser(this.graphqlClient, this.tokenProvider, {
       id: user.id,
       input: {
         tokenExpiredAt: '0'
@@ -1059,7 +1059,7 @@ export class AuthenticationClient {
    */
   async listUdv(): Promise<Array<UserDefinedData>> {
     const user = this.checkLoggedIn();
-    const { udv: list } = await udv(this.graphqlClientV2, this.tokenProvider, {
+    const { udv: list } = await udv(this.graphqlClient, this.tokenProvider, {
       targetType: UdfTargetType.User,
       targetId: user.id
     });
@@ -1085,7 +1085,7 @@ export class AuthenticationClient {
     const user = this.checkLoggedIn();
     value = JSON.stringify(value);
     const { setUdv: list } = await setUdv(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         targetType: UdfTargetType.User,
@@ -1115,7 +1115,7 @@ export class AuthenticationClient {
   async removeUdv(key: string): Promise<Array<UserDefinedData>> {
     const user = this.checkLoggedIn();
     const { removeUdv: list } = await removeUdv(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {
         targetType: UdfTargetType.User,

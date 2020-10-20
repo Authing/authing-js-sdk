@@ -40,7 +40,6 @@ export class ManagementClient {
 
   // sub classes definitions
   private graphqlClient: GraphqlClient;
-  private graphqlClientV2: GraphqlClient;
   private httpClient: HttpClient;
   private tokenProvider: ManagementTokenProvider;
   users: UsersManagementClient;
@@ -58,7 +57,6 @@ export class ManagementClient {
     if (!this.options.userPoolId && !this.options.appId)
       throw new Error('请提供 userPoolId 或者 appId!');
 
-    const graphqlApiEndpoint = `${this.options.host}/graphql`;
     const graphqlApiEndpointV2 = `${this.options.host}/graphql/v2`;
 
     if (!this.options.secret && !this.options.accessToken) {
@@ -70,11 +68,7 @@ export class ManagementClient {
 
     Axios.defaults.baseURL = this.options.host;
 
-    this.graphqlClient = new GraphqlClient(graphqlApiEndpoint, this.options);
-    this.graphqlClientV2 = new GraphqlClient(
-      graphqlApiEndpointV2,
-      this.options
-    );
+    this.graphqlClient = new GraphqlClient(graphqlApiEndpointV2, this.options);
     this.tokenProvider = new ManagementTokenProvider(
       this.options,
       this.graphqlClient
@@ -82,49 +76,49 @@ export class ManagementClient {
     this.httpClient = new HttpClient(this.options, this.tokenProvider);
     this.users = new UsersManagementClient(
       this.options,
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider
     );
     this.userpool = new UserPoolManagementClient(
       this.options,
       this.httpClient,
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider
     );
     this.org = new OrgManagementClient(
       this.options,
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.httpClient,
       this.tokenProvider
     );
     this.roles = new RolesManagementClient(
       this.options,
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider
     );
     this.policies = new PoliciesManagementClient(
       this.options,
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider
     );
     this.udf = new UdfManagementClient(
       this.options,
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider
     );
     this.acl = new AclManagementClient(
       this.options,
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider
     );
     this.whitelist = new WhitelistManagementClient(
       this.options,
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider
     );
     this.groups = new GroupsManagementClient(
       this.options,
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider
     );
   }
@@ -147,7 +141,7 @@ export class ManagementClient {
    */
   async sendEmail(email: string, scene: EmailScene) {
     const { sendEmail: data } = await sendEmail(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       { email, scene }
     );

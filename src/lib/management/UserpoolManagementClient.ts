@@ -32,19 +32,19 @@ import { HttpClient } from '../common/HttpClient';
  */
 export class UserPoolManagementClient {
   options: ManagementClientOptions;
-  graphqlClientV2: GraphqlClient;
+  graphqlClient: GraphqlClient;
   tokenProvider: ManagementTokenProvider;
   httpClient: HttpClient;
 
   constructor(
     options: ManagementClientOptions,
     httpClient: HttpClient,
-    graphqlClientV2: GraphqlClient,
+    graphqlClient: GraphqlClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
     this.httpClient = httpClient;
-    this.graphqlClientV2 = graphqlClientV2;
+    this.graphqlClient = graphqlClient;
     this.tokenProvider = tokenProvider;
   }
 
@@ -61,7 +61,7 @@ export class UserPoolManagementClient {
    */
   async detail(): Promise<UserPool> {
     const res = await getUserPoolDetail(
-      this.graphqlClientV2,
+      this.graphqlClient,
       this.tokenProvider,
       {}
     );
@@ -109,7 +109,7 @@ export class UserPoolManagementClient {
    * @memberof UserPoolManagementClient
    */
   async update(updates: UpdateUserpoolInput): Promise<UserPool> {
-    const res = await updateUserpool(this.graphqlClientV2, this.tokenProvider, {
+    const res = await updateUserpool(this.graphqlClient, this.tokenProvider, {
       input: updates
     });
     return res.updateUserpool;

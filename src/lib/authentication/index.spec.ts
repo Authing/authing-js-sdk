@@ -379,3 +379,17 @@ test('添加自定义数据 # OBJECT', async t => {
   const value = list[0].value;
   t.assert(typeof value === 'object');
 });
+
+test('通过 accessToken 初始化', async t => {
+  const user = await management.users.create({
+    username: generateRandomString()
+  });
+  const data = await management.users.refreshToken(user.id);
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv(),
+    accessToken: data.token
+  });
+  const newUser = await authing.getCurrentUser();
+  t.assert(newUser);
+  t.assert(newUser.id === user.id);
+});

@@ -33,7 +33,7 @@ export class ManagementTokenProvider {
    * @memberof ManagementTokenProvider
    */
   private async getClientWhenSdkInit() {
-    const res = await getAccessToken(this.graphqlClient, this, {
+    const res = await getAccessToken(this.graphqlClient, {
       userPoolId: this.options.userPoolId,
       secret: this.options.secret
     });
@@ -46,7 +46,7 @@ export class ManagementTokenProvider {
    * @memberof ManagementTokenProvider
    */
   private async refreshToken() {
-    const res = await refreshAccessToken(this.graphqlClient, this, {
+    const res = await refreshAccessToken(this.graphqlClient, {
       accessToken: this.options.accessToken
     });
     return res.refreshAccessToken.accessToken;

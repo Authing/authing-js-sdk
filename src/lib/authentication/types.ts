@@ -15,6 +15,8 @@ export interface AuthenticationClientOptions {
   host?: string;
   /** 请求来源 */
   requestFrom?: string;
+  /** token */
+  accessToken?: string;
 }
 
 export interface CheckLoginStatusRes {
