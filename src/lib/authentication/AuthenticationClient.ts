@@ -1014,7 +1014,7 @@ export class AuthenticationClient {
   }
 
   /**
-   * @name addUdv
+   * @name setUdv
    * @name_zh 添加自定义数据
    * @description 添加自定义数据
    *
@@ -1023,12 +1023,12 @@ export class AuthenticationClient {
    *
    * @example
    *
-   * authenticationClient.addUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
+   * authenticationClient.setUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
    *
    * @returns {Promise<Array<UserDefinedData>>}
    * @memberof AuthenticationClient
    */
-  async addUdv(key: string, value: any): Promise<Array<UserDefinedData>> {
+  async setUdv(key: string, value: any): Promise<Array<UserDefinedData>> {
     const user = this.checkLoggedIn();
     value = JSON.stringify(value);
     const { setUdv: list } = await setUdv(

@@ -690,7 +690,7 @@ authenticationClient.listUdv()
 
 ## 添加自定义数据
 
-AuthenticationClient().addUdv(key:, value:)
+AuthenticationClient().setUdv(key:, value:)
 
 > 添加自定义数据
 
@@ -707,7 +707,7 @@ AuthenticationClient().addUdv(key:, value:)
 #### 示例
 
 ```javascript
-authenticationClient.addUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
+authenticationClient.setUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
 ```
       
 

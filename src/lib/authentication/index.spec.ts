@@ -205,7 +205,7 @@ test('添加自定义数据', async t => {
     generateRandomString(5)
   );
 
-  await authing.addUdv(key, '123');
+  await authing.setUdv(key, '123');
   const list = await authing.listUdv();
   t.assert(list.length);
 });
@@ -222,7 +222,7 @@ test('添加自定义数据 # 不存在的 key', async t => {
   let faild = false;
   try {
     const key = generateRandomString(10);
-    await authing.addUdv(key, '123');
+    await authing.setUdv(key, '123');
   } catch {
     faild = true;
   }
@@ -249,7 +249,7 @@ test('添加自定义数据 # 非法的数据类型', async t => {
   let faild = false;
   try {
     const key = generateRandomString(10);
-    await authing.addUdv(key, 123);
+    await authing.setUdv(key, 123);
   } catch (error) {
     faild = true;
   }
@@ -273,7 +273,7 @@ test('删除自定义数据', async t => {
     generateRandomString(5)
   );
 
-  await authing.addUdv(key, '123');
+  await authing.setUdv(key, '123');
   await authing.removeUdv(key);
   const list = await authing.listUdv();
   t.assert(list.length === 0);
@@ -293,7 +293,7 @@ test('添加自定义数据 # 字符串', async t => {
     UdfDataType.String,
     generateRandomString(5)
   );
-  await authing.addUdv(key, '123');
+  await authing.setUdv(key, '123');
   const list = await authing.listUdv();
   t.assert(list.length === 1);
   const value = list[0].value;
@@ -315,7 +315,7 @@ test('添加自定义数据 # 数字', async t => {
     UdfDataType.Number,
     generateRandomString(5)
   );
-  await authing.addUdv(key, 123);
+  await authing.setUdv(key, 123);
   const list = await authing.listUdv();
   t.assert(list.length === 1);
   const value = list[0].value;
@@ -337,7 +337,7 @@ test('添加自定义数据 # boolean', async t => {
     UdfDataType.Boolean,
     generateRandomString(5)
   );
-  await authing.addUdv(key, true);
+  await authing.setUdv(key, true);
   const list = await authing.listUdv();
   console.log(list);
   t.assert(list.length === 1);
@@ -360,7 +360,7 @@ test('添加自定义数据 # DATETIME', async t => {
     UdfDataType.Datetime,
     generateRandomString(5)
   );
-  await authing.addUdv(key, Date.now());
+  await authing.setUdv(key, Date.now());
   const list = await authing.listUdv();
   t.assert(list.length === 1);
   const value = list[0].value;
@@ -383,7 +383,7 @@ test('添加自定义数据 # OBJECT', async t => {
     UdfDataType.Object,
     generateRandomString(5)
   );
-  await authing.addUdv(key, { ok: 'good' });
+  await authing.setUdv(key, { ok: 'good' });
   const list = await authing.listUdv();
   t.assert(list.length === 1);
   const value = list[0].value;
