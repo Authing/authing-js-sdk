@@ -250,7 +250,10 @@ import {
   GroupWithUsersDocument,
   GetUserGroupsVariables,
   GetUserGroupsResponse,
-  GetUserGroupsDocument
+  GetUserGroupsDocument,
+  UnbindEmailVariables,
+  UnbindEmailDocument,
+  UnbindEmailResponse
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1406,6 +1409,20 @@ export const getUserGroups = async (
   variables: GetUserGroupsVariables
 ): Promise<GetUserGroupsResponse> => {
   const query = GetUserGroupsDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const unbindEmail = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UnbindEmailVariables
+): Promise<UnbindEmailResponse> => {
+  const query = UnbindEmailDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,

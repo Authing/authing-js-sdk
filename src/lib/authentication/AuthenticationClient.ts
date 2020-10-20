@@ -122,7 +122,7 @@ export class AuthenticationClient {
   }
 
   private async setCurrentUser(user: User) {
-    this.setCurrentUser(user);
+    this.tokenProvider.setUser(user);
   }
 
   private async setToken(token: string) {
@@ -524,7 +524,6 @@ export class AuthenticationClient {
    *  '176xxxx7041',
    *  'passw0rd',
    *  {
-   *    autoRegister: true，
    *    captchaCode: 'xj72'
    *  }
    * )

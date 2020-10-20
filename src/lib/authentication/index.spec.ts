@@ -164,17 +164,7 @@ test('邮箱 # autoRegister', async t => {
     autoRegister: true
   });
   t.assert(user);
-  t.assert(user.email === email);
-  t.assert(user.token);
-});
-
-test('手机号密码 # autoRegister', async t => {
-  const authing = new AuthenticationClient(getOptionsFromEnv());
-  const phone = generateRandomPhone();
-  const password = generateRandomString();
-  const user = await authing.loginByPhonePassword(phone, password);
-  t.assert(user);
-  t.assert(user.phone === phone);
+  t.assert(user.email === email.toLowerCase());
   t.assert(user.token);
 });
 

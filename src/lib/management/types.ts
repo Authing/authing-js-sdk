@@ -15,7 +15,7 @@ export interface ManagementClientOptions {
   /** 请求超时时间 **/
   timeout?: number;
   /** 错误回调函数, 默认为 (err: Error) => { throw err } 直接抛出报错 **/
-  onError?: (code: number, message: string) => void;
+  onError?: (code: number, message: string, data?: any) => void;
   /** 密码加密的公钥 */
   encrptionPublicKey?: string;
   /** Authing 服务器地址 */

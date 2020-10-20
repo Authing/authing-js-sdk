@@ -23,7 +23,7 @@ export class GraphqlClient {
   }) {
     const { query, token, variables } = options;
     let headers: any = {
-      'x-authing-sdk-version': `js:${SDK_VERSION}`,
+      'x-authing-sdk-version': SDK_VERSION,
       'x-authing-userpool-id': this.options.userPoolId,
       'x-authing-request-from': this.options.requestFrom || 'sdk',
       'x-authing-app-id': this.options.appId || ''
@@ -40,16 +40,18 @@ export class GraphqlClient {
     } catch (error) {
       let errmsg = null;
       let errcode = null;
+      let data = null;
       const response = error.response;
       const errors = response.errors;
       errors.map((err: any) => {
         const { message: msg } = err;
-        const { code, message } = msg;
+        const { code, message, data: _data } = msg;
         errcode = code;
         errmsg = message;
-        this.options.onError(code, message);
+        data = _data;
+        this.options.onError(code, message, data);
       });
-      throw { code: errcode, message: errmsg };
+      throw { code: errcode, message: errmsg, data };
     }
   }
 }
