@@ -1,5 +1,5 @@
 ```python
-data = management.roles.delete_many([
+data = management_client.roles.delete_many([
   'ROLE1',
   'ROLE2'
 ])

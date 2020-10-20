@@ -1,5 +1,5 @@
 ```python
-data = management.roles.add_policies('ROLE', [
+data = management_client.roles.add_policies('ROLE', [
   'Policy1',
   'Policy2'
 ])

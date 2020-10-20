@@ -1,5 +1,5 @@
 ```python
-data = management.roles.add_users('ROLE', [
+data = management_client.roles.add_users('ROLE', [
   'USERID1',
   'USERID2'
 ])

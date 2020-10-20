@@ -1,6 +1,6 @@
 ```python
 code = 'code'
-management.roles.create(code=code)
+management_client.roles.create(code=code)
 ```
 
 ```csharp

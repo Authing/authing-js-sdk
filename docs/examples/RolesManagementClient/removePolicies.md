@@ -1,5 +1,5 @@
 ```python
-data = management.roles.remove_policies('ROLE', [
+data = management_client.roles.remove_policies('ROLE', [
   'Policy1',
   'Policy2'
 ])

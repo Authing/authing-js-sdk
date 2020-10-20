@@ -105,7 +105,10 @@ ${examples.map(x => x.value.split('\\`\\`\\`').join('```'))}
 // python
 for (let file of files) {
 
-  if (file.includes('QrCodeAuthenticationClient') || file.includes('OrgManagementClient')) {
+  if (file.includes('QrCodeAuthenticationClient')
+    || file.includes('OrgManagementClient')
+    || file.includes('GroupsManagementClient')
+  ) {
     continue
   }
 

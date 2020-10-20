@@ -1,5 +1,5 @@
 ```python
-data = management.roles.list_users('ROLE')
+data = management_client.roles.list_users('ROLE')
 totalCount = data['totalCount']
 _list = data['list']
 ```

@@ -1,5 +1,5 @@
 ```python
-data = management.roles.delete(code='code')
+data = management_client.roles.delete(code='code')
 code = data['code'] # 200 表示成功
 ```
 
