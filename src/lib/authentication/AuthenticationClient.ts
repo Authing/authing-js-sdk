@@ -91,7 +91,7 @@ export class AuthenticationClient {
   constructor(options: AuthenticationClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
     const graphqlApiEndpoint = `${this.options.host}/graphql`;
-    const graphqlApiEndpointV2 = `${this.options.host}/v2/graphql`;
+    const graphqlApiEndpointV2 = `${this.options.host}/graphql/v2`;
     // 子模块初始化顺序: GraphqlClient -> ManagementTokenProvider -> Others
     this.graphqlClient = new GraphqlClient(graphqlApiEndpoint, this.options);
     this.graphqlClientV2 = new GraphqlClient(

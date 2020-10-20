@@ -465,7 +465,7 @@ export class QrCodeAuthenticationClient {
    * @memberof QrCodeAuthenticationClient
    */
   async geneCode(): Promise<QRCodeGenarateResult> {
-    const api = `${this.options.host}/v2/api/qrcode/gene`;
+    const api = `${this.options.host}/api/v2/qrcode/gene`;
     const data = await this.httpClient.request({
       method: 'POST',
       url: api,
@@ -497,7 +497,7 @@ export class QrCodeAuthenticationClient {
    * @memberof QrCodeAuthenticationClient
    */
   async checkStatus(random: string): Promise<QRCodeStatus> {
-    const api = `${this.options.host}/v2/api/qrcode/check?random=${random}`;
+    const api = `${this.options.host}/api/v2/qrcode/check?random=${random}`;
     const data = await this.httpClient.request({
       method: 'GET',
       url: api
@@ -523,7 +523,7 @@ export class QrCodeAuthenticationClient {
    * @memberof QrCodeAuthenticationClient
    */
   async exchangeUserInfo(ticket: string): Promise<Partial<User>> {
-    const api = `${this.options.host}/v2/api/qrcode/userinfo`;
+    const api = `${this.options.host}/api/v2/qrcode/userinfo`;
     const userInfo = await this.httpClient.request({
       method: 'POST',
       url: api,

@@ -59,7 +59,7 @@ export class ManagementClient {
       throw new Error('请提供 userPoolId 或者 appId!');
 
     const graphqlApiEndpoint = `${this.options.host}/graphql`;
-    const graphqlApiEndpointV2 = `${this.options.host}/v2/graphql`;
+    const graphqlApiEndpointV2 = `${this.options.host}/graphql/v2`;
 
     if (!this.options.secret && !this.options.accessToken) {
       this.options.onError(
