@@ -1,6 +1,6 @@
 ```python
 data = management_client.users.detail(
-  userId="USERID"
+  userIds=["USERID1", "USERID2"]
 )
 ```
 
