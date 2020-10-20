@@ -861,7 +861,7 @@ export type Mutation = {
   /** 删除角色 */
   deleteRole: CommonMessage;
   /** 批量删除角色 */
-  deleteRoles: BatchOperationResult;
+  deleteRoles: CommonMessage;
   /** 给用户授权角色 */
   assignRole?: Maybe<CommonMessage>;
   /** 撤销角色 */
@@ -1434,16 +1434,6 @@ export type RegisterByPhoneCodeInput = {
   generateToken?: Maybe<Scalars['Boolean']>;
 };
 
-/** 批量删除返回结果 */
-export type BatchOperationResult = {
-  /** 删除成功的个数 */
-  succeedCount: Scalars['Int'];
-  /** 删除失败的个数 */
-  failedCount: Scalars['Int'];
-  message?: Maybe<Scalars['String']>;
-  errors?: Maybe<Array<Scalars['String']>>;
-};
-
 export type RefreshToken = {
   token?: Maybe<Scalars['String']>;
   iat?: Maybe<Scalars['Int']>;
@@ -1634,6 +1624,16 @@ export type RefreshAccessTokenRes = {
   accessToken?: Maybe<Scalars['String']>;
   exp?: Maybe<Scalars['Int']>;
   iat?: Maybe<Scalars['Int']>;
+};
+
+/** 批量删除返回结果 */
+export type BatchOperationResult = {
+  /** 删除成功的个数 */
+  succeedCount: Scalars['Int'];
+  /** 删除失败的个数 */
+  failedCount: Scalars['Int'];
+  message?: Maybe<Scalars['String']>;
+  errors?: Maybe<Array<Scalars['String']>>;
 };
 
 export type KeyValuePair = {
@@ -2266,12 +2266,7 @@ export type DeleteRolesVariables = Exact<{
 }>;
 
 export type DeleteRolesResponse = {
-  deleteRoles: {
-    succeedCount: number;
-    failedCount: number;
-    message?: Maybe<string>;
-    errors?: Maybe<Array<string>>;
-  };
+  deleteRoles: { message?: Maybe<string>; code?: Maybe<number> };
 };
 
 export type DeleteUserVariables = Exact<{
@@ -5423,10 +5418,8 @@ export const DeleteRoleDocument = `
 export const DeleteRolesDocument = `
     mutation deleteRoles($codes: [String!]!) {
   deleteRoles(codes: $codes) {
-    succeedCount
-    failedCount
     message
-    errors
+    code
   }
 }
     `;

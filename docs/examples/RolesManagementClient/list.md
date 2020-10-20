@@ -1,5 +1,7 @@
 ```python
-
+data = management.roles.list()
+totalCount = data['totalCount']
+_list = data['list']
 ```
 
 ```csharp

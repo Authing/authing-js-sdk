@@ -1,5 +1,10 @@
 ```python
-
+data = management.roles.add_policies('ROLE', [
+  'Policy1',
+  'Policy2'
+])
+totalCount = data['totalCount']
+_list = data['list']
 ```
 
 ```csharp
