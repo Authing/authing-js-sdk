@@ -1,7 +1,7 @@
 import { GraphqlClient } from './../common/GraphqlClient';
-import { graphqlRequest } from '../utils';
 import { ManagementClientOptions, DecodedAccessToken } from './types';
 import jwtDecode from 'jwt-decode';
+import { getAccessToken, refreshAccessToken } from '../graphqlapi';
 
 export class ManagementTokenProvider {
   /** 内部变量，请不要直接引用 **/
@@ -33,16 +33,11 @@ export class ManagementTokenProvider {
    * @memberof ManagementTokenProvider
    */
   private async getClientWhenSdkInit() {
-    const graphqlApiEndpoint = `${this.options.host}/graphql`;
-    const res: any = await graphqlRequest({
-      endpoint: graphqlApiEndpoint,
-      query: `query getClientWhenSdkInit($clientId: String!, $secret: String!) {\n  getClientWhenSdkInit(clientId: $clientId, secret: $secret) {\n    accessToken\n  }\n}\n`,
-      variables: {
-        clientId: this.options.userPoolId,
-        secret: this.options.secret
-      }
+    const res = await getAccessToken(this.graphqlClient, this, {
+      userPoolId: this.options.userPoolId,
+      secret: this.options.secret
     });
-    return res.getClientWhenSdkInit.accessToken;
+    return res.accessToken.accessToken;
   }
 
   /**
@@ -51,19 +46,8 @@ export class ManagementTokenProvider {
    * @memberof ManagementTokenProvider
    */
   private async refreshToken() {
-    const graphqlApiEndpoint = `${this.options.host}/graphql`;
-
-    const res: any = await graphqlRequest({
-      endpoint: graphqlApiEndpoint,
-      query: `mutation refreshAccessToken($userPoolId: String!, $accessToken: String!){
-        refreshAccessToken(userPoolId: $userPoolId, accessToken: $accessToken) {
-          accessToken
-        }
-      }`,
-      variables: {
-        userPoolId: this.options.userPoolId,
-        accessToken: this._accessToken
-      }
+    const res = await refreshAccessToken(this.graphqlClient, this, {
+      accessToken: this.options.accessToken
     });
     return res.refreshAccessToken.accessToken;
   }
@@ -75,6 +59,10 @@ export class ManagementTokenProvider {
    * @memberof ManagementTokenProvider
    */
   async getToken(): Promise<string> {
+    if (this.options.accessToken) {
+      return this.options.accessToken;
+    }
+
     // 缓存到 accessToken 过期前 3600 s
     if (
       this._accessToken &&

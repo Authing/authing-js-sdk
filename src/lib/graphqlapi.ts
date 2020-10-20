@@ -253,7 +253,12 @@ import {
   GetUserGroupsDocument,
   UnbindEmailVariables,
   UnbindEmailDocument,
-  UnbindEmailResponse
+  UnbindEmailResponse,
+  AccessTokenVariables,
+  AccessTokenDocument,
+  RefreshAccessTokenVariables,
+  RefreshAccessTokenResponse,
+  AccessTokenResponse
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1423,6 +1428,34 @@ export const unbindEmail = async (
   variables: UnbindEmailVariables
 ): Promise<UnbindEmailResponse> => {
   const query = UnbindEmailDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const getAccessToken = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: AccessTokenVariables
+): Promise<AccessTokenResponse> => {
+  const query = AccessTokenDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const refreshAccessToken = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RefreshAccessTokenVariables
+): Promise<RefreshAccessTokenResponse> => {
+  const query = RefreshTokenDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,

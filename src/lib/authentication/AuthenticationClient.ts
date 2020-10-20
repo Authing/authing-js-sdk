@@ -122,11 +122,11 @@ export class AuthenticationClient {
     return user;
   }
 
-  async setCurrentUser(user: User) {
+  setCurrentUser(user: User) {
     this.tokenProvider.setUser(user);
   }
 
-  async setToken(token: string) {
+  setToken(token: string) {
     this.tokenProvider.setToken(token);
   }
 
