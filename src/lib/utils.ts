@@ -1,4 +1,4 @@
-import { JSEncrypt } from 'jsencrypt'
+import crypto from 'crypto';
 import { SDK_VERSION } from './version';
 import { GraphQLClient } from 'graphql-request';
 import { Variables } from 'graphql-request/dist/src/types';
@@ -6,10 +6,18 @@ import _ from 'lodash';
 import * as jwt from 'jsonwebtoken';
 
 export const encrypt = (plainText: string, publicKey: string) => {
-  const encrypt = new JSEncrypt(); // 实例化加密对象
-  encrypt.setPublicKey(publicKey); // 设置公钥
-  const encryptedPassword = encrypt.encrypt(plainText); // 加密明文
-  return encryptedPassword;
+  // jsencrypt 库在加密后使用了base64编码,所以这里要先将base64编码后的密文转成buffer
+  const pawBuffer = Buffer.from(plainText);
+  const encryptText = crypto
+    .publicEncrypt(
+      {
+        key: Buffer.from(publicKey), // 如果通过文件方式读入就不必转成Buffer
+        padding: crypto.constants.RSA_PKCS1_PADDING
+      },
+      pawBuffer
+    )
+    .toString('base64');
+  return encryptText;
 };
 
 export const graphqlRequest = async (options: {
