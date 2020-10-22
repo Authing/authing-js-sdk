@@ -4,6 +4,7 @@ import { SDK_VERSION } from './version';
 import { GraphQLClient } from 'graphql-request';
 import { Variables } from 'graphql-request/dist/src/types';
 import _ from 'lodash';
+// @ts-ignore
 import jsjws from 'jsjws';
 import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from './management/types';
