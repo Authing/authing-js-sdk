@@ -1,4 +1,3 @@
-// @ts-ignore
 import { JSEncrypt } from 'jsencrypt'
 import { SDK_VERSION } from './version';
 import { GraphQLClient } from 'graphql-request';
