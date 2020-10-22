@@ -12,7 +12,8 @@ export const encrypt = (plainText: string, publicKey: string) => {
     .publicEncrypt(
       {
         key: Buffer.from(publicKey), // 如果通过文件方式读入就不必转成Buffer
-        padding: crypto.constants.RSA_PKCS1_PADDING
+        padding: 1
+        // padding: crypto.constants.RSA_PKCS1_PADDING
       },
       pawBuffer
     )
