@@ -1,18 +1,17 @@
 // @ts-ignore
-// import { JSEncrypt } from 'jsencrypt'
+import { JSEncrypt } from 'jsencrypt'
 import { SDK_VERSION } from './version';
 import { GraphQLClient } from 'graphql-request';
 import { Variables } from 'graphql-request/dist/src/types';
 import _ from 'lodash';
-import jsjws from 'jsjws';
-import jwtDecode from 'jwt-decode';
-import { DecodedAccessToken } from './management/types';
-// export const encrypt = (plainText: string, publicKey: string) => {
-//   const encrypt = new JSEncrypt(); // 实例化加密对象
-//   encrypt.setPublicKey(publicKey); // 设置公钥
-//   const encryptedPassword = encrypt.encrypt(plainText); // 加密明文
-//   return encryptedPassword;
-// };
+import * as jwt from 'jsonwebtoken';
+
+export const encrypt = (plainText: string, publicKey: string) => {
+  const encrypt = new JSEncrypt(); // 实例化加密对象
+  encrypt.setPublicKey(publicKey); // 设置公钥
+  const encryptedPassword = encrypt.encrypt(plainText); // 加密明文
+  return encryptedPassword;
+};
 
 export const graphqlRequest = async (options: {
   endpoint: string;
@@ -87,13 +86,8 @@ export default function buildTree(nodes: any[]) {
  *
  */
 export const verifyToken = (token: string, secret: string) => {
-  const valid = jsjws.JWS.verify(token, Buffer.from(secret), ['HS256']);
-  if (valid) {
-    const decoded: DecodedAccessToken = jwtDecode(token);
-    return decoded;
-  } else {
-    throw new Error('token 不合法');
-  }
+  const decoded = jwt.verify(token, secret) as any;
+  return decoded;
 };
 
 export const deepEqual = function(x: any, y: any) {
@@ -102,8 +96,7 @@ export const deepEqual = function(x: any, y: any) {
   } else if (
     typeof x == 'object' &&
     x != null &&
-    typeof y == 'object' &&
-    y != null
+    typeof y == 'object' && y != null
   ) {
     if (Object.keys(x).length != Object.keys(y).length) return false;
 
