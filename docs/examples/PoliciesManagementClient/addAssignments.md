@@ -13,5 +13,5 @@ management_client.policies.add_assignments(
 ```
 
 ```csharp
-
+var list = await managementClient.Policies.AddAssignments(new string[] { code }, PolicyAssignmentTargetType.USER, new string[] { userId });
 ```

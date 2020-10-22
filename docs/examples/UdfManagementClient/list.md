@@ -5,5 +5,5 @@ udfs = management.udf.list(
 ```
 
 ```csharp
-
+var udfs = await managementClient.Udf.List(UdfTargetType.USER);
 ```

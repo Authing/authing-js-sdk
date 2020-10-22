@@ -14,5 +14,7 @@ policy = management_client.policies.create(
 ```
 
 ```csharp
-
+var list = await managementClient.Policies.Create(code, new PolicyStatementInput[] {
+    new PolicyStatementInput("resource id", new string[] { "action id" })
+});
 ```

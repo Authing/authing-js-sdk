@@ -7,5 +7,5 @@ management_client.policies.remove_assignments(
 ```
 
 ```csharp
-
+var list = await managementClient.Policies.RemoveAssignments(new string[] { code }, PolicyAssignmentTargetType.USER, new string[] { userId });
 ```

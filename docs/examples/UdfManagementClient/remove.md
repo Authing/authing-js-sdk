@@ -6,5 +6,5 @@ management.udf.remove(
 ```
 
 ```csharp
-
+var udf = await managementClient.Udf.Remove(UdfTargetType.USER, "key");
 ```
