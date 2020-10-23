@@ -8,5 +8,5 @@ totalCount, _list = data['totalCount'], data['list']
 ```
 
 ```csharp
-
+var list = await managementClient.Policies.ListAssignments(code);
 ```

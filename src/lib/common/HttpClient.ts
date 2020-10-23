@@ -38,6 +38,7 @@ export class HttpClient {
     const { data } = await this.axios.request(config);
     const { code, message } = data;
     if (code !== 200) {
+      this.options.onError(code, message, data.data);
       throw new Error(message);
     }
     return data.data;

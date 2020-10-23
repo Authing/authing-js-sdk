@@ -15,5 +15,5 @@ udf = management.udf.set(
 ```
 
 ```csharp
-
+var udf = await managementClient.Udf.Set(UdfTargetType.USER, "key", UdfDataType.STRING, "label");
 ```

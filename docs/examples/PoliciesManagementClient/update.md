@@ -13,5 +13,5 @@ policy = management_client.policies.update(
 ```
 
 ```csharp
-
+var policy = await managementClient.Policies.Update(code, description: "asd");
 ```

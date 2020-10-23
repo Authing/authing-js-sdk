@@ -15,5 +15,5 @@ management_client.acl.allow(
 ```
 
 ```csharp
-
+await managementClient.Acl.Allow("resource id", "role id");
 ```
