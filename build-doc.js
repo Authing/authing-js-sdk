@@ -97,7 +97,7 @@ ${examples.map(x => x.value.split('\\`\\`\\`').join('```'))}
   fs.writeFileSync(source, docs.join('\n'))
 
   // 移动到 docs
-  const target = `../authing-docs/docs/sdk/sdk-for-node/${module}/${filename.replace('.ts', '')}.md`
+  const target = `../../docs/docs/sdk/sdk-for-node/${module}/${filename.replace('.ts', '')}.md`
   fs.copyFileSync(source, target)
 }
 
@@ -109,6 +109,7 @@ for (let file of files) {
     || file.includes('OrgManagementClient')
     || file.includes('GroupsManagementClient')
     || file.includes('WhitelistManagementClient')
+    || file.includes('MfaAuthenticationClient')
   ) {
     continue
   }
@@ -201,7 +202,7 @@ ${example ? example : ""}
   }
   const module = `${file.split('/')[file.split('/').length - 2]}`
   // 移动到 docs
-  const target = `../authing-docs/docs/sdk/sdk-for-python/${module}/${filename.replace('.ts', '')}.md`
+  const target = `../../docs/docs/sdk/sdk-for-python/${module}/${filename.replace('.ts', '')}.md`
   fs.writeFileSync(target, docs.join('\n'))
 }
 
@@ -216,6 +217,7 @@ for (let file of files) {
     || file.includes('UdfManagementClient')
     || file.includes('WhitelistManagementClient')
     || file.includes('UserpoolManagementClient')
+    || file.includes('MfaAuthenticationClient')
   ) {
     continue
   }
@@ -306,6 +308,6 @@ ${example ? example : ""}
   }
   const module = `${file.split('/')[file.split('/').length - 2]}`
   // 移动到 docs
-  const target = `../authing-docs/docs/sdk/sdk-for-csharp/${module}/${filename.replace('.ts', '')}.md`
+  const target = `../../docs/docs/sdk/sdk-for-csharp/${module}/${filename.replace('.ts', '')}.md`
   fs.writeFileSync(target, docs.join('\n'))
 }

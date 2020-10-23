@@ -9,6 +9,32 @@ import {
 import { HttpClient } from '../common/HttpClient';
 import { User } from '../..';
 
+/**
+ * @class MfaAuthenticationClient 多因素认证模块
+ * @description 此模块用于进行绑定 MFA 认证器、解绑 MFA 认证器、用户二次认证。
+ *
+ * 请求绑定 MFA 认证器：
+ *
+ * \`\`\`javascript
+ * import { AuthenticationClient } from "authing-js-sdk"
+ * const authenticationClient = new AuthenticationClient({
+ *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+ * })
+ * await authenticationClient.mfa.assosicateMfaAuthenticator({authenticatorType: 'totp'})
+ * \`\`\`
+ *
+ * 验证 MFA 二次口令：
+ *
+ * \`\`\`javascript
+ * import { AuthenticationClient } from "authing-js-sdk"
+ * const authenticationClient = new AuthenticationClient({
+ *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+ * })
+ * await authenticationClient.mfa.verifyTotpMfa({totp: '112233', mfaToken: 'xxx'})
+ * \`\`\`
+ *
+ * @name MfaAuthenticationClient
+ */
 export class MfaAuthenticationClient {
   options: AuthenticationClientOptions;
   tokenProvider: AuthenticationTokenProvider;
