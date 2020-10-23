@@ -93,5 +93,10 @@ export type IMfaAssociation = {
 
 export type IMfaConfirmAssociation = {
   code: number;
-  message: 'TOTP MFA 绑定成功';
+  message: string;
+};
+
+export type IMfaDeleteAssociation = {
+  code: number;
+  message: string;
 };

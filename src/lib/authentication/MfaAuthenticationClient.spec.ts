@@ -37,6 +37,25 @@ test('用户请求绑定 MFA 认证器', async t => {
   t.assert(typeof result.recovery_code === 'string');
 });
 
+test('用户解绑 MFA 认证器', async t => {
+  const password = generateRandomString(14);
+  const email = generateRandomEmail().toLocaleLowerCase();
+  await authenticationClient.registerByEmail(email, password);
+  await authenticationClient.loginByEmail(email, password);
+  const result = await authenticationClient.mfa.assosicateMfaAuthenticator({
+    authenticatorType: 'totp'
+  });
+
+  t.assert(result.authenticator_type === 'totp');
+  t.assert(typeof result.secret === 'string');
+  t.assert(typeof result.qrcode_uri === 'string');
+  t.assert(typeof result.qrcode_data_url === 'string');
+  t.assert(typeof result.recovery_code === 'string');
+
+  const deleteResult = await authenticationClient.mfa.deleteMfaAuthenticator();
+  t.assert(deleteResult.code === 200);
+});
+
 test('用户确认绑定 MFA 认证器', async t => {
   const password = generateRandomString(14);
   const email = generateRandomEmail().toLocaleLowerCase();
@@ -98,7 +117,7 @@ test('MFA 口令二次认证', async t => {
   }
 });
 
-test.only('MFA 恢复代码二次认证', async t => {
+test('MFA 恢复代码二次认证', async t => {
   const password = generateRandomString(14);
   const email = generateRandomEmail().toLocaleLowerCase();
   await authenticationClient.registerByEmail(email, password);

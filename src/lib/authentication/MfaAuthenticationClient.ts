@@ -3,7 +3,8 @@ import {
   AuthenticationClientOptions,
   IMfaAssociation,
   IMfaAuthenticators,
-  IMfaConfirmAssociation
+  IMfaConfirmAssociation,
+  IMfaDeleteAssociation
 } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { User } from '../..';
@@ -50,7 +51,7 @@ export class MfaAuthenticationClient {
         type: options.type
       }
     });
-    console.log(data)
+    console.log(data);
     return data;
   }
 
@@ -82,6 +83,32 @@ export class MfaAuthenticationClient {
       }
     });
     return data;
+  }
+
+  /**
+   * @name deleteMfaAuthenticator
+   * @name_zh 解绑 MFA
+   * @description 解绑 MFA
+   *
+   * @example
+   * const authenticationClient = new AuthenticationClient({
+   *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+   * })
+   * const authenticators = await authenticationClient.mfa.deleteMfaAuthenticator()
+   *
+   * @returns {Promise<IMfaDeleteAssociation>}
+   * @memberof MfaAuthenticationClient
+   */
+  async deleteMfaAuthenticator(): Promise<IMfaDeleteAssociation> {
+    const api = `${this.options.host}/api/v2/mfa/totp/associate`;
+    await this.httpClient.request({
+      method: 'DELETE',
+      url: api
+    });
+    return {
+      code: 200,
+      message: 'TOTP MFA 解绑成功'
+    };
   }
 
   /**
