@@ -364,6 +364,44 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
+"@otplib/core@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.npm.taobao.org/@otplib/core/download/@otplib/core-12.0.1.tgz#73720a8cedce211fe5b3f683cd5a9c098eaf0f8d"
+  integrity sha1-c3IKjO3OIR/ls/aDzVqcCY6vD40=
+
+"@otplib/plugin-crypto@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.npm.taobao.org/@otplib/plugin-crypto/download/@otplib/plugin-crypto-12.0.1.tgz#2b42c624227f4f9303c1c041fca399eddcbae25e"
+  integrity sha1-K0LGJCJ/T5MDwcBB/KOZ7dy64l4=
+  dependencies:
+    "@otplib/core" "^12.0.1"
+
+"@otplib/plugin-thirty-two@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.npm.taobao.org/@otplib/plugin-thirty-two/download/@otplib/plugin-thirty-two-12.0.1.tgz#5cc9b56e6e89f2a1fe4a2b38900ca4e11c87aa9e"
+  integrity sha1-XMm1bm6J8qH+Sis4kAyk4RyHqp4=
+  dependencies:
+    "@otplib/core" "^12.0.1"
+    thirty-two "^1.0.2"
+
+"@otplib/preset-default@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.npm.taobao.org/@otplib/preset-default/download/@otplib/preset-default-12.0.1.tgz#cb596553c08251e71b187ada4a2246ad2a3165ba"
+  integrity sha1-y1llU8CCUecbGHraSiJGrSoxZbo=
+  dependencies:
+    "@otplib/core" "^12.0.1"
+    "@otplib/plugin-crypto" "^12.0.1"
+    "@otplib/plugin-thirty-two" "^12.0.1"
+
+"@otplib/preset-v11@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.npm.taobao.org/@otplib/preset-v11/download/@otplib/preset-v11-12.0.1.tgz#4c7266712e7230500b421ba89252963c838fc96d"
+  integrity sha1-THJmcS5yMFALQhuoklKWPIOPyW0=
+  dependencies:
+    "@otplib/core" "^12.0.1"
+    "@otplib/plugin-crypto" "^12.0.1"
+    "@otplib/plugin-thirty-two" "^12.0.1"
+
 "@sindresorhus/df@^1.0.1":
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/@sindresorhus/df/download/@sindresorhus/df-1.0.1.tgz#c69b66f52f6fcdd287c807df210305dbaf78500d"
@@ -4237,6 +4275,15 @@ os-tmpdir@^1.0.1:
   resolved "https://registry.npm.taobao.org/os-tmpdir/download/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
 
+otplib@^12.0.1:
+  version "12.0.1"
+  resolved "https://registry.npm.taobao.org/otplib/download/otplib-12.0.1.tgz#c1d3060ab7aadf041ed2960302f27095777d1f73"
+  integrity sha1-wdMGCreq3wQe0pYDAvJwlXd9H3M=
+  dependencies:
+    "@otplib/core" "^12.0.1"
+    "@otplib/preset-default" "^12.0.1"
+    "@otplib/preset-v11" "^12.0.1"
+
 p-cancelable@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/p-cancelable/download/p-cancelable-1.1.0.tgz#d078d15a3af409220c886f1d9a0ca2e441ab26cc"
@@ -5515,6 +5562,11 @@ text-extensions@^1.0.0:
   version "1.9.0"
   resolved "https://registry.npm.taobao.org/text-extensions/download/text-extensions-1.9.0.tgz?cache=0&sync_timestamp=1581859646215&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftext-extensions%2Fdownload%2Ftext-extensions-1.9.0.tgz#1853e45fee39c945ce6f6c36b2d659b5aabc2a26"
   integrity sha1-GFPkX+45yUXOb2w2stZZtaq8KiY=
+
+thirty-two@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/thirty-two/download/thirty-two-1.0.2.tgz#4ca2fffc02a51290d2744b9e3f557693ca6b627a"
+  integrity sha1-TKL//AKlEpDSdEueP1V2k8prYno=
 
 through2@^2.0.0, through2@^2.0.2:
   version "2.0.5"

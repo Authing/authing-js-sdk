@@ -39,6 +39,7 @@ import {
 } from '../../types/graphql.v2';
 import { encrypt } from '../utils';
 import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
+import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { resetPassword, updateUser } from '../graphqlapi';
 import { HttpClient } from '../common/HttpClient';
 
@@ -50,8 +51,8 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
 +TiA2BKHbCvloW3w5Lnqm70iSsUi5Fmu9/2+68GZRH9L7Mlh8cFksCicW2Y2W2uM
 GKl64GDcIq3au+aqJQIDAQAB
 -----END PUBLIC KEY-----`,
-  onError: (code: number, message: string) => {
-    throw { code, message };
+  onError: (code: number, message: string, data: any) => {
+    throw { code, message, data };
   },
   host: 'https://core.authing.cn',
   requestFrom: 'sdk'
@@ -86,6 +87,7 @@ export class AuthenticationClient {
   tokenProvider: AuthenticationTokenProvider;
   wxqrcode: QrCodeAuthenticationClient;
   qrcode: QrCodeAuthenticationClient;
+  mfa: MfaAuthenticationClient;
 
   constructor(options: AuthenticationClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -108,7 +110,11 @@ export class AuthenticationClient {
       this.httpClient,
       'APP_AUTH'
     );
-
+    this.mfa = new MfaAuthenticationClient(
+      this.options,
+      this.tokenProvider,
+      this.httpClient
+    );
     if (this.options.accessToken) {
       this.setToken(this.options.accessToken);
     }
