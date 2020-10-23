@@ -46,7 +46,7 @@ export function generateRandomString(length: number = 30) {
 }
 
 export function generateRandomEmail() {
-  return generateRandomString() + '@example.com';
+  return generateRandomString(14) + '@example.com';
 }
 
 /**

@@ -69,3 +69,34 @@ export interface QRCodeGenarateResult {
   random: string;
   url: string;
 }
+
+export type IMfaAuthenticators = Array<{
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  enable: boolean;
+  secret: string;
+  authenticatorType: string;
+  recoveryCode: string;
+}>;
+
+export type IMfaAssociation = {
+  authenticator_type: string;
+  secret: string; // MFA Secret 可用于手动添加 MFA
+  qrcode_uri: string;
+  // MFA 二维码 Data Url，用于放在 <img> src 中展示二维码
+  qrcode_data_url: string;
+  // 恢复代码
+  recovery_code: string;
+};
+
+export type IMfaConfirmAssociation = {
+  code: number;
+  message: string;
+};
+
+export type IMfaDeleteAssociation = {
+  code: number;
+  message: string;
+};
