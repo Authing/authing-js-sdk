@@ -7,3 +7,11 @@ data = management_client.users.detail(
 ```csharp
 var user = await managementClient.Users.Detail("userId");
 ```
+
+```java
+User result = managementClient.users().detail("userId").execute();
+```
+
+```php
+$user = $managementClient->users()->detail("userId");
+```

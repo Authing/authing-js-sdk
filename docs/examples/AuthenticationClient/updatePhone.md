@@ -17,3 +17,11 @@ authentication_client.update_email(
 ```csharp
 await authenticationClient.UpdatePhone("phone number", "1234");
 ```
+
+```java
+User user = authenticationClient.updatePhone("phone number", "1234").execute();
+```
+
+```php
+$user = $authenticationClient->updatePhone("new phone number", "1234", "old phone number", "1234");
+```

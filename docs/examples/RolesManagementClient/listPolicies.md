@@ -8,3 +8,11 @@ _list = data['list']
 var code = "code";
 var policies = await managementClient.Roles.ListPolicies(code);
 ```
+
+```java
+PaginatedPolicyAssignments result = managementClient.roles().listPolicies("code").execute();
+```
+
+```php
+$policies = $managementClient->roles()->listPolicies("code");
+```

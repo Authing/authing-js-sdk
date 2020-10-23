@@ -11,3 +11,11 @@ var phone = "phone number";
 var phoneCode = "1234"
 await authenticationClient.BindPhone(phone, phoneCode);
 ```
+
+```java
+User user = authenticationClient.bindPhone("phone number", "1234").execute();
+```
+
+```php
+$user = $authenticationClient->bindPhone("phone number", "1234");
+```

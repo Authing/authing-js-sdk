@@ -8,3 +8,12 @@ users = data['list'] # 角色列表
 ```csharp
 var users = await managementClient.Users.Search("test");
 ```
+
+```java
+String query = "query";
+PaginatedUsers users = managementClient.users().search(query).execute();
+```
+
+```php
+$users = $managementClient->users()->search("query");
+```

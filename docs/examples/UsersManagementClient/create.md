@@ -19,3 +19,15 @@ var user = managementClient.Users.Create(new CreateUserInput()
   Password = password,
 })
 ```
+
+```java
+String email = "test@example.com";
+String password = "123456";
+User user = managementClient.users().create(new CreateUserInput().withEmail(email).withPassword(password)).execute();
+```
+
+```php
+$email = "test@example.com";
+$password = '123456';
+$user = $managementClient->users()->create((new CreateUserInput())->withEmail($email)->withPassword($password));
+```

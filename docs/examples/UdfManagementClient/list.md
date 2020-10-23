@@ -7,3 +7,11 @@ udfs = management.udf.list(
 ```csharp
 var udfs = await managementClient.Udf.List(UdfTargetType.USER);
 ```
+
+```java
+List<UserDefinedField> list = managementClient.udf().list(UdfTargetType.USER).execute();
+```
+
+```php
+$udfs = $managementClient->udf()->paginate(UDFTargetType::USER);
+```

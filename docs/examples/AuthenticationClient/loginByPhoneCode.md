@@ -13,3 +13,15 @@ var code = "1234";
 var user = await authenticationClient.LoginByPhoneCode(phone, code);
 Console.WriteLine(user.Phone);
 ```
+
+```java
+String phone = "phone number";
+String code = "1234";
+User user = authenticationClient.loginByPhoneCode(new LoginByPhoneCodeInput(phone, code)).execute();
+```
+
+```php
+$phone = "phone number";
+$code = "1234";
+$user = $authenticationClient->loginByPhoneCode((new LoginByPhoneCodeInput($phone, $code)));
+```

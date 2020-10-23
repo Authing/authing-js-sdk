@@ -16,6 +16,18 @@ authentication_client.update_email(
 
 ```csharp
 var newEmail = "new@example.com";
-var emailCOde = "1234"
-await authenticationClient.UpdateEmail(newEmail, "1234");
+var emailCode = "1234"
+await authenticationClient.UpdateEmail(newEmail, emailCode);
+```
+
+```java
+String newEmail = "new@example.com";
+String emailCode = "1234"
+User user = authenticationClient.updateEmail(newEmail, emailCode).execute();
+```
+
+```php
+$newEmail = "new@example.com";
+$emailCode = "1234";
+$user = $authenticationClient->updateEmail($newEmail, $emailCode);
 ```

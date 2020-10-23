@@ -17,3 +17,11 @@ var user = await managementClient.Users.Update("userId", new UpdateUserInput()
   Nickname = "nickname",
 })
 ```
+
+```java
+User result = managementClient.users().update("userId", new UpdateUserInput().withNickname("nickname")).execute();
+```
+
+```php
+$user = $managementClient->users()->update("userId", (new UpdateUserInput())->withNickname("nickname"));
+```

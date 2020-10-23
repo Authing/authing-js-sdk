@@ -12,3 +12,17 @@ var code = "1234";
 var password = "123456";
 var message = await authenticationClient.ResetPasswordByPhoneCode(phone, code, password);
 ```
+
+```java
+String phone = "phone number";
+String code = "1234";
+String password = "123456";
+authenticationClient.resetPasswordByPhoneCode(phone, code, password).execute();
+```
+
+```php
+$phone = "phone number";
+$code = "1234";
+$newPassword = "123456";
+$authenticationClient->resetPasswordByPhoneCode($phone, $code, $newPassword);
+```

@@ -16,3 +16,15 @@ var oldPassword = "111111";
 var newPassword = "123456";
 await authenticationClient.UpdatePassword(newPassword, oldPassword);
 ```
+
+```java
+String oldPassword = "111111";
+String newPassword = "123456";
+User user = authenticationClient.updatePassword(newPassword, oldPassword).execute();
+```
+
+```php
+$oldPassword = "111111";
+$newPassword = "123456";
+$user = $authenticationClient->updatePassword($newPassword, $oldPassword);
+```

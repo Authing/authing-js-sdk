@@ -7,3 +7,11 @@ user = authentication_client.get_current_user()
 var user = await authenticationClient.CurrentUser();
 Console.WriteLine(user.Phone);
 ```
+
+```java
+User user = authenticationClient.getCurrentUser().execute();
+```
+
+```php
+$user = $authenticationClient->getCurrentUser();
+```

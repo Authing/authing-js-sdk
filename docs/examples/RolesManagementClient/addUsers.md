@@ -12,3 +12,13 @@ var code = "code";
 var users = new string[] { "userId" };
 var message = await managementClient.Roles.AddUsers(code, users);
 ```
+
+```java
+ArrayList<String> userIds = new ArrayList<>();
+userIds.add("userId");
+CommonMessage message = managementClient.roles().addUsers("code", userIds).execute();
+```
+
+```php
+$message = $managementClient->roles()->addUsers("code", ["userId"]);
+```

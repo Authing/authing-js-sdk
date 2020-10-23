@@ -13,3 +13,15 @@ var password = "123456";
 var user = await authenticationClient.LoginByUsername(username, password);
 Console.WriteLine(user.Username);
 ```
+
+```java
+String username = "username";
+String password = "123456";
+User user = authenticationClient.loginByUsername(new LoginByUsernameInput(username, password)).execute();
+```
+
+```php
+$username = "username";
+$password = "123456";
+$user = $authenticationClient->loginByUsername(new LoginByUsernameInput($username, $password));
+```

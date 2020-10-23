@@ -10,3 +10,11 @@ totalCount, _list = data['totalCount'], data['list']
 ```csharp
 var list = await managementClient.Policies.ListAssignments(code);
 ```
+
+```java
+PaginatedPolicyAssignments policyAssignments = managementClient.policies().listAssignments("code").execute();
+```
+
+```php
+$policyAssignments = $managementClient->policies()->listAssignments("code");
+```

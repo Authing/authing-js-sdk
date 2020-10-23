@@ -15,3 +15,15 @@ var password = "123456";
 var user = await authenticationClient.RegisterByEmail(email, password);
 Console.WriteLine(user.Email);
 ```
+
+```java
+String email = "test@example.com";
+String password = "123456";
+User user = authenticationClient.registerByEmail(new RegisterByEmailInput(email, password)).execute();
+```
+
+```php
+$email = "test@example.com";
+$password = "123456";
+$user = $authenticationClient->registerByEmail(new RegisterByEmailInput($email, $password));
+```

@@ -8,3 +8,11 @@ _list = data['list']
 var code = "code";
 var users = await managementClient.Roles.ListUsers(code);
 ```
+
+```java
+PaginatedUsers users = managementClient.roles().listUsers("code").execute();
+```
+
+```php
+$users = $managementClient->roles()->listUsers("code");
+```

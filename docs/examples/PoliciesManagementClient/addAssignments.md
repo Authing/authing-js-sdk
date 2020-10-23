@@ -15,3 +15,17 @@ management_client.policies.add_assignments(
 ```csharp
 var list = await managementClient.Policies.AddAssignments(new string[] { code }, PolicyAssignmentTargetType.USER, new string[] { userId });
 ```
+
+```java
+ArrayList<String> policies = new ArrayList<>();
+policies.add("policy code");
+
+ArrayList<String> targetIdentifiers = new ArrayList<>();
+targetIdentifiers.add("userId");
+
+managementClient.policies().addAssignments(policies, PolicyAssignmentTargetType.USER, targetIdentifiers).execute();
+```
+
+```php
+$managementClient->policies()->addAssignments(["policy code"], PolicyAssignmentTargetType::USER, ["userId"]);
+```

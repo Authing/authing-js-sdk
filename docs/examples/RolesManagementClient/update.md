@@ -14,3 +14,11 @@ var code = "code";
 var desc = "update desc";
 var role = await managementClient.Roles.Update(code, desc);
 ```
+
+```java
+Role role = rolesManagementClient.roles().update(new UpdateRoleParam("code").withDescription("desc")).execute();
+```
+
+```php
+$role = $managementClient->roles()->update("code", "desc");
+```

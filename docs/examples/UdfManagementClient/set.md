@@ -17,3 +17,11 @@ udf = management.udf.set(
 ```csharp
 var udf = await managementClient.Udf.Set(UdfTargetType.USER, "key", UdfDataType.STRING, "label");
 ```
+
+```java
+UserDefinedField udf = managementClient.udf().set(UdfTargetType.USER, "key", UdfDataType.STRING, "label").execute();
+```
+
+```php
+$udf = $managementClient->udf()->set(UDFTargetType::USER, "key", UDFDataType::STRING, "label");
+```

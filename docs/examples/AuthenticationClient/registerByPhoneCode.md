@@ -17,3 +17,17 @@ var password = "123456";
 var user = await authenticationClient.RegisterByPhoneCode(phone, code, password);
 Console.WriteLine(user.Phone);
 ```
+
+```java
+String phone = "phone number";
+String code = "1234";
+String pasword = "123456"
+User user = authenticationClient.registerByPhoneCode(new RegisterByPhoneCodeInput(phone, code).withPassword(password)).execute();
+```
+
+```php
+$phone = "phone number";
+$code = "1234";
+$password = "123456";
+$user = $authenticationClient->registerByPhoneCode((new RegisterByPhoneCodeInput($phone, $code))->withPassword($password));
+```

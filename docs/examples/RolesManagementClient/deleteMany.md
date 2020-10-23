@@ -11,3 +11,13 @@ _list = data['list']
 var code = "code";
 var message = await managementClient.Roles.DeleteMany(new string[] { code });
 ```
+
+```java
+ArrayList<String> list = new ArrayList<String>();
+list.add("code");
+CommonMessage result = managementClient.roles().deleteMany(list).execute();
+```
+
+```php
+$message = $managementClient->roles()->deleteMany(["code"]);
+```

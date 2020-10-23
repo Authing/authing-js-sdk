@@ -12,3 +12,13 @@ var code = "code";
 var policies = new string[] { "policyId" };
 var message = await managementClient.Roles.RemovePolicies(code, policies);
 ```
+
+```java
+ArrayList<String> policies = new ArrayList<>();
+policies.add("policy id");
+CommonMessage message = managementClient.roles().removePolicies("code", policies).execute();
+```
+
+```php
+$message = $managementClient->roles()->removePolicies("code", ["policy id"]);
+```

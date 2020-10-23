@@ -11,3 +11,11 @@ data = authentication.check_login_status()
 var status = await authenticationClient.CheckLoginStatus();
 Console.WriteLine(status.code == 200);
 ```
+
+```java
+JwtTokenStatus status = authenticationClient.checkLoginStatus().execute();
+```
+
+```php
+$status = $authenticationClient->checkLoginStatus();
+```

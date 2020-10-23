@@ -8,3 +8,11 @@ management.udf.remove(
 ```csharp
 var udf = await managementClient.Udf.Remove(UdfTargetType.USER, "key");
 ```
+
+```java
+CommonMessage message = managementClient.udf().remove(UdfTargetType.USER, "key").execute();
+```
+
+```php
+$message = $managementClient->udf()->remove(UDFTargetType::USER, "key");
+```

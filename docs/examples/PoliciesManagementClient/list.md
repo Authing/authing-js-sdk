@@ -8,3 +8,11 @@ totalCount, _list = data['totalCount'], data['list']
 ```csharp
 var list = await managementClient.Policies.List();
 ```
+
+```java
+PaginatedPolicies roles = managementClient.policies().list().execute();
+```
+
+```php
+$policies = $managementClient->policies()->paginate();
+```

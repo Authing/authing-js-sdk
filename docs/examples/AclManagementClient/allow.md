@@ -17,3 +17,11 @@ management_client.acl.allow(
 ```csharp
 await managementClient.Acl.Allow("resource id", "role id");
 ```
+
+```java
+CommonMessage message = managementClient.acl().allow("resource", "action").execute();
+```
+
+```php
+$managementClient->acl()->allow("resource", "action", "user id");
+```
