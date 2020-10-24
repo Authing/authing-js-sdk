@@ -11,5 +11,5 @@
 ```
 
 ```php
-
+$managementClient->users()->removeGroup("userId", "group code");
 ```
