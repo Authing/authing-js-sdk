@@ -11,5 +11,5 @@ var list = await managementClient.Whitelist.Remove(WhitelistType.EMAIL, new stri
 ```
 
 ```php
-
+$managementClient->whitelist()->remove(WhitelistType::EMAIL, ["test@test.com"]);
 ```

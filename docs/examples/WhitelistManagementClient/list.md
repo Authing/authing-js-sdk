@@ -11,5 +11,5 @@ var list = await managementClient.Whitelist.List(WhitelistType.USERNAME);
 ```
 
 ```php
-
+$list = $managementClient->whitelist()->paginate(WhitelistType::EMAIL);
 ```

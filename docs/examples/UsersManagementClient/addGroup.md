@@ -11,5 +11,5 @@
 ```
 
 ```php
-
+$managementClient->users()->addGroup("userId", "group code");
 ```

@@ -11,5 +11,5 @@ var list = await managementClient.Whitelist.Add(WhitelistType.EMAIL, new string[
 ```
 
 ```php
-
+$managementClient->whitelist()->add(WhitelistType::EMAIL, ["test@test.com"]);
 ```

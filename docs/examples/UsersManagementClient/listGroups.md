@@ -13,5 +13,5 @@ users = data['list'] # 当前页
 ```
 
 ```php
-
+$list = $managementClient->users()->listGroups("userId");
 ```

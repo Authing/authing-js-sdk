@@ -11,5 +11,5 @@ var list = await managementClient.Groups.List();
 ```
 
 ```php
-
+$groups = $managementClient->groups()->paginate();
 ```

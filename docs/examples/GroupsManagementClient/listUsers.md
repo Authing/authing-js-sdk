@@ -11,5 +11,5 @@ var users = managementClient.Groups.ListUsers(code);
 ```
 
 ```php
-
+$users = $managementClient->groups()->listUsers("code");
 ```
