@@ -11,5 +11,5 @@ await managementClient.Groups.AddUsers(code, new string[] { userId1, userId2 });
 ```
 
 ```php
-
+$managementClient->groups()->addUsers("code", ["userId"]);
 ```

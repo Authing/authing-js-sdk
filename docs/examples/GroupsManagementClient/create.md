@@ -11,5 +11,5 @@ var list = await managementClient.Groups.Create(code, "name");
 ```
 
 ```php
-
+$group = $managementClient->groups()->create("code", "group name");
 ```

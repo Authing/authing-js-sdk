@@ -11,5 +11,5 @@ var message = await managementClient.Groups.DeleteMany(new string[] { code });
 ```
 
 ```php
-
+$managementClient->groups()->deleteMany(["code"]);
 ```

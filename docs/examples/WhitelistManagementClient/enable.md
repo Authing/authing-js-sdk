@@ -11,5 +11,5 @@ await managementClient.Whitelist.Enable(WhitelistType.EMAIL);
 ```
 
 ```php
-
+$managementClient->whitelist()->enable(WhitelistType::EMAIL);
 ```

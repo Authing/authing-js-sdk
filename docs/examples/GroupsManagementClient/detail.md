@@ -11,5 +11,5 @@ var policy = await managementClient.Groups.Update(code, description: "asd");
 ```
 
 ```php
-
+$group = $managementClient->groups()->detail("code");
 ```

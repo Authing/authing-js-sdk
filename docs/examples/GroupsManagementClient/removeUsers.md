@@ -11,5 +11,5 @@ await managementClient.Groups.RemoveUsers(code, new string[] { userId1, userId2 
 ```
 
 ```php
-
+$managementClient->groups()->removeUsers("code", ["userId"]);
 ```

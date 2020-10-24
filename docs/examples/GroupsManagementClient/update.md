@@ -11,5 +11,5 @@ var group = await client.Groups.Update(code, description: "asd");
 ```
 
 ```php
-
+$group = $managementClient->groups()->update("code", "group name");
 ```
