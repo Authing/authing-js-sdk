@@ -7,7 +7,7 @@
 ```
 
 ```java
-
+managementClient.users().addUdv("userId", "key", "value").execute();
 ```
 
 ```php
