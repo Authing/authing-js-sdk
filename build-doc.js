@@ -97,7 +97,7 @@ ${examples.map(x => x.value.split('\\`\\`\\`').join('```'))}
   fs.writeFileSync(source, docs.join('\n'))
 
   // 移动到 docs
-  const target = `../authing-docs/docs/sdk/sdk-for-node/${module}/${filename.replace('.ts', '')}.md`
+  const target = `../../authing-docs/docs/sdk/sdk-for-node/${module}/${filename.replace('.ts', '')}.md`
   fs.copyFileSync(source, target)
 }
 
@@ -202,7 +202,7 @@ ${example ? example : ""}
   }
   const module = `${file.split('/')[file.split('/').length - 2]}`
   // 移动到 docs
-  const target = `../authing-docs/docs/sdk/sdk-for-python/${module}/${filename.replace('.ts', '')}.md`
+  const target = `../../authing-docs/docs/sdk/sdk-for-python/${module}/${filename.replace('.ts', '')}.md`
   fs.writeFileSync(target, docs.join('\n'))
 }
 
@@ -303,7 +303,7 @@ ${example ? example : ""}
   }
   const module = `${file.split('/')[file.split('/').length - 2]}`
   // 移动到 docs
-  const target = `../authing-docs/docs/sdk/sdk-for-csharp/${module}/${filename.replace('.ts', '')}.md`
+  const target = `../../authing-docs/docs/sdk/sdk-for-csharp/${module}/${filename.replace('.ts', '')}.md`
   fs.writeFileSync(target, docs.join('\n'))
 }
 
@@ -347,7 +347,10 @@ for (let file of files) {
     const memberof = _.find(tags, { title: 'memberof' })?.description
     const name = _.find(tags, { title: 'name' })?.name
 
-    if (name === "checkPasswordStrength" || name === 'exists') {
+    if (name === "checkPasswordStrength" || name === 'exists' || name === 'listUdv'
+      || name === 'removeUdv'
+      || name === 'setUdv'
+    ) {
       continue
     }
 
@@ -406,7 +409,7 @@ ${example ? example : ""}
   }
   const module = `${file.split('/')[file.split('/').length - 2]}`
   // 移动到 docs
-  const target = `../authing-docs/docs/sdk/sdk-for-java/${module}/${filename.replace('.ts', '')}.md`
+  const target = `../../authing-docs/docs/sdk/sdk-for-java/${module}/${filename.replace('.ts', '')}.md`
   fs.writeFileSync(target, docs.join('\n'))
 }
 
@@ -419,6 +422,7 @@ for (let file of files) {
     || file.includes('GroupsManagementClient')
     || file.includes('WhitelistManagementClient')
     || file.includes('MfaAuthenticationClient')
+    || file.includes('UserpoolAuthenticationClient')
   ) {
     continue
   }
@@ -509,6 +513,6 @@ ${example ? example : ""}
   }
   const module = `${file.split('/')[file.split('/').length - 2]}`
   // 移动到 docs
-  const target = `../authing-docs/docs/sdk/sdk-for-php/${module}/${filename.replace('.ts', '')}.md`
+  const target = `../../authing-docs/docs/sdk/sdk-for-php/${module}/${filename.replace('.ts', '')}.md`
   fs.writeFileSync(target, docs.join('\n'))
 }
