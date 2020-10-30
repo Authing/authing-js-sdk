@@ -7,7 +7,7 @@
 ```
 
 ```java
-
+managementClient.users().addGroup("userId", "groupId").execute();
 ```
 
 ```php

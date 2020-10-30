@@ -11,7 +11,7 @@ Console.WriteLine(list.Count());
 ```
 
 ```java
-
+authenticationClient.removeUdv("key").execute();
 ```
 
 ```php

@@ -7,7 +7,7 @@
 ```
 
 ```java
-
+managementClient.users().listUdv("userId").execute();
 ```
 
 ```php

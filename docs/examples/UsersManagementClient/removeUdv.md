@@ -7,7 +7,7 @@
 ```
 
 ```java
-
+managementClient.users().removeUdv("userId", "key").execute();
 ```
 
 ```php

@@ -7,7 +7,7 @@
 ```
 
 ```java
-
+managementClient.users().removeGroup("userId", "groupId").execute();
 ```
 
 ```php

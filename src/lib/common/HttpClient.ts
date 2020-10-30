@@ -26,7 +26,7 @@ export class HttpClient {
       'x-authing-request-from': this.options.requestFrom || 'sdk',
       'x-authing-app-id': this.options.appId || ''
     };
-    if (!config?.headers?.authorization) {
+    if (!(config && config.headers && config.headers.authorization)) {
       // 如果用户不传 token，就使用 sdk 自己维护的
       const token = await this.tokenProvider.getToken();
       token && (headers.Authorization = `Bearer ${token}`);

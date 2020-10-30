@@ -9,7 +9,7 @@ users = data['list'] # 当前页
 ```
 
 ```java
-
+managementClient.users().listGroups("userId").execute();
 ```
 
 ```php
