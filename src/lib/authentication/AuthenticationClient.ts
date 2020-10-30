@@ -316,7 +316,9 @@ export class AuthenticationClient {
     options = options || {};
     profile = profile || {};
     const { forceLogin = false, generateToken = false, clientIp } = options;
-    password = encrypt(password, this.options.encrptionPublicKey);
+    if (password) {
+      password = encrypt(password, this.options.encrptionPublicKey);
+    }
     const { registerByPhoneCode: user } = await registerByPhoneCode(
       this.graphqlClient,
       this.tokenProvider,
