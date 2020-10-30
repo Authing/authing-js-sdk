@@ -1133,4 +1133,24 @@ export class AuthenticationClient {
     );
     return this.convertUdv(list);
   }
+
+  /**
+   * @name listOrg
+   * @name_zh 获取用户所在组织机构
+   * @description 获取用户所在的组织机构立碑，以及他所属的节点在此组织机构内的完整路径。
+   *
+   * @example
+   *
+   * const data = await authenticationClient.listOrgs();
+   *
+   * @returns {Promise<UserOrgList>}
+   *
+   * @memberof AuthenticationClient
+   */
+  async listOrgs() {
+    return await this.httpClient.request({
+      method: 'GET',
+      url: `/api/v2/users/me/orgs`
+    });
+  }
 }

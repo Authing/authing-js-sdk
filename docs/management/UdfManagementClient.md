@@ -38,10 +38,6 @@ UdfManagementClient().set(targetType, key, dataType, label)
 - `dataType` \<UdfDataType\> 数据类型，目前共支持五种数据类型。STRING 为字符串、NUMBER 为数字、DATETIME 为日期、BOOLEAN 为 boolean 值、OBJECT 为对象。 
 - `label` \<string\> 字段 Label，一般是一个 Human Readable 字符串。 
 
-#### 返回值
-
--  `Promise<UserDefinedField[]>` 
-
 #### 示例
 
 ```javascript
@@ -73,6 +69,12 @@ const udf = await managementClient.udf.set(
    '新的描述信息'
 );
 ```
+
+#### 返回值
+
+-  `Promise<UserDefinedField[]>` 
+
+
       
 
 ## 删除自定义字段
@@ -87,15 +89,17 @@ UdfManagementClient().remove(targetType, key)
 - `targetType` \<UdfTargetType\> 自定义字段目标类型， USER 表示用户、ROLE 表示角色。 
 - `key` \<string\> 字段 key 
 
-#### 返回值
-
--  `Promise<UserDefinedField[]>` 
-
 #### 示例
 
 ```javascript
 await managementClient.udf.remove(UdfTargetType.User, 'school');
 ```
+
+#### 返回值
+
+-  `Promise<UserDefinedField[]>` 
+
+
       
 
 ## 获取自定义字段定义
@@ -109,13 +113,15 @@ UdfManagementClient().list(targetType)
 
 - `targetType` \<UdfTargetType\> 自定义字段目标类型， USER 表示用户、ROLE 表示角色。 
 
-#### 返回值
-
--  `Promise<UserDefinedField[]>` 
-
 #### 示例
 
 ```javascript
 const list = await managementClient.udf.list(UdfTargetType.User);
 ```
+
+#### 返回值
+
+-  `Promise<UserDefinedField[]>` 
+
+
       

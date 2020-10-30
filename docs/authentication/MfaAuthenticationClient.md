@@ -40,10 +40,6 @@ MfaAuthenticationClient().getMfaAuthenticators()
 
 
 
-#### 返回值
-
--  `Promise<IMfaAuthenticators>` 
-
 #### 示例
 
 ```javascript
@@ -52,6 +48,12 @@ const authenticationClient = new AuthenticationClient({
 })
 const authenticators = await authenticationClient.mfa.getMfaAuthenticators({ type: 'totp' })
 ```
+
+#### 返回值
+
+-  `Promise<IMfaAuthenticators>` 
+
+
       
 
 ## 请求 MFA 二维码和密钥信息
@@ -65,10 +67,6 @@ MfaAuthenticationClient().assosicateMfaAuthenticator()
 
 
 
-#### 返回值
-
--  `Promise<IMfaAssociation>` 
-
 #### 示例
 
 ```javascript
@@ -77,6 +75,12 @@ const authenticationClient = new AuthenticationClient({
 })
 const authenticators = await authenticationClient.mfa.assosicateMfaAuthenticator({ authenticatorType: 'totp' })
 ```
+
+#### 返回值
+
+-  `Promise<IMfaAssociation>` 
+
+
       
 
 ## 解绑 MFA
@@ -90,10 +94,6 @@ MfaAuthenticationClient().deleteMfaAuthenticator()
 
 
 
-#### 返回值
-
--  `Promise<IMfaDeleteAssociation>` 
-
 #### 示例
 
 ```javascript
@@ -102,6 +102,12 @@ const authenticationClient = new AuthenticationClient({
 })
 const authenticators = await authenticationClient.mfa.deleteMfaAuthenticator()
 ```
+
+#### 返回值
+
+-  `Promise<IMfaDeleteAssociation>` 
+
+
       
 
 ## 确认绑定 MFA
@@ -115,10 +121,6 @@ MfaAuthenticationClient().confirmAssosicateMfaAuthenticator()
 
 
 
-#### 返回值
-
--  `Promise<IMfaConfirmAssociation>` 
-
 #### 示例
 
 ```javascript
@@ -127,6 +129,12 @@ const authenticationClient = new AuthenticationClient({
 })
 const authenticators = await authenticationClient.mfa.confirmAssosicateMfaAuthenticator({ authenticatorType: 'totp', totp: '112233' })
 ```
+
+#### 返回值
+
+-  `Promise<IMfaConfirmAssociation>` 
+
+
       
 
 ## 检验二次验证 MFA 口令
@@ -140,10 +148,6 @@ MfaAuthenticationClient().verifyTotpMfa()
 
 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -152,6 +156,12 @@ const authenticationClient = new AuthenticationClient({
 })
 const authenticators = await authenticationClient.mfa.verifyTotpMfa({ authenticatorType: 'totp', totp: '112233' })
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 检验二次验证 MFA 恢复代码
@@ -165,10 +175,6 @@ MfaAuthenticationClient().verifyTotpRecoveryCode()
 
 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -177,4 +183,10 @@ const authenticationClient = new AuthenticationClient({
 })
 const authenticators = await authenticationClient.mfa.verifyTotpRecoveryCode({ authenticatorType: 'totp', totp: '112233' })
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       

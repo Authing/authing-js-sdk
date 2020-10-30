@@ -38,10 +38,6 @@ AclManagementClient().allow(userId, action, resource)
 - `action` \<string\> 操作名称，推荐使用 \<resourceType\>:\<actionName\> 的格式，如 `books:edit`, `books:list` 
 - `resource` \<string\> 资源名称, 必须为 \<resourceType\>:\<resourceId\> 格式或者为 *, 如 `*`, `books:123`, `books:*` 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
@@ -54,6 +50,12 @@ managementClient.acl.allow('USERID2', 'books:*', 'books:*')
 managementClient.acl.isAllowed('USERID2', 'books:123', 'books:read') // true
 managementClient.acl.isAllowed('USERID2', 'books:124', 'books:edit') // true
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 判断某个用户是否对某个资源有某个操作权限
@@ -69,13 +71,15 @@ AclManagementClient().isAllowed(userId, action, resource)
 - `action` \<string\> 操作名称，推荐使用 \<resourceType\>:\<actionName\> 的格式，如 `books:edit`, `books:list` 
 - `resource` \<string\> 资源名称, 必须为 \<resourceType\>:\<resourceId\> 格式或者为 *, 如 `*`, `books:123`, `books:*` 
 
-#### 返回值
-
--  `Promise<boolean>` 是否具备操作权限
-
 #### 示例
 
 ```javascript
 managementClient.acl.isAllowed('USERID', 'books:*', 'books:edit')
 ```
+
+#### 返回值
+
+-  `Promise<boolean>` 是否具备操作权限
+
+
       

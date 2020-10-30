@@ -36,10 +36,6 @@ PoliciesManagementClient().create(code, 策略语句，详细格式与说明请�
 - `策略语句，详细格式与说明请见` \<PolicyStatement[]\> https://docs.authing.co/docs/access-control/index.html 
 - `description` \<string\> 描述 
 
-#### 返回值
-
--  `Promise<DeepPartial<Policy>>` 
-
 #### 示例
 
 ```javascript
@@ -55,6 +51,12 @@ const statements = [
 
 const policy = await managementClient.policies.create(code, statements);
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<Policy>>` 
+
+
       
 
 ## 删除策略
@@ -68,15 +70,17 @@ PoliciesManagementClient().delete(code)
 
 - `code` \<string\> 策略唯一标志 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 const { code, message } = await managementClient.policies.delete("CODE"); // 通过 code 是否为 200 判断操作是否成功
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 批量删除策略
@@ -90,15 +94,17 @@ PoliciesManagementClient().deleteMany(codeList)
 
 - `codeList` \<string\> 策略唯一标志列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 const { code, message } = await managementClient.policies.deleteMany(["CODE"]); // 通过 code 是否为 200 判断操作是否成功
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 修改策略
@@ -116,15 +122,17 @@ PoliciesManagementClient().update(code, updates)
 - `updates.statements` \<PolicyStatement[]\> 策略语句，详细格式与说明请见 https://docs.authing.co/docs/access-control/index.html 
 - `updates.newCode` \<string\> 新的唯一标志，如果传入，需要保证其在用户池内是唯一的。 
 
-#### 返回值
-
--  `Promise<DeepPartial<Policy>>` 
-
 #### 示例
 
 ```javascript
 const policy = await managementClient.policies.update('CODE', { newCode: 'NEWCODE' });
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<Policy>>` 
+
+
       
 
 ## 获取策略详情
@@ -140,11 +148,13 @@ PoliciesManagementClient().detail(code)
 
 const policy = await managementClient.policies.detail('CODE'); 
 
+#### 示例
+
+
+
 #### 返回值
 
 -  `Promise<DeepPartial<Policy>>` 
-
-#### 示例
 
 
       
@@ -163,10 +173,6 @@ PoliciesManagementClient().list(options)
 - `options.limit` \<number\>  默认值为 : `10`。
 - `options.excludeDefault` \<boolean\> 是否排除系统默认资源 默认值为 : `true`。
 
-#### 返回值
-
--  `Promise<DeepPartial<PaginatedPolicies>>` 
-
 #### 示例
 
 ```javascript
@@ -174,6 +180,12 @@ const { list, totalCount } = await managementClient.policies.list({
   excludeDefault: false // 包含系统默认的策略
 });
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<PaginatedPolicies>>` 
+
+
       
 
 ## 获取策略授权记录
@@ -188,10 +200,6 @@ PoliciesManagementClient().listAssignments(code, page, limit)
 - `code` \<string\> 策略唯一标志 
 - `page` \<number\>  默认值为 : `1`。
 - `limit` \<number\>  默认值为 : `10`。
-
-#### 返回值
-
--  `Promise<PaginatedPolicyAssignments>` 
 
 #### 示例
 
@@ -213,6 +221,12 @@ const { totalCount, list } = await managementClient.policies.listAssignments("CO
  }
 ]
 ```
+
+#### 返回值
+
+-  `Promise<PaginatedPolicyAssignments>` 
+
+
       
 
 ## 添加策略授权
@@ -228,10 +242,6 @@ PoliciesManagementClient().addAssignments(policies, targetType, targetIdentifier
 - `targetType` \<PolicyAssignmentTargetType\> 可选值为 USER (用户) 和 ROLE (角色) 
 - `targetIdentifiers` \<string[]\> 用户 id 列表和角色 code 列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
@@ -249,6 +259,12 @@ await managementClient.policies.addAssignments(
   ['ROLE_CODE']
 );
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 撤销策略授权
@@ -264,10 +280,6 @@ PoliciesManagementClient().removeAssignments(policies, targetType, targetIdentif
 - `targetType` \<PolicyAssignmentTargetType\> 可选值为 USER (用户) 和 ROLE (角色) 
 - `targetIdentifiers` \<string[]\> 用户 id 列表和角色 code 列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
@@ -285,4 +297,10 @@ await managementClient.policies.removeAssignments(
   ['ROLE_CODE']
 );
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       

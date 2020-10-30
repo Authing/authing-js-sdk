@@ -38,10 +38,6 @@ AuthenticationClient().registerByEmail(email, password, profile, options)
 - `options.generateToken` \<boolean\> 是否为该用户生成 token，不会触发登录后的完整流程，用户的累计登录次数不会加 1。默认为 false 。 
 - `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -59,6 +55,12 @@ authenticationClient.registerByEmail(
 ```javascript
 authenticationClient.registerByEmail('test@example.com', 'passw0rd')
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 使用用户名注册
@@ -78,10 +80,6 @@ AuthenticationClient().registerByUsername(username, password, profile, options)
 - `options.generateToken` \<boolean\> 是否为该用户生成 token，不会触发登录后的完整流程，用户的累计登录次数不会加 1。默认为 false 。 
 - `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -99,6 +97,12 @@ authenticationClient.registerByUsername(
 ```javascript
 authenticationClient.registerByUsername('bob', 'passw0rd')
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 使用手机号注册
@@ -119,10 +123,6 @@ AuthenticationClient().registerByPhoneCode(phone, code, password, profile, optio
 - `options.generateToken` \<boolean\> 是否为该用户生成 token，不会触发登录后的完整流程，用户的累计登录次数不会加 1。默认为 false 。 
 - `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -141,6 +141,12 @@ authenticationClient.registerByPhoneCode(
 ```javascript
 authenticationClient.registerByPhoneCode('176xxxx7041', '1234')
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 检查密码强度
@@ -154,10 +160,6 @@ AuthenticationClient().checkPasswordStrength(password)
 
 - `password` \<string\>  
 
-#### 返回值
-
--  `Promise<CheckPasswordStrengthResult>` 
-
 #### 示例
 
 ```javascript
@@ -166,6 +168,12 @@ authenticationClient.checkPasswordStrength('weak')
 ```javascript
 authenticationClient.checkPasswordStrength('strongPassw0rd!')
 ```
+
+#### 返回值
+
+-  `Promise<CheckPasswordStrengthResult>` 
+
+
       
 
 ## 发送短信验证码
@@ -179,15 +187,17 @@ AuthenticationClient().sendSmsCode(phone)
 
 - `phone` \<string\>  
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.sendSmsCode('176xxxx6754')
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 使用邮箱登录
@@ -208,10 +218,6 @@ AuthenticationClient().loginByEmail(email, password, options)
 - `options.captchaCode` \<string\> 图形验证码 
 - `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -227,6 +233,12 @@ authenticationClient.loginByEmail(
 ```javascript
 authenticationClient.loginByEmail('test@example.com', 'passw0rd')
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 使用用户名登录
@@ -247,10 +259,6 @@ AuthenticationClient().loginByUsername(username, password, options)
 - `options.captchaCode` \<string\> 图形验证码 
 - `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -266,6 +274,12 @@ authenticationClient.loginByEmail(
 ```javascript
 authenticationClient.loginByEmail('test@example.com', 'passw0rd')
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 使用手机号验证码登录
@@ -281,10 +295,6 @@ AuthenticationClient().loginByPhoneCode(phone, code)
 - `code` \<string\> 短信验证码 
 - `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -293,6 +303,12 @@ authenticationClient.loginByPhoneCode(
  '1234',
 )
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 使用手机号密码登录
@@ -310,10 +326,6 @@ AuthenticationClient().loginByPhonePassword(phone, password, options)
 - `options.captchaCode` \<string\> 图形验证码 
 - `options.clientIp` \<string\> 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -328,6 +340,12 @@ authenticationClient.loginByPhonePassword(
 ```javascript
 authenticationClient.loginByPhonePassword('176xxxx7041', 'passw0rd')
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 检测 Token 登录状态
@@ -341,15 +359,17 @@ AuthenticationClient().checkLoginStatus(token)
 
 - `token` \<string\> 用户的登录凭证 token 
 
-#### 返回值
-
--  `Promise<JwtTokenStatus>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.checkLoginStatus('TOKEN')
 ```
+
+#### 返回值
+
+-  `Promise<JwtTokenStatus>` 
+
+
       
 
 ## 发送邮件
@@ -364,16 +384,18 @@ AuthenticationClient().sendEmail(email, scene)
 - `email` \<string\> 邮箱 
 - `scene` \<EmailScene\> 发送场景，可选值为 RESET_PASSWORD（发送重置密码邮件，邮件中包含验证码）、VerifyEmail（发送验证邮箱的邮件）、ChangeEmail（发送修改邮箱邮件，邮件中包含验证码） 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 import { EmailScene } from "authing-js-sdk"
 authenticationClient.sendEmail('test@example.com', EmailScene.RESET_PASSWORD)
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 通过短信验证码重置密码
@@ -389,15 +411,17 @@ AuthenticationClient().resetPasswordByPhoneCode(phone, code, newPassword)
 - `code` \<string\> 验证码 
 - `newPassword` \<string\> 新的密码 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.resetPasswordByPhoneCode('176xxxx7041', '1234', 'passw0rd')
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 通过邮件验证码重置密码
@@ -413,15 +437,17 @@ AuthenticationClient().resetPasswordByEmailCode(phone, code, newPassword)
 - `code` \<string\> 验证码 
 - `newPassword` \<string\> 新的密码 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.resetPasswordByEmailCode('test@example.com', '1234', 'passw0rd')
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 修改用户资料
@@ -461,10 +487,6 @@ AuthenticationClient().updateProfile(updates)
 - `updates.province` \<string\> 省份 
 - `updates.country` \<string\> 国家 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -473,6 +495,12 @@ authenticationClient.updateProfile({
  lastIp: "111.111.111.111"
 })
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 更新用户密码
@@ -487,10 +515,6 @@ AuthenticationClient().updatePassword(newPassword, oldPassword)
 - `newPassword` \<string\> 新密码 
 - `oldPassword` \<string\> 旧密码，如果用户没有设置密码，可以不填。 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -499,6 +523,12 @@ authenticationClient.updatePassword('passw0rd') // 由手机号、社会化登�
 ```javascript
 authenticationClient.updatePassword('passw0rd', 'oldPassw0rd') // 用户之前设置了密码
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 更新用户手机号
@@ -518,10 +548,6 @@ AuthenticationClient().updatePhone(phone, phoneCode, oldPhone, oldPhoneCode)
 - `oldPhone` \<string\> 旧手机号 
 - `oldPhoneCode` \<string\> 旧手机号的验证码 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -530,6 +556,12 @@ authenticationClient.updatePhone('176xxxx7041', '1234') // 关闭了“验证原
 ```javascript
 authenticationClient.updatePhone('176xxxx7041', '1234', '156xxxx9876', '1234') // 开启了“验证原有手机号“选项
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 更新用户邮箱
@@ -548,10 +580,6 @@ AuthenticationClient().updateEmail(email, emailCode, oldEmail, oldEmailCode)
 - `oldEmail` \<string\> 旧邮箱 
 - `oldEmailCode` \<string\> 旧邮箱的验证码 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -560,6 +588,12 @@ authenticationClient.updateEmail('test@example.com', '1234') // 关闭了“验�
 ```javascript
 authenticationClient.updateEmail('test@example.com', '1234', 'test2@example.com', '1234') // 开启了“验证原有邮箱“选项
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 刷新当前用户的 token
@@ -573,15 +607,17 @@ AuthenticationClient().refreshToken()
 
 
 
-#### 返回值
-
--  `Promise<RefreshToken>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.updateEmail()
 ```
+
+#### 返回值
+
+-  `Promise<RefreshToken>` 
+
+
       
 
 ## 绑定手机号
@@ -596,15 +632,17 @@ AuthenticationClient().bindPhone(phone, phoneCode)
 - `phone` \<string\>  
 - `phoneCode` \<string\>  
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.bindPhone('176xxxx7041', '1234')
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 解绑手机号
@@ -618,15 +656,17 @@ AuthenticationClient().unbindPhone()
 
 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.unbindPhone()
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 解绑手机号
@@ -640,15 +680,17 @@ AuthenticationClient().unbindPhone()
 
 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.unbindPhone()
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 获取当前登录的用户信息
@@ -662,15 +704,17 @@ AuthenticationClient().getCurrentUser()
 
 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.getCurrentUser()
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 退出登录
@@ -684,15 +728,17 @@ AuthenticationClient().logout()
 
 
 
-#### 返回值
-
--  `null` 
-
 #### 示例
 
 ```javascript
 authenticationClient.logout()
 ```
+
+#### 返回值
+
+-  `null` 
+
+
       
 
 ## 获取当前用户的自定义数据列表
@@ -706,15 +752,17 @@ AuthenticationClient().listUdv()
 
 
 
-#### 返回值
-
--  `Promise<Array<UserDefinedData>>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.listUdv()
 ```
+
+#### 返回值
+
+-  `Promise<Array<UserDefinedData>>` 
+
+
       
 
 ## 添加自定义数据
@@ -729,15 +777,17 @@ AuthenticationClient().setUdv(key, value)
 - `key` \<string\> 自定义字段的 key 
 - `value` \<any\> 自定义数据的值，值的类型必须要和用户池定义的自定义字段类型一致。 
 
-#### 返回值
-
--  `Promise<Array<UserDefinedData>>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.setUdv('school', '清华大学') // 要求用户必须定义了 school 这个字段。
 ```
+
+#### 返回值
+
+-  `Promise<Array<UserDefinedData>>` 
+
+
       
 
 ## 删除自定义数据
@@ -751,13 +801,183 @@ AuthenticationClient().removeUdv(key)
 
 - `key` \<null\> 自定义字段的 key 
 
-#### 返回值
-
--  `Promise<Array<UserDefinedData>>` 
-
 #### 示例
 
 ```javascript
 authenticationClient.removeUdv('school')
 ```
+
+#### 返回值
+
+-  `Promise<Array<UserDefinedData>>` 
+
+
+      
+
+## 获取用户所在组织机构
+
+AuthenticationClient().listOrg()
+
+> 获取用户所在的组织机构立碑，以及他所属的节点在此组织机构内的完整路径。
+
+
+#### 参数
+
+
+
+#### 示例
+
+```javascript
+const data = await authenticationClient.listOrgs();
+```
+
+#### 返回值
+
+-  `Promise<UserOrgList>` 
+
+
+返回的数据是一个二维数组，内部数组的第一个元素（`type` 为 `org`）为此节点所属组织机构的信息，后面的元素（`type` 为 `node`）表示该用户所在节点的完整路径。
+
+如下面的示例数据中，用户属于下面三个组织机构节点：
+
+- 组织机构 ID 5f9bf36b8eda1849a2a21c46，所属部门为 `非凡科技` 。
+- 组织机构 ID 5f9bf336d4fc39774036a98c，所属部门为 `锤子科技/研发/后端/Java 工程师` 。
+- 组织机构 ID 5f9bf336d4fc39774036a98c，所属部门为 `锤子科技/运营` 。
+
+```json
+[
+  [
+    {
+      "type": "org",
+      "id": "5f9bf36b8eda1849a2a21c46",
+      "createdAt": "2020-10-30T11:05:15.747Z",
+      "updatedAt": "2020-10-30T11:05:15.781Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "rootNodeId": "5f9bf36bae0366a625533e83",
+      "logo": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf36bae0366a625533e83",
+      "createdAt": "2020-10-30T11:05:15.757Z",
+      "updatedAt": "2020-10-30T12:21:08.937Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf36b8eda1849a2a21c46",
+      "name": "非凡科技",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    }
+  ],
+  [
+    {
+      "type": "org",
+      "id": "5f9bf336d4fc39774036a98c",
+      "createdAt": "2020-10-30T11:04:22.622Z",
+      "updatedAt": "2020-10-30T11:04:22.687Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "rootNodeId": "5f9bf3366a8118b1db9d2e9b",
+      "logo": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf3366a8118b1db9d2e9b",
+      "createdAt": "2020-10-30T11:04:22.642Z",
+      "updatedAt": "2020-10-30T12:21:18.452Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "锤子科技",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf33faa441fe79a369572",
+      "createdAt": "2020-10-30T11:04:31.301Z",
+      "updatedAt": "2020-10-30T12:21:28.305Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "研发",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf3525cdf85be04263a72",
+      "createdAt": "2020-10-30T11:04:50.412Z",
+      "updatedAt": "2020-10-30T12:21:44.378Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "后端",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf35dff4b8f3f58ac862f",
+      "createdAt": "2020-10-30T11:05:01.198Z",
+      "updatedAt": "2020-10-30T12:21:54.310Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "Java 工程师",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    }
+  ],
+  [
+    {
+      "type": "org",
+      "id": "5f9bf336d4fc39774036a98c",
+      "createdAt": "2020-10-30T11:04:22.622Z",
+      "updatedAt": "2020-10-30T11:04:22.687Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "rootNodeId": "5f9bf3366a8118b1db9d2e9b",
+      "logo": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf3366a8118b1db9d2e9b",
+      "createdAt": "2020-10-30T11:04:22.642Z",
+      "updatedAt": "2020-10-30T12:21:18.452Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "锤子科技",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf37f1a3cdeb88c03dfdc",
+      "createdAt": "2020-10-30T11:05:35.002Z",
+      "updatedAt": "2020-10-30T12:22:01.319Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "运营",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    }
+  ]
+]
+```
+
       

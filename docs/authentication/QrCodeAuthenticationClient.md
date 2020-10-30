@@ -70,10 +70,6 @@ ticket 可以用来换取完整的用户信息，相关接口见 https://docs.au
 - `options.tips.retry` \<number\>  
 - `options.tips.failed` \<number\>  
 
-#### 返回值
-
--  `null` 
-
 #### 示例
 
 ```javascript
@@ -84,6 +80,12 @@ authenticationClient.wxqrcode.startScanning("qrcode", {
  onError: (message) => onFail && onFail(`${message}`),
 });
 ```
+
+#### 返回值
+
+-  `null` 
+
+
       
 
 ## 生成二维码
@@ -97,10 +99,6 @@ QrCodeAuthenticationClient().geneCode()
 
 
 
-#### 返回值
-
--  `Promise<QRCodeGenarateResult>` 
-
 #### 示例
 
 ```javascript
@@ -112,6 +110,12 @@ const { url, random } = await authenticationClient.wxqrcode.geneCode()
 # random 二维码唯一 ID
 # url 二维码链接
 ```
+
+#### 返回值
+
+-  `Promise<QRCodeGenarateResult>` 
+
+
       
 
 ## 检测扫码状态
@@ -125,10 +129,6 @@ QrCodeAuthenticationClient().checkStatus(random)
 
 - `random` \<string\>  
 
-#### 返回值
-
--  `Promise<QRCodeStatus>` 
-
 #### 示例
 
 ```javascript
@@ -140,6 +140,12 @@ const { random, status, ticket, userInfo } = await authenticationClient.wxqrcode
 # ticket: 用于换取用户信息的一个随机字符串
 # userInfo: 用户信息
 ```
+
+#### 返回值
+
+-  `Promise<QRCodeStatus>` 
+
+
       
 
 ## 使用 ticket 交换用户信息
@@ -153,10 +159,6 @@ QrCodeAuthenticationClient().exchangeUserInfo(ticket)
 
 - `ticket` \<string\> ticket 
 
-#### 返回值
-
--  `Promise<Partial<User>>` 
-
 #### 示例
 
 ```javascript
@@ -166,6 +168,12 @@ const authenticationClient = new AuthenticationClient({
 const user = await authenticationClient.wxqrcode.exchangeUserInfo('TICKET')
 # user: 完整的用户信息，其中 user.token 为用户的登录凭证。
 ```
+
+#### 返回值
+
+-  `Promise<Partial<User>>` 
+
+
       
 
 ## 开始轮询二维码状态
@@ -191,11 +199,13 @@ ticket 可以用来换取完整的用户信息，相关接口见 https://docs.au
 - `options.onError` \<Function\> 获取二维码状态失败事件回调函数。常见原因为网络失败等，每次查询失败时都会回调。回调参数 data 示例如 {"code": 2241,"message": "二维码不存在" } 
 - `options.onExpired` \<Function\> 二维码失效时被回调，只回调一次，之后轮询结束。 
 
+#### 示例
+
+
+
 #### 返回值
 
 -  `null` 
-
-#### 示例
 
 
       

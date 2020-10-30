@@ -26,7 +26,8 @@ export const getOptionsFromEnv = (): ManagementClientOptions => {
   return {
     userPoolId: process.env.AUTHING_USERPOOL_ID,
     secret: process.env.AUTHING_USERPOOL_SECRET,
-    host: process.env.AUTHING_HOST
+    host: process.env.AUTHING_HOST,
+    timeout: 10000
   };
 };
 

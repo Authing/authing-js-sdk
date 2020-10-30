@@ -37,15 +37,17 @@ OrgManagementClient().create(name, description, code)
 - `description` \<string\> 根节点描述 
 - `code` \<string\> 根节点唯一标志，必须为合法的英文字符。 
 
-#### 返回值
-
-
-
 #### 示例
 
 ```javascript
 const org = await managementClient.org.create('北京非凡科技', '北京非凡科技有限公司', 'feifan');
 ```
+
+#### 返回值
+
+
+
+
       
 
 ## 删除组织机构
@@ -59,11 +61,13 @@ OrgManagementClient().deleteById(id)
 
 - `id` \<string\> 组织机构 ID 
 
+#### 示例
+
+
+
 #### 返回值
 
 -  `Promise<CommonMessage>` 
-
-#### 示例
 
 
       
@@ -80,15 +84,17 @@ OrgManagementClient().list(page, limit)
 - `page` \<number\>  默认值为 : `1`。
 - `limit` \<number\>  默认值为 : `10`。
 
-#### 返回值
-
--  `null` 
-
 #### 示例
 
 ```javascript
 const { totalCount, list } = await managementClient.org.list()
 ```
+
+#### 返回值
+
+-  `null` 
+
+
       
 
 ## 添加节点
@@ -107,10 +113,6 @@ OrgManagementClient().addNode(orgId, parentNodeId, data)
 - `data.code` \<string\> 节点唯一标志 
 - `data.description` \<string\> 节点描述信息 
 
-#### 返回值
-
--  `Promise<Org>` 
-
 #### 示例
 
 ```javascript
@@ -120,6 +122,12 @@ const newOrg = await managementClient.org.addNode(orgId, rootNode.id, { name: '�
 
 // newOrg.nodes.length 现在为 2
 ```
+
+#### 返回值
+
+-  `Promise<Org>` 
+
+
       
 
 ## 修改节点
@@ -137,10 +145,6 @@ OrgManagementClient().updateNode(id, updates)
 - `updates.code` \<string\> 节点唯一标志 
 - `updates.description` \<string\> 节点描述信息 
 
-#### 返回值
-
--  `Promise<Org>` 
-
 #### 示例
 
 ```javascript
@@ -148,6 +152,12 @@ await managementClient.org.updateNode("NDOEID", {
    name: '新的节点名称'
 })
 ```
+
+#### 返回值
+
+-  `Promise<Org>` 
+
+
       
 
 ## 获取组织机构详情
@@ -161,11 +171,13 @@ OrgManagementClient().findById(id)
 
 - `id` \<string\> 组织机构 ID 
 
+#### 示例
+
+
+
 #### 返回值
 
 -  `Promise<Org>` 
-
-#### 示例
 
 
       
@@ -182,11 +194,13 @@ OrgManagementClient().deleteNode(orgId, nodeId)
 - `orgId` \<string\> 组织机构 ID 
 - `nodeId` \<string\> 节点 ID 
 
+#### 示例
+
+
+
 #### 返回值
 
 -  `Promise<CommonMessage>` 
-
-#### 示例
 
 
       
@@ -204,15 +218,17 @@ OrgManagementClient().moveNode(orgId, nodeId, targetParentId)
 - `nodeId` \<string\> 需要移动的节点 ID 
 - `targetParentId` \<string\> 目标父节点 ID 
 
-#### 返回值
-
--  `Promise<Org>` 最新的树结构
-
 #### 示例
 
 ```javascript
 await managementClient.org.moveNode("ORGID", "NODEID", "TRAGET_NODE_ID")
 ```
+
+#### 返回值
+
+-  `Promise<Org>` 最新的树结构
+
+
       
 
 ## 判断是否为根节点
@@ -227,11 +243,13 @@ OrgManagementClient().isRootNode(orgId, nodeId)
 - `orgId` \<string\> 组织机构 ID 
 - `nodeId` \<string\> 组织机构 ID 
 
+#### 示例
+
+
+
 #### 返回值
 
 -  `Promise<boolean>` 
-
-#### 示例
 
 
       
@@ -248,16 +266,18 @@ OrgManagementClient().listChildren(orgId, nodeId)
 - `orgId` \<string\> 组织机构 ID 
 - `nodeId` \<string\> 组织机构 ID 
 
-#### 返回值
-
--  `Promise<Node[]>` 
-
 #### 示例
 
 ```javascript
 // 子节点列表
 cosnt children = await managementClient.org.moveNode("ORGID", "NODEID")
 ```
+
+#### 返回值
+
+-  `Promise<Node[]>` 
+
+
       
 
 ## 获取根节点
@@ -271,15 +291,17 @@ OrgManagementClient().rootNode(orgId)
 
 - `orgId` \<string\> 组织机构 ID 
 
-#### 返回值
-
--  `Promise<Node[]>` 
-
 #### 示例
 
 ```javascript
 const rootNode = await managementClient.org.rootNode("ORGID")
 ```
+
+#### 返回值
+
+-  `Promise<Node[]>` 
+
+
       
 
 ## 通过 JSON 导入
@@ -292,10 +314,6 @@ OrgManagementClient().importByJson(json)
 #### 参数
 
 - `json` \<Object\> JSON 格式的树结构，详细格式请见示例代码。 
-
-#### 返回值
-
--  `Promise<Node[]>` 
 
 #### 示例
 
@@ -325,6 +343,12 @@ const tree = {
   };
 const org = await managementClient.org.importByJson(tree);
 ```
+
+#### 返回值
+
+-  `Promise<Node[]>` 
+
+
       
 
 ## 添加成功
@@ -339,11 +363,13 @@ OrgManagementClient().addMembers(nodeId, userIds)
 - `nodeId` \<string\> 节点 ID 
 - `userIds` \<string[]\> 用户 ID 列表 
 
+#### 示例
+
+
+
 #### 返回值
 
 -  `Promise<PaginatedUsers>` 
-
-#### 示例
 
 
       
@@ -363,11 +389,13 @@ OrgManagementClient().listMembers(nodeId, options)
 - `options.limit` \<number\>  默认值为 : `10`。
 - `options.includeChildrenNodes` \<boolean\> 是否获取所有子节点的成员 默认值为 : `false`。
 
+#### 示例
+
+
+
 #### 返回值
 
 -  `Promise<PaginatedUsers>` 
-
-#### 示例
 
 
       
@@ -384,11 +412,13 @@ OrgManagementClient().removeMembers(nodeId, userIds)
 - `nodeId` \<string\> 节点 ID 
 - `userIds` \<string[]\> 用户 ID 列表 
 
+#### 示例
+
+
+
 #### 返回值
 
 -  `Promise<PaginatedUsers>` 
-
-#### 示例
 
 
       

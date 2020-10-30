@@ -38,12 +38,20 @@ for (let file of files) {
     })
     const returns = _.filter(tags, { title: 'returns' }).map(x => {
       const type = raw.match(/@returns {(.*?)}.*?\n/) ? raw.match(/@returns {(.*?)}.*?\n/)[1] : null
+      const datatype = type && type.match(/Promise<(.*?)>$/) ? type.match(/Promise<(.*?)>$/)[1] : null
       return {
         name: x.name,
         description: x.description,
-        type
+        type,
+        datatype
       }
     })[0]
+
+    let exampleDataType = null
+    const filename = `./docs/datatypes/${returns?.datatype}.md`
+    if (returns && fs.existsSync(filename)) {
+      exampleDataType = fs.readFileSync(filename)
+    }
     const class_ = _.find(tags, { title: 'class' })
     const memberof = _.find(tags, { title: 'memberof' })?.description
     const name = _.find(tags, { title: 'name' })?.name
@@ -66,13 +74,15 @@ ${memberof}().${name}(${args})
 
 ${params.map(param => `- \`${param.name}\` \\<${param.type}\\> ${param.description} ${param.default ? `默认值为 : \`${param.default}\`。` : ''}`).join('\n')}
 
+#### 示例
+
+${examples.map(x => `\`\`\`javascript\n${x.value.trim()}\n\`\`\``).join('\n')}
+
 #### 返回值
 
 ${returns ? `- ${returns.name} \`${returns.type}\` ${returns.description}` : ''}
 
-#### 示例
-
-${examples.map(x => `\`\`\`javascript\n${x.value.trim()}\n\`\`\``).join('\n')}
+${exampleDataType ? exampleDataType : ""}
       `
     } else {
       doc = `
@@ -97,7 +107,7 @@ ${examples.map(x => x.value.split('\\`\\`\\`').join('```'))}
   fs.writeFileSync(source, docs.join('\n'))
 
   // 移动到 docs
-  const target = `../docs/docs/sdk/sdk-for-node/${module}/${filename.replace('.ts', '')}.md`
+  const target = `../../authing-docs/docs/sdk/sdk-for-node/${module}/${filename.replace('.ts', '')}.md`
   fs.copyFileSync(source, target)
 }
 
@@ -155,7 +165,6 @@ for (let file of files) {
     let doc = ''
     if (!class_) {
       const exampleFilename = `./docs/examples/${memberof}/${name}.md`
-      console.log(exampleFilename)
       let example = ""
       if (fs.existsSync(exampleFilename)) {
         const lang = 'python'
@@ -258,7 +267,6 @@ for (let file of files) {
     let doc = ''
     if (!class_) {
       const exampleFilename = `./docs/examples/${memberof}/${name}.md`
-      console.log(exampleFilename)
       let example = ""
       if (fs.existsSync(exampleFilename)) {
         const lang = 'csharp'
@@ -361,7 +369,6 @@ for (let file of files) {
     let doc = ''
     if (!class_) {
       const exampleFilename = `./docs/examples/${memberof}/${name}.md`
-      console.log(exampleFilename)
       let example = ""
       if (fs.existsSync(exampleFilename)) {
         const lang = 'java'
@@ -463,7 +470,6 @@ for (let file of files) {
     let doc = ''
     if (!class_) {
       const exampleFilename = `./docs/examples/${memberof}/${name}.md`
-      console.log(exampleFilename)
       let example = ""
       if (fs.existsSync(exampleFilename)) {
         const lang = 'php'

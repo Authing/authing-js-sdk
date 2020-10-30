@@ -77,6 +77,7 @@ export class ManagementClient {
     this.users = new UsersManagementClient(
       this.options,
       this.graphqlClient,
+      this.httpClient,
       this.tokenProvider
     );
     this.userpool = new UserPoolManagementClient(

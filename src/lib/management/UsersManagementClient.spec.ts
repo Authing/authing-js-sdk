@@ -9,7 +9,7 @@ import moment from 'moment';
 
 const managementClient = new ManagementClient(getOptionsFromEnv());
 
-test('创建用户', async t => {
+test.only('创建用户', async t => {
   const username = generateRandomString(10);
   const email = generateRandomString(10);
   const phone = generateRandomPhone();
@@ -117,6 +117,13 @@ test('批量查询用户', async t => {
   t.assert(data.length === list.length);
 });
 
+test('搜索用户', async t => {
+  const query = 'c';
+  const { list, totalCount } = await managementClient.users.search(query);
+  t.assert(list !== undefined);
+  t.assert(totalCount !== undefined);
+});
+
 test('修改用户资料', async t => {
   const user = await managementClient.users.create({
     username: generateRandomString(),
@@ -191,4 +198,11 @@ test('refreshToken', async t => {
     fetchUserDetail: true
   });
   t.assert(user.id === data.id);
+});
+
+test.skip('获取用户组织机构列表', async t => {
+  const data = await managementClient.users.listOrgs(
+    '5f9976a7389b6dccb23a4c54'
+  );
+  t.assert(data);
 });

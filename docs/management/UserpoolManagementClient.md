@@ -35,15 +35,17 @@ UserPoolManagementClient().detail()
 
 
 
-#### 返回值
-
--  `Promise<UserPool>` 
-
 #### 示例
 
 ```javascript
 const userpool = await managementClient.userpool.detail()
 ```
+
+#### 返回值
+
+-  `Promise<UserPool>` 
+
+
       
 
 ## 更新用户池配置
@@ -80,10 +82,6 @@ UserPoolManagementClient().update(updates)
 - `updates.frequentRegisterCheck.timeInterval` \<Object\> 检测周期，单位为秒。 
 - `updates.frequentRegisterCheck.limit` \<Object\> 同一个周期内同一 IP 注册次数达到此数目时会触发频率限制。 
 
-#### 返回值
-
--  `Promise<UserPool>` 
-
 #### 示例
 
 ```javascript
@@ -91,6 +89,12 @@ const userpool = await managementClient.userpool.update({
    registerDisabled: true // 关闭系统注册
 })
 ```
+
+#### 返回值
+
+-  `Promise<UserPool>` 
+
+
       
 
 ## 获取环境变量列表
@@ -104,15 +108,17 @@ UserPoolManagementClient().listEnv()
 
 
 
-#### 返回值
-
--  `Promise<Env[]>` 
-
 #### 示例
 
 ```javascript
 const envList = await managementClient.userpool.listEnv()
 ```
+
+#### 返回值
+
+-  `Promise<Env[]>` 
+
+
       
 
 ## 添加环境变量
@@ -127,15 +133,17 @@ UserPoolManagementClient().addEnv(key, value)
 - `key` \<string\> 环境变量键 
 - `value` \<any\> 环境变量值 
 
-#### 返回值
-
--  `Promise<Env[]>` 返回最新的环境变量列表
-
 #### 示例
 
 ```javascript
 const envList = await managementClient.userpool.addEnv('LARK_WEBHOOK', 'xxxxxxx') // 添加一个飞书群机器人 webhook 地址，之后可以在 pipeline 函数中使用（详细请见: https://docs.authing.co/extensibility/pipeline/usage.html）
 ```
+
+#### 返回值
+
+-  `Promise<Env[]>` 返回最新的环境变量列表
+
+
       
 
 ## 删除环境变量
@@ -149,13 +157,15 @@ UserPoolManagementClient().removeEnv(key)
 
 - `key` \<string\> 环境变量键 
 
-#### 返回值
-
--  `Promise<Env[]>` 返回最新的环境变量列表
-
 #### 示例
 
 ```javascript
 const envList = await managementClient.userpool.removeEnv('LARK_WEBHOOK')
 ```
+
+#### 返回值
+
+-  `Promise<Env[]>` 返回最新的环境变量列表
+
+
       

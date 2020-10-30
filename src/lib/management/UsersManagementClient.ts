@@ -30,6 +30,7 @@ import {
   PaginatedGroups,
   PaginatedRoles
 } from '../../types/graphql.v2';
+import { HttpClient } from '../common/HttpClient';
 
 /**
  * @name UsersManagementClient
@@ -61,16 +62,19 @@ import {
 export class UsersManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;
+  httpClient: HttpClient;
   tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
     graphqlClient: GraphqlClient,
+    httpClient: HttpClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
     this.graphqlClient = graphqlClient;
     this.tokenProvider = tokenProvider;
+    this.httpClient = httpClient;
   }
 
   /**
@@ -634,5 +638,27 @@ export class UsersManagementClient {
       }
     );
     return data;
+  }
+
+  /**
+   * @name listOrg
+   * @name_zh 获取用户所在组织机构
+   * @description 获取用户所在组织机构，以及他在该组织机构内的的节点路径。
+   *
+   * @param {string} userId 用户 ID
+   *
+   * @example
+   *
+   * const data = await managementClient.users.listOrgs("USERID");
+   *
+   * @returns {Promise<UserOrgList>}
+   *
+   * @memberof UsersManagementClient
+   */
+  async listOrgs(userId: string) {
+    return await this.httpClient.request({
+      method: 'GET',
+      url: `/api/v2/users/${userId}/orgs`
+    });
   }
 }

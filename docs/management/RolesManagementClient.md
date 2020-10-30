@@ -35,15 +35,17 @@ RolesManagementClient().create(code, description)
 - `code` \<string\> 角色唯一标志符 
 - `description` \<string\> 描述 
 
-#### 返回值
-
--  `Promise<DeepPartial<Role>>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.create('rolea', 'RoleA')
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<Role>>` 
+
+
       
 
 ## 删除角色
@@ -57,15 +59,17 @@ RolesManagementClient().delete(code)
 
 - `code` \<string\> 角色唯一标志符 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.delete('rolea')
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 批量删除角色
@@ -79,15 +83,17 @@ RolesManagementClient().deleteMany(codeList)
 
 - `codeList` \<string[]\> 角色唯一标志符列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.delete(['rolea'])
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 修改角色
@@ -104,15 +110,17 @@ RolesManagementClient().update(code, input)
 - `input.description` \<string\> 描述信息 
 - `input.newCode` \<string\> 新的唯一标志符 
 
-#### 返回值
-
--  `Promise<DeepPartial<Role>>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.update('rolea', {newCode: 'newcode'})
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<Role>>` 
+
+
       
 
 ## 获取角色详情
@@ -126,15 +134,17 @@ RolesManagementClient().detail(code)
 
 - `code` \<string\> 角色唯一标志符 
 
-#### 返回值
-
--  `Promise<DeepPartial<Role>>` 角色详情
-
 #### 示例
 
 ```javascript
 managementClient.roles.detail('manager')
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<Role>>` 角色详情
+
+
       
 
 ## 获取角色列表
@@ -149,15 +159,17 @@ RolesManagementClient().list(page, limit)
 - `page` \<number\> 页码数 默认值为 : `1`。
 - `limit` \<number\> 每页个数 默认值为 : `10`。
 
-#### 返回值
-
--  `Promise<DeepPartial<PaginatedRoles>>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.list(2, 10)
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<PaginatedRoles>>` 
+
+
       
 
 ## 获取角色用户列表
@@ -171,15 +183,17 @@ RolesManagementClient().listUsers(code)
 
 - `code` \<string\> 角色唯一标志符 
 
-#### 返回值
-
--  `Promise<DeepPartial<PaginatedUsers>>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.listUsers(code)
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<PaginatedUsers>>` 
+
+
       
 
 ## 添加用户
@@ -194,15 +208,17 @@ RolesManagementClient().addUsers(code, userIds)
 - `code` \<string\> 角色唯一标志符 
 - `userIds` \<string[]\> 用户 ID 列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.addUsers(code, ['USERID1', 'USERID2'])
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 移除用户
@@ -217,15 +233,17 @@ RolesManagementClient().removeUsers(code, userIds)
 - `code` \<string\> 角色唯一标志符 
 - `userIds` \<string[]\> 用户 ID 列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.removeUsers(code, ['USERID1', 'USERID2'])
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 获取角色策略列表
@@ -241,15 +259,17 @@ RolesManagementClient().listPolicies(code, page, limit)
 - `page` \<number\> 页码数 默认值为 : `1`。
 - `limit` \<number\> 页码个数 默认值为 : `10`。
 
-#### 返回值
-
--  `Promise<PaginatedPolicyAssignments>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.listPolicies('codea', 1, 10)
 ```
+
+#### 返回值
+
+-  `Promise<PaginatedPolicyAssignments>` 
+
+
       
 
 ## 授权策略
@@ -264,15 +284,17 @@ RolesManagementClient().addPolicies(code, policies)
 - `code` \<string\> 角色唯一标志符 
 - `policies` \<string[]\> 策略列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.addPolicies('rolea', ['PolicyA', 'PolicyB'])
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 角色移除策略
@@ -287,13 +309,15 @@ RolesManagementClient().removePolicies(code, policies)
 - `code` \<string\> 角色唯一标志符 
 - `policies` \<string[]\> 策略列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 managementClient.roles.removePolicies('rolea', ['PolicyA', 'PolicyB'])
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       

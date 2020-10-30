@@ -36,15 +36,17 @@ GroupsManagementClient().create(code, name, description)
 - `name` \<string\> 分组名称 
 - `description` \<string\> 描述 
 
-#### 返回值
-
--  `Promise<DeepPartial<Group>>` 
-
 #### 示例
 
 ```javascript
 managementClient.groups.create('group', '分组 xxx')
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<Group>>` 
+
+
       
 
 ## 删除分组
@@ -58,15 +60,17 @@ GroupsManagementClient().delete(code)
 
 - `code` \<string\> 分组唯一标志符 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 managementClient.groups.delete('rolea')
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 修改分组
@@ -84,15 +88,17 @@ GroupsManagementClient().update(code, input)
 - `input.description` \<string\> 新的描述信息 
 - `input.newCode` \<string\> 新的唯一标志符 
 
-#### 返回值
-
--  `Promise<DeepPartial<Group>>` 
-
 #### 示例
 
 ```javascript
 managementClient.groups.update('group', {newCode: 'newcode'})
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<Group>>` 
+
+
       
 
 ## 获取分组详情
@@ -106,15 +112,17 @@ GroupsManagementClient().detail(code)
 
 - `code` \<string\> 分组唯一标志符 
 
-#### 返回值
-
--  `Promise<DeepPartial<Group>>` 分组详情
-
 #### 示例
 
 ```javascript
 managementClient.groups.detail('manager')
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<Group>>` 分组详情
+
+
       
 
 ## 获取分组列表
@@ -129,15 +137,17 @@ GroupsManagementClient().list(page, limit)
 - `page` \<number\> 页码数 默认值为 : `1`。
 - `limit` \<number\> 每页个数 默认值为 : `10`。
 
-#### 返回值
-
--  `Promise<DeepPartial<PaginatedGroups>>` 
-
 #### 示例
 
 ```javascript
 managementClient.groups.list(1, 10)
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<PaginatedGroups>>` 
+
+
       
 
 ## 批量删除分组
@@ -151,15 +161,17 @@ GroupsManagementClient().deleteMany(codeList)
 
 - `codeList` \<string[]\> 分组唯一标志符列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 managementClient.groups.deleteMany(['groupa', 'groupb'])
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 获取分组用户列表
@@ -175,15 +187,17 @@ GroupsManagementClient().listUsers(code, page, limit)
 - `page` \<number\> 页码数 默认值为 : `1`。
 - `limit` \<number\> 每页个数 默认值为 : `10`。
 
-#### 返回值
-
--  `Promise<DeepPartial<PaginatedUsers>>` 
-
 #### 示例
 
 ```javascript
 managementClient.groups.listUsers(code)
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<PaginatedUsers>>` 
+
+
       
 
 ## 添加用户
@@ -198,15 +212,17 @@ GroupsManagementClient().addUsers(code, userIds)
 - `code` \<string\> 分组唯一标志符 
 - `userIds` \<string[]\> 用户 ID 列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 managementClient.groups.addUsers(code, ['USERID1', 'USERID2'])
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 移除用户
@@ -221,13 +237,15 @@ GroupsManagementClient().removeUsers(code, userIds)
 - `code` \<string\> 分组唯一标志符 
 - `userIds` \<string[]\> 用户 ID 列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 managementClient.groups.removeUsers(code, ['USERID1', 'USERID2'])
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       

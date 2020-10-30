@@ -78,10 +78,6 @@ UsersManagementClient().create(userInfo)
 - `userInfo.province` \<string\> 省份 
 - `userInfo.country` \<string\> 国家 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -98,6 +94,12 @@ const user = await managementClient.users.create({
    signedUp: '2020-10-15T17:55:37+08:00' // 原有用户系统记录的用户注册时间
 })
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 修改用户资料
@@ -153,10 +155,6 @@ UsersManagementClient *().update(id, updates)
 - `updates.province` \<string\> 省份 
 - `updates.country` \<string\> 国家 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
@@ -171,6 +169,12 @@ const user = await managementClient.users.update("USERID" ,{
    tokenExpiredAt: '2020-10-15T17:55:37+08:00'
 })
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 获取用户详情
@@ -184,15 +188,17 @@ UsersManagementClient().detail(userId)
 
 - `userId` \<string\> 用户 ID 
 
-#### 返回值
-
--  `Promise<User>` 
-
 #### 示例
 
 ```javascript
 const user = await managementClient.users.detail('USERID');
 ```
+
+#### 返回值
+
+-  `Promise<User>` 
+
+
       
 
 ## 删除用户
@@ -206,15 +212,17 @@ UsersManagementClient().delete(userId)
 
 - `userId` \<string\> 用户 ID 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 const user = await managementClient.users.delete('USERID');
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 批量删除用户
@@ -228,15 +236,17 @@ UsersManagementClient().deleteMany(userIds)
 
 - `userIds` \<string[]\> 用户 ID 列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 const user = await managementClient.users.deleteMany(['USERID']);
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 批量获取用户
@@ -250,15 +260,17 @@ UsersManagementClient().batch(userIds)
 
 - `userIds` \<string[]\> 用户 ID 列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 const users = await managementClient.users.batch(['USERID']);
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 获取用户列表
@@ -273,15 +285,17 @@ UsersManagementClient().list(page, limit)
 - `page` \<number\> 页码数, 从 1 开始 默认值为 : `1`。
 - `limit` \<number\> 每页包含的用户数 默认值为 : `10`。
 
-#### 返回值
-
--  `null` 
-
 #### 示例
 
 ```javascript
 const user = await managementClient.users.list();
 ```
+
+#### 返回值
+
+-  `null` 
+
+
       
 
 ## 检查用户是否存在
@@ -298,10 +312,6 @@ UsersManagementClient().exists(options)
 - `options.email` \<string\> 邮箱，邮箱不区分大小写。 
 - `options.phone` \<string\> 手机号 
 
-#### 返回值
-
--  `Promise<boolean>` 
-
 #### 示例
 
 ```javascript
@@ -309,6 +319,12 @@ const exists = await managementClient.users.exists({
    username: "bob"
 });
 ```
+
+#### 返回值
+
+-  `Promise<boolean>` 
+
+
       
 
 ## 查找用户
@@ -325,11 +341,13 @@ UsersManagementClient().find(options)
 - `options.email` \<string\> 邮箱，邮箱不区分大小写。 
 - `options.phone` \<string\> 手机号 
 
+#### 示例
+
+
+
 #### 返回值
 
 
-
-#### 示例
 
 
       
@@ -350,15 +368,17 @@ UsersManagementClient().search(query, options, page, limit)
 - `page` \<number\>  默认值为 : `1`。
 - `limit` \<number\>  默认值为 : `10`。
 
-#### 返回值
-
--  `Promise<PaginatedUsers>` 
-
 #### 示例
 
 ```javascript
 const { totalCount, list } = await managementClient.users.search("Bob");
 ```
+
+#### 返回值
+
+-  `Promise<PaginatedUsers>` 
+
+
       
 
 ## 刷新用户 token
@@ -372,10 +392,6 @@ UsersManagementClient().refreshToken(id)
 
 - `id` \<string\> 用户 ID 
 
-#### 返回值
-
--  `Promise<RefreshToken>` 
-
 #### 示例
 
 ```javascript
@@ -387,6 +403,12 @@ const data = await managementClient.checkLoginStatus(token, {
   fetchUserDetail: true
 });
 ```
+
+#### 返回值
+
+-  `Promise<RefreshToken>` 
+
+
       
 
 ## 获取用户分组列表
@@ -400,15 +422,17 @@ UsersManagementClient().listGroups(userId)
 
 - `userId` \<string\> 用户 ID 
 
-#### 返回值
-
--  `Promise<DeepPartial<PaginatedGroups>>` 
-
 #### 示例
 
 ```javascript
 const { list, totalCount} = await managementClient.users.listGroups("USERID");
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<PaginatedGroups>>` 
+
+
       
 
 ## 加入分组
@@ -423,15 +447,17 @@ UsersManagementClient().addGroup(userId, group)
 - `userId` \<string\> 用户 ID 
 - `group` \<string\> 分组 code 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 const { code, message } = await managementClient.users.addGroup("USERID", "GROUP_CODE");
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 退出分组
@@ -446,15 +472,17 @@ UsersManagementClient().removeGroup(userId, group)
 - `userId` \<string\> 用户 ID 
 - `group` \<string\> 分组 code 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 const { code, message } = await managementClient.users.removeGroup("USERID", "GROUP_CODE");
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 获取用户角色列表
@@ -468,15 +496,17 @@ UsersManagementClient().listRoles(userId)
 
 - `userId` \<string\> 用户 ID 
 
-#### 返回值
-
--  `Promise<DeepPartial<PaginatedRoles>>` 
-
 #### 示例
 
 ```javascript
 const { list, totalCount} = await managementClient.users.listRoles("USERID");
 ```
+
+#### 返回值
+
+-  `Promise<DeepPartial<PaginatedRoles>>` 
+
+
       
 
 ## 添加角色
@@ -491,15 +521,17 @@ UsersManagementClient().addRoles(userId, roles)
 - `userId` \<string\> 用户 ID 
 - `roles` \<string\> 角色 code 列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 const { code, message } = await managementClient.users.addRoles("USERID", ["ROLEA"]);
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
       
 
 ## 移除角色
@@ -514,13 +546,183 @@ UsersManagementClient().removeRoles(userId, roles)
 - `userId` \<string\> 用户 ID 
 - `roles` \<string\> 角色 code 列表 
 
-#### 返回值
-
--  `Promise<CommonMessage>` 
-
 #### 示例
 
 ```javascript
 const { code, message } = await managementClient.users.removeRoles("USERID", ["ROLEA"]);
 ```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
+      
+
+## 获取用户所在组织机构
+
+UsersManagementClient().listOrg(userId)
+
+> 获取用户所在组织机构，以及他在该组织机构内的的节点路径。
+
+
+#### 参数
+
+- `userId` \<string\> 用户 ID 
+
+#### 示例
+
+```javascript
+const data = await managementClient.users.listOrgs("USERID");
+```
+
+#### 返回值
+
+-  `Promise<UserOrgList>` 
+
+
+返回的数据是一个二维数组，内部数组的第一个元素（`type` 为 `org`）为此节点所属组织机构的信息，后面的元素（`type` 为 `node`）表示该用户所在节点的完整路径。
+
+如下面的示例数据中，用户属于下面三个组织机构节点：
+
+- 组织机构 ID 5f9bf36b8eda1849a2a21c46，所属部门为 `非凡科技` 。
+- 组织机构 ID 5f9bf336d4fc39774036a98c，所属部门为 `锤子科技/研发/后端/Java 工程师` 。
+- 组织机构 ID 5f9bf336d4fc39774036a98c，所属部门为 `锤子科技/运营` 。
+
+```json
+[
+  [
+    {
+      "type": "org",
+      "id": "5f9bf36b8eda1849a2a21c46",
+      "createdAt": "2020-10-30T11:05:15.747Z",
+      "updatedAt": "2020-10-30T11:05:15.781Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "rootNodeId": "5f9bf36bae0366a625533e83",
+      "logo": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf36bae0366a625533e83",
+      "createdAt": "2020-10-30T11:05:15.757Z",
+      "updatedAt": "2020-10-30T12:21:08.937Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf36b8eda1849a2a21c46",
+      "name": "非凡科技",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    }
+  ],
+  [
+    {
+      "type": "org",
+      "id": "5f9bf336d4fc39774036a98c",
+      "createdAt": "2020-10-30T11:04:22.622Z",
+      "updatedAt": "2020-10-30T11:04:22.687Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "rootNodeId": "5f9bf3366a8118b1db9d2e9b",
+      "logo": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf3366a8118b1db9d2e9b",
+      "createdAt": "2020-10-30T11:04:22.642Z",
+      "updatedAt": "2020-10-30T12:21:18.452Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "锤子科技",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf33faa441fe79a369572",
+      "createdAt": "2020-10-30T11:04:31.301Z",
+      "updatedAt": "2020-10-30T12:21:28.305Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "研发",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf3525cdf85be04263a72",
+      "createdAt": "2020-10-30T11:04:50.412Z",
+      "updatedAt": "2020-10-30T12:21:44.378Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "后端",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf35dff4b8f3f58ac862f",
+      "createdAt": "2020-10-30T11:05:01.198Z",
+      "updatedAt": "2020-10-30T12:21:54.310Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "Java 工程师",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    }
+  ],
+  [
+    {
+      "type": "org",
+      "id": "5f9bf336d4fc39774036a98c",
+      "createdAt": "2020-10-30T11:04:22.622Z",
+      "updatedAt": "2020-10-30T11:04:22.687Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "rootNodeId": "5f9bf3366a8118b1db9d2e9b",
+      "logo": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf3366a8118b1db9d2e9b",
+      "createdAt": "2020-10-30T11:04:22.642Z",
+      "updatedAt": "2020-10-30T12:21:18.452Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "锤子科技",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    },
+    {
+      "type": "node",
+      "id": "5f9bf37f1a3cdeb88c03dfdc",
+      "createdAt": "2020-10-30T11:05:35.002Z",
+      "updatedAt": "2020-10-30T12:22:01.319Z",
+      "userPoolId": "59f86b4832eb28071bdd9214",
+      "orgId": "5f9bf336d4fc39774036a98c",
+      "name": "运营",
+      "nameI18n": null,
+      "description": null,
+      "descriptionI18n": null,
+      "order": null,
+      "code": null
+    }
+  ]
+]
+```
+
       
