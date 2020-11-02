@@ -39,7 +39,7 @@ export class HttpClient {
     const { code, message } = data;
     if (code !== 200) {
       this.options.onError(code, message, data.data);
-      throw new Error(message);
+      throw new Error(JSON.stringify({ code, message, data: data.data }));
     }
     return data.data;
   }
