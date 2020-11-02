@@ -1153,4 +1153,60 @@ export class AuthenticationClient {
       url: `/api/v2/users/me/orgs`
     });
   }
+
+   /**
+   * @name loginByLdap
+   * @name_zh 使用 LDAP 用户名登录
+   * @description 使用 LDAP 用户名登录。
+   *
+   * 如果你的用户池配置了登录失败检测，当同一  IP 下登录多次失败的时候会要求用户输入图形验证码（code 为 2000)。
+   *
+   * @param {string} username 用户名
+   * @param {string} password 密码
+   * @param {Object} [options]
+   * @param {boolean} [options.autoRegister] 是否自动注册。如果检测到用户不存在，会根据登录账密自动创建一个账号。
+   * @param {string} [options.captchaCode] 图形验证码
+   * @param {string} [options.clientIp] 客户端真实 IP，如果你在服务器端调用此接口，请务必将此参数设置为终端用户的真实 IP。
+   *
+   *
+   * @example
+   * const authenticationClient = new AuthenticationClient({
+   *   userPoolId: '你的用户池 ID',
+   *   appId: '应用 ID'
+   * })
+   *
+   * authenticationClient.loginByLdap(
+   *  'admin',
+   *  'admin',
+   * )
+   *
+   *
+   * @returns {Promise<User>}
+   * @memberof AuthenticationClient
+   */
+  async loginByLdap(
+    username: string,
+    password: string,
+    options?: {
+      autoRegister?: boolean;
+      captchaCode?: string;
+      clientIp?: string;
+    }
+  ): Promise<User> {
+    options = options || {};
+    // const { autoRegister = false, captchaCode, clientIp } = options;
+    // password = encrypt(password, this.options.encrptionPublicKey);
+    const api = `${this.options.host}/api/v2/ldap/verify-user`;
+
+    const user = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
+        username,
+        password
+      }
+    })
+    this.setCurrentUser(user);
+    return user;
+  }
 }

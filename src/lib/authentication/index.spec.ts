@@ -142,6 +142,20 @@ test('刷新用户 token', async t => {
   t.assert(data);
 });
 
+test.skip('使用 LDAP 登录', async t => {
+  const authing = new AuthenticationClient(getOptionsFromEnv());
+
+  // 创建 ldap 连接
+  // 为应用启用 ldap 连接
+  // ldap 登录
+  const username = 'admin';
+  const password = 'admin';
+  const user = await authing.loginByLdap(username, password);
+  t.assert(user);
+  t.assert(user.username === username);
+  t.assert(user.token);
+});
+
 test('用户名注册 # autoRegister', async t => {
   const authing = new AuthenticationClient(getOptionsFromEnv());
 
