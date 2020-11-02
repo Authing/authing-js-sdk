@@ -403,3 +403,11 @@ test.skip('listOrgs', async t => {
   const data = await authing.listOrgs();
   t.assert(data);
 });
+
+test('checkPasswordStrength', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const { valid } = await authing.checkPasswordStrength('Passw0rd!');
+  t.assert(valid);
+});
