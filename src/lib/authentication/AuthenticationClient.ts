@@ -1150,11 +1150,11 @@ export class AuthenticationClient {
   async listOrgs() {
     return await this.httpClient.request({
       method: 'GET',
-      url: `/api/v2/users/me/orgs`
+      url: `${this.options.host}/api/v2/users/me/orgs`
     });
   }
 
-   /**
+  /**
    * @name loginByLdap
    * @name_zh 使用 LDAP 用户名登录
    * @description 使用 LDAP 用户名登录。
@@ -1205,7 +1205,7 @@ export class AuthenticationClient {
         username,
         password
       }
-    })
+    });
     this.setCurrentUser(user);
     return user;
   }

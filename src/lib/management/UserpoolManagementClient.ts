@@ -130,7 +130,7 @@ export class UserPoolManagementClient {
   async listEnv(): Promise<{ key: string; value: any }[]> {
     return await this.httpClient.request({
       method: 'GET',
-      url: '/api/v2/env'
+      url: `${this.options.host}/api/v2/env`
     });
   }
 
@@ -155,7 +155,7 @@ export class UserPoolManagementClient {
   ): Promise<{ key: string; value: any }[]> {
     return await this.httpClient.request({
       method: 'POST',
-      url: '/api/v2/env',
+      url: `${this.options.host}/api/v2/env`,
       data: {
         key,
         value
@@ -180,7 +180,7 @@ export class UserPoolManagementClient {
   async removeEnv(key: string): Promise<{ key: string; value: any }[]> {
     return await this.httpClient.request({
       method: 'DELETE',
-      url: `/api/v2/env/${key}`
+      url: `${this.options.host}/api/v2/env/${key}`
     });
   }
 }

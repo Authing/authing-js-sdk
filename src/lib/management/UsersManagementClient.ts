@@ -658,7 +658,7 @@ export class UsersManagementClient {
   async listOrgs(userId: string) {
     return await this.httpClient.request({
       method: 'GET',
-      url: `/api/v2/users/${userId}/orgs`
+      url: `${this.options.host}/api/v2/users/${userId}/orgs`
     });
   }
 }
