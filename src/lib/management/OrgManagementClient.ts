@@ -483,8 +483,8 @@ export class OrgManagementClient {
 
   /**
    * @name removeMembers
-   * @name_zh 添加成功
-   * @description 节点添加成员
+   * @name_zh 删除成功
+   * @description 删除节点成员
    *
    * @param {string} nodeId 节点 ID
    * @param {string[]} userIds 用户 ID 列表
