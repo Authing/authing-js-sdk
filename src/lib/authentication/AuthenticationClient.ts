@@ -1209,4 +1209,42 @@ export class AuthenticationClient {
     this.setCurrentUser(user);
     return user;
   }
+
+  /**
+   * @name loginByAd
+   * @name_zh 使用 AD 用户名登录
+   * @description 使用 AD 用户名登录。
+   *
+   * @param {string} username 用户名
+   * @param {string} password 密码
+   *
+   *
+   * @example
+   * const authenticationClient = new AuthenticationClient({
+   *   userPoolId: '你的用户池 ID',
+   *   appId: '应用 ID'
+   * })
+   *
+   * authenticationClient.loginByAd(
+   *  'admin',
+   *  'admin',
+   * )
+   *
+   * @returns {Promise<User>}
+   * @memberof AuthenticationClient
+   */
+  async loginByAd(username: string, password: string): Promise<User> {
+    const api = `${this.options.host}/api/v2/ad/verify-user`;
+
+    const user = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
+        username,
+        password
+      }
+    });
+    this.setCurrentUser(user);
+    return user;
+  }
 }
