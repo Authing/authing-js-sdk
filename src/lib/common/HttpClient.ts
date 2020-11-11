@@ -3,7 +3,7 @@ import { ManagementClientOptions } from '../management/types';
 import { AuthenticationClientOptions } from '../authentication/types';
 import { AuthenticationTokenProvider } from '../authentication/AuthenticationTokenProvider';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
-import Axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export class HttpClient {
   options: ManagementClientOptions;
@@ -16,7 +16,14 @@ export class HttpClient {
   ) {
     this.options = options;
     this.tokenProvider = tokenProvider;
-    this.axios = Axios.create();
+    // @ts-ignore
+    if (typeof wx !== 'undefined') {
+      const Axios = require('wx-axios');
+      this.axios = Axios.create();
+    } else {
+      const Axios = require('axios');
+      this.axios = Axios.create();
+    }
   }
 
   async request(config: AxiosRequestConfig) {

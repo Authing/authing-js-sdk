@@ -1,10 +1,12 @@
 import { SDK_VERSION } from '../version';
 import { ManagementClientOptions } from '../management/types';
 import { AuthenticationClientOptions } from '../authentication/types';
+import { AxiosInstance } from 'axios';
 
 export class GraphqlClient {
   endpoint: string;
   options: ManagementClientOptions;
+  axios: AxiosInstance;
 
   constructor(
     endpoint: string,
@@ -12,41 +14,51 @@ export class GraphqlClient {
   ) {
     this.endpoint = endpoint;
     this.options = options;
+    // @ts-ignore
+    if (typeof wx !== 'undefined') {
+      const Axios = require('wx-axios');
+      this.axios = Axios.create();
+    } else {
+      const Axios = require('axios');
+      this.axios = Axios.create();
+    }
   }
 
   async request(options: { query: string; variables?: any; token?: string }) {
-    const Axios = require('axios');
-    const axios = Axios.create();
     const { query, token, variables } = options;
     let headers: any = {
+      'content-type': 'application/json',
       'x-authing-sdk-version': `js:${SDK_VERSION}`,
       'x-authing-userpool-id': this.options.userPoolId,
       'x-authing-request-from': this.options.requestFrom || 'sdk',
       'x-authing-app-id': this.options.appId || ''
     };
     token && (headers.Authorization = `Bearer ${token}`);
-    const graphqlOptions = {
-      timeout: this.options.timeout,
-      headers
-    };
-
+    let data = null;
+    let errors = null;
     try {
-      // return await graphQLClient.request<T>(query, variables);
-      let {
-        data: { data }
-      } = await axios.post(this.endpoint, { query, variables }, graphqlOptions);
-      return data;
+      let { data: responseData } = await this.axios({
+        url: this.endpoint,
+        data: {
+          query,
+          variables
+        },
+        method: 'post',
+        headers,
+        timeout: this.options.timeout
+      });
+      data = responseData.data;
+      errors = responseData.errors;
     } catch (error) {
-      if (error.name === 'FetchError') {
-        this.options.onError(500, '网络请求超时', null);
-        throw { code: 500, message: '网络请求超时', data: null };
-      }
+      console.log(error);
+      this.options.onError(500, '网络请求错误', null);
+      throw { code: 500, message: '网络请求错误', data: null };
+    }
 
+    if (errors?.length > 0) {
       let errmsg = null;
       let errcode = null;
       let data = null;
-      const response = error.response;
-      const errors = response.errors;
       errors.map((err: any) => {
         const { message: msg } = err;
         const { code, message, data: _data } = msg;
@@ -57,5 +69,7 @@ export class GraphqlClient {
       });
       throw { code: errcode, message: errmsg, data };
     }
+
+    return data;
   }
 }

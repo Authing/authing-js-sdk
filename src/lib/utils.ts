@@ -11,7 +11,7 @@ export const encrypt = async (plainText: string, publicKey: string) => {
   }
   // 小程序环境
   // @ts-ignore
-  else if (typeof global.wx) {
+  else if (typeof wx !== 'undefined') {
     // @ts-ignore
     const { JSEncrypt } = await import('wxapp-jsencrpt.js');
     const encrypt = new JSEncrypt();

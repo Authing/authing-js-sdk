@@ -1949,7 +1949,7 @@ dot-prop@^5.1.0:
 
 dotenv@^8.2.0:
   version "8.2.0"
-  resolved "https://registry.npm.taobao.org/dotenv/download/dotenv-8.2.0.tgz?cache=0&sync_timestamp=1571190782798&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdotenv%2Fdownload%2Fdotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
+  resolved "https://registry.npm.taobao.org/dotenv/download/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha1-l+YZJZradQ7qPk6j4mvO6lQksWo=
 
 dotgitignore@2.1.0:
@@ -2345,6 +2345,11 @@ follow-redirects@1.5.10:
   integrity sha1-e3qfmuov3/NnhqlP9kPtB/T/Xio=
   dependencies:
     debug "=3.1.0"
+
+follow-redirects@^1.4.1:
+  version "1.13.0"
+  resolved "https://registry.npm.taobao.org/follow-redirects/download/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
+  integrity sha1-tC6Nk6Kn7qXtiGM2dtZZe8jjhNs=
 
 for-in@^1.0.1, for-in@^1.0.2:
   version "1.0.2"
@@ -2920,6 +2925,11 @@ is-buffer@^1.1.5:
   version "1.1.6"
   resolved "https://registry.npm.taobao.org/is-buffer/download/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha1-76ouqdqg16suoTqXsritUf776L4=
+
+is-buffer@^2.0.2:
+  version "2.0.5"
+  resolved "https://registry.npm.taobao.org/is-buffer/download/is-buffer-2.0.5.tgz#ebc252e400d22ff8d77fa09888821a24a658c191"
+  integrity sha1-68JS5ADSL/jXf6CYiIIaJKZYwZE=
 
 is-callable@^1.1.4, is-callable@^1.1.5:
   version "1.1.5"
@@ -5930,6 +5940,14 @@ write-file-atomic@^3.0.0:
     is-typedarray "^1.0.0"
     signal-exit "^3.0.2"
     typedarray-to-buffer "^3.1.5"
+
+wx-axios@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.npm.taobao.org/wx-axios/download/wx-axios-0.0.7.tgz#c3f4b16038ef8a6456593571a75e52305425d50c"
+  integrity sha1-w/SxYDjvimRWWTVxp15SMFQl1Qw=
+  dependencies:
+    follow-redirects "^1.4.1"
+    is-buffer "^2.0.2"
 
 xdg-basedir@^2.0.0:
   version "2.0.0"
