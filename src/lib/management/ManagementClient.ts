@@ -5,8 +5,7 @@ import { ManagementClientOptions } from './types';
 import { UserPoolManagementClient } from './UserpoolManagementClient';
 import { UsersManagementClient } from './UsersManagementClient';
 import { sendEmail } from '../graphqlapi';
-import { EmailScene, User, UserPool } from '../../types/graphql.v2';
-import { verifyToken } from '../utils';
+import { EmailScene, User } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
 import Axios from 'axios';
 import { RolesManagementClient } from './RolesManagementClient';
@@ -15,6 +14,7 @@ import { UdfManagementClient } from './UdfManagementClient';
 import { GroupsManagementClient } from './GroupsManagementClient';
 import { AclManagementClient } from './AclManagementClient';
 import { WhitelistManagementClient } from './WhitelistManagementClient';
+import jwtDecode from 'jwt-decode';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -34,9 +34,6 @@ GKl64GDcIq3au+aqJQIDAQAB
 export class ManagementClient {
   // 初始化参数
   options: ManagementClientOptions;
-
-  /** 用户池配置 */
-  private userpoolConfig: UserPool;
 
   // sub classes definitions
   private graphqlClient: GraphqlClient;
@@ -124,16 +121,6 @@ export class ManagementClient {
     );
   }
 
-  private async getConfig(): Promise<UserPool> {
-    if (this.userpoolConfig) {
-      return this.userpoolConfig;
-    }
-
-    const detail = await this.userpool.detail();
-    this.userpoolConfig = detail;
-    return detail;
-  }
-
   /**
    * @description 发送邮件
    * @param email: 邮件
@@ -163,10 +150,9 @@ export class ManagementClient {
     const { fetchUserDetail = false } = options;
     if (!token) return null;
 
-    let decoded = null;
+    let decoded: any = null;
     try {
-      const config = await this.getConfig();
-      decoded = verifyToken(token, config.jwtSecret);
+      decoded = jwtDecode(token);
     } catch (error) {
       return null;
     }
