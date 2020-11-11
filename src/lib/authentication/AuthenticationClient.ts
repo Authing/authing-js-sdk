@@ -182,7 +182,7 @@ export class AuthenticationClient {
     options = options || {};
     profile = profile || {};
     const { forceLogin = false, generateToken = false, clientIp } = options;
-    password = encrypt(password, this.options.encrptionPublicKey);
+    password = await encrypt(password, this.options.encrptionPublicKey);
     const { registerByEmail: user } = await registerByEmail(
       this.graphqlClient,
       this.tokenProvider,
@@ -248,7 +248,7 @@ export class AuthenticationClient {
     options = options || {};
     profile = profile || {};
     const { forceLogin = false, generateToken = false, clientIp } = options;
-    password = encrypt(password, this.options.encrptionPublicKey);
+    password = await encrypt(password, this.options.encrptionPublicKey);
     const { registerByUsername: user } = await registerByUsername(
       this.graphqlClient,
       this.tokenProvider,
@@ -317,7 +317,7 @@ export class AuthenticationClient {
     profile = profile || {};
     const { forceLogin = false, generateToken = false, clientIp } = options;
     if (password) {
-      password = encrypt(password, this.options.encrptionPublicKey);
+      password = await encrypt(password, this.options.encrptionPublicKey);
     }
     const { registerByPhoneCode: user } = await registerByPhoneCode(
       this.graphqlClient,
@@ -431,7 +431,7 @@ export class AuthenticationClient {
   ): Promise<User> {
     options = options || {};
     const { autoRegister = false, captchaCode, clientIp } = options;
-    password = encrypt(password, this.options.encrptionPublicKey);
+    password = await encrypt(password, this.options.encrptionPublicKey);
     const { loginByEmail: user } = await loginByEmail(
       this.graphqlClient,
       this.tokenProvider,
@@ -487,7 +487,7 @@ export class AuthenticationClient {
   ): Promise<User> {
     options = options || {};
     const { autoRegister = false, captchaCode, clientIp } = options;
-    password = encrypt(password, this.options.encrptionPublicKey);
+    password = await encrypt(password, this.options.encrptionPublicKey);
     const { loginByUsername: user } = await loginByUsername(
       this.graphqlClient,
       this.tokenProvider,
@@ -580,7 +580,7 @@ export class AuthenticationClient {
   ): Promise<User> {
     options = options || {};
     const { captchaCode, autoRegister = false, clientIp } = options;
-    password = encrypt(password, this.options.encrptionPublicKey);
+    password = await encrypt(password, this.options.encrptionPublicKey);
     const { loginByPhonePassword: user } = await loginByPhonePassword(
       this.graphqlClient,
       this.tokenProvider,
@@ -659,7 +659,7 @@ export class AuthenticationClient {
     code: string,
     newPassword: string
   ): Promise<CommonMessage> {
-    newPassword = encrypt(newPassword, this.options.encrptionPublicKey);
+    newPassword = await encrypt(newPassword, this.options.encrptionPublicKey);
     const { resetPassword: data } = await resetPassword(
       this.graphqlClient,
       this.tokenProvider,
@@ -693,7 +693,7 @@ export class AuthenticationClient {
     code: string,
     newPassword: string
   ): Promise<CommonMessage> {
-    newPassword = encrypt(newPassword, this.options.encrptionPublicKey);
+    newPassword = await encrypt(newPassword, this.options.encrptionPublicKey);
     const { resetPassword: data } = await resetPassword(
       this.graphqlClient,
       this.tokenProvider,
@@ -790,9 +790,11 @@ export class AuthenticationClient {
     oldPassword?: string
   ): Promise<User> {
     newPassword =
-      newPassword && encrypt(newPassword, this.options.encrptionPublicKey);
+      newPassword &&
+      (await encrypt(newPassword, this.options.encrptionPublicKey));
     oldPassword =
-      oldPassword && encrypt(oldPassword, this.options.encrptionPublicKey);
+      oldPassword &&
+      (await encrypt(oldPassword, this.options.encrptionPublicKey));
 
     const { updatePassword: user } = await updatePassword(
       this.graphqlClient,

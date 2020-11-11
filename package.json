@@ -53,8 +53,7 @@
 		"graphql-request": "^1.8.2",
 		"jsencrypt": "^3.0.0-rc.1",
 		"jsonwebtoken": "^8.5.1",
-		"jwt-decode": "^2.2.0",
-		"lodash": "^4.17.15"
+		"jwt-decode": "^2.2.0"
 	},
 	"devDependencies": {
 		"@bitjson/npm-scripts-info": "^1.0.0",

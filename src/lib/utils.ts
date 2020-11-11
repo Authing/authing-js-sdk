@@ -1,19 +1,19 @@
-import _ from 'lodash';
 import * as jwt from 'jsonwebtoken';
-// @ts-ignore
-import cryptoPolyfill from './crypto-polyfill';
 
-export const encrypt = (plainText: string, publicKey: string) => {
+export const encrypt = async (plainText: string, publicKey: string) => {
   // jsencrypt 库在加密后使用了base64编码,所以这里要先将base64编码后的密文转成buffer
   // 浏览器环境
   if (typeof window === 'object') {
-    const encrypt = new cryptoPolyfill(); // 实例化加密对象
+    // @ts-ignore
+    const jsencrypt = await import('jsencrypt');
+    const encrypt = new jsencrypt(); // 实例化加密对象
     encrypt.setPublicKey(publicKey); // 设置公钥
     const encryptoPasswd = encrypt.encrypt(plainText); // 加密明文
     return encryptoPasswd;
   } else {
+    const crypto = await import('crypto');
     const pawBuffer = Buffer.from(plainText);
-    const encryptText = cryptoPolyfill
+    const encryptText = crypto
       .publicEncrypt(
         {
           key: Buffer.from(publicKey), // 如果通过文件方式读入就不必转成Buffer
@@ -56,10 +56,11 @@ export default function buildTree(nodes: any[]) {
     ]
   }
   */
-  const rootNodes = [_.find(nodes, { root: true })];
+
+  const rootNodes = [nodes.find(x => x.root === true)];
   const mapChildren = (childId: any) => {
-    const node = _.find(nodes, x => x.id === childId) || null;
-    if (_.isArray(node.children) && node.children.length > 0) {
+    const node = nodes.find(x => x.id === childId) || null;
+    if (Array.isArray(node.children) && node.children.length > 0) {
       node.children = node.children
         .map(mapChildren)
         .filter((node: any) => node !== null);

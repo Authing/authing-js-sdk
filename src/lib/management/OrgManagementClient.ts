@@ -2,7 +2,6 @@ import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ExtendedOrg, ManagementClientOptions } from './types';
 import buildTree from '../utils';
-import _ from 'lodash';
 import {
   orgs,
   createOrg,
@@ -62,7 +61,7 @@ export class OrgManagementClient {
   }
 
   private buildTree(org: DeepPartial<Org>): ExtendedOrg {
-    (org as any).tree = buildTree(_.cloneDeep(org.nodes) as any);
+    (org as any).tree = buildTree(JSON.parse(JSON.stringify(org.nodes)) as any);
     return org as ExtendedOrg;
   }
 

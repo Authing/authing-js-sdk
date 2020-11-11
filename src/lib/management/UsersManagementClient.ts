@@ -145,7 +145,7 @@ export class UsersManagementClient {
    */
   async create(userInfo: CreateUserInput): Promise<User> {
     if (userInfo && userInfo.password) {
-      userInfo.password = encrypt(
+      userInfo.password = await encrypt(
         userInfo.password,
         this.options.encrptionPublicKey
       );
@@ -228,7 +228,7 @@ export class UsersManagementClient {
    */
   async update(id: string, updates: UpdateUserInput): Promise<User> {
     if (updates && updates.password) {
-      updates.password = encrypt(
+      updates.password = await encrypt(
         updates.password,
         this.options.encrptionPublicKey
       );
