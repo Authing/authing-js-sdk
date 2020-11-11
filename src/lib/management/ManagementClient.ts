@@ -67,12 +67,18 @@ export class ManagementClient {
 
     Axios.defaults.baseURL = this.options.host;
 
-    this.graphqlClient = new GraphqlClient(graphqlApiEndpointV2, this.options);
+    this.graphqlClient = new (this.options.graphqlClient || GraphqlClient)(
+      graphqlApiEndpointV2,
+      this.options
+    );
     this.tokenProvider = new ManagementTokenProvider(
       this.options,
       this.graphqlClient
     );
-    this.httpClient = new HttpClient(this.options, this.tokenProvider);
+    this.httpClient = new (this.options.httpClient || HttpClient)(
+      this.options,
+      this.tokenProvider
+    );
     this.users = new UsersManagementClient(
       this.options,
       this.graphqlClient,

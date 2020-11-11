@@ -1,11 +1,11 @@
 import { SDK_VERSION } from '../version';
 import { ManagementClientOptions } from '../management/types';
 import { AuthenticationClientOptions } from '../authentication/types';
-import { AxiosInstance } from 'axios';
+import Axios, { AxiosInstance } from 'axios';
 
 export class GraphqlClient {
   endpoint: string;
-  options: ManagementClientOptions;
+  options: ManagementClientOptions | AuthenticationClientOptions;
   axios: AxiosInstance;
 
   constructor(
@@ -14,14 +14,7 @@ export class GraphqlClient {
   ) {
     this.endpoint = endpoint;
     this.options = options;
-    // @ts-ignore
-    if (typeof wx !== 'undefined') {
-      const Axios = require('wx-axios');
-      this.axios = Axios.create();
-    } else {
-      const Axios = require('axios');
-      this.axios = Axios.create();
-    }
+    this.axios = Axios.create();
   }
 
   async request(options: { query: string; variables?: any; token?: string }) {

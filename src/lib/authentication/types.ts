@@ -1,3 +1,6 @@
+import { GraphqlClient } from '../common/GraphqlClient';
+import { HttpClient } from '../common/HttpClient';
+
 /**
  * 初始化 AuthenticationClientOptions 的参数
  */
@@ -19,6 +22,8 @@ export interface AuthenticationClientOptions {
   accessToken?: string;
   /** 加密函数 */
   encryptFunction?: (plainText: string, publicKey: string) => Promise<string>;
+  httpClient?: typeof HttpClient;
+  graphqlClient?: typeof GraphqlClient;
 }
 
 export interface CheckLoginStatusRes {
