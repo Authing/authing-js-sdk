@@ -1,6 +1,4 @@
-import { Variables } from 'graphql-request/dist/src/types';
 import { SDK_VERSION } from '../version';
-import { GraphQLClient } from 'graphql-request';
 import { ManagementClientOptions } from '../management/types';
 import { AuthenticationClientOptions } from '../authentication/types';
 
@@ -16,11 +14,9 @@ export class GraphqlClient {
     this.options = options;
   }
 
-  async request<T>(options: {
-    query: string;
-    variables?: Variables;
-    token?: string;
-  }) {
+  async request(options: { query: string; variables?: any; token?: string }) {
+    const Axios = require('axios');
+    const axios = Axios.create();
     const { query, token, variables } = options;
     let headers: any = {
       'x-authing-sdk-version': `js:${SDK_VERSION}`,
@@ -33,10 +29,13 @@ export class GraphqlClient {
       timeout: this.options.timeout,
       headers
     };
-    const graphQLClient = new GraphQLClient(this.endpoint, graphqlOptions);
 
     try {
-      return await graphQLClient.request<T>(query, variables);
+      // return await graphQLClient.request<T>(query, variables);
+      let {
+        data: { data }
+      } = await axios.post(this.endpoint, { query, variables }, graphqlOptions);
+      return data;
     } catch (error) {
       if (error.name === 'FetchError') {
         this.options.onError(500, '网络请求超时', null);

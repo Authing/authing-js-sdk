@@ -10,7 +10,7 @@ import { ManagementClient } from '../management/ManagementClient';
 
 const managementClient = new ManagementClient(getOptionsFromEnv());
 
-test('邮箱注册', async t => {
+test.only('邮箱注册', async t => {
   const authing = new AuthenticationClient(getOptionsFromEnv());
   const email = generateRandomString() + '@test.com';
   const password = generateRandomString();
