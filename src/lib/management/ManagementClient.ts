@@ -15,6 +15,7 @@ import { GroupsManagementClient } from './GroupsManagementClient';
 import { AclManagementClient } from './AclManagementClient';
 import { WhitelistManagementClient } from './WhitelistManagementClient';
 import jwtDecode from 'jwt-decode';
+import { encrypt } from '../utils';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -28,7 +29,8 @@ GKl64GDcIq3au+aqJQIDAQAB
     throw { code, message };
   },
   host: 'https://core.authing.cn',
-  requestFrom: 'sdk'
+  requestFrom: 'sdk',
+  encryptFunction: encrypt
 };
 
 export class ManagementClient {

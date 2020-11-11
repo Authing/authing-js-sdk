@@ -1,38 +1,18 @@
 export const encrypt = async (plainText: string, publicKey: string) => {
-  // jsencrypt 库在加密后使用了base64编码,所以这里要先将base64编码后的密文转成buffer
-  // 浏览器环境
-  if (typeof window === 'object') {
-    // @ts-ignore
-    const jsencrypt = await import('jsencrypt');
-    const encrypt = new jsencrypt(); // 实例化加密对象
-    encrypt.setPublicKey(publicKey); // 设置公钥
-    const encryptoPasswd = encrypt.encrypt(plainText); // 加密明文
-    return encryptoPasswd;
-  }
-  // 小程序环境
-  // @ts-ignore
-  else if (typeof wx !== 'undefined') {
-    // @ts-ignore
-    const { JSEncrypt } = await import('wxapp-jsencrpt.js');
-    const encrypt = new JSEncrypt();
-    encrypt.setPublicKey(publicKey);
-    const encStr = encrypt.encrypt(plainText);
-    return encStr.toString();
-  } else {
-    const crypto = await import('crypto');
-    const pawBuffer = Buffer.from(plainText);
-    const encryptText = crypto
-      .publicEncrypt(
-        {
-          key: Buffer.from(publicKey), // 如果通过文件方式读入就不必转成Buffer
-          padding: 1
-          // padding: crypto.constants.RSA_PKCS1_PADDING
-        },
-        pawBuffer
-      )
-      .toString('base64');
-    return encryptText;
-  }
+  // 动态引入，为了在 rn 小程序等环境下构建的时候不会报错
+  const crypto = await import('crypto');
+  const pawBuffer = Buffer.from(plainText);
+  const encryptText = crypto
+    .publicEncrypt(
+      {
+        key: Buffer.from(publicKey), // 如果通过文件方式读入就不必转成Buffer
+        padding: 1
+        // padding: crypto.constants.RSA_PKCS1_PADDING
+      },
+      pawBuffer
+    )
+    .toString('base64');
+  return encryptText;
 };
 
 export default function buildTree(nodes: any[]) {

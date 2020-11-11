@@ -17,6 +17,8 @@ export interface AuthenticationClientOptions {
   requestFrom?: string;
   /** token */
   accessToken?: string;
+  /** 加密函数 */
+  encryptFunction?: (plainText: string, publicKey: string) => Promise<string>;
 }
 
 export interface CheckLoginStatusRes {
