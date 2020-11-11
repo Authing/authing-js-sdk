@@ -1,44 +1,30 @@
-import crypto from 'crypto';
-import { SDK_VERSION } from './version';
-import { GraphQLClient } from 'graphql-request';
-import { Variables } from 'graphql-request/dist/src/types';
 import _ from 'lodash';
 import * as jwt from 'jsonwebtoken';
+// @ts-ignore
+import cryptoPolyfill from './crypto-polyfill';
 
 export const encrypt = (plainText: string, publicKey: string) => {
   // jsencrypt 库在加密后使用了base64编码,所以这里要先将base64编码后的密文转成buffer
-  const pawBuffer = Buffer.from(plainText);
-  const encryptText = crypto
-    .publicEncrypt(
-      {
-        key: Buffer.from(publicKey), // 如果通过文件方式读入就不必转成Buffer
-        padding: 1
-        // padding: crypto.constants.RSA_PKCS1_PADDING
-      },
-      pawBuffer
-    )
-    .toString('base64');
-  return encryptText;
-};
-
-export const graphqlRequest = async (options: {
-  endpoint: string;
-  query: string;
-  variables?: Variables;
-  token?: string;
-}) => {
-  const { endpoint, query, token, variables } = options;
-  let headers: any = {
-    'x-authing-sdk-version': SDK_VERSION
-  };
-  token && (headers.Authorization = `Bearer ${token}`);
-  const graphQLClient = new GraphQLClient(endpoint, {
-    headers
-  });
-
-  // 这一步可能会报错
-  const data = await graphQLClient.request(query, variables);
-  return data;
+  // 浏览器环境
+  if (typeof window === 'object') {
+    const encrypt = new cryptoPolyfill(); // 实例化加密对象
+    encrypt.setPublicKey(publicKey); // 设置公钥
+    const encryptoPasswd = encrypt.encrypt(plainText); // 加密明文
+    return encryptoPasswd;
+  } else {
+    const pawBuffer = Buffer.from(plainText);
+    const encryptText = cryptoPolyfill
+      .publicEncrypt(
+        {
+          key: Buffer.from(publicKey), // 如果通过文件方式读入就不必转成Buffer
+          padding: 1
+          // padding: crypto.constants.RSA_PKCS1_PADDING
+        },
+        pawBuffer
+      )
+      .toString('base64');
+    return encryptText;
+  }
 };
 
 export default function buildTree(nodes: any[]) {
@@ -104,7 +90,8 @@ export const deepEqual = function(x: any, y: any) {
   } else if (
     typeof x == 'object' &&
     x != null &&
-    typeof y == 'object' && y != null
+    typeof y == 'object' &&
+    y != null
   ) {
     if (Object.keys(x).length != Object.keys(y).length) return false;
 
