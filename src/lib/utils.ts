@@ -8,6 +8,16 @@ export const encrypt = async (plainText: string, publicKey: string) => {
     encrypt.setPublicKey(publicKey); // 设置公钥
     const encryptoPasswd = encrypt.encrypt(plainText); // 加密明文
     return encryptoPasswd;
+  }
+  // 小程序环境
+  // @ts-ignore
+  else if (typeof global.wx) {
+    // @ts-ignore
+    const { JSEncrypt } = await import('wxapp-jsencrpt.js');
+    const encrypt = new JSEncrypt();
+    encrypt.setPublicKey(publicKey);
+    const encStr = encrypt.encrypt(plainText);
+    return encStr.toString();
   } else {
     const crypto = await import('crypto');
     const pawBuffer = Buffer.from(plainText);

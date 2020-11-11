@@ -105,7 +105,7 @@
 	"nyc": {
 		"extends": "@istanbuljs/nyc-config-typescript",
 		"exclude": [
-			"**/*.spec.js"
+      "**/*.spec.js"
 		]
 	}
 }
