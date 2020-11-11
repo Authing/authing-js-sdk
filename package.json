@@ -50,8 +50,7 @@
 	"dependencies": {
 		"axios": "^0.19.2",
 		"jsencrypt": "^3.0.0-rc.1",
-		"jwt-decode": "^2.2.0",
-		"wx-axios": "^0.0.7"
+		"jwt-decode": "^2.2.0"
 	},
 	"devDependencies": {
 		"@bitjson/npm-scripts-info": "^1.0.0",
