@@ -42,6 +42,8 @@ import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { resetPassword, updateUser } from '../graphqlapi';
 import { HttpClient } from '../common/HttpClient';
 import { encrypt } from '../utils';
+import jwtDecode from 'jwt-decode';
+import { DecodedAccessToken } from '../..';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   timeout: 10000,
@@ -128,10 +130,23 @@ export class AuthenticationClient {
 
   checkLoggedIn() {
     const user = this.tokenProvider.getUser();
-    if (!user) {
+
+    if (user) {
+      return user.id;
+    }
+
+    const token = this.tokenProvider.getToken();
+    if (!token) {
       throw new Error('请先登录！');
     }
-    return user;
+    const decoded: DecodedAccessToken = jwtDecode(token);
+    const {
+      data: { id: userId }
+    } = decoded;
+    if (!userId) {
+      throw new Error('不合法的 accessToken');
+    }
+    return userId;
   }
 
   setCurrentUser(user: User) {
@@ -780,7 +795,7 @@ export class AuthenticationClient {
    * @memberof AuthenticationClient
    */
   async updateProfile(updates: UpdateUserInput): Promise<User> {
-    const user = this.checkLoggedIn();
+    const userId = this.checkLoggedIn();
     if (updates && updates.password) {
       delete updates.password;
     }
@@ -788,7 +803,7 @@ export class AuthenticationClient {
       this.graphqlClient,
       this.tokenProvider,
       {
-        id: user.id,
+        id: userId,
         input: updates
       }
     );
@@ -1063,9 +1078,9 @@ export class AuthenticationClient {
    * @memberof AuthenticationClient
    */
   async logout() {
-    const user = this.checkLoggedIn();
+    const userId = this.checkLoggedIn();
     await updateUser(this.graphqlClient, this.tokenProvider, {
-      id: user.id,
+      id: userId,
       input: {
         tokenExpiredAt: '0'
       }
@@ -1104,10 +1119,10 @@ export class AuthenticationClient {
    * @memberof AuthenticationClient
    */
   async listUdv(): Promise<Array<UserDefinedData>> {
-    const user = this.checkLoggedIn();
+    const userId = this.checkLoggedIn();
     const { udv: list } = await udv(this.graphqlClient, this.tokenProvider, {
       targetType: UdfTargetType.User,
-      targetId: user.id
+      targetId: userId
     });
     return this.convertUdv(list);
   }
@@ -1128,14 +1143,14 @@ export class AuthenticationClient {
    * @memberof AuthenticationClient
    */
   async setUdv(key: string, value: any): Promise<Array<UserDefinedData>> {
-    const user = this.checkLoggedIn();
+    const userId = this.checkLoggedIn();
     value = JSON.stringify(value);
     const { setUdv: list } = await setUdv(
       this.graphqlClient,
       this.tokenProvider,
       {
         targetType: UdfTargetType.User,
-        targetId: user.id,
+        targetId: userId,
         key,
         value
       }
@@ -1159,13 +1174,13 @@ export class AuthenticationClient {
    * @memberof AuthenticationClient
    */
   async removeUdv(key: string): Promise<Array<UserDefinedData>> {
-    const user = this.checkLoggedIn();
+    const userId = this.checkLoggedIn();
     const { removeUdv: list } = await removeUdv(
       this.graphqlClient,
       this.tokenProvider,
       {
         targetType: UdfTargetType.User,
-        targetId: user.id,
+        targetId: userId,
         key
       }
     );

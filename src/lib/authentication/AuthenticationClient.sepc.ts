@@ -10,7 +10,7 @@ import { ManagementClient } from '../management/ManagementClient';
 
 const managementClient = new ManagementClient(getOptionsFromEnv());
 
-test.only('邮箱注册', async t => {
+test('邮箱注册', async t => {
   const authing = new AuthenticationClient(getOptionsFromEnv());
   const email = generateRandomString() + '@test.com';
   const password = generateRandomString();
@@ -406,6 +406,19 @@ test('通过 accessToken 初始化', async t => {
   const newUser = await authing.getCurrentUser();
   t.assert(newUser);
   t.assert(newUser.id === user.id);
+});
+
+test.only('通过 accessToken 初始化 2', async t => {
+  let user = await managementClient.users.create({
+    username: generateRandomString()
+  });
+  const data = await managementClient.users.refreshToken(user.id);
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv(),
+    accessToken: data.token
+  });
+  user = await authing.updateProfile({ nickname: 'nick' });
+  t.assert(user.nickname === 'nick');
 });
 
 test.skip('listOrgs', async t => {
