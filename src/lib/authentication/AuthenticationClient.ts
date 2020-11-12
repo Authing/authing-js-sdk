@@ -98,7 +98,8 @@ export class AuthenticationClient {
       graphqlApiEndpointV2,
       this.options
     );
-    this.tokenProvider = new AuthenticationTokenProvider(this.options);
+    this.tokenProvider = new (this.options.tokenProvider ||
+      AuthenticationTokenProvider)(this.options);
     this.httpClient = new (this.options.httpClient || HttpClient)(
       this.options,
       this.tokenProvider
