@@ -126,7 +126,7 @@ export class AuthenticationClient {
     }
   }
 
-  private checkLoggedIn() {
+  checkLoggedIn() {
     const user = this.tokenProvider.getUser();
     if (!user) {
       throw new Error('请先登录！');
