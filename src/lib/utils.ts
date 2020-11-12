@@ -1,6 +1,6 @@
 export const encrypt = async (plainText: string, publicKey: string) => {
   // 动态引入，为了在 rn 小程序等环境下构建的时候不会报错
-  const crypto = await import('crypto');
+  const crypto = require('crypto');
   const pawBuffer = Buffer.from(plainText);
   const encryptText = crypto
     .publicEncrypt(
