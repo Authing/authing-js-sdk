@@ -645,7 +645,7 @@ export class AuthenticationClient {
    * @returns {Promise<JwtTokenStatus>}
    * @memberof AuthenticationClient
    */
-  async checkLoginStatus(token: string): Promise<JwtTokenStatus> {
+  async checkLoginStatus(token?: string): Promise<JwtTokenStatus> {
     const res = await checkLoginStatus(this.graphqlClient, this.tokenProvider, {
       token
     });

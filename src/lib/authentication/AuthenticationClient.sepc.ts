@@ -408,7 +408,7 @@ test('通过 accessToken 初始化', async t => {
   t.assert(newUser.id === user.id);
 });
 
-test.only('通过 accessToken 初始化 2', async t => {
+test('通过 accessToken 初始化 2', async t => {
   let user = await managementClient.users.create({
     username: generateRandomString()
   });
@@ -437,4 +437,18 @@ test('checkPasswordStrength', async t => {
   });
   const { valid } = await authing.checkPasswordStrength('Passw0rd!');
   t.assert(valid);
+});
+
+test('checkLoginStatus', async t => {
+  let user = await managementClient.users.create({
+    username: generateRandomString()
+  });
+  const data = await managementClient.users.refreshToken(user.id);
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv(),
+    accessToken: data.token
+  });
+  const data2 = await authing.checkLoginStatus();
+  t.assert(data2.code === 200);
+  t.assert(data2.status === true);
 });
