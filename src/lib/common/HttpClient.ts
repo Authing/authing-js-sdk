@@ -16,7 +16,9 @@ export class HttpClient {
   ) {
     this.options = options;
     this.tokenProvider = tokenProvider;
-    this.axios = Axios.create();
+    this.axios = Axios.create({
+      withCredentials: true
+    });
   }
 
   async request(config: AxiosRequestConfig) {
