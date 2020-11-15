@@ -18,8 +18,7 @@ import { CommonMessage } from '../../types/graphql.v2';
  * import { ManagementClient } from "authing-js-sdk"
  * const managementClient = new ManagementClient({
  *    userPoolId: "YOUR_USERPOOL_ID",
- *    secret: process.env.AUTHING_USERPOOL_SECRET,
- *    host: process.env.AUTHING_HOST
+ *    secret: "YOUR_USERPOOL_SECRET",
  * })
  * managementClient.acl.allow // 允许某个用户对某个资源进行某个操作
  * managementClient.acl.isAllowed // 判断某个用户是否对某个资源有某个操作权限

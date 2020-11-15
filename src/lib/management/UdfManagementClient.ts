@@ -23,8 +23,7 @@ import { setUdf, removeUdf, udf } from '../graphqlapi';
  * import { ManagementClient } from "authing-js-sdk"
  * const managementClient = new ManagementClient({
  *    userPoolId: "YOUR_USERPOOL_ID",
- *    secret: process.env.AUTHING_USERPOOL_SECRET,
- *    host: process.env.AUTHING_HOST
+ *    secret: "YOUR_USERPOOL_SECRET",
  * })
  * managementClient.udf.list // 获取自定义字段元数据列表
  * managementClient.udf.set // 设置自定义字段

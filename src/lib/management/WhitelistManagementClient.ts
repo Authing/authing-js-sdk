@@ -26,8 +26,7 @@ import { ManagementClientOptions } from './types';
  * import { ManagementClient } from "authing-js-sdk"
  * const managementClient = new ManagementClient({
  *    userPoolId: "YOUR_USERPOOL_ID",
- *    secret: process.env.AUTHING_USERPOOL_SECRET,
- *    host: process.env.AUTHING_HOST
+ *    secret: "YOUR_USERPOOL_SECRET",
  * })
  * managementClient.whitelist.list // 获取注册白名单记录
  * managementClient.whitelist.add // 添加白名单记录

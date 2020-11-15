@@ -19,8 +19,7 @@ import { HttpClient } from '../common/HttpClient';
  * import { ManagementClient } from "authing-js-sdk"
  * const managementClient = new ManagementClient({
  *    userPoolId: "YOUR_USERPOOL_ID",
- *    secret: process.env.AUTHING_USERPOOL_SECRET,
- *    host: process.env.AUTHING_HOST
+ *    secret: "YOUR_USERPOOL_SECRET",
  * })
  *
  * managementClient.userpool.detail // 获取用户池配置
