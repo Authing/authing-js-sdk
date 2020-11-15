@@ -31,7 +31,7 @@ import { HttpClient } from '../common/HttpClient';
  * \`\`\`javascript
  * import { ManagementClient } from "authing-js-sdk"
  * const managementClient = new ManagementClient({
- *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+ *    userPoolId: "YOUR_USERPOOL_ID",
  *    secret: process.env.AUTHING_USERPOOL_SECRET,
  *    host: process.env.AUTHING_HOST
  * })
