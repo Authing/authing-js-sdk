@@ -14,7 +14,9 @@ export class GraphqlClient {
   ) {
     this.endpoint = endpoint;
     this.options = options;
-    this.axios = Axios.create();
+    this.axios = Axios.create({
+      withCredentials: true
+    });
   }
 
   async request(options: { query: string; variables?: any; token?: string }) {
