@@ -45,9 +45,8 @@ import { HttpClient } from '../common/HttpClient';
  * \`\`\`javascript
  * import { ManagementClient } from "authing-js-sdk"
  * const managementClient = new ManagementClient({
- *    userPoolId: process.env.AUTHING_USERPOOL_ID,
- *    secret: process.env.AUTHING_USERPOOL_SECRET,
- *    host: process.env.AUTHING_HOST
+ *    userPoolId: "YOUR_USERPOOL_ID",
+ *    secret: "YOUR_USERPOOL_SECRET",
  * })
  *
  * managementClient.users.list // 获取用户列表

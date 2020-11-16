@@ -84,3 +84,71 @@ export const deepEqual = function(x: any, y: any) {
     return true;
   } else return false;
 };
+
+export const popupCenter = (
+  url: string,
+  { w, h }: { w: number; h: number } = { w: 585, h: 649 }
+) => {
+  // Fixes dual-screen position                             Most browsers      Firefox
+  const dualScreenLeft =
+    window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+  const dualScreenTop =
+    window.screenTop !== undefined ? window.screenTop : window.screenY;
+
+  const width = window.innerWidth
+    ? window.innerWidth
+    : document.documentElement.clientWidth
+    ? document.documentElement.clientWidth
+    : window.screen.width;
+  const height = window.innerHeight
+    ? window.innerHeight
+    : document.documentElement.clientHeight
+    ? document.documentElement.clientHeight
+    : window.screen.height;
+
+  const systemZoom = width / window.screen.availWidth;
+  const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+  const top = (height - h) / 2 / systemZoom + dualScreenTop;
+  const newWindow = window.open(
+    url,
+    '_blank',
+    `
+      toolbar=no,
+      menubar=no,
+      scrollbars=no,
+      resizable=no,
+      location=no,
+      status=no
+      width=${w / systemZoom},
+      height=${h / systemZoom},
+      top=${top},
+      left=${left}
+      `
+  );
+
+  newWindow?.focus();
+};
+
+export const createCssClassStyleSheet = (
+  className: string,
+  styleSheet: any
+) => {
+  let styleTag = document.createElement('style');
+  let styleText = `
+    .${className} {
+      ${styleSheet}
+    }
+  `;
+  let textNode = document.createTextNode(styleText);
+  styleTag.appendChild(textNode);
+  document.head.appendChild(styleTag);
+};
+
+export const serialize = function(obj: any) {
+  var str = [];
+  for (var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+    }
+  return str.join('&');
+};

@@ -44,6 +44,7 @@ import { HttpClient } from '../common/HttpClient';
 import { encrypt } from '../utils';
 import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from '../..';
+import { SocialAuthenticationClient } from './SocialAuthenticationClient';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   timeout: 10000,
@@ -72,7 +73,7 @@ GKl64GDcIq3au+aqJQIDAQAB
  * \`\`\`javascript
  * import { AuthenticationClient } from "authing-js-sdk"
  * const authenticationClient = new AuthenticationClient({
- *    userPoolId: process.env.AUTHING_USERPOOL_ID,
+ *    userPoolId: "YOUR_USERPOOL_ID",
  * })
  * authenticationClient.registerByEmail // 使用邮箱注册
  * authenticationClient.loginByEmail // 使用邮箱登录
@@ -91,6 +92,7 @@ export class AuthenticationClient {
   wxqrcode: QrCodeAuthenticationClient;
   qrcode: QrCodeAuthenticationClient;
   mfa: MfaAuthenticationClient;
+  social: SocialAuthenticationClient;
 
   constructor(options: AuthenticationClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -119,6 +121,11 @@ export class AuthenticationClient {
       'APP_AUTH'
     );
     this.mfa = new MfaAuthenticationClient(
+      this.options,
+      this.tokenProvider,
+      this.httpClient
+    );
+    this.social = new SocialAuthenticationClient(
       this.options,
       this.tokenProvider,
       this.httpClient
