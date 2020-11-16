@@ -7,7 +7,11 @@
 	"module": "build/module/index.js",
 	"repository": "https://github.com/authing/authing.js",
 	"license": "MIT",
-	"keywords": [],
+  "keywords": [],
+  "sideEffects": [
+    "build/main/*",
+    "build/umd/*"
+  ],
 	"scripts": {
 		"describe": "npm-scripts-info",
 		"build": "run-s clean && run-p build:*",
