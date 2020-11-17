@@ -220,6 +220,13 @@ export class QrCodeAuthenticationClient {
     };
 
     const genTip = (text: string) => {
+      let formattedText: string;
+      try {
+        formattedText = JSON.parse(text).message || text;
+      } catch (e) {
+        formattedText = text;
+      }
+
       const tip = document.createElement('span');
       tip.className = 'authing__heading-subtitle';
       if (!needGenerate) {
@@ -235,7 +242,7 @@ export class QrCodeAuthenticationClient {
         );
         tip.classList.add('__authing__heading-subtitle-style');
       }
-      tip.innerHTML = text;
+      tip.innerHTML = formattedText;
       return tip;
     };
 
