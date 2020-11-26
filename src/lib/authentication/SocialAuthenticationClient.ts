@@ -13,7 +13,7 @@ import { User } from '../../types/graphql.v2';
  * \`\`\`javascript
  * import { AuthenticationClient } from "authing-js-sdk"
  * const authenticationClient = new AuthenticationClient({
- *    userPoolId: "YOUR_USERPOOL_ID",
+ *    appId: "YOUR_APP_ID",
  * })
  * await authenticationClient.social.authorize("github", {
  *    onSuccess: (user) => { console.log(user) },
@@ -57,7 +57,7 @@ export class SocialAuthenticationClient {
    * // 使用 GitHub 登录
    *
    * const authenticationClient = new AuthenticationClient({
-   *    userPoolId: "YOUR_USERPOOL_ID",
+   *    appId: "YOUR_APP_ID",
    * })
    *
    * await authenticationClient.social.authorize("github", {
@@ -75,7 +75,7 @@ export class SocialAuthenticationClient {
    * // 使用新建浏览器 tab 的形式打开社会化登录页面
    *
    * const authenticationClient = new AuthenticationClient({
-   *    userPoolId: "YOUR_USERPOOL_ID",
+   *    appId: "YOUR_APP_ID",
    * })
    *
    * await authenticationClient.social.authorize("github", {

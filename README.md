@@ -37,21 +37,21 @@ yarn add authing-js-sdk
 
 ### 初始化
 
-`AuthenticationClient` 初始化需要传入用户池 ID `userPoolId`：
+`AuthenticationClient` 初始化需要传入应用 ID `appId`：
 
-> 你可以在此了解[如何获取 UserPoolId](https://docs.authing.cn/others/faq.html)，如果你对用户池的概念不是很了解，可以在此[了解 Authing 系统的核心概念](https://docs.authing.cn/quickstart/basic.html)。
+> 你可以在此了解[如何创建应用](https://docs.authing.cn/app/create.html)，以及[了解 Authing 系统的核心概念](https://docs.authing.cn/quickstart/basic.html)。
 
 ```js
 import { AuthenticationClient } from "authing-js-sdk"
 
 const authing = new AuthenticationClient({
-  userPoolId: "YOUR_USERPOOL_ID"
+  appId: "YOUR_APP_ID"
 })
 ```
 
 完整参数列表如下:
 
-- `userPoolId`: 用户池 ID。
+- `appId`: 应用 ID。
 - `accessToken`: 通过用户的 token 初始化 SDK 。
 - `timeout`: 请求超时时间，单位为毫秒，默认为 10000 （10 秒）。
 - `onError`: 错误处理函数，你可以用其来全局捕捉 Authing 客户端请求的所有异常。函数定义为：

@@ -73,7 +73,7 @@ GKl64GDcIq3au+aqJQIDAQAB
  * \`\`\`javascript
  * import { AuthenticationClient } from "authing-js-sdk"
  * const authenticationClient = new AuthenticationClient({
- *    userPoolId: "YOUR_USERPOOL_ID",
+ *    appId: "YOUR_APP_ID",
  * })
  * authenticationClient.registerByEmail // 使用邮箱注册
  * authenticationClient.loginByEmail // 使用邮箱登录
