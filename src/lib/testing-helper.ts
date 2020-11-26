@@ -25,7 +25,7 @@ export const sleep = (ms: number) => {
 export const getOptionsFromEnv = (): ManagementClientOptions => {
   return {
     userPoolId: process.env.AUTHING_USERPOOL_ID,
-    secret: 'YOUR_USERPOOL_SECRET',
+    secret: process.env.AUTHING_USERPOOL_SECRET,
     appId: process.env.AUTHING_APP_ID,
     host: process.env.AUTHING_HOST,
     timeout: 10000
