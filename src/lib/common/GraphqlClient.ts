@@ -24,7 +24,7 @@ export class GraphqlClient {
     let headers: any = {
       'content-type': 'application/json',
       'x-authing-sdk-version': `js:${SDK_VERSION}`,
-      'x-authing-userpool-id': this.options.userPoolId,
+      'x-authing-userpool-id': this.options.userPoolId || '',
       'x-authing-request-from': this.options.requestFrom || 'sdk',
       'x-authing-app-id': this.options.appId || ''
     };
