@@ -11,9 +11,8 @@
 ```javascript
 import { ManagementClient } from "authing-js-sdk"
 const managementClient = new ManagementClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
-   secret: process.env.AUTHING_USERPOOL_SECRET,
-   host: process.env.AUTHING_HOST
+   userPoolId: "YOUR_USERPOOL_ID",
+   secret: "YOUR_USERPOOL_SECRET",
 })
 managementClient.org.list // 获取用户池组织机构列表
 managementClient.org.moveNode // 获取组织机构详情
@@ -400,11 +399,11 @@ OrgManagementClient().listMembers(nodeId, options)
 
       
 
-## 添加成功
+## 删除成功
 
 OrgManagementClient().removeMembers(nodeId, userIds)
 
-> 节点添加成员
+> 删除节点成员
 
 
 #### 参数

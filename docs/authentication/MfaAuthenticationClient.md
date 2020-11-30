@@ -10,7 +10,7 @@
 ```javascript
 import { AuthenticationClient } from "authing-js-sdk"
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 await authenticationClient.mfa.assosicateMfaAuthenticator({authenticatorType: 'totp'})
 ```
@@ -20,7 +20,7 @@ await authenticationClient.mfa.assosicateMfaAuthenticator({authenticatorType: 't
 ```javascript
 import { AuthenticationClient } from "authing-js-sdk"
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 await authenticationClient.mfa.verifyTotpMfa({totp: '112233', mfaToken: 'xxx'})
 ```
@@ -44,7 +44,7 @@ MfaAuthenticationClient().getMfaAuthenticators()
 
 ```javascript
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 const authenticators = await authenticationClient.mfa.getMfaAuthenticators({ type: 'totp' })
 ```
@@ -71,7 +71,7 @@ MfaAuthenticationClient().assosicateMfaAuthenticator()
 
 ```javascript
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 const authenticators = await authenticationClient.mfa.assosicateMfaAuthenticator({ authenticatorType: 'totp' })
 ```
@@ -98,7 +98,7 @@ MfaAuthenticationClient().deleteMfaAuthenticator()
 
 ```javascript
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 const authenticators = await authenticationClient.mfa.deleteMfaAuthenticator()
 ```
@@ -125,7 +125,7 @@ MfaAuthenticationClient().confirmAssosicateMfaAuthenticator()
 
 ```javascript
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 const authenticators = await authenticationClient.mfa.confirmAssosicateMfaAuthenticator({ authenticatorType: 'totp', totp: '112233' })
 ```
@@ -152,7 +152,7 @@ MfaAuthenticationClient().verifyTotpMfa()
 
 ```javascript
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 const authenticators = await authenticationClient.mfa.verifyTotpMfa({ authenticatorType: 'totp', totp: '112233' })
 ```
@@ -179,7 +179,7 @@ MfaAuthenticationClient().verifyTotpRecoveryCode()
 
 ```javascript
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 const authenticators = await authenticationClient.mfa.verifyTotpRecoveryCode({ authenticatorType: 'totp', totp: '112233' })
 ```

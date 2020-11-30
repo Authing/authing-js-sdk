@@ -111,7 +111,7 @@ ${examples.map(x => x.value.split('\\`\\`\\`').join('```'))}
   fs.copyFileSync(source, target)
 }
 
-
+/*
 // python
 for (let file of files) {
 
@@ -517,3 +517,4 @@ ${example ? example : ""}
   const target = `../docs/docs/sdk/sdk-for-php/${module}/${filename.replace('.ts', '')}.md`
   fs.writeFileSync(target, docs.join('\n'))
 }
+*/

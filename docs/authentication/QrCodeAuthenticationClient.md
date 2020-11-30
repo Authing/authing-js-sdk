@@ -10,7 +10,7 @@
 ```javascript
 import { AuthenticationClient } from "authing-js-sdk"
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 authenticationClient.wxqrcode.startScanning() # 开始扫码登录
 ```
@@ -20,7 +20,7 @@ authenticationClient.wxqrcode.startScanning() # 开始扫码登录
 ```javascript
 import { AuthenticationClient } from "authing-js-sdk"
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 authenticationClient.qrcode.startScanning() # 开始扫码登录
 ```
@@ -103,7 +103,7 @@ QrCodeAuthenticationClient().geneCode()
 
 ```javascript
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 const { url, random } = await authenticationClient.wxqrcode.geneCode()
 
@@ -133,7 +133,7 @@ QrCodeAuthenticationClient().checkStatus(random)
 
 ```javascript
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 const { random, status, ticket, userInfo } = await authenticationClient.wxqrcode.checkStatus('RANDOM')
 # status: 二维码状态: 0 - 未使用, 1 - 已扫码, 2 - 已授权, 3 - 取消授权, -1 - 已过期
@@ -163,7 +163,7 @@ QrCodeAuthenticationClient().exchangeUserInfo(ticket)
 
 ```javascript
 const authenticationClient = new AuthenticationClient({
-   userPoolId: process.env.AUTHING_USERPOOL_ID,
+   appId: "YOUR_APP_ID",
 })
 const user = await authenticationClient.wxqrcode.exchangeUserInfo('TICKET')
 # user: 完整的用户信息，其中 user.token 为用户的登录凭证。
