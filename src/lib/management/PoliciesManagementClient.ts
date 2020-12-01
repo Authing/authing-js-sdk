@@ -20,6 +20,7 @@ import {
   addPolicyAssignments,
   removePolicyAssignments
 } from '../graphqlapi';
+import { DeepPartial } from '../../types/index';
 
 /**
  * @class PoliciesManagementClient 管理策略

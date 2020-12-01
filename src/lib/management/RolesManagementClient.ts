@@ -23,6 +23,7 @@ import {
   addPolicyAssignments,
   removePolicyAssignments
 } from '../graphqlapi';
+import { DeepPartial } from '../../types/index';
 
 /**
  * @class RolesManagementClient 管理角色

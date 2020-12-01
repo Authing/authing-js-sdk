@@ -17,6 +17,7 @@ import {
   PaginatedGroups,
   PaginatedUsers
 } from '../../types/graphql.v2';
+import { DeepPartial } from '../../types/index';
 
 /**
  * @class GroupsManagementClient 管理分组

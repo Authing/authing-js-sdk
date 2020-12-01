@@ -20,6 +20,7 @@ import {
 } from '../graphqlapi';
 import { CommonMessage, Org, PaginatedUsers } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
+import { DeepPartial } from '../../types/index';
 
 /**
  * @class OrgManagementClient 管理组织机构

@@ -30,6 +30,7 @@ import {
   PaginatedRoles
 } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
+import { DeepPartial } from '../../types/index';
 
 /**
  * @name UsersManagementClient
