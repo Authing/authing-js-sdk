@@ -153,7 +153,9 @@ export const serialize = function(obj: any) {
   return str.join('&');
 };
 
-export const objectToQueryString = (queryParameters: any) => {
+export const objectToQueryString = (queryParameters: {
+  [x: string]: string;
+}) => {
   return queryParameters
     ? Object.entries(queryParameters).reduce((queryString, [key, val]) => {
         const symbol = queryString.length === 0 ? '?' : '&';

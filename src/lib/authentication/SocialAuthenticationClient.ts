@@ -101,7 +101,7 @@ export class SocialAuthenticationClient {
     options = options || {};
     const { position, popup = true, onSuccess, onError } = options;
     const query = {
-      from_guard: 1,
+      from_guard: '1',
       userpool_id: this.options.userPoolId,
       app_id: this.options.appId
     };
