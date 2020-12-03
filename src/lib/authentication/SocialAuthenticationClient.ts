@@ -100,7 +100,7 @@ export class SocialAuthenticationClient {
   ) {
     options = options || {};
     const { position, popup = true, onSuccess, onError } = options;
-    const url = `${this.options.host}/connections/social/${provider}/${this.options.userPoolId}?from_guard=1`;
+    const url = `${this.options.host}/connections/social/${provider}?from_guard=1&userpool_id=${this.options.userPoolId}&app_id=${this.options.appId}`;
     const onMessage = (e: MessageEvent) => {
       let { code, message, data: userInfo, event } = e.data;
       event = event || {};
