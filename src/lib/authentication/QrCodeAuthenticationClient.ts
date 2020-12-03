@@ -60,6 +60,7 @@ export class QrCodeAuthenticationClient {
    *
    * @param {string} domId DOM 元素的 ID。
    * @param {Object} options
+   * @param {boolean} options.autoExchangeUserInfo 是否自定义使用 ticket 换取用户信息
    * @param {number} options.interval 间隔时间，单位为毫秒，默认为 800 毫秒
    * @param {Function} options.onStart 开始轮询的事件回调函数, 第一个参数为 setInterval 返回的计时器，可以用 clearInterval 取消此计时器
    * @param {Function} options.onResult 获取到二维码最新状态事件回调函数，第一个参数为的类型为 QRCodeStatus。
@@ -106,6 +107,7 @@ export class QrCodeAuthenticationClient {
   async startScanning(
     domId: string,
     options?: {
+      autoExchangeUserInfo?: boolean;
       size?: {
         height: number;
         width: number;
@@ -139,6 +141,7 @@ export class QrCodeAuthenticationClient {
   ) {
     options = options || {};
     const {
+      autoExchangeUserInfo = false,
       size = {
         height: 240,
         width: 240
@@ -390,14 +393,22 @@ export class QrCodeAuthenticationClient {
         }
 
         // 需要对用户的 onSuccess, onScanned, onExpired, onCancel 进行加工从而在页面上展示相关提示
-        let decoratedOnSuccess = function(
-          userInfo: QRCodeUserInfo,
-          ticket: string
-        ) {
+        let decoratedOnSuccess = (userInfo: QRCodeUserInfo, ticket: string) => {
           const shadow = genShadow(succeed, null, '__authing_success_tip');
           nodeWrapper.appendChild(shadow);
           if (onSuccess) {
-            onSuccess(userInfo, ticket);
+            if (autoExchangeUserInfo) {
+              const { token } = userInfo;
+              if (!token) {
+                // 轮询接口不会返回完整用户信息，需要使用 ticket 换取
+                this.exchangeUserInfo(ticket).then(userInfo => {
+                  // @ts-ignore
+                  onSuccess(userInfo, ticket);
+                });
+              }
+            } else {
+              onSuccess(userInfo, ticket);
+            }
           }
         };
 
