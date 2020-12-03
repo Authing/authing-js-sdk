@@ -403,6 +403,8 @@ export class QrCodeAuthenticationClient {
                 // 轮询接口不会返回完整用户信息，需要使用 ticket 换取
                 this.exchangeUserInfo(ticket).then(userInfo => {
                   // @ts-ignore
+                  this.tokenProvider.setUser(userInfo);
+                  // @ts-ignore
                   onSuccess(userInfo, ticket);
                 });
               }
