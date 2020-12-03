@@ -101,11 +101,11 @@ export class SocialAuthenticationClient {
     options = options || {};
     const { position, popup = true, onSuccess, onError } = options;
     const url = `${this.options.host}/connections/social/${provider}/${this.options.userPoolId}?from_guard=1`;
-    const onMessage = (event: MessageEvent) => {
-      let { code, message, data } = event.data;
-
-      // 非 Authing 的事件
-      if (code === undefined) {
+    const onMessage = (e: MessageEvent) => {
+      let { code, message, data: userInfo, event } = e.data;
+      event = event || {};
+      const { source, eventType } = event;
+      if (source !== 'authing' || eventType !== 'socialLogin') {
         return;
       }
 
@@ -117,7 +117,9 @@ export class SocialAuthenticationClient {
         // do nothing...
       }
       if (code === 200) {
-        onSuccess && onSuccess(data);
+        // 保存用户的 token
+        this.tokenProvider.setUser(userInfo);
+        onSuccess && onSuccess(userInfo);
       } else {
         onError && onError(code, message);
       }
