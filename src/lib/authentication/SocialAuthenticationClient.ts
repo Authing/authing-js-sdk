@@ -1,7 +1,7 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import { AuthenticationClientOptions } from './types';
 import { HttpClient } from '../common/HttpClient';
-import { popupCenter } from '../utils';
+import { objectToQueryString, popupCenter } from '../utils';
 import { User } from '../../types/graphql.v2';
 
 /**
@@ -100,7 +100,14 @@ export class SocialAuthenticationClient {
   ) {
     options = options || {};
     const { position, popup = true, onSuccess, onError } = options;
-    const url = `${this.options.host}/connections/social/${provider}?from_guard=1&userpool_id=${this.options.userPoolId}&app_id=${this.options.appId}`;
+    const query = {
+      from_guard: 1,
+      userpool_id: this.options.userPoolId,
+      app_id: this.options.appId
+    };
+    const url = `${
+      this.options.host
+    }/connections/social/${provider}${objectToQueryString(query)}`;
     const onMessage = (e: MessageEvent) => {
       let { code, message, data: userInfo, event } = e.data;
       event = event || {};
