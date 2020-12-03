@@ -663,4 +663,8 @@ export class QrCodeAuthenticationClient {
     }, interval);
     return timer;
   }
+
+  async stopPolling(timer: any) {
+    clearInterval(timer);
+  }
 }
