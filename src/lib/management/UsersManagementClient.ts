@@ -31,6 +31,7 @@ import {
 } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
 import { DeepPartial } from '../../types/index';
+import { PublicKeyManager } from '../common/PublicKeyManager';
 
 /**
  * @name UsersManagementClient
@@ -63,17 +64,43 @@ export class UsersManagementClient {
   graphqlClient: GraphqlClient;
   httpClient: HttpClient;
   tokenProvider: ManagementTokenProvider;
+  publickKeyManager: PublicKeyManager;
 
   constructor(
     options: ManagementClientOptions,
     graphqlClient: GraphqlClient,
     httpClient: HttpClient,
-    tokenProvider: ManagementTokenProvider
+    tokenProvider: ManagementTokenProvider,
+    publickKeyManager: PublicKeyManager
   ) {
     this.options = options;
     this.graphqlClient = graphqlClient;
     this.tokenProvider = tokenProvider;
     this.httpClient = httpClient;
+    this.publickKeyManager = publickKeyManager;
+  }
+
+  /**
+   * @description 密码加密公钥
+   */
+  private publicKey: string;
+
+  /**
+   * @description 获取密码加密公钥
+   */
+  private async getPublicKey() {
+    if (this.publicKey) {
+      return this.publicKey;
+    }
+
+    const api = `${this.options.host}/api/v2/.well-known`;
+    const data = await this.httpClient.request({
+      method: 'GET',
+      url: api
+    });
+    const { publickKey } = data;
+    this.publicKey = publickKey;
+    return this.publicKey;
   }
 
   /**
@@ -146,7 +173,7 @@ export class UsersManagementClient {
     if (userInfo && userInfo.password) {
       userInfo.password = await this.options.encryptFunction(
         userInfo.password,
-        this.options.encrptionPublicKey
+        await this.getPublicKey()
       );
     }
     const { createUser: user } = await createUser(
@@ -229,7 +256,7 @@ export class UsersManagementClient {
     if (updates && updates.password) {
       updates.password = await this.options.encryptFunction(
         updates.password,
-        this.options.encrptionPublicKey
+        await this.getPublicKey()
       );
     }
     const { updateUser: user } = await updateUser(

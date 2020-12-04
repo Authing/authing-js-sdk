@@ -16,15 +16,10 @@ import { AclManagementClient } from './AclManagementClient';
 import { WhitelistManagementClient } from './WhitelistManagementClient';
 import jwtDecode from 'jwt-decode';
 import { encrypt } from '../utils';
+import { PublicKeyManager } from '../common/PublicKeyManager';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
-  encrptionPublicKey: `-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xKeUgQ+Aoz7TLfAfs9+paePb
-5KIofVthEopwrXFkp8OCeocaTHt9ICjTT2QeJh6cZaDaArfZ873GPUn00eOIZ7Ae
-+TiA2BKHbCvloW3w5Lnqm70iSsUi5Fmu9/2+68GZRH9L7Mlh8cFksCicW2Y2W2uM
-GKl64GDcIq3au+aqJQIDAQAB
------END PUBLIC KEY-----`,
   onError: (code: number, message: string) => {
     throw { code, message };
   },
@@ -41,6 +36,8 @@ export class ManagementClient {
   private graphqlClient: GraphqlClient;
   private httpClient: HttpClient;
   private tokenProvider: ManagementTokenProvider;
+  private publicKeyManager: PublicKeyManager;
+
   users: UsersManagementClient;
   userpool: UserPoolManagementClient;
   acl: AclManagementClient;
@@ -79,11 +76,16 @@ export class ManagementClient {
       this.options,
       this.tokenProvider
     );
+    this.publicKeyManager = new PublicKeyManager(
+      this.options.host,
+      this.httpClient
+    );
     this.users = new UsersManagementClient(
       this.options,
       this.graphqlClient,
       this.httpClient,
-      this.tokenProvider
+      this.tokenProvider,
+      this.publicKeyManager
     );
     this.userpool = new UserPoolManagementClient(
       this.options,
