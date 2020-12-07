@@ -81,29 +81,6 @@ export class UsersManagementClient {
   }
 
   /**
-   * @description 密码加密公钥
-   */
-  private publicKey: string;
-
-  /**
-   * @description 获取密码加密公钥
-   */
-  private async getPublicKey() {
-    if (this.publicKey) {
-      return this.publicKey;
-    }
-
-    const api = `${this.options.host}/api/v2/.well-known`;
-    const data = await this.httpClient.request({
-      method: 'GET',
-      url: api
-    });
-    const { publickKey } = data;
-    this.publicKey = publickKey;
-    return this.publicKey;
-  }
-
-  /**
    * @name create
    * @name_zh 创建用户
    * @description 此接口将以管理员身份创建用户，不需要进行手机号验证码检验等安全检测。
@@ -173,7 +150,7 @@ export class UsersManagementClient {
     if (userInfo && userInfo.password) {
       userInfo.password = await this.options.encryptFunction(
         userInfo.password,
-        await this.getPublicKey()
+        await this.publickKeyManager.getPublicKey()
       );
     }
     const { createUser: user } = await createUser(
@@ -256,7 +233,7 @@ export class UsersManagementClient {
     if (updates && updates.password) {
       updates.password = await this.options.encryptFunction(
         updates.password,
-        await this.getPublicKey()
+        await this.publickKeyManager.getPublicKey()
       );
     }
     const { updateUser: user } = await updateUser(
