@@ -18,7 +18,8 @@ import {
   deletePolicies,
   policyAssignments,
   addPolicyAssignments,
-  removePolicyAssignments
+  removePolicyAssignments,
+  enablePolicyAssignment
 } from '../graphqlapi';
 import { DeepPartial } from '../../types/index';
 
@@ -387,5 +388,83 @@ export class PoliciesManagementClient {
       }
     );
     return res.removePolicyAssignments;
+  }
+
+  /**
+   * @name enableAssignment
+   * @name_zh 设置策略授权状态为开启
+   * @description 开启授权，处于未开启状态的策略授权不会生效
+   *
+   * @param {string} policy 策略 code
+   * @param {PolicyAssignmentTargetType} targetType 可选值为 USER (用户), ROLE (角色), GROUP（分组）, ORG（组织机构）
+   * @param {string} targetIdentifier 用户 id 、角色 code、分组 code、组织机构节点 ID
+   *
+   * @example
+   *
+   * import { PolicyAssignmentTargetType } from "authing-js-sdk"
+   *
+   * await managementClient.policies.enableAssignment(
+   *   "code1",
+   *   PolicyAssignmentTargetType.User,
+   *   'USERID'
+   * );
+   *
+   * @returns {Promise<CommonMessage>}
+   * @memberof PoliciesManagementClient
+   */
+  async enableAssignment(
+    policy: string,
+    targetType: PolicyAssignmentTargetType,
+    targetIdentifier: string
+  ): Promise<CommonMessage> {
+    const res = await enablePolicyAssignment(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        policy,
+        targetType,
+        targetIdentifier
+      }
+    );
+    return res.enablePolicyAssignment;
+  }
+
+  /**
+   * @name disableAssignment
+   * @name_zh 设置策略授权状态为关闭
+   * @description 关闭策略授权，处于未开启状态的策略授权不会生效
+   *
+   * @param {string} policy 策略 code
+   * @param {PolicyAssignmentTargetType} targetType 可选值为 USER (用户), ROLE (角色), GROUP（分组）, ORG（组织机构）
+   * @param {string} targetIdentifier 用户 id 、角色 code、分组 code、组织机构节点 ID
+   *
+   * @example
+   *
+   * import { PolicyAssignmentTargetType } from "authing-js-sdk"
+   *
+   * await managementClient.policies.disableAssignment(
+   *   "code1",
+   *   PolicyAssignmentTargetType.User,
+   *   'USERID'
+   * );
+   *
+   * @returns {Promise<CommonMessage>}
+   * @memberof PoliciesManagementClient
+   */
+  async disableAssignment(
+    policy: string,
+    targetType: PolicyAssignmentTargetType,
+    targetIdentifier: string
+  ): Promise<CommonMessage> {
+    const res = await enablePolicyAssignment(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        policy,
+        targetType,
+        targetIdentifier
+      }
+    );
+    return res.enablePolicyAssignment;
   }
 }

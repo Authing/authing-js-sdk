@@ -258,7 +258,13 @@ import {
   AccessTokenDocument,
   RefreshAccessTokenVariables,
   RefreshAccessTokenResponse,
-  AccessTokenResponse
+  AccessTokenResponse,
+  EnablePolicyAssignmentVariables,
+  EnablePolicyAssignmentResponse,
+  EnablePolicyAssignmentDocument,
+  DisbalePolicyAssignmentVariables,
+  DisbalePolicyAssignmentResponse,
+  DisbalePolicyAssignmentDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1275,6 +1281,34 @@ export const removePolicyAssignments = async (
   variables: RemovePolicyAssignmentsVariables
 ): Promise<RemovePolicyAssignmentsResponse> => {
   const query = RemovePolicyAssignmentsDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const enablePolicyAssignment = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: EnablePolicyAssignmentVariables
+): Promise<EnablePolicyAssignmentResponse> => {
+  const query = EnablePolicyAssignmentDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const disablePolicyAssignment = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: DisbalePolicyAssignmentVariables
+): Promise<DisbalePolicyAssignmentResponse> => {
+  const query = DisbalePolicyAssignmentDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
