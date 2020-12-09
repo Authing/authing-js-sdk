@@ -19,7 +19,8 @@ import {
   policyAssignments,
   addPolicyAssignments,
   removePolicyAssignments,
-  enablePolicyAssignment
+  enablePolicyAssignment,
+  disablePolicyAssignment
 } from '../graphqlapi';
 import { DeepPartial } from '../../types/index';
 
@@ -456,7 +457,7 @@ export class PoliciesManagementClient {
     targetType: PolicyAssignmentTargetType,
     targetIdentifier: string
   ): Promise<CommonMessage> {
-    const res = await enablePolicyAssignment(
+    const res = await disablePolicyAssignment(
       this.graphqlClient,
       this.tokenProvider,
       {
@@ -465,6 +466,6 @@ export class PoliciesManagementClient {
         targetIdentifier
       }
     );
-    return res.enablePolicyAssignment;
+    return res.disbalePolicyAssignment;
   }
 }
