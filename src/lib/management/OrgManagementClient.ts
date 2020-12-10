@@ -16,7 +16,8 @@ import {
   moveNode,
   removeMembers,
   isRootNode,
-  rootNode
+  rootNode,
+  nodeById
 } from '../graphqlapi';
 import { CommonMessage, Org, PaginatedUsers } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
@@ -189,6 +190,33 @@ export class OrgManagementClient {
       }
     );
     return this.buildTree(org);
+  }
+
+  /**
+   * @name getNodeById
+   * @name_zh 获取某个节点详情
+   * @description 获取某个节点详情
+   *
+   * @param {string} nodeId 节点 ID
+   *
+   * @example
+   *
+   * const node = await managementClient.org.getNodeById('NODE_ID');
+   *
+   * // newOrg.nodes.length 现在为 2
+   *
+   * @returns {Promise<Node>}
+   * @memberof OrgManagementClient
+   */
+  async getNodeById(nodeId: string) {
+    const { nodeById: node } = await nodeById(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        id: nodeId
+      }
+    );
+    return node;
   }
 
   /**

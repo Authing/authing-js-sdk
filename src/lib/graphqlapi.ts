@@ -264,7 +264,10 @@ import {
   EnablePolicyAssignmentDocument,
   DisbalePolicyAssignmentVariables,
   DisbalePolicyAssignmentResponse,
-  DisbalePolicyAssignmentDocument
+  DisbalePolicyAssignmentDocument,
+  NodeByIdVariables,
+  NodeByIdResponse,
+  NodeByIdDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -833,6 +836,20 @@ export const deleteNode = async (
   variables: DeleteNodeVariables
 ): Promise<DeleteNodeResponse> => {
   const query = DeleteNodeDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const nodeById = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: NodeByIdVariables
+): Promise<NodeByIdResponse> => {
+  const query = NodeByIdDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
