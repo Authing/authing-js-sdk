@@ -305,7 +305,7 @@ export class RolesManagementClient {
       this.graphqlClient,
       this.tokenProvider,
       {
-        targetType: PolicyAssignmentTargetType.User,
+        targetType: PolicyAssignmentTargetType.Role,
         targetIdentifier: code,
         page,
         limit
