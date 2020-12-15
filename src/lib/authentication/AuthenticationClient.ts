@@ -205,7 +205,7 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
-      params?: Array<{ key: string; value: string }>;
+      params?: Array<{ key: string; value: any }>;
     }
   ): Promise<User> {
     options = options || {};
@@ -285,7 +285,7 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
-      params?: Array<{ key: string; value: string }>;
+      params?: Array<{ key: string; value: any }>;
     }
   ): Promise<User> {
     options = options || {};
@@ -367,7 +367,7 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
-      params?: Array<{ key: string; value: string }>;
+      params?: Array<{ key: string; value: any }>;
     }
   ): Promise<User> {
     options = options || {};
@@ -497,7 +497,7 @@ export class AuthenticationClient {
       autoRegister?: boolean;
       captchaCode?: string;
       clientIp?: string;
-      params?: Array<{ key: string; value: string }>;
+      params?: Array<{ key: string; value: any }>;
     }
   ): Promise<User> {
     options = options || {};
@@ -568,7 +568,7 @@ export class AuthenticationClient {
       autoRegister?: boolean;
       captchaCode?: string;
       clientIp?: string;
-      params?: Array<{ key: string; value: string }>;
+      params?: Array<{ key: string; value: any }>;
     }
   ): Promise<User> {
     options = options || {};
@@ -625,7 +625,7 @@ export class AuthenticationClient {
     code: string,
     options?: {
       clientIp?: string;
-      params?: Array<{ key: string; value: string }>;
+      params?: Array<{ key: string; value: any }>;
     }
   ): Promise<User> {
     options = options || {};
@@ -681,7 +681,7 @@ export class AuthenticationClient {
       captchaCode?: string;
       autoRegister?: boolean;
       clientIp?: string;
-      params?: Array<{ key: string; value: string }>;
+      params?: Array<{ key: string; value: any }>;
     }
   ): Promise<User> {
     options = options || {};
