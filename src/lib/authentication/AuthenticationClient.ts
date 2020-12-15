@@ -205,15 +205,25 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
+      params?: Array<{ key: string; value: string }>;
     }
   ): Promise<User> {
     options = options || {};
     profile = profile || {};
-    const { forceLogin = false, generateToken = false, clientIp } = options;
+    const {
+      forceLogin = false,
+      generateToken = false,
+      clientIp,
+      params
+    } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
+    let extraParams = null;
+    if (params) {
+      extraParams = JSON.stringify(params);
+    }
     const { registerByEmail: user } = await registerByEmail(
       this.graphqlClient,
       this.tokenProvider,
@@ -224,7 +234,8 @@ export class AuthenticationClient {
           profile,
           forceLogin,
           generateToken,
-          clientIp
+          clientIp,
+          params: extraParams
         }
       }
     );
@@ -274,15 +285,25 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
+      params?: Array<{ key: string; value: string }>;
     }
   ): Promise<User> {
     options = options || {};
     profile = profile || {};
-    const { forceLogin = false, generateToken = false, clientIp } = options;
+    const {
+      forceLogin = false,
+      generateToken = false,
+      clientIp,
+      params
+    } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
+    let extraParams = null;
+    if (params) {
+      extraParams = JSON.stringify(params);
+    }
     const { registerByUsername: user } = await registerByUsername(
       this.graphqlClient,
       this.tokenProvider,
@@ -293,7 +314,8 @@ export class AuthenticationClient {
           profile,
           forceLogin,
           generateToken,
-          clientIp
+          clientIp,
+          params: extraParams
         }
       }
     );
@@ -345,16 +367,26 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
+      params?: Array<{ key: string; value: string }>;
     }
   ): Promise<User> {
     options = options || {};
     profile = profile || {};
-    const { forceLogin = false, generateToken = false, clientIp } = options;
+    const {
+      forceLogin = false,
+      generateToken = false,
+      clientIp,
+      params
+    } = options;
     if (password) {
       password = await this.options.encryptFunction(
         password,
         await this.publicKeyManager.getPublicKey()
       );
+    }
+    let extraParams = null;
+    if (params) {
+      extraParams = JSON.stringify(params);
     }
     const { registerByPhoneCode: user } = await registerByPhoneCode(
       this.graphqlClient,
@@ -367,7 +399,8 @@ export class AuthenticationClient {
           profile,
           forceLogin,
           generateToken,
-          clientIp
+          clientIp,
+          params: extraParams
         }
       }
     );
@@ -464,19 +497,31 @@ export class AuthenticationClient {
       autoRegister?: boolean;
       captchaCode?: string;
       clientIp?: string;
+      params?: Array<{ key: string; value: string }>;
     }
   ): Promise<User> {
     options = options || {};
-    const { autoRegister = false, captchaCode, clientIp } = options;
+    const { autoRegister = false, captchaCode, clientIp, params } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
+    let extraParams = null;
+    if (params) {
+      extraParams = JSON.stringify(params);
+    }
     const { loginByEmail: user } = await loginByEmail(
       this.graphqlClient,
       this.tokenProvider,
       {
-        input: { email, password, autoRegister, captchaCode, clientIp }
+        input: {
+          email,
+          password,
+          autoRegister,
+          captchaCode,
+          clientIp,
+          params: extraParams
+        }
       }
     );
     this.setCurrentUser(user);
@@ -523,19 +568,31 @@ export class AuthenticationClient {
       autoRegister?: boolean;
       captchaCode?: string;
       clientIp?: string;
+      params?: Array<{ key: string; value: string }>;
     }
   ): Promise<User> {
     options = options || {};
-    const { autoRegister = false, captchaCode, clientIp } = options;
+    const { autoRegister = false, captchaCode, clientIp, params } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
+    let extraParams = null;
+    if (params) {
+      extraParams = JSON.stringify(params);
+    }
     const { loginByUsername: user } = await loginByUsername(
       this.graphqlClient,
       this.tokenProvider,
       {
-        input: { username, password, autoRegister, captchaCode, clientIp }
+        input: {
+          username,
+          password,
+          autoRegister,
+          captchaCode,
+          clientIp,
+          params: extraParams
+        }
       }
     );
     this.setCurrentUser(user);
@@ -568,15 +625,20 @@ export class AuthenticationClient {
     code: string,
     options?: {
       clientIp?: string;
+      params?: Array<{ key: string; value: string }>;
     }
   ): Promise<User> {
     options = options || {};
-    const { clientIp } = options;
+    const { clientIp, params } = options;
+    let extraParams = null;
+    if (params) {
+      extraParams = JSON.stringify(params);
+    }
     const { loginByPhoneCode: user } = await loginByPhoneCode(
       this.graphqlClient,
       this.tokenProvider,
       {
-        input: { phone, code, clientIp }
+        input: { phone, code, clientIp, params: extraParams }
       }
     );
     this.setCurrentUser(user);
@@ -619,19 +681,31 @@ export class AuthenticationClient {
       captchaCode?: string;
       autoRegister?: boolean;
       clientIp?: string;
+      params?: Array<{ key: string; value: string }>;
     }
   ): Promise<User> {
     options = options || {};
-    const { captchaCode, autoRegister = false, clientIp } = options;
+    const { captchaCode, autoRegister = false, clientIp, params } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
+    let extraParams = null;
+    if (params) {
+      extraParams = JSON.stringify(params);
+    }
     const { loginByPhonePassword: user } = await loginByPhonePassword(
       this.graphqlClient,
       this.tokenProvider,
       {
-        input: { phone, password, captchaCode, autoRegister, clientIp }
+        input: {
+          phone,
+          password,
+          captchaCode,
+          autoRegister,
+          clientIp,
+          params: extraParams
+        }
       }
     );
     this.setCurrentUser(user);
