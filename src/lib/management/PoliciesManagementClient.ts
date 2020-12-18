@@ -332,15 +332,20 @@ export class PoliciesManagementClient {
   async addAssignments(
     policies: string[],
     targetType: PolicyAssignmentTargetType,
-    targetIdentifiers: string[]
+    targetIdentifiers: string[],
+    options?: {
+      inheritByChildren?: boolean;
+    }
   ): Promise<CommonMessage> {
+    const { inheritByChildren } = options || {};
     const res = await addPolicyAssignments(
       this.graphqlClient,
       this.tokenProvider,
       {
         policies,
         targetType,
-        targetIdentifiers
+        targetIdentifiers,
+        inheritByChildren
       }
     );
     return res.addPolicyAssignments;
