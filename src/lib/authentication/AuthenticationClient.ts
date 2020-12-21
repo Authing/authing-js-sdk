@@ -31,7 +31,6 @@ import {
   JwtTokenStatus,
   RefreshToken,
   RegisterProfile,
-  UdfDataType,
   UdfTargetType,
   UpdateUserInput,
   User,
@@ -41,7 +40,7 @@ import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { resetPassword, updateUser } from '../graphqlapi';
 import { HttpClient } from '../common/HttpClient';
-import { encrypt } from '../utils';
+import { encrypt, convertUdv } from '../utils';
 import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from '../..';
 import { SocialAuthenticationClient } from './SocialAuthenticationClient';
@@ -1169,24 +1168,6 @@ export class AuthenticationClient {
     this.tokenProvider.clearUser();
   }
 
-  private convertUdv(
-    data: Array<{ key: string; dataType: UdfDataType; value: any }>
-  ) {
-    for (const item of data) {
-      const { dataType, value } = item;
-      if (dataType === UdfDataType.Number) {
-        item.value = JSON.parse(value);
-      } else if (dataType === UdfDataType.Boolean) {
-        item.value = JSON.parse(value);
-      } else if (dataType === UdfDataType.Datetime) {
-        item.value = new Date(parseInt(value));
-      } else if (dataType === UdfDataType.Object) {
-        item.value = JSON.parse(value);
-      }
-    }
-    return data;
-  }
-
   /**
    * @name listUdv
    * @name_zh 获取当前用户的自定义数据列表
@@ -1205,7 +1186,7 @@ export class AuthenticationClient {
       targetType: UdfTargetType.User,
       targetId: userId
     });
-    return this.convertUdv(list);
+    return convertUdv(list);
   }
 
   /**
@@ -1236,7 +1217,7 @@ export class AuthenticationClient {
         value
       }
     );
-    return this.convertUdv(list);
+    return convertUdv(list);
   }
 
   /**
@@ -1265,7 +1246,7 @@ export class AuthenticationClient {
         key
       }
     );
-    return this.convertUdv(list);
+    return convertUdv(list);
   }
 
   /**

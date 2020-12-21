@@ -668,6 +668,7 @@ export type UserDefinedData = {
   key: Scalars['String'];
   dataType: UdfDataType;
   value: Scalars['String'];
+  label?: Maybe<Scalars['String']>;
 };
 
 export enum UdfDataType {
@@ -2265,8 +2266,19 @@ export type SetUdvVariables = Exact<{
   value: Scalars['String'];
 }>;
 
+export type SetUdvBatchVariables = Exact<{
+  targetType: UdfTargetType;
+  targetId: Scalars['String'];
+  udvList: {
+    key: string
+    value: string
+  }[]
+}>;
+
 
 export type SetUdvResponse = { setUdv?: Maybe<Array<{ key: string, dataType: UdfDataType, value: string }>> };
+
+export type SetUdvBatchResponse = { setUdvBatch?: Maybe<Array<{ key: string, dataType: UdfDataType, value: string }>> };
 
 export type UnbindEmailVariables = Exact<{ [key: string]: never; }>;
 
@@ -3990,6 +4002,15 @@ export const SetUdvDocument = `
     key
     dataType
     value
+  }
+}
+    `;
+export const SetUdvBatchDocument = `
+    mutation setUdvBatch($targetType: UDFTargetType!, $targetId: String!, $udvList: [UserDefinedData!]) {
+  setUdv(targetType: $targetType, targetId: $targetId, key: $key, udvList: $udvList) {
+    key
+    dataType
+    udvList
   }
 }
     `;
