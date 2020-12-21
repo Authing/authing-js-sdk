@@ -6194,7 +6194,7 @@ export const SetUdvDocument = `
     `;
 export const SetUdvBatchDocument = `
     mutation setUdvBatch($targetType: UDFTargetType!, $targetId: String!, $udvList: [UserDefinedDataInput!]) {
-  setUdv(targetType: $targetType, targetId: $targetId, key: $key, udvList: $udvList) {
+  setUdvBatch(targetType: $targetType, targetId: $targetId, key: $key, udvList: $udvList) {
     key
     dataType
     udvList
