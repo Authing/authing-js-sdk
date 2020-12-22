@@ -879,6 +879,7 @@ export type Mutation = {
   removeUdf?: Maybe<CommonMessage>;
   setUdv?: Maybe<Array<UserDefinedData>>;
   removeUdv?: Maybe<Array<UserDefinedData>>;
+  setUdvBatch?: Maybe<Array<UserDefinedData>>;
   refreshToken?: Maybe<RefreshToken>;
   /** 创建用户。此接口需要管理员权限，普通用户注册请使用 **register** 接口。 */
   createUser: User;
@@ -1196,6 +1197,12 @@ export type MutationRemoveUdvArgs = {
   key: Scalars['String'];
 };
 
+export type MutationSetUdvBatchArgs = {
+  targetType: UdfTargetType;
+  targetId: Scalars['String'];
+  udvList?: Maybe<Array<UserDefinedDataInput>>;
+};
+
 export type MutationRefreshTokenArgs = {
   id?: Maybe<Scalars['String']>;
 };
@@ -1468,6 +1475,11 @@ export type RegisterByPhoneCodeInput = {
   generateToken?: Maybe<Scalars['Boolean']>;
   clientIp?: Maybe<Scalars['String']>;
   params?: Maybe<Scalars['String']>;
+};
+
+export type UserDefinedDataInput = {
+  key: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
 };
 
 export type RefreshToken = {
@@ -2989,7 +3001,12 @@ export type RemoveUdvVariables = Exact<{
 
 export type RemoveUdvResponse = {
   removeUdv?: Maybe<
-    Array<{ key: string; dataType: UdfDataType; value: string }>
+    Array<{
+      key: string;
+      dataType: UdfDataType;
+      value: string;
+      label?: Maybe<string>;
+    }>
   >;
 };
 
@@ -3074,22 +3091,31 @@ export type SetUdvVariables = Exact<{
   value: Scalars['String'];
 }>;
 
+export type SetUdvResponse = {
+  setUdv?: Maybe<
+    Array<{
+      key: string;
+      dataType: UdfDataType;
+      value: string;
+      label?: Maybe<string>;
+    }>
+  >;
+};
+
 export type SetUdvBatchVariables = Exact<{
   targetType: UdfTargetType;
   targetId: Scalars['String'];
-  udvList: {
-    key: string;
-    value: string;
-  }[];
+  udvList?: Maybe<Array<UserDefinedDataInput>>;
 }>;
-
-export type SetUdvResponse = {
-  setUdv?: Maybe<Array<{ key: string; dataType: UdfDataType; value: string }>>;
-};
 
 export type SetUdvBatchResponse = {
   setUdvBatch?: Maybe<
-    Array<{ key: string; dataType: UdfDataType; value: string }>
+    Array<{
+      key: string;
+      dataType: UdfDataType;
+      value: string;
+      label?: Maybe<string>;
+    }>
   >;
 };
 
@@ -4665,7 +4691,12 @@ export type UdvVariables = Exact<{
 }>;
 
 export type UdvResponse = {
-  udv: Array<{ key: string; dataType: UdfDataType; value: string }>;
+  udv: Array<{
+    key: string;
+    dataType: UdfDataType;
+    value: string;
+    label?: Maybe<string>;
+  }>;
 };
 
 export type UserVariables = Exact<{
@@ -6128,6 +6159,7 @@ export const RemoveUdvDocument = `
     key
     dataType
     value
+    label
   }
 }
     `;
@@ -6189,6 +6221,7 @@ export const SetUdvDocument = `
     key
     dataType
     value
+    label
   }
 }
     `;
@@ -7581,6 +7614,7 @@ export const UdvDocument = `
     key
     dataType
     value
+    label
   }
 }
     `;
