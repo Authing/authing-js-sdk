@@ -147,9 +147,7 @@ export class AuthenticationClient {
       throw new Error('请先登录！');
     }
     const decoded: DecodedAccessToken = jwtDecode(token);
-    const {
-      data: { id: userId }
-    } = decoded;
+    const userId = decoded.sub || decoded.data?.id;
     if (!userId) {
       throw new Error('不合法的 accessToken');
     }

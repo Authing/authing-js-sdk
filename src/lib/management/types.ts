@@ -32,11 +32,13 @@ export interface ManagementClientOptions {
  * Decode 过后的用户池 accessToken
  */
 export interface DecodedAccessToken {
+  /** 用户 ID */
+  sub: string;
   /** 签发时间 **/
   iat: number;
   /** 过期时间 **/
   exp: number;
-  data: {
+  data?: {
     /** 用户池管理员邮箱 **/
     email: string;
     /** 用户池管理员用户 ID **/
