@@ -267,7 +267,10 @@ import {
   DisbalePolicyAssignmentDocument,
   NodeByIdVariables,
   NodeByIdResponse,
-  NodeByIdDocument
+  NodeByIdDocument,
+  SetUdvBatchDocument,
+  SetUdvBatchVariables,
+  SetUdvBatchResponse
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1088,6 +1091,20 @@ export const setUdv = async (
   variables: SetUdvVariables
 ): Promise<SetUdvResponse> => {
   const query = SetUdvDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const setUdvBatch = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: SetUdvBatchVariables
+): Promise<SetUdvBatchResponse> => {
+  const query = SetUdvBatchDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,

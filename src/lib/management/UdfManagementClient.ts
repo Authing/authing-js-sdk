@@ -5,9 +5,11 @@ import {
   CommonMessage,
   UdfDataType,
   UdfTargetType,
-  UserDefinedField
+  UserDefinedField,
+  UserDefinedData
 } from '../../types/graphql.v2';
-import { setUdf, removeUdf, udf } from '../graphqlapi';
+import { setUdf, removeUdf, udf, udv, setUdvBatch } from '../graphqlapi';
+import { convertUdv } from '../utils';
 
 /**
  * @name UdfManagementClient
@@ -155,5 +157,72 @@ export class UdfManagementClient {
       targetType
     });
     return list;
+  }
+
+  /**
+   * @name listUdv
+   * @name_zh 获取某一实体的自定义字段数据列表
+   * @description 获取某一实体的自定义字段数据列表
+   *
+   *
+   * @param {UdfTargetType} targetType 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
+   * @param {string} targetId 自定义字段目标 id，如用户 ID
+   * @example
+   *
+   * udfManagementClient.listUdv('USER', 'userId')
+   *
+   * @returns {Promise<Array<UserDefinedData>>}
+   * @memberof UdfManagementClient
+   */
+  async listUdv(
+    targetType: UdfTargetType,
+    targetId: string
+  ): Promise<Array<UserDefinedData>> {
+    const { udv: list } = await udv(this.graphqlClient, this.tokenProvider, {
+      targetType,
+      targetId
+    });
+    return convertUdv(list);
+  }
+
+  /**
+   * @name setUdvBatch
+   * @name_zh 批量添加自定义数据
+   * @description 批量添加自定义数据
+   *
+   * @param {UdfTargetType} targetType 自定义字段目标类型， USER 表示用户、ROLE 表示角色。
+   * @param {string} targetId 自定义字段目标 id，如用户 ID
+   * @param {Object[]} [udvList]
+   * @param {boolean} [udvList.key] 自定义字段的 key
+   * @param {string} [udvList.value] 自定义字段的值
+   *
+   * @example
+   *
+   * udfManagementClient.setUdv('USER', 'userId', [{key: 'school', 'value': '清华大学'}])
+   *
+   * @returns {Promise<Array<UserDefinedData>>}
+   * @memberof UdfManagementClient
+   */
+  async setUdvBatch(
+    targetType: UdfTargetType,
+    targetId: string,
+    udvList: {
+      key: string;
+      value: any;
+    }[]
+  ): Promise<Array<UserDefinedData>> {
+    const { setUdvBatch: list } = await setUdvBatch(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        targetType,
+        targetId,
+        udvList: udvList.map(item => ({
+          key: item.key,
+          value: JSON.stringify(item.value)
+        }))
+      }
+    );
+    return convertUdv(list);
   }
 }

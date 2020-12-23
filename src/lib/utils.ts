@@ -1,3 +1,5 @@
+import { UdfDataType } from '../types/graphql.v2';
+
 export const encrypt = async (plainText: string, publicKey: string) => {
   // 动态引入，为了在 rn 小程序等环境下构建的时候不会报错
   const crypto = require('crypto');
@@ -163,4 +165,22 @@ export const objectToQueryString = (queryParameters: {
         return queryString;
       }, '')
     : '';
+};
+
+export const convertUdv = (
+  data: Array<{ key: string; dataType: UdfDataType; value: any }>
+) => {
+  for (const item of data) {
+    const { dataType, value } = item;
+    if (dataType === UdfDataType.Number) {
+      item.value = JSON.parse(value);
+    } else if (dataType === UdfDataType.Boolean) {
+      item.value = JSON.parse(value);
+    } else if (dataType === UdfDataType.Datetime) {
+      item.value = new Date(parseInt(value));
+    } else if (dataType === UdfDataType.Object) {
+      item.value = JSON.parse(value);
+    }
+  }
+  return data;
 };
