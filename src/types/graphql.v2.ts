@@ -875,6 +875,8 @@ export type Mutation = {
   assignRole?: Maybe<CommonMessage>;
   /** 撤销角色 */
   revokeRole?: Maybe<CommonMessage>;
+  /** 使用子账号登录 */
+  loginBySubAccount: User;
   setUdf: UserDefinedField;
   removeUdf?: Maybe<CommonMessage>;
   setUdv?: Maybe<Array<UserDefinedData>>;
@@ -1169,6 +1171,13 @@ export type MutationRevokeRoleArgs = {
   userIds?: Maybe<Array<Scalars['String']>>;
   groupCodes?: Maybe<Array<Scalars['String']>>;
   nodeCodes?: Maybe<Array<Scalars['String']>>;
+};
+
+export type MutationLoginBySubAccountArgs = {
+  account: Scalars['String'];
+  password: Scalars['String'];
+  captchaCode?: Maybe<Scalars['String']>;
+  clientIp?: Maybe<Scalars['String']>;
 };
 
 export type MutationSetUdfArgs = {
@@ -2593,6 +2602,66 @@ export type LoginByPhonePasswordResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
   }>;
+};
+
+export type LoginBySubAccountVariables = Exact<{
+  account: Scalars['String'];
+  password: Scalars['String'];
+  captchaCode?: Maybe<Scalars['String']>;
+  clientIp?: Maybe<Scalars['String']>;
+}>;
+
+export type LoginBySubAccountResponse = {
+  loginBySubAccount: {
+    id: string;
+    arn: string;
+    userPoolId: string;
+    username?: Maybe<string>;
+    email?: Maybe<string>;
+    emailVerified?: Maybe<boolean>;
+    phone?: Maybe<string>;
+    phoneVerified?: Maybe<boolean>;
+    unionid?: Maybe<string>;
+    openid?: Maybe<string>;
+    nickname?: Maybe<string>;
+    registerSource: Array<string>;
+    photo?: Maybe<string>;
+    password?: Maybe<string>;
+    oauth?: Maybe<string>;
+    token?: Maybe<string>;
+    tokenExpiredAt?: Maybe<string>;
+    loginsCount?: Maybe<number>;
+    lastLogin?: Maybe<string>;
+    lastIP?: Maybe<string>;
+    signedUp?: Maybe<string>;
+    blocked?: Maybe<boolean>;
+    isDeleted?: Maybe<boolean>;
+    device?: Maybe<string>;
+    browser?: Maybe<string>;
+    company?: Maybe<string>;
+    name?: Maybe<string>;
+    givenName?: Maybe<string>;
+    familyName?: Maybe<string>;
+    middleName?: Maybe<string>;
+    profile?: Maybe<string>;
+    preferredUsername?: Maybe<string>;
+    website?: Maybe<string>;
+    gender?: Maybe<string>;
+    birthdate?: Maybe<string>;
+    zoneinfo?: Maybe<string>;
+    locale?: Maybe<string>;
+    address?: Maybe<string>;
+    formatted?: Maybe<string>;
+    streetAddress?: Maybe<string>;
+    locality?: Maybe<string>;
+    region?: Maybe<string>;
+    postalCode?: Maybe<string>;
+    city?: Maybe<string>;
+    province?: Maybe<string>;
+    country?: Maybe<string>;
+    createdAt?: Maybe<string>;
+    updatedAt?: Maybe<string>;
+  };
 };
 
 export type LoginByUsernameVariables = Exact<{
@@ -5739,6 +5808,60 @@ export const LoginByPhoneCodeDocument = `
 export const LoginByPhonePasswordDocument = `
     mutation loginByPhonePassword($input: LoginByPhonePasswordInput!) {
   loginByPhonePassword(input: $input) {
+    id
+    arn
+    userPoolId
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    city
+    province
+    country
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export const LoginBySubAccountDocument = `
+    mutation loginBySubAccount($account: String!, $password: String!, $captchaCode: String, $clientIp: String) {
+  loginBySubAccount(account: $account, password: $password, captchaCode: $captchaCode, clientIp: $clientIp) {
     id
     arn
     userPoolId

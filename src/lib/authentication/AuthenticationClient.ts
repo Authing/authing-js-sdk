@@ -20,7 +20,8 @@ import {
   setUdv,
   removeUdv,
   udv,
-  unbindEmail
+  unbindEmail,
+  loginBySubAccount
 } from '../graphqlapi';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
@@ -703,6 +704,34 @@ export class AuthenticationClient {
           clientIp,
           params: extraParams
         }
+      }
+    );
+    this.setCurrentUser(user);
+    return user;
+  }
+
+  async loginBySubAccount(
+    account: string,
+    password: string,
+    options?: {
+      captchaCode?: string;
+      clientIp?: string;
+    }
+  ): Promise<User> {
+    options = options || {};
+    const { captchaCode, clientIp } = options;
+    password = await this.options.encryptFunction(
+      password,
+      await this.publicKeyManager.getPublicKey()
+    );
+    const { loginBySubAccount: user } = await loginBySubAccount(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        account,
+        password,
+        captchaCode,
+        clientIp
       }
     );
     this.setCurrentUser(user);

@@ -270,7 +270,10 @@ import {
   NodeByIdDocument,
   SetUdvBatchDocument,
   SetUdvBatchVariables,
-  SetUdvBatchResponse
+  SetUdvBatchResponse,
+  LoginBySubAccountVariables,
+  LoginBySubAccountResponse,
+  LoginBySubAccountDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -503,6 +506,20 @@ export const loginByPhonePassword = async (
   variables: LoginByPhonePasswordVariables
 ): Promise<LoginByPhonePasswordResponse> => {
   const query = LoginByPhonePasswordDocument;
+  const token = tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const loginBySubAccount = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: AuthenticationTokenProvider,
+  variables: LoginBySubAccountVariables
+): Promise<LoginBySubAccountResponse> => {
+  const query = LoginBySubAccountDocument;
   const token = tokenProvider.getToken();
   return garpqhlClient.request({
     query,
