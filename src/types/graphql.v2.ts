@@ -1350,8 +1350,8 @@ export enum EmailScene {
   VerifyEmail = 'VERIFY_EMAIL',
   /** 发送修改邮箱邮件，邮件中包含验证码 */
   ChangeEmail = 'CHANGE_EMAIL',
-  /** 发送 MFA 邮箱邮件，邮件中包含验证码 */
-  MfaVerifyEmail = 'MFA_VERIFY'
+  /** 发送 MFA 验证邮件 */
+  MfaVerify = 'MFA_VERIFY'
 }
 
 export type CommonMessage = {
@@ -2641,8 +2641,8 @@ export type LoginBySubAccountResponse = {
   loginBySubAccount: {
     id: string;
     arn: string;
-    userPoolId: string;
     status?: Maybe<UserStatus>;
+    userPoolId: string;
     username?: Maybe<string>;
     email?: Maybe<string>;
     emailVerified?: Maybe<boolean>;
@@ -5931,8 +5931,8 @@ export const LoginBySubAccountDocument = `
   loginBySubAccount(account: $account, password: $password, captchaCode: $captchaCode, clientIp: $clientIp) {
     id
     arn
-    userPoolId
     status
+    userPoolId
     username
     email
     emailVerified
