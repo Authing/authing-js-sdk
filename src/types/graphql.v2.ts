@@ -1351,7 +1351,7 @@ export enum EmailScene {
   /** 发送修改邮箱邮件，邮件中包含验证码 */
   ChangeEmail = 'CHANGE_EMAIL',
   /** 发送 MFA 邮箱邮件，邮件中包含验证码 */
-  MFA_VERIFY_EMAIL = 'MFA_VERIFY'
+  MfaVerifyEmail = 'MFA_VERIFY'
 }
 
 export type CommonMessage = {
