@@ -511,6 +511,8 @@ export type Mfa = {
 
 export type Node = {
   id: Scalars['String'];
+  /** 组织机构 ID */
+  orgId?: Maybe<Scalars['String']>;
   /** 节点名称 */
   name: Scalars['String'];
   /** 多语言名称，**key** 为标准 **i18n** 语言编码，**value** 为对应语言的名称。 */
@@ -1714,6 +1716,7 @@ export type AddMemberVariables = Exact<{
 export type AddMemberResponse = {
   addMember: {
     id: string;
+    orgId?: Maybe<string>;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -1798,6 +1801,7 @@ export type AddNodeResponse = {
     id: string;
     rootNode: {
       id: string;
+      orgId?: Maybe<string>;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -1813,6 +1817,7 @@ export type AddNodeResponse = {
     };
     nodes: Array<{
       id: string;
+      orgId?: Maybe<string>;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -2025,6 +2030,7 @@ export type CreateOrgResponse = {
     id: string;
     rootNode: {
       id: string;
+      orgId?: Maybe<string>;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -2040,6 +2046,7 @@ export type CreateOrgResponse = {
     };
     nodes: Array<{
       id: string;
+      orgId?: Maybe<string>;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -2732,6 +2739,7 @@ export type MoveNodeResponse = {
     id: string;
     rootNode: {
       id: string;
+      orgId?: Maybe<string>;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -2747,6 +2755,7 @@ export type MoveNodeResponse = {
     };
     nodes: Array<{
       id: string;
+      orgId?: Maybe<string>;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -3403,6 +3412,7 @@ export type UpdateNodeVariables = Exact<{
 export type UpdateNodeResponse = {
   updateNode: {
     id: string;
+    orgId?: Maybe<string>;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -3758,6 +3768,7 @@ export type ChildrenNodesVariables = Exact<{
 export type ChildrenNodesResponse = {
   childrenNodes: Array<{
     id: string;
+    orgId?: Maybe<string>;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -4071,6 +4082,7 @@ export type NodeByCodeVariables = Exact<{
 export type NodeByCodeResponse = {
   nodeByCode?: Maybe<{
     id: string;
+    orgId?: Maybe<string>;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -4098,6 +4110,7 @@ export type NodeByCodeWithMembersVariables = Exact<{
 export type NodeByCodeWithMembersResponse = {
   nodeByCode?: Maybe<{
     id: string;
+    orgId?: Maybe<string>;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -4172,6 +4185,7 @@ export type NodeByIdVariables = Exact<{
 export type NodeByIdResponse = {
   nodeById?: Maybe<{
     id: string;
+    orgId?: Maybe<string>;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -4198,6 +4212,7 @@ export type NodeByIdWithMembersVariables = Exact<{
 export type NodeByIdWithMembersResponse = {
   nodeById?: Maybe<{
     id: string;
+    orgId?: Maybe<string>;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -4274,6 +4289,7 @@ export type OrgResponse = {
     id: string;
     rootNode: {
       id: string;
+      orgId?: Maybe<string>;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -4289,6 +4305,7 @@ export type OrgResponse = {
     };
     nodes: Array<{
       id: string;
+      orgId?: Maybe<string>;
       name: string;
       nameI18n?: Maybe<string>;
       description?: Maybe<string>;
@@ -4593,6 +4610,7 @@ export type RootNodeVariables = Exact<{
 export type RootNodeResponse = {
   rootNode: {
     id: string;
+    orgId?: Maybe<string>;
     name: string;
     nameI18n?: Maybe<string>;
     description?: Maybe<string>;
@@ -5067,6 +5085,7 @@ export const AddMemberDocument = `
     mutation addMember($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $nodeId: String, $orgId: String, $nodeCode: String, $userIds: [String!]!, $isLeader: Boolean) {
   addMember(nodeId: $nodeId, orgId: $orgId, nodeCode: $nodeCode, userIds: $userIds, isLeader: $isLeader) {
     id
+    orgId
     name
     nameI18n
     description
@@ -5141,6 +5160,7 @@ export const AddNodeDocument = `
     id
     rootNode {
       id
+      orgId
       name
       nameI18n
       description
@@ -5156,6 +5176,7 @@ export const AddNodeDocument = `
     }
     nodes {
       id
+      orgId
       name
       nameI18n
       description
@@ -5322,6 +5343,7 @@ export const CreateOrgDocument = `
     id
     rootNode {
       id
+      orgId
       name
       nameI18n
       description
@@ -5337,6 +5359,7 @@ export const CreateOrgDocument = `
     }
     nodes {
       id
+      orgId
       name
       nameI18n
       description
@@ -5973,6 +5996,7 @@ export const MoveNodeDocument = `
     id
     rootNode {
       id
+      orgId
       name
       nameI18n
       description
@@ -5988,6 +6012,7 @@ export const MoveNodeDocument = `
     }
     nodes {
       id
+      orgId
       name
       nameI18n
       description
@@ -6546,6 +6571,7 @@ export const UpdateNodeDocument = `
     mutation updateNode($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $id: String!, $name: String, $code: String, $description: String) {
   updateNode(id: $id, name: $name, code: $code, description: $description) {
     id
+    orgId
     name
     nameI18n
     description
@@ -6868,6 +6894,7 @@ export const ChildrenNodesDocument = `
     query childrenNodes($orgId: String!, $nodeId: String!) {
   childrenNodes(orgId: $orgId, nodeId: $nodeId) {
     id
+    orgId
     name
     nameI18n
     description
@@ -7131,6 +7158,7 @@ export const NodeByCodeDocument = `
     query nodeByCode($orgId: String!, $code: String!) {
   nodeByCode(orgId: $orgId, code: $code) {
     id
+    orgId
     name
     nameI18n
     description
@@ -7150,6 +7178,7 @@ export const NodeByCodeWithMembersDocument = `
     query nodeByCodeWithMembers($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!, $code: String!) {
   nodeByCode(orgId: $orgId, code: $code) {
     id
+    orgId
     name
     nameI18n
     description
@@ -7221,6 +7250,7 @@ export const NodeByIdDocument = `
     query nodeById($id: String!) {
   nodeById(id: $id) {
     id
+    orgId
     name
     nameI18n
     description
@@ -7240,6 +7270,7 @@ export const NodeByIdWithMembersDocument = `
     query nodeByIdWithMembers($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $id: String!) {
   nodeById(id: $id) {
     id
+    orgId
     name
     nameI18n
     description
@@ -7313,6 +7344,7 @@ export const OrgDocument = `
     id
     rootNode {
       id
+      orgId
       name
       nameI18n
       description
@@ -7328,6 +7360,7 @@ export const OrgDocument = `
     }
     nodes {
       id
+      orgId
       name
       nameI18n
       description
@@ -7584,6 +7617,7 @@ export const RootNodeDocument = `
     query rootNode($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!) {
   rootNode(orgId: $orgId) {
     id
+    orgId
     name
     nameI18n
     description
