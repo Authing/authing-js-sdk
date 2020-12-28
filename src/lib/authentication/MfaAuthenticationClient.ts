@@ -208,6 +208,7 @@ export class MfaAuthenticationClient {
    *
    * @param {object} options
    * @param {string} options.phone 用户手机号
+   * @param {string} options.code 手机验证码
    * @param {string} options.token 登录接口返回的 mfaToken
    *
    * @example
@@ -221,6 +222,7 @@ export class MfaAuthenticationClient {
    */
   async verifyAppSmsMfa(options: {
     phone: string;
+    code: string;
     mfaToken: string;
   }): Promise<User> {
     const api = `${this.options.host}/api/v2/applications/mfa/sms/verify`;
@@ -228,7 +230,8 @@ export class MfaAuthenticationClient {
       method: 'POST',
       url: api,
       data: {
-        phone: options.phone
+        phone: options.phone,
+        code: options.code
       },
       headers: {
         authorization: 'Bearer ' + options.mfaToken
@@ -244,6 +247,7 @@ export class MfaAuthenticationClient {
    *
    * @param {object} options
    * @param {string} options.email 用户邮箱
+   * @param {string} options.code 邮箱验证码
    * @param {string} options.token 登录接口返回的 mfaToken
    *
    * @example
@@ -258,13 +262,15 @@ export class MfaAuthenticationClient {
   async verifyAppEmailMfa(options: {
     email: string;
     mfaToken: string;
+    code: string;
   }): Promise<User> {
     const api = `${this.options.host}/api/v2/applications/mfa/email/verify`;
     const data: User = await this.httpClient.request({
       method: 'POST',
       url: api,
       data: {
-        email: options.email
+        email: options.email,
+        code: options.code
       },
       headers: {
         authorization: 'Bearer ' + options.mfaToken
