@@ -14,10 +14,10 @@ before_script:
   - |
     case "$CI_COMMIT_REF_NAME" in
       "master")
-        PUBLISH_OPTS="--verbose --tag=alpha"
+        PUBLISH_OPTS="--verbose"
         ;;
       *)
-        PUBLISH_OPTS="--verbose"
+        PUBLISH_OPTS="--verbose --tag=alpha"
         ;;
     esac
 
