@@ -202,6 +202,121 @@ export class MfaAuthenticationClient {
   }
 
   /**
+   * @name verifyAppSmsMfa
+   * @name_zh 检验二次验证 MFA 短信验证码
+   * @description 检验二次验证 MFA 短信验证码
+   *
+   * @param {object} options
+   * @param {string} options.phone 用户手机号
+   * @param {string} options.token 登录接口返回的 mfaToken
+   *
+   * @example
+   * const authenticationClient = new AuthenticationClient({
+   *    appId: "YOUR_APP_ID",
+   * })
+   * const authenticators = await authenticationClient.mfa.verifySmsMfa({ mfaToken: 'xxxxxx', phone: '173xxxxxxxx' })
+   *
+   * @returns {Promise<User>}
+   * @memberof MfaAuthenticationClient
+   */
+  async verifyAppSmsMfa(options: {
+    phone: string;
+    mfaToken: string;
+  }): Promise<User> {
+    const api = `${this.options.host}/api/v2/applications/mfa/sms/verify`;
+    const data: User = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
+        phone: options.phone
+      },
+      headers: {
+        authorization: 'Bearer ' + options.mfaToken
+      }
+    });
+    return data;
+  }
+
+  /**
+   * @name verifyAppEmailMfa
+   * @name_zh 检验二次验证 MFA 邮箱验证码
+   * @description 检验二次验证 MFA 邮箱验证码
+   *
+   * @param {object} options
+   * @param {string} options.email 用户邮箱
+   * @param {string} options.token 登录接口返回的 mfaToken
+   *
+   * @example
+   * const authenticationClient = new AuthenticationClient({
+   *    appId: "YOUR_APP_ID",
+   * })
+   * const authenticators = await authenticationClient.mfa.verifyAppEmailMfa({ mfaToken: 'xxxx', email: 'example@authing.com' })
+   *
+   * @returns {Promise<User>}
+   * @memberof MfaAuthenticationClient
+   */
+  async verifyAppEmailMfa(options: {
+    email: string;
+    mfaToken: string;
+  }): Promise<User> {
+    const api = `${this.options.host}/api/v2/applications/mfa/email/verify`;
+    const data: User = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
+        email: options.email
+      },
+      headers: {
+        authorization: 'Bearer ' + options.mfaToken
+      }
+    });
+    return data;
+  }
+
+  /**
+   * @name phoneOrEmailBindable
+   * @name_zh 检测手机号或邮箱是否已被绑定
+   * @description 当需要手机或邮箱 MFA 登录，而用户未绑定手机或邮箱时，可先让用户输入手机号或邮箱，用此接口先检测手机或邮箱是否可绑定，再进行 MFA 验证
+   *
+   * @param {object} options
+   * @param {string} [options.mfaToken] 后端返回的 mfaToken
+   * @param {string} [options.phone] 需要检测的手机号
+   * @param {string} [options.email] 需要检测的邮箱
+   *
+   * @example
+   *
+   * authenticationClient.phoneOrEmailBindable({
+   *  phone: '173xxxxxxxx',
+   *  mfaToken: 'xxxxx'
+   * })
+   *
+   * @returns {Promise<boolean>}
+   * @memberof MfaAuthenticationClient
+   */
+  async phoneOrEmailBindable({
+    phone,
+    email,
+    mfaToken
+  }: {
+    phone?: string;
+    email?: string;
+    mfaToken: string;
+  }): Promise<boolean> {
+    const api = `${this.options.host}/api/v2/applications/mfa/check`;
+    return await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
+        email,
+        phone
+      },
+      headers: {
+        authorization: 'Bearer ' + mfaToken
+      }
+    });
+  }
+
+  /**
    * @name verifyTotpRecoveryCode
    * @name_zh 检验二次验证 MFA 恢复代码
    * @description 检验二次验证 MFA 恢复代码
