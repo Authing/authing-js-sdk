@@ -656,7 +656,7 @@ export type UserDefinedField = {
   targetType: UdfTargetType;
   dataType: UdfDataType;
   key: Scalars['String'];
-  label: Scalars['String'];
+  label?: Maybe<Scalars['String']>;
   options?: Maybe<Scalars['String']>;
 };
 
@@ -3182,7 +3182,7 @@ export type SetUdfResponse = {
     targetType: UdfTargetType;
     dataType: UdfDataType;
     key: string;
-    label: string;
+    label?: Maybe<string>;
     options?: Maybe<string>;
   };
 };
@@ -4802,7 +4802,7 @@ export type UdfResponse = {
     targetType: UdfTargetType;
     dataType: UdfDataType;
     key: string;
-    label: string;
+    label?: Maybe<string>;
     options?: Maybe<string>;
   }>;
 };
