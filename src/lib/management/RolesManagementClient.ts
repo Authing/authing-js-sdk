@@ -66,7 +66,8 @@ export class RolesManagementClient {
    * @description 创建角色
    *
    * @param {string} code 角色唯一标志符
-   * @param {string} [description] 描述
+   * @param {string} [options.description] 描述
+   * @param {string} [options.namespace] 该角色所在的 namespace，默认为 default
    *
    * @example
    * managementClient.roles.create('rolea', 'RoleA')
@@ -74,10 +75,15 @@ export class RolesManagementClient {
    * @returns {Promise<DeepPartial<Role>>}
    * @memberof RolesManagementClient
    */
-  async create(code: string, description?: string): Promise<DeepPartial<Role>> {
+  async create(
+    code: string,
+    description?: string,
+    namespace?: string
+  ): Promise<DeepPartial<Role>> {
     const res = await addRole(this.graphqlClient, this.tokenProvider, {
       code,
-      description
+      description,
+      namespace
     });
     return res.createRole;
   }
@@ -88,6 +94,7 @@ export class RolesManagementClient {
    * @description 删除角色
    *
    * @param {string} code 角色唯一标志符
+   * @param {string} [namespace] 角色所属的 Namespace code，默认值为 'default'
    *
    * @example
    * managementClient.roles.delete('rolea')
@@ -95,12 +102,13 @@ export class RolesManagementClient {
    * @returns {Promise<CommonMessage>}
    * @memberof RolesManagementClient
    */
-  async delete(code: string): Promise<CommonMessage> {
+  async delete(code: string, namespace?: string): Promise<CommonMessage> {
     const { deleteRole: data } = await deleteRole(
       this.graphqlClient,
       this.tokenProvider,
       {
-        code
+        code,
+        namespace
       }
     );
     return data;
@@ -112,6 +120,7 @@ export class RolesManagementClient {
    * @description 批量删除角色
    *
    * @param {string[]} codeList 角色唯一标志符列表
+   * @param {string} [namespace] 角色所属的 Namespace，默认值为 'default'
    *
    * @example
    * managementClient.roles.delete(['rolea'])
@@ -119,12 +128,16 @@ export class RolesManagementClient {
    * @returns {Promise<CommonMessage>}
    * @memberof RolesManagementClient
    */
-  async deleteMany(codeList: string[]): Promise<CommonMessage> {
+  async deleteMany(
+    codeList: string[],
+    namespace?: string
+  ): Promise<CommonMessage> {
     const { deleteRoles: data } = await deleteRoles(
       this.graphqlClient,
       this.tokenProvider,
       {
-        codeList
+        codeList,
+        namespace
       }
     );
     return data;
@@ -136,9 +149,10 @@ export class RolesManagementClient {
    * @description 修改角色
    *
    * @param {string} code 角色唯一标志符
-   * @param {Object} input
-   * @param {string} input.description 描述信息
-   * @param {string} input.newCode 新的唯一标志符
+   * @param {Object} options
+   * @param {string} options.description 描述信息
+   * @param {string} options.newCode 新的唯一标志符
+   * @param {string} options.namespace 角色所属的 Namespace，默认值为 'default'
    *
    * @example
    * managementClient.roles.update('rolea', {newCode: 'newcode'})
@@ -149,19 +163,21 @@ export class RolesManagementClient {
    */
   async update(
     code: string,
-    input: {
+    options: {
       description?: string;
       newCode?: string;
+      namespace?: string;
     }
   ): Promise<DeepPartial<Role>> {
-    const { description, newCode } = input;
+    const { description, newCode, namespace } = options;
     const { updateRole: data } = await updateRole(
       this.graphqlClient,
       this.tokenProvider,
       {
         code,
         description,
-        newCode
+        newCode,
+        namespace
       }
     );
     return data;
@@ -174,16 +190,18 @@ export class RolesManagementClient {
    * @description 获取角色详情
    *
    * @param {string} code 角色唯一标志符
+   * @param {string} [namespace] 角色所属的 Namespace，默认值为 'default'
    *
-   * @example
+   * @example`
    * managementClient.roles.detail('manager')
    *
    * @returns {Promise<DeepPartial<Role>>} 角色详情
    * @memberof RolesManagementClient
    */
-  async detail(code: string): Promise<DeepPartial<Role>> {
+  async detail(code: string, namespace?: string): Promise<DeepPartial<Role>> {
     const { role: data } = await role(this.graphqlClient, this.tokenProvider, {
-      code
+      code,
+      namespace
     });
     return data;
   }
@@ -193,24 +211,30 @@ export class RolesManagementClient {
    * @name_zh 获取角色列表
    * @description 获取角色列表
    *
-   * @param {number} [page=1] 页码数
-   * @param {number} [limit=10] 每页个数
+   * @param {Object} [options]
+   * @param {number} [options.page=1] 页码数
+   * @param {number} [options.limit=10] 每页个数
+   * @param {string} [options.namespace] 角色所属的 Namespace，默认值为 'default'
+   *
    * @example
    * managementClient.roles.list(2, 10)
    *
    * @returns {Promise<DeepPartial<PaginatedRoles>>}
    * @memberof RolesManagementClient
    */
-  async list(
-    page: number = 1,
-    limit: number = 10
-  ): Promise<DeepPartial<PaginatedRoles>> {
+  async list(options?: {
+    page?: number;
+    limit?: number;
+    namespace?: string;
+  }): Promise<DeepPartial<PaginatedRoles>> {
+    const { page = 1, limit = 10, namespace } = options || {};
     const { roles: data } = await roles(
       this.graphqlClient,
       this.tokenProvider,
       {
         page,
-        limit
+        limit,
+        namespace
       }
     );
     return data;
@@ -220,7 +244,9 @@ export class RolesManagementClient {
    * @name listUsers
    * @name_zh 获取角色用户列表
    * @description 获取角色用户列表
+   *
    * @param {string} code 角色唯一标志符
+   *
    * @example
    * managementClient.roles.listUsers(code)
    *
@@ -245,16 +271,23 @@ export class RolesManagementClient {
    *
    * @param {string} code 角色唯一标志符
    * @param {string[]} userIds 用户 ID 列表
+   * @param {string} [namespace] 角色所属的 Namespace，默认值为 'default'
+   *
    * @example
    * managementClient.roles.addUsers(code, ['USERID1', 'USERID2'])
    *
    * @returns {Promise<CommonMessage>}
    * @memberof RolesManagementClient
    */
-  async addUsers(code: string, userIds: string[]): Promise<CommonMessage> {
+  async addUsers(
+    code: string,
+    userIds: string[],
+    namespace?: string
+  ): Promise<CommonMessage> {
     const res = await assignRole(this.graphqlClient, this.tokenProvider, {
       roleCode: code,
-      userIds
+      userIds,
+      namespace
     });
     return res.assignRole;
   }
@@ -267,16 +300,23 @@ export class RolesManagementClient {
    *
    * @param {string} code 角色唯一标志符
    * @param {string[]} userIds 用户 ID 列表
+   * @param {string} [namespace] 角色所属的 Namespace，默认值为 'default'
+   *
    * @example
    * managementClient.roles.removeUsers(code, ['USERID1', 'USERID2'])
    *
    * @returns {Promise<CommonMessage>}
    * @memberof RolesManagementClient
    */
-  async removeUsers(code: string, userIds: string[]): Promise<CommonMessage> {
+  async removeUsers(
+    code: string,
+    userIds: string[],
+    namespace?: string
+  ): Promise<CommonMessage> {
     const res = await revokeRole(this.graphqlClient, this.tokenProvider, {
       roleCode: code,
-      userIds
+      userIds,
+      namespace
     });
     return res.revokeRole;
   }

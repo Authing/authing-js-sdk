@@ -86,15 +86,22 @@ export class PoliciesManagementClient {
    * @returns {Promise<DeepPartial<Policy>>}
    * @memberof PoliciesManagementClient
    */
-  async create(
-    code: string,
-    statements: PolicyStatement[],
-    description?: string
-  ): Promise<DeepPartial<Policy>> {
+  async create({
+    code,
+    statements,
+    description,
+    namespace
+  }: {
+    code: string;
+    statements: PolicyStatement[];
+    description?: string;
+    namespace?: string;
+  }): Promise<DeepPartial<Policy>> {
     const res = await createPolicy(this.graphqlClient, this.tokenProvider, {
       code,
       statements,
-      description
+      description,
+      namespace
     });
     return res.createPolicy;
   }
@@ -114,12 +121,13 @@ export class PoliciesManagementClient {
    * @memberof PoliciesManagementClient
    *
    */
-  async delete(code: string): Promise<CommonMessage> {
+  async delete(code: string, namespace?: string): Promise<CommonMessage> {
     const { deletePolicy: data } = await deletePolicy(
       this.graphqlClient,
       this.tokenProvider,
       {
-        code
+        code,
+        namespace
       }
     );
     return data;
@@ -140,12 +148,16 @@ export class PoliciesManagementClient {
    * @memberof PoliciesManagementClient
    *
    */
-  async deleteMany(codeList: string[]): Promise<CommonMessage> {
+  async deleteMany(
+    codeList: string[],
+    namespace?: string
+  ): Promise<CommonMessage> {
     const { deletePolicies: data } = await deletePolicies(
       this.graphqlClient,
       this.tokenProvider,
       {
-        codeList
+        codeList,
+        namespace
       }
     );
     return data;
@@ -176,9 +188,10 @@ export class PoliciesManagementClient {
       statements?: PolicyStatement[];
       description?: string;
       newCode?: string;
+      namespace?: string;
     }
   ): Promise<DeepPartial<Policy>> {
-    const { description, statements, newCode } = updates;
+    const { description, statements, newCode, namespace } = updates;
     const { updatePolicy: data } = await updatePolicy(
       this.graphqlClient,
       this.tokenProvider,
@@ -186,7 +199,8 @@ export class PoliciesManagementClient {
         code,
         description,
         statements,
-        newCode
+        newCode,
+        namespace
       }
     );
     return data;
@@ -204,12 +218,13 @@ export class PoliciesManagementClient {
    * @returns {Promise<DeepPartial<Policy>>}
    * @memberof PoliciesManagementClient
    */
-  async detail(code: string): Promise<DeepPartial<Policy>> {
+  async detail(code: string, namespace?: string): Promise<DeepPartial<Policy>> {
     const { policy: data } = await policy(
       this.graphqlClient,
       this.tokenProvider,
       {
-        code
+        code,
+        namespace
       }
     );
     return data;
@@ -223,6 +238,7 @@ export class PoliciesManagementClient {
    * @param {Object} options
    * @param {number} [options.page=1]
    * @param {number} [options.limit=10]
+   * @param {number} [options.namespace='default'] 所属权限组
    * @param {boolean} [options.excludeDefault=true] 是否排除系统默认资源
    *
    * @example
@@ -237,16 +253,18 @@ export class PoliciesManagementClient {
   async list(options?: {
     page?: number;
     limit?: number;
+    namespace?: string;
     excludeDefault?: boolean;
   }): Promise<DeepPartial<PaginatedPolicies>> {
     options = options || {};
-    const { page = 1, limit = 10, excludeDefault = true } = options;
+    const { page = 1, limit = 10, excludeDefault = true, namespace } = options;
     const { policies: data } = await policies(
       this.graphqlClient,
       this.tokenProvider,
       {
         page,
         limit,
+        namespace,
         excludeDefault
       }
     );
@@ -287,7 +305,8 @@ export class PoliciesManagementClient {
   async listAssignments(
     code: string,
     page: number = 1,
-    limit: number = 10
+    limit: number = 10,
+    namespace?: string
   ): Promise<PaginatedPolicyAssignments> {
     const { policyAssignments: data } = await policyAssignments(
       this.graphqlClient,
@@ -295,7 +314,8 @@ export class PoliciesManagementClient {
       {
         code,
         page,
-        limit
+        limit,
+        namespace
       }
     );
     return data;
@@ -335,9 +355,10 @@ export class PoliciesManagementClient {
     targetIdentifiers: string[],
     options?: {
       inheritByChildren?: boolean;
+      namespace?: string;
     }
   ): Promise<CommonMessage> {
-    const { inheritByChildren } = options || {};
+    const { inheritByChildren, namespace } = options || {};
     const res = await addPolicyAssignments(
       this.graphqlClient,
       this.tokenProvider,
@@ -345,7 +366,8 @@ export class PoliciesManagementClient {
         policies,
         targetType,
         targetIdentifiers,
-        inheritByChildren
+        inheritByChildren,
+        namespace
       }
     );
     return res.addPolicyAssignments;
@@ -382,7 +404,8 @@ export class PoliciesManagementClient {
   async removeAssignments(
     policies: string[],
     targetType: PolicyAssignmentTargetType,
-    targetIdentifiers: string[]
+    targetIdentifiers: string[],
+    namespace?: string
   ): Promise<CommonMessage> {
     const res = await removePolicyAssignments(
       this.graphqlClient,
@@ -390,7 +413,8 @@ export class PoliciesManagementClient {
       {
         policies,
         targetType,
-        targetIdentifiers
+        targetIdentifiers,
+        namespace
       }
     );
     return res.removePolicyAssignments;
@@ -421,7 +445,8 @@ export class PoliciesManagementClient {
   async enableAssignment(
     policy: string,
     targetType: PolicyAssignmentTargetType,
-    targetIdentifier: string
+    targetIdentifier: string,
+    namespace?: string
   ): Promise<CommonMessage> {
     const res = await enablePolicyAssignment(
       this.graphqlClient,
@@ -429,7 +454,8 @@ export class PoliciesManagementClient {
       {
         policy,
         targetType,
-        targetIdentifier
+        targetIdentifier,
+        namespace
       }
     );
     return res.enablePolicyAssignment;
@@ -460,7 +486,8 @@ export class PoliciesManagementClient {
   async disableAssignment(
     policy: string,
     targetType: PolicyAssignmentTargetType,
-    targetIdentifier: string
+    targetIdentifier: string,
+    namespace?: string
   ): Promise<CommonMessage> {
     const res = await disablePolicyAssignment(
       this.graphqlClient,
@@ -468,7 +495,8 @@ export class PoliciesManagementClient {
       {
         policy,
         targetType,
-        targetIdentifier
+        targetIdentifier,
+        namespace
       }
     );
     return res.disbalePolicyAssignment;

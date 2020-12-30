@@ -171,15 +171,18 @@ export type QueryIsActionDeniedArgs = {
 
 export type QueryPolicyArgs = {
   code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type QueryPoliciesArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   excludeDefault?: Maybe<Scalars['Boolean']>;
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type QueryPolicyAssignmentsArgs = {
+  namespace?: Maybe<Scalars['String']>;
   code?: Maybe<Scalars['String']>;
   targetType?: Maybe<PolicyAssignmentTargetType>;
   targetIdentifier?: Maybe<Scalars['String']>;
@@ -189,9 +192,11 @@ export type QueryPolicyAssignmentsArgs = {
 
 export type QueryRoleArgs = {
   code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type QueryRolesArgs = {
+  namespace?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -484,6 +489,8 @@ export type PaginatedRoles = {
 };
 
 export type Role = {
+  /** 权限组 code */
+  namespace: Scalars['String'];
   /** 唯一标志 code */
   code: Scalars['String'];
   /** 资源描述符 arn */
@@ -576,6 +583,8 @@ export type CheckPasswordStrengthResult = {
 };
 
 export type Policy = {
+  /** 权限组 code */
+  namespace: Scalars['String'];
   code: Scalars['String'];
   isDefault: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
@@ -591,6 +600,7 @@ export type Policy = {
 export type PolicyAssignmentsArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type PolicyStatement = {
@@ -656,7 +666,7 @@ export type UserDefinedField = {
   targetType: UdfTargetType;
   dataType: UdfDataType;
   key: Scalars['String'];
-  label?: Maybe<Scalars['String']>;
+  label: Scalars['String'];
   options?: Maybe<Scalars['String']>;
 };
 
@@ -1084,12 +1094,14 @@ export type MutationResetPasswordArgs = {
 };
 
 export type MutationCreatePolicyArgs = {
+  namespace?: Maybe<Scalars['String']>;
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   statements: Array<PolicyStatementInput>;
 };
 
 export type MutationUpdatePolicyArgs = {
+  namespace?: Maybe<Scalars['String']>;
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   statements?: Maybe<Array<PolicyStatementInput>>;
@@ -1098,10 +1110,12 @@ export type MutationUpdatePolicyArgs = {
 
 export type MutationDeletePolicyArgs = {
   code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type MutationDeletePoliciesArgs = {
   codeList: Array<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type MutationAddPolicyAssignmentsArgs = {
@@ -1109,24 +1123,28 @@ export type MutationAddPolicyAssignmentsArgs = {
   targetType: PolicyAssignmentTargetType;
   targetIdentifiers?: Maybe<Array<Scalars['String']>>;
   inheritByChildren?: Maybe<Scalars['Boolean']>;
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type MutationEnablePolicyAssignmentArgs = {
   policy: Scalars['String'];
   targetType: PolicyAssignmentTargetType;
   targetIdentifier: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type MutationDisbalePolicyAssignmentArgs = {
   policy: Scalars['String'];
   targetType: PolicyAssignmentTargetType;
   targetIdentifier: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type MutationRemovePolicyAssignmentsArgs = {
   policies: Array<Scalars['String']>;
   targetType: PolicyAssignmentTargetType;
   targetIdentifiers?: Maybe<Array<Scalars['String']>>;
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type MutationAllowArgs = {
@@ -1136,6 +1154,7 @@ export type MutationAllowArgs = {
   userIds?: Maybe<Array<Scalars['String']>>;
   roleCode?: Maybe<Scalars['String']>;
   roleCodes?: Maybe<Array<Scalars['String']>>;
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type MutationRegisterByUsernameArgs = {
@@ -1151,6 +1170,7 @@ export type MutationRegisterByPhoneCodeArgs = {
 };
 
 export type MutationCreateRoleArgs = {
+  namespace?: Maybe<Scalars['String']>;
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   parent?: Maybe<Scalars['String']>;
@@ -1160,17 +1180,21 @@ export type MutationUpdateRoleArgs = {
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   newCode?: Maybe<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type MutationDeleteRoleArgs = {
   code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type MutationDeleteRolesArgs = {
   codeList: Array<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
 };
 
 export type MutationAssignRoleArgs = {
+  namespace?: Maybe<Scalars['String']>;
   roleCode?: Maybe<Scalars['String']>;
   roleCodes?: Maybe<Array<Maybe<Scalars['String']>>>;
   userIds?: Maybe<Array<Scalars['String']>>;
@@ -1179,6 +1203,7 @@ export type MutationAssignRoleArgs = {
 };
 
 export type MutationRevokeRoleArgs = {
+  namespace?: Maybe<Scalars['String']>;
   roleCode?: Maybe<Scalars['String']>;
   roleCodes?: Maybe<Array<Maybe<Scalars['String']>>>;
   userIds?: Maybe<Array<Scalars['String']>>;
@@ -1853,6 +1878,7 @@ export type AddPolicyAssignmentsVariables = Exact<{
   targetType: PolicyAssignmentTargetType;
   targetIdentifiers?: Maybe<Array<Scalars['String']>>;
   inheritByChildren?: Maybe<Scalars['Boolean']>;
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type AddPolicyAssignmentsResponse = {
@@ -1890,6 +1916,7 @@ export type AllowVariables = Exact<{
   userIds?: Maybe<Array<Scalars['String']>>;
   roleCode?: Maybe<Scalars['String']>;
   roleCodes?: Maybe<Array<Scalars['String']>>;
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type AllowResponse = {
@@ -1897,6 +1924,7 @@ export type AllowResponse = {
 };
 
 export type AssignRoleVariables = Exact<{
+  namespace?: Maybe<Scalars['String']>;
   roleCode?: Maybe<Scalars['String']>;
   roleCodes?: Maybe<Array<Maybe<Scalars['String']>>>;
   userIds?: Maybe<Array<Scalars['String']>>;
@@ -2079,6 +2107,7 @@ export type CreateOrgResponse = {
 };
 
 export type CreatePolicyVariables = Exact<{
+  namespace?: Maybe<Scalars['String']>;
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   statements: Array<PolicyStatementInput>;
@@ -2086,12 +2115,13 @@ export type CreatePolicyVariables = Exact<{
 
 export type CreatePolicyResponse = {
   createPolicy: {
+    namespace: string;
     code: string;
-    assignmentsCount: number;
     isDefault: boolean;
     description?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
+    assignmentsCount: number;
     statements: Array<{
       resource: string;
       actions: Array<string>;
@@ -2101,6 +2131,7 @@ export type CreatePolicyResponse = {
 };
 
 export type CreateRoleVariables = Exact<{
+  namespace?: Maybe<Scalars['String']>;
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   parent?: Maybe<Scalars['String']>;
@@ -2108,6 +2139,7 @@ export type CreateRoleVariables = Exact<{
 
 export type CreateRoleResponse = {
   createRole: {
+    namespace: string;
     code: string;
     arn: string;
     description?: Maybe<string>;
@@ -2115,6 +2147,7 @@ export type CreateRoleResponse = {
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
     parent?: Maybe<{
+      namespace: string;
       code: string;
       arn: string;
       description?: Maybe<string>;
@@ -2322,6 +2355,7 @@ export type DeleteOrgResponse = {
 
 export type DeletePoliciesVariables = Exact<{
   codeList: Array<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type DeletePoliciesResponse = {
@@ -2330,6 +2364,7 @@ export type DeletePoliciesResponse = {
 
 export type DeletePolicyVariables = Exact<{
   code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type DeletePolicyResponse = {
@@ -2338,6 +2373,7 @@ export type DeletePolicyResponse = {
 
 export type DeleteRoleVariables = Exact<{
   code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type DeleteRoleResponse = {
@@ -2346,6 +2382,7 @@ export type DeleteRoleResponse = {
 
 export type DeleteRolesVariables = Exact<{
   codeList: Array<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type DeleteRolesResponse = {
@@ -2409,6 +2446,7 @@ export type DisbalePolicyAssignmentVariables = Exact<{
   policy: Scalars['String'];
   targetType: PolicyAssignmentTargetType;
   targetIdentifier: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type DisbalePolicyAssignmentResponse = {
@@ -2438,6 +2476,7 @@ export type EnablePolicyAssignmentVariables = Exact<{
   policy: Scalars['String'];
   targetType: PolicyAssignmentTargetType;
   targetIdentifier: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type EnablePolicyAssignmentResponse = {
@@ -3081,6 +3120,7 @@ export type RemovePolicyAssignmentsVariables = Exact<{
   policies: Array<Scalars['String']>;
   targetType: PolicyAssignmentTargetType;
   targetIdentifiers?: Maybe<Array<Scalars['String']>>;
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type RemovePolicyAssignmentsResponse = {
@@ -3149,6 +3189,7 @@ export type ResetPasswordResponse = {
 };
 
 export type RevokeRoleVariables = Exact<{
+  namespace?: Maybe<Scalars['String']>;
   roleCode?: Maybe<Scalars['String']>;
   roleCodes?: Maybe<Array<Maybe<Scalars['String']>>>;
   userIds?: Maybe<Array<Scalars['String']>>;
@@ -3182,7 +3223,7 @@ export type SetUdfResponse = {
     targetType: UdfTargetType;
     dataType: UdfDataType;
     key: string;
-    label?: Maybe<string>;
+    label: string;
     options?: Maybe<string>;
   };
 };
@@ -3578,6 +3619,7 @@ export type UpdatePhoneResponse = {
 };
 
 export type UpdatePolicyVariables = Exact<{
+  namespace?: Maybe<Scalars['String']>;
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   statements?: Maybe<Array<PolicyStatementInput>>;
@@ -3586,6 +3628,7 @@ export type UpdatePolicyVariables = Exact<{
 
 export type UpdatePolicyResponse = {
   updatePolicy: {
+    namespace: string;
     code: string;
     isDefault: boolean;
     description?: Maybe<string>;
@@ -3604,10 +3647,12 @@ export type UpdateRoleVariables = Exact<{
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   newCode?: Maybe<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type UpdateRoleResponse = {
   updateRole: {
+    namespace: string;
     code: string;
     arn: string;
     description?: Maybe<string>;
@@ -3616,6 +3661,7 @@ export type UpdateRoleResponse = {
     updatedAt?: Maybe<string>;
     users: { totalCount: number };
     parent?: Maybe<{
+      namespace: string;
       code: string;
       arn: string;
       description?: Maybe<string>;
@@ -4405,39 +4451,38 @@ export type PoliciesVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   excludeDefault?: Maybe<Scalars['Boolean']>;
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type PoliciesResponse = {
   policies: {
     totalCount: number;
     list: Array<{
+      namespace: string;
       code: string;
       isDefault: boolean;
       description?: Maybe<string>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
       assignmentsCount: number;
-      statements: Array<{
-        resource: string;
-        actions: Array<string>;
-        effect?: Maybe<PolicyEffect>;
-      }>;
     }>;
   };
 };
 
 export type PolicyVariables = Exact<{
+  namespace?: Maybe<Scalars['String']>;
   code: Scalars['String'];
 }>;
 
 export type PolicyResponse = {
   policy?: Maybe<{
+    namespace: string;
     code: string;
-    assignmentsCount: number;
     isDefault: boolean;
     description?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
+    assignmentsCount: number;
     statements: Array<{
       resource: string;
       actions: Array<string>;
@@ -4447,6 +4492,7 @@ export type PolicyResponse = {
 };
 
 export type PolicyAssignmentsVariables = Exact<{
+  namespace?: Maybe<Scalars['String']>;
   code?: Maybe<Scalars['String']>;
   targetType?: Maybe<PolicyAssignmentTargetType>;
   targetIdentifier?: Maybe<Scalars['String']>;
@@ -4522,10 +4568,12 @@ export type QueryMfaResponse = {
 
 export type RoleVariables = Exact<{
   code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type RoleResponse = {
   role?: Maybe<{
+    namespace: string;
     code: string;
     arn: string;
     description?: Maybe<string>;
@@ -4534,6 +4582,7 @@ export type RoleResponse = {
     updatedAt?: Maybe<string>;
     users: { totalCount: number };
     parent?: Maybe<{
+      namespace: string;
       code: string;
       arn: string;
       description?: Maybe<string>;
@@ -4607,6 +4656,7 @@ export type RoleWithUsersResponse = {
 };
 
 export type RolesVariables = Exact<{
+  namespace?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
@@ -4616,19 +4666,13 @@ export type RolesResponse = {
   roles: {
     totalCount: number;
     list: Array<{
+      namespace: string;
       code: string;
       arn: string;
       description?: Maybe<string>;
       isSystem?: Maybe<boolean>;
       createdAt?: Maybe<string>;
       updatedAt?: Maybe<string>;
-      parent?: Maybe<{
-        code: string;
-        description?: Maybe<string>;
-        isSystem?: Maybe<boolean>;
-        createdAt?: Maybe<string>;
-        updatedAt?: Maybe<string>;
-      }>;
     }>;
   };
 };
@@ -4802,7 +4846,7 @@ export type UdfResponse = {
     targetType: UdfTargetType;
     dataType: UdfDataType;
     key: string;
-    label?: Maybe<string>;
+    label: string;
     options?: Maybe<string>;
   }>;
 };
@@ -5233,8 +5277,8 @@ export const AddNodeDocument = `
 }
     `;
 export const AddPolicyAssignmentsDocument = `
-    mutation addPolicyAssignments($policies: [String!]!, $targetType: PolicyAssignmentTargetType!, $targetIdentifiers: [String!], $inheritByChildren: Boolean) {
-  addPolicyAssignments(policies: $policies, targetType: $targetType, targetIdentifiers: $targetIdentifiers, inheritByChildren: $inheritByChildren) {
+    mutation addPolicyAssignments($policies: [String!]!, $targetType: PolicyAssignmentTargetType!, $targetIdentifiers: [String!], $inheritByChildren: Boolean, $namespace: String) {
+  addPolicyAssignments(policies: $policies, targetType: $targetType, targetIdentifiers: $targetIdentifiers, inheritByChildren: $inheritByChildren, namespace: $namespace) {
     message
     code
   }
@@ -5258,16 +5302,16 @@ export const AddWhitelistDocument = `
 }
     `;
 export const AllowDocument = `
-    mutation allow($resource: String!, $action: String!, $userId: String, $userIds: [String!], $roleCode: String, $roleCodes: [String!]) {
-  allow(resource: $resource, action: $action, userId: $userId, userIds: $userIds, roleCode: $roleCode, roleCodes: $roleCodes) {
+    mutation allow($resource: String!, $action: String!, $userId: String, $userIds: [String!], $roleCode: String, $roleCodes: [String!], $namespace: String) {
+  allow(resource: $resource, action: $action, userId: $userId, userIds: $userIds, roleCode: $roleCode, roleCodes: $roleCodes, namespace: $namespace) {
     message
     code
   }
 }
     `;
 export const AssignRoleDocument = `
-    mutation assignRole($roleCode: String, $roleCodes: [String], $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
-  assignRole(roleCode: $roleCode, roleCodes: $roleCodes, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
+    mutation assignRole($namespace: String, $roleCode: String, $roleCodes: [String], $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
+  assignRole(namespace: $namespace, roleCode: $roleCode, roleCodes: $roleCodes, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
     message
     code
   }
@@ -5417,10 +5461,10 @@ export const CreateOrgDocument = `
 }
     `;
 export const CreatePolicyDocument = `
-    mutation createPolicy($code: String!, $description: String, $statements: [PolicyStatementInput!]!) {
-  createPolicy(code: $code, description: $description, statements: $statements) {
+    mutation createPolicy($namespace: String, $code: String!, $description: String, $statements: [PolicyStatementInput!]!) {
+  createPolicy(namespace: $namespace, code: $code, description: $description, statements: $statements) {
+    namespace
     code
-    assignmentsCount
     isDefault
     description
     statements {
@@ -5430,12 +5474,14 @@ export const CreatePolicyDocument = `
     }
     createdAt
     updatedAt
+    assignmentsCount
   }
 }
     `;
 export const CreateRoleDocument = `
-    mutation createRole($code: String!, $description: String, $parent: String) {
-  createRole(code: $code, description: $description, parent: $parent) {
+    mutation createRole($namespace: String, $code: String!, $description: String, $parent: String) {
+  createRole(namespace: $namespace, code: $code, description: $description, parent: $parent) {
+    namespace
     code
     arn
     description
@@ -5443,6 +5489,7 @@ export const CreateRoleDocument = `
     createdAt
     updatedAt
     parent {
+      namespace
       code
       arn
       description
@@ -5634,32 +5681,32 @@ export const DeleteOrgDocument = `
 }
     `;
 export const DeletePoliciesDocument = `
-    mutation deletePolicies($codeList: [String!]!) {
-  deletePolicies(codeList: $codeList) {
+    mutation deletePolicies($codeList: [String!]!, $namespace: String) {
+  deletePolicies(codeList: $codeList, namespace: $namespace) {
     message
     code
   }
 }
     `;
 export const DeletePolicyDocument = `
-    mutation deletePolicy($code: String!) {
-  deletePolicy(code: $code) {
+    mutation deletePolicy($code: String!, $namespace: String) {
+  deletePolicy(code: $code, namespace: $namespace) {
     message
     code
   }
 }
     `;
 export const DeleteRoleDocument = `
-    mutation deleteRole($code: String!) {
-  deleteRole(code: $code) {
+    mutation deleteRole($code: String!, $namespace: String) {
+  deleteRole(code: $code, namespace: $namespace) {
     message
     code
   }
 }
     `;
 export const DeleteRolesDocument = `
-    mutation deleteRoles($codeList: [String!]!) {
-  deleteRoles(codeList: $codeList) {
+    mutation deleteRoles($codeList: [String!]!, $namespace: String) {
+  deleteRoles(codeList: $codeList, namespace: $namespace) {
     message
     code
   }
@@ -5718,8 +5765,8 @@ export const DisableSocialConnectionInstanceDocument = `
 }
     `;
 export const DisbalePolicyAssignmentDocument = `
-    mutation disbalePolicyAssignment($policy: String!, $targetType: PolicyAssignmentTargetType!, $targetIdentifier: String!) {
-  disbalePolicyAssignment(policy: $policy, targetType: $targetType, targetIdentifier: $targetIdentifier) {
+    mutation disbalePolicyAssignment($policy: String!, $targetType: PolicyAssignmentTargetType!, $targetIdentifier: String!, $namespace: String) {
+  disbalePolicyAssignment(policy: $policy, targetType: $targetType, targetIdentifier: $targetIdentifier, namespace: $namespace) {
     message
     code
   }
@@ -5742,8 +5789,8 @@ export const EnableEmailTemplateDocument = `
 }
     `;
 export const EnablePolicyAssignmentDocument = `
-    mutation enablePolicyAssignment($policy: String!, $targetType: PolicyAssignmentTargetType!, $targetIdentifier: String!) {
-  enablePolicyAssignment(policy: $policy, targetType: $targetType, targetIdentifier: $targetIdentifier) {
+    mutation enablePolicyAssignment($policy: String!, $targetType: PolicyAssignmentTargetType!, $targetIdentifier: String!, $namespace: String) {
+  enablePolicyAssignment(policy: $policy, targetType: $targetType, targetIdentifier: $targetIdentifier, namespace: $namespace) {
     message
     code
   }
@@ -6336,8 +6383,8 @@ export const RemoveMemberDocument = `
 }
     `;
 export const RemovePolicyAssignmentsDocument = `
-    mutation removePolicyAssignments($policies: [String!]!, $targetType: PolicyAssignmentTargetType!, $targetIdentifiers: [String!]) {
-  removePolicyAssignments(policies: $policies, targetType: $targetType, targetIdentifiers: $targetIdentifiers) {
+    mutation removePolicyAssignments($policies: [String!]!, $targetType: PolicyAssignmentTargetType!, $targetIdentifiers: [String!], $namespace: String) {
+  removePolicyAssignments(policies: $policies, targetType: $targetType, targetIdentifiers: $targetIdentifiers, namespace: $namespace) {
     message
     code
   }
@@ -6387,8 +6434,8 @@ export const ResetPasswordDocument = `
 }
     `;
 export const RevokeRoleDocument = `
-    mutation revokeRole($roleCode: String, $roleCodes: [String], $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
-  revokeRole(roleCode: $roleCode, roleCodes: $roleCodes, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
+    mutation revokeRole($namespace: String, $roleCode: String, $roleCodes: [String], $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
+  revokeRole(namespace: $namespace, roleCode: $roleCode, roleCodes: $roleCodes, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
     message
     code
   }
@@ -6754,8 +6801,9 @@ export const UpdatePhoneDocument = `
 }
     `;
 export const UpdatePolicyDocument = `
-    mutation updatePolicy($code: String!, $description: String, $statements: [PolicyStatementInput!], $newCode: String) {
-  updatePolicy(code: $code, description: $description, statements: $statements, newCode: $newCode) {
+    mutation updatePolicy($namespace: String, $code: String!, $description: String, $statements: [PolicyStatementInput!], $newCode: String) {
+  updatePolicy(namespace: $namespace, code: $code, description: $description, statements: $statements, newCode: $newCode) {
+    namespace
     code
     isDefault
     description
@@ -6771,8 +6819,9 @@ export const UpdatePolicyDocument = `
 }
     `;
 export const UpdateRoleDocument = `
-    mutation updateRole($code: String!, $description: String, $newCode: String) {
-  updateRole(code: $code, description: $description, newCode: $newCode) {
+    mutation updateRole($code: String!, $description: String, $newCode: String, $namespace: String) {
+  updateRole(code: $code, description: $description, newCode: $newCode, namespace: $namespace) {
+    namespace
     code
     arn
     description
@@ -6783,6 +6832,7 @@ export const UpdateRoleDocument = `
       totalCount
     }
     parent {
+      namespace
       code
       arn
       description
@@ -7477,30 +7527,26 @@ export const OrgsDocument = `
 }
     `;
 export const PoliciesDocument = `
-    query policies($page: Int, $limit: Int, $excludeDefault: Boolean) {
-  policies(page: $page, limit: $limit, excludeDefault: $excludeDefault) {
+    query policies($page: Int, $limit: Int, $excludeDefault: Boolean, $namespace: String) {
+  policies(page: $page, limit: $limit, excludeDefault: $excludeDefault, namespace: $namespace) {
     totalCount
     list {
+      namespace
       code
       isDefault
       description
       createdAt
       updatedAt
       assignmentsCount
-      statements {
-        resource
-        actions
-        effect
-      }
     }
   }
 }
     `;
 export const PolicyDocument = `
-    query policy($code: String!) {
-  policy(code: $code) {
+    query policy($namespace: String, $code: String!) {
+  policy(code: $code, namespace: $namespace) {
+    namespace
     code
-    assignmentsCount
     isDefault
     description
     statements {
@@ -7510,12 +7556,13 @@ export const PolicyDocument = `
     }
     createdAt
     updatedAt
+    assignmentsCount
   }
 }
     `;
 export const PolicyAssignmentsDocument = `
-    query policyAssignments($code: String, $targetType: PolicyAssignmentTargetType, $targetIdentifier: String, $page: Int, $limit: Int) {
-  policyAssignments(code: $code, targetType: $targetType, targetIdentifier: $targetIdentifier, page: $page, limit: $limit) {
+    query policyAssignments($namespace: String, $code: String, $targetType: PolicyAssignmentTargetType, $targetIdentifier: String, $page: Int, $limit: Int) {
+  policyAssignments(namespace: $namespace, code: $code, targetType: $targetType, targetIdentifier: $targetIdentifier, page: $page, limit: $limit) {
     totalCount
     list {
       code
@@ -7569,8 +7616,9 @@ export const QueryMfaDocument = `
 }
     `;
 export const RoleDocument = `
-    query role($code: String!) {
-  role(code: $code) {
+    query role($code: String!, $namespace: String) {
+  role(code: $code, namespace: $namespace) {
+    namespace
     code
     arn
     description
@@ -7581,6 +7629,7 @@ export const RoleDocument = `
       totalCount
     }
     parent {
+      namespace
       code
       arn
       description
@@ -7651,23 +7700,17 @@ export const RoleWithUsersDocument = `
 }
     `;
 export const RolesDocument = `
-    query roles($page: Int, $limit: Int, $sortBy: SortByEnum) {
-  roles(page: $page, limit: $limit, sortBy: $sortBy) {
+    query roles($namespace: String, $page: Int, $limit: Int, $sortBy: SortByEnum) {
+  roles(namespace: $namespace, page: $page, limit: $limit, sortBy: $sortBy) {
     totalCount
     list {
+      namespace
       code
       arn
       description
       isSystem
       createdAt
       updatedAt
-      parent {
-        code
-        description
-        isSystem
-        createdAt
-        updatedAt
-      }
     }
   }
 }
