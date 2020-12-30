@@ -7,6 +7,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** Arbitrary object */
+  Object: any;
 };
 
 export type Query = {
@@ -597,12 +599,19 @@ export type PolicyStatement = {
   resource: Scalars['String'];
   actions: Array<Scalars['String']>;
   effect?: Maybe<PolicyEffect>;
+  condition?: Maybe<Array<PolicyStatementCondition>>;
 };
 
 export enum PolicyEffect {
   Allow = 'ALLOW',
   Deny = 'DENY'
 }
+
+export type PolicyStatementCondition = {
+  param: Scalars['String'];
+  op: Scalars['String'];
+  value: Scalars['Object'];
+};
 
 export type PolicyAssignment = {
   code: Scalars['String'];
@@ -1087,6 +1096,7 @@ export type MutationCreatePolicyArgs = {
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   statements: Array<PolicyStatementInput>;
+  condition?: Maybe<Array<PolicyStatementConditionInput>>;
 };
 
 export type MutationUpdatePolicyArgs = {
@@ -1434,6 +1444,12 @@ export type PolicyStatementInput = {
   resource: Scalars['String'];
   actions: Array<Scalars['String']>;
   effect?: Maybe<PolicyEffect>;
+};
+
+export type PolicyStatementConditionInput = {
+  param: Scalars['String'];
+  op: Scalars['String'];
+  value: Scalars['Object'];
 };
 
 export type RegisterByUsernameInput = {
@@ -2082,6 +2098,7 @@ export type CreatePolicyVariables = Exact<{
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   statements: Array<PolicyStatementInput>;
+  condition?: Maybe<Array<PolicyStatementConditionInput>>;
 }>;
 
 export type CreatePolicyResponse = {
@@ -2096,6 +2113,7 @@ export type CreatePolicyResponse = {
       resource: string;
       actions: Array<string>;
       effect?: Maybe<PolicyEffect>;
+      condition?: Maybe<Array<{ param: string; op: string; value: any }>>;
     }>;
   };
 };
@@ -3596,6 +3614,7 @@ export type UpdatePolicyResponse = {
       resource: string;
       actions: Array<string>;
       effect?: Maybe<PolicyEffect>;
+      condition?: Maybe<Array<{ param: string; op: string; value: any }>>;
     }>;
   };
 };
@@ -4421,6 +4440,7 @@ export type PoliciesResponse = {
         resource: string;
         actions: Array<string>;
         effect?: Maybe<PolicyEffect>;
+        condition?: Maybe<Array<{ param: string; op: string; value: any }>>;
       }>;
     }>;
   };
@@ -4442,6 +4462,7 @@ export type PolicyResponse = {
       resource: string;
       actions: Array<string>;
       effect?: Maybe<PolicyEffect>;
+      condition?: Maybe<Array<{ param: string; op: string; value: any }>>;
     }>;
   }>;
 };
@@ -4483,6 +4504,7 @@ export type PolicyWithAssignmentsResponse = {
       resource: string;
       actions: Array<string>;
       effect?: Maybe<PolicyEffect>;
+      condition?: Maybe<Array<{ param: string; op: string; value: any }>>;
     }>;
     assignments: Array<{
       code: string;
@@ -5417,8 +5439,8 @@ export const CreateOrgDocument = `
 }
     `;
 export const CreatePolicyDocument = `
-    mutation createPolicy($code: String!, $description: String, $statements: [PolicyStatementInput!]!) {
-  createPolicy(code: $code, description: $description, statements: $statements) {
+    mutation createPolicy($code: String!, $description: String, $statements: [PolicyStatementInput!]!, $condition: [PolicyStatementConditionInput!]) {
+  createPolicy(code: $code, description: $description, statements: $statements, condition: $condition) {
     code
     assignmentsCount
     isDefault
@@ -5427,6 +5449,11 @@ export const CreatePolicyDocument = `
       resource
       actions
       effect
+      condition {
+        param
+        op
+        value
+      }
     }
     createdAt
     updatedAt
@@ -6763,6 +6790,11 @@ export const UpdatePolicyDocument = `
       resource
       actions
       effect
+      condition {
+        param
+        op
+        value
+      }
     }
     createdAt
     updatedAt
@@ -7491,6 +7523,11 @@ export const PoliciesDocument = `
         resource
         actions
         effect
+        condition {
+          param
+          op
+          value
+        }
       }
     }
   }
@@ -7507,6 +7544,11 @@ export const PolicyDocument = `
       resource
       actions
       effect
+      condition {
+        param
+        op
+        value
+      }
     }
     createdAt
     updatedAt
@@ -7535,6 +7577,11 @@ export const PolicyWithAssignmentsDocument = `
       resource
       actions
       effect
+      condition {
+        param
+        op
+        value
+      }
     }
     createdAt
     updatedAt
