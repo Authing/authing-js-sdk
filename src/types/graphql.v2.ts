@@ -1096,7 +1096,6 @@ export type MutationCreatePolicyArgs = {
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   statements: Array<PolicyStatementInput>;
-  condition?: Maybe<Array<PolicyStatementConditionInput>>;
 };
 
 export type MutationUpdatePolicyArgs = {
@@ -1444,6 +1443,7 @@ export type PolicyStatementInput = {
   resource: Scalars['String'];
   actions: Array<Scalars['String']>;
   effect?: Maybe<PolicyEffect>;
+  condition?: Maybe<Array<PolicyStatementConditionInput>>;
 };
 
 export type PolicyStatementConditionInput = {
@@ -2098,17 +2098,16 @@ export type CreatePolicyVariables = Exact<{
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   statements: Array<PolicyStatementInput>;
-  condition?: Maybe<Array<PolicyStatementConditionInput>>;
 }>;
 
 export type CreatePolicyResponse = {
   createPolicy: {
     code: string;
-    assignmentsCount: number;
     isDefault: boolean;
     description?: Maybe<string>;
     createdAt?: Maybe<string>;
     updatedAt?: Maybe<string>;
+    assignmentsCount: number;
     statements: Array<{
       resource: string;
       actions: Array<string>;
@@ -5439,10 +5438,9 @@ export const CreateOrgDocument = `
 }
     `;
 export const CreatePolicyDocument = `
-    mutation createPolicy($code: String!, $description: String, $statements: [PolicyStatementInput!]!, $condition: [PolicyStatementConditionInput!]) {
-  createPolicy(code: $code, description: $description, statements: $statements, condition: $condition) {
+    mutation createPolicy($code: String!, $description: String, $statements: [PolicyStatementInput!]!) {
+  createPolicy(code: $code, description: $description, statements: $statements) {
     code
-    assignmentsCount
     isDefault
     description
     statements {
@@ -5457,6 +5455,7 @@ export const CreatePolicyDocument = `
     }
     createdAt
     updatedAt
+    assignmentsCount
   }
 }
     `;
