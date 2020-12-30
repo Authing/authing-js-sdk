@@ -83,19 +83,20 @@ export class PoliciesManagementClient {
    *
    * const policy = await managementClient.policies.create(code, statements);
    *
-   * @returns {Promise<DeepPartial<Policy>>}
+   * @returns {Promise<Policy>}
    * @memberof PoliciesManagementClient
    */
   async create(
     code: string,
     statements: PolicyStatement[],
     description?: string
-  ): Promise<DeepPartial<Policy>> {
+  ): Promise<Policy> {
     const res = await createPolicy(this.graphqlClient, this.tokenProvider, {
       code,
       statements,
       description
     });
+    // @ts-ignore
     return res.createPolicy;
   }
 
@@ -166,7 +167,7 @@ export class PoliciesManagementClient {
    *
    * const policy = await managementClient.policies.update('CODE', { newCode: 'NEWCODE' });
    *
-   * @returns {Promise<DeepPartial<Policy>>}
+   * @returns {Promise<Policy>}
    * @memberof PoliciesManagementClient
    *
    */
@@ -177,7 +178,7 @@ export class PoliciesManagementClient {
       description?: string;
       newCode?: string;
     }
-  ): Promise<DeepPartial<Policy>> {
+  ): Promise<Policy> {
     const { description, statements, newCode } = updates;
     const { updatePolicy: data } = await updatePolicy(
       this.graphqlClient,
@@ -189,6 +190,7 @@ export class PoliciesManagementClient {
         newCode
       }
     );
+    // @ts-ignore
     return data;
   }
 
@@ -201,10 +203,10 @@ export class PoliciesManagementClient {
    *
    * const policy = await managementClient.policies.detail('CODE');
    *
-   * @returns {Promise<DeepPartial<Policy>>}
+   * @returns {Promise<Policy>}
    * @memberof PoliciesManagementClient
    */
-  async detail(code: string): Promise<DeepPartial<Policy>> {
+  async detail(code: string): Promise<Policy> {
     const { policy: data } = await policy(
       this.graphqlClient,
       this.tokenProvider,
@@ -212,6 +214,7 @@ export class PoliciesManagementClient {
         code
       }
     );
+    // @ts-ignore
     return data;
   }
 
