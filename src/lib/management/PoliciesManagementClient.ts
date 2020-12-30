@@ -302,12 +302,17 @@ export class PoliciesManagementClient {
    * @returns {Promise<PaginatedPolicyAssignments>}
    * @memberof PoliciesManagementClient
    */
-  async listAssignments(
-    code: string,
-    page: number = 1,
-    limit: number = 10,
-    namespace?: string
-  ): Promise<PaginatedPolicyAssignments> {
+  async listAssignments({
+    code,
+    namespace,
+    page = 1,
+    limit = 10
+  }: {
+    code: string;
+    namespace?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<PaginatedPolicyAssignments> {
     const { policyAssignments: data } = await policyAssignments(
       this.graphqlClient,
       this.tokenProvider,

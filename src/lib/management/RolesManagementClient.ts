@@ -246,6 +246,7 @@ export class RolesManagementClient {
    * @description 获取角色用户列表
    *
    * @param {string} code 角色唯一标志符
+   * * @param {string} [namespace] 角色所属的 Namespace，默认值为 'default'
    *
    * @example
    * managementClient.roles.listUsers(code)
@@ -253,12 +254,16 @@ export class RolesManagementClient {
    * @returns {Promise<DeepPartial<PaginatedUsers>>}
    * @memberof RolesManagementClient
    */
-  async listUsers(code: string): Promise<DeepPartial<PaginatedUsers>> {
+  async listUsers(
+    code: string,
+    namespace: string
+  ): Promise<DeepPartial<PaginatedUsers>> {
     const { role: data } = await roleWithUsers(
       this.graphqlClient,
       this.tokenProvider,
       {
-        code
+        code,
+        namespace
       }
     );
     return data.users;

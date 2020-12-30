@@ -144,9 +144,9 @@ test('addAssignments', async t => {
     PolicyAssignmentTargetType.User,
     [user.id]
   );
-  const { totalCount, list } = await managementClient.policies.listAssignments(
+  const { totalCount, list } = await managementClient.policies.listAssignments({
     code
-  );
+  });
   t.assert(totalCount === 1);
   t.assert(list.length === 1);
   const { targetIdentifier } = list[0];
@@ -214,10 +214,10 @@ test('addAssignments # 多个策略', async t => {
 
   const {
     totalCount: totalCount1
-  } = await managementClient.policies.listAssignments(code1);
+  } = await managementClient.policies.listAssignments({ code: code1 });
   const {
     totalCount: totalCount2
-  } = await managementClient.policies.listAssignments(code2);
+  } = await managementClient.policies.listAssignments({ code: code2 });
   t.assert(totalCount1 === 1);
   t.assert(totalCount2 === 1);
 });
@@ -242,6 +242,8 @@ test('removeAssignments', async t => {
     PolicyAssignmentTargetType.User,
     [user.id]
   );
-  const { totalCount } = await managementClient.policies.listAssignments(code);
+  const { totalCount } = await managementClient.policies.listAssignments({
+    code
+  });
   t.assert(totalCount === 0);
 });
