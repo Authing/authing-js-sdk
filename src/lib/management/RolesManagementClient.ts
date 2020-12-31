@@ -256,7 +256,7 @@ export class RolesManagementClient {
    */
   async listUsers(
     code: string,
-    namespace: string
+    namespace?: string
   ): Promise<DeepPartial<PaginatedUsers>> {
     const { role: data } = await roleWithUsers(
       this.graphqlClient,
