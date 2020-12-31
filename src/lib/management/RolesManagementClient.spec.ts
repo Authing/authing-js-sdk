@@ -7,7 +7,7 @@ const managementClient = new ManagementClient(getOptionsFromEnv());
 
 test('create', async t => {
   const code = generateRandomString(5);
-  const role = await managementClient.roles.create(code);
+  const role = await managementClient.roles.create(code, '测试', 'sdktest');
   t.assert(role);
   t.assert(role.code === code);
 });
@@ -40,7 +40,7 @@ test('detail', async t => {
 
 test('delete', async t => {
   const code = generateRandomString(5);
-  let role = await managementClient.roles.create(code);
+  let role = await managementClient.roles.create(code, '');
   await managementClient.roles.delete(code);
   role = await managementClient.roles.detail(code);
   t.assert(!role);
