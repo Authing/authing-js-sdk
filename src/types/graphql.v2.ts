@@ -180,6 +180,7 @@ export type QueryPoliciesArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   namespace?: Maybe<Scalars['String']>;
+  excludeDefault?: Maybe<Scalars['Boolean']>;
 };
 
 export type QueryPolicyAssignmentsArgs = {
@@ -4612,6 +4613,7 @@ export type RoleResponse = {
 
 export type RoleWithUsersVariables = Exact<{
   code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 export type RoleWithUsersResponse = {
@@ -4621,6 +4623,7 @@ export type RoleWithUsersResponse = {
       list: Array<{
         id: string;
         arn: string;
+        status?: Maybe<UserStatus>;
         userPoolId: string;
         username?: Maybe<string>;
         email?: Maybe<string>;
@@ -7670,13 +7673,14 @@ export const RoleDocument = `
 }
     `;
 export const RoleWithUsersDocument = `
-    query roleWithUsers($code: String!) {
-  role(code: $code) {
+    query roleWithUsers($code: String!, $namespace: String) {
+  role(code: $code, namespace: $namespace) {
     users {
       totalCount
       list {
         id
         arn
+        status
         userPoolId
         username
         email

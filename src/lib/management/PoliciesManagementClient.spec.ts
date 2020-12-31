@@ -87,15 +87,6 @@ test('update policy # 系统内置策略', async t => {
   t.assert(failed);
 });
 
-test('list # excludeDefault', async t => {
-  const { list, totalCount } = await managementClient.policies.list({
-    excludeDefault: false
-  });
-  t.assert(totalCount > 0);
-  t.assert(list.length > 0);
-  t.assert(list.length <= 10);
-});
-
 test('detail', async t => {
   const code = generateRandomString(5);
   let policy = await managementClient.policies.create({

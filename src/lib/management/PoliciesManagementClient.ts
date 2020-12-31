@@ -254,18 +254,16 @@ export class PoliciesManagementClient {
     page?: number;
     limit?: number;
     namespace?: string;
-    excludeDefault?: boolean;
   }): Promise<DeepPartial<PaginatedPolicies>> {
     options = options || {};
-    const { page = 1, limit = 10, excludeDefault = true, namespace } = options;
+    const { page = 1, limit = 10, namespace } = options;
     const { policies: data } = await policies(
       this.graphqlClient,
       this.tokenProvider,
       {
         page,
         limit,
-        namespace,
-        excludeDefault
+        namespace
       }
     );
     return data;
