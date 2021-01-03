@@ -17,7 +17,8 @@ import {
   revokeRole,
   isUserExists,
   addUserToGroup,
-  removeUserFromGroup
+  removeUserFromGroup,
+  archivedUsers
 } from '../graphqlapi';
 import {
   User,
@@ -369,6 +370,34 @@ export class UsersManagementClient {
     );
     return data;
   }
+
+  /**
+   * @name listArchivedUsers
+   * @name_zh 获取已归档用户列表
+   * @description 获取已归档用户列表
+   *
+   * @param {number} [page=1] 页码数, 从 1 开始
+   * @param {number} [limit=10] 每页包含的用户数
+   *
+   * @example
+   *
+   * const user = await managementClient.users.listArchivedUsers();
+   *
+   * @returns
+   * @memberof UsersManagementClient
+   */
+  async listArchivedUsers(page: number = 1, limit: number = 10) {
+    const { archivedUsers: data } = await archivedUsers(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        page,
+        limit
+      }
+    );
+    return data;
+  }
+
 
   /**
    * @name exists

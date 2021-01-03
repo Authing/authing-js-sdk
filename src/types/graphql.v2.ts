@@ -60,6 +60,8 @@ export type Query = {
   user?: Maybe<User>;
   userBatch: Array<User>;
   users: PaginatedUsers;
+  /** 已归档的用户列表 */
+  archivedUsers: PaginatedUsers;
   searchUser: PaginatedUsers;
   checkLoginStatus?: Maybe<JwtTokenStatus>;
   isUserExists?: Maybe<Scalars['Boolean']>;
@@ -255,6 +257,12 @@ export type QueryUsersArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
+};
+
+
+export type QueryArchivedUsersArgs = {
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -2498,6 +2506,14 @@ export type AccessTokenVariables = Exact<{
 
 export type AccessTokenResponse = { accessToken: { accessToken?: Maybe<string>, exp?: Maybe<number>, iat?: Maybe<number> } };
 
+export type ArchivedUsersVariables = Exact<{
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type ArchivedUsersResponse = { archivedUsers: { totalCount: number, list: Array<{ id: string, arn: string, status?: Maybe<UserStatus>, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource: Array<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
+
 export type CheckLoginStatusVariables = Exact<{
   token?: Maybe<Scalars['String']>;
 }>;
@@ -4697,6 +4713,64 @@ export const AccessTokenDocument = `
     accessToken
     exp
     iat
+  }
+}
+    `;
+export const ArchivedUsersDocument = `
+    query archivedUsers($page: Int, $limit: Int) {
+  archivedUsers(page: $page, limit: $limit) {
+    totalCount
+    list {
+      id
+      arn
+      status
+      userPoolId
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerSource
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      city
+      province
+      country
+      createdAt
+      updatedAt
+    }
   }
 }
     `;
