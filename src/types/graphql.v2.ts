@@ -7,7 +7,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Arbitrary object */
   Object: any;
 };
 
@@ -508,8 +507,17 @@ export type User = {
   country?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
+  /** 用户所在的角色列表 */
   roles?: Maybe<PaginatedRoles>;
+  /** 用户所在的分组列表 */
   groups?: Maybe<PaginatedGroups>;
+  /** 用户所在的部门列表 */
+  departments?: Maybe<PaginatedDepartments>;
+};
+
+
+export type UserDepartmentsArgs = {
+  orgId?: Maybe<Scalars['String']>;
 };
 
 export enum UserStatus {
@@ -531,6 +539,8 @@ export type Identity = {
   isSocial?: Maybe<Scalars['Boolean']>;
   provider?: Maybe<Scalars['String']>;
   userPoolId?: Maybe<Scalars['String']>;
+  refreshToken?: Maybe<Scalars['String']>;
+  accessToken?: Maybe<Scalars['String']>;
 };
 
 export type PaginatedRoles = {
@@ -564,17 +574,17 @@ export type PaginatedGroups = {
   list: Array<Group>;
 };
 
-export type Mfa = {
-  /** MFA ID */
-  id: Scalars['String'];
-  /** 用户 ID */
-  userId: Scalars['String'];
-  /** 用户池 ID */
-  userPoolId: Scalars['String'];
-  /** 是否开启 MFA */
-  enable: Scalars['Boolean'];
-  /** 密钥 */
-  secret?: Maybe<Scalars['String']>;
+export type PaginatedDepartments = {
+  list: Array<UserDepartment>;
+  totalCount: Scalars['Int'];
+};
+
+export type UserDepartment = {
+  department: Node;
+  /** 是否为主部门 */
+  isMainDepartment: Scalars['Boolean'];
+  /** 加入该部门的时间 */
+  joinedAt?: Maybe<Scalars['String']>;
 };
 
 export type Node = {
@@ -595,9 +605,11 @@ export type Node = {
   code?: Maybe<Scalars['String']>;
   /** 是否为根节点 */
   root?: Maybe<Scalars['Boolean']>;
-  /** 距离父节点的深度（如果是查询整棵树，返回的 **depth** 为距离根节点的深度，如果是查询某个节点的子节点，返回的 **depath** 指的是距离该节点的深度。） */
+  /** 距离父节点的深度（如果是查询整棵树，返回的 **depth** 为距离根节点的深度，如果是查询某个节点的子节点，返回的 **depth** 指的是距离该节点的深度。） */
   depth?: Maybe<Scalars['Int']>;
   path: Array<Scalars['String']>;
+  codePath: Array<Maybe<Scalars['String']>>;
+  namePath: Array<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   /** 该节点的子节点 **ID** 列表 */
@@ -612,6 +624,19 @@ export type NodeUsersArgs = {
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
   includeChildrenNodes?: Maybe<Scalars['Boolean']>;
+};
+
+export type Mfa = {
+  /** MFA ID */
+  id: Scalars['String'];
+  /** 用户 ID */
+  userId: Scalars['String'];
+  /** 用户池 ID */
+  userPoolId: Scalars['String'];
+  /** 是否开启 MFA */
+  enable: Scalars['Boolean'];
+  /** 密钥 */
+  secret?: Maybe<Scalars['String']>;
 };
 
 export type Org = {
@@ -890,6 +915,8 @@ export type Mutation = {
   enableSocialConnectionInstance: SocialConnectionInstance;
   /** 关闭社会化登录 */
   disableSocialConnectionInstance: SocialConnectionInstance;
+  /** 设置用户在某个组织机构内所在的主部门 */
+  setMainDepartment: CommonMessage;
   /** 配置自定义邮件模版 */
   configEmailTemplate: EmailTemplate;
   /** 启用自定义邮件模版 */
@@ -1016,6 +1043,12 @@ export type MutationEnableSocialConnectionInstanceArgs = {
 
 export type MutationDisableSocialConnectionInstanceArgs = {
   provider: Scalars['String'];
+};
+
+
+export type MutationSetMainDepartmentArgs = {
+  userId: Scalars['String'];
+  departmentId?: Maybe<Scalars['String']>;
 };
 
 
@@ -1479,6 +1512,16 @@ export type CreateSocialConnectionInstanceFieldInput = {
   value: Scalars['String'];
 };
 
+export type CommonMessage = {
+  /** 可读的接口响应说明，请以业务状态码 code 作为判断业务是否成功的标志 */
+  message?: Maybe<Scalars['String']>;
+  /**
+   * 业务状态码（与 HTTP 响应码不同），但且仅当为 200 的时候表示操作成功表示，详细说明请见：
+   * [Authing 错误代码列表](https://docs.authing.co/advanced/error-code.html)
+   */
+  code?: Maybe<Scalars['Int']>;
+};
+
 export type ConfigEmailTemplateInput = {
   /** 邮件模版类型 */
   type: EmailTemplateType;
@@ -1508,16 +1551,6 @@ export enum EmailScene {
   /** 发送 MFA 验证邮件 */
   MfaVerify = 'MFA_VERIFY'
 }
-
-export type CommonMessage = {
-  /** 可读的接口响应说明，请以业务状态码 code 作为判断业务是否成功的标志 */
-  message?: Maybe<Scalars['String']>;
-  /**
-   * 业务状态码（与 HTTP 响应码不同），但且仅当为 200 的时候表示操作成功表示，详细说明请见：
-   * [Authing 错误代码列表](https://docs.authing.co/advanced/error-code.html)
-   */
-  code?: Maybe<Scalars['Int']>;
-};
 
 export type CreateFunctionInput = {
   /** 函数名称 */
@@ -2363,6 +2396,14 @@ export type SendEmailVariables = Exact<{
 
 export type SendEmailResponse = { sendEmail: { message?: Maybe<string>, code?: Maybe<number> } };
 
+export type SetMainDepartmentVariables = Exact<{
+  userId: Scalars['String'];
+  departmentId?: Maybe<Scalars['String']>;
+}>;
+
+
+export type SetMainDepartmentResponse = { setMainDepartment: { message?: Maybe<string>, code?: Maybe<number> } };
+
 export type SetUdfVariables = Exact<{
   targetType: UdfTargetType;
   key: Scalars['String'];
@@ -2565,6 +2606,14 @@ export type FunctionsVariables = Exact<{
 
 
 export type FunctionsResponse = { functions: { totalCount: number, list: Array<{ id: string, name: string, sourceCode: string, description?: Maybe<string>, url?: Maybe<string> }> } };
+
+export type GetUserDepartmentsVariables = Exact<{
+  id: Scalars['String'];
+  orgId?: Maybe<Scalars['String']>;
+}>;
+
+
+export type GetUserDepartmentsResponse = { user?: Maybe<{ departments?: Maybe<{ totalCount: number, list: Array<{ isMainDepartment: boolean, joinedAt?: Maybe<string>, department: { id: string, orgId?: Maybe<string>, name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, path: Array<string>, codePath: Array<Maybe<string>>, namePath: Array<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> } }> }> }> };
 
 export type GetUserGroupsVariables = Exact<{
   id: Scalars['String'];
@@ -2859,7 +2908,7 @@ export type UserVariables = Exact<{
 }>;
 
 
-export type UserResponse = { user?: Maybe<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource: Array<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> };
+export type UserResponse = { user?: Maybe<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource: Array<string>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, userPoolId?: Maybe<string> }>>> }> };
 
 export type UserBatchVariables = Exact<{
   ids: Array<Scalars['String']>;
@@ -4194,6 +4243,14 @@ export const SendEmailDocument = `
   }
 }
     `;
+export const SetMainDepartmentDocument = `
+    mutation setMainDepartment($userId: String!, $departmentId: String) {
+  setMainDepartment(userId: $userId, departmentId: $departmentId) {
+    message
+    code
+  }
+}
+    `;
 export const SetUdfDocument = `
     mutation setUdf($targetType: UDFTargetType!, $key: String!, $dataType: UDFDataType!, $label: String!, $options: String) {
   setUdf(targetType: $targetType, key: $key, dataType: $dataType, label: $label, options: $options) {
@@ -4911,6 +4968,37 @@ export const FunctionsDocument = `
       url
     }
     totalCount
+  }
+}
+    `;
+export const GetUserDepartmentsDocument = `
+    query getUserDepartments($id: String!, $orgId: String) {
+  user(id: $id) {
+    departments(orgId: $orgId) {
+      totalCount
+      list {
+        department {
+          id
+          orgId
+          name
+          nameI18n
+          description
+          descriptionI18n
+          order
+          code
+          root
+          depth
+          path
+          codePath
+          namePath
+          createdAt
+          updatedAt
+          children
+        }
+        isMainDepartment
+        joinedAt
+      }
+    }
   }
 }
     `;
@@ -5700,6 +5788,15 @@ export const UserDocument = `
     emailVerified
     phone
     phoneVerified
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
     unionid
     openid
     nickname
