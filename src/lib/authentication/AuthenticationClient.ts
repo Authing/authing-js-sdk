@@ -1089,15 +1089,19 @@ export class AuthenticationClient {
    * @returns {{code: 200, message: "绑定成功"}}
    * @memberof AuthenticationClient
    */
-  async linkAccount(options: {primaryUserToken: string, secondaryUserToken: string}): Promise<{code: number, message: string}> {
-    return await this.httpClient.request({
+  async linkAccount(options: {
+    primaryUserToken: string;
+    secondaryUserToken: string;
+  }): Promise<{ code: number; message: string }> {
+    await this.httpClient.request({
       method: 'POST',
       url: `${this.options.host}/api/v2/users/link`,
       data: {
         primaryUserToken: options.primaryUserToken,
-        secondaryUserToken: options.secondaryUserToken,
+        secondaryUserToken: options.secondaryUserToken
       }
     });
+    return { code: 200, message: '绑定成功' };
   }
   /**
    * @name bindPhone
@@ -1464,18 +1468,17 @@ export class AuthenticationClient {
    * @description 更新用户头像
    */
   public async updateAvatar() {
-
-    this.checkLoggedIn()
+    this.checkLoggedIn();
 
     // TODO: 设置超时时间
-    const task = new Promise((resolve) => {
+    const task = new Promise(resolve => {
       this.uploadPhoto(src => {
-        resolve(src)
+        resolve(src);
       });
-    })
+    });
 
     // @ts-ignore
-    const src: string = await task
+    const src: string = await task;
     const user = await this.updateProfile({ photo: src });
     this.setCurrentUser(user);
     return user;
