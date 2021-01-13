@@ -9,7 +9,7 @@ import moment from 'moment';
 
 const managementClient = new ManagementClient(getOptionsFromEnv());
 
-test.only('创建用户', async t => {
+test('创建用户', async t => {
   const username = generateRandomString(10);
   const email = generateRandomString(10);
   const phone = generateRandomPhone();

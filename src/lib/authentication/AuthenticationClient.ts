@@ -1073,7 +1073,36 @@ export class AuthenticationClient {
     this.setToken(data.token);
     return data;
   }
-
+  /**
+   * @name linkAccount
+   * @name_zh 关联账号
+   * @description 将社交账号绑定到主账号（手机号、邮箱账号）。
+   *
+   * @param {Object} options
+   * @param {string} options.primaryUserToken 主账号 Token
+   * @param {string} options.secondaryUserToken 社交账号 Token
+   *
+   * @example
+   *
+   * authenticationClient.linkAccount({ primaryUserToken: '', secondaryUserToken: '' })
+   *
+   * @returns {{code: 200, message: "绑定成功"}}
+   * @memberof AuthenticationClient
+   */
+  async linkAccount(options: {
+    primaryUserToken: string;
+    secondaryUserToken: string;
+  }): Promise<{ code: number; message: string }> {
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/users/link`,
+      data: {
+        primaryUserToken: options.primaryUserToken,
+        secondaryUserToken: options.secondaryUserToken
+      }
+    });
+    return { code: 200, message: '绑定成功' };
+  }
   /**
    * @name bindPhone
    * @name_zh 绑定手机号
@@ -1388,6 +1417,69 @@ export class AuthenticationClient {
         password
       }
     });
+    this.setCurrentUser(user);
+    return user;
+  }
+
+  /**
+   * @description 上传图片
+   */
+  private uploadPhoto(cb: (src: string) => void) {
+    const inputElem = document.createElement('input');
+    inputElem.type = 'file';
+    inputElem.accept = 'image/*';
+
+    const authing = this;
+
+    inputElem.onchange = () => {
+      const file = inputElem.files[0];
+      let formData = new FormData();
+      formData.append('file', file);
+      let xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        // 上传成功
+        if (this.readyState === 4) {
+          try {
+            const data = JSON.parse(this.responseText);
+            const { code, message } = data;
+            if (code !== 200) {
+              authing.options.onError(code, message);
+              throw new Error(JSON.stringify({ code, message }));
+            }
+            const {
+              data: { url }
+            } = data;
+            cb(url);
+          } catch (error) {
+            const code = 500;
+            const message = `上传图片失败, error = ${error.message}`;
+            authing.options.onError(code, message);
+            throw new Error(JSON.stringify({ code, message }));
+          }
+        }
+      };
+      xhr.open('POST', `${this.options.host}/api/v2/upload?folder=avatar`);
+      xhr.send(formData);
+    };
+    inputElem.click();
+  }
+
+  /**
+   * @description 更新用户头像
+   */
+  public async updateAvatar() {
+    this.checkLoggedIn();
+
+    // TODO: 设置超时时间
+    const task = new Promise(resolve => {
+      this.uploadPhoto(src => {
+        resolve(src);
+      });
+    });
+
+    // @ts-ignore
+    const src: string = await task;
+    const user = await this.updateProfile({ photo: src });
     this.setCurrentUser(user);
     return user;
   }

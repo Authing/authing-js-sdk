@@ -273,7 +273,10 @@ import {
   SetUdvBatchResponse,
   LoginBySubAccountVariables,
   LoginBySubAccountResponse,
-  LoginBySubAccountDocument
+  LoginBySubAccountDocument,
+  ArchivedUsersVariables,
+  ArchivedUsersResponse,
+  ArchivedUsersDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -674,6 +677,20 @@ export const users = async (
   variables: UsersVariables
 ): Promise<UsersResponse> => {
   const query = UsersDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const archivedUsers = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: ArchivedUsersVariables
+): Promise<ArchivedUsersResponse> => {
+  const query = ArchivedUsersDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
