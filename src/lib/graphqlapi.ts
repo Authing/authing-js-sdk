@@ -95,9 +95,6 @@ import {
   CreateOrgResponse,
   CreateOrgDocument,
   CreateOrgVariables,
-  AddNodeVariables,
-  AddNodeResponse,
-  AddNodeDocument,
   UpdateNodeVariables,
   UpdateNodeResponse,
   UpdateNodeDocument,
@@ -276,7 +273,10 @@ import {
   LoginBySubAccountDocument,
   ArchivedUsersVariables,
   ArchivedUsersResponse,
-  ArchivedUsersDocument
+  ArchivedUsersDocument,
+  AddNodeV2Variables,
+  AddNodeV2Response,
+  AddNodeV2Document
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -842,9 +842,9 @@ export const updateRole = async (
 export const addNode = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
-  variables: AddNodeVariables
-): Promise<AddNodeResponse> => {
-  const query = AddNodeDocument;
+  variables: AddNodeV2Variables
+): Promise<AddNodeV2Response> => {
+  const query = AddNodeV2Document;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,

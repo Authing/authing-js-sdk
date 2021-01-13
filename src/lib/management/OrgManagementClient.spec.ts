@@ -136,10 +136,11 @@ test('addNode', async t => {
     generateRandomString()
   );
   const rootNode = org.rootNode;
-  const newOrg = await managementClient.org.addNode(org.id, rootNode.id, {
-    name: generateRandomString()
+  const name = generateRandomString()
+  const newNode = await managementClient.org.addNode(org.id, rootNode.id, {
+    name
   });
-  t.assert(newOrg.nodes.length === 2);
+  t.assert(newNode.name === name);
 });
 
 test('updateNode', async t => {

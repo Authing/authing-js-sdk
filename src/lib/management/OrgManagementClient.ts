@@ -159,7 +159,7 @@ export class OrgManagementClient {
    *
    * // newOrg.nodes.length 现在为 2
    *
-   * @returns {Promise<Org>}
+   * @returns {Promise<Node>}
    * @memberof OrgManagementClient
    */
   async addNode(
@@ -175,7 +175,7 @@ export class OrgManagementClient {
     }
   ) {
     const { name, code, order, nameI18n, description, descriptionI18n } = data;
-    const { addNode: org } = await addNode(
+    const { addNodeV2: node } = await addNode(
       this.graphqlClient,
       this.tokenProvider,
       {
@@ -189,7 +189,7 @@ export class OrgManagementClient {
         descriptionI18n
       }
     );
-    return this.buildTree(org);
+    return node
   }
 
   /**

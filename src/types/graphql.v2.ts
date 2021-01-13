@@ -956,6 +956,8 @@ export type Mutation = {
   deleteOrg: CommonMessage;
   /** 添加子节点 */
   addNode: Org;
+  /** 添加子节点 */
+  addNodeV2: Node;
   /** 修改节点 */
   updateNode: Node;
   /** 删除节点（会一并删掉子节点） */
@@ -1168,6 +1170,18 @@ export type MutationDeleteOrgArgs = {
 
 
 export type MutationAddNodeArgs = {
+  orgId: Scalars['String'];
+  parentNodeId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  nameI18n?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  descriptionI18n?: Maybe<Scalars['String']>;
+  order?: Maybe<Scalars['Int']>;
+  code?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationAddNodeV2Args = {
   orgId: Scalars['String'];
   parentNodeId?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -1945,6 +1959,20 @@ export type AddNodeVariables = Exact<{
 
 
 export type AddNodeResponse = { addNode: { id: string, rootNode: { id: string, orgId?: Maybe<string>, name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, path: Array<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }, nodes: Array<{ id: string, orgId?: Maybe<string>, name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, path: Array<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }> } };
+
+export type AddNodeV2Variables = Exact<{
+  orgId: Scalars['String'];
+  parentNodeId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  nameI18n?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  descriptionI18n?: Maybe<Scalars['String']>;
+  order?: Maybe<Scalars['Int']>;
+  code?: Maybe<Scalars['String']>;
+}>;
+
+
+export type AddNodeV2Response = { addNodeV2: { id: string, orgId?: Maybe<string>, name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, path: Array<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> } };
 
 export type AddPolicyAssignmentsVariables = Exact<{
   policies: Array<Scalars['String']>;
@@ -3072,6 +3100,26 @@ export const AddNodeDocument = `
       updatedAt
       children
     }
+  }
+}
+    `;
+export const AddNodeV2Document = `
+    mutation addNodeV2($orgId: String!, $parentNodeId: String, $name: String!, $nameI18n: String, $description: String, $descriptionI18n: String, $order: Int, $code: String) {
+  addNodeV2(orgId: $orgId, parentNodeId: $parentNodeId, name: $name, nameI18n: $nameI18n, description: $description, descriptionI18n: $descriptionI18n, order: $order, code: $code) {
+    id
+    orgId
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    path
+    createdAt
+    updatedAt
+    children
   }
 }
     `;
