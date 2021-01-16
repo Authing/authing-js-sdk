@@ -18,7 +18,8 @@ import {
   isUserExists,
   addUserToGroup,
   removeUserFromGroup,
-  archivedUsers
+  archivedUsers,
+  findUser
 } from '../graphqlapi';
 import {
   User,
@@ -398,7 +399,6 @@ export class UsersManagementClient {
     return data;
   }
 
-
   /**
    * @name exists
    * @name_zh 检查用户是否存在
@@ -449,7 +449,19 @@ export class UsersManagementClient {
    *
    * @memberof UsersManagementClient
    */
-  // async find(options: { username?: string; email?: string; phone?: string }) {}
+  async find(options: { username?: string; email?: string; phone?: string }) {
+    const { username, email, phone } = options;
+    const { findUser: user } = await findUser(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        username,
+        email,
+        phone
+      }
+    );
+    return user;
+  }
 
   /**
    * @name search

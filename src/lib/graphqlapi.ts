@@ -276,7 +276,10 @@ import {
   ArchivedUsersDocument,
   AddNodeV2Variables,
   AddNodeV2Response,
-  AddNodeV2Document
+  AddNodeV2Document,
+  FindUserVariables,
+  FindUserResponse,
+  FindUserDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -733,6 +736,20 @@ export const searchUser = async (
   variables: SearchUserVariables
 ): Promise<SearchUserResponse> => {
   const query = SearchUserDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const findUser = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: FindUserVariables
+): Promise<FindUserResponse> => {
+  const query = FindUserDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
