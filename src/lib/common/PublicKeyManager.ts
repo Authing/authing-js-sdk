@@ -1,6 +1,9 @@
+import { AuthenticationClientOptions } from '../authentication/types';
+import { ManagementClientOptions } from '../management/types';
 import { HttpClient } from './HttpClient';
 
 export class PublicKeyManager {
+  options: AuthenticationClientOptions | ManagementClientOptions
   host: string;
   httpClient: HttpClient;
 
@@ -9,8 +12,12 @@ export class PublicKeyManager {
    */
   private publicKey: string;
 
-  constructor(host: string, httpClient: HttpClient) {
-    this.host = host;
+  constructor(
+    options: AuthenticationClientOptions | ManagementClientOptions,
+    httpClient: HttpClient
+  ) {
+    this.options = options
+    this.host = options.host;
     this.httpClient = httpClient;
   }
 
@@ -18,6 +25,13 @@ export class PublicKeyManager {
    * @description 获取密码加密公钥
    */
   public async getPublicKey() {
+
+    // 直接使用 options 传入的 publicKey
+    if (this.options.publicKey) {
+      return this.options.publicKey;
+    }
+
+    // 使用缓存过的 publicKey
     if (this.publicKey) {
       return this.publicKey;
     }

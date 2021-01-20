@@ -77,7 +77,7 @@ export class ManagementClient {
       this.tokenProvider
     );
     this.publicKeyManager = new PublicKeyManager(
-      this.options.host,
+      this.options,
       this.httpClient
     );
     this.users = new UsersManagementClient(

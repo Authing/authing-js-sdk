@@ -21,6 +21,8 @@ export interface AuthenticationClientOptions {
   accessToken?: string;
   /** 加密函数 */
   encryptFunction?: (plainText: string, publicKey: string) => Promise<string>;
+  /** 密码传输加密公钥 */
+  publicKey?: string,
   httpClient?: typeof HttpClient;
   graphqlClient?: typeof GraphqlClient;
   tokenProvider?: typeof AuthenticationTokenProvider;

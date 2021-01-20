@@ -105,7 +105,7 @@ export class AuthenticationClient {
       this.tokenProvider
     );
     this.publicKeyManager = new PublicKeyManager(
-      this.options.host,
+      this.options,
       this.httpClient
     );
     this.wxqrcode = new QrCodeAuthenticationClient(
