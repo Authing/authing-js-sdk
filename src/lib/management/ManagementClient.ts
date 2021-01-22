@@ -14,6 +14,7 @@ import { UdfManagementClient } from './UdfManagementClient';
 import { GroupsManagementClient } from './GroupsManagementClient';
 import { AclManagementClient } from './AclManagementClient';
 import { WhitelistManagementClient } from './WhitelistManagementClient';
+import { StatisticsManagementClient } from './StatisticsManagementClient';
 import jwtDecode from 'jwt-decode';
 import { encrypt } from '../utils';
 import { PublicKeyManager } from '../common/PublicKeyManager';
@@ -47,6 +48,7 @@ export class ManagementClient {
   udf: UdfManagementClient;
   groups: GroupsManagementClient;
   whitelist: WhitelistManagementClient;
+  statistics: StatisticsManagementClient;
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -127,6 +129,11 @@ export class ManagementClient {
     this.groups = new GroupsManagementClient(
       this.options,
       this.graphqlClient,
+      this.tokenProvider
+    );
+    this.statistics = new StatisticsManagementClient(
+      this.options,
+      this.httpClient,
       this.tokenProvider
     );
   }

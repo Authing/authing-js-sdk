@@ -128,3 +128,196 @@ export interface CreateOIDCProviderInput {
 export interface ExtendedOrg extends Org {
   tree: any;
 }
+
+/**
+ * 用户支持的操作日志类型枚举
+ */
+export enum SupportedUserActionEnum {
+  /**
+   * 登录
+   */
+  LOGIN = 'login',
+  /**
+   * 注册
+   */
+  REGISTER = 'register',
+  /**
+   * 删除账户
+   */
+  DELETE_ACCOUNT = 'deleteAccount',
+  /**
+   * 修改账号信息
+   */
+  UPDATE_USER_INFO = 'updateUserinfo',
+  /**
+   * 刷新 token
+   */
+  REFRESH_TOKEN = 'refreshToken',
+  /**
+   * 修改邮箱
+   */
+  UPDATE_EMAIL = 'updateEmail',
+  /**
+   * 修改手机号
+   */
+  UPDATE_PHONE = 'updatePhone',
+  /**
+   * 修改密码
+   */
+  UPDATE_PASSWORD = 'updatePassword',
+  /**
+   * 验证 MFA
+   */
+  VERIFY_MFA = 'verifyMfa'
+}
+
+/**
+ * 管理员支持的操作日志类型枚举
+ */
+export enum SupportedAdminActionEnum {
+  /**
+   * 删除用户
+   */
+  DELETE_USER = 'deleteUser',
+  /**
+   * 批量删除用户
+   */
+  DELETE_USERS = 'deleteUsers',
+  /**
+   * 创建用户
+   */
+  CREATE_USER = 'createUser',
+  /**
+   * 刷新 Token
+   */
+  REFRESH_TOKEN = 'refreshToken',
+  /**
+   * 导入用户
+   */
+  IMPORT_USER = 'importUser',
+  /**
+   * 导出用户
+   */
+  EXPORT_USER = 'exportUser',
+  /**
+   * 刷新密码
+   */
+  REFRESH_SECRET = 'refreshSecret',
+  /**
+   * 删除用户池
+   */
+  DELETE_USERPOOL = 'deleteUserpool',
+  /**
+   * 创建用户池
+   */
+  CREATE_USERPOOL = 'createUserpool',
+  /**
+   * 修改用户池配置
+   */
+  USERPOOL_UPDATE_CONFIG = 'userpool:UpdateConfig',
+  /**
+   * 刷新用户池密钥
+   */
+  REFRESH_USERPOOL_SECRET = 'refreshUserpoolSecret'
+}
+
+/**
+ * 用户日志信息
+ */
+export interface UserLogsInfo {
+  /**
+   * 用户池 ID
+   */
+  userpoolId: string;
+  /**
+   *用户 ID
+   */
+  userId: string;
+  /**
+   * 用户名
+   */
+  username: string;
+  /**
+   * 城市名
+   */
+  cityName: string;
+  /**
+   * 区域名
+   */
+  regionName: string;
+  /**
+   * 客户端 IP
+   */
+  clientIp: string;
+  /**
+   * 操作类型描述
+   */
+  operationDesc: string;
+  /**
+   * 操作类型
+   */
+  operationName: string;
+  /**
+   * 时间戳
+   */
+  timestamp: string;
+  /**
+   * 应用 ID
+   */
+  appId: string;
+  /**
+   * 应用名
+   */
+  appName: string;
+}
+
+/**
+ * 管理员操作日志信息
+ */
+export interface AdminLogsInfo {
+  /**
+   * 用户池 ID
+   */
+  userpoolId: string;
+  /**
+   * 操作者类型
+   */
+  operatorType: string;
+  /**
+   * 操作者 ID
+   */
+  operatorId: string;
+  /**
+   * 操作者名称
+   */
+  operatorName: string;
+  /**
+   * 操作类型
+   */
+  operationName: string;
+  /**
+   * 城市名
+   */
+  cityName: string;
+  /**
+   * 区域名
+   */
+  regionName: string;
+  /**
+   * 客户端 IP
+   */
+  clientIp: string;
+  /**
+   * 资源类型
+   */
+  resourceType: string;
+  /**
+   * 资源类型名称
+   */
+  resourceDesc: string;
+  resource_arn: string;
+  /**
+   * 时间戳
+   */
+  timestamp: string;
+}
