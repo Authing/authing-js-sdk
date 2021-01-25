@@ -19,7 +19,8 @@ import {
   addUserToGroup,
   removeUserFromGroup,
   archivedUsers,
-  findUser
+  findUser,
+  getUserDepartments
 } from '../graphqlapi';
 import {
   User,
@@ -704,5 +705,29 @@ export class UsersManagementClient {
       method: 'GET',
       url: `${this.options.host}/api/v2/users/${userId}/orgs`
     });
+  }
+
+  /**
+   * @name listDepartment
+   * @name_zh 获取用户所在部门
+   * @description 获取用户所在部门列表
+   *
+   * @param {string} userId 用户 ID
+   *
+   * @example
+   *
+   * const data = await managementClient.users.listDepartment("USERID");
+   *
+   * @returns {Promise<UserDepartmentList>}
+   *
+   * @memberof UsersManagementClient
+   */
+  async listDepartment(userId: string) {
+    const {
+      user: { departments }
+    } = await getUserDepartments(this.graphqlClient, this.tokenProvider, {
+      id: userId
+    });
+    return departments;
   }
 }

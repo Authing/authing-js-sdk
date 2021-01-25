@@ -279,7 +279,13 @@ import {
   AddNodeV2Document,
   FindUserVariables,
   FindUserResponse,
-  FindUserDocument
+  FindUserDocument,
+  GetUserDepartmentsDocument,
+  GetUserDepartmentsVariables,
+  GetUserDepartmentsResponse,
+  SetMainDepartmentResponse,
+  SetMainDepartmentDocument,
+  SetMainDepartmentVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1058,6 +1064,34 @@ export const getUserRoles = async (
   variables: GetUserRolesVariables
 ): Promise<GetUserRolesResponse> => {
   const query = GetUserRolesDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const getUserDepartments = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: GetUserDepartmentsVariables
+): Promise<GetUserDepartmentsResponse> => {
+  const query = GetUserDepartmentsDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const setMainDepartment = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: SetMainDepartmentVariables
+): Promise<SetMainDepartmentResponse> => {
+  const query = SetMainDepartmentDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,

@@ -17,7 +17,8 @@ import {
   removeMembers,
   isRootNode,
   rootNode,
-  nodeById
+  nodeById,
+  setMainDepartment
 } from '../graphqlapi';
 import { CommonMessage, Org, PaginatedUsers } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
@@ -533,5 +534,32 @@ export class OrgManagementClient {
       }
     );
     return data.users;
+  }
+
+  /**
+   * @name setMainDepartment
+   * @name_zh 设置用户主部门
+   * @description 设置用户主部门
+   *
+   * @param {string} userId 用户 ID
+   * @param {string} departmentId 部门 ID
+   *
+   * @returns {Promise<PaginatedUsers>}
+   * @memberof OrgManagementClient
+   *
+   */
+  async setMainDepartment(
+    userId: string,
+    departmentId: string
+  ): Promise<CommonMessage> {
+    const { setMainDepartment: data } = await setMainDepartment(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        userId,
+        departmentId
+      }
+    );
+    return data;
   }
 }
