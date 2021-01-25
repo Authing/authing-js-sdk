@@ -15,6 +15,8 @@ export interface AuthenticationClientOptions {
   onError?: (code: number, message: string, data?: any) => void;
   /** Authing 服务器地址 */
   host?: string;
+  /** Websocket 服务器域名 */
+  websocketHost?: string;
   /** 请求来源 */
   requestFrom?: string;
   /** token */

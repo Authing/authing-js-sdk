@@ -104,10 +104,7 @@ export class AuthenticationClient {
       this.options,
       this.tokenProvider
     );
-    this.publicKeyManager = new PublicKeyManager(
-      this.options,
-      this.httpClient
-    );
+    this.publicKeyManager = new PublicKeyManager(this.options, this.httpClient);
     this.wxqrcode = new QrCodeAuthenticationClient(
       this.options,
       this.tokenProvider,
@@ -1407,7 +1404,9 @@ export class AuthenticationClient {
       .split('.')
       .slice(1)
       .join('.');
-    const api = `https://ws.${firstLevelDomain}/api/v2/ad/verify-user`;
+    const websocketHost =
+      this.options.websocketHost || `https://ws.${firstLevelDomain}`;
+    const api = `${websocketHost}/api/v2/ad/verify-user`;
 
     const user = await this.httpClient.request({
       method: 'POST',
