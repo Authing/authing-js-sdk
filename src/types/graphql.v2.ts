@@ -42,6 +42,7 @@ export type Query = {
   childrenNodes: Array<Node>;
   rootNode: Node;
   isRootNode?: Maybe<Scalars['Boolean']>;
+  searchNodes: Array<Node>;
   checkPasswordStrength: CheckPasswordStrengthResult;
   isActionAllowed: Scalars['Boolean'];
   isActionDenied: Scalars['Boolean'];
@@ -171,6 +172,11 @@ export type QueryRootNodeArgs = {
 export type QueryIsRootNodeArgs = {
   nodeId: Scalars['String'];
   orgId: Scalars['String'];
+};
+
+
+export type QuerySearchNodesArgs = {
+  keyword: Scalars['String'];
 };
 
 
@@ -779,6 +785,7 @@ export type UserPool = {
   description?: Maybe<Scalars['String']>;
   secret: Scalars['String'];
   jwtSecret: Scalars['String'];
+  ownerId?: Maybe<Scalars['String']>;
   userpoolTypes?: Maybe<Array<UserPoolType>>;
   logo: Scalars['String'];
   createdAt?: Maybe<Scalars['String']>;
@@ -1778,6 +1785,7 @@ export type CreateUserInput = {
   region?: Maybe<Scalars['String']>;
   postalCode?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
 };
 
 export type UpdateUserInput = {
@@ -1831,6 +1839,7 @@ export type UpdateUserInput = {
   city?: Maybe<Scalars['String']>;
   province?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
 };
 
 export type UpdateUserpoolInput = {
@@ -2883,7 +2892,14 @@ export type RootNodeVariables = Exact<{
 }>;
 
 
-export type RootNodeResponse = { rootNode: { id: string, orgId?: Maybe<string>, name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, path: Array<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>>, users: { totalCount: number } } };
+export type RootNodeResponse = { rootNode: { id: string, orgId?: Maybe<string>, name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, path: Array<string>, codePath: Array<Maybe<string>>, namePath: Array<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> } };
+
+export type SearchNodesVariables = Exact<{
+  keyword: Scalars['String'];
+}>;
+
+
+export type SearchNodesResponse = { searchNodes: Array<{ id: string, orgId?: Maybe<string>, name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, path: Array<string>, codePath: Array<Maybe<string>>, namePath: Array<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }> };
 
 export type SearchUserVariables = Exact<{
   query: Scalars['String'];
@@ -2956,7 +2972,7 @@ export type UserBatchResponse = { userBatch: Array<{ id: string, arn: string, us
 export type UserpoolVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserpoolResponse = { userpool: { id: string, name: string, domain: string, description?: Maybe<string>, secret: string, jwtSecret: string, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, appSsoEnabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, packageType?: Maybe<number>, useCustomUserStore?: Maybe<boolean>, loginRequireEmailVerified?: Maybe<boolean>, userpoolTypes?: Maybe<Array<{ code?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string>, image?: Maybe<string>, sdks?: Maybe<Array<Maybe<string>>> }>>, frequentRegisterCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, loginFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>, changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>, qrcodeLoginStrategy?: Maybe<{ qrcodeExpiresAfter?: Maybe<number>, returnFullUserInfo?: Maybe<boolean>, allowExchangeUserInfoFromBrowser?: Maybe<boolean>, ticketExpiresAfter?: Maybe<number> }>, app2WxappLoginStrategy?: Maybe<{ ticketExpriresAfter?: Maybe<number>, ticketExchangeUserInfoNeedSecret?: Maybe<boolean> }>, whitelist?: Maybe<{ phoneEnabled?: Maybe<boolean>, emailEnabled?: Maybe<boolean>, usernameEnabled?: Maybe<boolean> }>, customSMSProvider?: Maybe<{ enabled?: Maybe<boolean>, provider?: Maybe<string> }> } };
+export type UserpoolResponse = { userpool: { id: string, name: string, domain: string, description?: Maybe<string>, secret: string, jwtSecret: string, ownerId?: Maybe<string>, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, appSsoEnabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, packageType?: Maybe<number>, useCustomUserStore?: Maybe<boolean>, loginRequireEmailVerified?: Maybe<boolean>, userpoolTypes?: Maybe<Array<{ code?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string>, image?: Maybe<string>, sdks?: Maybe<Array<Maybe<string>>> }>>, frequentRegisterCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, loginFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>, changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>, qrcodeLoginStrategy?: Maybe<{ qrcodeExpiresAfter?: Maybe<number>, returnFullUserInfo?: Maybe<boolean>, allowExchangeUserInfoFromBrowser?: Maybe<boolean>, ticketExpiresAfter?: Maybe<number> }>, app2WxappLoginStrategy?: Maybe<{ ticketExpriresAfter?: Maybe<number>, ticketExchangeUserInfoNeedSecret?: Maybe<boolean> }>, whitelist?: Maybe<{ phoneEnabled?: Maybe<boolean>, emailEnabled?: Maybe<boolean>, usernameEnabled?: Maybe<boolean> }>, customSMSProvider?: Maybe<{ enabled?: Maybe<boolean>, provider?: Maybe<string> }> } };
 
 export type UserpoolTypesVariables = Exact<{ [key: string]: never; }>;
 
@@ -2970,7 +2986,7 @@ export type UserpoolsVariables = Exact<{
 }>;
 
 
-export type UserpoolsResponse = { userpools: { totalCount: number, list: Array<{ id: string, name: string, domain: string, description?: Maybe<string>, secret: string, jwtSecret: string, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, appSsoEnabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, packageType?: Maybe<number>, useCustomUserStore?: Maybe<boolean>, loginRequireEmailVerified?: Maybe<boolean> }> } };
+export type UserpoolsResponse = { userpools: { totalCount: number, list: Array<{ id: string, name: string, domain: string, ownerId?: Maybe<string>, description?: Maybe<string>, secret: string, jwtSecret: string, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, appSsoEnabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, packageType?: Maybe<number>, useCustomUserStore?: Maybe<boolean>, loginRequireEmailVerified?: Maybe<boolean> }> } };
 
 export type UsersVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -5702,12 +5718,33 @@ export const RootNodeDocument = `
     root
     depth
     path
+    codePath
+    namePath
     createdAt
     updatedAt
     children
-    users(page: $page, limit: $limit, sortBy: $sortBy, includeChildrenNodes: $includeChildrenNodes) {
-      totalCount
-    }
+  }
+}
+    `;
+export const SearchNodesDocument = `
+    query searchNodes($keyword: String!) {
+  searchNodes(keyword: $keyword) {
+    id
+    orgId
+    name
+    nameI18n
+    description
+    descriptionI18n
+    order
+    code
+    root
+    depth
+    path
+    codePath
+    namePath
+    createdAt
+    updatedAt
+    children
   }
 }
     `;
@@ -5982,6 +6019,7 @@ export const UserpoolDocument = `
     description
     secret
     jwtSecret
+    ownerId
     userpoolTypes {
       code
       name
@@ -6060,6 +6098,7 @@ export const UserpoolsDocument = `
       id
       name
       domain
+      ownerId
       description
       secret
       jwtSecret
