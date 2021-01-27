@@ -718,7 +718,7 @@ export enum PolicyAssignmentTargetType {
   Role = 'ROLE',
   Group = 'GROUP',
   Org = 'ORG',
-  SubAccount = 'SUB_ACCOUNT'
+  Subaccount = 'SUBACCOUNT'
 }
 
 export type PaginatedPolicies = {
