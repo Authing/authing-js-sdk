@@ -12,7 +12,7 @@ module.exports = {
   output: {
     path: resolve('./build/browser'),
     filename: 'index.min.js',
-    library: 'AuthingJsSdk',
+    library: 'Authing',
     libraryTarget: 'window'
   },
   module: {
