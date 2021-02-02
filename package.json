@@ -1,23 +1,25 @@
 {
 	"name": "authing-js-sdk",
-	"version": "4.10.11",
+	"version": "4.10.12",
 	"description": "Official SDK of Authing",
 	"main": "build/main/index.js",
 	"typings": "build/main/index.d.ts",
 	"module": "build/module/index.js",
+	"browser": "build/browser/index.min.js",
 	"repository": "https://github.com/authing/authing.js",
 	"license": "MIT",
-  "keywords": [],
-  "sideEffects": [
-    "build/main/*",
-    "build/umd/*"
-  ],
+	"keywords": [],
+	"sideEffects": [
+		"build/main/*",
+		"build/umd/*"
+	],
 	"scripts": {
 		"describe": "npm-scripts-info",
 		"build": "run-s clean && run-p build:*",
 		"build:main": "tsc -p tsconfig.json",
 		"build:module": "tsc -p tsconfig.module.json",
 		"build:umd": "tsc -p tsconfig.brower.json",
+		"build:browser": "webpack",
 		"fix": "run-s fix:*",
 		"fix:prettier": "prettier \"src/**/*.ts\" --write",
 		"fix:tslint": "tslint --fix --project .",
@@ -57,6 +59,14 @@
 		"jwt-decode": "^2.2.0"
 	},
 	"devDependencies": {
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "buffer": "^6.0.3",
+		"crypto-browserify": "^3.12.0",
+		"@babel/core": "^7.12.10",
+		"@babel/plugin-transform-runtime": "^7.12.10",
+		"@babel/preset-env": "^7.12.11",
+		"@babel/preset-typescript": "^7.12.7",
 		"@bitjson/npm-scripts-info": "^1.0.0",
 		"@bitjson/typedoc": "^0.15.0-0",
 		"@istanbuljs/nyc-config-typescript": "^0.1.3",
@@ -84,10 +94,13 @@
 		"prettier": "^1.18.2",
 		"standard-version": "^6.0.1",
 		"trash-cli": "^3.0.0",
+		"ts-loader": "^8.0.14",
 		"tslint": "^5.18.0",
 		"tslint-config-prettier": "^1.18.0",
 		"tslint-immutable": "^6.0.1",
-		"typescript": "^3.9.3"
+		"typescript": "^3.9.3",
+		"webpack": "^5.19.0",
+		"webpack-cli": "^4.4.0"
 	},
 	"ava": {
 		"failFast": true,
