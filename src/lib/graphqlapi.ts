@@ -285,7 +285,10 @@ import {
   GetUserDepartmentsResponse,
   SetMainDepartmentResponse,
   SetMainDepartmentDocument,
-  SetMainDepartmentVariables
+  SetMainDepartmentVariables,
+  BindEmailVariables,
+  BindEmailResponse,
+  BindEmailDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1029,6 +1032,21 @@ export const bindPhone = async (
     variables
   });
 };
+
+export const bindEmail = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: BindEmailVariables
+): Promise<BindEmailResponse> => {
+  const query = BindEmailDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
 
 export const unbindPhone = async (
   garpqhlClient: GraphqlClient,

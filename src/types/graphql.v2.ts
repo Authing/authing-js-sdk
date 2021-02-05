@@ -1021,6 +1021,8 @@ export type Mutation = {
   updatePassword: User;
   /** 绑定手机号，调用此接口需要当前用户未绑定手机号 */
   bindPhone: User;
+  /** 绑定邮箱 */
+  bindEmail: User;
   /** 解绑定手机号，调用此接口需要当前用户已绑定手机号并且绑定了其他登录方式 */
   unbindPhone: User;
   /** 修改手机号。此接口需要验证手机号验证码，管理员直接修改请使用 **updateUser** 接口。 */
@@ -1456,6 +1458,12 @@ export type MutationUpdatePasswordArgs = {
 export type MutationBindPhoneArgs = {
   phone: Scalars['String'];
   phoneCode: Scalars['String'];
+};
+
+
+export type MutationBindEmailArgs = {
+  email: Scalars['String'];
+  emailCode: Scalars['String'];
 };
 
 
@@ -2039,6 +2047,14 @@ export type AssignRoleVariables = Exact<{
 
 
 export type AssignRoleResponse = { assignRole?: Maybe<{ message?: Maybe<string>, code?: Maybe<number> }> };
+
+export type BindEmailVariables = Exact<{
+  email: Scalars['String'];
+  emailCode: Scalars['String'];
+}>;
+
+
+export type BindEmailResponse = { bindEmail: { id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> } };
 
 export type BindPhoneVariables = Exact<{
   phone: Scalars['String'];
@@ -2889,10 +2905,6 @@ export type RolesVariables = Exact<{
 export type RolesResponse = { roles: { totalCount: number, list: Array<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type RootNodeVariables = Exact<{
-  page?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SortByEnum>;
-  includeChildrenNodes?: Maybe<Scalars['Boolean']>;
   orgId: Scalars['String'];
 }>;
 
@@ -3182,6 +3194,61 @@ export const AssignRoleDocument = `
   assignRole(namespace: $namespace, roleCode: $roleCode, roleCodes: $roleCodes, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
     message
     code
+  }
+}
+    `;
+export const BindEmailDocument = `
+    mutation bindEmail($email: String!, $emailCode: String!) {
+  bindEmail(email: $email, emailCode: $emailCode) {
+    id
+    arn
+    userPoolId
+    status
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    city
+    province
+    country
+    createdAt
+    updatedAt
   }
 }
     `;
@@ -5711,7 +5778,7 @@ export const RolesDocument = `
 }
     `;
 export const RootNodeDocument = `
-    query rootNode($page: Int, $limit: Int, $sortBy: SortByEnum, $includeChildrenNodes: Boolean, $orgId: String!) {
+    query rootNode($orgId: String!) {
   rootNode(orgId: $orgId) {
     id
     orgId
