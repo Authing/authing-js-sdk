@@ -1102,7 +1102,6 @@ export class AuthenticationClient {
     return { code: 200, message: '绑定成功' };
   }
 
-
   /**
    * @name bindPhone
    * @name_zh 绑定手机号
@@ -1241,8 +1240,16 @@ export class AuthenticationClient {
    * @returns {null}
    * @memberof AuthenticationClient
    */
-  async logout() {
+  public async logout() {
     const userId = this.checkLoggedIn();
+    if (this.options.appDomain) {
+      const logoutUrl = `//${this.options.appDomain}/cas/logout`;
+      await this.httpClient.request({
+        method: 'GET',
+        url: logoutUrl,
+        withCredentials: true
+      });
+    }
     await updateUser(this.graphqlClient, this.tokenProvider, {
       id: userId,
       input: {
