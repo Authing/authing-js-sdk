@@ -1243,7 +1243,7 @@ export class AuthenticationClient {
   public async logout() {
     const userId = this.checkLoggedIn();
     if (this.options.appDomain) {
-      const logoutUrl = `//${this.options.appDomain}/cas/logout`;
+      const logoutUrl = `${this.options.appDomain}/cas/logout`;
       await this.httpClient.request({
         method: 'GET',
         url: logoutUrl,

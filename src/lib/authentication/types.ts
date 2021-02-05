@@ -10,7 +10,7 @@ export interface AuthenticationClientOptions {
   userPoolId?: string;
   /** 应用 ID */
   appId?: string;
-  /** 应用域名 */
+  /** 应用域名，如 https://sample-app.authing.cn */
   appDomain?: string;
   /** 请求超时时间 **/
   timeout?: number;
