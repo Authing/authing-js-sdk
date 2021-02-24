@@ -15,5 +15,5 @@ test('查看管理员操作日志', async t => {
     operationNames: [SupportedAdminActionEnum.CREATE_USER]
   });
   console.log(auditLogs);
-  t.assert(auditLogs.length !== 0);
+  t.assert(auditLogs.totalCount !== 0);
 });

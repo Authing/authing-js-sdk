@@ -45,6 +45,7 @@ export class StatisticsManagementClient {
     operationNames?: string[];
     userIds?: string[];
     page?: number;
+    limit?: number
   }): Promise<{ totalCount: number; list: UserLogsInfo[] }> {
     let requestParam: any = {};
     if (options?.clientIp) {
@@ -60,6 +61,9 @@ export class StatisticsManagementClient {
     }
     if (options?.page) {
       requestParam.page = options.page;
+    }
+    if (options?.limit) {
+      requestParam.limit = options.limit;
     }
     const result: any = await this.httpClient.request({
       method: 'GET',
@@ -96,6 +100,7 @@ export class StatisticsManagementClient {
     operationNames?: string[];
     operatorArns?: string[];
     page?: number;
+    limit?: number
   }): Promise<{ list: AdminLogsInfo[]; totalCount: number }> {
     let requestParam: any = {};
     if (options?.clientIp) {
@@ -109,6 +114,9 @@ export class StatisticsManagementClient {
     }
     if (options?.page) {
       requestParam.page = options.page;
+    }
+    if (options?.limit) {
+      requestParam.limit = options.limit;
     }
     const result: any = await this.httpClient.request({
       method: 'GET',
