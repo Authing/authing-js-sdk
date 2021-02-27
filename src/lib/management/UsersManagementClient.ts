@@ -149,8 +149,14 @@ export class UsersManagementClient {
    * @returns {Promise<User>}
    * @memberof UsersManagementClient
    */
-  async create(userInfo: CreateUserInput): Promise<User> {
-    if (userInfo && userInfo.password) {
+  async create(
+    userInfo: CreateUserInput,
+    options?: {
+      keepPassword?: boolean;
+    }
+  ): Promise<User> {
+    const { keepPassword = false } = options || {};
+    if (userInfo?.password) {
       userInfo.password = await this.options.encryptFunction(
         userInfo.password,
         await this.publickKeyManager.getPublicKey()
@@ -160,7 +166,8 @@ export class UsersManagementClient {
       this.graphqlClient,
       this.tokenProvider,
       {
-        userInfo
+        userInfo,
+        keepPassword
       }
     );
     return user;
