@@ -54,7 +54,7 @@ export class StatisticsManagementClient {
     if (options?.operationNames) {
       requestParam.operation_name = options.operationNames;
     }
-    if (options?.userIds) {
+    if (options?.userIds?.length) {
       requestParam.operator_arn = options.userIds.map(userId => {
         return `arn:cn:authing:${this.options.userPoolId}:user:${userId}`;
       });
@@ -75,11 +75,11 @@ export class StatisticsManagementClient {
       list: list.map((log: any) => {
         return {
           userpoolId: log.userpool_id,
-          userId: log.user.id,
-          username: log.user.displayName,
-          cityName: log.geoip.city_name,
-          regionName: log.geoip.region_name,
-          clientIp: log.geoip.ip,
+          userId: log.user?.id,
+          username: log.user?.displayName,
+          cityName: log.geoip?.city_name,
+          regionName: log.geoip?.region_name,
+          clientIp: log.geoip?.ip,
           operationDesc: log.operation_desc,
           operationName: log.operation_name,
           timestamp: log.timestamp,
@@ -129,12 +129,12 @@ export class StatisticsManagementClient {
         return {
           userpoolId: log.userpool_id,
           operatorType: log.operator_type,
-          operatorId: log.operator_detail.id,
-          operatorName: log.operator_detail.displayName,
+          operatorId: log.operator_detail?.id,
+          operatorName: log.operator_detail?.displayName,
           operationName: log.operation_name,
-          cityName: log.geoip.city_name,
-          regionName: log.geoip.region_name,
-          clientIp: log.geoip.ip,
+          cityName: log.geoip?.city_name,
+          regionName: log.geoip?.region_name,
+          clientIp: log.geoip?.ip,
           resourceType: log.resource_type,
           resourceDesc: log.resource_desc,
           resource_arn: log.resource_arn,
