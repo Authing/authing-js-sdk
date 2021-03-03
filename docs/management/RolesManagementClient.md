@@ -24,7 +24,7 @@ managementClient.roles.listUsers // 获取角色用户列表
 
 ## 创建角色
 
-RolesManagementClient().create(code, description)
+RolesManagementClient().create(code)
 
 > 创建角色
 
@@ -32,7 +32,8 @@ RolesManagementClient().create(code, description)
 #### 参数
 
 - `code` \<string\> 角色唯一标志符 
-- `description` \<string\> 描述 
+- `options.description` \<string\> 描述 
+- `options.namespace` \<string\> 该角色所在的 namespace，默认为 default 
 
 #### 示例
 
@@ -49,7 +50,7 @@ managementClient.roles.create('rolea', 'RoleA')
 
 ## 删除角色
 
-RolesManagementClient().delete(code)
+RolesManagementClient().delete(code, namespace)
 
 > 删除角色
 
@@ -57,6 +58,7 @@ RolesManagementClient().delete(code)
 #### 参数
 
 - `code` \<string\> 角色唯一标志符 
+- `namespace` \<string\> 角色所属的 Namespace code，默认值为 'default' 
 
 #### 示例
 
@@ -73,7 +75,7 @@ managementClient.roles.delete('rolea')
 
 ## 批量删除角色
 
-RolesManagementClient().deleteMany(codeList)
+RolesManagementClient().deleteMany(codeList, namespace)
 
 > 批量删除角色
 
@@ -81,6 +83,7 @@ RolesManagementClient().deleteMany(codeList)
 #### 参数
 
 - `codeList` \<string[]\> 角色唯一标志符列表 
+- `namespace` \<string\> 角色所属的 Namespace，默认值为 'default' 
 
 #### 示例
 
@@ -97,7 +100,7 @@ managementClient.roles.delete(['rolea'])
 
 ## 修改角色
 
-RolesManagementClient().update(code, input)
+RolesManagementClient().update(code, options)
 
 > 修改角色
 
@@ -105,9 +108,10 @@ RolesManagementClient().update(code, input)
 #### 参数
 
 - `code` \<string\> 角色唯一标志符 
-- `input` \<Object\>  
-- `input.description` \<string\> 描述信息 
-- `input.newCode` \<string\> 新的唯一标志符 
+- `options` \<Object\>  
+- `options.description` \<string\> 描述信息 
+- `options.newCode` \<string\> 新的唯一标志符 
+- `options.namespace` \<string\> 角色所属的 Namespace，默认值为 'default' 
 
 #### 示例
 
@@ -124,7 +128,7 @@ managementClient.roles.update('rolea', {newCode: 'newcode'})
 
 ## 获取角色详情
 
-RolesManagementClient().detail(code)
+RolesManagementClient().detail(code, namespace)
 
 > 获取角色详情
 
@@ -132,10 +136,12 @@ RolesManagementClient().detail(code)
 #### 参数
 
 - `code` \<string\> 角色唯一标志符 
+- `namespace` \<string\> 角色所属的 Namespace，默认值为 'default' 
 
 #### 示例
 
 ```javascript
+`
 managementClient.roles.detail('manager')
 ```
 
@@ -148,15 +154,17 @@ managementClient.roles.detail('manager')
 
 ## 获取角色列表
 
-RolesManagementClient().list(page, limit)
+RolesManagementClient().list(options)
 
 > 获取角色列表
 
 
 #### 参数
 
-- `page` \<number\> 页码数 默认值为 : `1`。
-- `limit` \<number\> 每页个数 默认值为 : `10`。
+- `options` \<Object\>  
+- `options.page` \<number\> 页码数 默认值为 : `1`。
+- `options.limit` \<number\> 每页个数 默认值为 : `10`。
+- `options.namespace` \<string\> 角色所属的 Namespace，默认值为 'default' 
 
 #### 示例
 
@@ -173,7 +181,7 @@ managementClient.roles.list(2, 10)
 
 ## 获取角色用户列表
 
-RolesManagementClient().listUsers(code)
+RolesManagementClient().listUsers(code, namespace)
 
 > 获取角色用户列表
 
@@ -181,6 +189,7 @@ RolesManagementClient().listUsers(code)
 #### 参数
 
 - `code` \<string\> 角色唯一标志符 
+- `namespace` \<string\> 角色所属的 Namespace，默认值为 'default' 
 
 #### 示例
 
@@ -197,7 +206,7 @@ managementClient.roles.listUsers(code)
 
 ## 添加用户
 
-RolesManagementClient().addUsers(code, userIds)
+RolesManagementClient().addUsers(code, userIds, namespace)
 
 > 添加用户
 
@@ -206,6 +215,7 @@ RolesManagementClient().addUsers(code, userIds)
 
 - `code` \<string\> 角色唯一标志符 
 - `userIds` \<string[]\> 用户 ID 列表 
+- `namespace` \<string\> 角色所属的 Namespace，默认值为 'default' 
 
 #### 示例
 
@@ -222,7 +232,7 @@ managementClient.roles.addUsers(code, ['USERID1', 'USERID2'])
 
 ## 移除用户
 
-RolesManagementClient().removeUsers(code, userIds)
+RolesManagementClient().removeUsers(code, userIds, namespace)
 
 > 移除用户
 
@@ -231,6 +241,7 @@ RolesManagementClient().removeUsers(code, userIds)
 
 - `code` \<string\> 角色唯一标志符 
 - `userIds` \<string[]\> 用户 ID 列表 
+- `namespace` \<string\> 角色所属的 Namespace，默认值为 'default' 
 
 #### 示例
 

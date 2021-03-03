@@ -645,6 +645,7 @@ export class UsersManagementClient {
    *
    * @param {string} userId 用户 ID
    * @param {string} roles 角色 code 列表
+   * @param {string} namespace 权限组命名空间
    *
    * @example
    *
@@ -653,13 +654,14 @@ export class UsersManagementClient {
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
    */
-  async addRoles(userId: string, roles: string[]): Promise<CommonMessage> {
+  async addRoles(userId: string, roles: string[], namespace?: string): Promise<CommonMessage> {
     const { assignRole: data } = await assignRole(
       this.graphqlClient,
       this.tokenProvider,
       {
         roleCodes: roles,
-        userIds: [userId]
+        userIds: [userId],
+        namespace,
       }
     );
     return data;

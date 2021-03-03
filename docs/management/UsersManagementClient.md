@@ -297,6 +297,31 @@ const user = await managementClient.users.list();
 
       
 
+## 获取已归档用户列表
+
+UsersManagementClient().listArchivedUsers(page, limit)
+
+> 获取已归档用户列表
+
+
+#### 参数
+
+- `page` \<number\> 页码数, 从 1 开始 默认值为 : `1`。
+- `limit` \<number\> 每页包含的用户数 默认值为 : `10`。
+
+#### 示例
+
+```javascript
+const user = await managementClient.users.listArchivedUsers();
+```
+
+#### 返回值
+
+-  `null` 
+
+
+      
+
 ## 检查用户是否存在
 
 UsersManagementClient().exists(options)

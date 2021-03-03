@@ -62,6 +62,7 @@ UserPoolManagementClient().update(updates)
 - `updates.domain` \<string\> 用户池企业应用面板二级域名 
 - `updates.description` \<string\> 描述信息 
 - `updates.emailVerifiedDefault` \<boolean\> 设置邮箱默认为已验证状态（用户的 emailVerified 字段为 true） 
+- `updates.appSsoEnabled` \<boolean\> 开启用户池下的应用之间单点登录 
 - `updates.sendWelcomeEmail` \<boolean\> 用户注册之后是否发送欢迎邮件 
 - `updates.registerDisabled` \<boolean\> 是否关闭注册，当用户池关闭注册之后，普通用户将无法注册账号，只有管理员能够手动创建账号。 
 - `updates.allowedOrigins` \<string\> 安全域配置，安全域（Allowed Origins） 是允许从 JavaScript 向 Authing API 发出请求的 URL（通常与 CORS 一起使用）。 默认情况下，系统会允许你使用所有网址。 如果需要，此字段允许你输入其他来源。 你可以通过逐行分隔多个有效 URL，并在子域级别使用通配符（例如：https://*.sample.com）。

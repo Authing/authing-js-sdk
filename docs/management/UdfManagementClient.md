@@ -124,3 +124,56 @@ const list = await managementClient.udf.list(UdfTargetType.User);
 
 
       
+
+## 获取某一实体的自定义字段数据列表
+
+UdfManagementClient().listUdv(targetType, targetId)
+
+> 获取某一实体的自定义字段数据列表
+
+
+#### 参数
+
+- `targetType` \<UdfTargetType\> 自定义字段目标类型， USER 表示用户、ROLE 表示角色。 
+- `targetId` \<string\> 自定义字段目标 id，如用户 ID 
+
+#### 示例
+
+```javascript
+udfManagementClient.listUdv('USER', 'userId')
+```
+
+#### 返回值
+
+-  `Promise<Array<UserDefinedData>>` 
+
+
+      
+
+## 批量添加自定义数据
+
+UdfManagementClient().setUdvBatch(targetType, targetId, udvList)
+
+> 批量添加自定义数据
+
+
+#### 参数
+
+- `targetType` \<UdfTargetType\> 自定义字段目标类型， USER 表示用户、ROLE 表示角色。 
+- `targetId` \<string\> 自定义字段目标 id，如用户 ID 
+- `udvList` \<Object[]\>  
+- `udvList.key` \<boolean\> 自定义字段的 key 
+- `udvList.value` \<string\> 自定义字段的值 
+
+#### 示例
+
+```javascript
+udfManagementClient.setUdv('USER', 'userId', [{key: 'school', 'value': '清华大学'}])
+```
+
+#### 返回值
+
+-  `Promise<Array<UserDefinedData>>` 
+
+
+      
