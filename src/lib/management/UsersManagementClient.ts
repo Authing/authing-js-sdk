@@ -20,7 +20,8 @@ import {
   removeUserFromGroup,
   archivedUsers,
   findUser,
-  getUserDepartments
+  getUserDepartments,
+  listUserAuthorizedResources
 } from '../graphqlapi';
 import {
   User,
@@ -30,7 +31,8 @@ import {
   CommonMessage,
   UpdateUserInput,
   PaginatedGroups,
-  PaginatedRoles
+  PaginatedRoles,
+  PaginatedAuthorizedResources
 } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
 import { DeepPartial } from '../../types/index';
@@ -149,8 +151,14 @@ export class UsersManagementClient {
    * @returns {Promise<User>}
    * @memberof UsersManagementClient
    */
-  async create(userInfo: CreateUserInput): Promise<User> {
-    if (userInfo && userInfo.password) {
+  async create(
+    userInfo: CreateUserInput,
+    options?: {
+      keepPassword?: boolean;
+    }
+  ): Promise<User> {
+    const { keepPassword = false } = options || {};
+    if (userInfo?.password) {
       userInfo.password = await this.options.encryptFunction(
         userInfo.password,
         await this.publickKeyManager.getPublicKey()
@@ -160,7 +168,8 @@ export class UsersManagementClient {
       this.graphqlClient,
       this.tokenProvider,
       {
-        userInfo
+        userInfo,
+        keepPassword
       }
     );
     return user;
@@ -638,6 +647,7 @@ export class UsersManagementClient {
    *
    * @param {string} userId 用户 ID
    * @param {string} roles 角色 code 列表
+   * @param {string} namespace 权限组命名空间
    *
    * @example
    *
@@ -646,13 +656,18 @@ export class UsersManagementClient {
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
    */
-  async addRoles(userId: string, roles: string[]): Promise<CommonMessage> {
+  async addRoles(
+    userId: string,
+    roles: string[],
+    namespace?: string
+  ): Promise<CommonMessage> {
     const { assignRole: data } = await assignRole(
       this.graphqlClient,
       this.tokenProvider,
       {
         roleCodes: roles,
-        userIds: [userId]
+        userIds: [userId],
+        namespace
       }
     );
     return data;
@@ -729,5 +744,29 @@ export class UsersManagementClient {
       id: userId
     });
     return departments;
+  }
+
+  /**
+   * @description 获取用户被授权的所有资源
+   *
+   * @param userId
+   * @param namespace
+   */
+  public async listAuthorizedResources(
+    userId: string,
+    namespace: string
+  ): Promise<PaginatedAuthorizedResources> {
+    const { user } = await listUserAuthorizedResources(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        id: userId,
+        namespace
+      }
+    );
+    if (!user) {
+      throw new Error('用户不存在');
+    }
+    return user.authorizedResources;
   }
 }

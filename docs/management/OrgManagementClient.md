@@ -129,6 +129,32 @@ const newOrg = await managementClient.org.addNode(orgId, rootNode.id, { name: '�
 
       
 
+## 获取某个节点详情
+
+OrgManagementClient().getNodeById(nodeId)
+
+> 获取某个节点详情
+
+
+#### 参数
+
+- `nodeId` \<string\> 节点 ID 
+
+#### 示例
+
+```javascript
+const node = await managementClient.org.getNodeById('NODE_ID');
+
+// newOrg.nodes.length 现在为 2
+```
+
+#### 返回值
+
+-  `Promise<Node>` 
+
+
+      
+
 ## 修改节点
 
 OrgManagementClient().updateNode(id, updates)

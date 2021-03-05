@@ -1,8 +1,4 @@
-import {
-  AdminLogsInfo,
-  ManagementClientOptions,
-  UserLogsInfo
-} from './types';
+import { AdminLogsInfo, ManagementClientOptions, UserLogsInfo } from './types';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { HttpClient } from '../common/HttpClient';
 
@@ -49,7 +45,8 @@ export class StatisticsManagementClient {
     operationNames?: string[];
     userIds?: string[];
     page?: number;
-  }): Promise<UserLogsInfo[]> {
+    limit?: number
+  }): Promise<{ totalCount: number; list: UserLogsInfo[] }> {
     let requestParam: any = {};
     if (options?.clientIp) {
       requestParam.clientip = options.clientIp;
@@ -57,7 +54,7 @@ export class StatisticsManagementClient {
     if (options?.operationNames) {
       requestParam.operation_name = options.operationNames;
     }
-    if (options?.userIds) {
+    if (options?.userIds?.length) {
       requestParam.operator_arn = options.userIds.map(userId => {
         return `arn:cn:authing:${this.options.userPoolId}:user:${userId}`;
       });
@@ -65,26 +62,33 @@ export class StatisticsManagementClient {
     if (options?.page) {
       requestParam.page = options.page;
     }
+    if (options?.limit) {
+      requestParam.limit = options.limit;
+    }
     const result: any = await this.httpClient.request({
       method: 'GET',
       url: `${this.options.host}/api/v2/analysis/user-action`,
       params: { ...requestParam }
     });
-    return result.list.map((log: any) => {
-      return {
-        userpoolId: log.userpool_id,
-        userId: log.user.id,
-        username: log.user.displayName,
-        cityName: log.geoip.city_name,
-        regionName: log.geoip.region_name,
-        clientIp: log.geoip.ip,
-        operationDesc: log.operation_desc,
-        operationName: log.operation_name,
-        timestamp: log.timestamp,
-        appId: log.app_id,
-        appName: log.app?.name
-      };
-    })
+    const { list, totalCount } = result;
+    return {
+      list: list.map((log: any) => {
+        return {
+          userpoolId: log.userpool_id,
+          userId: log.user?.id,
+          username: log.user?.displayName,
+          cityName: log.geoip?.city_name,
+          regionName: log.geoip?.region_name,
+          clientIp: log.geoip?.ip,
+          operationDesc: log.operation_desc,
+          operationName: log.operation_name,
+          timestamp: log.timestamp,
+          appId: log.app_id,
+          appName: log.app?.name
+        };
+      }),
+      totalCount
+    };
   }
 
   /**
@@ -96,7 +100,8 @@ export class StatisticsManagementClient {
     operationNames?: string[];
     operatorArns?: string[];
     page?: number;
-  }): Promise<AdminLogsInfo[]> {
+    limit?: number
+  }): Promise<{ list: AdminLogsInfo[]; totalCount: number }> {
     let requestParam: any = {};
     if (options?.clientIp) {
       requestParam.clientip = options.clientIp;
@@ -110,27 +115,33 @@ export class StatisticsManagementClient {
     if (options?.page) {
       requestParam.page = options.page;
     }
+    if (options?.limit) {
+      requestParam.limit = options.limit;
+    }
     const result: any = await this.httpClient.request({
       method: 'GET',
       url: `${this.options.host}/api/v2/analysis/audit`,
       params: { ...requestParam }
     });
-    return result.list.map((log: any) => {
-      return {
-        userpoolId: log.userpool_id,
-        operatorType: log.operator_type,
-        operatorId: log.operator_detail.id,
-        operatorName: log.operator_detail.displayName,
-        operationName: log.operation_name,
-        cityName: log.geoip.city_name,
-        regionName: log.geoip.region_name,
-        clientIp: log.geoip.ip,
-        resourceType: log.resource_type,
-        resourceDesc: log.resource_desc,
-        resource_arn: log.resource_arn,
-        timestamp: log.timestamp
-      };
-    })
+    const { list, totalCount } = result;
+    return {
+      list: list.map((log: any) => {
+        return {
+          userpoolId: log.userpool_id,
+          operatorType: log.operator_type,
+          operatorId: log.operator_detail?.id,
+          operatorName: log.operator_detail?.displayName,
+          operationName: log.operation_name,
+          cityName: log.geoip?.city_name,
+          regionName: log.geoip?.region_name,
+          clientIp: log.geoip?.ip,
+          resourceType: log.resource_type,
+          resourceDesc: log.resource_desc,
+          resource_arn: log.resource_arn,
+          timestamp: log.timestamp
+        };
+      }),
+      totalCount
+    };
   }
-
 }

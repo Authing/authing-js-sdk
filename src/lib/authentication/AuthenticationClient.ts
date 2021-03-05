@@ -21,7 +21,8 @@ import {
   removeUdv,
   udv,
   unbindEmail,
-  loginBySubAccount
+  loginBySubAccount,
+  bindEmail
 } from '../graphqlapi';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
@@ -1100,6 +1101,7 @@ export class AuthenticationClient {
     });
     return { code: 200, message: '绑定成功' };
   }
+
   /**
    * @name bindPhone
    * @name_zh 绑定手机号
@@ -1145,6 +1147,34 @@ export class AuthenticationClient {
       this.graphqlClient,
       this.tokenProvider,
       {}
+    );
+    this.setCurrentUser(user);
+    return user;
+  }
+
+  /**
+   * @name bindEmail
+   * @name_zh 绑定手机号
+   * @description 用户初次绑定手机号，如果需要修改手机号请使用 updatePhone 接口。
+   *
+   * @param {string} email
+   * @param {string} emailCode
+   *
+   * @example
+   *
+   * authenticationClient.bindEmail('test@example.com', '1234')
+   *
+   * @returns {Promise<User>}
+   * @memberof AuthenticationClient
+   */
+  async bindEmail(email: string, emailCode: string): Promise<User> {
+    const { bindEmail: user } = await bindEmail(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        email,
+        emailCode
+      }
     );
     this.setCurrentUser(user);
     return user;
@@ -1210,8 +1240,16 @@ export class AuthenticationClient {
    * @returns {null}
    * @memberof AuthenticationClient
    */
-  async logout() {
+  public async logout() {
     const userId = this.checkLoggedIn();
+    if (this.options.appDomain) {
+      const logoutUrl = `${this.options.appDomain}/cas/logout`;
+      await this.httpClient.request({
+        method: 'GET',
+        url: logoutUrl,
+        withCredentials: true
+      });
+    }
     await updateUser(this.graphqlClient, this.tokenProvider, {
       id: userId,
       input: {

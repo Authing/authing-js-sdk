@@ -620,6 +620,32 @@ authenticationClient.updateEmail()
 
       
 
+## 关联账号
+
+AuthenticationClient().linkAccount(options)
+
+> 将社交账号绑定到主账号（手机号、邮箱账号）。
+
+
+#### 参数
+
+- `options` \<Object\>  
+- `options.primaryUserToken` \<string\> 主账号 Token 
+- `options.secondaryUserToken` \<string\> 社交账号 Token 
+
+#### 示例
+
+```javascript
+authenticationClient.linkAccount({ primaryUserToken: '', secondaryUserToken: '' })
+```
+
+#### 返回值
+
+-  `{code: 200, message: "绑定成功"` 
+
+
+      
+
 ## 绑定手机号
 
 AuthenticationClient().bindPhone(phone, phoneCode)
@@ -906,6 +932,50 @@ authenticationClient.loginByAd(
 #### 返回值
 
 -  `Promise<User>` 
+
+
+      
+
+## undefined
+
+undefined().undefined()
+
+> 上传图片
+
+
+#### 参数
+
+
+
+#### 示例
+
+
+
+#### 返回值
+
+
+
+
+      
+
+## undefined
+
+undefined().undefined()
+
+> 更新用户头像
+
+
+#### 参数
+
+
+
+#### 示例
+
+
+
+#### 返回值
+
+
 
 
       

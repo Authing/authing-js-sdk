@@ -285,7 +285,13 @@ import {
   GetUserDepartmentsResponse,
   SetMainDepartmentResponse,
   SetMainDepartmentDocument,
-  SetMainDepartmentVariables
+  SetMainDepartmentVariables,
+  BindEmailVariables,
+  BindEmailResponse,
+  BindEmailDocument,
+  ListUserAuthorizedResourcesVariables,
+  ListUserAuthorizedResourcesResponse,
+  ListUserAuthorizedResourcesDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1030,6 +1036,21 @@ export const bindPhone = async (
   });
 };
 
+export const bindEmail = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: BindEmailVariables
+): Promise<BindEmailResponse> => {
+  const query = BindEmailDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+
 export const unbindPhone = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
@@ -1607,6 +1628,21 @@ export const refreshAccessToken = async (
   const query = RefreshTokenDocument;
   return garpqhlClient.request({
     query,
+    variables
+  });
+};
+
+
+export const listUserAuthorizedResources = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: ListUserAuthorizedResourcesVariables
+): Promise<ListUserAuthorizedResourcesResponse> => {
+  const query = ListUserAuthorizedResourcesDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
     variables
   });
 };

@@ -562,4 +562,26 @@ export class OrgManagementClient {
     );
     return data;
   }
+
+  /**
+   * @description 导出所有组织机构
+   */
+  public async exportAll() {
+    const data = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/orgs/export`
+    })
+    return data
+  }
+
+  /**
+   * @description 导出某个组织机构
+   */
+  public async exportByOrgId(orgId: string){
+    const data = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/orgs/export?org_id=${orgId}`,
+    })
+    return data
+  }
 }

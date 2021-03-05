@@ -8,7 +8,10 @@ import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 export interface AuthenticationClientOptions {
   /** 用户池 ID **/
   userPoolId?: string;
+  /** 应用 ID */
   appId?: string;
+  /** 应用域名，如 https://sample-app.authing.cn */
+  appDomain?: string;
   /** 请求超时时间 **/
   timeout?: number;
   /** 错误回调函数, 默认为 (err: Error) => { throw err } 直接抛出报错 **/

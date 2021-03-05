@@ -170,6 +170,7 @@ PoliciesManagementClient().list(options)
 - `options` \<Object\>  
 - `options.page` \<number\>  默认值为 : `1`。
 - `options.limit` \<number\>  默认值为 : `10`。
+- `options.namespace` \<number\> 所属权限组 默认值为 : `'default'`。
 - `options.excludeDefault` \<boolean\> 是否排除系统默认资源 默认值为 : `true`。
 
 #### 示例
@@ -294,6 +295,70 @@ await managementClient.policies.removeAssignments(
   ["code1", "code2"],
   PolicyAssignmentTargetType.Role,
   ['ROLE_CODE']
+);
+```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
+      
+
+## 设置策略授权状态为开启
+
+PoliciesManagementClient().enableAssignment(policy, targetType, targetIdentifier)
+
+> 开启授权，处于未开启状态的策略授权不会生效
+
+
+#### 参数
+
+- `policy` \<string\> 策略 code 
+- `targetType` \<PolicyAssignmentTargetType\> 可选值为 USER (用户), ROLE (角色), GROUP（分组）, ORG（组织机构） 
+- `targetIdentifier` \<string\> 用户 id 、角色 code、分组 code、组织机构节点 ID 
+
+#### 示例
+
+```javascript
+import { PolicyAssignmentTargetType } from "authing-js-sdk"
+
+await managementClient.policies.enableAssignment(
+  "code1",
+  PolicyAssignmentTargetType.User,
+  'USERID'
+);
+```
+
+#### 返回值
+
+-  `Promise<CommonMessage>` 
+
+
+      
+
+## 设置策略授权状态为关闭
+
+PoliciesManagementClient().disableAssignment(policy, targetType, targetIdentifier)
+
+> 关闭策略授权，处于未开启状态的策略授权不会生效
+
+
+#### 参数
+
+- `policy` \<string\> 策略 code 
+- `targetType` \<PolicyAssignmentTargetType\> 可选值为 USER (用户), ROLE (角色), GROUP（分组）, ORG（组织机构） 
+- `targetIdentifier` \<string\> 用户 id 、角色 code、分组 code、组织机构节点 ID 
+
+#### 示例
+
+```javascript
+import { PolicyAssignmentTargetType } from "authing-js-sdk"
+
+await managementClient.policies.disableAssignment(
+  "code1",
+  PolicyAssignmentTargetType.User,
+  'USERID'
 );
 ```
 

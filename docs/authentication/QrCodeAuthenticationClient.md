@@ -40,6 +40,7 @@ QrCodeAuthenticationClient().startScanning(domId, options)
 
 - `domId` \<string\> DOM 元素的 ID。 
 - `options` \<Object\>  
+- `options.autoExchangeUserInfo` \<boolean\> 是否自定义使用 ticket 换取用户信息 
 - `options.interval` \<number\> 间隔时间，单位为毫秒，默认为 800 毫秒 
 - `options.onStart` \<Function\> 开始轮询的事件回调函数, 第一个参数为 setInterval 返回的计时器，可以用 clearInterval 取消此计时器 
 - `options.onResult` \<Function\> 获取到二维码最新状态事件回调函数，第一个参数为的类型为 QRCodeStatus。 
