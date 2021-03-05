@@ -288,7 +288,10 @@ import {
   SetMainDepartmentVariables,
   BindEmailVariables,
   BindEmailResponse,
-  BindEmailDocument
+  BindEmailDocument,
+  ListUserAuthorizedResourcesVariables,
+  ListUserAuthorizedResourcesResponse,
+  ListUserAuthorizedResourcesDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1625,6 +1628,21 @@ export const refreshAccessToken = async (
   const query = RefreshTokenDocument;
   return garpqhlClient.request({
     query,
+    variables
+  });
+};
+
+
+export const listUserAuthorizedResources = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: ListUserAuthorizedResourcesVariables
+): Promise<ListUserAuthorizedResourcesResponse> => {
+  const query = ListUserAuthorizedResourcesDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
     variables
   });
 };
