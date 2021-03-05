@@ -176,7 +176,7 @@ export class QrCodeAuthenticationClient {
     } = tips;
 
     let node = document.getElementById(domId);
-    let nodeWrapper: any;
+    let nodeWrapper: HTMLDivElement | undefined;
     let needGenerate = false;
 
     if (!node) {
@@ -287,7 +287,10 @@ export class QrCodeAuthenticationClient {
       shadowA.style.color = '#fff';
       shadowA.style.borderBottom = '1px solid #fff';
       shadowA.style.cursor = 'pointer';
-      shadowA.onclick = aOnClick;
+
+      if (aOnClick) {
+        shadowA.addEventListener('click', aOnClick);
+      }
       shadowA.id = shadowAId;
       shadow.appendChild(shadowA);
       return shadow;
@@ -431,7 +434,14 @@ export class QrCodeAuthenticationClient {
         };
 
         let decoratedOnExpired = function() {
-          const shadow = genShadow(expired, null, '__authing_success_tip');
+          const shadow = genShadow(
+            expired,
+            () => {
+              nodeWrapper.innerHTML = '';
+              start();
+            },
+            '__authing_success_tip'
+          );
           nodeWrapper.appendChild(shadow);
           if (onExpired) {
             onExpired();
