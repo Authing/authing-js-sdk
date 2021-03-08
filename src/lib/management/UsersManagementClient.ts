@@ -482,8 +482,11 @@ export class UsersManagementClient {
    * @param options 选项
    * @param {string[]} [options.fields] 搜索用户字段，如果不指定，默认会从 username、nickname、email、phone、company、name、givenName、familyName、middleName、profile、preferredUsername 这些字段进行模糊搜索。
    * 如果你需要精确查找，请使用 find 方法。
-   * @param {number} [page=1]
-   * @param {number} [limit=10]
+   * @param {number} [options.page=1]
+   * @param {number} [options.limit=10]
+   * @param {Object} [options.departmentOpts] 限制条件，用户所在的部门
+   * @param {string} [options.departmentOpts.departmentId] 部门 ID
+   * @param {string} [options.departmentOpts.includeChildrenDepartments] 是否包含此部门的子部门
    *
    * @example
    *
@@ -494,21 +497,31 @@ export class UsersManagementClient {
    */
   async search(
     query: string,
-    options?: { fields?: string[]; page?: number; limit?: number }
+    options?: {
+      fields?: string[];
+      page?: number;
+      limit?: number;
+      // 所在的部门 ID 列表
+      departmentOpts?: Array<{
+        departmentId: string;
+        includeChildrenDepartments?: boolean;
+      }>;
+    }
   ): Promise<PaginatedUsers> {
     options = options || {};
-    const { fields, page = 1, limit = 10 } = options;
-    const { searchUser: users } = await searchUser(
+    const { fields, page = 1, limit = 10, departmentOpts } = options;
+    const { searchUser: data } = await searchUser(
       this.graphqlClient,
       this.tokenProvider,
       {
         query,
         fields,
         page,
-        limit
+        limit,
+        departmentOpts
       }
     );
-    return users;
+    return data;
   }
 
   /**

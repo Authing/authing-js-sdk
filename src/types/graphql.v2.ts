@@ -276,6 +276,7 @@ export type QuerySearchUserArgs = {
   fields?: Maybe<Array<Maybe<Scalars['String']>>>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
+  departmentOpts?: Maybe<Array<Maybe<SearchUserDepartmentOpt>>>;
 };
 
 
@@ -788,6 +789,11 @@ export type UserDefinedField = {
   key: Scalars['String'];
   label?: Maybe<Scalars['String']>;
   options?: Maybe<Scalars['String']>;
+};
+
+export type SearchUserDepartmentOpt = {
+  departmentId?: Maybe<Scalars['String']>;
+  includeChildrenDepartments?: Maybe<Scalars['Boolean']>;
 };
 
 export type JwtTokenStatus = {
@@ -2941,6 +2947,7 @@ export type SearchUserVariables = Exact<{
   fields?: Maybe<Array<Maybe<Scalars['String']>>>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
+  departmentOpts?: Maybe<Array<Maybe<SearchUserDepartmentOpt>>>;
 }>;
 
 
@@ -5855,8 +5862,8 @@ export const SearchNodesDocument = `
 }
     `;
 export const SearchUserDocument = `
-    query searchUser($query: String!, $fields: [String], $page: Int, $limit: Int) {
-  searchUser(query: $query, fields: $fields, page: $page, limit: $limit) {
+    query searchUser($query: String!, $fields: [String], $page: Int, $limit: Int, $departmentOpts: [SearchUserDepartmentOpt]) {
+  searchUser(query: $query, fields: $fields, page: $page, limit: $limit, departmentOpts: $departmentOpts) {
     totalCount
     list {
       id

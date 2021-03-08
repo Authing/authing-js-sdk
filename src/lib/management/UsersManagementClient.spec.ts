@@ -208,7 +208,7 @@ test.skip('获取用户组织机构列表', async t => {
 });
 
 
-test.only('xx', async t => {
+test('xx', async t => {
   const data = await managementClient.users.listAuthorizedResources('603f567865d782899ffb0b6e', '603f52fa7c7ee4bc2e48e14c')
   console.log(JSON.stringify(data, null, 4))
   t.assert(data)
