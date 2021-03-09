@@ -27,7 +27,7 @@ export interface AuthenticationClientOptions {
   /** 加密函数 */
   encryptFunction?: (plainText: string, publicKey: string) => Promise<string>;
   /** 密码传输加密公钥 */
-  publicKey?: string,
+  publicKey?: string;
   httpClient?: typeof HttpClient;
   graphqlClient?: typeof GraphqlClient;
   tokenProvider?: typeof AuthenticationTokenProvider;
@@ -114,3 +114,26 @@ export type IMfaDeleteAssociation = {
   code: number;
   message: string;
 };
+
+/**
+ * 密码安全等级
+ */
+export enum PasswordSecurityLevel {
+  LOW = 1,
+  MIDDLE = 2,
+  HIGH = 3
+}
+export interface SecurityLevel {
+  // 是否绑定了邮箱
+  email: boolean;
+  // 是否绑定了个人 MFA
+  mfa: boolean;
+  // 是否设置了密码
+  password: boolean;
+  // 是否绑定了手机号
+  phone: boolean;
+  // 密码安全等级，null 表示密码还未做过安全等级检测检测
+  passwordSecurityLevel: PasswordSecurityLevel | null;
+  // 账户的总体安全等级评分
+  score: number;
+}

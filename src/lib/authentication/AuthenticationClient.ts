@@ -25,7 +25,7 @@ import {
   bindEmail
 } from '../graphqlapi';
 import { GraphqlClient } from '../common/GraphqlClient';
-import { AuthenticationClientOptions } from './types';
+import { AuthenticationClientOptions, SecurityLevel } from './types';
 import {
   CheckPasswordStrengthResult,
   CommonMessage,
@@ -1519,5 +1519,25 @@ export class AuthenticationClient {
     const user = await this.updateProfile({ photo: src });
     this.setCurrentUser(user);
     return user;
+  }
+
+  /**
+   * @name getSecurityLevel
+   * @name_zh 用户安全等级
+   * @description 获取用户的安全等级评分
+   *
+   * @example
+   *
+   * const data = await authenticationClient.getSecurityLevel();
+   *
+   * @returns {Promise<SecurityLevel>}
+   *
+   * @memberof AuthenticationClient
+   */
+  async getSecurityLevel(): Promise<SecurityLevel> {
+    return await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/users/me/security-level`
+    });
   }
 }
