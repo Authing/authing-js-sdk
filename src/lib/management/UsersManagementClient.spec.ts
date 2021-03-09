@@ -207,9 +207,66 @@ test.skip('获取用户组织机构列表', async t => {
   t.assert(data);
 });
 
-
 test('xx', async t => {
-  const data = await managementClient.users.listAuthorizedResources('603f567865d782899ffb0b6e', '603f52fa7c7ee4bc2e48e14c')
-  console.log(JSON.stringify(data, null, 4))
-  t.assert(data)
-})
+  const data = await managementClient.users.listAuthorizedResources(
+    '603f567865d782899ffb0b6e',
+    '603f52fa7c7ee4bc2e48e14c'
+  );
+  console.log(JSON.stringify(data, null, 4));
+  t.assert(data);
+});
+
+test('自定义数据', async t => {
+  const userId = '603f2c49e91d695739d7206c';
+  await managementClient.users.setUdfValue(userId, {
+    school: '华中科技大学'
+  });
+  const data = await managementClient.users.getUdfValue(userId);
+  console.log(data);
+  t.assert(data);
+
+  await managementClient.users.removeUdfValue(userId, 'school');
+  const data2 = await managementClient.users.getUdfValue(userId);
+  console.log(data2);
+  t.assert(data);
+});
+
+test('getUdfValueBatch', async t => {
+  const userId = '603f2c49e91d695739d7206c';
+  await managementClient.users.setUdfValue(userId, {
+    school: '华中科技大学'
+  });
+
+  const data = await managementClient.users.getUdfValueBatch([userId]);
+  console.log(data);
+  t.assert(data);
+});
+
+test.only('setUdfValueBatch', async t => {
+  t.assert(true)
+  try {
+    await managementClient.users.setUdfValueBatch([
+      {
+        userId: '603f2c49e91d695739d7206c',
+        data: {
+          school: '华中科技大学'
+        }
+      },
+      {
+        userId: '603f2c4910dfc09f1f3ecce5',
+        data: {
+          school: '清华大学',
+          age: 100
+        }
+      }
+    ]);
+    const data = await managementClient.users.getUdfValueBatch([
+      '603f2c49e91d695739d7206c',
+      '603f2c4910dfc09f1f3ecce5'
+    ]);
+    console.log(data);
+    t.assert(data);
+  } catch (error) {
+    console.log(error);
+  }
+});

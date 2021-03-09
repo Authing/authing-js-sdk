@@ -22,7 +22,8 @@ import {
   udv,
   unbindEmail,
   loginBySubAccount,
-  bindEmail
+  bindEmail,
+  setUdvBatch
 } from '../graphqlapi';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { AuthenticationClientOptions } from './types';
@@ -42,11 +43,12 @@ import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { resetPassword, updateUser } from '../graphqlapi';
 import { HttpClient } from '../common/HttpClient';
-import { encrypt, convertUdv } from '../utils';
+import { encrypt, convertUdv, convertUdvToKeyValuePair } from '../utils';
 import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from '../..';
 import { SocialAuthenticationClient } from './SocialAuthenticationClient';
 import { PublicKeyManager } from '../common/PublicKeyManager';
+import { KeyValuePair } from '../../types';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   timeout: 10000,
@@ -1519,5 +1521,57 @@ export class AuthenticationClient {
     const user = await this.updateProfile({ photo: src });
     this.setCurrentUser(user);
     return user;
+  }
+
+  /**
+   * @description 获取当前用户的所有自定义数据
+   *
+   */
+  public async getUdfValue(){
+    const userId = this.checkLoggedIn();
+    const { udv: list } = await udv(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.User,
+      targetId: userId
+    });
+    return convertUdvToKeyValuePair(list);
+  }
+
+  /**
+   * @description 设置自定义字段值
+   *
+   */
+  public async setUdfValue(data: KeyValuePair){
+    if (Object.keys(data).length === 0) {
+      throw new Error('empty udf value list')
+    }
+    const userId = this.checkLoggedIn();
+    await setUdvBatch(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        targetType: UdfTargetType.User,
+        targetId: userId,
+        udvList: Object.keys(data).map(key => ({
+          key,
+          value: JSON.stringify(data[key])
+        }))
+      }
+    );
+  }
+
+  /**
+   * @description 删除用户自定义数据
+   */
+  public async removeUdfValue(key: string){
+    const userId = this.checkLoggedIn();
+    await removeUdv(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        targetType: UdfTargetType.User,
+        targetId: userId,
+        key
+      }
+    );
   }
 }

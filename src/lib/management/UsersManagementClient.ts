@@ -21,7 +21,12 @@ import {
   archivedUsers,
   findUser,
   getUserDepartments,
-  listUserAuthorizedResources
+  listUserAuthorizedResources,
+  udv,
+  udfValueBatch,
+  setUdvBatch,
+  removeUdv,
+  setUdfValueBatch
 } from '../graphqlapi';
 import {
   User,
@@ -32,11 +37,14 @@ import {
   UpdateUserInput,
   PaginatedGroups,
   PaginatedRoles,
-  PaginatedAuthorizedResources
+  PaginatedAuthorizedResources,
+  UdfTargetType,
+  SetUdfValueBatchInput
 } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
-import { DeepPartial } from '../../types/index';
+import { DeepPartial, KeyValuePair } from '../../types/index';
 import { PublicKeyManager } from '../common/PublicKeyManager';
+import { convertUdvToKeyValuePair } from '../utils';
 
 /**
  * @name UsersManagementClient
@@ -781,5 +789,102 @@ export class UsersManagementClient {
       throw new Error('用户不存在');
     }
     return user.authorizedResources;
+  }
+
+  /**
+   * @description 获取某个用户的所有自定义数据
+   * @param userId: 用户 ID
+   *
+   */
+  public async getUdfValue(userId: string) {
+    const { udv: list } = await udv(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.User,
+      targetId: userId
+    });
+    return convertUdvToKeyValuePair(list);
+  }
+
+  /**
+   * @description 批量获取多个用户的自定义数据
+   *
+   * @param userIds: 用户 ID 列表
+   */
+  public async getUdfValueBatch(
+    userIds: string[]
+  ): Promise<{ [x: string]: KeyValuePair }> {
+    if (userIds.length === 0) {
+      throw new Error('empty user id list');
+    }
+    const { udfValueBatch: result } = await udfValueBatch(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        targetType: UdfTargetType.User,
+        targetIds: userIds
+      }
+    );
+    let ret: { [x: string]: KeyValuePair } = {};
+    for (const { targetId, data } of result) {
+      ret[targetId] = convertUdvToKeyValuePair(data);
+    }
+    return ret;
+  }
+
+  /**
+   * @description 设置某个用户的自定义数据
+   *
+   * @param userId
+   * @param data
+   */
+  public async setUdfValue(userId: string, data: KeyValuePair) {
+    if (Object.keys(data).length === 0) {
+      throw new Error('empty udf value list');
+    }
+    await setUdvBatch(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.User,
+      targetId: userId,
+      udvList: Object.keys(data).map(key => ({
+        key,
+        value: JSON.stringify(data[key])
+      }))
+    });
+  }
+
+  /**
+   * @description 批量设置自定义数据
+   *
+   */
+  public async setUdfValueBatch(
+    input: { userId: string; data: KeyValuePair }[]
+  ) {
+    if (input.length === 0) {
+      throw new Error('empty input list');
+    }
+    const params: SetUdfValueBatchInput[] = [];
+    input.forEach(({ userId, data }) => {
+      for (const key of Object.keys(data)) {
+        params.push({
+          targetId: userId,
+          key,
+          value: JSON.stringify(data[key])
+        });
+      }
+    });
+    await setUdfValueBatch(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.User,
+      input: params
+    });
+  }
+
+  /**
+   * @description 清楚用户的自定义数据
+   *
+   */
+  public async removeUdfValue(userId: string, key: string) {
+    await removeUdv(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.User,
+      targetId: userId,
+      key
+    });
   }
 }

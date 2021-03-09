@@ -452,3 +452,25 @@ test('checkLoginStatus', async t => {
   t.assert(data2.code === 200);
   t.assert(data2.status === true);
 });
+
+test('getUdfValue', async t => {
+  const authing = new AuthenticationClient(getOptionsFromEnv());
+
+  const username = generateRandomString(12);
+  const password = generateRandomString();
+  await authing.loginByUsername(username, password, {
+    autoRegister: true
+  });
+  await authing.setUdfValue({
+    school: '华中科技大学'
+  });
+
+  const data = await authing.getUdfValue()
+  console.log(data)
+  t.assert(data.school === '华中科技大学')
+
+  await authing.removeUdfValue('school')
+  const data2 = await authing.getUdfValue()
+  t.assert(data2.school === undefined)
+})
+
