@@ -1243,7 +1243,7 @@ export class AuthenticationClient {
   public async logout() {
     await this.httpClient.request({
       method: 'GET',
-      url: `/api/v2/logout?app_id=${this.options.appId}`,
+      url: `${this.options.host}/api/v2/logout?app_id=${this.options.appId}`,
       withCredentials: true
     });
     this.tokenProvider.clearUser();
