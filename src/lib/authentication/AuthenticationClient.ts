@@ -23,7 +23,8 @@ import {
   unbindEmail,
   loginBySubAccount,
   bindEmail,
-  setUdvBatch
+  setUdvBatch,
+  listUserAuthorizedResources
 } from '../graphqlapi';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { AuthenticationClientOptions, SecurityLevel } from './types';
@@ -32,6 +33,7 @@ import {
   CommonMessage,
   EmailScene,
   JwtTokenStatus,
+  PaginatedAuthorizedResources,
   RefreshToken,
   RegisterProfile,
   UdfTargetType,
@@ -1575,5 +1577,29 @@ export class AuthenticationClient {
       method: 'GET',
       url: `${this.options.host}/api/v2/users/me/security-level`
     });
+  }
+
+  /**
+   * @description 获取用户被授权的所有资源
+   *
+   * @param userId
+   * @param namespace
+   */
+  public async listAuthorizedResources(
+    namespace: string
+  ): Promise<PaginatedAuthorizedResources> {
+    const userId = this.checkLoggedIn();
+    const { user } = await listUserAuthorizedResources(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        id: userId,
+        namespace
+      }
+    );
+    if (!user) {
+      throw new Error('用户不存在');
+    }
+    return user.authorizedResources;
   }
 }
