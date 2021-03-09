@@ -1241,20 +1241,10 @@ export class AuthenticationClient {
    * @memberof AuthenticationClient
    */
   public async logout() {
-    const userId = this.checkLoggedIn();
-    if (this.options.appDomain) {
-      const logoutUrl = `${this.options.appDomain}/cas/logout`;
-      await this.httpClient.request({
-        method: 'GET',
-        url: logoutUrl,
-        withCredentials: true
-      });
-    }
-    await updateUser(this.graphqlClient, this.tokenProvider, {
-      id: userId,
-      input: {
-        tokenExpiredAt: '0'
-      }
+    await this.httpClient.request({
+      method: 'GET',
+      url: `/api/v2/logout?app_id=${this.options.appId}`,
+      withCredentials: true
     });
     this.tokenProvider.clearUser();
   }
