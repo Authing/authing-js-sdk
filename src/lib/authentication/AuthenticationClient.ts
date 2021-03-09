@@ -130,8 +130,8 @@ export class AuthenticationClient {
       this.tokenProvider,
       this.httpClient
     );
-    if (this.options.accessToken) {
-      this.setToken(this.options.accessToken);
+    if (this.options.token) {
+      this.setToken(this.options.token);
     }
   }
 
