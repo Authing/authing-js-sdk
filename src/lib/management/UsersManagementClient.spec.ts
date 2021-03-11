@@ -177,6 +177,12 @@ test('获取用户角色列表', async t => {
   t.assert(roles.list[0].code === role.code);
 });
 
+test.skip('获取用户角色列表 namespace', async t => {
+  const roles = await managementClient.users.listRoles('603f567865d782899ffb0b6e', '603f52f97cd214a8805c0cc8');
+  console.log(roles)
+  t.assert(roles)
+})
+
 test('删除用户', async t => {
   const user = await managementClient.users.create({
     username: generateRandomString(),
@@ -242,7 +248,7 @@ test('getUdfValueBatch', async t => {
   t.assert(data);
 });
 
-test.only('setUdfValueBatch', async t => {
+test('setUdfValueBatch', async t => {
   t.assert(true)
   try {
     await managementClient.users.setUdfValueBatch([

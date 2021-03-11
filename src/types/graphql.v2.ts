@@ -535,6 +535,11 @@ export type User = {
 };
 
 
+export type UserRolesArgs = {
+  namespace?: Maybe<Scalars['String']>;
+};
+
+
 export type UserDepartmentsArgs = {
   orgId?: Maybe<Scalars['String']>;
 };
@@ -2740,6 +2745,7 @@ export type GetUserGroupsResponse = { user?: Maybe<{ groups?: Maybe<{ totalCount
 
 export type GetUserRolesVariables = Exact<{
   id: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -5255,9 +5261,9 @@ export const GetUserGroupsDocument = `
 }
     `;
 export const GetUserRolesDocument = `
-    query getUserRoles($id: String!) {
+    query getUserRoles($id: String!, $namespace: String) {
   user(id: $id) {
-    roles {
+    roles(namespace: $namespace) {
       totalCount
       list {
         code

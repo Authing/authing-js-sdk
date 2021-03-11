@@ -644,6 +644,7 @@ export class UsersManagementClient {
    * @description 获取用户的角色列表
    *
    * @param {string} userId 用户 ID
+   * @param {string} namespace 权限组命名空间
    *
    * @example
    *
@@ -652,11 +653,15 @@ export class UsersManagementClient {
    * @returns {Promise<DeepPartial<PaginatedRoles>>}
    * @memberof UsersManagementClient
    */
-  async listRoles(userId: string): Promise<DeepPartial<PaginatedRoles>> {
+  async listRoles(
+    userId: string,
+    namespace?: string
+  ): Promise<DeepPartial<PaginatedRoles>> {
     const {
       user: { roles }
     } = await getUserRoles(this.graphqlClient, this.tokenProvider, {
-      id: userId
+      id: userId,
+      namespace
     });
     return roles;
   }
@@ -701,6 +706,7 @@ export class UsersManagementClient {
    *
    * @param {string} userId 用户 ID
    * @param {string} roles 角色 code 列表
+   * @param {string} namespace 权限分组 code
    *
    * @example
    *
@@ -709,13 +715,18 @@ export class UsersManagementClient {
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
    */
-  async removeRoles(userId: string, roles: string[]): Promise<CommonMessage> {
+  async removeRoles(
+    userId: string,
+    roles: string[],
+    namespace?: string
+  ): Promise<CommonMessage> {
     const { revokeRole: data } = await revokeRole(
       this.graphqlClient,
       this.tokenProvider,
       {
         roleCodes: roles,
-        userIds: [userId]
+        userIds: [userId],
+        namespace
       }
     );
     return data;
