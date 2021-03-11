@@ -57,6 +57,8 @@ export type Query = {
   udv: Array<UserDefinedData>;
   /** 查询用户池定义的自定义字段 */
   udf: Array<UserDefinedField>;
+  /** 批量查询多个对象的自定义数据 */
+  udfValueBatch: Array<UserDefinedDataMap>;
   user?: Maybe<User>;
   userBatch: Array<User>;
   users: PaginatedUsers;
@@ -245,6 +247,12 @@ export type QueryUdvArgs = {
 
 export type QueryUdfArgs = {
   targetType: UdfTargetType;
+};
+
+
+export type QueryUdfValueBatchArgs = {
+  targetType: UdfTargetType;
+  targetIds: Array<Maybe<Scalars['String']>>;
 };
 
 
@@ -527,6 +535,11 @@ export type User = {
 };
 
 
+export type UserRolesArgs = {
+  namespace?: Maybe<Scalars['String']>;
+};
+
+
 export type UserDepartmentsArgs = {
   orgId?: Maybe<Scalars['String']>;
 };
@@ -791,6 +804,11 @@ export type UserDefinedField = {
   options?: Maybe<Scalars['String']>;
 };
 
+export type UserDefinedDataMap = {
+  targetId: Scalars['String'];
+  data: Array<UserDefinedData>;
+};
+
 export type SearchUserDepartmentOpt = {
   departmentId?: Maybe<Scalars['String']>;
   includeChildrenDepartments?: Maybe<Scalars['Boolean']>;
@@ -1034,6 +1052,7 @@ export type Mutation = {
   setUdf: UserDefinedField;
   removeUdf?: Maybe<CommonMessage>;
   setUdv?: Maybe<Array<UserDefinedData>>;
+  setUdfValueBatch?: Maybe<CommonMessage>;
   removeUdv?: Maybe<Array<UserDefinedData>>;
   setUdvBatch?: Maybe<Array<UserDefinedData>>;
   refreshToken?: Maybe<RefreshToken>;
@@ -1442,6 +1461,12 @@ export type MutationSetUdvArgs = {
 };
 
 
+export type MutationSetUdfValueBatchArgs = {
+  targetType: UdfTargetType;
+  input: Array<SetUdfValueBatchInput>;
+};
+
+
 export type MutationRemoveUdvArgs = {
   targetType: UdfTargetType;
   targetId: Scalars['String'];
@@ -1757,6 +1782,12 @@ export type RegisterByPhoneCodeInput = {
   generateToken?: Maybe<Scalars['Boolean']>;
   clientIp?: Maybe<Scalars['String']>;
   params?: Maybe<Scalars['String']>;
+};
+
+export type SetUdfValueBatchInput = {
+  targetId: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type UserDefinedDataInput = {
@@ -2497,6 +2528,14 @@ export type SetUdfVariables = Exact<{
 
 export type SetUdfResponse = { setUdf: { targetType: UdfTargetType, dataType: UdfDataType, key: string, label?: Maybe<string>, options?: Maybe<string> } };
 
+export type SetUdfValueBatchVariables = Exact<{
+  targetType: UdfTargetType;
+  input: Array<SetUdfValueBatchInput>;
+}>;
+
+
+export type SetUdfValueBatchResponse = { setUdfValueBatch?: Maybe<{ code?: Maybe<number>, message?: Maybe<string> }> };
+
 export type SetUdvVariables = Exact<{
   targetType: UdfTargetType;
   targetId: Scalars['String'];
@@ -2706,6 +2745,7 @@ export type GetUserGroupsResponse = { user?: Maybe<{ groups?: Maybe<{ totalCount
 
 export type GetUserRolesVariables = Exact<{
   id: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -2988,6 +3028,14 @@ export type UdfVariables = Exact<{
 
 
 export type UdfResponse = { udf: Array<{ targetType: UdfTargetType, dataType: UdfDataType, key: string, label?: Maybe<string>, options?: Maybe<string> }> };
+
+export type UdfValueBatchVariables = Exact<{
+  targetType: UdfTargetType;
+  targetIds: Array<Scalars['String']>;
+}>;
+
+
+export type UdfValueBatchResponse = { udfValueBatch: Array<{ targetId: string, data: Array<{ key: string, dataType: UdfDataType, value: string, label?: Maybe<string> }> }> };
 
 export type UdvVariables = Exact<{
   targetType: UdfTargetType;
@@ -4441,6 +4489,14 @@ export const SetUdfDocument = `
   }
 }
     `;
+export const SetUdfValueBatchDocument = `
+    mutation setUdfValueBatch($targetType: UDFTargetType!, $input: [SetUdfValueBatchInput!]!) {
+  setUdfValueBatch(targetType: $targetType, input: $input) {
+    code
+    message
+  }
+}
+    `;
 export const SetUdvDocument = `
     mutation setUdv($targetType: UDFTargetType!, $targetId: String!, $key: String!, $value: String!) {
   setUdv(targetType: $targetType, targetId: $targetId, key: $key, value: $value) {
@@ -5205,9 +5261,9 @@ export const GetUserGroupsDocument = `
 }
     `;
 export const GetUserRolesDocument = `
-    query getUserRoles($id: String!) {
+    query getUserRoles($id: String!, $namespace: String) {
   user(id: $id) {
-    roles {
+    roles(namespace: $namespace) {
       totalCount
       list {
         code
@@ -5989,6 +6045,19 @@ export const UdfDocument = `
     key
     label
     options
+  }
+}
+    `;
+export const UdfValueBatchDocument = `
+    query udfValueBatch($targetType: UDFTargetType!, $targetIds: [String!]!) {
+  udfValueBatch(targetType: $targetType, targetIds: $targetIds) {
+    targetId
+    data {
+      key
+      dataType
+      value
+      label
+    }
   }
 }
     `;

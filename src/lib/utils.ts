@@ -1,3 +1,4 @@
+import { KeyValuePair } from '../types';
 import { UdfDataType } from '../types/graphql.v2';
 
 export const encrypt = async (plainText: string, publicKey: string) => {
@@ -169,7 +170,7 @@ export const objectToQueryString = (queryParameters: {
 
 export const convertUdv = (
   data: Array<{ key: string; dataType: UdfDataType; value: any }>
-) => {
+): Array<{ key: string; dataType: UdfDataType; value: any }> => {
   for (const item of data) {
     const { dataType, value } = item;
     if (dataType === UdfDataType.Number) {
@@ -183,4 +184,26 @@ export const convertUdv = (
     }
   }
   return data;
+};
+
+export const convertUdvToKeyValuePair = (
+  data: Array<{ key: string; dataType: UdfDataType; value: any }>
+): KeyValuePair => {
+  for (const item of data) {
+    const { dataType, value } = item;
+    if (dataType === UdfDataType.Number) {
+      item.value = JSON.parse(value);
+    } else if (dataType === UdfDataType.Boolean) {
+      item.value = JSON.parse(value);
+    } else if (dataType === UdfDataType.Datetime) {
+      item.value = new Date(parseInt(value));
+    } else if (dataType === UdfDataType.Object) {
+      item.value = JSON.parse(value);
+    }
+  }
+  const ret: any = {};
+  for (const item of data) {
+    ret[item.key] = item.value;
+  }
+  return ret;
 };

@@ -22,7 +22,9 @@ import {
   udv,
   unbindEmail,
   loginBySubAccount,
-  bindEmail
+  bindEmail,
+  setUdvBatch,
+  listUserAuthorizedResources
 } from '../graphqlapi';
 import { GraphqlClient } from '../common/GraphqlClient';
 import {
@@ -35,6 +37,7 @@ import {
   CommonMessage,
   EmailScene,
   JwtTokenStatus,
+  PaginatedAuthorizedResources,
   RefreshToken,
   RegisterProfile,
   UdfTargetType,
@@ -46,11 +49,12 @@ import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { resetPassword, updateUser } from '../graphqlapi';
 import { HttpClient } from '../common/HttpClient';
-import { encrypt, convertUdv } from '../utils';
+import { encrypt, convertUdv, convertUdvToKeyValuePair } from '../utils';
 import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from '../..';
 import { SocialAuthenticationClient } from './SocialAuthenticationClient';
 import { PublicKeyManager } from '../common/PublicKeyManager';
+import { KeyValuePair } from '../../types';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   timeout: 10000,
@@ -132,8 +136,8 @@ export class AuthenticationClient {
       this.tokenProvider,
       this.httpClient
     );
-    if (this.options.accessToken) {
-      this.setToken(this.options.accessToken);
+    if (this.options.token) {
+      this.setToken(this.options.token);
     }
   }
 
@@ -1516,6 +1520,50 @@ export class AuthenticationClient {
   }
 
   /**
+   * @description 获取当前用户的所有自定义数据
+   *
+   */
+  public async getUdfValue() {
+    const userId = this.checkLoggedIn();
+    const { udv: list } = await udv(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.User,
+      targetId: userId
+    });
+    return convertUdvToKeyValuePair(list);
+  }
+
+  /**
+   * @description 设置自定义字段值
+   *
+   */
+  public async setUdfValue(data: KeyValuePair) {
+    if (Object.keys(data).length === 0) {
+      throw new Error('empty udf value list');
+    }
+    const userId = this.checkLoggedIn();
+    await setUdvBatch(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.User,
+      targetId: userId,
+      udvList: Object.keys(data).map(key => ({
+        key,
+        value: JSON.stringify(data[key])
+      }))
+    });
+  }
+
+  /**
+   * @description 删除用户自定义数据
+   */
+  public async removeUdfValue(key: string) {
+    const userId = this.checkLoggedIn();
+    await removeUdv(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.User,
+      targetId: userId,
+      key
+    });
+  }
+
+  /**
    * @name getSecurityLevel
    * @name_zh 用户安全等级
    * @description 获取用户的安全等级评分
@@ -1536,6 +1584,30 @@ export class AuthenticationClient {
   }
 
   /**
+   * @description 获取用户被授权的所有资源
+   *
+   * @param userId
+   * @param namespace
+   */
+  public async listAuthorizedResources(
+    namespace: string
+  ): Promise<PaginatedAuthorizedResources> {
+    const userId = this.checkLoggedIn();
+    const { user } = await listUserAuthorizedResources(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        id: userId,
+        namespace
+      }
+    );
+    if (!user) {
+      throw new Error('用户不存在');
+    }
+    return user.authorizedResources;
+  }
+
+  /**
    * @name computedPasswordSecurityLevel
    * @name_zh 计算密码安全等级
    * @description 计算密码安全等级
@@ -1548,7 +1620,9 @@ export class AuthenticationClient {
    *
    * @memberof AuthenticationClient
    */
-  computedPasswordSecurityLevel(password: string): PasswordSecurityLevel {
+  public computedPasswordSecurityLevel(
+    password: string
+  ): PasswordSecurityLevel {
     if (typeof password !== 'string') {
       throw 'password must be a `string`';
     }

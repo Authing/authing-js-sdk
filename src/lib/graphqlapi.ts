@@ -291,7 +291,13 @@ import {
   BindEmailDocument,
   ListUserAuthorizedResourcesVariables,
   ListUserAuthorizedResourcesResponse,
-  ListUserAuthorizedResourcesDocument
+  ListUserAuthorizedResourcesDocument,
+  UdfValueBatchVariables,
+  UdfValueBatchResponse,
+  UdfValueBatchDocument,
+  SetUdfValueBatchVariables,
+  SetUdfValueBatchResponse,
+  SetUdfValueBatchDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1191,6 +1197,20 @@ export const udv = async (
   });
 };
 
+export const udfValueBatch = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UdfValueBatchVariables
+): Promise<UdfValueBatchResponse> => {
+  const query = UdfValueBatchDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
 export const setUdv = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
@@ -1218,6 +1238,21 @@ export const setUdvBatch = async (
     variables
   });
 };
+
+export const setUdfValueBatch = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: SetUdfValueBatchVariables
+): Promise<SetUdfValueBatchResponse> => {
+  const query = SetUdfValueBatchDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
 
 export const removeUdv = async (
   garpqhlClient: GraphqlClient,
