@@ -658,12 +658,15 @@ export class UsersManagementClient {
     namespace?: string
   ): Promise<DeepPartial<PaginatedRoles>> {
     const {
-      user: { roles }
+      user
     } = await getUserRoles(this.graphqlClient, this.tokenProvider, {
       id: userId,
       namespace
     });
-    return roles;
+    if (!user) {
+      throw new Error('用户不存在！')
+    }
+    return user.roles;
   }
 
   /**
