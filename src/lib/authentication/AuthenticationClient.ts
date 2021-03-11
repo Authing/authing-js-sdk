@@ -25,7 +25,11 @@ import {
   bindEmail
 } from '../graphqlapi';
 import { GraphqlClient } from '../common/GraphqlClient';
-import { AuthenticationClientOptions, SecurityLevel } from './types';
+import {
+  AuthenticationClientOptions,
+  SecurityLevel,
+  PasswordSecurityLevel
+} from './types';
 import {
   CheckPasswordStrengthResult,
   CommonMessage,
@@ -1529,5 +1533,34 @@ export class AuthenticationClient {
       method: 'GET',
       url: `${this.options.host}/api/v2/users/me/security-level`
     });
+  }
+
+  /**
+   * @name computedPasswordSecurityLevel
+   * @name_zh 计算密码安全等级
+   * @description 计算密码安全等级
+   *
+   * @example
+   *
+   * const data = authenticationClient.computedPasswordSecurityLevel('xxxxxxxx');
+   *
+   * @returns {PasswordSecurityLevel}
+   *
+   * @memberof AuthenticationClient
+   */
+  computedPasswordSecurityLevel(password: string): PasswordSecurityLevel {
+    if (typeof password !== 'string') {
+      throw 'password must be a `string`';
+    }
+
+    const highLevel = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{12,}$/g);
+    const middleLevel = new RegExp(/^(?=.*[a-zA-Z])(?=.*\d)[^]{8,}$/g);
+    if (password.match(highLevel) !== null) {
+      return PasswordSecurityLevel.HIGH;
+    }
+    if (password.match(middleLevel) !== null) {
+      return PasswordSecurityLevel.MIDDLE;
+    }
+    return PasswordSecurityLevel.LOW;
   }
 }
