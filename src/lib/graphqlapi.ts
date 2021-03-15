@@ -297,7 +297,22 @@ import {
   UdfValueBatchDocument,
   SetUdfValueBatchVariables,
   SetUdfValueBatchResponse,
-  SetUdfValueBatchDocument
+  SetUdfValueBatchDocument,
+  ListRoleAuthorizedResourcesVariables,
+  ListRoleAuthorizedResourcesResponse,
+  ListRoleAuthorizedResourcesDocument,
+  ListGroupAuthorizedResourcesVariables,
+  ListGroupAuthorizedResourcesResponse,
+  ListGroupAuthorizedResourcesDocument,
+  ListNodeByIdAuthorizedResourcesVariables,
+  ListNodeByIdAuthorizedResourcesResponse,
+  ListNodeByIdAuthorizedResourcesDocument,
+  ListNodeByCodeAuthorizedResourcesVariables,
+  ListNodeByCodeAuthorizedResourcesResponse,
+  ListNodeByCodeAuthorizedResourcesDocument,
+  AuthorizedResourcesVariables,
+  AuthorizedResourcesResponse,
+  AuthorizedResourcesDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1674,6 +1689,80 @@ export const listUserAuthorizedResources = async (
   variables: ListUserAuthorizedResourcesVariables
 ): Promise<ListUserAuthorizedResourcesResponse> => {
   const query = ListUserAuthorizedResourcesDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+
+export const listRoleAuthorizedResources = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: ListRoleAuthorizedResourcesVariables
+): Promise<ListRoleAuthorizedResourcesResponse> => {
+  const query = ListRoleAuthorizedResourcesDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+
+export const listGroupAuthorizedResources = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: ListGroupAuthorizedResourcesVariables
+): Promise<ListGroupAuthorizedResourcesResponse> => {
+  const query = ListGroupAuthorizedResourcesDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+
+export const listNodeByIdAuthorizedResources = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: ListNodeByIdAuthorizedResourcesVariables
+): Promise<ListNodeByIdAuthorizedResourcesResponse> => {
+  const query = ListNodeByIdAuthorizedResourcesDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+
+export const listNodeByCodeAuthorizedResources = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: ListNodeByCodeAuthorizedResourcesVariables
+): Promise<ListNodeByCodeAuthorizedResourcesResponse> => {
+  const query = ListNodeByCodeAuthorizedResourcesDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const listAuthorizedResources = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: AuthorizedResourcesVariables
+): Promise<AuthorizedResourcesResponse> => {
+  const query = AuthorizedResourcesDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,

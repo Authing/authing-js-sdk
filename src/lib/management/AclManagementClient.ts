@@ -1,8 +1,18 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
-import { allow, isAllowed } from '../graphqlapi';
-import { CommonMessage } from '../../types/graphql.v2';
+import {
+  allow,
+  isAllowed,
+  listAuthorizedResources,
+} from '../graphqlapi';
+import {
+  CommonMessage,
+  PaginatedAuthorizedResources,
+  PolicyAssignmentTargetType,
+  ResourceType
+} from '../../types/graphql.v2';
+import { formatAuthorizedResources } from '../utils';
 
 /**
  * @class AclManagementClient 管理权限、访问控制
@@ -111,5 +121,35 @@ export class AclManagementClient {
       }
     );
     return isActionAllowed;
+  }
+
+  /**
+   * @description 获取用户被授权的所有资源
+   *
+   * @param userId
+   * @param namespace
+   */
+  public async listAuthorizedResources(
+    targetType: PolicyAssignmentTargetType,
+    targetIdentifier: string,
+    namespace: string,
+    options?: {
+      resourceType?: ResourceType;
+    }
+  ): Promise<PaginatedAuthorizedResources> {
+    const { resourceType } = options || {};
+    let {
+      authorizedResources: { list, totalCount }
+    } = await listAuthorizedResources(this.graphqlClient, this.tokenProvider, {
+      targetType,
+      targetIdentifier,
+      namespace,
+      resourceType
+    });
+    list = formatAuthorizedResources(list);
+    return {
+      list,
+      totalCount
+    };
   }
 }

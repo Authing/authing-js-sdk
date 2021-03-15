@@ -1,6 +1,7 @@
 import { ManagementClient } from './ManagementClient';
 import { generateRandomString, getOptionsFromEnv } from '../testing-helper';
 import test from 'ava';
+import { ResourceType } from '../../types/graphql.v2';
 
 const managementClient = new ManagementClient(getOptionsFromEnv());
 
@@ -119,3 +120,15 @@ test('removeUsers', async t => {
   t.assert(totalCount === 0);
   t.assert(list.length === 0);
 });
+
+test.skip('listAuthorizedResources', async t => {
+  const data = await managementClient.groups.listAuthorizedResources(
+    'group',
+    '6018bab016c246d458ef0ad2',
+    {
+      resourceType: ResourceType.Menu
+    }
+  );
+  console.log(JSON.stringify(data, null, 4));
+  t.assert(data);
+})

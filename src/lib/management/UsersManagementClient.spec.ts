@@ -6,6 +6,7 @@ import {
 } from '../testing-helper';
 import test from 'ava';
 import moment from 'moment';
+import { ResourceType } from '../../types/graphql.v2';
 
 const managementClient = new ManagementClient(getOptionsFromEnv());
 
@@ -213,10 +214,13 @@ test.skip('获取用户组织机构列表', async t => {
   t.assert(data);
 });
 
-test('xx', async t => {
+test.skip('listAuthorizedResources', async t => {
   const data = await managementClient.users.listAuthorizedResources(
-    '603f567865d782899ffb0b6e',
-    '603f52fa7c7ee4bc2e48e14c'
+    '603f2c49e91d695739d7206c',
+    '6018bab016c246d458ef0ad2',
+    {
+      resourceType: ResourceType.Menu
+    }
   );
   console.log(JSON.stringify(data, null, 4));
   t.assert(data);

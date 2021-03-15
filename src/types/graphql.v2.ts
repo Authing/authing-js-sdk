@@ -49,6 +49,8 @@ export type Query = {
   policy?: Maybe<Policy>;
   policies: PaginatedPolicies;
   policyAssignments: PaginatedPolicyAssignments;
+  /** 获取一个对象被授权的资源列表 */
+  authorizedResources?: Maybe<PaginatedAuthorizedResources>;
   /** 通过 **code** 查询角色详情 */
   role?: Maybe<Role>;
   /** 获取角色列表 */
@@ -222,6 +224,14 @@ export type QueryPolicyAssignmentsArgs = {
   targetIdentifier?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryAuthorizedResourcesArgs = {
+  targetType?: Maybe<PolicyAssignmentTargetType>;
+  targetIdentifier?: Maybe<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
 };
 
 
@@ -436,12 +446,20 @@ export type Group = {
   updatedAt?: Maybe<Scalars['String']>;
   /** 包含的用户列表 */
   users: PaginatedUsers;
+  /** 被授权访问的所有资源 */
+  authorizedResources?: Maybe<PaginatedAuthorizedResources>;
 };
 
 
 export type GroupUsersArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
+};
+
+
+export type GroupAuthorizedResourcesArgs = {
+  namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
 };
 
 export type PaginatedUsers = {
@@ -547,6 +565,7 @@ export type UserDepartmentsArgs = {
 
 export type UserAuthorizedResourcesArgs = {
   namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
 };
 
 export enum UserStatus {
@@ -594,9 +613,35 @@ export type Role = {
   updatedAt?: Maybe<Scalars['String']>;
   /** 被授予此角色的用户列表 */
   users: PaginatedUsers;
+  /** 被授权访问的所有资源 */
+  authorizedResources?: Maybe<PaginatedAuthorizedResources>;
   /** 父角色 */
   parent?: Maybe<Role>;
 };
+
+
+export type RoleAuthorizedResourcesArgs = {
+  resourceType?: Maybe<Scalars['String']>;
+};
+
+export type PaginatedAuthorizedResources = {
+  totalCount: Scalars['Int'];
+  list: Array<AuthorizedResource>;
+};
+
+export type AuthorizedResource = {
+  code: Scalars['String'];
+  type?: Maybe<ResourceType>;
+  actions?: Maybe<Array<Scalars['String']>>;
+};
+
+export enum ResourceType {
+  Data = 'DATA',
+  Api = 'API',
+  Menu = 'MENU',
+  Ui = 'UI',
+  Button = 'BUTTON'
+}
 
 export type PaginatedGroups = {
   totalCount: Scalars['Int'];
@@ -645,6 +690,8 @@ export type Node = {
   children?: Maybe<Array<Scalars['String']>>;
   /** 节点的用户列表 */
   users: PaginatedUsers;
+  /** 被授权访问的所有资源 */
+  authorizedResources?: Maybe<PaginatedAuthorizedResources>;
 };
 
 
@@ -655,24 +702,11 @@ export type NodeUsersArgs = {
   includeChildrenNodes?: Maybe<Scalars['Boolean']>;
 };
 
-export type PaginatedAuthorizedResources = {
-  totalCount: Scalars['Int'];
-  list: Array<AuthorizedResource>;
-};
 
-export type AuthorizedResource = {
-  code: Scalars['String'];
-  type?: Maybe<ResourceType>;
-  actions?: Maybe<Array<Scalars['String']>>;
+export type NodeAuthorizedResourcesArgs = {
+  namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
 };
-
-export enum ResourceType {
-  Data = 'DATA',
-  Api = 'API',
-  Menu = 'MENU',
-  Ui = 'UI',
-  Button = 'BUTTON'
-}
 
 export type Mfa = {
   /** MFA ID */
@@ -2819,9 +2853,57 @@ export type IsUserExistsVariables = Exact<{
 
 export type IsUserExistsResponse = { isUserExists?: Maybe<boolean> };
 
+export type AuthorizedResourcesVariables = Exact<{
+  targetType?: Maybe<PolicyAssignmentTargetType>;
+  targetIdentifier?: Maybe<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
+}>;
+
+
+export type AuthorizedResourcesResponse = { authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> };
+
+export type ListGroupAuthorizedResourcesVariables = Exact<{
+  code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
+}>;
+
+
+export type ListGroupAuthorizedResourcesResponse = { group?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> }> };
+
+export type ListNodeByCodeAuthorizedResourcesVariables = Exact<{
+  orgId: Scalars['String'];
+  code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
+}>;
+
+
+export type ListNodeByCodeAuthorizedResourcesResponse = { nodeByCode?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> }> };
+
+export type ListNodeByIdAuthorizedResourcesVariables = Exact<{
+  id: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
+}>;
+
+
+export type ListNodeByIdAuthorizedResourcesResponse = { nodeById?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> }> };
+
+export type ListRoleAuthorizedResourcesVariables = Exact<{
+  code: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
+}>;
+
+
+export type ListRoleAuthorizedResourcesResponse = { role?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> }> };
+
 export type ListUserAuthorizedResourcesVariables = Exact<{
   id: Scalars['String'];
   namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -5395,10 +5477,78 @@ export const IsUserExistsDocument = `
   isUserExists(email: $email, phone: $phone, username: $username)
 }
     `;
+export const AuthorizedResourcesDocument = `
+    query authorizedResources($targetType: PolicyAssignmentTargetType, $targetIdentifier: String, $namespace: String, $resourceType: String) {
+  authorizedResources(targetType: $targetType, targetIdentifier: $targetIdentifier, namespace: $namespace, resourceType: $resourceType) {
+    totalCount
+    list {
+      code
+      type
+      actions
+    }
+  }
+}
+    `;
+export const ListGroupAuthorizedResourcesDocument = `
+    query listGroupAuthorizedResources($code: String!, $namespace: String, $resourceType: String) {
+  group(code: $code) {
+    authorizedResources(namespace: $namespace, resourceType: $resourceType) {
+      totalCount
+      list {
+        code
+        type
+        actions
+      }
+    }
+  }
+}
+    `;
+export const ListNodeByCodeAuthorizedResourcesDocument = `
+    query listNodeByCodeAuthorizedResources($orgId: String!, $code: String!, $namespace: String, $resourceType: String) {
+  nodeByCode(orgId: $orgId, code: $code) {
+    authorizedResources(namespace: $namespace, resourceType: $resourceType) {
+      totalCount
+      list {
+        code
+        type
+        actions
+      }
+    }
+  }
+}
+    `;
+export const ListNodeByIdAuthorizedResourcesDocument = `
+    query listNodeByIdAuthorizedResources($id: String!, $namespace: String, $resourceType: String) {
+  nodeById(id: $id) {
+    authorizedResources(namespace: $namespace, resourceType: $resourceType) {
+      totalCount
+      list {
+        code
+        type
+        actions
+      }
+    }
+  }
+}
+    `;
+export const ListRoleAuthorizedResourcesDocument = `
+    query listRoleAuthorizedResources($code: String!, $namespace: String, $resourceType: String) {
+  role(code: $code, namespace: $namespace) {
+    authorizedResources(resourceType: $resourceType) {
+      totalCount
+      list {
+        code
+        type
+        actions
+      }
+    }
+  }
+}
+    `;
 export const ListUserAuthorizedResourcesDocument = `
-    query listUserAuthorizedResources($id: String!, $namespace: String) {
+    query listUserAuthorizedResources($id: String!, $namespace: String, $resourceType: String) {
   user(id: $id) {
-    authorizedResources(namespace: $namespace) {
+    authorizedResources(namespace: $namespace, resourceType: $resourceType) {
       totalCount
       list {
         code

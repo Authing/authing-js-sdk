@@ -210,3 +210,14 @@ export const convertUdvToKeyValuePair = (
 
 export const isWechatBrowser = () =>
   /MicroMessenger/i.test(navigator?.userAgent);
+
+export const formatAuthorizedResources = (resources: any[]) => {
+  return resources.map(resource => {
+    for(const key in resource) {
+      if (!resource[key]) {
+        delete resource[key]
+      }
+    }
+    return resource
+  })
+};

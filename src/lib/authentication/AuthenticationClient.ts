@@ -40,6 +40,7 @@ import {
   PaginatedAuthorizedResources,
   RefreshToken,
   RegisterProfile,
+  ResourceType,
   UdfTargetType,
   UpdateUserInput,
   User,
@@ -49,7 +50,7 @@ import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { resetPassword, updateUser } from '../graphqlapi';
 import { HttpClient } from '../common/HttpClient';
-import { encrypt, convertUdv, convertUdvToKeyValuePair } from '../utils';
+import { encrypt, convertUdv, convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
 import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from '../..';
 import { SocialAuthenticationClient } from './SocialAuthenticationClient';
@@ -1590,21 +1591,33 @@ export class AuthenticationClient {
    * @param namespace
    */
   public async listAuthorizedResources(
-    namespace: string
+    namespace: string,
+    options?: {
+      resourceType?: ResourceType;
+    }
   ): Promise<PaginatedAuthorizedResources> {
     const userId = this.checkLoggedIn();
+    const { resourceType } = options || {};
     const { user } = await listUserAuthorizedResources(
       this.graphqlClient,
       this.tokenProvider,
       {
         id: userId,
-        namespace
+        namespace,
+        resourceType
       }
     );
     if (!user) {
       throw new Error('用户不存在');
     }
-    return user.authorizedResources;
+    let {
+      authorizedResources: { list, totalCount }
+    } = user;
+    list = formatAuthorizedResources(list);
+    return {
+      list,
+      totalCount
+    };
   }
 
   /**

@@ -1,6 +1,7 @@
 import { ManagementClient } from './ManagementClient';
 import { generateRandomString, getOptionsFromEnv } from '../testing-helper';
 import test from 'ava';
+import { ResourceType } from '../../types/graphql.v2';
 
 const managementClient = new ManagementClient(getOptionsFromEnv());
 
@@ -168,3 +169,28 @@ test('findById', async t => {
   t.assert(org);
   t.assert(org.rootNode);
 });
+
+test.only('listAuthorizedResourcesByNodeId', async t => {
+  const data = await managementClient.org.listAuthorizedResourcesByNodeId(
+    '603f4add1655b8d33f91a848',
+    '6018bab016c246d458ef0ad2',
+    {
+      resourceType: ResourceType.Data
+    }
+  );
+  console.log(JSON.stringify(data, null, 4));
+  t.assert(data);
+})
+
+test.only('listAuthorizedResourcesByNodeCode', async t => {
+  const data = await managementClient.org.listAuthorizedResourcesByNodeCode(
+    '603f4add8d7971d877feaa94',
+    'ou=devops,dc=example,dc=org',
+    '6018bab016c246d458ef0ad2',
+    {
+      resourceType: ResourceType.Data
+    }
+  );
+  console.log(JSON.stringify(data, null, 4));
+  t.assert(data);
+})
