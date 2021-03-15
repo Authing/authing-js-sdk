@@ -1,5 +1,5 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
-import { AuthenticationClientOptions, SocialConnectionProvider } from './types';
+import { AuthenticationClientOptions } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { objectToQueryString, popupCenter, isWechatBrowser } from '../utils';
 import { User } from '../../types/graphql.v2';
