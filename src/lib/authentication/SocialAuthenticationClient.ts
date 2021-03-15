@@ -1,7 +1,7 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
-import { AuthenticationClientOptions } from './types';
+import { AuthenticationClientOptions, SocialConnectionProvider } from './types';
 import { HttpClient } from '../common/HttpClient';
-import { objectToQueryString, popupCenter } from '../utils';
+import { objectToQueryString, popupCenter, isWechatBrowser } from '../utils';
 import { User } from '../../types/graphql.v2';
 
 /**
@@ -134,7 +134,10 @@ export class SocialAuthenticationClient {
     };
     window.addEventListener('message', onMessage);
 
-    if (popup) {
+    if (provider === SocialConnectionProvider.WECHATMP && isWechatBrowser()) {
+      // 微信网页授权登录在微信内直接打开
+      window.location.href = url;
+    } else if (popup) {
       popupCenter(url, position);
     } else {
       window.open(url);

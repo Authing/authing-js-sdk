@@ -135,3 +135,23 @@ export interface SecurityLevel {
   // 账户的总体安全等级评分
   score: number;
 }
+
+export enum SocialConnectionProvider {
+  ALIPAY = 'alipay',
+  GOOGLE = 'google',
+  WECHATPC = 'wechat:pc', // 微信扫码登录
+  WECHATMP = 'wechat:webpage-authorization', // 微信公众号网页授权
+  WECHAT_MINIPROGRAM = 'wechat:miniprogram:default', // 微信小程序登录
+  WECHAT_MINIPROGRAM_QRCODE = 'wechat:miniprogram:qrconnect', // 微信小程序登录
+  WECHAT_MINIPROGRAM_APPLAUNCH = 'wechat:miniprogram:app-launch', // 微信小程序登录
+  WECHATMOBILE = 'wechat:mobile', // 微信移动应用
+  GITHUB = 'github',
+  QQ = 'qq',
+  WECHATWORK_ADDRESS_BOOK = 'wechatwork:addressbook', // 企业微信通讯录
+  WECHATWORK_CORP_QRCONNECT = 'wechatwork:corp:qrconnect',
+  WECHATWORK_SERVICEPROVIDER_QRCONNECT = 'wechatwork:service-provider:qrconnect',
+  DINGTALK = 'dingtalk',
+  WEIBO = 'weibo',
+  APPLE = 'apple',
+  APPLE_WEB = 'apple:web'
+}

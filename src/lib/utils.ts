@@ -207,3 +207,6 @@ export const convertUdvToKeyValuePair = (
   }
   return ret;
 };
+
+export const isWechatBrowser = () =>
+  /MicroMessenger/i.test(navigator?.userAgent);
