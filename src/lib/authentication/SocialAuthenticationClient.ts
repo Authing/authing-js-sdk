@@ -1,5 +1,5 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
-import { AuthenticationClientOptions } from './types';
+import { AuthenticationClientOptions, SocialConnectionProvider } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { objectToQueryString, popupCenter, isWechatBrowser } from '../utils';
 import { User } from '../../types/graphql.v2';
@@ -108,12 +108,16 @@ export class SocialAuthenticationClient {
       onError,
       authorization_params
     } = options;
-    const query = {
-      from_guard: '1',
+    const query: Record<string, string> = {
       userpool_id: this.options.userPoolId,
       app_id: this.options.appId,
       authorization_params: JSON.stringify(authorization_params)
     };
+
+    if (provider !== SocialConnectionProvider.WECHATMP) {
+      query.from_guard = '1';
+    }
+
     const url = `${
       this.options.host
     }/connections/social/${provider}${objectToQueryString(query)}`;
