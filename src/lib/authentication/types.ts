@@ -153,5 +153,14 @@ export enum SocialConnectionProvider {
   DINGTALK = 'dingtalk',
   WEIBO = 'weibo',
   APPLE = 'apple',
-  APPLE_WEB = 'apple:web'
+  APPLE_WEB = 'apple:web',
+  OAUTH = 'oauth'
+}
+
+export enum Protocol {
+  OIDC = 'oidc',
+  OAUTH = 'oauth',
+  SAML = 'saml',
+  CAS = 'cas',
+  AZURE_AD = 'azure-ad'
 }

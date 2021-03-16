@@ -213,11 +213,24 @@ export const isWechatBrowser = () =>
 
 export const formatAuthorizedResources = (resources: any[]) => {
   return resources.map(resource => {
-    for(const key in resource) {
+    for (const key in resource) {
       if (!resource[key]) {
-        delete resource[key]
+        delete resource[key];
       }
     }
-    return resource
-  })
+    return resource;
+  });
 };
+
+export function generateUidKey(number: number) {
+  var map = [];
+  for (let i = 97; i < 123; i++) {
+    map.push(String.fromCharCode(i));
+  }
+  let arr = [];
+  while (number--) {
+    let rand = Math.floor(Math.random() * 16);
+    arr.push(map[rand]);
+  }
+  return arr.join('');
+}

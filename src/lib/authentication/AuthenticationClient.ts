@@ -50,12 +50,18 @@ import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { resetPassword, updateUser } from '../graphqlapi';
 import { HttpClient } from '../common/HttpClient';
-import { encrypt, convertUdv, convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
+import {
+  encrypt,
+  convertUdv,
+  convertUdvToKeyValuePair,
+  formatAuthorizedResources
+} from '../utils';
 import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from '../..';
 import { SocialAuthenticationClient } from './SocialAuthenticationClient';
 import { PublicKeyManager } from '../common/PublicKeyManager';
 import { KeyValuePair } from '../../types';
+import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   timeout: 10000,
@@ -98,6 +104,7 @@ export class AuthenticationClient {
   qrcode: QrCodeAuthenticationClient;
   mfa: MfaAuthenticationClient;
   social: SocialAuthenticationClient;
+  enterprise: EnterpriseAuthenticationClient;
   private publicKeyManager: PublicKeyManager;
 
   constructor(options: AuthenticationClientOptions) {
@@ -133,6 +140,11 @@ export class AuthenticationClient {
       this.httpClient
     );
     this.social = new SocialAuthenticationClient(
+      this.options,
+      this.tokenProvider,
+      this.httpClient
+    );
+    this.enterprise = new EnterpriseAuthenticationClient(
       this.options,
       this.tokenProvider,
       this.httpClient
