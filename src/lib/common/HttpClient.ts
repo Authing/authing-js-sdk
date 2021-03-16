@@ -46,3 +46,30 @@ export class HttpClient {
     return data.data;
   }
 }
+
+export class NaiveHttpClient extends HttpClient {
+  options: ManagementClientOptions;
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider;
+  axios: AxiosInstance;
+
+  constructor(
+    options: ManagementClientOptions | AuthenticationClientOptions,
+    tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider
+  ) {
+    super(options, tokenProvider);
+  }
+
+  async request(config: AxiosRequestConfig) {
+    const headers: any = {
+      'x-authing-sdk-version': `js:${SDK_VERSION}`,
+      'x-authing-userpool-id': this.options.userPoolId || '',
+      'x-authing-request-from': this.options.requestFrom || 'sdk',
+      'x-authing-app-id': this.options.appId || ''
+    };
+
+    config.headers = { ...headers, ...config.headers };
+    config.timeout = this.options.timeout;
+    const { data } = await this.axios.request(config);
+    return data;
+  }
+}

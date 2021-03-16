@@ -49,7 +49,7 @@ import {
 import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { resetPassword, updateUser } from '../graphqlapi';
-import { HttpClient } from '../common/HttpClient';
+import { HttpClient, NaiveHttpClient } from '../common/HttpClient';
 import {
   encrypt,
   convertUdv,
@@ -64,6 +64,10 @@ import { KeyValuePair } from '../../types';
 import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
+  protocol: 'oidc', // 默认 oidc
+  tokenEndPointAuthMethod: 'client_secret_post', // 默认 client_secret_post
+  introspectionEndPointAuthMethod: 'client_secret_post', // 默认 client_secret_post
+  revocationEndPointAuthMethod: 'client_secret_post',
   timeout: 10000,
   onError: (code: number, message: string, data: any) => {
     throw { code, message, data };
@@ -99,6 +103,7 @@ export class AuthenticationClient {
 
   graphqlClient: GraphqlClient;
   httpClient: HttpClient;
+  naiveHttpClient: NaiveHttpClient;
   tokenProvider: AuthenticationTokenProvider;
   wxqrcode: QrCodeAuthenticationClient;
   qrcode: QrCodeAuthenticationClient;
@@ -118,6 +123,10 @@ export class AuthenticationClient {
     this.tokenProvider = new (this.options.tokenProvider ||
       AuthenticationTokenProvider)(this.options);
     this.httpClient = new (this.options.httpClient || HttpClient)(
+      this.options,
+      this.tokenProvider
+    );
+    this.naiveHttpClient = new NaiveHttpClient(
       this.options,
       this.tokenProvider
     );
@@ -1661,5 +1670,133 @@ export class AuthenticationClient {
       return PasswordSecurityLevel.MIDDLE;
     }
     return PasswordSecurityLevel.LOW;
+  }
+  _generateTokenRequest(params: { [x: string]: string }) {
+    let p = new URLSearchParams(params);
+    return p.toString();
+  }
+  async _getAccessTokenByCodeWithClientSecretPost(code: string) {
+    const qstr = this._generateTokenRequest({
+      client_id: this.options.appId,
+      client_secret: this.options.secret,
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: this.options.redirectUri
+    });
+    const api = `${this.options.host}/oidc/token`;
+    let tokenSet = await this.naiveHttpClient.request({
+      method: 'POST',
+      url: api,
+      data: qstr,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    return tokenSet;
+  }
+  _generateBasicAuthToken(appId?: string, secret?: string) {
+    let id = appId || this.options.appId;
+    let s = secret || this.options.secret;
+    let token = 'Basic ' + Buffer.from(id + ':' + s).toString('base64');
+    return token;
+  }
+  async _getAccessTokenByCodeWithClientSecretBasic(code: string) {
+    const api = `${this.options.host}/oidc/token`;
+    const qstr = this._generateTokenRequest({
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: this.options.redirectUri
+    });
+    let tokenSet = await this.naiveHttpClient.request({
+      data: qstr,
+      method: 'POST',
+      url: api,
+      headers: {
+        Authorization: this._generateBasicAuthToken()
+      }
+    });
+    return tokenSet;
+  }
+  async _getAccessTokenByWithNone(code: string) {
+    const api = `${this.options.host}/oidc/token`;
+    const qstr = this._generateTokenRequest({
+      client_id: this.options.appId,
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: this.options.redirectUri
+    });
+    let tokenSet = await this.naiveHttpClient.request({
+      method: 'POST',
+      url: api,
+      data: qstr
+    });
+    return tokenSet;
+  }
+  async getAccessTokenByCode(code: string) {
+    if (
+      !this.options.secret &&
+      this.options.tokenEndPointAuthMethod !== 'none'
+    ) {
+      throw new Error(
+        '请在初始化 AuthenticationClient 时传入 appId 和 secret 参数'
+      );
+    }
+    if (this.options.tokenEndPointAuthMethod === 'client_secret_post') {
+      return await this._getAccessTokenByCodeWithClientSecretPost(code);
+    }
+    if (this.options.tokenEndPointAuthMethod === 'client_secret_basic') {
+      return await this._getAccessTokenByCodeWithClientSecretBasic(code);
+    }
+    if (this.options.tokenEndPointAuthMethod === 'none') {
+      return await this._getAccessTokenByWithNone(code);
+    }
+  }
+  async getAccessTokenByClientCredentials(
+    scope: string,
+    options?: {
+      accessKey: string;
+      accessSecret: string;
+    }
+  ) {
+    if (!scope) {
+      throw new Error(
+        '请传入 scope 参数，请看文档：https://docs.authing.cn/v2/guides/authorization/m2m-authz.html'
+      );
+    }
+    if (!options) {
+      throw new Error(
+        '请在调用本方法时传入 { accessKey: string, accessSecret: string }，请看文档：https://docs.authing.cn/v2/guides/authorization/m2m-authz.html'
+        // '请在初始化 AuthenticationClient 时传入 appId 和 secret 参数或者在调用本方法时传入 { accessKey: string, accessSecret: string }，请看文档：https://docs.authing.cn/v2/guides/authorization/m2m-authz.html'
+      );
+    }
+    let i = options?.accessKey || this.options.appId;
+    let s = options?.accessSecret || this.options.secret;
+    const qstr = this._generateTokenRequest({
+      client_id: i,
+      client_secret: s,
+      grant_type: 'client_credentials',
+      scope: scope
+    });
+    const api = `${this.options.host}/oidc/token`;
+    let tokenSet = await this.naiveHttpClient.request({
+      method: 'POST',
+      url: api,
+      data: qstr,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    return tokenSet;
+  }
+  async getUserInfoByAccessToken(accessToken: string) {
+    const api = `${this.options.host}/oidc/me`;
+    let userInfo = await this.naiveHttpClient.request({
+      method: 'GET',
+      url: api,
+      params: {
+        access_token: accessToken
+      }
+    });
+    return userInfo;
   }
 }

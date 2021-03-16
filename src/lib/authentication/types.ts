@@ -10,6 +10,18 @@ export interface AuthenticationClientOptions {
   userPoolId?: string;
   /** 应用 ID */
   appId?: string;
+  /** 应用密钥 */
+  secret?: string;
+  /** 应用身份协议 */
+  protocol?: 'oauth' | 'oidc' | 'cas';
+  /** 获取 token 端点认证方式 */
+  tokenEndPointAuthMethod?: 'client_secret_post' | 'client_secret_basic' | 'none';
+  /** 检查 token 端点认证方式 */
+  introspectionEndPointAuthMethod?: 'client_secret_post' | 'client_secret_basic' | 'none';
+  /** 撤回 token 端点认证方式 */
+  revocationEndPointAuthMethod?: 'client_secret_post' | 'client_secret_basic' | 'none';
+  /** 应用回调地址 */
+  redirectUri?: string;
   /** 请求超时时间 **/
   timeout?: number;
   /** 错误回调函数, 默认为 (err: Error) => { throw err } 直接抛出报错 **/
