@@ -8,16 +8,20 @@ import {
   getGroups,
   group,
   groupWithUsers,
+  listGroupAuthorizedResources,
   removeUserFromGroup,
   updateGroup
 } from '../graphqlapi';
 import {
   CommonMessage,
   Group,
+  PaginatedAuthorizedResources,
   PaginatedGroups,
-  PaginatedUsers
+  PaginatedUsers,
+  ResourceType
 } from '../../types/graphql.v2';
 import { DeepPartial } from '../../types/index';
+import { formatAuthorizedResources } from '../utils';
 
 /**
  * @class GroupsManagementClient 管理分组
@@ -302,5 +306,42 @@ export class GroupsManagementClient {
       }
     );
     return res.removeUserFromGroup;
+  }
+
+  /**
+   * @description 获取分组被授权的所有资源
+   *
+   * @param code: 分组 code
+   * @param namespace: 权限组 namespace code
+   * @param options.resourceType 资源类型
+   */
+  public async listAuthorizedResources(
+    code: string,
+    namespace: string,
+    options?: {
+      resourceType?: ResourceType;
+    }
+  ): Promise<PaginatedAuthorizedResources> {
+    const { resourceType } = options || {};
+    const { group } = await listGroupAuthorizedResources(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        code,
+        namespace,
+        resourceType
+      }
+    );
+    if (!group) {
+      throw new Error('分组不存在');
+    }
+    let {
+      authorizedResources: { list, totalCount }
+    } = group;
+    list = formatAuthorizedResources(list);
+    return {
+      list,
+      totalCount
+    };
   }
 }

@@ -1,7 +1,7 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ExtendedOrg, ManagementClientOptions } from './types';
-import buildTree from '../utils';
+import buildTree, { formatAuthorizedResources } from '../utils';
 import {
   orgs,
   createOrg,
@@ -18,9 +18,17 @@ import {
   isRootNode,
   rootNode,
   nodeById,
-  setMainDepartment
+  setMainDepartment,
+  listNodeByIdAuthorizedResources,
+  listNodeByCodeAuthorizedResources
 } from '../graphqlapi';
-import { CommonMessage, Org, PaginatedUsers } from '../../types/graphql.v2';
+import {
+  CommonMessage,
+  Org,
+  PaginatedAuthorizedResources,
+  PaginatedUsers,
+  ResourceType
+} from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
 import { DeepPartial } from '../../types/index';
 
@@ -190,7 +198,7 @@ export class OrgManagementClient {
         descriptionI18n
       }
     );
-    return node
+    return node;
   }
 
   /**
@@ -570,18 +578,95 @@ export class OrgManagementClient {
     const data = await this.httpClient.request({
       method: 'GET',
       url: `${this.options.host}/api/v2/orgs/export`
-    })
-    return data
+    });
+    return data;
   }
 
   /**
    * @description 导出某个组织机构
    */
-  public async exportByOrgId(orgId: string){
+  public async exportByOrgId(orgId: string) {
     const data = await this.httpClient.request({
       method: 'GET',
-      url: `${this.options.host}/api/v2/orgs/export?org_id=${orgId}`,
-    })
-    return data
+      url: `${this.options.host}/api/v2/orgs/export?org_id=${orgId}`
+    });
+    return data;
+  }
+
+  /**
+   * @description 获取组织机构节点被授权的所有资源
+   *
+   * @param nodeId: 分组 ID
+   * @param namespace: 权限组 namespace code
+   * @param options.resourceType 资源类型
+   */
+  public async listAuthorizedResourcesByNodeId(
+    nodeId: string,
+    namespace: string,
+    options?: {
+      resourceType?: ResourceType;
+    }
+  ): Promise<PaginatedAuthorizedResources> {
+    const { resourceType } = options || {};
+    const { nodeById: node } = await listNodeByIdAuthorizedResources(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        id: nodeId,
+        namespace,
+        resourceType
+      }
+    );
+    if (!node) {
+      throw new Error('组织机构节点不存在');
+    }
+    let {
+      authorizedResources: { list, totalCount }
+    } = node;
+    list = formatAuthorizedResources(list);
+    return {
+      list,
+      totalCount
+    };
+  }
+
+  /**
+   * @description 获取组织机构节点被授权的所有资源
+   *
+   * @param orgId: 组织机构 ID；
+   * @param code: 分组 code
+   * @param namespace: 权限组 namespace code
+   * @param options.resourceType 资源类型
+   */
+  public async listAuthorizedResourcesByNodeCode(
+    orgId: string,
+    code: string,
+    namespace: string,
+    options?: {
+      resourceType?: ResourceType;
+    }
+  ): Promise<PaginatedAuthorizedResources> {
+    const { resourceType } = options || {};
+    const { nodeByCode: node } = await listNodeByCodeAuthorizedResources(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        orgId,
+        code,
+        namespace,
+        resourceType
+      }
+    );
+    if (!node) {
+      throw new Error('组织机构节点不存在');
+    }
+    let {
+      authorizedResources: { list, totalCount }
+    } = node;
+    list = formatAuthorizedResources(list);
+    return {
+      list,
+      totalCount
+    };
   }
 }

@@ -3,10 +3,12 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import {
   CommonMessage,
+  PaginatedAuthorizedResources,
   PaginatedPolicyAssignments,
   PaginatedRoles,
   PaginatedUsers,
   PolicyAssignmentTargetType,
+  ResourceType,
   Role
 } from '../../types/graphql.v2';
 import {
@@ -21,9 +23,11 @@ import {
   deleteRoles,
   policyAssignments,
   addPolicyAssignments,
-  removePolicyAssignments
+  removePolicyAssignments,
+  listRoleAuthorizedResources
 } from '../graphqlapi';
 import { DeepPartial } from '../../types/index';
+import { formatAuthorizedResources } from '../utils';
 
 /**
  * @class RolesManagementClient 管理角色
@@ -414,5 +418,42 @@ export class RolesManagementClient {
       }
     );
     return res.removePolicyAssignments;
+  }
+
+  /**
+   * @description 获取角色被授权的所有资源
+   *
+   * @param code: 角色 code
+   * @param namespace: 角色权限组 namespace code
+   * @param options.resourceType 资源类型
+   */
+  public async listAuthorizedResources(
+    code: string,
+    namespace: string,
+    options?: {
+      resourceType?: ResourceType;
+    }
+  ): Promise<PaginatedAuthorizedResources> {
+    const { resourceType } = options || {};
+    const { role } = await listRoleAuthorizedResources(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        code,
+        namespace,
+        resourceType
+      }
+    );
+    if (!role) {
+      throw new Error('角色不存在');
+    }
+    let {
+      authorizedResources: { list, totalCount }
+    } = role;
+    list = formatAuthorizedResources(list);
+    return {
+      list,
+      totalCount
+    };
   }
 }

@@ -39,12 +39,13 @@ import {
   PaginatedRoles,
   PaginatedAuthorizedResources,
   UdfTargetType,
-  SetUdfValueBatchInput
+  SetUdfValueBatchInput,
+  ResourceType
 } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
 import { DeepPartial, KeyValuePair } from '../../types/index';
 import { PublicKeyManager } from '../common/PublicKeyManager';
-import { convertUdvToKeyValuePair } from '../utils';
+import { convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
 
 /**
  * @name UsersManagementClient
@@ -657,14 +658,16 @@ export class UsersManagementClient {
     userId: string,
     namespace?: string
   ): Promise<DeepPartial<PaginatedRoles>> {
-    const {
-      user
-    } = await getUserRoles(this.graphqlClient, this.tokenProvider, {
-      id: userId,
-      namespace
-    });
+    const { user } = await getUserRoles(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        id: userId,
+        namespace
+      }
+    );
     if (!user) {
-      throw new Error('用户不存在！')
+      throw new Error('用户不存在！');
     }
     return user.roles;
   }
@@ -789,20 +792,32 @@ export class UsersManagementClient {
    */
   public async listAuthorizedResources(
     userId: string,
-    namespace: string
+    namespace: string,
+    options?: {
+      resourceType?: ResourceType;
+    }
   ): Promise<PaginatedAuthorizedResources> {
+    const { resourceType } = options || {};
     const { user } = await listUserAuthorizedResources(
       this.graphqlClient,
       this.tokenProvider,
       {
         id: userId,
-        namespace
+        namespace,
+        resourceType
       }
     );
     if (!user) {
       throw new Error('用户不存在');
     }
-    return user.authorizedResources;
+    let {
+      authorizedResources: { list, totalCount }
+    } = user;
+    list = formatAuthorizedResources(list);
+    return {
+      list,
+      totalCount
+    };
   }
 
   /**
