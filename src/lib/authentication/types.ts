@@ -15,11 +15,20 @@ export interface AuthenticationClientOptions {
   /** 应用身份协议 */
   protocol?: 'oauth' | 'oidc' | 'cas';
   /** 获取 token 端点认证方式 */
-  tokenEndPointAuthMethod?: 'client_secret_post' | 'client_secret_basic' | 'none';
+  tokenEndPointAuthMethod?:
+    | 'client_secret_post'
+    | 'client_secret_basic'
+    | 'none';
   /** 检查 token 端点认证方式 */
-  introspectionEndPointAuthMethod?: 'client_secret_post' | 'client_secret_basic' | 'none';
+  introspectionEndPointAuthMethod?:
+    | 'client_secret_post'
+    | 'client_secret_basic'
+    | 'none';
   /** 撤回 token 端点认证方式 */
-  revocationEndPointAuthMethod?: 'client_secret_post' | 'client_secret_basic' | 'none';
+  revocationEndPointAuthMethod?:
+    | 'client_secret_post'
+    | 'client_secret_basic'
+    | 'none';
   /** 应用回调地址 */
   redirectUri?: string;
   /** 请求超时时间 **/
@@ -175,4 +184,189 @@ export enum Protocol {
   SAML = 'saml',
   CAS = 'cas',
   AZURE_AD = 'azure-ad'
+}
+
+export enum AppPasswordStrengthLimit {
+  NoCheck,
+  Low,
+  Middle,
+  High
+}
+
+export enum RegisterMethods {
+  Email = 'email',
+  Phone = 'phone'
+}
+
+export enum LoginMethods {
+  LDAP = 'ldap',
+  AppQr = 'app-qrcode',
+  Password = 'password',
+  PhoneCode = 'phone-code',
+  WxMinQr = 'wechat-miniprogram-qrcode', // 对应社会化登录的 wechat:miniprogram:qrconnect(小程序扫码登录)
+  AD = 'ad' // 对应企业身份源的 Windows AD 登录
+}
+
+export interface IOAuthConnectionConfig {
+  authEndPoint: string;
+  tokenEndPoint: string;
+  scope: string;
+  clientId: string;
+  clientSecret: string;
+  authUrlTemplate: string;
+  codeToTokenScript: string;
+  tokenToUserInfoScript: string;
+  tokenToUserInfoScriptFuncId: string;
+  codeToTokenScriptFuncId: string;
+  authUrl?: string; // 根据模板拼接出来的授权 url
+}
+export interface ISamlConnectionConfig {
+  signInEndPoint: string;
+  samlRequest?: string;
+
+  // saml assertion 验签公钥
+
+  samlIdpCert: string;
+
+  // saml request 验签公钥
+
+  samlSpCert: string;
+
+  // saml request 签名私钥
+
+  samlSpKey: string;
+
+  signOutEndPoint: string;
+
+  signSamlRequest: boolean;
+
+  signatureAlgorithm: string;
+
+  digestAlgorithm: string;
+
+  protocolBinding: string;
+}
+
+export interface ICasConnectionConfig {
+  casConnectionLoginUrl: string;
+}
+
+export enum OIDCConnectionMode {
+  FRONT_CHANNEL = 'FRONT_CHANNEL',
+  BACK_CHANNEL = 'BACK_CHANNEL'
+}
+
+export interface IAzureAdConnectionConfig {
+  microsoftAzureAdDomain: string;
+  clientId: string;
+  syncUserProfileOnLogin: string;
+  emailVerifiedDefault: boolean;
+  authorizationUrl: string;
+  callbackUrl: string;
+}
+
+export interface OIDCConnectionConfig {
+  issuerUrl: string;
+  authorizationEdpoint: string;
+  responseType: string;
+  mode: OIDCConnectionMode;
+  clientId: string;
+  clientSecret: string;
+  scopes: string;
+  redirectUri: string;
+}
+
+export interface ApplicationConfig {
+  id: string;
+  cdnBase: string;
+  userPoolId: string;
+  rootUserPoolId: string;
+  publicKey: string;
+  passwordStrength: AppPasswordStrengthLimit;
+  // 登录框自定义 css 代码
+  css: string;
+  name: string;
+  logo: string;
+  redirectUris: string[];
+  registerDisabled: boolean;
+  registerTabs: {
+    list: RegisterMethods[];
+    default: string;
+    title: { [x: string]: string };
+  };
+  loginTabs: {
+    list: LoginMethods[];
+    default: string;
+    title: { [x: string]: string };
+  };
+  socialConnections: {
+    provider: string;
+    name: string;
+    authorizationUrl: string;
+  }[];
+
+  agreementEnabled: boolean;
+
+  extendsFieldsEnabled: boolean;
+
+  identityProviders: {
+    identifier: string;
+    protocol: Protocol;
+    displayName: string;
+    logo: string;
+    config:
+      | ISamlConnectionConfig
+      | OIDCConnectionConfig
+      | ICasConnectionConfig
+      | IAzureAdConnectionConfig
+      | IOAuthConnectionConfig;
+  }[];
+
+  ssoPageComponentDisplay: {
+    autoRegisterThenLoginHintInfo: boolean;
+    forgetPasswordBtn: boolean;
+    idpBtns: boolean;
+    loginBtn: boolean;
+    loginByPhoneCodeTab: boolean;
+    loginByUserPasswordTab: boolean;
+    loginMethodNav: boolean;
+    phoneCodeInput: boolean;
+    registerBtn: boolean;
+    registerByEmailTab: boolean;
+    registerByPhoneTab: boolean;
+    registerMethodNav: boolean;
+    socialLoginBtns: boolean;
+    userPasswordInput: boolean;
+    wxMpScanTab: boolean;
+  };
+
+  protocol: Protocol;
+  oidcConfig: OidcClientMetadata;
+  enableSubAccount: boolean;
+  // 用户池是否在白名单
+  userPoolInWhitelist: boolean;
+
+  userPortal: UserPortalConfig;
+
+  /** websocket 域名*/
+  websocket: string;
+  verifyCodeLength: number;
+}
+
+export interface OidcClientMetadata {
+  grant_types: string[];
+  client_id: string;
+  redirect_uris: string[];
+  scope: string;
+  response_types: ResponseType[];
+}
+
+export interface UserPortalConfig {
+  cdnBase: string;
+  assetsBase: string;
+  assetsVersion: string;
+  // 网站备案号
+  icpRecord: string;
+  // 公安备案号
+  psbRecord: string;
 }

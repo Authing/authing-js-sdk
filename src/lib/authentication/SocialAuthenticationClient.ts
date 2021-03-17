@@ -46,7 +46,6 @@ export class SocialAuthenticationClient {
    * 完成授权之后，会自动关闭此窗口，并触发 onSuccess 回调函数，通过此函数，你可以获取到用户信息。
    *
    * @param {string} provider 社会化登录服务商的标志。
-   * @param {string} oauthIdentifier 自定义 OAuth 登录的唯一标识符。
    * @param {object} [options]
    * @param {boolean} [options.popup=true] 是否通过弹窗的方式打开社会化登录窗口，如果设置为 false，将会以 window.open 的方式打开一个新的浏览器  tab 。
    * @param {Function} [options.onSuccess] 用户同意授权事件回调函数，第一个参数为用户信息。
@@ -100,7 +99,6 @@ export class SocialAuthenticationClient {
       };
       authorization_params?: Record<string, any>; // 为了兼容之前的代码
       authorizationParams?: Record<string, any>;
-      oauthIdentifier?: string;
     }
   ) {
     options = options || {};
@@ -110,16 +108,14 @@ export class SocialAuthenticationClient {
       onSuccess,
       onError,
       authorization_params,
-      authorizationParams,
-      oauthIdentifier
+      authorizationParams
     } = options;
     const query: Record<string, string> = {
       userpool_id: this.options.userPoolId,
       app_id: this.options.appId,
       authorization_params: JSON.stringify(
         authorization_params || authorizationParams
-      ),
-      oauth_identifier: oauthIdentifier
+      )
     };
 
     if (provider !== SocialConnectionProvider.WECHATMP) {
