@@ -51,7 +51,7 @@ export class SocialAuthenticationClient {
    * @param {Function} [options.onSuccess] 用户同意授权事件回调函数，第一个参数为用户信息。
    * @param {Function} [options.onError] 社会化登录失败事件回调函数，第一个参数 code 为错误码，第二个参数 message 为错误提示。详细的错误码列表请见：详细说明请见：[Authing 错误代码列表](https://docs.authing.co/advanced/error-code.html)
    * @param {object} [options.position] 只有当 options.popup 为 ture 的时候有效，弹出窗口的位置，默认为 { w: 585, h: 649 } 。
-   * @param {object} [options.authorization_params] 请求时的额外参数
+   * @param {object} [options.authorizationParams] 请求时的额外参数
    *
    * @example
    *
@@ -97,7 +97,8 @@ export class SocialAuthenticationClient {
         w: number;
         h: number;
       };
-      authorization_params?: Record<string, any>;
+      authorization_params?: Record<string, any>; // 为了兼容之前的代码
+      authorizationParams?: Record<string, any>;
     }
   ) {
     options = options || {};
@@ -106,12 +107,15 @@ export class SocialAuthenticationClient {
       popup = true,
       onSuccess,
       onError,
-      authorization_params
+      authorization_params,
+      authorizationParams
     } = options;
     const query: Record<string, string> = {
       userpool_id: this.options.userPoolId,
       app_id: this.options.appId,
-      authorization_params: JSON.stringify(authorization_params)
+      authorization_params: JSON.stringify(
+        authorization_params || authorizationParams
+      )
     };
 
     if (provider !== SocialConnectionProvider.WECHATMP) {

@@ -61,6 +61,7 @@ import { DecodedAccessToken } from '../..';
 import { SocialAuthenticationClient } from './SocialAuthenticationClient';
 import { PublicKeyManager } from '../common/PublicKeyManager';
 import { KeyValuePair } from '../../types';
+import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   protocol: 'oidc', // 默认 oidc
@@ -108,6 +109,7 @@ export class AuthenticationClient {
   qrcode: QrCodeAuthenticationClient;
   mfa: MfaAuthenticationClient;
   social: SocialAuthenticationClient;
+  enterprise: EnterpriseAuthenticationClient;
   private publicKeyManager: PublicKeyManager;
 
   constructor(options: AuthenticationClientOptions) {
@@ -147,6 +149,11 @@ export class AuthenticationClient {
       this.httpClient
     );
     this.social = new SocialAuthenticationClient(
+      this.options,
+      this.tokenProvider,
+      this.httpClient
+    );
+    this.enterprise = new EnterpriseAuthenticationClient(
       this.options,
       this.tokenProvider,
       this.httpClient
