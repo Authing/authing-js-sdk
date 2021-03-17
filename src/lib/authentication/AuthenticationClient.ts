@@ -1668,6 +1668,12 @@ export class AuthenticationClient {
     let p = new URLSearchParams(params);
     return p.toString();
   }
+  _generateBasicAuthToken(appId?: string, secret?: string) {
+    let id = appId || this.options.appId;
+    let s = secret || this.options.secret;
+    let token = 'Basic ' + Buffer.from(id + ':' + s).toString('base64');
+    return token;
+  }
   async _getAccessTokenByCodeWithClientSecretPost(code: string) {
     const qstr = this._generateTokenRequest({
       client_id: this.options.appId,
@@ -1676,7 +1682,12 @@ export class AuthenticationClient {
       code,
       redirect_uri: this.options.redirectUri
     });
-    const api = `${this.options.host}/oidc/token`;
+    let api = '';
+    if (this.options.protocol === 'oidc') {
+      api = `${this.options.host}/oidc/token`;
+    } else if (this.options.protocol === 'oauth') {
+      api = `${this.options.host}/oauth/token`;
+    }
     let tokenSet = await this.naiveHttpClient.request({
       method: 'POST',
       url: api,
@@ -1687,14 +1698,13 @@ export class AuthenticationClient {
     });
     return tokenSet;
   }
-  _generateBasicAuthToken(appId?: string, secret?: string) {
-    let id = appId || this.options.appId;
-    let s = secret || this.options.secret;
-    let token = 'Basic ' + Buffer.from(id + ':' + s).toString('base64');
-    return token;
-  }
   async _getAccessTokenByCodeWithClientSecretBasic(code: string) {
-    const api = `${this.options.host}/oidc/token`;
+    let api = '';
+    if (this.options.protocol === 'oidc') {
+      api = `${this.options.host}/oidc/token`;
+    } else if (this.options.protocol === 'oauth') {
+      api = `${this.options.host}/oauth/token`;
+    }
     const qstr = this._generateTokenRequest({
       grant_type: 'authorization_code',
       code,
@@ -1710,8 +1720,13 @@ export class AuthenticationClient {
     });
     return tokenSet;
   }
-  async _getAccessTokenByWithNone(code: string) {
-    const api = `${this.options.host}/oidc/token`;
+  async _getAccessTokenByCodeWithNone(code: string) {
+    let api = '';
+    if (this.options.protocol === 'oidc') {
+      api = `${this.options.host}/oidc/token`;
+    } else if (this.options.protocol === 'oauth') {
+      api = `${this.options.host}/oauth/token`;
+    }
     const qstr = this._generateTokenRequest({
       client_id: this.options.appId,
       grant_type: 'authorization_code',
@@ -1734,14 +1749,27 @@ export class AuthenticationClient {
         '请在初始化 AuthenticationClient 时传入 appId 和 secret 参数'
       );
     }
-    if (this.options.tokenEndPointAuthMethod === 'client_secret_post') {
-      return await this._getAccessTokenByCodeWithClientSecretPost(code);
+    if (this.options.protocol === 'oidc') {
+      if (this.options.tokenEndPointAuthMethod === 'client_secret_post') {
+        return await this._getAccessTokenByCodeWithClientSecretPost(code);
+      }
+      if (this.options.tokenEndPointAuthMethod === 'client_secret_basic') {
+        return await this._getAccessTokenByCodeWithClientSecretBasic(code);
+      }
+      if (this.options.tokenEndPointAuthMethod === 'none') {
+        return await this._getAccessTokenByCodeWithNone(code);
+      }
     }
-    if (this.options.tokenEndPointAuthMethod === 'client_secret_basic') {
-      return await this._getAccessTokenByCodeWithClientSecretBasic(code);
-    }
-    if (this.options.tokenEndPointAuthMethod === 'none') {
-      return await this._getAccessTokenByWithNone(code);
+    if (this.options.protocol === 'oauth') {
+      if (this.options.tokenEndPointAuthMethod === 'client_secret_post') {
+        return await this._getAccessTokenByCodeWithClientSecretPost(code);
+      }
+      if (this.options.tokenEndPointAuthMethod === 'client_secret_basic') {
+        return await this._getAccessTokenByCodeWithClientSecretBasic(code);
+      }
+      if (this.options.tokenEndPointAuthMethod === 'none') {
+        return await this._getAccessTokenByCodeWithNone(code);
+      }
     }
   }
   async getAccessTokenByClientCredentials(
@@ -1770,7 +1798,12 @@ export class AuthenticationClient {
       grant_type: 'client_credentials',
       scope: scope
     });
-    const api = `${this.options.host}/oidc/token`;
+    let api = '';
+    if (this.options.protocol === 'oidc') {
+      api = `${this.options.host}/oidc/token`;
+    } else if (this.options.protocol === 'oauth') {
+      api = `${this.options.host}/oauth/token`;
+    }
     let tokenSet = await this.naiveHttpClient.request({
       method: 'POST',
       url: api,
@@ -1782,12 +1815,17 @@ export class AuthenticationClient {
     return tokenSet;
   }
   async getUserInfoByAccessToken(accessToken: string) {
-    const api = `${this.options.host}/oidc/me`;
+    let api = '';
+    if (this.options.protocol === 'oidc') {
+      api = `${this.options.host}/oidc/me`;
+    } else if (this.options.protocol === 'oauth') {
+      api = `${this.options.host}/oauth/me`;
+    }
     let userInfo = await this.naiveHttpClient.request({
-      method: 'GET',
+      method: 'POST',
       url: api,
-      params: {
-        access_token: accessToken
+      headers: {
+        Authorization: 'Bearer ' + accessToken
       }
     });
     return userInfo;
