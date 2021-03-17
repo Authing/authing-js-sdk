@@ -1756,27 +1756,14 @@ export class AuthenticationClient {
         '请在初始化 AuthenticationClient 时传入 appId 和 secret 参数'
       );
     }
-    if (this.options.protocol === 'oidc') {
-      if (this.options.tokenEndPointAuthMethod === 'client_secret_post') {
-        return await this._getAccessTokenByCodeWithClientSecretPost(code);
-      }
-      if (this.options.tokenEndPointAuthMethod === 'client_secret_basic') {
-        return await this._getAccessTokenByCodeWithClientSecretBasic(code);
-      }
-      if (this.options.tokenEndPointAuthMethod === 'none') {
-        return await this._getAccessTokenByCodeWithNone(code);
-      }
+    if (this.options.tokenEndPointAuthMethod === 'client_secret_post') {
+      return await this._getAccessTokenByCodeWithClientSecretPost(code);
     }
-    if (this.options.protocol === 'oauth') {
-      if (this.options.tokenEndPointAuthMethod === 'client_secret_post') {
-        return await this._getAccessTokenByCodeWithClientSecretPost(code);
-      }
-      if (this.options.tokenEndPointAuthMethod === 'client_secret_basic') {
-        return await this._getAccessTokenByCodeWithClientSecretBasic(code);
-      }
-      if (this.options.tokenEndPointAuthMethod === 'none') {
-        return await this._getAccessTokenByCodeWithNone(code);
-      }
+    if (this.options.tokenEndPointAuthMethod === 'client_secret_basic') {
+      return await this._getAccessTokenByCodeWithClientSecretBasic(code);
+    }
+    if (this.options.tokenEndPointAuthMethod === 'none') {
+      return await this._getAccessTokenByCodeWithNone(code);
     }
   }
   async getAccessTokenByClientCredentials(
