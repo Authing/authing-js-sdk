@@ -1750,6 +1750,9 @@ export class AuthenticationClient {
     return tokenSet;
   }
   async getAccessTokenByCode(code: string) {
+    if (!['oauth', 'oidc'].includes(this.options.protocol)) {
+      throw new Error('初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数')
+    }
     if (
       !this.options.secret &&
       this.options.tokenEndPointAuthMethod !== 'none'
@@ -1827,8 +1830,10 @@ export class AuthenticationClient {
     return userInfo;
   }
   buildAuthorizeUrl(options?: IOidcParams | IOauthParams) {
-    if(!this.options.domain) {
-      throw new Error('请在初始化 AuthenticationClient 时传入应用域名 domain 参数，形如：app1.authing.cn')
+    if (!this.options.domain) {
+      throw new Error(
+        '请在初始化 AuthenticationClient 时传入应用域名 domain 参数，形如：app1.authing.cn'
+      );
     }
     if (this.options.protocol === 'oidc') {
       return this._buildOidcAuthorizeUrl(options as IOidcParams);
@@ -1865,12 +1870,20 @@ export class AuthenticationClient {
     };
     Object.keys(map).forEach(k => {
       if (options && (options as any)[k]) {
+        if(k === 'scope' && options.scope.includes('offline_access')) {
+          res.prompt = 'consent'
+        }
         res[map[k]] = (options as any)[k];
       }
     });
     let params = new URLSearchParams(res);
-    let hostUrl = new URL(this.options.host)
-    let authorizeUrl = hostUrl.protocol + '//' + this.options.domain + '/oidc/auth?' + params.toString();
+    let hostUrl = new URL(this.options.host);
+    let authorizeUrl =
+      hostUrl.protocol +
+      '//' +
+      this.options.domain +
+      '/oidc/auth?' +
+      params.toString();
     return authorizeUrl;
   }
   _buildOauthAuthorizeUrl(options: IOauthParams) {
@@ -1896,9 +1909,108 @@ export class AuthenticationClient {
       }
     });
     let params = new URLSearchParams(res);
-    let hostUrl = new URL(this.options.host)
+    let hostUrl = new URL(this.options.host);
 
-    let authorizeUrl = hostUrl.protocol + '//' + this.options.domain + '/oauth/auth?' + params.toString();
+    let authorizeUrl =
+      hostUrl.protocol +
+      '//' +
+      this.options.domain +
+      '/oauth/auth?' +
+      params.toString();
     return authorizeUrl;
+  }
+
+  async _getNewAccessTokenByRefreshTokenWithClientSecretPost(
+    refreshToken: string
+  ) {
+    const qstr = this._generateTokenRequest({
+      client_id: this.options.appId,
+      client_secret: this.options.secret,
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken
+    });
+    let api = '';
+    if (this.options.protocol === 'oidc') {
+      api = `${this.options.host}/oidc/token`;
+    } else if (this.options.protocol === 'oauth') {
+      api = `${this.options.host}/oauth/token`;
+    }
+    let tokenSet = await this.naiveHttpClient.request({
+      method: 'POST',
+      url: api,
+      data: qstr,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    return tokenSet;
+  }
+  async _getNewAccessTokenByRefreshTokenWithClientSecretBasic(
+    refreshToken: string
+  ) {
+    let api = '';
+    if (this.options.protocol === 'oidc') {
+      api = `${this.options.host}/oidc/token`;
+    } else if (this.options.protocol === 'oauth') {
+      api = `${this.options.host}/oauth/token`;
+    }
+    const qstr = this._generateTokenRequest({
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken
+    });
+    let tokenSet = await this.naiveHttpClient.request({
+      data: qstr,
+      method: 'POST',
+      url: api,
+      headers: {
+        Authorization: this._generateBasicAuthToken()
+      }
+    });
+    return tokenSet;
+  }
+  async _getNewAccessTokenByRefreshTokenWithNone(refreshToken: string) {
+    let api = '';
+    if (this.options.protocol === 'oidc') {
+      api = `${this.options.host}/oidc/token`;
+    } else if (this.options.protocol === 'oauth') {
+      api = `${this.options.host}/oauth/token`;
+    }
+    const qstr = this._generateTokenRequest({
+      client_id: this.options.appId,
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken
+    });
+    let tokenSet = await this.naiveHttpClient.request({
+      method: 'POST',
+      url: api,
+      data: qstr
+    });
+    return tokenSet;
+  }
+  async getNewAccessTokenByRefreshToken(refreshToken: string) {
+    if (!['oauth', 'oidc'].includes(this.options.protocol)) {
+      throw new Error('初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数')
+    }
+    if (
+      !this.options.secret &&
+      this.options.tokenEndPointAuthMethod !== 'none'
+    ) {
+      throw new Error(
+        '请在初始化 AuthenticationClient 时传入 appId 和 secret 参数'
+      );
+    }
+    if (this.options.tokenEndPointAuthMethod === 'client_secret_post') {
+      return await this._getNewAccessTokenByRefreshTokenWithClientSecretPost(
+        refreshToken
+      );
+    }
+    if (this.options.tokenEndPointAuthMethod === 'client_secret_basic') {
+      return await this._getNewAccessTokenByRefreshTokenWithClientSecretBasic(
+        refreshToken
+      );
+    }
+    if (this.options.tokenEndPointAuthMethod === 'none') {
+      return await this._getNewAccessTokenByRefreshTokenWithNone(refreshToken);
+    }
   }
 }
