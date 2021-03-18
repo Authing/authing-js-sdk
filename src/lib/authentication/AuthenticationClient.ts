@@ -30,7 +30,9 @@ import { GraphqlClient } from '../common/GraphqlClient';
 import {
   AuthenticationClientOptions,
   SecurityLevel,
-  PasswordSecurityLevel
+  PasswordSecurityLevel,
+  IOidcParams,
+  IOauthParams
 } from './types';
 import {
   CheckPasswordStrengthResult,
@@ -1823,5 +1825,80 @@ export class AuthenticationClient {
       }
     });
     return userInfo;
+  }
+  buildAuthorizeUrl(options?: IOidcParams | IOauthParams) {
+    if(!this.options.domain) {
+      throw new Error('请在初始化 AuthenticationClient 时传入应用域名 domain 参数，形如：app1.authing.cn')
+    }
+    if (this.options.protocol === 'oidc') {
+      return this._buildOidcAuthorizeUrl(options as IOidcParams);
+    }
+    if (this.options.protocol === 'oauth') {
+      return this._buildOauthAuthorizeUrl(options as IOauthParams);
+    }
+    throw new Error(
+      '不支持的协议类型，请在初始化 AuthenticationClient 时传入 protocol 参数，可选值为 oidc、oauth'
+    );
+  }
+  _buildOidcAuthorizeUrl(options: IOidcParams) {
+    let map: any = {
+      appId: 'client_id',
+      scope: 'scope',
+      state: 'state',
+      nonce: 'nonce',
+      responseMode: 'response_mode',
+      responseType: 'response_type',
+      redirectUri: 'redirect_uri'
+    };
+    let res: any = {
+      nonce: Math.random()
+        .toString()
+        .slice(2),
+      state: Math.random()
+        .toString()
+        .slice(2),
+      scope: 'openid profile email phone address',
+      client_id: this.options.appId,
+      response_mode: 'query',
+      redirect_uri: this.options.redirectUri,
+      response_type: 'code'
+    };
+    Object.keys(map).forEach(k => {
+      if (options && (options as any)[k]) {
+        res[map[k]] = (options as any)[k];
+      }
+    });
+    let params = new URLSearchParams(res);
+    let hostUrl = new URL(this.options.host)
+    let authorizeUrl = hostUrl.protocol + '//' + this.options.domain + '/oidc/auth?' + params.toString();
+    return authorizeUrl;
+  }
+  _buildOauthAuthorizeUrl(options: IOauthParams) {
+    let map: any = {
+      appId: 'client_id',
+      scope: 'scope',
+      state: 'state',
+      responseType: 'response_type',
+      redirectUri: 'redirect_uri'
+    };
+    let res: any = {
+      state: Math.random()
+        .toString()
+        .slice(2),
+      scope: 'user',
+      client_id: this.options.appId,
+      redirect_uri: this.options.redirectUri,
+      response_type: 'code'
+    };
+    Object.keys(map).forEach(k => {
+      if (options && (options as any)[k]) {
+        res[map[k]] = (options as any)[k];
+      }
+    });
+    let params = new URLSearchParams(res);
+    let hostUrl = new URL(this.options.host)
+
+    let authorizeUrl = hostUrl.protocol + '//' + this.options.domain + '/oauth/auth?' + params.toString();
+    return authorizeUrl;
   }
 }
