@@ -2215,8 +2215,8 @@ export class AuthenticationClient {
     const [valid, username] = result.split('\n');
     return {
       valid: valid === 'yes',
-      username,
-      [valid !== 'yes' && 'message']: 'ticket 不合法'
-    }
+      ...(username && { username }),
+      ...(valid !== 'yes' && { message: 'ticket 不合法' })
+    };
   }
 }
