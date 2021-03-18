@@ -1752,7 +1752,9 @@ export class AuthenticationClient {
   }
   async getAccessTokenByCode(code: string) {
     if (!['oauth', 'oidc'].includes(this.options.protocol)) {
-      throw new Error('初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数')
+      throw new Error(
+        '初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数'
+      );
     }
     if (
       !this.options.secret &&
@@ -1871,8 +1873,8 @@ export class AuthenticationClient {
     };
     Object.keys(map).forEach(k => {
       if (options && (options as any)[k]) {
-        if(k === 'scope' && options.scope.includes('offline_access')) {
-          res.prompt = 'consent'
+        if (k === 'scope' && options.scope.includes('offline_access')) {
+          res.prompt = 'consent';
         }
         res[map[k]] = (options as any)[k];
       }
@@ -1990,7 +1992,9 @@ export class AuthenticationClient {
   }
   async getNewAccessTokenByRefreshToken(refreshToken: string) {
     if (!['oauth', 'oidc'].includes(this.options.protocol)) {
-      throw new Error('初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数')
+      throw new Error(
+        '初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数'
+      );
     }
     if (
       !this.options.secret &&
@@ -2015,9 +2019,7 @@ export class AuthenticationClient {
     }
   }
 
-  async _revokeTokenWithClientSecretPost(
-    token: string
-  ) {
+  async _revokeTokenWithClientSecretPost(token: string) {
     const qstr = this._generateTokenRequest({
       client_id: this.options.appId,
       client_secret: this.options.secret,
@@ -2039,18 +2041,18 @@ export class AuthenticationClient {
     });
     return tokenSet;
   }
-  async _revokeTokenWithClientSecretBasic(
-    token: string
-  ) {
+  async _revokeTokenWithClientSecretBasic(token: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
       api = `${this.options.host}/oidc/token/revocation`;
     } else if (this.options.protocol === 'oauth') {
-      throw new Error('OAuth 2.0 暂不支持用 client_secret_basic 模式身份验证撤回 Token')
+      throw new Error(
+        'OAuth 2.0 暂不支持用 client_secret_basic 模式身份验证撤回 Token'
+      );
       api = `${this.options.host}/oauth/token/revocation`;
     }
     const qstr = this._generateTokenRequest({
-      token: token,
+      token: token
     });
     let result = await this.naiveHttpClient.request({
       data: qstr,
@@ -2082,7 +2084,9 @@ export class AuthenticationClient {
   }
   async revokeToken(token: string) {
     if (!['oauth', 'oidc'].includes(this.options.protocol)) {
-      throw new Error('初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数')
+      throw new Error(
+        '初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数'
+      );
     }
     if (
       !this.options.secret &&
@@ -2093,27 +2097,23 @@ export class AuthenticationClient {
       );
     }
     if (this.options.revocationEndPointAuthMethod === 'client_secret_post') {
-      await this._revokeTokenWithClientSecretPost(
-        token
-      );
+      await this._revokeTokenWithClientSecretPost(token);
       return true;
     }
     if (this.options.revocationEndPointAuthMethod === 'client_secret_basic') {
-      await this._revokeTokenWithClientSecretBasic(
-        token
-      );
+      await this._revokeTokenWithClientSecretBasic(token);
       return true;
     }
     if (this.options.revocationEndPointAuthMethod === 'none') {
       await this._revokeTokenWithNone(token);
       return true;
     }
-    throw new Error('初始化 AuthenticationClient 时传入的 revocationEndPointAuthMethod 参数可选值为 client_secret_base、client_secret_post、none，请检查参数')
+    throw new Error(
+      '初始化 AuthenticationClient 时传入的 revocationEndPointAuthMethod 参数可选值为 client_secret_base、client_secret_post、none，请检查参数'
+    );
   }
 
-  async _introspectTokenWithClientSecretPost(
-    token: string
-  ) {
+  async _introspectTokenWithClientSecretPost(token: string) {
     const qstr = this._generateTokenRequest({
       client_id: this.options.appId,
       client_secret: this.options.secret,
@@ -2135,9 +2135,7 @@ export class AuthenticationClient {
     });
     return tokenSet;
   }
-  async _introspectTokenWithClientSecretBasic(
-    token: string
-  ) {
+  async _introspectTokenWithClientSecretBasic(token: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
       api = `${this.options.host}/oidc/token/introspection`;
@@ -2145,7 +2143,7 @@ export class AuthenticationClient {
       api = `${this.options.host}/oauth/token/introspection`;
     }
     const qstr = this._generateTokenRequest({
-      token: token,
+      token: token
     });
     let result = await this.naiveHttpClient.request({
       data: qstr,
@@ -2177,7 +2175,9 @@ export class AuthenticationClient {
   }
   async introspectToken(token: string) {
     if (!['oauth', 'oidc'].includes(this.options.protocol)) {
-      throw new Error('初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数')
+      throw new Error(
+        '初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数'
+      );
     }
     if (
       !this.options.secret &&
@@ -2188,18 +2188,35 @@ export class AuthenticationClient {
       );
     }
     if (this.options.introspectionEndPointAuthMethod === 'client_secret_post') {
-      return await this._introspectTokenWithClientSecretPost(
-        token
-      );
+      return await this._introspectTokenWithClientSecretPost(token);
     }
-    if (this.options.introspectionEndPointAuthMethod === 'client_secret_basic') {
-      return await this._introspectTokenWithClientSecretBasic(
-        token
-      );
+    if (
+      this.options.introspectionEndPointAuthMethod === 'client_secret_basic'
+    ) {
+      return await this._introspectTokenWithClientSecretBasic(token);
     }
     if (this.options.introspectionEndPointAuthMethod === 'none') {
       return await this._introspectTokenWithNone(token);
     }
-    throw new Error('初始化 AuthenticationClient 时传入的 introspectionEndPointAuthMethod 参数可选值为 client_secret_base、client_secret_post、none，请检查参数')
+    throw new Error(
+      '初始化 AuthenticationClient 时传入的 introspectionEndPointAuthMethod 参数可选值为 client_secret_base、client_secret_post、none，请检查参数'
+    );
+  }
+  async validateTicketV1(ticket: string, service: string) {
+    const api = `${this.options.host}/cas-idp/${this.options.appId}/validate`;
+    let result = await this.naiveHttpClient.request({
+      method: 'GET',
+      url: api,
+      params: {
+        service,
+        ticket
+      }
+    });
+    const [valid, username, _] = result.split('\n');
+    return {
+      valid: valid === 'yes',
+      username,
+      [valid !== 'yes' && 'message']: 'ticket 不合法'
+    }
   }
 }
