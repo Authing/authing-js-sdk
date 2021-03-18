@@ -2212,7 +2212,7 @@ export class AuthenticationClient {
         ticket
       }
     });
-    const [valid, username, _] = result.split('\n');
+    const [valid, username] = result.split('\n');
     return {
       valid: valid === 'yes',
       username,
