@@ -1101,6 +1101,7 @@ export class AuthenticationClient {
     this.setToken(data.token);
     return data;
   }
+
   /**
    * @name linkAccount
    * @name_zh 关联账号
@@ -1184,8 +1185,8 @@ export class AuthenticationClient {
 
   /**
    * @name bindEmail
-   * @name_zh 绑定手机号
-   * @description 用户初次绑定手机号，如果需要修改手机号请使用 updatePhone 接口。
+   * @name_zh 绑定邮箱号
+   * @description 用户邮箱号
    *
    * @param {string} email
    * @param {string} emailCode
@@ -1211,9 +1212,9 @@ export class AuthenticationClient {
   }
 
   /**
-   * @name unbindPhone
-   * @name_zh 解绑手机号
-   * @description 用户解绑手机号
+   * @name unbindEmail
+   * @name_zh 解绑邮箱号
+   * @description 用户解绑邮箱号
    *
    * @example
    *
