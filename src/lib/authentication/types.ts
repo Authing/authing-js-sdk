@@ -31,6 +31,8 @@ export interface AuthenticationClientOptions {
     | 'none';
   /** 应用回调地址 */
   redirectUri?: string;
+  /** 应用认证地址 */
+  domain?: string;
   /** 请求超时时间 **/
   timeout?: number;
   /** 错误回调函数, 默认为 (err: Error) => { throw err } 直接抛出报错 **/
@@ -369,4 +371,31 @@ export interface UserPortalConfig {
   icpRecord: string;
   // 公安备案号
   psbRecord: string;
+}
+
+export interface IOidcParams {
+  appId?: string;
+  redirectUri?: string;
+  responseType?:
+    | 'code'
+    | 'code id_token token'
+    | 'code id_token'
+    | 'code token'
+    | 'id_token token'
+    | 'id_token'
+    | 'none';
+  responseMode?: 'query' | 'fragment' | 'form_post';
+  state?: string;
+  nonce?: string;
+  scope?: string;
+}
+
+export interface IOauthParams {
+  appId?: string;
+  redirectUri?: string;
+  responseType?:
+    | 'code'
+    | 'token'
+  state?: string;
+  scope?: string;
 }
