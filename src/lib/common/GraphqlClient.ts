@@ -45,9 +45,10 @@ export class GraphqlClient {
       data = responseData.data;
       errors = responseData.errors;
     } catch (error) {
-      console.log(error);
-      this.options.onError(500, '网络请求错误', null);
-      throw { code: 500, message: '网络请求错误', data: null };
+      const statusCode = error?.response?.status
+      const errorDetail = error?.response?.data
+      this.options.onError(statusCode || 500, 'GraphQL 请求错误，请检查输入格式', errorDetail);
+      throw { code: statusCode || 500, message: 'GraphQL 请求错误，请检查输入格式', data: errorDetail };
     }
 
     if (errors?.length > 0) {
