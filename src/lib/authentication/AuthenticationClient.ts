@@ -31,6 +31,7 @@ import {
 import { GraphqlClient } from '../common/GraphqlClient';
 import {
   AuthenticationClientOptions,
+  ICasParams,
   ILogoutParams,
   IOauthParams,
   IOidcParams,
@@ -1834,7 +1835,7 @@ export class AuthenticationClient {
     });
     return userInfo;
   }
-  buildAuthorizeUrl(options?: IOidcParams | IOauthParams) {
+  buildAuthorizeUrl(options?: IOidcParams | IOauthParams | ICasParams) {
     if (!this.options.domain) {
       throw new Error(
         '请在初始化 AuthenticationClient 时传入应用域名 domain 参数，形如：app1.authing.cn'
@@ -1849,8 +1850,11 @@ export class AuthenticationClient {
     if (this.options.protocol === 'saml') {
       return this._buildSamlAuthorizeUrl();
     }
+    if (this.options.protocol === 'cas') {
+      return this._buildCasAuthorizeUrl(options as ICasParams);
+    }
     throw new Error(
-      '不支持的协议类型，请在初始化 AuthenticationClient 时传入 protocol 参数，可选值为 oidc、oauth'
+      '不支持的协议类型，请在初始化 AuthenticationClient 时传入 protocol 参数，可选值为 oidc、oauth、saml、cas'
     );
   }
   _buildOidcAuthorizeUrl(options: IOidcParams) {
@@ -1939,6 +1943,13 @@ export class AuthenticationClient {
       this.options.appId
     );
   }
+  _buildCasAuthorizeUrl(options: ICasParams) {
+    let hostUrl = new URL(this.options.host);
+    if (options?.service) {
+      return `${hostUrl.protocol}//${this.options.domain}/cas-idp/${this.options.appId}?service=${options?.service}`;
+    }
+    return `${hostUrl.protocol}//${this.options.domain}/cas-idp/${this.options.appId}`;
+  }
   _buildCasLogoutUrl(options: ILogoutParams) {
     let hostUrl = new URL(this.options.host);
     if (options?.redirectUri) {
@@ -1953,8 +1964,10 @@ export class AuthenticationClient {
     return hostUrl.protocol + '//' + this.options.domain + '/cas-idp/logout';
   }
   _buildOidcLogoutUrl(options: ILogoutParams) {
-    if(options && !(options.idToken && options.redirectUri)) {
-      throw new Error('必须同时传入 idToken 和 redirectUri 参数，或者同时都不传入')
+    if (options && !(options.idToken && options.redirectUri)) {
+      throw new Error(
+        '必须同时传入 idToken 和 redirectUri 参数，或者同时都不传入'
+      );
     }
     let hostUrl = new URL(this.options.host);
     if (options?.redirectUri) {
@@ -1974,9 +1987,9 @@ export class AuthenticationClient {
       return this._buildCasLogoutUrl(options);
     }
     if (this.options.protocol === 'oidc' && options?.expert) {
-      return this._buildOidcLogoutUrl(options)
+      return this._buildOidcLogoutUrl(options);
     }
-    return this._buildEasyLogoutUrl(options)
+    return this._buildEasyLogoutUrl(options);
   }
   async _getNewAccessTokenByRefreshTokenWithClientSecretPost(
     refreshToken: string

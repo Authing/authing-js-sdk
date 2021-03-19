@@ -405,3 +405,7 @@ export interface ILogoutParams {
   redirectUri?: string;
   idToken?: string;
 }
+
+export interface ICasParams {
+  service?: string;
+}
