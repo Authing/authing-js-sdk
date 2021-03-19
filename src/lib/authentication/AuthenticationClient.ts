@@ -33,7 +33,6 @@ import {
   AuthenticationClientOptions,
   IOauthParams,
   IOidcParams,
-  ISamlParams,
   PasswordSecurityLevel,
   SecurityLevel
 } from './types';
@@ -1831,7 +1830,7 @@ export class AuthenticationClient {
     });
     return userInfo;
   }
-  buildAuthorizeUrl(options?: IOidcParams | IOauthParams | ISamlParams) {
+  buildAuthorizeUrl(options?: IOidcParams | IOauthParams) {
     if (!this.options.domain) {
       throw new Error(
         '请在初始化 AuthenticationClient 时传入应用域名 domain 参数，形如：app1.authing.cn'
