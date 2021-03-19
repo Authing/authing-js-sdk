@@ -1,38 +1,40 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import {
+  bindEmail,
+  bindPhone,
   checkLoginStatus,
   checkPasswordStrength,
+  listUserAuthorizedResources,
   loginByEmail,
   loginByPhoneCode,
   loginByPhonePassword,
+  loginBySubAccount,
   loginByUsername,
   refreshToken,
   registerByEmail,
-  registerByUsername,
-  sendEmail,
   registerByPhoneCode,
-  updatePassword,
-  updatePhone,
-  updateEmail,
-  bindPhone,
-  unbindPhone,
-  user,
-  setUdv,
+  registerByUsername,
   removeUdv,
+  resetPassword,
+  sendEmail,
+  setUdv,
+  setUdvBatch,
   udv,
   unbindEmail,
-  loginBySubAccount,
-  bindEmail,
-  setUdvBatch,
-  listUserAuthorizedResources
+  unbindPhone,
+  updateEmail,
+  updatePassword,
+  updatePhone,
+  updateUser,
+  user
 } from '../graphqlapi';
 import { GraphqlClient } from '../common/GraphqlClient';
 import {
   AuthenticationClientOptions,
-  SecurityLevel,
-  PasswordSecurityLevel,
+  IOauthParams,
   IOidcParams,
-  IOauthParams
+  PasswordSecurityLevel,
+  SecurityLevel
 } from './types';
 import {
   CheckPasswordStrengthResult,
@@ -50,12 +52,11 @@ import {
 } from '../../types/graphql.v2';
 import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { MfaAuthenticationClient } from './MfaAuthenticationClient';
-import { resetPassword, updateUser } from '../graphqlapi';
 import { HttpClient, NaiveHttpClient } from '../common/HttpClient';
 import {
-  encrypt,
   convertUdv,
   convertUdvToKeyValuePair,
+  encrypt,
   formatAuthorizedResources
 } from '../utils';
 import jwtDecode from 'jwt-decode';
@@ -1844,6 +1845,9 @@ export class AuthenticationClient {
     if (this.options.protocol === 'oauth') {
       return this._buildOauthAuthorizeUrl(options as IOauthParams);
     }
+    if (this.options.protocol === 'saml') {
+      return this._buildSamlAuthorizeUrl();
+    }
     throw new Error(
       '不支持的协议类型，请在初始化 AuthenticationClient 时传入 protocol 参数，可选值为 oidc、oauth'
     );
@@ -1921,6 +1925,14 @@ export class AuthenticationClient {
       '/oauth/auth?' +
       params.toString();
     return authorizeUrl;
+  }
+
+  _buildSamlAuthorizeUrl() {
+    let hostUrl = new URL(this.options.host);
+
+    return hostUrl.protocol +'//' +
+      this.options.domain + '/saml-idp/' +
+      this.options.appId;
   }
 
   async _getNewAccessTokenByRefreshTokenWithClientSecretPost(
