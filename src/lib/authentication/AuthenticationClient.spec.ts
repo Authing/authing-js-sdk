@@ -525,7 +525,7 @@ test.only('拼接 OIDC 带 refresh_token 能力的授权链接', async t => {
   t.assert(url1Data.searchParams.get('prompt') === 'consent');
 });
 
-test('拼接 OAuth 授权链接', async t => {
+test.only('拼接 OAuth 授权链接', async t => {
   const authing = new AuthenticationClient({
     appId: '9072248490655972',
     secret: '16657960936447935',
@@ -547,5 +547,23 @@ test('拼接 OAuth 授权链接', async t => {
   t.assert(url1Data.searchParams.get('client_id') === '9072248490655972');
   t.assert(url1Data.searchParams.get('redirect_uri') === 'https://baidu.com');
   t.assert(url1Data.searchParams.get('response_type') === 'code');
+
+});
+
+
+test.only('拼接 Saml 授权链接', async t => {
+  const authing = new AuthenticationClient({
+    appId: '9072248490655972',
+    secret: '16657960936447935',
+    redirectUri: 'https://baidu.com',
+    tokenEndPointAuthMethod: 'client_secret_basic',
+    protocol: 'saml',
+    domain: 'oidc1.authing.cn'
+  });
+  let url1 = authing.buildAuthorizeUrl();
+  let url1Data = new URL(url1);
+
+  t.assert(url1Data.hostname === 'oidc1.authing.cn');
+  t.assert(url1Data.pathname === `/saml-idp/9072248490655972`);
 
 });

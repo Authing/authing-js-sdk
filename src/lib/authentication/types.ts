@@ -13,7 +13,7 @@ export interface AuthenticationClientOptions {
   /** 应用密钥 */
   secret?: string;
   /** 应用身份协议 */
-  protocol?: 'oauth' | 'oidc' | 'cas';
+  protocol?: 'oauth' | 'oidc' | 'saml' | 'cas';
   /** 获取 token 端点认证方式 */
   tokenEndPointAuthMethod?:
     | 'client_secret_post'
