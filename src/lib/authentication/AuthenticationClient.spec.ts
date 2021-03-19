@@ -499,7 +499,7 @@ test('拼接 OIDC 授权链接', async t => {
   t.assert(url1Data.searchParams.get('response_type') === 'code');
 });
 
-test.only('拼接 OIDC 带 refresh_token 能力的授权链接', async t => {
+test('拼接 OIDC 带 refresh_token 能力的授权链接', async t => {
   const authing = new AuthenticationClient({
     appId: '9072248490655972',
     secret: '16657960936447935',
@@ -548,4 +548,86 @@ test('拼接 OAuth 授权链接', async t => {
   t.assert(url1Data.searchParams.get('redirect_uri') === 'https://baidu.com');
   t.assert(url1Data.searchParams.get('response_type') === 'code');
 
+});
+
+
+test('拼接 Saml 授权链接', async t => {
+  const authing = new AuthenticationClient({
+    appId: '9072248490655972',
+    secret: '16657960936447935',
+    redirectUri: 'https://baidu.com',
+    tokenEndPointAuthMethod: 'client_secret_basic',
+    protocol: 'saml',
+    domain: 'oidc1.authing.cn'
+  });
+  let url1 = authing.buildAuthorizeUrl();
+  let url1Data = new URL(url1);
+
+  t.assert(url1Data.hostname === 'oidc1.authing.cn');
+  t.assert(url1Data.pathname === `/saml-idp/9072248490655972`);
+
+});
+
+test.only('拼接 OIDC 傻瓜登出链接', async t => {
+  const authing = new AuthenticationClient({
+    appId: '9072248490655972',
+    secret: '16657960936447935',
+    redirectUri: 'https://baidu.com',
+    tokenEndPointAuthMethod: 'client_secret_basic',
+    protocol: 'oidc',
+    domain: 'oidc1.authing.cn'
+  });
+  let url1 = authing.buildLogoutUrl();
+  let url1Data = new URL(url1);
+
+  t.assert(url1Data.hostname === 'oidc1.authing.cn');
+  t.assert(url1Data.pathname === `/login/profile/logout`);
+});
+
+test.only('拼接 OIDC 专家登出链接', async t => {
+  const authing = new AuthenticationClient({
+    appId: '9072248490655972',
+    secret: '16657960936447935',
+    redirectUri: 'https://baidu.com',
+    tokenEndPointAuthMethod: 'client_secret_basic',
+    protocol: 'oidc',
+    domain: 'oidc1.authing.cn'
+  });
+  let url1 = authing.buildLogoutUrl({expert: true, idToken: '123', redirectUri: 'https://authing.cn'});
+  let url1Data = new URL(url1);
+
+  t.assert(url1Data.hostname === 'oidc1.authing.cn');
+  t.assert(url1Data.pathname === `/oidc/session/end`);
+  t.assert(url1Data.searchParams.get('id_token_hint') === '123');
+  t.assert(url1Data.searchParams.get('post_logout_redirect_uri') === 'https://authing.cn');
+});
+test.only('拼接 OAuth 傻瓜登出链接', async t => {
+  const authing = new AuthenticationClient({
+    appId: '9072248490655972',
+    secret: '16657960936447935',
+    redirectUri: 'https://baidu.com',
+    tokenEndPointAuthMethod: 'client_secret_basic',
+    protocol: 'oauth',
+    domain: 'oidc1.authing.cn'
+  });
+  let url1 = authing.buildLogoutUrl();
+  let url1Data = new URL(url1);
+
+  t.assert(url1Data.hostname === 'oidc1.authing.cn');
+  t.assert(url1Data.pathname === `/login/profile/logout`);
+});
+test.only('拼接 Saml 傻瓜登出链接', async t => {
+  const authing = new AuthenticationClient({
+    appId: '9072248490655972',
+    secret: '16657960936447935',
+    redirectUri: 'https://baidu.com',
+    tokenEndPointAuthMethod: 'client_secret_basic',
+    protocol: 'saml',
+    domain: 'oidc1.authing.cn'
+  });
+  let url1 = authing.buildLogoutUrl();
+  let url1Data = new URL(url1);
+
+  t.assert(url1Data.hostname === 'oidc1.authing.cn');
+  t.assert(url1Data.pathname === `/login/profile/logout`);
 });

@@ -78,10 +78,7 @@ export class ManagementClient {
       this.options,
       this.tokenProvider
     );
-    this.publicKeyManager = new PublicKeyManager(
-      this.options,
-      this.httpClient
-    );
+    this.publicKeyManager = new PublicKeyManager(this.options, this.httpClient);
     this.users = new UsersManagementClient(
       this.options,
       this.graphqlClient,
@@ -182,5 +179,34 @@ export class ManagementClient {
       const user = await this.users.detail(id);
       return user;
     }
+  }
+
+  /**
+   * @name isPasswordValid
+   * @name_zh 检测密码是否合法
+   * @description 检测密码是否合法
+   *
+   * @param {string} password 密码
+   *
+   * @example
+   *
+   * const envList = await managementClient.isPasswordValid('xxxxxx')
+   *
+   * @returns {Promise<{
+   *  valid: boolean
+   *  message: string
+   * }>} 返回检测结果
+   * @memberof ManagementClient
+   */
+  async isPasswordValid(
+    password: string
+  ): Promise<{ valid: boolean; message: string }[]> {
+    return await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/password/check`,
+      data: {
+        password
+      }
+    });
   }
 }

@@ -3,7 +3,6 @@ import { GraphqlClient } from '../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { updateUserpool } from '../graphqlapi';
 import { UpdateUserpoolInput, UserPool } from '../../types/graphql.v2';
-import { getUserPoolDetail } from '../graphqlapi';
 import { HttpClient } from '../common/HttpClient';
 
 /**
@@ -59,12 +58,12 @@ export class UserPoolManagementClient {
    * @memberof UserPoolManagementClient
    */
   async detail(): Promise<UserPool> {
-    const res = await getUserPoolDetail(
-      this.graphqlClient,
-      this.tokenProvider,
-      {}
-    );
-    return res.userpool;
+    const userPool = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/userpools/detail`
+    });
+
+    return userPool;
   }
 
   /**
