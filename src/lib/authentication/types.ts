@@ -399,3 +399,9 @@ export interface IOauthParams {
   state?: string;
   scope?: string;
 }
+
+export interface ILogoutParams {
+  expert?: boolean;
+  redirectUri?: string;
+  idToken?: string;
+}

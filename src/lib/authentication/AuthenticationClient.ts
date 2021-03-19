@@ -31,6 +31,7 @@ import {
 import { GraphqlClient } from '../common/GraphqlClient';
 import {
   AuthenticationClientOptions,
+  ILogoutParams,
   IOauthParams,
   IOidcParams,
   PasswordSecurityLevel,
@@ -1930,11 +1931,53 @@ export class AuthenticationClient {
   _buildSamlAuthorizeUrl() {
     let hostUrl = new URL(this.options.host);
 
-    return hostUrl.protocol +'//' +
-      this.options.domain + '/saml-idp/' +
-      this.options.appId;
+    return (
+      hostUrl.protocol +
+      '//' +
+      this.options.domain +
+      '/saml-idp/' +
+      this.options.appId
+    );
   }
-
+  _buildCasLogoutUrl(options: ILogoutParams) {
+    let hostUrl = new URL(this.options.host);
+    if (options?.redirectUri) {
+      return (
+        hostUrl.protocol +
+        '//' +
+        this.options.domain +
+        '/cas-idp/logout?url=' +
+        options.redirectUri
+      );
+    }
+    return hostUrl.protocol + '//' + this.options.domain + '/cas-idp/logout';
+  }
+  _buildOidcLogoutUrl(options: ILogoutParams) {
+    if(options && !(options.idToken && options.redirectUri)) {
+      throw new Error('必须同时传入 idToken 和 redirectUri 参数，或者同时都不传入')
+    }
+    let hostUrl = new URL(this.options.host);
+    if (options?.redirectUri) {
+      return `${hostUrl.protocol}//${this.options.domain}/oidc/session/end?id_token_hint=${options.idToken}&post_logout_redirect_uri=${options.redirectUri}`;
+    }
+    return `${hostUrl.protocol}//${this.options.domain}/oidc/session/end`;
+  }
+  _buildEasyLogoutUrl(options?: ILogoutParams) {
+    let hostUrl = new URL(this.options.host);
+    if (options?.redirectUri) {
+      return `${hostUrl.protocol}//${this.options.domain}/login/profile/logout?redirect_uri=${options.redirectUri}`;
+    }
+    return `${hostUrl.protocol}//${this.options.domain}/login/profile/logout`;
+  }
+  buildLogoutUrl(options?: ILogoutParams) {
+    if (this.options.protocol === 'cas') {
+      return this._buildCasLogoutUrl(options);
+    }
+    if (this.options.protocol === 'oidc' && options?.expert) {
+      return this._buildOidcLogoutUrl(options)
+    }
+    return this._buildEasyLogoutUrl(options)
+  }
   async _getNewAccessTokenByRefreshTokenWithClientSecretPost(
     refreshToken: string
   ) {
