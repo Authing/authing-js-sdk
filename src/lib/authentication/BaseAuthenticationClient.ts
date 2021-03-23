@@ -7,7 +7,7 @@ export class BaseAuthenticationClient {
     const { appHost, domain, host } = this.options;
     // 最新版本，传入 appHost
     if (appHost) {
-      return appHost;
+      return appHost.replace(/\/$/, '');
     }
     // 兼容协议认证 API 中传入的 domain
     else if (domain) {
