@@ -3,10 +3,12 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { ManagementClientOptions } from './types';
 import {
   allow,
+  authorizeResource,
   isAllowed,
-  listAuthorizedResources,
+  listAuthorizedResources
 } from '../graphqlapi';
 import {
+  AuthorizeResourceOpt,
   CommonMessage,
   PaginatedAuthorizedResources,
   PolicyAssignmentTargetType,
@@ -152,4 +154,32 @@ export class AclManagementClient {
       totalCount
     };
   }
+
+  /**
+   * @description 将一个（类）资源授权给用户、角色、分组、组织机构，且可以分别指定不同的操作权限。
+   *
+   */
+  public async authorizeResource(params: {
+    namespace: string;
+    resource: string;
+    opts: AuthorizeResourceOpt[];
+  }): Promise<CommonMessage> {
+    const { namespace, resource, opts } = params;
+    const { authorizeResource: data } = await authorizeResource(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        namespace,
+        resource,
+        opts
+      }
+    );
+    return data;
+  }
+
+  /**
+   * @description 获取具备某个（类）资源操作权限的用户、分组、角色、组织机构。
+   *
+   */
+  public async listResourcePermissions() {}
 }

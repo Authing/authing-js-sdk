@@ -11,6 +11,9 @@ export type Scalars = {
 };
 
 export type Query = {
+  isActionAllowed: Scalars['Boolean'];
+  isActionDenied: Scalars['Boolean'];
+  resourcePermissions?: Maybe<PaginatedResourcePermissionAssignments>;
   qiniuUptoken?: Maybe<Scalars['String']>;
   isDomainAvaliable?: Maybe<Scalars['Boolean']>;
   /** 获取社会化登录定义 */
@@ -44,8 +47,6 @@ export type Query = {
   isRootNode?: Maybe<Scalars['Boolean']>;
   searchNodes: Array<Node>;
   checkPasswordStrength: CheckPasswordStrengthResult;
-  isActionAllowed: Scalars['Boolean'];
-  isActionDenied: Scalars['Boolean'];
   policy?: Maybe<Policy>;
   policies: PaginatedPolicies;
   policyAssignments: PaginatedPolicyAssignments;
@@ -79,6 +80,28 @@ export type Query = {
   accessToken: AccessTokenRes;
   /** 用户池注册白名单列表 */
   whitelist: Array<WhiteList>;
+};
+
+
+export type QueryIsActionAllowedArgs = {
+  resource: Scalars['String'];
+  action: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+
+export type QueryIsActionDeniedArgs = {
+  resource: Scalars['String'];
+  action: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+
+export type QueryResourcePermissionsArgs = {
+  namespace: Scalars['String'];
+  resourceType: ResourceType;
+  resource: Scalars['String'];
+  targetType?: Maybe<PolicyAssignmentTargetType>;
 };
 
 
@@ -186,20 +209,6 @@ export type QuerySearchNodesArgs = {
 
 export type QueryCheckPasswordStrengthArgs = {
   password: Scalars['String'];
-};
-
-
-export type QueryIsActionAllowedArgs = {
-  resource: Scalars['String'];
-  action: Scalars['String'];
-  userId: Scalars['String'];
-};
-
-
-export type QueryIsActionDeniedArgs = {
-  resource: Scalars['String'];
-  action: Scalars['String'];
-  userId: Scalars['String'];
 };
 
 
@@ -332,6 +341,33 @@ export type QueryAccessTokenArgs = {
 
 export type QueryWhitelistArgs = {
   type: WhitelistType;
+};
+
+export enum ResourceType {
+  Data = 'DATA',
+  Api = 'API',
+  Menu = 'MENU',
+  Ui = 'UI',
+  Button = 'BUTTON'
+}
+
+export enum PolicyAssignmentTargetType {
+  User = 'USER',
+  Role = 'ROLE',
+  Group = 'GROUP',
+  Org = 'ORG',
+  AkSk = 'AK_SK'
+}
+
+export type PaginatedResourcePermissionAssignments = {
+  list?: Maybe<Array<Maybe<ResourcePermissionAssignment>>>;
+  totalCount?: Maybe<Scalars['Int']>;
+};
+
+export type ResourcePermissionAssignment = {
+  targetType?: Maybe<PolicyAssignmentTargetType>;
+  targetIdentifier?: Maybe<Scalars['String']>;
+  actions?: Maybe<Array<Scalars['String']>>;
 };
 
 export type SocialConnection = {
@@ -635,14 +671,6 @@ export type AuthorizedResource = {
   actions?: Maybe<Array<Scalars['String']>>;
 };
 
-export enum ResourceType {
-  Data = 'DATA',
-  Api = 'API',
-  Menu = 'MENU',
-  Ui = 'UI',
-  Button = 'BUTTON'
-}
-
 export type PaginatedGroups = {
   totalCount: Scalars['Int'];
   list: Array<Group>;
@@ -786,14 +814,6 @@ export type PolicyAssignment = {
   targetType: PolicyAssignmentTargetType;
   targetIdentifier: Scalars['String'];
 };
-
-export enum PolicyAssignmentTargetType {
-  User = 'USER',
-  Role = 'ROLE',
-  Group = 'GROUP',
-  Org = 'ORG',
-  AkSk = 'AK_SK'
-}
 
 export type PaginatedPolicies = {
   totalCount: Scalars['Int'];
@@ -999,8 +1019,10 @@ export type WhiteList = {
 };
 
 export type Mutation = {
-  /** 创建社会化登录服务商 */
-  createSocialConnection: SocialConnection;
+  /** 允许操作某个资源 */
+  allow: CommonMessage;
+  /** 将一个（类）资源授权给用户、角色、分组、组织机构，且可以分别指定不同的操作权限。 */
+  authorizeResource: CommonMessage;
   /** 配置社会化登录 */
   createSocialConnectionInstance: SocialConnectionInstance;
   /** 开启社会化登录 */
@@ -1064,8 +1086,6 @@ export type Mutation = {
   /** 开启授权 */
   disbalePolicyAssignment: CommonMessage;
   removePolicyAssignments: CommonMessage;
-  /** 允许操作某个资源 */
-  allow: CommonMessage;
   registerByUsername?: Maybe<User>;
   registerByEmail?: Maybe<User>;
   registerByPhoneCode?: Maybe<User>;
@@ -1123,8 +1143,22 @@ export type Mutation = {
 };
 
 
-export type MutationCreateSocialConnectionArgs = {
-  input: CreateSocialConnectionInput;
+export type MutationAllowArgs = {
+  resource: Scalars['String'];
+  action: Scalars['String'];
+  userId?: Maybe<Scalars['String']>;
+  userIds?: Maybe<Array<Scalars['String']>>;
+  roleCode?: Maybe<Scalars['String']>;
+  roleCodes?: Maybe<Array<Scalars['String']>>;
+  namespace?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationAuthorizeResourceArgs = {
+  namespace?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<ResourceType>;
+  resource?: Maybe<Scalars['String']>;
+  opts?: Maybe<Array<Maybe<AuthorizeResourceOpt>>>;
 };
 
 
@@ -1390,17 +1424,6 @@ export type MutationRemovePolicyAssignmentsArgs = {
 };
 
 
-export type MutationAllowArgs = {
-  resource: Scalars['String'];
-  action: Scalars['String'];
-  userId?: Maybe<Scalars['String']>;
-  userIds?: Maybe<Array<Scalars['String']>>;
-  roleCode?: Maybe<Scalars['String']>;
-  roleCodes?: Maybe<Array<Scalars['String']>>;
-  namespace?: Maybe<Scalars['String']>;
-};
-
-
 export type MutationRegisterByUsernameArgs = {
   input: RegisterByUsernameInput;
 };
@@ -1606,20 +1629,20 @@ export type MutationRemoveWhitelistArgs = {
   list: Array<Scalars['String']>;
 };
 
-export type CreateSocialConnectionInput = {
-  provider: Scalars['String'];
-  name: Scalars['String'];
-  logo: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  fields?: Maybe<Array<SocialConnectionFieldInput>>;
+export type CommonMessage = {
+  /** 可读的接口响应说明，请以业务状态码 code 作为判断业务是否成功的标志 */
+  message?: Maybe<Scalars['String']>;
+  /**
+   * 业务状态码（与 HTTP 响应码不同），但且仅当为 200 的时候表示操作成功表示，详细说明请见：
+   * [Authing 错误代码列表](https://docs.authing.co/advanced/error-code.html)
+   */
+  code?: Maybe<Scalars['Int']>;
 };
 
-export type SocialConnectionFieldInput = {
-  key?: Maybe<Scalars['String']>;
-  label?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
-  placeholder?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<Maybe<SocialConnectionFieldInput>>>;
+export type AuthorizeResourceOpt = {
+  PolicyAssignmentTargetType: PolicyAssignmentTargetType;
+  targetIdentifier: Scalars['String'];
+  actions?: Maybe<Array<Scalars['String']>>;
 };
 
 export type CreateSocialConnectionInstanceInput = {
@@ -1631,16 +1654,6 @@ export type CreateSocialConnectionInstanceInput = {
 export type CreateSocialConnectionInstanceFieldInput = {
   key: Scalars['String'];
   value: Scalars['String'];
-};
-
-export type CommonMessage = {
-  /** 可读的接口响应说明，请以业务状态码 code 作为判断业务是否成功的标志 */
-  message?: Maybe<Scalars['String']>;
-  /**
-   * 业务状态码（与 HTTP 响应码不同），但且仅当为 200 的时候表示操作成功表示，详细说明请见：
-   * [Authing 错误代码列表](https://docs.authing.co/advanced/error-code.html)
-   */
-  code?: Maybe<Scalars['Int']>;
 };
 
 export type ConfigEmailTemplateInput = {
@@ -2034,6 +2047,22 @@ export type KeyValuePair = {
   value: Scalars['String'];
 };
 
+export type SocialConnectionFieldInput = {
+  key?: Maybe<Scalars['String']>;
+  label?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  placeholder?: Maybe<Scalars['String']>;
+  children?: Maybe<Array<Maybe<SocialConnectionFieldInput>>>;
+};
+
+export type CreateSocialConnectionInput = {
+  provider: Scalars['String'];
+  name: Scalars['String'];
+  logo: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  fields?: Maybe<Array<SocialConnectionFieldInput>>;
+};
+
 export type AddMemberVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
@@ -2129,6 +2158,15 @@ export type AssignRoleVariables = Exact<{
 
 export type AssignRoleResponse = { assignRole?: Maybe<{ message?: Maybe<string>, code?: Maybe<number> }> };
 
+export type AuthorizeResourceVariables = Exact<{
+  namespace?: Maybe<Scalars['String']>;
+  resource?: Maybe<Scalars['String']>;
+  opts?: Maybe<Array<Maybe<AuthorizeResourceOpt>>>;
+}>;
+
+
+export type AuthorizeResourceResponse = { authorizeResource: { code?: Maybe<number>, message?: Maybe<string> } };
+
 export type BindEmailVariables = Exact<{
   email: Scalars['String'];
   emailCode: Scalars['String'];
@@ -2207,13 +2245,6 @@ export type CreateRoleVariables = Exact<{
 
 
 export type CreateRoleResponse = { createRole: { namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, parent?: Maybe<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
-
-export type CreateSocialConnectionVariables = Exact<{
-  input: CreateSocialConnectionInput;
-}>;
-
-
-export type CreateSocialConnectionResponse = { createSocialConnection: { provider: string, name: string, logo: string, description?: Maybe<string>, fields?: Maybe<Array<{ key?: Maybe<string>, label?: Maybe<string>, type?: Maybe<string>, placeholder?: Maybe<string> }>> } };
 
 export type CreateSocialConnectionInstanceVariables = Exact<{
   input: CreateSocialConnectionInstanceInput;
@@ -3024,6 +3055,16 @@ export type QueryMfaVariables = Exact<{
 
 export type QueryMfaResponse = { queryMfa?: Maybe<{ id: string, userId: string, userPoolId: string, enable: boolean, secret?: Maybe<string> }> };
 
+export type ResourcePermissionsVariables = Exact<{
+  namespace: Scalars['String'];
+  resourceType: ResourceType;
+  resource: Scalars['String'];
+  targetType?: Maybe<PolicyAssignmentTargetType>;
+}>;
+
+
+export type ResourcePermissionsResponse = { resourcePermissions?: Maybe<{ totalCount?: Maybe<number>, list?: Maybe<Array<Maybe<{ targetType?: Maybe<PolicyAssignmentTargetType>, targetIdentifier?: Maybe<string>, actions?: Maybe<Array<string>> }>>> }> };
+
 export type RoleVariables = Exact<{
   code: Scalars['String'];
   namespace?: Maybe<Scalars['String']>;
@@ -3352,6 +3393,14 @@ export const AssignRoleDocument = `
   }
 }
     `;
+export const AuthorizeResourceDocument = `
+    mutation authorizeResource($namespace: String, $resource: String, $opts: [AuthorizeResourceOpt]) {
+  authorizeResource(namespace: $namespace, resource: $resource, opts: $opts) {
+    code
+    message
+  }
+}
+    `;
 export const BindEmailDocument = `
     mutation bindEmail($email: String!, $emailCode: String!) {
   bindEmail(email: $email, emailCode: $emailCode) {
@@ -3589,22 +3638,6 @@ export const CreateRoleDocument = `
       description
       createdAt
       updatedAt
-    }
-  }
-}
-    `;
-export const CreateSocialConnectionDocument = `
-    mutation createSocialConnection($input: CreateSocialConnectionInput!) {
-  createSocialConnection(input: $input) {
-    provider
-    name
-    logo
-    description
-    fields {
-      key
-      label
-      type
-      placeholder
     }
   }
 }
@@ -5924,6 +5957,18 @@ export const QueryMfaDocument = `
     userPoolId
     enable
     secret
+  }
+}
+    `;
+export const ResourcePermissionsDocument = `
+    query resourcePermissions($namespace: String!, $resourceType: ResourceType!, $resource: String!, $targetType: PolicyAssignmentTargetType) {
+  resourcePermissions(namespace: $namespace, resource: $resource, resourceType: $resourceType, targetType: $targetType) {
+    totalCount
+    list {
+      targetType
+      targetIdentifier
+      actions
+    }
   }
 }
     `;

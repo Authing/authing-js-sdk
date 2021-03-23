@@ -8,6 +8,7 @@ import {
 } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { User } from '../..';
+import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
 /**
  * @class MfaAuthenticationClient 多因素认证模块
@@ -39,6 +40,7 @@ export class MfaAuthenticationClient {
   options: AuthenticationClientOptions;
   tokenProvider: AuthenticationTokenProvider;
   httpClient: HttpClient;
+  baseClient: BaseAuthenticationClient;
 
   constructor(
     options: AuthenticationClientOptions,
@@ -48,6 +50,7 @@ export class MfaAuthenticationClient {
     this.options = options;
     this.tokenProvider = tokenProvider;
     this.httpClient = httpClient;
+    this.baseClient = new BaseAuthenticationClient(options);
   }
 
   /**
@@ -69,7 +72,7 @@ export class MfaAuthenticationClient {
       type: string;
     } = { type: 'totp' }
   ): Promise<IMfaAuthenticators> {
-    const api = `${this.options.host}/api/v2/mfa/authenticator`;
+    const api = `${this.baseClient.appHost}/api/v2/mfa/authenticator`;
     const data: IMfaAuthenticators = await this.httpClient.request({
       method: 'GET',
       url: api,
@@ -100,7 +103,7 @@ export class MfaAuthenticationClient {
       authenticatorType: string;
     } = { authenticatorType: 'totp' }
   ): Promise<IMfaAssociation> {
-    const api = `${this.options.host}/api/v2/mfa/totp/associate`;
+    const api = `${this.baseClient.appHost}/api/v2/mfa/totp/associate`;
     const data: IMfaAssociation = await this.httpClient.request({
       method: 'POST',
       url: api,
@@ -126,7 +129,7 @@ export class MfaAuthenticationClient {
    * @memberof MfaAuthenticationClient
    */
   async deleteMfaAuthenticator(): Promise<IMfaDeleteAssociation> {
-    const api = `${this.options.host}/api/v2/mfa/totp/associate`;
+    const api = `${this.baseClient.appHost}/api/v2/mfa/totp/associate`;
     await this.httpClient.request({
       method: 'DELETE',
       url: api
@@ -157,7 +160,7 @@ export class MfaAuthenticationClient {
       totp?: string;
     } = { authenticatorType: 'totp' }
   ): Promise<IMfaConfirmAssociation> {
-    const api = `${this.options.host}/api/v2/mfa/totp/associate/confirm`;
+    const api = `${this.baseClient.appHost}/api/v2/mfa/totp/associate/confirm`;
     await this.httpClient.request({
       method: 'POST',
       url: api,
@@ -187,7 +190,7 @@ export class MfaAuthenticationClient {
     totp: string;
     mfaToken: string;
   }): Promise<User> {
-    const api = `${this.options.host}/api/v2/mfa/totp/verify`;
+    const api = `${this.baseClient.appHost}/api/v2/mfa/totp/verify`;
     const data: User = await this.httpClient.request({
       method: 'POST',
       url: api,
@@ -225,7 +228,7 @@ export class MfaAuthenticationClient {
     code: string;
     mfaToken: string;
   }): Promise<User> {
-    const api = `${this.options.host}/api/v2/applications/mfa/sms/verify`;
+    const api = `${this.baseClient.appHost}/api/v2/applications/mfa/sms/verify`;
     const data: User = await this.httpClient.request({
       method: 'POST',
       url: api,
@@ -264,7 +267,7 @@ export class MfaAuthenticationClient {
     mfaToken: string;
     code: string;
   }): Promise<User> {
-    const api = `${this.options.host}/api/v2/applications/mfa/email/verify`;
+    const api = `${this.baseClient.appHost}/api/v2/applications/mfa/email/verify`;
     const data: User = await this.httpClient.request({
       method: 'POST',
       url: api,
@@ -308,7 +311,7 @@ export class MfaAuthenticationClient {
     email?: string;
     mfaToken: string;
   }): Promise<boolean> {
-    const api = `${this.options.host}/api/v2/applications/mfa/check`;
+    const api = `${this.baseClient.appHost}/api/v2/applications/mfa/check`;
     return await this.httpClient.request({
       method: 'POST',
       url: api,
@@ -340,7 +343,7 @@ export class MfaAuthenticationClient {
     recoveryCode: string;
     mfaToken: string;
   }): Promise<User> {
-    const api = `${this.options.host}/api/v2/mfa/totp/recovery`;
+    const api = `${this.baseClient.appHost}/api/v2/mfa/totp/recovery`;
     const data: User = await this.httpClient.request({
       method: 'POST',
       url: api,

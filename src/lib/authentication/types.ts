@@ -6,10 +6,10 @@ import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
  * 初始化 AuthenticationClientOptions 的参数
  */
 export interface AuthenticationClientOptions {
-  /** 用户池 ID **/
-  userPoolId?: string;
   /** 应用 ID */
-  appId?: string;
+  appId: string;
+  /** 应用完整域名，如 https://sample-app.authing.cn，不带最后的斜线 '/'。 */
+  appHost: string
   /** 应用密钥 */
   secret?: string;
   /** 应用身份协议 */
@@ -31,14 +31,10 @@ export interface AuthenticationClientOptions {
     | 'none';
   /** 应用回调地址 */
   redirectUri?: string;
-  /** 应用认证地址 */
-  domain?: string;
   /** 请求超时时间 **/
   timeout?: number;
   /** 错误回调函数, 默认为 (err: Error) => { throw err } 直接抛出报错 **/
   onError?: (code: number, message: string, data?: any) => void;
-  /** Authing 服务器地址 */
-  host?: string;
   /** Websocket 服务器域名 */
   websocketHost?: string;
   /** 请求来源 */
@@ -52,22 +48,15 @@ export interface AuthenticationClientOptions {
   httpClient?: typeof HttpClient;
   graphqlClient?: typeof GraphqlClient;
   tokenProvider?: typeof AuthenticationTokenProvider;
-}
 
-export interface CheckLoginStatusRes {
-  status: boolean;
-  code: number;
-  message: string;
-  token: {
-    data: {
-      email?: string;
-      id: string;
-      clientId?: string;
-      unionid?: string;
-    };
-    iat: number;
-    exp: number;
-  };
+  /**
+   * @deprecated 该参数已经废弃，请使用 appHost
+   */
+  host?: string
+  /**
+   * @deprecated 该参数已经废弃，请使用 appHost
+   */
+  domain?: string
 }
 
 export interface QRCodeUserInfo {

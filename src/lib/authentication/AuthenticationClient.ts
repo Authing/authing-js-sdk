@@ -67,8 +67,11 @@ import { SocialAuthenticationClient } from './SocialAuthenticationClient';
 import { PublicKeyManager } from '../common/PublicKeyManager';
 import { KeyValuePair } from '../../types';
 import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient';
+import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
+  appId: undefined,
+  appHost: undefined,
   protocol: 'oidc', // 默认 oidc
   tokenEndPointAuthMethod: 'client_secret_post', // 默认 client_secret_post
   introspectionEndPointAuthMethod: 'client_secret_post', // 默认 client_secret_post
@@ -77,9 +80,9 @@ const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   onError: (code: number, message: string, data: any) => {
     throw { code, message, data };
   },
-  host: 'https://core.authing.cn',
   requestFrom: 'sdk',
-  encryptFunction: encrypt
+  encryptFunction: encrypt,
+  host: 'https://core.authing.cn'
 };
 
 /**
@@ -106,6 +109,7 @@ export class AuthenticationClient {
   // 初始化参数
   options: AuthenticationClientOptions;
 
+  baseClient: BaseAuthenticationClient;
   graphqlClient: GraphqlClient;
   httpClient: HttpClient;
   naiveHttpClient: NaiveHttpClient;
@@ -119,10 +123,11 @@ export class AuthenticationClient {
 
   constructor(options: AuthenticationClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
-    const graphqlApiEndpointV2 = `${this.options.host}/graphql/v2`;
+    this.baseClient = new BaseAuthenticationClient(this.options);
+    const graphqlEndpoint = `${this.baseClient.appHost}/graphql/v2`;
     // 子模块初始化顺序: GraphqlClient -> ManagementTokenProvider -> Others
     this.graphqlClient = new (this.options.graphqlClient || GraphqlClient)(
-      graphqlApiEndpointV2,
+      graphqlEndpoint,
       this.options
     );
     this.tokenProvider = new (this.options.tokenProvider ||
@@ -479,7 +484,7 @@ export class AuthenticationClient {
    */
   async sendSmsCode(phone: string): Promise<CommonMessage> {
     // TODO: 这种链接从服务器动态拉取
-    const api = `${this.options.host}/api/v2/sms/send`;
+    const api = `${this.baseClient.appHost}/api/v2/sms/send`;
     const data = await this.httpClient.request({
       method: 'POST',
       url: api,
@@ -1129,7 +1134,7 @@ export class AuthenticationClient {
   }): Promise<{ code: number; message: string }> {
     await this.httpClient.request({
       method: 'POST',
-      url: `${this.options.host}/api/v2/users/link`,
+      url: `${this.baseClient.appHost}/api/v2/users/link`,
       data: {
         primaryUserToken: options.primaryUserToken,
         secondaryUserToken: options.secondaryUserToken
@@ -1279,7 +1284,7 @@ export class AuthenticationClient {
   public async logout() {
     await this.httpClient.request({
       method: 'GET',
-      url: `${this.options.host}/api/v2/logout?app_id=${this.options.appId}`,
+      url: `${this.baseClient.appHost}/api/v2/logout?app_id=${this.options.appId}`,
       withCredentials: true
     });
     this.tokenProvider.clearUser();
@@ -1382,7 +1387,7 @@ export class AuthenticationClient {
   async listOrgs() {
     return await this.httpClient.request({
       method: 'GET',
-      url: `${this.options.host}/api/v2/users/me/orgs`
+      url: `${this.baseClient.appHost}/api/v2/users/me/orgs`
     });
   }
 
@@ -1426,7 +1431,7 @@ export class AuthenticationClient {
     }
   ): Promise<User> {
     options = options || {};
-    const api = `${this.options.host}/api/v2/ldap/verify-user`;
+    const api = `${this.baseClient.appHost}/api/v2/ldap/verify-user`;
 
     const user = await this.httpClient.request({
       method: 'POST',
@@ -1464,7 +1469,7 @@ export class AuthenticationClient {
    * @memberof AuthenticationClient
    */
   async loginByAd(username: string, password: string): Promise<User> {
-    const firstLevelDomain = new URL(this.options.host).hostname
+    const firstLevelDomain = new URL(this.baseClient.appHost).hostname
       .split('.')
       .slice(1)
       .join('.');
@@ -1521,7 +1526,10 @@ export class AuthenticationClient {
           }
         }
       };
-      xhr.open('POST', `${this.options.host}/api/v2/upload?folder=avatar`);
+      xhr.open(
+        'POST',
+        `${this.baseClient.appHost}/api/v2/upload?folder=avatar`
+      );
       xhr.send(formData);
     };
     inputElem.click();
@@ -1607,7 +1615,7 @@ export class AuthenticationClient {
   async getSecurityLevel(): Promise<SecurityLevel> {
     return await this.httpClient.request({
       method: 'GET',
-      url: `${this.options.host}/api/v2/users/me/security-level`
+      url: `${this.baseClient.appHost}/api/v2/users/me/security-level`
     });
   }
 
@@ -1697,9 +1705,9 @@ export class AuthenticationClient {
     });
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token`;
+      api = `${this.baseClient.appHost}/oidc/token`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token`;
+      api = `${this.baseClient.appHost}/oauth/token`;
     }
     let tokenSet = await this.naiveHttpClient.request({
       method: 'POST',
@@ -1714,9 +1722,9 @@ export class AuthenticationClient {
   async _getAccessTokenByCodeWithClientSecretBasic(code: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token`;
+      api = `${this.baseClient.appHost}/oidc/token`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token`;
+      api = `${this.baseClient.appHost}/oauth/token`;
     }
     const qstr = this._generateTokenRequest({
       grant_type: 'authorization_code',
@@ -1736,9 +1744,9 @@ export class AuthenticationClient {
   async _getAccessTokenByCodeWithNone(code: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token`;
+      api = `${this.baseClient.appHost}/oidc/token`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token`;
+      api = `${this.baseClient.appHost}/oauth/token`;
     }
     const qstr = this._generateTokenRequest({
       client_id: this.options.appId,
@@ -1805,9 +1813,9 @@ export class AuthenticationClient {
     });
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token`;
+      api = `${this.baseClient.appHost}/oidc/token`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token`;
+      api = `${this.baseClient.appHost}/oauth/token`;
     }
     let tokenSet = await this.naiveHttpClient.request({
       method: 'POST',
@@ -1822,9 +1830,9 @@ export class AuthenticationClient {
   async getUserInfoByAccessToken(accessToken: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/me`;
+      api = `${this.baseClient.appHost}/oidc/me`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/me`;
+      api = `${this.baseClient.appHost}/oauth/me`;
     }
     let userInfo = await this.naiveHttpClient.request({
       method: 'POST',
@@ -1836,9 +1844,9 @@ export class AuthenticationClient {
     return userInfo;
   }
   buildAuthorizeUrl(options?: IOidcParams | IOauthParams | ICasParams) {
-    if (!this.options.domain) {
+    if (!this.baseClient.appHost) {
       throw new Error(
-        '请在初始化 AuthenticationClient 时传入应用域名 domain 参数，形如：app1.authing.cn'
+        '请在初始化 AuthenticationClient 时传入应用域名 appHost 参数，形如：https://app1.authing.cn'
       );
     }
     if (this.options.protocol === 'oidc') {
@@ -1889,13 +1897,8 @@ export class AuthenticationClient {
       }
     });
     let params = new URLSearchParams(res);
-    let hostUrl = new URL(this.options.host);
     let authorizeUrl =
-      hostUrl.protocol +
-      '//' +
-      this.options.domain +
-      '/oidc/auth?' +
-      params.toString();
+      this.baseClient.appHost + '/oidc/auth?' + params.toString();
     return authorizeUrl;
   }
   _buildOauthAuthorizeUrl(options: IOauthParams) {
@@ -1921,47 +1924,28 @@ export class AuthenticationClient {
       }
     });
     let params = new URLSearchParams(res);
-    let hostUrl = new URL(this.options.host);
 
     let authorizeUrl =
-      hostUrl.protocol +
-      '//' +
-      this.options.domain +
-      '/oauth/auth?' +
-      params.toString();
+      this.baseClient.appHost + '/oauth/auth?' + params.toString();
     return authorizeUrl;
   }
 
   _buildSamlAuthorizeUrl() {
-    let hostUrl = new URL(this.options.host);
-
-    return (
-      hostUrl.protocol +
-      '//' +
-      this.options.domain +
-      '/saml-idp/' +
-      this.options.appId
-    );
+    return this.baseClient.appHost + '/saml-idp/' + this.options.appId;
   }
   _buildCasAuthorizeUrl(options: ICasParams) {
-    let hostUrl = new URL(this.options.host);
     if (options?.service) {
-      return `${hostUrl.protocol}//${this.options.domain}/cas-idp/${this.options.appId}?service=${options?.service}`;
+      return `${this.baseClient.appHost}/cas-idp/${this.options.appId}?service=${options?.service}`;
     }
-    return `${hostUrl.protocol}//${this.options.domain}/cas-idp/${this.options.appId}`;
+    return `${this.baseClient.appHost}/cas-idp/${this.options.appId}`;
   }
   _buildCasLogoutUrl(options: ILogoutParams) {
-    let hostUrl = new URL(this.options.host);
     if (options?.redirectUri) {
       return (
-        hostUrl.protocol +
-        '//' +
-        this.options.domain +
-        '/cas-idp/logout?url=' +
-        options.redirectUri
+        this.baseClient.appHost + '/cas-idp/logout?url=' + options.redirectUri
       );
     }
-    return hostUrl.protocol + '//' + this.options.domain + '/cas-idp/logout';
+    return `${this.baseClient.appHost}/cas-idp/logout`;
   }
   _buildOidcLogoutUrl(options: ILogoutParams) {
     if (options && !(options.idToken && options.redirectUri)) {
@@ -1969,18 +1953,16 @@ export class AuthenticationClient {
         '必须同时传入 idToken 和 redirectUri 参数，或者同时都不传入'
       );
     }
-    let hostUrl = new URL(this.options.host);
     if (options?.redirectUri) {
-      return `${hostUrl.protocol}//${this.options.domain}/oidc/session/end?id_token_hint=${options.idToken}&post_logout_redirect_uri=${options.redirectUri}`;
+      return `${this.baseClient.appHost}/oidc/session/end?id_token_hint=${options.idToken}&post_logout_redirect_uri=${options.redirectUri}`;
     }
-    return `${hostUrl.protocol}//${this.options.domain}/oidc/session/end`;
+    return `${this.baseClient.appHost}/oidc/session/end`;
   }
   _buildEasyLogoutUrl(options?: ILogoutParams) {
-    let hostUrl = new URL(this.options.host);
     if (options?.redirectUri) {
-      return `${hostUrl.protocol}//${this.options.domain}/login/profile/logout?redirect_uri=${options.redirectUri}`;
+      return `${this.baseClient.appHost}/login/profile/logout?redirect_uri=${options.redirectUri}`;
     }
-    return `${hostUrl.protocol}//${this.options.domain}/login/profile/logout`;
+    return `${this.baseClient.appHost}/login/profile/logout`;
   }
   buildLogoutUrl(options?: ILogoutParams) {
     if (this.options.protocol === 'cas') {
@@ -2002,9 +1984,9 @@ export class AuthenticationClient {
     });
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token`;
+      api = `${this.baseClient.appHost}/oidc/token`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token`;
+      api = `${this.baseClient.appHost}/oauth/token`;
     }
     let tokenSet = await this.naiveHttpClient.request({
       method: 'POST',
@@ -2021,9 +2003,9 @@ export class AuthenticationClient {
   ) {
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token`;
+      api = `${this.baseClient.appHost}/oidc/token`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token`;
+      api = `${this.baseClient.appHost}/oauth/token`;
     }
     const qstr = this._generateTokenRequest({
       grant_type: 'refresh_token',
@@ -2042,9 +2024,9 @@ export class AuthenticationClient {
   async _getNewAccessTokenByRefreshTokenWithNone(refreshToken: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token`;
+      api = `${this.baseClient.appHost}/oidc/token`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token`;
+      api = `${this.baseClient.appHost}/oauth/token`;
     }
     const qstr = this._generateTokenRequest({
       client_id: this.options.appId,
@@ -2095,9 +2077,9 @@ export class AuthenticationClient {
     });
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token/revocation`;
+      api = `${this.baseClient.appHost}/oidc/token/revocation`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token/revocation`;
+      api = `${this.baseClient.appHost}/oauth/token/revocation`;
     }
     let tokenSet = await this.naiveHttpClient.request({
       method: 'POST',
@@ -2112,12 +2094,12 @@ export class AuthenticationClient {
   async _revokeTokenWithClientSecretBasic(token: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token/revocation`;
+      api = `${this.baseClient.appHost}/oidc/token/revocation`;
     } else if (this.options.protocol === 'oauth') {
       throw new Error(
         'OAuth 2.0 暂不支持用 client_secret_basic 模式身份验证撤回 Token'
       );
-      api = `${this.options.host}/oauth/token/revocation`;
+      api = `${this.baseClient.appHost}/oauth/token/revocation`;
     }
     const qstr = this._generateTokenRequest({
       token: token
@@ -2135,9 +2117,9 @@ export class AuthenticationClient {
   async _revokeTokenWithNone(token: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token/revocation`;
+      api = `${this.baseClient.appHost}/oidc/token/revocation`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token/revocation`;
+      api = `${this.baseClient.appHost}/oauth/token/revocation`;
     }
     const qstr = this._generateTokenRequest({
       client_id: this.options.appId,
@@ -2189,9 +2171,9 @@ export class AuthenticationClient {
     });
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token/introspection`;
+      api = `${this.baseClient.appHost}/oidc/token/introspection`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token/introspection`;
+      api = `${this.baseClient.appHost}/oauth/token/introspection`;
     }
     let tokenSet = await this.naiveHttpClient.request({
       method: 'POST',
@@ -2206,9 +2188,9 @@ export class AuthenticationClient {
   async _introspectTokenWithClientSecretBasic(token: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token/introspection`;
+      api = `${this.baseClient.appHost}/oidc/token/introspection`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token/introspection`;
+      api = `${this.baseClient.appHost}/oauth/token/introspection`;
     }
     const qstr = this._generateTokenRequest({
       token: token
@@ -2226,9 +2208,9 @@ export class AuthenticationClient {
   async _introspectTokenWithNone(token: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
-      api = `${this.options.host}/oidc/token/introspection`;
+      api = `${this.baseClient.appHost}/oidc/token/introspection`;
     } else if (this.options.protocol === 'oauth') {
-      api = `${this.options.host}/oauth/token/introspection`;
+      api = `${this.baseClient.appHost}/oauth/token/introspection`;
     }
     const qstr = this._generateTokenRequest({
       client_id: this.options.appId,
@@ -2271,7 +2253,7 @@ export class AuthenticationClient {
     );
   }
   async validateTicketV1(ticket: string, service: string) {
-    const api = `${this.options.host}/cas-idp/${this.options.appId}/validate`;
+    const api = `${this.baseClient.appHost}/cas-idp/${this.options.appId}/validate`;
     let result = await this.naiveHttpClient.request({
       method: 'GET',
       url: api,

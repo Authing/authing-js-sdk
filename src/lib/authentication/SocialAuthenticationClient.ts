@@ -3,6 +3,7 @@ import { AuthenticationClientOptions, SocialConnectionProvider } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { objectToQueryString, popupCenter, isWechatBrowser } from '../utils';
 import { User } from '../../types/graphql.v2';
+import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
 /**
  * @class SocialAuthenticationClient 社会化登录模块
@@ -28,6 +29,7 @@ export class SocialAuthenticationClient {
   options: AuthenticationClientOptions;
   tokenProvider: AuthenticationTokenProvider;
   httpClient: HttpClient;
+  baseClient: BaseAuthenticationClient;
 
   constructor(
     options: AuthenticationClientOptions,
@@ -37,6 +39,7 @@ export class SocialAuthenticationClient {
     this.options = options;
     this.tokenProvider = tokenProvider;
     this.httpClient = httpClient;
+    this.baseClient = new BaseAuthenticationClient(options);
   }
 
   /**
@@ -111,7 +114,6 @@ export class SocialAuthenticationClient {
       authorizationParams
     } = options;
     const query: Record<string, string> = {
-      userpool_id: this.options.userPoolId,
       app_id: this.options.appId,
       authorization_params: JSON.stringify(
         authorization_params || authorizationParams
@@ -123,7 +125,7 @@ export class SocialAuthenticationClient {
     }
 
     const url = `${
-      this.options.host
+      this.baseClient.appHost
     }/connections/social/${provider}${objectToQueryString(query)}`;
     const onMessage = (e: MessageEvent) => {
       let { code, message, data: userInfo, event } = e.data;

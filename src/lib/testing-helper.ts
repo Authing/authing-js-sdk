@@ -1,5 +1,3 @@
-import { ManagementClientOptions } from './management/types';
-
 require('dotenv').config({
   path: '.env'
 });
@@ -22,11 +20,12 @@ export const sleep = (ms: number) => {
  * 从环境变量中读取配置
  *
  */
-export const getOptionsFromEnv = (): ManagementClientOptions => {
+export const getOptionsFromEnv = ()=> {
   return {
     userPoolId: process.env.AUTHING_USERPOOL_ID,
     secret: process.env.AUTHING_USERPOOL_SECRET,
     appId: process.env.AUTHING_APP_ID,
+    appHost: process.env.AUTHING_APP_HOST,
     host: process.env.AUTHING_HOST,
     timeout: 10000,
     publicKey: `-----BEGIN PUBLIC KEY-----

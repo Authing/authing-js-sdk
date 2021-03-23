@@ -8,6 +8,7 @@ import {
 import { createCssClassStyleSheet } from '../utils';
 import { User } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
+import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
 /**
  * @class QrCodeAuthenticationClient 扫码登录模块
@@ -40,6 +41,7 @@ export class QrCodeAuthenticationClient {
   tokenProvider: AuthenticationTokenProvider;
   scene: string;
   httpClient: HttpClient;
+  baseClient: BaseAuthenticationClient;
 
   constructor(
     options: AuthenticationClientOptions,
@@ -51,6 +53,7 @@ export class QrCodeAuthenticationClient {
     this.tokenProvider = tokenProvider;
     this.httpClient = httpClient;
     this.scene = scene;
+    this.baseClient = new BaseAuthenticationClient(options);
   }
 
   /**
@@ -495,7 +498,7 @@ export class QrCodeAuthenticationClient {
    * @memberof QrCodeAuthenticationClient
    */
   async geneCode(): Promise<QRCodeGenarateResult> {
-    const api = `${this.options.host}/api/v2/qrcode/gene`;
+    const api = `${this.baseClient.appHost}/api/v2/qrcode/gene`;
     const data = await this.httpClient.request({
       method: 'POST',
       url: api,
@@ -527,7 +530,7 @@ export class QrCodeAuthenticationClient {
    * @memberof QrCodeAuthenticationClient
    */
   async checkStatus(random: string): Promise<QRCodeStatus> {
-    const api = `${this.options.host}/api/v2/qrcode/check?random=${random}`;
+    const api = `${this.baseClient.appHost}/api/v2/qrcode/check?random=${random}`;
     const data = await this.httpClient.request({
       method: 'GET',
       url: api
@@ -553,7 +556,7 @@ export class QrCodeAuthenticationClient {
    * @memberof QrCodeAuthenticationClient
    */
   async exchangeUserInfo(ticket: string): Promise<Partial<User>> {
-    const api = `${this.options.host}/api/v2/qrcode/userinfo`;
+    const api = `${this.baseClient.appHost}/api/v2/qrcode/userinfo`;
     const userInfo = await this.httpClient.request({
       method: 'POST',
       url: api,

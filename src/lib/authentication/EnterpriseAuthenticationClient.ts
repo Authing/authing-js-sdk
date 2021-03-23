@@ -13,6 +13,7 @@ import { HttpClient } from '../common/HttpClient';
 import { objectToQueryString, popupCenter, isWechatBrowser } from '../utils';
 import { User } from '../../types/graphql.v2';
 import { generateUidKey } from '../utils';
+import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
 /**
  * @class EnterpriseAuthenticationClient 企业身份源登录模块
@@ -38,6 +39,7 @@ export class EnterpriseAuthenticationClient {
   options: AuthenticationClientOptions;
   tokenProvider: AuthenticationTokenProvider;
   httpClient: HttpClient;
+  baseClient: BaseAuthenticationClient;
 
   constructor(
     options: AuthenticationClientOptions,
@@ -45,17 +47,17 @@ export class EnterpriseAuthenticationClient {
     httpClient: HttpClient
   ) {
     this.options = options;
+    this.baseClient = new BaseAuthenticationClient(options);
     this.tokenProvider = tokenProvider;
     this.httpClient = httpClient;
   }
-
 
   //  TODO，跟着 user-portal 逻辑走的，后续应该优化
   private async initProviderContext(appId: string) {
     // 这个接口不止为了获取应用配置，还为了初始化一些企业身份源的 context
     const appConfig: ApplicationConfig = await this.httpClient.request({
       method: 'GET',
-      url: `${this.options.host}/api/v2/applications/${appId}/public-config`
+      url: `${this.baseClient.appHost}/api/v2/applications/${appId}/public-config`
     });
 
     return appConfig;
@@ -190,7 +192,7 @@ export class EnterpriseAuthenticationClient {
     if (protocol === Protocol.OIDC) {
       await this.httpClient.request({
         method: 'POST',
-        url: `${this.options.host}/api/v2/connections/oidc/start-interaction`,
+        url: `${this.baseClient.appHost}/api/v2/connections/oidc/start-interaction`,
         data: {
           state,
           protocol,

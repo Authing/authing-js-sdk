@@ -24,6 +24,7 @@ export class GraphqlClient {
     let headers: any = {
       'content-type': 'application/json',
       'x-authing-sdk-version': `js:${SDK_VERSION}`,
+      // @ts-ignore
       'x-authing-userpool-id': this.options.userPoolId || '',
       'x-authing-request-from': this.options.requestFrom || 'sdk',
       'x-authing-app-id': this.options.appId || ''
@@ -45,10 +46,14 @@ export class GraphqlClient {
       data = responseData.data;
       errors = responseData.errors;
     } catch (error) {
-      const statusCode = error?.response?.status
-      const errorDetail = error?.response?.data
-      this.options.onError(statusCode || 500, 'GraphQL 请求错误，请检查输入格式', errorDetail);
-      throw { code: statusCode || 500, message: 'GraphQL 请求错误，请检查输入格式', data: errorDetail };
+      const statusCode = error.code || error?.response?.status;
+      const errorDetail = error.message || error?.response?.data;
+      this.options.onError(statusCode || 500, error.message, errorDetail);
+      throw {
+        code: statusCode || 500,
+        message: error.message,
+        data: errorDetail
+      };
     }
 
     if (errors?.length > 0) {
