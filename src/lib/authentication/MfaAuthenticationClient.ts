@@ -9,12 +9,14 @@ import {
 import { HttpClient } from '../common/HttpClient';
 import { User } from '../..';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
+import { AxiosRequestConfig } from 'axios';
+import { uploadFile, xhrUpload } from '../utils';
 
 /**
  * @class MfaAuthenticationClient 多因素认证模块
- * @description 此模块用于进行绑定 MFA 认证器、解绑 MFA 认证器、用户二次认证。
+ * @description 此模块用于进行绑定 TOTP MFA 认证器、解绑 TOTP MFA 认证器、绑定用户人脸、解绑人脸、用户二次认证。
  *
- * 请求绑定 MFA 认证器：
+ * 请求绑定 TOTP MFA 认证器：
  *
  * \`\`\`javascript
  * import { AuthenticationClient } from "authing-js-sdk"
@@ -80,7 +82,6 @@ export class MfaAuthenticationClient {
         type: options.type
       }
     });
-    console.log(data);
     return data;
   }
 
@@ -352,6 +353,190 @@ export class MfaAuthenticationClient {
       },
       headers: {
         authorization: 'Bearer ' + options.mfaToken
+      }
+    });
+    return data;
+  }
+
+  /**
+   * @name associateFaceWithUrl
+   * @name_zh 通过图片 URL 方式绑定人脸
+   * @description 通过图片 URL 方式绑定人脸
+   *
+   * @param {object} options
+   * @param {string} options.photoA 人脸照片一地址
+   * @param {string} [options.photoB] 人脸照片二地址（用于比对）
+   * @param {string} [options.mfaToken] 若是在二次认证时绑定人脸，需要传入 mfaToken
+   *
+   * @example
+   * const authenticationClient = new AuthenticationClient({
+   *    appId: "YOUR_APP_ID",
+   * })
+   * const user = await authenticationClient.mfa.associateFace({ photoA: 'http://example.com/photo/imgA.jpg', photoB: 'http://example.com/photo/imgB.jpg', mfaToken: 'xxxxxxxxxxxx' })
+   *
+   * @returns {Promise<User>}
+   * @memberof MfaAuthenticationClient
+   */
+  async associateFaceWithUrl(options: {
+    photoA: string;
+    photoB?: string;
+    mfaToken?: string;
+  }): Promise<User> {
+    const { photoA, photoB, mfaToken } = options;
+
+    const headers: AxiosRequestConfig['headers'] = {};
+    if (mfaToken) {
+      headers.authorization = `Bearer ${mfaToken}`;
+    }
+
+    const api = `${this.baseClient.appHost}/api/v2/mfa/face/associate`;
+    const data: User = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
+        photoA,
+        photoB: photoB || photoA,
+        isExternal: true
+      },
+      headers
+    });
+    return data;
+  }
+
+  /**
+   * @name associateFaceWithLocalFile
+   * @name_zh 通过上传本地文件的方式绑定人脸
+   * @description 通过上传本地文件的方式绑定人脸
+   *
+   * @param {string} [mfaToken] 若是在二次认证时绑定人脸，需要传入 mfaToken
+   *
+   * @example
+   * const authenticationClient = new AuthenticationClient({
+   *    appId: "YOUR_APP_ID",
+   * })
+   * const user = await authenticationClient.mfa.associateFaceWithLocalFile('xxxxxxxxxxx')
+   *
+   * @returns {Promise<User>}
+   * @memberof MfaAuthenticationClient
+   */
+  async associateFaceWithLocalFile(mfaToken?: string): Promise<User> {
+    const headers: AxiosRequestConfig['headers'] = {};
+    if (mfaToken) {
+      headers.authorization = `Bearer ${mfaToken}`;
+    }
+
+    let uploadedKey;
+    try {
+      const { key } = await uploadFile({
+        // 阿里云支持这些
+        accept: '.jpeg,.jpg,.png,.bmp',
+        url: `${this.baseClient.appHost}/api/v2/upload?folder=face-photo&private=true`
+      });
+      uploadedKey = key;
+    } catch (e) {
+      this.options.onError(e.code, e.message);
+    }
+
+    const data: User = await this.httpClient.request({
+      method: 'POST',
+      url: `${this.baseClient.appHost}/api/v2/mfa/face/associate`,
+      data: {
+        photoA: uploadedKey,
+        photoB: uploadedKey
+      },
+      headers
+    });
+    return data;
+  }
+
+  /**
+   * @name associateFaceWithBlob
+   * @name_zh 通过传入 Blob 对象绑定人脸
+   * @description 通过传入 Blob 对象绑定人脸
+   *
+   * @param {object} options
+   * @param {string} options.blobA 人脸数据 Blob 对象一
+   * @param {string} [options.blobB] 人脸数据 Blob 对象二（用于比对）
+   * @param {string} [options.mfaToken] 若是在二次认证时绑定人脸，需要传入 mfaToken
+   *
+   * @example
+   * const authenticationClient = new AuthenticationClient({
+   *    appId: "YOUR_APP_ID",
+   * })
+   * const user = await authenticationClient.mfa.associateFaceWithBlob({blobA: Blob, blobB: Blob, mfaToken: 'xxx'})
+   *
+   * @returns {Promise<User>}
+   * @memberof MfaAuthenticationClient
+   */
+  async associateFaceWithBlob(opts: {
+    mfaToken?: string;
+    blobA: Blob;
+    blobB: Blob;
+  }): Promise<User> {
+    const { blobA, blobB, mfaToken } = opts;
+
+    const headers: AxiosRequestConfig['headers'] = {};
+    if (mfaToken) {
+      headers.authorization = `Bearer ${mfaToken}`;
+    }
+
+    let photoA;
+    let photoB;
+    const uploadUrl = `${this.baseClient.appHost}/api/v2/upload?folder=face-photo&private=true`;
+    try {
+      const { key: keyA } = await xhrUpload(blobA, uploadUrl);
+      photoA = keyA;
+
+      if (blobB) {
+        const { key: keyB } = await xhrUpload(blobB, uploadUrl);
+        photoB = keyB;
+      } else {
+        photoB = keyA;
+      }
+    } catch (e) {
+      this.options.onError(e.code, e.message);
+    }
+
+    const data: User = await this.httpClient.request({
+      method: 'POST',
+      url: `${this.baseClient.appHost}/api/v2/mfa/face/associate`,
+      data: {
+        photoA,
+        photoB
+      },
+      headers
+    });
+    return data;
+  }
+
+  /**
+   * @name verifyFaceMfa
+   * @name_zh 检测二次登录人脸验证
+   * @description 检测二次登录人脸验证
+   *
+   * @param {string} photo 人脸照片地址
+   * @param {string} mfaToken 二次校验时 Authing 返回的 mfaToken
+   *
+   * @example
+   * const authenticationClient = new AuthenticationClient({
+   *    appId: "YOUR_APP_ID",
+   * })
+   * const user = await authenticationClient.mfa.verifyFaceMfa('http://example.com/photo/photo.jpg')
+   *
+   * @returns {Promise<User>}
+   * @memberof MfaAuthenticationClient
+   */
+  async verifyFaceMfa(photo: string, mfaToken: string): Promise<User> {
+    const api = `${this.baseClient.appHost}/api/v2/mfa/face/verify`;
+
+    const data: User = await this.httpClient.request({
+      method: 'POST',
+      url: api,
+      data: {
+        photo
+      },
+      headers: {
+        authorization: `Bearer ${mfaToken}`
       }
     });
     return data;
