@@ -906,7 +906,7 @@ export class UsersManagementClient {
   }
 
   /**
-   * @description 清楚用户的自定义数据
+   * @description 清除用户的自定义数据
    *
    */
   public async removeUdfValue(userId: string, key: string) {
@@ -915,5 +915,33 @@ export class UsersManagementClient {
       targetId: userId,
       key
     });
+  }
+
+  /**
+   * 判断用户是否有某个角色
+   * @param userId 用户 ID
+   * @param roleCode 角色 Code
+   * @param namespace 权限分组 ID
+   */
+  public async hasRole(
+    userId: string,
+    roleCode: string,
+    namespace?: string
+  ): Promise<boolean> {
+    const roleList = await this.listRoles(userId, namespace);
+
+    if (roleList.totalCount < 1) {
+      return false;
+    }
+
+    let hasRole: boolean = false;
+
+    roleList.list.forEach(item => {
+      if (item.code === roleCode) {
+        hasRole = true;
+      }
+    });
+
+    return hasRole;
   }
 }
