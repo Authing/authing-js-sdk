@@ -1,5 +1,5 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
-import { AuthenticationClientOptions, SocialConnectionProvider } from './types';
+import { AuthenticationClientOptions } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { objectToQueryString, popupCenter, isWechatBrowser } from '../utils';
 import { User } from '../../types/graphql.v2';
@@ -102,6 +102,7 @@ export class SocialAuthenticationClient {
       };
       authorization_params?: Record<string, any>; // 为了兼容之前的代码
       authorizationParams?: Record<string, any>;
+      context?: { [x: string]: any };
     }
   ) {
     options = options || {};
@@ -111,19 +112,19 @@ export class SocialAuthenticationClient {
       onSuccess,
       onError,
       authorization_params,
-      authorizationParams
+      authorizationParams,
+      context
     } = options;
     const query: Record<string, string> = {
+      from_guard: '1',
       app_id: this.options.appId,
       authorization_params: JSON.stringify(
         authorization_params || authorizationParams
       )
     };
-
-    if (provider !== SocialConnectionProvider.WECHATMP) {
-      query.from_guard = '1';
+    if (context) {
+      query.context = JSON.stringify(context)
     }
-
     const url = `${
       this.baseClient.appHost
     }/connections/social/${provider}${objectToQueryString(query)}`;

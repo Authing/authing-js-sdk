@@ -140,6 +140,7 @@ export class QrCodeAuthenticationClient {
         retry?: string;
         failed?: string;
       };
+      context?: { [x: string]: any };
     }
   ) {
     options = options || {};
@@ -165,7 +166,8 @@ export class QrCodeAuthenticationClient {
       onCodeLoaded,
       onCodeLoadFailed,
       // onCodeDestroyed,
-      tips = {}
+      tips = {},
+      context
     } = options;
     const {
       title = `使用 <strong> ${
@@ -371,7 +373,9 @@ export class QrCodeAuthenticationClient {
       let random: string = null;
       let url: string = null;
       try {
-        const data = await this.geneCode();
+        const data = await this.geneCode({
+          context
+        });
         random = data.random;
         url = data.url;
       } catch (error) {
@@ -497,13 +501,17 @@ export class QrCodeAuthenticationClient {
    * @returns {Promise<QRCodeGenarateResult>}
    * @memberof QrCodeAuthenticationClient
    */
-  async geneCode(): Promise<QRCodeGenarateResult> {
+  async geneCode(options?: {
+    context?: { [x: string]: any };
+  }): Promise<QRCodeGenarateResult> {
+    const { context } = options || {};
     const api = `${this.baseClient.appHost}/api/v2/qrcode/gene`;
     const data = await this.httpClient.request({
       method: 'POST',
       url: api,
       data: {
-        scene: this.scene
+        scene: this.scene,
+        context
       }
     });
     return data;

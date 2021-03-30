@@ -242,6 +242,7 @@ export class AuthenticationClient {
       generateToken?: boolean;
       clientIp?: string;
       params?: Array<{ key: string; value: any }>;
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
@@ -250,7 +251,8 @@ export class AuthenticationClient {
       forceLogin = false,
       generateToken = false,
       clientIp,
-      params
+      params,
+      context
     } = options;
     password = await this.options.encryptFunction(
       password,
@@ -259,6 +261,10 @@ export class AuthenticationClient {
     let extraParams = null;
     if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { registerByEmail: user } = await registerByEmail(
       this.graphqlClient,
@@ -271,7 +277,8 @@ export class AuthenticationClient {
           forceLogin,
           generateToken,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -322,6 +329,7 @@ export class AuthenticationClient {
       generateToken?: boolean;
       clientIp?: string;
       params?: Array<{ key: string; value: any }>;
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
@@ -330,7 +338,8 @@ export class AuthenticationClient {
       forceLogin = false,
       generateToken = false,
       clientIp,
-      params
+      params,
+      context
     } = options;
     password = await this.options.encryptFunction(
       password,
@@ -339,6 +348,10 @@ export class AuthenticationClient {
     let extraParams = null;
     if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { registerByUsername: user } = await registerByUsername(
       this.graphqlClient,
@@ -351,7 +364,8 @@ export class AuthenticationClient {
           forceLogin,
           generateToken,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -404,6 +418,7 @@ export class AuthenticationClient {
       generateToken?: boolean;
       clientIp?: string;
       params?: Array<{ key: string; value: any }>;
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
@@ -412,7 +427,8 @@ export class AuthenticationClient {
       forceLogin = false,
       generateToken = false,
       clientIp,
-      params
+      params,
+      context
     } = options;
     if (password) {
       password = await this.options.encryptFunction(
@@ -423,6 +439,10 @@ export class AuthenticationClient {
     let extraParams = null;
     if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { registerByPhoneCode: user } = await registerByPhoneCode(
       this.graphqlClient,
@@ -436,7 +456,8 @@ export class AuthenticationClient {
           forceLogin,
           generateToken,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -534,10 +555,17 @@ export class AuthenticationClient {
       captchaCode?: string;
       clientIp?: string;
       params?: Array<{ key: string; value: any }>;
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
-    const { autoRegister = false, captchaCode, clientIp, params } = options;
+    const {
+      autoRegister = false,
+      captchaCode,
+      clientIp,
+      params,
+      context
+    } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
@@ -545,6 +573,10 @@ export class AuthenticationClient {
     let extraParams = null;
     if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { loginByEmail: user } = await loginByEmail(
       this.graphqlClient,
@@ -556,7 +588,8 @@ export class AuthenticationClient {
           autoRegister,
           captchaCode,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -605,10 +638,17 @@ export class AuthenticationClient {
       captchaCode?: string;
       clientIp?: string;
       params?: Array<{ key: string; value: any }>;
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
-    const { autoRegister = false, captchaCode, clientIp, params } = options;
+    const {
+      autoRegister = false,
+      captchaCode,
+      clientIp,
+      params,
+      context
+    } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
@@ -616,6 +656,10 @@ export class AuthenticationClient {
     let extraParams = null;
     if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { loginByUsername: user } = await loginByUsername(
       this.graphqlClient,
@@ -627,7 +671,8 @@ export class AuthenticationClient {
           autoRegister,
           captchaCode,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -662,19 +707,30 @@ export class AuthenticationClient {
     options?: {
       clientIp?: string;
       params?: Array<{ key: string; value: any }>;
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
-    const { clientIp, params } = options;
+    const { clientIp, params, context } = options;
     let extraParams = null;
     if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { loginByPhoneCode: user } = await loginByPhoneCode(
       this.graphqlClient,
       this.tokenProvider,
       {
-        input: { phone, code, clientIp, params: extraParams }
+        input: {
+          phone,
+          code,
+          clientIp,
+          params: extraParams,
+          context: extraContext
+        }
       }
     );
     this.setCurrentUser(user);
@@ -718,10 +774,17 @@ export class AuthenticationClient {
       autoRegister?: boolean;
       clientIp?: string;
       params?: Array<{ key: string; value: any }>;
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
-    const { captchaCode, autoRegister = false, clientIp, params } = options;
+    const {
+      captchaCode,
+      autoRegister = false,
+      clientIp,
+      params,
+      context
+    } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
@@ -729,6 +792,10 @@ export class AuthenticationClient {
     let extraParams = null;
     if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { loginByPhonePassword: user } = await loginByPhonePassword(
       this.graphqlClient,
@@ -740,7 +807,8 @@ export class AuthenticationClient {
           captchaCode,
           autoRegister,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
