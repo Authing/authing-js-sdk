@@ -359,7 +359,7 @@ export class MfaAuthenticationClient {
   }
 
   /**
-   * @name associateFaceWithUrl
+   * @name associateFaceByUrl
    * @name_zh 通过图片 URL 方式绑定人脸
    * @description 通过图片 URL 方式绑定人脸
    *
@@ -377,7 +377,7 @@ export class MfaAuthenticationClient {
    * @returns {Promise<User>}
    * @memberof MfaAuthenticationClient
    */
-  async associateFaceWithUrl(options: {
+  async associateFaceByUrl(options: {
     photoA: string;
     photoB?: string;
     mfaToken?: string;
@@ -404,7 +404,7 @@ export class MfaAuthenticationClient {
   }
 
   /**
-   * @name associateFaceWithLocalFile
+   * @name associateFaceByLocalFile
    * @name_zh 通过上传本地文件的方式绑定人脸
    * @description 通过上传本地文件的方式绑定人脸
    *
@@ -414,12 +414,12 @@ export class MfaAuthenticationClient {
    * const authenticationClient = new AuthenticationClient({
    *    appId: "YOUR_APP_ID",
    * })
-   * const user = await authenticationClient.mfa.associateFaceWithLocalFile('xxxxxxxxxxx')
+   * const user = await authenticationClient.mfa.associateFaceByLocalFile('xxxxxxxxxxx')
    *
    * @returns {Promise<User>}
    * @memberof MfaAuthenticationClient
    */
-  async associateFaceWithLocalFile(mfaToken?: string): Promise<User> {
+  async associateFaceByLocalFile(mfaToken?: string): Promise<User> {
     const headers: AxiosRequestConfig['headers'] = {};
     if (mfaToken) {
       headers.authorization = `Bearer ${mfaToken}`;
@@ -450,7 +450,7 @@ export class MfaAuthenticationClient {
   }
 
   /**
-   * @name associateFaceWithBlob
+   * @name associateFaceByBlob
    * @name_zh 通过传入 Blob 对象绑定人脸
    * @description 通过传入 Blob 对象绑定人脸
    *
@@ -463,12 +463,12 @@ export class MfaAuthenticationClient {
    * const authenticationClient = new AuthenticationClient({
    *    appId: "YOUR_APP_ID",
    * })
-   * const user = await authenticationClient.mfa.associateFaceWithBlob({blobA: Blob, blobB: Blob, mfaToken: 'xxx'})
+   * const user = await authenticationClient.mfa.associateFaceByBlob({blobA: Blob, blobB: Blob, mfaToken: 'xxx'})
    *
    * @returns {Promise<User>}
    * @memberof MfaAuthenticationClient
    */
-  async associateFaceWithBlob(opts: {
+  async associateFaceByBlob(opts: {
     mfaToken?: string;
     blobA: Blob;
     blobB: Blob;
