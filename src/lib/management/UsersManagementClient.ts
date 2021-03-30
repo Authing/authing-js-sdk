@@ -355,8 +355,14 @@ export class UsersManagementClient {
    */
   async batch(
     ids: string[],
-    type: BatchFetchUserTypes = 'id'
+    options: {
+      type: BatchFetchUserTypes;
+    } = {
+      type: 'id'
+    }
   ): Promise<User[]> {
+    const { type } = options;
+
     const users = await this.httpClient.request({
       url: `${this.options.host}/api/v2/users/batch`,
       method: 'POST',
