@@ -322,3 +322,14 @@ export interface AdminLogsInfo {
   timestamp: string;
 }
 
+export enum UserMfaType {
+  OTP = 'OTP',
+  FACE = 'FACE'
+}
+
+export type BatchFetchUserTypes =
+  | 'id'
+  | 'username'
+  | 'phone'
+  | 'email'
+  | 'externalId';

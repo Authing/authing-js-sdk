@@ -1,6 +1,6 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
-import { ManagementClientOptions } from './types';
+import { ManagementClientOptions, BatchFetchUserTypes } from './types';
 import {
   deleteUser,
   deleteUsers,
@@ -342,9 +342,10 @@ export class UsersManagementClient {
   /**
    * @name batch
    * @name_zh 批量获取用户
-   * @description 通过 ID 批量获取用户详情
+   * @description 通过 ID、username、email、phone、email、externalId 批量获取用户详情
    *
-   * @param {string[]} userIds 用户 ID 列表
+   * @param {string[]} identifiers 需要查询的数据列表，如 用户 ID 列表
+   * @param {string} [type] 列表类型，可选值为 'id' ,'username' ,'phone' ,'email', 'externalId'，默认为 'id'
    *
    * @example
    *
@@ -353,15 +354,18 @@ export class UsersManagementClient {
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
    */
-  async batch(ids: string[]): Promise<User[]> {
-    const { userBatch: data } = await userBatch(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        ids
+  async batch(
+    ids: string[],
+    type: BatchFetchUserTypes = 'id'
+  ): Promise<User[]> {
+    const users = await this.httpClient.request({
+      method: 'POST',
+      data: {
+        ids,
+        type
       }
-    );
-    return data;
+    });
+    return users;
   }
 
   /**
