@@ -682,6 +682,37 @@ test('兼容老版本，使用 host 初始化', async t => {
   t.assert(user);
 });
 
+test.skip('注册时添加自定义参数 # customData', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const email = generateRandomEmail()
+  const password = generateRandomString();
+  const user = await authing.registerByEmail(email, password, null, {
+    customData: {
+      source: 'google'
+    }
+  })
+  t.assert(user)
+})
+
+test.skip('注册时添加自定义参数 # params', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const email = generateRandomEmail()
+  const password = generateRandomString();
+  const user = await authing.registerByEmail(email, password, null, {
+    params: [
+      {
+        key: 'source',
+        value: 'google'
+      }
+    ]
+  })
+  t.assert(user)
+})
+
 test.skip('登录添加自定义 context', async t => {
   const authing = new AuthenticationClient({
     ...getOptionsFromEnv()
