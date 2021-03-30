@@ -11,7 +11,6 @@ import {
   searchUser,
   createUser,
   refreshToken,
-  userBatch,
   getUserRoles,
   assignRole,
   revokeRole,
