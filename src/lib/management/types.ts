@@ -1,4 +1,4 @@
-import { Org } from '../../types/graphql.v2';
+import { Org, ResourceType } from '../../types/graphql.v2';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { HttpClient } from '../common/HttpClient';
 
@@ -333,3 +333,47 @@ export type BatchFetchUserTypes =
   | 'phone'
   | 'email'
   | 'externalId';
+
+export interface IResourceQueryFilter {
+  page?: number;
+  limit?: number;
+  type?: ResourceType;
+  namespaceCode?: string;
+}
+
+export interface IResourceDto {
+  code: string;
+  type: ResourceType;
+  description?: string;
+  actions: Array<{
+    name: string;
+    description: string;
+  }>;
+  namespace: string;
+}
+
+export interface IResourceUpdateDto {
+  type?: ResourceType;
+  description?: string;
+  actions?: Array<{
+    name: string;
+    description: string;
+  }>;
+  namespace: string;
+}
+
+export interface IResourceResponse {
+  userPoolId: string;
+  code: string;
+  actions: Array<{
+    name: string;
+    description: string;
+  }>;
+  type: string;
+  description: string;
+  namespaceId: number;
+  createdAt: Date;
+  updatedAt: Date;
+  id: string;
+  apiIdentifier?: string;
+}

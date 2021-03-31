@@ -1,6 +1,12 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
-import { ManagementClientOptions } from './types';
+import {
+  IResourceDto,
+  IResourceQueryFilter,
+  IResourceResponse,
+  IResourceUpdateDto,
+  ManagementClientOptions
+} from './types';
 import {
   allow,
   authorizeResource,
@@ -15,6 +21,7 @@ import {
   ResourceType
 } from '../../types/graphql.v2';
 import { formatAuthorizedResources } from '../utils';
+import { HttpClient } from '../common/HttpClient';
 
 /**
  * @class AclManagementClient 管理权限、访问控制
@@ -42,14 +49,17 @@ export class AclManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;
   tokenProvider: ManagementTokenProvider;
+  httpClient: HttpClient;
 
   constructor(
     options: ManagementClientOptions,
     graphqlClient: GraphqlClient,
+    httpClient: HttpClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
     this.graphqlClient = graphqlClient;
+    this.httpClient = httpClient;
     this.tokenProvider = tokenProvider;
   }
 
@@ -182,4 +192,72 @@ export class AclManagementClient {
    *
    */
   public async listResourcePermissions() {}
+
+  public async getResources(options?: IResourceQueryFilter) {
+    return await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/resources`,
+      params: {
+        namespaceCode: options?.namespaceCode,
+        type: options?.type,
+        limit: options?.limit || 10,
+        page: options?.page || 1
+      }
+    });
+  }
+
+  public async createResource(
+    options: IResourceDto
+  ): Promise<IResourceResponse> {
+    if (!options) {
+      throw new Error('请传入资源数据');
+    }
+    if (!options.code) {
+      throw new Error('请为资源设定一个资源标识符');
+    }
+    if (!options.actions || options?.actions.length === 0) {
+      throw new Error('请至少定义一个资源操作');
+    }
+    if (!options.namespace) {
+      throw new Error('请传入权限分组标识符');
+    }
+    return await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/resources`,
+      data: options
+    });
+  }
+
+  public async updateResource(
+    code: string,
+    options?: IResourceUpdateDto
+  ): Promise<IResourceResponse> {
+    if (!code) {
+      throw new Error('请传入资源标识符');
+    }
+    return await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/resources/${code}`,
+      data: options
+    });
+  }
+  public async deleteResource(
+    code: string,
+    namespaceCode: string
+  ): Promise<boolean> {
+    if (!code) {
+      throw new Error('请传入资源标识符');
+    }
+    if (!namespaceCode) {
+      throw new Error('请传入权限分组标识符');
+    }
+    await this.httpClient.request({
+      method: 'DELETE',
+      url: `${this.options.host}/api/v2/resources/${code}`,
+      params: {
+        namespace: namespaceCode
+      }
+    });
+    return true;
+  }
 }
