@@ -348,7 +348,7 @@ export class UsersManagementClient {
    *
    * @example
    *
-   * const users = await managementClient.users.batch(['USERID']);
+   * const users = await managementClient.users.batch(['USERID'], options);
    *
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
@@ -356,17 +356,17 @@ export class UsersManagementClient {
   async batch(
     ids: string[],
     options?: {
-      type: BatchFetchUserTypes;
+      queryField: BatchFetchUserTypes;
     }
   ): Promise<User[]> {
-    const { type = 'id' } = options || {};
+    const { queryField = 'id' } = options || {};
 
     const users = await this.httpClient.request({
       url: `${this.options.host}/api/v2/users/batch`,
       method: 'POST',
       data: {
         ids,
-        type
+        type: queryField
       }
     });
     return users;
