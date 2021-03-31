@@ -1,6 +1,6 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
-import { ManagementClientOptions } from './types';
+import { ManagementClientOptions, BatchFetchUserTypes } from './types';
 import {
   deleteUser,
   deleteUsers,
@@ -11,7 +11,6 @@ import {
   searchUser,
   createUser,
   refreshToken,
-  userBatch,
   getUserRoles,
   assignRole,
   revokeRole,
@@ -342,26 +341,35 @@ export class UsersManagementClient {
   /**
    * @name batch
    * @name_zh 批量获取用户
-   * @description 通过 ID 批量获取用户详情
+   * @description 通过 ID、username、email、phone、email、externalId 批量获取用户详情
    *
-   * @param {string[]} userIds 用户 ID 列表
+   * @param {string[]} identifiers 需要查询的数据列表，如 用户 ID 列表
+   * @param {string} [type] 列表类型，可选值为 'id' ,'username' ,'phone' ,'email', 'externalId'，默认为 'id'
    *
    * @example
    *
-   * const users = await managementClient.users.batch(['USERID']);
+   * const users = await managementClient.users.batch(['USERID'], options);
    *
    * @returns {Promise<CommonMessage>}
    * @memberof UsersManagementClient
    */
-  async batch(ids: string[]): Promise<User[]> {
-    const { userBatch: data } = await userBatch(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        ids
+  async batch(
+    ids: string[],
+    options?: {
+      queryField: BatchFetchUserTypes;
+    }
+  ): Promise<User[]> {
+    const { queryField = 'id' } = options || {};
+
+    const users = await this.httpClient.request({
+      url: `${this.options.host}/api/v2/users/batch`,
+      method: 'POST',
+      data: {
+        ids,
+        type: queryField
       }
-    );
-    return data;
+    });
+    return users;
   }
 
   /**
