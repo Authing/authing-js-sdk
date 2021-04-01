@@ -9,7 +9,7 @@ export interface AuthenticationClientOptions {
   /** 应用 ID */
   appId: string;
   /** 应用完整域名，如 https://sample-app.authing.cn，不带最后的斜线 '/'。 */
-  appHost: string
+  appHost?: string
   /** 应用密钥 */
   secret?: string;
   /** 应用身份协议 */

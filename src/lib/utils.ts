@@ -318,3 +318,24 @@ export function uploadFile<T extends boolean = false>(opts: {
     inputElem.click();
   });
 }
+
+export const convertKeyValueListToObject = (
+  data: Array<{ key: string; value: any }>
+) => {
+  const ret: any = {};
+  for (const { key, value } of data) {
+    ret[key] = value;
+  }
+  return ret;
+};
+
+export const convertObjectToKeyValueList = (data: { [x: string]: any }) => {
+  const ret = [];
+  for (const key of Object.keys(data)) {
+    ret.push({
+      key,
+      value: data[key]
+    });
+  }
+  return ret;
+};

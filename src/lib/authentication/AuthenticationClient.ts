@@ -56,6 +56,7 @@ import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { HttpClient, NaiveHttpClient } from '../common/HttpClient';
 import {
+  convertObjectToKeyValueList,
   convertUdv,
   convertUdvToKeyValuePair,
   encrypt,
@@ -242,7 +243,17 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
       context?: { [x: string]: any };
     }
   ): Promise<User> {
@@ -253,14 +264,17 @@ export class AuthenticationClient {
       generateToken = false,
       clientIp,
       params,
-      context
+      context,
+      customData
     } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
     }
     let extraContext = null;
@@ -329,7 +343,17 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
       context?: { [x: string]: any };
     }
   ): Promise<User> {
@@ -340,14 +364,17 @@ export class AuthenticationClient {
       generateToken = false,
       clientIp,
       params,
-      context
+      context,
+      customData
     } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
     }
     let extraContext = null;
@@ -418,7 +445,17 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
       context?: { [x: string]: any };
     }
   ): Promise<User> {
@@ -429,7 +466,8 @@ export class AuthenticationClient {
       generateToken = false,
       clientIp,
       params,
-      context
+      context,
+      customData
     } = options;
     if (password) {
       password = await this.options.encryptFunction(
@@ -438,7 +476,9 @@ export class AuthenticationClient {
       );
     }
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
     }
     let extraContext = null;
@@ -555,7 +595,17 @@ export class AuthenticationClient {
       autoRegister?: boolean;
       captchaCode?: string;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
       context?: { [x: string]: any };
     }
   ): Promise<User> {
@@ -565,14 +615,17 @@ export class AuthenticationClient {
       captchaCode,
       clientIp,
       params,
-      context
+      context,
+      customData
     } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
     }
     let extraContext = null;
@@ -638,7 +691,17 @@ export class AuthenticationClient {
       autoRegister?: boolean;
       captchaCode?: string;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+            /**
+       * @description 将会写入配置的用户自定义字段
+       */
+             customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
       context?: { [x: string]: any };
     }
   ): Promise<User> {
@@ -648,14 +711,17 @@ export class AuthenticationClient {
       captchaCode,
       clientIp,
       params,
-      context
+      context,
+      customData
     } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
     }
     let extraContext = null;
@@ -707,14 +773,26 @@ export class AuthenticationClient {
     code: string,
     options?: {
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
       context?: { [x: string]: any };
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
-    const { clientIp, params, context } = options;
+    const { clientIp, params, context, customData } = options;
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
     }
     let extraContext = null;
@@ -774,7 +852,17 @@ export class AuthenticationClient {
       captchaCode?: string;
       autoRegister?: boolean;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
       context?: { [x: string]: any };
     }
   ): Promise<User> {
@@ -784,14 +872,17 @@ export class AuthenticationClient {
       autoRegister = false,
       clientIp,
       params,
-      context
+      context,
+      customData
     } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
     }
     let extraContext = null;
