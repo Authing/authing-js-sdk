@@ -4,7 +4,8 @@ import {
   IMfaAssociation,
   IMfaAuthenticators,
   IMfaConfirmAssociation,
-  IMfaDeleteAssociation
+  IMfaDeleteAssociation,
+  TotpSource
 } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { User } from '../..';
@@ -72,15 +73,25 @@ export class MfaAuthenticationClient {
   async getMfaAuthenticators(
     options: {
       type: string;
-    } = { type: 'totp' }
+      mfaToken?: string;
+      source?: TotpSource;
+    } = { type: 'totp', source: 'SELF' }
   ): Promise<IMfaAuthenticators> {
+    const { type, mfaToken, source } = options;
+
     const api = `${this.baseClient.appHost}/api/v2/mfa/authenticator`;
+    const headers: AxiosRequestConfig['headers'] = {};
+    if (mfaToken) {
+      headers.authorization = `Bearer ${mfaToken}`;
+    }
     const data: IMfaAuthenticators = await this.httpClient.request({
       method: 'GET',
       url: api,
       params: {
-        type: options.type
-      }
+        type,
+        source
+      },
+      headers
     });
     return data;
   }
@@ -102,15 +113,26 @@ export class MfaAuthenticationClient {
   async assosicateMfaAuthenticator(
     options: {
       authenticatorType: string;
-    } = { authenticatorType: 'totp' }
+      mfaToken?: string;
+      source?: TotpSource;
+    } = { authenticatorType: 'totp', source: 'SELF' }
   ): Promise<IMfaAssociation> {
+    const { authenticatorType, mfaToken, source } = options;
+
+    const headers: AxiosRequestConfig['headers'] = {};
+    if (mfaToken) {
+      headers.authorization = `Bearer ${mfaToken}`;
+    }
+
     const api = `${this.baseClient.appHost}/api/v2/mfa/totp/associate`;
     const data: IMfaAssociation = await this.httpClient.request({
       method: 'POST',
       url: api,
       data: {
-        authenticator_type: options.authenticatorType
-      }
+        authenticator_type: authenticatorType,
+        source
+      },
+      headers
     });
     return data;
   }
@@ -159,15 +181,25 @@ export class MfaAuthenticationClient {
     options: {
       authenticatorType: string;
       totp?: string;
-    } = { authenticatorType: 'totp' }
+      source?: TotpSource;
+      mfaToken?: TotpSource;
+    } = { authenticatorType: 'totp', source: 'SELF' }
   ): Promise<IMfaConfirmAssociation> {
     const api = `${this.baseClient.appHost}/api/v2/mfa/totp/associate/confirm`;
+    const { authenticatorType, totp, source, mfaToken } = options;
+
+    const headers: AxiosRequestConfig['headers'] = {};
+    if (mfaToken) {
+      headers.authorization = `Bearer ${mfaToken}`;
+    }
+
     await this.httpClient.request({
       method: 'POST',
       url: api,
       data: {
-        authenticator_type: options.authenticatorType,
-        totp: options.totp
+        authenticator_type: authenticatorType,
+        totp,
+        source
       }
     });
     return { code: 200, message: 'TOTP MFA 绑定成功' };
