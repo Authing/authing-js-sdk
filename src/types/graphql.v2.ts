@@ -324,6 +324,7 @@ export type QueryFindUserArgs = {
   email?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
 };
 
 
@@ -2805,6 +2806,7 @@ export type FindUserVariables = Exact<{
   email?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -5282,8 +5284,8 @@ export const EmailTemplatesDocument = `
 }
     `;
 export const FindUserDocument = `
-    query findUser($email: String, $phone: String, $username: String) {
-  findUser(email: $email, phone: $phone, username: $username) {
+    query findUser($email: String, $phone: String, $username: String, $externalId: String) {
+  findUser(email: $email, phone: $phone, username: $username, externalId: $externalId) {
     id
     arn
     userPoolId
