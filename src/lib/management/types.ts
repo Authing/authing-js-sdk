@@ -383,3 +383,11 @@ export interface IAppAccessPolicyQueryFilter {
   limit?: number;
   appId: string;
 }
+
+export interface IAppAccessPolicy {
+  appId: string;
+  targetType: 'USER' | 'ROLE' | 'GROUP' | 'ORG';
+  targetIdentifiers: string[];
+  namespace?: string;
+  inheritByChildren?: string;
+}

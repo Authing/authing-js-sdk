@@ -1,6 +1,7 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import {
+  IAppAccessPolicy,
   IAppAccessPolicyQueryFilter,
   IResourceDto,
   IResourceQueryFilter,
@@ -277,5 +278,162 @@ export class AclManagementClient {
         limit
       }
     });
+  }
+  public async enableApplicationAccessPolicy(options: IAppAccessPolicy) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    if (!options?.targetType) {
+      throw new Error(
+        '请传入主体类型，可选值为 USER、ROLE、ORG、GROUP，含义为用户、角色、组织机构节点、用户分组'
+      );
+    }
+    if (!options?.targetIdentifiers) {
+      throw new Error('请传入主体 id');
+    }
+    const {
+      namespace,
+      targetIdentifiers,
+      targetType,
+      appId,
+      inheritByChildren
+    } = options;
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/enable-effect`,
+      data: {
+        targetType,
+        namespace,
+        targetIdentifiers,
+        inheritByChildren
+      }
+    });
+    return { code: 200, message: '启用应用访问控制策略成功' };
+  }
+  public async disableApplicationAccessPolicy(options: IAppAccessPolicy) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    if (!options?.targetType) {
+      throw new Error(
+        '请传入主体类型，可选值为 USER、ROLE、ORG、GROUP，含义为用户、角色、组织机构节点、用户分组'
+      );
+    }
+    if (!options?.targetIdentifiers) {
+      throw new Error('请传入主体 id');
+    }
+
+    const {
+      namespace,
+      targetIdentifiers,
+      targetType,
+      appId,
+      inheritByChildren
+    } = options;
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/disable-effect`,
+      data: {
+        targetType,
+        namespace,
+        targetIdentifiers,
+        inheritByChildren
+      }
+    });
+    return { code: 200, message: '停用应用访问控制策略成功' };
+  }
+  public async deleteApplicationAccessPolicy(options: IAppAccessPolicy) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    if (!options?.targetType) {
+      throw new Error(
+        '请传入主体类型，可选值为 USER、ROLE、ORG、GROUP，含义为用户、角色、组织机构节点、用户分组'
+      );
+    }
+    if (!options?.targetIdentifiers) {
+      throw new Error('请传入主体 id');
+    }
+
+    const {
+      namespace,
+      targetIdentifiers,
+      targetType,
+      appId,
+      inheritByChildren
+    } = options;
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/revoke`,
+      data: {
+        targetType,
+        namespace,
+        targetIdentifiers,
+        inheritByChildren
+      }
+    });
+    return { code: 200, message: '删除应用访问控制策略成功' };
+  }
+  public async allowAccessApplication(options: IAppAccessPolicy) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    if (!options?.targetType) {
+      throw new Error(
+        '请传入主体类型，可选值为 USER、ROLE、ORG、GROUP，含义为用户、角色、组织机构节点、用户分组'
+      );
+    }
+    if (!options?.targetIdentifiers) {
+      throw new Error('请传入主体 id');
+    }
+    const {
+      namespace,
+      targetIdentifiers,
+      targetType,
+      appId,
+      inheritByChildren
+    } = options;
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/allow`,
+      data: {
+        targetType,
+        namespace,
+        targetIdentifiers,
+        inheritByChildren
+      }
+    });
+    return { code: 200, message: '允许主体访问应用的策略配置已生效' };
+  }
+  public async denyAccessApplication(options: IAppAccessPolicy) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    if (!options?.targetType) {
+      throw new Error(
+        '请传入主体类型，可选值为 USER、ROLE、ORG、GROUP，含义为用户、角色、组织机构节点、用户分组'
+      );
+    }
+    if (!options?.targetIdentifiers) {
+      throw new Error('请传入主体 id');
+    }
+    const {
+      namespace,
+      targetIdentifiers,
+      targetType,
+      appId,
+      inheritByChildren
+    } = options;
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/deny`,
+      data: {
+        targetType,
+        namespace,
+        targetIdentifiers,
+        inheritByChildren
+      }
+    });
+    return { code: 200, message: '拒绝主体访问应用的策略配置已生效' };
   }
 }
