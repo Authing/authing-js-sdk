@@ -473,18 +473,25 @@ export class UsersManagementClient {
    * @param {string} [options.username] 用户名，区分大小写。
    * @param {string} [options.email] 邮箱，邮箱不区分大小写。
    * @param {string} [options.phone] 手机号
+   * @param {string} [options.externalId] externalId
    *
    * @memberof UsersManagementClient
    */
-  async find(options: { username?: string; email?: string; phone?: string }) {
-    const { username, email, phone } = options;
+  async find(options: {
+    username?: string;
+    email?: string;
+    phone?: string;
+    externalId?: string;
+  }) {
+    const { username, email, phone, externalId } = options;
     const { findUser: user } = await findUser(
       this.graphqlClient,
       this.tokenProvider,
       {
         username,
         email,
-        phone
+        phone,
+        externalId
       }
     );
     return user;

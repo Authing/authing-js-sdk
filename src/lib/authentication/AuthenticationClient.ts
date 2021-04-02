@@ -60,7 +60,8 @@ import {
   convertUdv,
   convertUdvToKeyValuePair,
   encrypt,
-  formatAuthorizedResources
+  formatAuthorizedResources,
+  uploadFile
 } from '../utils';
 import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from '../..';
@@ -1653,46 +1654,13 @@ export class AuthenticationClient {
    * @description 上传图片
    */
   private uploadPhoto(cb: (src: string) => void) {
-    const inputElem = document.createElement('input');
-    inputElem.type = 'file';
-    inputElem.accept = 'image/*';
-
     const authing = this;
-
-    inputElem.onchange = () => {
-      const file = inputElem.files[0];
-      let formData = new FormData();
-      formData.append('file', file);
-      let xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        // 上传成功
-        if (this.readyState === 4) {
-          try {
-            const data = JSON.parse(this.responseText);
-            const { code, message } = data;
-            if (code !== 200) {
-              authing.options.onError(code, message);
-              throw new Error(JSON.stringify({ code, message }));
-            }
-            const {
-              data: { url }
-            } = data;
-            cb(url);
-          } catch (error) {
-            const code = 500;
-            const message = `上传图片失败, error = ${error.message}`;
-            authing.options.onError(code, message);
-            throw new Error(JSON.stringify({ code, message }));
-          }
-        }
-      };
-      xhr.open(
-        'POST',
-        `${this.baseClient.appHost}/api/v2/upload?folder=avatar`
-      );
-      xhr.send(formData);
-    };
-    inputElem.click();
+    uploadFile({
+      accept: 'image/*',
+      url: `${this.baseClient.appHost}/api/v2/upload?folder=avatar`
+    })
+      .then(({ url }) => cb(url))
+      .catch(({ code, message }) => authing.options.onError(code, message));
   }
 
   /**
