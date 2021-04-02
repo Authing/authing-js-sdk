@@ -398,3 +398,25 @@ export interface ICasParams {
 }
 
 export type TotpSource = 'APPLICATION' | 'SELF';
+
+export type ProviderType =
+  | 'wechat:pc'
+  | 'github'
+  | 'google'
+  | 'qq'
+  | 'apple'
+  | 'baidu'
+  | 'alipay'
+  | 'lark:app-store'
+  | 'lark:custom-app'
+  | 'weibo'
+  | 'dingtalk'
+  | 'wechat:webpage-authorization'
+  | 'alipay'
+  | 'wechat:miniprogram:default'
+  | 'wechat:mobile'
+  | 'wechatwork:service-provider:authorization'
+  | 'wechatwork:service-provider:qrconnect'
+  | 'wechatwork:corp:qrconnect'
+  | 'wechat:miniprogram:app-launch'
+  | 'wechat:miniprogram:qrconnect';
