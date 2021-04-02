@@ -18,6 +18,7 @@ import { StatisticsManagementClient } from './StatisticsManagementClient';
 import jwtDecode from 'jwt-decode';
 import { encrypt } from '../utils';
 import { PublicKeyManager } from '../common/PublicKeyManager';
+import { ApplicationsManagementClient } from './ApplicationsManagementClient';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -49,6 +50,7 @@ export class ManagementClient {
   groups: GroupsManagementClient;
   whitelist: WhitelistManagementClient;
   statistics: StatisticsManagementClient;
+  applications: ApplicationsManagementClient
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -133,6 +135,11 @@ export class ManagementClient {
       this.httpClient,
       this.tokenProvider
     );
+    this.applications = new ApplicationsManagementClient(
+      this.options,
+      this.httpClient,
+      this.tokenProvider
+    )
   }
 
   /**

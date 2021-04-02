@@ -686,21 +686,21 @@ test.skip('注册时添加自定义参数 # customData', async t => {
   const authing = new AuthenticationClient({
     ...getOptionsFromEnv()
   });
-  const email = generateRandomEmail()
+  const email = generateRandomEmail();
   const password = generateRandomString();
   const user = await authing.registerByEmail(email, password, null, {
     customData: {
       source: 'google'
     }
-  })
-  t.assert(user)
-})
+  });
+  t.assert(user);
+});
 
 test.skip('注册时添加自定义参数 # params', async t => {
   const authing = new AuthenticationClient({
     ...getOptionsFromEnv()
   });
-  const email = generateRandomEmail()
+  const email = generateRandomEmail();
   const password = generateRandomString();
   const user = await authing.registerByEmail(email, password, null, {
     params: [
@@ -709,9 +709,9 @@ test.skip('注册时添加自定义参数 # params', async t => {
         value: 'google'
       }
     ]
-  })
-  t.assert(user)
-})
+  });
+  t.assert(user);
+});
 
 test.skip('登录添加自定义 context', async t => {
   const authing = new AuthenticationClient({
@@ -737,6 +737,16 @@ test.skip('注册添加自定义 context', async t => {
       fuck: true
     }
   });
-  console.log(user)
-  t.assert(true)
+  console.log(user);
+  t.assert(true);
+});
+
+test.skip('获取当前用户能访问的应用', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv(),
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDY2YmI5MjYzZjFjYjNjZjhlNDBjYWYiLCJiaXJ0aGRhdGUiOm51bGwsImZhbWlseV9uYW1lIjpudWxsLCJnZW5kZXIiOiJVIiwiZ2l2ZW5fbmFtZSI6bnVsbCwibG9jYWxlIjpudWxsLCJtaWRkbGVfbmFtZSI6bnVsbCwibmFtZSI6bnVsbCwibmlja25hbWUiOm51bGwsInBpY3R1cmUiOiJkZWZhdWx0LXVzZXItYXZhdGFyLnBuZyIsInByZWZlcnJlZF91c2VybmFtZSI6bnVsbCwicHJvZmlsZSI6bnVsbCwidXBkYXRlZF9hdCI6IjIwMjEtMDQtMDJUMDY6Mzc6MDYuMzI4WiIsIndlYnNpdGUiOm51bGwsInpvbmVpbmZvIjpudWxsLCJhZGRyZXNzIjp7ImNvdW50cnkiOm51bGwsInBvc3RhbF9jb2RlIjpudWxsLCJyZWdpb24iOm51bGwsImZvcm1hdHRlZCI6bnVsbH0sInBob25lX251bWJlciI6bnVsbCwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjpmYWxzZSwiZW1haWwiOm51bGwsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZGF0YSI6eyJ0eXBlIjoidXNlciIsInVzZXJQb29sSWQiOiI2MDY1YTJjMzFmM2JhZjgxYTg5ODQwYzciLCJhcHBJZCI6IjYwNjVhMmMzZjMyYjNlYTY3OTIyNDk3ZCIsImlkIjoiNjA2NmJiOTI2M2YxY2IzY2Y4ZTQwY2FmIiwidXNlcklkIjoiNjA2NmJiOTI2M2YxY2IzY2Y4ZTQwY2FmIiwiX2lkIjoiNjA2NmJiOTI2M2YxY2IzY2Y4ZTQwY2FmIiwicGhvbmUiOm51bGwsImVtYWlsIjpudWxsLCJ1c2VybmFtZSI6IkVnS0Q5MkdtZ1BGbyIsInVuaW9uaWQiOm51bGwsIm9wZW5pZCI6bnVsbCwiY2xpZW50SWQiOiI2MDY1YTJjMzFmM2JhZjgxYTg5ODQwYzcifSwidXNlcnBvb2xfaWQiOiI2MDY1YTJjMzFmM2JhZjgxYTg5ODQwYzciLCJhdWQiOiI2MDY1YTJjM2YzMmIzZWE2NzkyMjQ5N2QiLCJleHAiOjE2MTg1NTUwMjYsImlhdCI6MTYxNzM0NTQyNiwiaXNzIjoiaHR0cHM6Ly9kZW1vdXNlcnBvb2wuYXV0aGluZy5sb2NhbC9vaWRjIn0.5DuCvJnR4M4CVjt25LJ2AgPxBk8M3lMaoxeBWXxhhWk"
+  });
+  const { list, totalCount } = await authing.listApplications();
+  t.assert(list)
+  t.assert(totalCount !== undefined)
 });

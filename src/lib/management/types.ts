@@ -333,3 +333,47 @@ export type BatchFetchUserTypes =
   | 'phone'
   | 'email'
   | 'externalId';
+
+
+/**
+ * 应用公开的配置
+ */
+export interface ApplicationPublicDetail {
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+  name: string,
+  logo: string,
+  domain: string,
+  description: string,
+  protocol: string
+}
+
+export interface ApplicationDetail {
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+  name: string,
+  logo: string,
+  domain: string,
+  description: string,
+  protocol: string
+  secret: string
+  jwks: any,
+  ssoPageCustomizationSettings: any,
+  redirectUris: string[],
+  logoutRedirectUris: string[],
+  oidcProviderEnabled: boolean,
+  oauthProviderEnabled: boolean,
+  samlProviderEnabled: boolean,
+  casProviderEnabled: boolean
+  registerDisabled: boolean,
+  oidcConfig: {[x: string]: any}
+  samlConfig:  {[x: string]: any}
+  oauthConfig: {[x: string]: any}
+  casConfig: {[x: string]: any}
+  showAuthorizationPage: boolean
+  enableSubAccount: boolean
+  loginRequireEmailVerified: boolean
+  agreementEnabled: boolean
+}

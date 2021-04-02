@@ -69,6 +69,7 @@ import { PublicKeyManager } from '../common/PublicKeyManager';
 import { KeyValuePair } from '../../types';
 import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
+import { ApplicationPublicDetail } from '../management/types';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   appId: undefined,
@@ -694,10 +695,10 @@ export class AuthenticationClient {
        * @deprecated use customData instead
        */
       params?: Array<{ key: string; value: any }>;
-            /**
+      /**
        * @description 将会写入配置的用户自定义字段
        */
-             customData?: { [x: string]: any };
+      customData?: { [x: string]: any };
       /**
        * @description 请求上下文，将会传递到 Pipeline 中
        */
@@ -2427,5 +2428,23 @@ export class AuthenticationClient {
       ...(username && { username }),
       ...(valid !== 'yes' && { message: 'ticket 不合法' })
     };
+  }
+
+  /**
+   * @description 获取当前用户能够访问的应用
+   */
+  public async listApplications(params?: {
+    page: number;
+    limit: number;
+  }): Promise<{
+    totalCount: number;
+    list: ApplicationPublicDetail[];
+  }> {
+    const { page = 1, limit = 10 } = params || {};
+    const data = await this.httpClient.request({
+      url: `${this.baseClient.appHost}/api/v2/users/me/applications/allowed?page=${page}&limit=${limit}`,
+      method: 'GET'
+    });
+    return data
   }
 }
