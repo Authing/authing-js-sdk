@@ -36,6 +36,7 @@ import {
   IOauthParams,
   IOidcParams,
   PasswordSecurityLevel,
+  ProviderType,
   SecurityLevel
 } from './types';
 import {
@@ -1300,6 +1301,37 @@ export class AuthenticationClient {
       }
     });
     return { code: 200, message: '绑定成功' };
+  }
+
+  /**
+   * @name unLinkAccount
+   * @name_zh 解除账号绑定
+   * @description 将社交账号从主账号（手机号、邮箱账号）解绑。
+   *
+   * @param {Object} options
+   * @param {string} options.primaryUserToken 主账号 Token
+   * @param {string} options.provider 社交账号的提供商名称
+   *
+   * @example
+   *
+   * authenticationClient.unLinkAccount({ primaryUserToken: '', provider: 'wechat:pc' })
+   *
+   * @returns {{code: 200, message: "解绑成功"}}
+   * @memberof AuthenticationClient
+   */
+  async unLinkAccount(options: {
+    primaryUserToken: string;
+    provider: ProviderType
+  }) {
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.baseClient.appHost}/api/v2/users/unlink`,
+      data: {
+        primaryUserToken: options.primaryUserToken,
+        provider: options.provider
+      }
+    });
+    return { code: 200, message: '解绑成功' };
   }
 
   /**

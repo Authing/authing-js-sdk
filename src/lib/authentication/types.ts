@@ -9,7 +9,7 @@ export interface AuthenticationClientOptions {
   /** 应用 ID */
   appId: string;
   /** 应用完整域名，如 https://sample-app.authing.cn，不带最后的斜线 '/'。 */
-  appHost?: string
+  appHost?: string;
   /** 应用密钥 */
   secret?: string;
   /** 应用身份协议 */
@@ -52,11 +52,11 @@ export interface AuthenticationClientOptions {
   /**
    * @deprecated 该参数已经废弃，请使用 appHost
    */
-  host?: string
+  host?: string;
   /**
    * @deprecated 该参数已经废弃，请使用 appHost
    */
-  domain?: string
+  domain?: string;
 }
 
 export interface QRCodeUserInfo {
@@ -382,9 +382,7 @@ export interface IOidcParams {
 export interface IOauthParams {
   appId?: string;
   redirectUri?: string;
-  responseType?:
-    | 'code'
-    | 'token'
+  responseType?: 'code' | 'token';
   state?: string;
   scope?: string;
 }
@@ -398,3 +396,25 @@ export interface ILogoutParams {
 export interface ICasParams {
   service?: string;
 }
+
+export type ProviderType =
+  | 'wechat:pc'
+  | 'github'
+  | 'google'
+  | 'qq'
+  | 'apple'
+  | 'baidu'
+  | 'alipay'
+  | 'lark:app-store'
+  | 'lark:custom-app'
+  | 'weibo'
+  | 'dingtalk'
+  | 'wechat:webpage-authorization'
+  | 'alipay'
+  | 'wechat:miniprogram:default'
+  | 'wechat:mobile'
+  | 'wechatwork:service-provider:authorization'
+  | 'wechatwork:service-provider:qrconnect'
+  | 'wechatwork:corp:qrconnect'
+  | 'wechat:miniprogram:app-launch'
+  | 'wechat:miniprogram:qrconnect';

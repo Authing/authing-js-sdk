@@ -81,7 +81,7 @@ test('修改资源', async t => {
   t.assert(updated.description === '新的描述');
 });
 
-test.only('删除资源', async t => {
+test('删除资源', async t => {
   let code = Math.random()
     .toString(26)
     .slice(2);
@@ -104,4 +104,21 @@ test.only('删除资源', async t => {
     '600a8f4e37708b363024a3ca'
   );
   t.assert(deleted === true);
+});
+
+test('获取应用访问控制策略', async t => {
+  let res = await managementClient.acl.getApplicationAccessPolicies({
+    appId: process.env.AUTHING_APP_ID
+  });
+  t.assert(Array.isArray(res.list));
+  t.assert(typeof res.totalCount === 'number');
+});
+
+test('获取应用访问控制策略', async t => {
+  let res = await managementClient.acl.getApplicationAccessPolicies({
+    appId: process.env.AUTHING_APP_ID
+  });
+  console.log(res);
+  t.assert(Array.isArray(res.list));
+  t.assert(typeof res.totalCount === 'number');
 });

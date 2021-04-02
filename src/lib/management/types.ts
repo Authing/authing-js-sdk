@@ -377,3 +377,9 @@ export interface IResourceResponse {
   id: string;
   apiIdentifier?: string;
 }
+
+export interface IAppAccessPolicyQueryFilter {
+  page?: number;
+  limit?: number;
+  appId: string;
+}

@@ -1,6 +1,7 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import {
+  IAppAccessPolicyQueryFilter,
   IResourceDto,
   IResourceQueryFilter,
   IResourceResponse,
@@ -259,5 +260,22 @@ export class AclManagementClient {
       }
     });
     return true;
+  }
+
+  public async getApplicationAccessPolicies(
+    options: IAppAccessPolicyQueryFilter
+  ) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    const { appId, page, limit } = options;
+    return await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/records`,
+      params: {
+        page,
+        limit
+      }
+    });
   }
 }
