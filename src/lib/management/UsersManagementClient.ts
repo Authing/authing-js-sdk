@@ -924,4 +924,17 @@ export class UsersManagementClient {
       key
     });
   }
+  /**
+   * @description 强制一批用户下线
+   */
+  async kick(userIds: string[]) {
+    await this.httpClient.request({
+      url: `${this.options.host}/api/v2/users/kick`,
+      method: 'POST',
+      data: {
+        userIds
+      }
+    });
+    return { code: 200, message: '强制下线成功' };
+  }
 }
