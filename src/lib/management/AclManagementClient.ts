@@ -436,4 +436,24 @@ export class AclManagementClient {
     });
     return { code: 200, message: '拒绝主体访问应用的策略配置已生效' };
   }
+  public async updateDefaultApplicationAccessPolicy(options: {
+    defaultStrategy: 'ALLOW_ALL' | 'DENY_ALL';
+    appId: string;
+  }) {
+    if (!options?.appId) {
+      throw new Error('请传入应用 id');
+    }
+    if (!options?.defaultStrategy) {
+      throw new Error(
+        '请传入默认策略，可选值为 ALLOW_ALL、DENY_ALL，含义为默认允许所有用户登录应用、默认拒绝所有用户登录应用'
+      );
+    }
+    return await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${options.appId}/authorization/allow`,
+      data: {
+        permissionStrategy: { defaultStrategy: options.defaultStrategy }
+      }
+    });
+  }
 }
