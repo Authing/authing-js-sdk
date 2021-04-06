@@ -391,3 +391,108 @@ export interface IAppAccessPolicy {
   namespace?: string;
   inheritByChildren?: string;
 }
+
+export interface Statement {
+  resource: string;
+  actions: string[];
+  effect: string;
+  condition: any[];
+  resourceType?: any;
+}
+
+export interface IPolicy {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userPoolId: string;
+  isDefault: boolean;
+  isAuto: boolean;
+  hidden: boolean;
+  code: string;
+  description: string;
+  statements: Statement[];
+  namespaceId: number;
+}
+
+export interface IUser {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userPoolId: string;
+  isRoot: boolean;
+  status: string;
+  oauth?: any;
+  email?: any;
+  phone?: any;
+  username: string;
+  unionid?: any;
+  openid?: any;
+  nickname?: any;
+  company?: any;
+  photo: string;
+  browser?: any;
+  device?: any;
+  password: string;
+  salt: string;
+  token?: any;
+  tokenExpiredAt?: any;
+  loginsCount: number;
+  lastIp?: any;
+  name?: any;
+  givenName?: any;
+  familyName?: any;
+  middleName?: any;
+  profile?: any;
+  preferredUsername?: any;
+  website?: any;
+  gender: string;
+  birthdate?: any;
+  zoneinfo?: any;
+  locale?: any;
+  address?: any;
+  formatted?: any;
+  streetAddress?: any;
+  locality?: any;
+  region?: any;
+  postalCode?: any;
+  city?: any;
+  province?: any;
+  country?: any;
+  registerSource: string[];
+  secretInfo?: any;
+  emailVerified: boolean;
+  phoneVerified: boolean;
+  lastLogin?: any;
+  blocked: boolean;
+  isDeleted: boolean;
+  sendSmsCount: number;
+  sendSmsLimitCount: number;
+  dataVersion?: any;
+  encryptedPassword: string;
+  signedUp: Date;
+  externalId?: any;
+  mainDepartmentId?: any;
+  mainDepartmentCode?: any;
+  lastMfaTime?: any;
+  passwordSecurityLevel: number;
+  source?: any;
+  identities: any[];
+}
+
+export interface IList {
+  assignedAt: Date;
+  inheritByChildren?: boolean;
+  enabled: boolean;
+  policyId: string;
+  code: string;
+  policy: IPolicy;
+  targetType: string;
+  targetIdentifier: string;
+  target: IUser;
+  namespace: string;
+}
+
+export interface IApplicationAccessPolicies {
+  list: IList[];
+  totalCount: number;
+}

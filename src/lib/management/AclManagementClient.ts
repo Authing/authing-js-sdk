@@ -3,6 +3,7 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import {
   IAppAccessPolicy,
   IAppAccessPolicyQueryFilter,
+  IApplicationAccessPolicies,
   IResourceDto,
   IResourceQueryFilter,
   IResourceResponse,
@@ -265,7 +266,7 @@ export class AclManagementClient {
 
   public async getApplicationAccessPolicies(
     options: IAppAccessPolicyQueryFilter
-  ) {
+  ) : Promise<IApplicationAccessPolicies> {
     if (!options?.appId) {
       throw new Error('请传入 appId');
     }

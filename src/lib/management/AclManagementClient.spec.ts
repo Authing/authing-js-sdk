@@ -134,7 +134,7 @@ test('启用应用访问控制策略', async t => {
   t.assert(res.code === 200);
 });
 
-test.only('停用应用访问控制策略', async t => {
+test('停用应用访问控制策略', async t => {
   let username = Math.random()
     .toString(26)
     .slice(2);
@@ -158,6 +158,26 @@ test.only('停用应用访问控制策略', async t => {
     targetIdentifiers: [user.id]
   });
   t.assert(res2.code === 200);
+});
+
+test('删除应用访问控制策略', async t => {
+  let username = Math.random()
+    .toString(26)
+    .slice(2);
+  let pwd = '123456';
+  let user = await managementClient.users.create({ username, password: pwd });
+  await managementClient.acl.allowAccessApplication({
+    appId: process.env.AUTHING_APP_ID,
+    targetType: 'USER',
+    targetIdentifiers: [user.id],
+    namespace: 'default'
+  });
+  let res = await managementClient.acl.deleteApplicationAccessPolicy({
+    appId: process.env.AUTHING_APP_ID,
+    targetType: 'USER',
+    targetIdentifiers: [user.id]
+  });
+  t.assert(res.code === 200);
 });
 
 test('配置「允许主体（用户、角色、分组、组织机构节点）访问应用」的控制策略', async t => {
