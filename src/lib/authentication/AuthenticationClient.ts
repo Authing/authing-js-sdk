@@ -2044,7 +2044,6 @@ export class AuthenticationClient {
         .slice(2),
       scope: 'openid profile email phone address',
       client_id: this.options.appId,
-      response_mode: 'query',
       redirect_uri: this.options.redirectUri,
       response_type: 'code'
     };
