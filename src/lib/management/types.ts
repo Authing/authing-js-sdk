@@ -500,41 +500,151 @@ export interface IApplicationAccessPolicies {
  * 应用公开的配置
  */
 export interface ApplicationPublicDetail {
-  id: string,
-  createdAt: string,
-  updatedAt: string,
-  name: string,
-  logo: string,
-  domain: string,
-  description: string,
-  protocol: string
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  name: string;
+  logo: string;
+  domain: string;
+  description: string;
+  protocol: string;
 }
 
 export interface ApplicationDetail {
-  id: string,
-  createdAt: string,
-  updatedAt: string,
-  name: string,
-  logo: string,
-  domain: string,
-  description: string,
-  protocol: string
-  secret: string
-  jwks: any,
-  ssoPageCustomizationSettings: any,
-  redirectUris: string[],
-  logoutRedirectUris: string[],
-  oidcProviderEnabled: boolean,
-  oauthProviderEnabled: boolean,
-  samlProviderEnabled: boolean,
-  casProviderEnabled: boolean
-  registerDisabled: boolean,
-  oidcConfig: {[x: string]: any}
-  samlConfig:  {[x: string]: any}
-  oauthConfig: {[x: string]: any}
-  casConfig: {[x: string]: any}
-  showAuthorizationPage: boolean
-  enableSubAccount: boolean
-  loginRequireEmailVerified: boolean
-  agreementEnabled: boolean
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  name: string;
+  logo: string;
+  domain: string;
+  description: string;
+  protocol: string;
+  secret: string;
+  jwks: any;
+  ssoPageCustomizationSettings: any;
+  redirectUris: string[];
+  logoutRedirectUris: string[];
+  oidcProviderEnabled: boolean;
+  oauthProviderEnabled: boolean;
+  samlProviderEnabled: boolean;
+  casProviderEnabled: boolean;
+  registerDisabled: boolean;
+  oidcConfig: { [x: string]: any };
+  samlConfig: { [x: string]: any };
+  oauthConfig: { [x: string]: any };
+  casConfig: { [x: string]: any };
+  showAuthorizationPage: boolean;
+  enableSubAccount: boolean;
+  loginRequireEmailVerified: boolean;
+  agreementEnabled: boolean;
+}
+
+export interface QrcodeScanning {
+  redirect: boolean;
+  interval: number;
+}
+
+export interface Key {
+  e: string;
+  n: string;
+  d: string;
+  p: string;
+  q: string;
+  dp: string;
+  dq: string;
+  qi: string;
+  kty: string;
+  kid: string;
+  alg: string;
+  use: string;
+}
+
+export interface Jwks {
+  keys: Key[];
+}
+
+export interface OidcConfig {
+  grant_types: string[];
+  response_types: string[];
+  id_token_signed_response_alg: string;
+  token_endpoint_auth_method: string;
+  authorization_code_expire: number;
+  id_token_expire: number;
+  access_token_expire: number;
+  refresh_token_expire: number;
+  cas_expire: number;
+  skip_consent: boolean;
+  redirect_uris: string[];
+  post_logout_redirect_uris: any[];
+  client_id: string;
+  introspection_endpoint_auth_method: string;
+  revocation_endpoint_auth_method: string;
+}
+
+export interface OauthConfig {
+  id: string;
+  redirect_uris: string[];
+  grants: string[];
+  access_token_lifetime: number;
+  refresh_token_lifetime: number;
+  introspection_endpoint_auth_method: string;
+  revocation_endpoint_auth_method: string;
+}
+
+export interface PermissionStrategy {
+  enabled: boolean;
+  defaultStrategy: string;
+  allowPolicyId: string;
+  denyPolicyId: string;
+}
+
+export interface IApplication {
+  qrcodeScanning: QrcodeScanning;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userPoolId: string;
+  protocol: string;
+  isOfficial: boolean;
+  isDeleted: boolean;
+  isDefault: boolean;
+  name: string;
+  description?: any;
+  identifier: string;
+  jwks: Jwks;
+  ssoPageCustomizationSettings?: any;
+  logo: string;
+  redirectUris: string[];
+  logoutRedirectUris: any[];
+  oidcProviderEnabled: boolean;
+  oauthProviderEnabled: boolean;
+  samlProviderEnabled: boolean;
+  casProviderEnabled: boolean;
+  registerDisabled: boolean;
+  loginTabs: string[];
+  defaultLoginTab: string;
+  registerTabs: string[];
+  defaultRegisterTab: string;
+  ldapConnections?: any;
+  adConnections: any[];
+  disabledSocialConnections?: any;
+  disabledOidcConnections: any[];
+  disabledSamlConnections: any[];
+  disabledOauth2Connections: any[];
+  disabledCasConnections: any[];
+  disabledAzureAdConnections: any[];
+  extendsFieldsEnabled: boolean;
+  extendsFields: any[];
+  ext?: any;
+  css: string;
+  oidcConfig: OidcConfig;
+  samlConfig?: any;
+  oauthConfig: OauthConfig;
+  casConfig?: any;
+  showAuthorizationPage: boolean;
+  enableSubAccount: boolean;
+  loginRequireEmailVerified: boolean;
+  agreementEnabled: boolean;
+  skipMfa: boolean;
+  permissionStrategy: PermissionStrategy;
 }

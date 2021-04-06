@@ -3,6 +3,7 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import {
   IAppAccessPolicy,
   IAppAccessPolicyQueryFilter,
+  IApplication,
   IApplicationAccessPolicies,
   IResourceDto,
   IResourceQueryFilter,
@@ -440,7 +441,7 @@ export class AclManagementClient {
   public async updateDefaultApplicationAccessPolicy(options: {
     defaultStrategy: 'ALLOW_ALL' | 'DENY_ALL';
     appId: string;
-  }) {
+  }): Promise<IApplication> {
     if (!options?.appId) {
       throw new Error('请传入应用 id');
     }
