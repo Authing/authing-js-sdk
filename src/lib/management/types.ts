@@ -1,4 +1,4 @@
-import { Org, ResourceType } from '../../types/graphql.v2';
+import { Org } from '../../types/graphql.v2';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { HttpClient } from '../common/HttpClient';
 
@@ -337,13 +337,13 @@ export type BatchFetchUserTypes =
 export interface IResourceQueryFilter {
   page?: number;
   limit?: number;
-  type?: ResourceType;
+  type?: 'DATA' | 'API' | 'MENU' | 'UI' | 'BUTTON';
   namespaceCode?: string;
 }
 
 export interface IResourceDto {
   code: string;
-  type: ResourceType;
+  type: 'DATA' | 'API' | 'MENU' | 'UI' | 'BUTTON';
   description?: string;
   actions: Array<{
     name: string;
@@ -353,7 +353,7 @@ export interface IResourceDto {
 }
 
 export interface IResourceUpdateDto {
-  type?: ResourceType;
+  type?: 'DATA' | 'API' | 'MENU' | 'UI' | 'BUTTON';
   description?: string;
   actions?: Array<{
     name: string;
@@ -397,7 +397,7 @@ export interface Statement {
   actions: string[];
   effect: string;
   condition: any[];
-  resourceType?: any;
+  resourceType?: 'DATA' | 'API' | 'MENU' | 'UI' | 'BUTTON';
 }
 
 export interface IPolicy {
