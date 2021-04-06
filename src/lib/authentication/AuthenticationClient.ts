@@ -4,6 +4,7 @@ import {
   bindPhone,
   checkLoginStatus,
   checkPasswordStrength,
+  getUserRoles,
   listUserAuthorizedResources,
   loginByEmail,
   loginByPhoneCode,
@@ -2268,5 +2269,43 @@ export class AuthenticationClient {
       ...(username && { username }),
       ...(valid !== 'yes' && { message: 'ticket 不合法' })
     };
+  }
+
+  /**
+   * 判断 "我" 是否有某个角色
+   * @param roleCode 角色 Code
+   * @param namespace 权限分组 ID
+   */
+  public async hasRole(
+    roleCode: string,
+    namespace?: string
+  ): Promise<boolean> {
+    const { user } = await getUserRoles(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        id: this.checkLoggedIn(),
+        namespace
+      }
+    );
+    if (!user) {
+      return false;
+    }
+
+    const roleList = user.roles;
+
+    if (roleList.totalCount < 1) {
+      return false;
+    }
+
+    let hasRole: boolean = false;
+
+    roleList.list.forEach(item => {
+      if (item.code === roleCode) {
+        hasRole = true;
+      }
+    });
+
+    return hasRole;
   }
 }
