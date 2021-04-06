@@ -120,6 +120,12 @@ test('启用应用访问控制策略', async t => {
     .slice(2);
   let pwd = '123456';
   let user = await managementClient.users.create({ username, password: pwd });
+  await managementClient.acl.allowAccessApplication({
+    appId: process.env.AUTHING_APP_ID,
+    targetType: 'USER',
+    targetIdentifiers: [user.id],
+    namespace: 'default'
+  });
   let res = await managementClient.acl.enableApplicationAccessPolicy({
     appId: process.env.AUTHING_APP_ID,
     targetType: 'USER',
@@ -128,12 +134,18 @@ test('启用应用访问控制策略', async t => {
   t.assert(res.code === 200);
 });
 
-test('停用应用访问控制策略', async t => {
+test.only('停用应用访问控制策略', async t => {
   let username = Math.random()
     .toString(26)
     .slice(2);
   let pwd = '123456';
   let user = await managementClient.users.create({ username, password: pwd });
+  await managementClient.acl.allowAccessApplication({
+    appId: process.env.AUTHING_APP_ID,
+    targetType: 'USER',
+    targetIdentifiers: [user.id],
+    namespace: 'default'
+  });
   let res = await managementClient.acl.enableApplicationAccessPolicy({
     appId: process.env.AUTHING_APP_ID,
     targetType: 'USER',
