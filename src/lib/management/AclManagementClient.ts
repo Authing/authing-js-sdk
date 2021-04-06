@@ -234,7 +234,7 @@ export class AclManagementClient {
 
   public async updateResource(
     code: string,
-    options?: IResourceUpdateDto
+    options: IResourceUpdateDto
   ): Promise<IResourceResponse> {
     if (!code) {
       throw new Error('请传入资源标识符');
