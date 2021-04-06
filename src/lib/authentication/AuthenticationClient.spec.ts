@@ -1,5 +1,6 @@
 import { AuthenticationClient } from './AuthenticationClient';
 import {
+  generateRandomEmail,
   generateRandomPhone,
   generateRandomString,
   getOptionsFromEnv
@@ -480,7 +481,7 @@ test('拼接 OIDC 授权链接', async t => {
     secret: '16657960936447935',
     redirectUri: 'https://baidu.com',
     tokenEndPointAuthMethod: 'client_secret_basic',
-    protocol: 'oidc',
+    protocol: 'oidc'
   });
   let url1 = authing.buildAuthorizeUrl();
   let url1Data = new URL(url1);
@@ -505,9 +506,11 @@ test('拼接 OIDC 带 refresh_token 能力的授权链接', async t => {
     secret: '16657960936447935',
     redirectUri: 'https://baidu.com',
     tokenEndPointAuthMethod: 'client_secret_basic',
-    protocol: 'oidc',
+    protocol: 'oidc'
   });
-  let url1 = authing.buildAuthorizeUrl({scope: 'openid profile offline_access'});
+  let url1 = authing.buildAuthorizeUrl({
+    scope: 'openid profile offline_access'
+  });
   let url1Data = new URL(url1);
 
   t.assert(url1Data.hostname === 'oidc1.authing.cn');
@@ -531,7 +534,7 @@ test('拼接 OAuth 授权链接', async t => {
     secret: '16657960936447935',
     redirectUri: 'https://baidu.com',
     tokenEndPointAuthMethod: 'client_secret_basic',
-    protocol: 'oauth',
+    protocol: 'oauth'
   });
   let url1 = authing.buildAuthorizeUrl();
   let url1Data = new URL(url1);
@@ -540,15 +543,11 @@ test('拼接 OAuth 授权链接', async t => {
   t.assert(url1Data.pathname === '/oauth/auth');
   t.assert(typeof parseInt(url1Data.searchParams.get('nonce')) === 'number');
   t.assert(typeof parseInt(url1Data.searchParams.get('state')) === 'number');
-  t.assert(
-    url1Data.searchParams.get('scope') === 'user'
-  );
+  t.assert(url1Data.searchParams.get('scope') === 'user');
   t.assert(url1Data.searchParams.get('client_id') === '9072248490655972');
   t.assert(url1Data.searchParams.get('redirect_uri') === 'https://baidu.com');
   t.assert(url1Data.searchParams.get('response_type') === 'code');
-
 });
-
 
 test('拼接 Saml 授权链接', async t => {
   const authing = new AuthenticationClient({
@@ -557,14 +556,13 @@ test('拼接 Saml 授权链接', async t => {
     redirectUri: 'https://baidu.com',
     tokenEndPointAuthMethod: 'client_secret_basic',
     protocol: 'saml',
-    appHost: 'https://oidc1.authing.cn',
+    appHost: 'https://oidc1.authing.cn'
   });
   let url1 = authing.buildAuthorizeUrl();
   let url1Data = new URL(url1);
 
   t.assert(url1Data.hostname === 'oidc1.authing.cn');
   t.assert(url1Data.pathname === `/saml-idp/9072248490655972`);
-
 });
 
 test('拼接 CAS 授权链接', async t => {
@@ -574,14 +572,13 @@ test('拼接 CAS 授权链接', async t => {
     redirectUri: 'https://baidu.com',
     tokenEndPointAuthMethod: 'client_secret_basic',
     protocol: 'cas',
-    appHost: 'https://oidc1.authing.cn',
+    appHost: 'https://oidc1.authing.cn'
   });
   let url1 = authing.buildAuthorizeUrl();
   let url1Data = new URL(url1);
 
   t.assert(url1Data.hostname === 'oidc1.authing.cn');
   t.assert(url1Data.pathname === `/cas-idp/9072248490655972`);
-
 });
 
 test('拼接 CAS 授权链接，带 service 参数', async t => {
@@ -591,15 +588,14 @@ test('拼接 CAS 授权链接，带 service 参数', async t => {
     redirectUri: 'https://baidu.com',
     tokenEndPointAuthMethod: 'client_secret_basic',
     protocol: 'cas',
-    appHost: 'https://oidc1.authing.cn',
+    appHost: 'https://oidc1.authing.cn'
   });
-  let url1 = authing.buildAuthorizeUrl({service: 'https://authing.cn'});
+  let url1 = authing.buildAuthorizeUrl({ service: 'https://authing.cn' });
   let url1Data = new URL(url1);
 
   t.assert(url1Data.hostname === 'oidc1.authing.cn');
   t.assert(url1Data.pathname === `/cas-idp/9072248490655972`);
   t.assert(url1Data.searchParams.get('service') === 'https://authing.cn');
-
 });
 
 test('拼接 OIDC 傻瓜登出链接', async t => {
@@ -609,7 +605,7 @@ test('拼接 OIDC 傻瓜登出链接', async t => {
     redirectUri: 'https://baidu.com',
     tokenEndPointAuthMethod: 'client_secret_basic',
     protocol: 'oidc',
-    appHost: 'https://oidc1.authing.cn',
+    appHost: 'https://oidc1.authing.cn'
   });
   let url1 = authing.buildLogoutUrl();
   let url1Data = new URL(url1);
@@ -625,15 +621,22 @@ test('拼接 OIDC 专家登出链接', async t => {
     redirectUri: 'https://baidu.com',
     tokenEndPointAuthMethod: 'client_secret_basic',
     protocol: 'oidc',
-    appHost: 'https://oidc1.authing.cn',
+    appHost: 'https://oidc1.authing.cn'
   });
-  let url1 = authing.buildLogoutUrl({expert: true, idToken: '123', redirectUri: 'https://authing.cn'});
+  let url1 = authing.buildLogoutUrl({
+    expert: true,
+    idToken: '123',
+    redirectUri: 'https://authing.cn'
+  });
   let url1Data = new URL(url1);
 
   t.assert(url1Data.hostname === 'oidc1.authing.cn');
   t.assert(url1Data.pathname === `/oidc/session/end`);
   t.assert(url1Data.searchParams.get('id_token_hint') === '123');
-  t.assert(url1Data.searchParams.get('post_logout_redirect_uri') === 'https://authing.cn');
+  t.assert(
+    url1Data.searchParams.get('post_logout_redirect_uri') ===
+      'https://authing.cn'
+  );
 });
 test('拼接 OAuth 傻瓜登出链接', async t => {
   const authing = new AuthenticationClient({
@@ -642,7 +645,7 @@ test('拼接 OAuth 傻瓜登出链接', async t => {
     redirectUri: 'https://baidu.com',
     tokenEndPointAuthMethod: 'client_secret_basic',
     protocol: 'oauth',
-    appHost: 'https://oidc1.authing.cn',
+    appHost: 'https://oidc1.authing.cn'
   });
   let url1 = authing.buildLogoutUrl();
   let url1Data = new URL(url1);
@@ -658,7 +661,7 @@ test('拼接 Saml 傻瓜登出链接', async t => {
     redirectUri: 'https://baidu.com',
     tokenEndPointAuthMethod: 'client_secret_basic',
     protocol: 'saml',
-    appHost: 'https://oidc1.authing.cn',
+    appHost: 'https://oidc1.authing.cn'
   });
   let url1 = authing.buildLogoutUrl();
   let url1Data = new URL(url1);
@@ -666,7 +669,6 @@ test('拼接 Saml 傻瓜登出链接', async t => {
   t.assert(url1Data.hostname === 'oidc1.authing.cn');
   t.assert(url1Data.pathname === `/login/profile/logout`);
 });
-
 
 test('兼容老版本，使用 host 初始化', async t => {
   // @ts-ignore
@@ -678,4 +680,73 @@ test('兼容老版本，使用 host 初始化', async t => {
   const password = generateRandomString();
   const user = await authing.registerByEmail(email, password);
   t.assert(user);
-})
+});
+
+test.skip('注册时添加自定义参数 # customData', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const email = generateRandomEmail();
+  const password = generateRandomString();
+  const user = await authing.registerByEmail(email, password, null, {
+    customData: {
+      source: 'google'
+    }
+  });
+  t.assert(user);
+});
+
+test.skip('注册时添加自定义参数 # params', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const email = generateRandomEmail();
+  const password = generateRandomString();
+  const user = await authing.registerByEmail(email, password, null, {
+    params: [
+      {
+        key: 'source',
+        value: 'google'
+      }
+    ]
+  });
+  t.assert(user);
+});
+
+test.skip('登录添加自定义 context', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const user = await authing.loginByEmail('cj@authing.cn', 'cj@authing.cn', {
+    context: {
+      param: '1'
+    }
+  });
+  console.log(user);
+  t.assert(true);
+});
+
+test.skip('注册添加自定义 context', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const email = generateRandomEmail();
+  const password = 'passw0rd';
+  const user = await authing.registerByEmail(email, password, null, {
+    context: {
+      fuck: true
+    }
+  });
+  console.log(user);
+  t.assert(true);
+});
+
+test.skip('获取当前用户能访问的应用', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv(),
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDY2YmI5MjYzZjFjYjNjZjhlNDBjYWYiLCJiaXJ0aGRhdGUiOm51bGwsImZhbWlseV9uYW1lIjpudWxsLCJnZW5kZXIiOiJVIiwiZ2l2ZW5fbmFtZSI6bnVsbCwibG9jYWxlIjpudWxsLCJtaWRkbGVfbmFtZSI6bnVsbCwibmFtZSI6bnVsbCwibmlja25hbWUiOm51bGwsInBpY3R1cmUiOiJkZWZhdWx0LXVzZXItYXZhdGFyLnBuZyIsInByZWZlcnJlZF91c2VybmFtZSI6bnVsbCwicHJvZmlsZSI6bnVsbCwidXBkYXRlZF9hdCI6IjIwMjEtMDQtMDJUMDY6Mzc6MDYuMzI4WiIsIndlYnNpdGUiOm51bGwsInpvbmVpbmZvIjpudWxsLCJhZGRyZXNzIjp7ImNvdW50cnkiOm51bGwsInBvc3RhbF9jb2RlIjpudWxsLCJyZWdpb24iOm51bGwsImZvcm1hdHRlZCI6bnVsbH0sInBob25lX251bWJlciI6bnVsbCwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjpmYWxzZSwiZW1haWwiOm51bGwsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZGF0YSI6eyJ0eXBlIjoidXNlciIsInVzZXJQb29sSWQiOiI2MDY1YTJjMzFmM2JhZjgxYTg5ODQwYzciLCJhcHBJZCI6IjYwNjVhMmMzZjMyYjNlYTY3OTIyNDk3ZCIsImlkIjoiNjA2NmJiOTI2M2YxY2IzY2Y4ZTQwY2FmIiwidXNlcklkIjoiNjA2NmJiOTI2M2YxY2IzY2Y4ZTQwY2FmIiwiX2lkIjoiNjA2NmJiOTI2M2YxY2IzY2Y4ZTQwY2FmIiwicGhvbmUiOm51bGwsImVtYWlsIjpudWxsLCJ1c2VybmFtZSI6IkVnS0Q5MkdtZ1BGbyIsInVuaW9uaWQiOm51bGwsIm9wZW5pZCI6bnVsbCwiY2xpZW50SWQiOiI2MDY1YTJjMzFmM2JhZjgxYTg5ODQwYzcifSwidXNlcnBvb2xfaWQiOiI2MDY1YTJjMzFmM2JhZjgxYTg5ODQwYzciLCJhdWQiOiI2MDY1YTJjM2YzMmIzZWE2NzkyMjQ5N2QiLCJleHAiOjE2MTg1NTUwMjYsImlhdCI6MTYxNzM0NTQyNiwiaXNzIjoiaHR0cHM6Ly9kZW1vdXNlcnBvb2wuYXV0aGluZy5sb2NhbC9vaWRjIn0.5DuCvJnR4M4CVjt25LJ2AgPxBk8M3lMaoxeBWXxhhWk"
+  });
+  const { list, totalCount } = await authing.listApplications();
+  t.assert(list)
+  t.assert(totalCount !== undefined)
+});

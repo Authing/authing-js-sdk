@@ -234,3 +234,108 @@ export function generateUidKey(number: number) {
   }
   return arr.join('');
 }
+
+interface UploadRes {
+  key: string;
+  url: string;
+}
+export const xhrUpload = (
+  file: File | Blob,
+  url: string
+): Promise<UploadRes> => {
+  return new Promise((resolve, reject) => {
+    let formData = new FormData();
+    formData.append(
+      'file',
+      file,
+      file instanceof Blob ? 'personal.jpeg' : undefined
+    );
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      // 上传成功
+      if (this.readyState === 4) {
+        try {
+          const res = JSON.parse(this.responseText);
+          const { code, message, data } = res;
+          if (code !== 200) {
+            reject({
+              code,
+              message
+            });
+          }
+          resolve(data);
+        } catch (error) {
+          const code = 500;
+          const message = `上传图片失败, error = ${error.message}`;
+          reject({
+            code,
+            message
+          });
+        }
+      }
+    };
+    xhr.open('POST', url);
+    xhr.send(formData);
+  });
+};
+
+export function uploadFile<T extends boolean = false>(opts: {
+  accept: string;
+  multiple?: T;
+  url: string;
+}): Promise<T extends true ? UploadRes[] : UploadRes> {
+  type Res = T extends true ? UploadRes[] : UploadRes;
+
+  const { url, accept, multiple } = opts;
+
+  return new Promise((resolve, reject) => {
+    const inputElem = document.createElement('input');
+    inputElem.type = 'file';
+    inputElem.accept = accept;
+    inputElem.multiple = multiple;
+
+    inputElem.onchange = () => {
+      const files = inputElem.files;
+
+      if (!multiple) {
+        const file = files[0];
+        xhrUpload(file, url)
+          .then(res => resolve(res as Res))
+          .catch(error => reject(error));
+      } else {
+        let promises = [];
+        let i = 0;
+        while (i < files.length) {
+          promises.push(xhrUpload(files[i], url));
+          i++;
+        }
+
+        Promise.all(promises)
+          .then(res => resolve(res as Res))
+          .catch(error => reject(error));
+      }
+    };
+    inputElem.click();
+  });
+}
+
+export const convertKeyValueListToObject = (
+  data: Array<{ key: string; value: any }>
+) => {
+  const ret: any = {};
+  for (const { key, value } of data) {
+    ret[key] = value;
+  }
+  return ret;
+};
+
+export const convertObjectToKeyValueList = (data: { [x: string]: any }) => {
+  const ret = [];
+  for (const key of Object.keys(data)) {
+    ret.push({
+      key,
+      value: data[key]
+    });
+  }
+  return ret;
+};

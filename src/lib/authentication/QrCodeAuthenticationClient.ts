@@ -140,6 +140,14 @@ export class QrCodeAuthenticationClient {
         retry?: string;
         failed?: string;
       };
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
+      context?: { [x: string]: any };
     }
   ) {
     options = options || {};
@@ -165,7 +173,9 @@ export class QrCodeAuthenticationClient {
       onCodeLoaded,
       onCodeLoadFailed,
       // onCodeDestroyed,
-      tips = {}
+      tips = {},
+      context,
+      customData
     } = options;
     const {
       title = `使用 <strong> ${
@@ -371,7 +381,10 @@ export class QrCodeAuthenticationClient {
       let random: string = null;
       let url: string = null;
       try {
-        const data = await this.geneCode();
+        const data = await this.geneCode({
+          context,
+          customData
+        });
         random = data.random;
         url = data.url;
       } catch (error) {
@@ -497,13 +510,19 @@ export class QrCodeAuthenticationClient {
    * @returns {Promise<QRCodeGenarateResult>}
    * @memberof QrCodeAuthenticationClient
    */
-  async geneCode(): Promise<QRCodeGenarateResult> {
+  async geneCode(options?: {
+    context?: { [x: string]: any };
+    customData?: { [x: string]: any };
+  }): Promise<QRCodeGenarateResult> {
+    const { context, customData } = options || {};
     const api = `${this.baseClient.appHost}/api/v2/qrcode/gene`;
     const data = await this.httpClient.request({
       method: 'POST',
       url: api,
       data: {
-        scene: this.scene
+        scene: this.scene,
+        context,
+        params: customData
       }
     });
     return data;

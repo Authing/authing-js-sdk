@@ -1,7 +1,11 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
-import { AuthenticationClientOptions, SocialConnectionProvider } from './types';
+import { AuthenticationClientOptions } from './types';
 import { HttpClient } from '../common/HttpClient';
-import { objectToQueryString, popupCenter, isWechatBrowser } from '../utils';
+import {
+  objectToQueryString,
+  popupCenter,
+  isWechatBrowser,
+} from '../utils';
 import { User } from '../../types/graphql.v2';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
@@ -102,6 +106,11 @@ export class SocialAuthenticationClient {
       };
       authorization_params?: Record<string, any>; // 为了兼容之前的代码
       authorizationParams?: Record<string, any>;
+      context?: { [x: string]: any };
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
     }
   ) {
     options = options || {};
@@ -111,19 +120,23 @@ export class SocialAuthenticationClient {
       onSuccess,
       onError,
       authorization_params,
-      authorizationParams
+      authorizationParams,
+      context,
+      customData
     } = options;
     const query: Record<string, string> = {
+      from_guard: '1',
       app_id: this.options.appId,
       authorization_params: JSON.stringify(
         authorization_params || authorizationParams
       )
     };
-
-    if (provider !== SocialConnectionProvider.WECHATMP) {
-      query.from_guard = '1';
+    if (context) {
+      query.context = JSON.stringify(context);
     }
-
+    if (customData) {
+      query.custom_data = JSON.stringify(customData);
+    }
     const url = `${
       this.baseClient.appHost
     }/connections/social/${provider}${objectToQueryString(query)}`;

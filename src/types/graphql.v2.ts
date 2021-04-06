@@ -102,6 +102,7 @@ export type QueryResourcePermissionsArgs = {
   resourceType: ResourceType;
   resource: Scalars['String'];
   targetType?: Maybe<PolicyAssignmentTargetType>;
+  actions?: Maybe<ResourcePermissionsActionsInput>;
 };
 
 
@@ -323,6 +324,7 @@ export type QueryFindUserArgs = {
   email?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
 };
 
 
@@ -357,6 +359,16 @@ export enum PolicyAssignmentTargetType {
   Group = 'GROUP',
   Org = 'ORG',
   AkSk = 'AK_SK'
+}
+
+export type ResourcePermissionsActionsInput = {
+  op: Operator;
+  list: Array<Maybe<Scalars['String']>>;
+};
+
+export enum Operator {
+  And = 'AND',
+  Or = 'OR'
 }
 
 export type PaginatedResourcePermissionAssignments = {
@@ -1640,7 +1652,7 @@ export type CommonMessage = {
 };
 
 export type AuthorizeResourceOpt = {
-  PolicyAssignmentTargetType: PolicyAssignmentTargetType;
+  targetType: PolicyAssignmentTargetType;
   targetIdentifier: Scalars['String'];
   actions?: Maybe<Array<Scalars['String']>>;
 };
@@ -1718,7 +1730,10 @@ export type LoginByEmailInput = {
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
   clientIp?: Maybe<Scalars['String']>;
+  /** 设置用户自定义字段，要求符合 Array<{ key: string; value: string }> 格式 */
   params?: Maybe<Scalars['String']>;
+  /** 请求上下文信息，将会传递到 pipeline 中 */
+  context?: Maybe<Scalars['String']>;
 };
 
 export type LoginByUsernameInput = {
@@ -1729,7 +1744,10 @@ export type LoginByUsernameInput = {
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
   clientIp?: Maybe<Scalars['String']>;
+  /** 设置用户自定义字段，要求符合 Array<{ key: string; value: string }> 格式 */
   params?: Maybe<Scalars['String']>;
+  /** 请求上下文信息，将会传递到 pipeline 中 */
+  context?: Maybe<Scalars['String']>;
 };
 
 export type LoginByPhoneCodeInput = {
@@ -1738,7 +1756,10 @@ export type LoginByPhoneCodeInput = {
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
   clientIp?: Maybe<Scalars['String']>;
+  /** 设置用户自定义字段，要求符合 Array<{ key: string; value: string }> 格式 */
   params?: Maybe<Scalars['String']>;
+  /** 请求上下文信息，将会传递到 pipeline 中 */
+  context?: Maybe<Scalars['String']>;
 };
 
 export type LoginByPhonePasswordInput = {
@@ -1749,7 +1770,10 @@ export type LoginByPhonePasswordInput = {
   /** 如果用户不存在，是否自动创建一个账号 */
   autoRegister?: Maybe<Scalars['Boolean']>;
   clientIp?: Maybe<Scalars['String']>;
+  /** 设置用户自定义字段，要求符合 Array<{ key: string; value: string }> 格式 */
   params?: Maybe<Scalars['String']>;
+  /** 请求上下文信息，将会传递到 pipeline 中 */
+  context?: Maybe<Scalars['String']>;
 };
 
 export type PolicyStatementInput = {
@@ -1772,7 +1796,10 @@ export type RegisterByUsernameInput = {
   forceLogin?: Maybe<Scalars['Boolean']>;
   generateToken?: Maybe<Scalars['Boolean']>;
   clientIp?: Maybe<Scalars['String']>;
+  /** 设置用户自定义字段，要求符合 Array<{ key: string; value: string }> 格式 */
   params?: Maybe<Scalars['String']>;
+  /** 请求上下文信息，将会传递到 pipeline 中 */
+  context?: Maybe<Scalars['String']>;
 };
 
 export type RegisterProfile = {
@@ -1817,7 +1844,10 @@ export type RegisterByEmailInput = {
   forceLogin?: Maybe<Scalars['Boolean']>;
   generateToken?: Maybe<Scalars['Boolean']>;
   clientIp?: Maybe<Scalars['String']>;
+  /** 设置用户自定义字段，要求符合 Array<{ key: string; value: string }> 格式 */
   params?: Maybe<Scalars['String']>;
+  /** 请求上下文信息，将会传递到 pipeline 中 */
+  context?: Maybe<Scalars['String']>;
 };
 
 export type RegisterByPhoneCodeInput = {
@@ -1828,7 +1858,10 @@ export type RegisterByPhoneCodeInput = {
   forceLogin?: Maybe<Scalars['Boolean']>;
   generateToken?: Maybe<Scalars['Boolean']>;
   clientIp?: Maybe<Scalars['String']>;
+  /** 设置用户自定义字段，要求符合 Array<{ key: string; value: string }> 格式 */
   params?: Maybe<Scalars['String']>;
+  /** 请求上下文信息，将会传递到 pipeline 中 */
+  context?: Maybe<Scalars['String']>;
 };
 
 export type SetUdfValueBatchInput = {
@@ -2161,6 +2194,7 @@ export type AssignRoleResponse = { assignRole?: Maybe<{ message?: Maybe<string>,
 export type AuthorizeResourceVariables = Exact<{
   namespace?: Maybe<Scalars['String']>;
   resource?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<ResourceType>;
   opts?: Maybe<Array<Maybe<AuthorizeResourceOpt>>>;
 }>;
 
@@ -2772,6 +2806,7 @@ export type FindUserVariables = Exact<{
   email?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -3060,6 +3095,7 @@ export type ResourcePermissionsVariables = Exact<{
   resourceType: ResourceType;
   resource: Scalars['String'];
   targetType?: Maybe<PolicyAssignmentTargetType>;
+  actions?: Maybe<ResourcePermissionsActionsInput>;
 }>;
 
 
@@ -3394,8 +3430,8 @@ export const AssignRoleDocument = `
 }
     `;
 export const AuthorizeResourceDocument = `
-    mutation authorizeResource($namespace: String, $resource: String, $opts: [AuthorizeResourceOpt]) {
-  authorizeResource(namespace: $namespace, resource: $resource, opts: $opts) {
+    mutation authorizeResource($namespace: String, $resource: String, $resourceType: ResourceType, $opts: [AuthorizeResourceOpt]) {
+  authorizeResource(namespace: $namespace, resource: $resource, resourceType: $resourceType, opts: $opts) {
     code
     message
   }
@@ -5248,8 +5284,8 @@ export const EmailTemplatesDocument = `
 }
     `;
 export const FindUserDocument = `
-    query findUser($email: String, $phone: String, $username: String) {
-  findUser(email: $email, phone: $phone, username: $username) {
+    query findUser($email: String, $phone: String, $username: String, $externalId: String) {
+  findUser(email: $email, phone: $phone, username: $username, externalId: $externalId) {
     id
     arn
     userPoolId
@@ -5961,8 +5997,8 @@ export const QueryMfaDocument = `
 }
     `;
 export const ResourcePermissionsDocument = `
-    query resourcePermissions($namespace: String!, $resourceType: ResourceType!, $resource: String!, $targetType: PolicyAssignmentTargetType) {
-  resourcePermissions(namespace: $namespace, resource: $resource, resourceType: $resourceType, targetType: $targetType) {
+    query resourcePermissions($namespace: String!, $resourceType: ResourceType!, $resource: String!, $targetType: PolicyAssignmentTargetType, $actions: ResourcePermissionsActionsInput) {
+  resourcePermissions(namespace: $namespace, resource: $resource, resourceType: $resourceType, targetType: $targetType, actions: $actions) {
     totalCount
     list {
       targetType

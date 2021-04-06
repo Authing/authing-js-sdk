@@ -37,6 +37,7 @@ import {
   IOauthParams,
   IOidcParams,
   PasswordSecurityLevel,
+  ProviderType,
   SecurityLevel
 } from './types';
 import {
@@ -57,10 +58,12 @@ import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { HttpClient, NaiveHttpClient } from '../common/HttpClient';
 import {
+  convertObjectToKeyValueList,
   convertUdv,
   convertUdvToKeyValuePair,
   encrypt,
-  formatAuthorizedResources
+  formatAuthorizedResources,
+  uploadFile
 } from '../utils';
 import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from '../..';
@@ -69,6 +72,7 @@ import { PublicKeyManager } from '../common/PublicKeyManager';
 import { KeyValuePair } from '../../types';
 import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
+import { ApplicationPublicDetail } from '../management/types';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   appId: undefined,
@@ -242,7 +246,18 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
@@ -251,15 +266,23 @@ export class AuthenticationClient {
       forceLogin = false,
       generateToken = false,
       clientIp,
-      params
+      params,
+      context,
+      customData
     } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { registerByEmail: user } = await registerByEmail(
       this.graphqlClient,
@@ -272,7 +295,8 @@ export class AuthenticationClient {
           forceLogin,
           generateToken,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -322,7 +346,18 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
@@ -331,15 +366,23 @@ export class AuthenticationClient {
       forceLogin = false,
       generateToken = false,
       clientIp,
-      params
+      params,
+      context,
+      customData
     } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { registerByUsername: user } = await registerByUsername(
       this.graphqlClient,
@@ -352,7 +395,8 @@ export class AuthenticationClient {
           forceLogin,
           generateToken,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -404,7 +448,18 @@ export class AuthenticationClient {
       forceLogin?: boolean;
       generateToken?: boolean;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
@@ -413,7 +468,9 @@ export class AuthenticationClient {
       forceLogin = false,
       generateToken = false,
       clientIp,
-      params
+      params,
+      context,
+      customData
     } = options;
     if (password) {
       password = await this.options.encryptFunction(
@@ -422,8 +479,14 @@ export class AuthenticationClient {
       );
     }
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { registerByPhoneCode: user } = await registerByPhoneCode(
       this.graphqlClient,
@@ -437,7 +500,8 @@ export class AuthenticationClient {
           forceLogin,
           generateToken,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -534,18 +598,42 @@ export class AuthenticationClient {
       autoRegister?: boolean;
       captchaCode?: string;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
-    const { autoRegister = false, captchaCode, clientIp, params } = options;
+    const {
+      autoRegister = false,
+      captchaCode,
+      clientIp,
+      params,
+      context,
+      customData
+    } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { loginByEmail: user } = await loginByEmail(
       this.graphqlClient,
@@ -557,7 +645,8 @@ export class AuthenticationClient {
           autoRegister,
           captchaCode,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -605,18 +694,42 @@ export class AuthenticationClient {
       autoRegister?: boolean;
       captchaCode?: string;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
-    const { autoRegister = false, captchaCode, clientIp, params } = options;
+    const {
+      autoRegister = false,
+      captchaCode,
+      clientIp,
+      params,
+      context,
+      customData
+    } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { loginByUsername: user } = await loginByUsername(
       this.graphqlClient,
@@ -628,7 +741,8 @@ export class AuthenticationClient {
           autoRegister,
           captchaCode,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -662,20 +776,43 @@ export class AuthenticationClient {
     code: string,
     options?: {
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
+      context?: { [x: string]: any };
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
-    const { clientIp, params } = options;
+    const { clientIp, params, context, customData } = options;
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { loginByPhoneCode: user } = await loginByPhoneCode(
       this.graphqlClient,
       this.tokenProvider,
       {
-        input: { phone, code, clientIp, params: extraParams }
+        input: {
+          phone,
+          code,
+          clientIp,
+          params: extraParams,
+          context: extraContext
+        }
       }
     );
     this.setCurrentUser(user);
@@ -718,18 +855,42 @@ export class AuthenticationClient {
       captchaCode?: string;
       autoRegister?: boolean;
       clientIp?: string;
+      /**
+       * @deprecated use customData instead
+       */
       params?: Array<{ key: string; value: any }>;
+      /**
+       * @description 将会写入配置的用户自定义字段
+       */
+      customData?: { [x: string]: any };
+      /**
+       * @description 请求上下文，将会传递到 Pipeline 中
+       */
+      context?: { [x: string]: any };
     }
   ): Promise<User> {
     options = options || {};
-    const { captchaCode, autoRegister = false, clientIp, params } = options;
+    const {
+      captchaCode,
+      autoRegister = false,
+      clientIp,
+      params,
+      context,
+      customData
+    } = options;
     password = await this.options.encryptFunction(
       password,
       await this.publicKeyManager.getPublicKey()
     );
     let extraParams = null;
-    if (params) {
+    if (customData) {
+      extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
+    } else if (params) {
       extraParams = JSON.stringify(params);
+    }
+    let extraContext = null;
+    if (context) {
+      extraContext = JSON.stringify(context);
     }
     const { loginByPhonePassword: user } = await loginByPhonePassword(
       this.graphqlClient,
@@ -741,7 +902,8 @@ export class AuthenticationClient {
           captchaCode,
           autoRegister,
           clientIp,
-          params: extraParams
+          params: extraParams,
+          context: extraContext
         }
       }
     );
@@ -1145,6 +1307,37 @@ export class AuthenticationClient {
   }
 
   /**
+   * @name unLinkAccount
+   * @name_zh 解除账号绑定
+   * @description 将社交账号从主账号（手机号、邮箱账号）解绑。
+   *
+   * @param {Object} options
+   * @param {string} options.primaryUserToken 主账号 Token
+   * @param {string} options.provider 社交账号的提供商名称
+   *
+   * @example
+   *
+   * authenticationClient.unLinkAccount({ primaryUserToken: '', provider: 'wechat:pc' })
+   *
+   * @returns {{code: 200, message: "解绑成功"}}
+   * @memberof AuthenticationClient
+   */
+  async unLinkAccount(options: {
+    primaryUserToken: string;
+    provider: ProviderType;
+  }) {
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.baseClient.appHost}/api/v2/users/unlink`,
+      data: {
+        primaryUserToken: options.primaryUserToken,
+        provider: options.provider
+      }
+    });
+    return { code: 200, message: '解绑成功' };
+  }
+
+  /**
    * @name bindPhone
    * @name_zh 绑定手机号
    * @description 用户初次绑定手机号，如果需要修改手机号请使用 updatePhone 接口。
@@ -1494,46 +1687,13 @@ export class AuthenticationClient {
    * @description 上传图片
    */
   private uploadPhoto(cb: (src: string) => void) {
-    const inputElem = document.createElement('input');
-    inputElem.type = 'file';
-    inputElem.accept = 'image/*';
-
     const authing = this;
-
-    inputElem.onchange = () => {
-      const file = inputElem.files[0];
-      let formData = new FormData();
-      formData.append('file', file);
-      let xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        // 上传成功
-        if (this.readyState === 4) {
-          try {
-            const data = JSON.parse(this.responseText);
-            const { code, message } = data;
-            if (code !== 200) {
-              authing.options.onError(code, message);
-              throw new Error(JSON.stringify({ code, message }));
-            }
-            const {
-              data: { url }
-            } = data;
-            cb(url);
-          } catch (error) {
-            const code = 500;
-            const message = `上传图片失败, error = ${error.message}`;
-            authing.options.onError(code, message);
-            throw new Error(JSON.stringify({ code, message }));
-          }
-        }
-      };
-      xhr.open(
-        'POST',
-        `${this.baseClient.appHost}/api/v2/upload?folder=avatar`
-      );
-      xhr.send(formData);
-    };
-    inputElem.click();
+    uploadFile({
+      accept: 'image/*',
+      url: `${this.baseClient.appHost}/api/v2/upload?folder=avatar`
+    })
+      .then(({ url }) => cb(url))
+      .catch(({ code, message }) => authing.options.onError(code, message));
   }
 
   /**
@@ -2307,5 +2467,23 @@ export class AuthenticationClient {
     });
 
     return hasRole;
+  }
+
+  /**
+   * @description 获取当前用户能够访问的应用
+   */
+  public async listApplications(params?: {
+    page: number;
+    limit: number;
+  }): Promise<{
+    totalCount: number;
+    list: ApplicationPublicDetail[];
+  }> {
+    const { page = 1, limit = 10 } = params || {};
+    const data = await this.httpClient.request({
+      url: `${this.baseClient.appHost}/api/v2/users/me/applications/allowed?page=${page}&limit=${limit}`,
+      method: 'GET'
+    });
+    return data;
   }
 }

@@ -18,10 +18,11 @@ import { StatisticsManagementClient } from './StatisticsManagementClient';
 import jwtDecode from 'jwt-decode';
 import { encrypt } from '../utils';
 import { PublicKeyManager } from '../common/PublicKeyManager';
-import { ApplicationManagementClient } from './ApplicationManagementClient';
 import { UserActionManagementClient } from './UserActionManagementClient';
 import { ResouceManagementClient } from './ResouceManagementClient';
 import { NamespaceManagementClient } from './NamespaceManagementClient';
+import { ApplicationsManagementClient } from './ApplicationsManagementClient';
+import { MFAManagementClient } from './MFAManagementClient';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -53,10 +54,11 @@ export class ManagementClient {
   groups: GroupsManagementClient;
   whitelist: WhitelistManagementClient;
   statistics: StatisticsManagementClient;
-  application: ApplicationManagementClient;
   userAction: UserActionManagementClient;
   resource: ResouceManagementClient;
   namespace: NamespaceManagementClient;
+  applications: ApplicationsManagementClient
+  mfa: MFAManagementClient;
 
   constructor(options: ManagementClientOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -141,11 +143,6 @@ export class ManagementClient {
       this.httpClient,
       this.tokenProvider
     );
-    this.application = new ApplicationManagementClient(
-      this.options,
-      this.httpClient,
-      this.tokenProvider
-    );
     this.userAction = new UserActionManagementClient(
       this.options,
       this.httpClient,
@@ -158,6 +155,17 @@ export class ManagementClient {
     );
     this.namespace = new NamespaceManagementClient(
       this.options,
+      this.httpClient,
+      this.tokenProvider
+    );
+    this.applications = new ApplicationsManagementClient(
+      this.options,
+      this.httpClient,
+      this.tokenProvider
+    )
+    this.mfa = new MFAManagementClient(
+      this.options,
+      this.graphqlClient,
       this.httpClient,
       this.tokenProvider
     );
