@@ -126,6 +126,7 @@ export class ManagementClient {
     this.acl = new AclManagementClient(
       this.options,
       this.graphqlClient,
+      this.httpClient,
       this.tokenProvider
     );
     this.whitelist = new WhitelistManagementClient(

@@ -179,10 +179,13 @@ test('获取用户角色列表', async t => {
 });
 
 test.skip('获取用户角色列表 namespace', async t => {
-  const roles = await managementClient.users.listRoles('603f567865d782899ffb0b6e', '603f52f97cd214a8805c0cc8');
-  console.log(roles)
-  t.assert(roles)
-})
+  const roles = await managementClient.users.listRoles(
+    '603f567865d782899ffb0b6e',
+    '603f52f97cd214a8805c0cc8'
+  );
+  console.log(roles);
+  t.assert(roles);
+});
 
 test('删除用户', async t => {
   const user = await managementClient.users.create({
@@ -253,7 +256,7 @@ test('getUdfValueBatch', async t => {
 });
 
 test('setUdfValueBatch', async t => {
-  t.assert(true)
+  t.assert(true);
   try {
     await managementClient.users.setUdfValueBatch([
       {
@@ -279,4 +282,14 @@ test('setUdfValueBatch', async t => {
   } catch (error) {
     console.log(error);
   }
+});
+
+test('踢下线一批用户', async t => {
+  let username = Math.random()
+    .toString(26)
+    .slice(2);
+  let pwd = '123456';
+  let user = await managementClient.users.create({ username, password: pwd });
+  let data = await managementClient.users.kick([user.id]);
+  t.assert(data.code === 200);
 });

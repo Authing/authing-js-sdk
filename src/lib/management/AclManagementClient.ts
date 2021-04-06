@@ -1,6 +1,17 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import {
+  IAppAccessPolicy,
+  IAppAccessPolicyQueryFilter,
+  IApplication,
+  IApplicationAccessPolicies,
+  IResourceDto,
+  IResourceQueryFilter,
+  IResourceResponse,
+  IResourceUpdateDto,
+  ManagementClientOptions
+} from './types';
+import {
   ManagementClientOptions,
   ProgrammaticAccessAccount,
   ProgrammaticAccessAccountList
@@ -48,14 +59,17 @@ export class AclManagementClient {
   graphqlClient: GraphqlClient;
   httpClient: HttpClient;
   tokenProvider: ManagementTokenProvider;
+  httpClient: HttpClient;
 
   constructor(
     options: ManagementClientOptions,
     graphqlClient: GraphqlClient,
+    httpClient: HttpClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
     this.graphqlClient = graphqlClient;
+    this.httpClient = httpClient;
     this.tokenProvider = tokenProvider;
   }
 
@@ -207,6 +221,268 @@ export class AclManagementClient {
    *
    */
   public async listResourcePermissions() {}
+
+  public async getResources(options?: IResourceQueryFilter) {
+    return await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/resources`,
+      params: {
+        namespaceCode: options?.namespaceCode,
+        type: options?.type,
+        limit: options?.limit || 10,
+        page: options?.page || 1
+      }
+    });
+  }
+
+  public async createResource(
+    options: IResourceDto
+  ): Promise<IResourceResponse> {
+    if (!options) {
+      throw new Error('请传入资源数据');
+    }
+    if (!options.code) {
+      throw new Error('请为资源设定一个资源标识符');
+    }
+    if (!options.actions || options?.actions.length === 0) {
+      throw new Error('请至少定义一个资源操作');
+    }
+    if (!options.namespace) {
+      throw new Error('请传入权限分组标识符');
+    }
+    return await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/resources`,
+      data: options
+    });
+  }
+
+  public async updateResource(
+    code: string,
+    options: IResourceUpdateDto
+  ): Promise<IResourceResponse> {
+    if (!code) {
+      throw new Error('请传入资源标识符');
+    }
+    return await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/resources/${code}`,
+      data: options
+    });
+  }
+  public async deleteResource(
+    code: string,
+    namespaceCode: string
+  ): Promise<boolean> {
+    if (!code) {
+      throw new Error('请传入资源标识符');
+    }
+    if (!namespaceCode) {
+      throw new Error('请传入权限分组标识符');
+    }
+    await this.httpClient.request({
+      method: 'DELETE',
+      url: `${this.options.host}/api/v2/resources/${code}`,
+      params: {
+        namespace: namespaceCode
+      }
+    });
+    return true;
+  }
+
+  public async getApplicationAccessPolicies(
+    options: IAppAccessPolicyQueryFilter
+  ) : Promise<IApplicationAccessPolicies> {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    const { appId, page, limit } = options;
+    return await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/records`,
+      params: {
+        page,
+        limit
+      }
+    });
+  }
+  public async enableApplicationAccessPolicy(options: IAppAccessPolicy) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    if (!options?.targetType) {
+      throw new Error(
+        '请传入主体类型，可选值为 USER、ROLE、ORG、GROUP，含义为用户、角色、组织机构节点、用户分组'
+      );
+    }
+    if (!options?.targetIdentifiers) {
+      throw new Error('请传入主体 id');
+    }
+    const {
+      namespace,
+      targetIdentifiers,
+      targetType,
+      appId,
+      inheritByChildren
+    } = options;
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/enable-effect`,
+      data: {
+        targetType,
+        namespace,
+        targetIdentifiers,
+        inheritByChildren
+      }
+    });
+    return { code: 200, message: '启用应用访问控制策略成功' };
+  }
+  public async disableApplicationAccessPolicy(options: IAppAccessPolicy) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    if (!options?.targetType) {
+      throw new Error(
+        '请传入主体类型，可选值为 USER、ROLE、ORG、GROUP，含义为用户、角色、组织机构节点、用户分组'
+      );
+    }
+    if (!options?.targetIdentifiers) {
+      throw new Error('请传入主体 id');
+    }
+
+    const {
+      namespace,
+      targetIdentifiers,
+      targetType,
+      appId,
+      inheritByChildren
+    } = options;
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/disable-effect`,
+      data: {
+        targetType,
+        namespace,
+        targetIdentifiers,
+        inheritByChildren
+      }
+    });
+    return { code: 200, message: '停用应用访问控制策略成功' };
+  }
+  public async deleteApplicationAccessPolicy(options: IAppAccessPolicy) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    if (!options?.targetType) {
+      throw new Error(
+        '请传入主体类型，可选值为 USER、ROLE、ORG、GROUP，含义为用户、角色、组织机构节点、用户分组'
+      );
+    }
+    if (!options?.targetIdentifiers) {
+      throw new Error('请传入主体 id');
+    }
+
+    const {
+      namespace,
+      targetIdentifiers,
+      targetType,
+      appId,
+      inheritByChildren
+    } = options;
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/revoke`,
+      data: {
+        targetType,
+        namespace,
+        targetIdentifiers,
+        inheritByChildren
+      }
+    });
+    return { code: 200, message: '删除应用访问控制策略成功' };
+  }
+  public async allowAccessApplication(options: IAppAccessPolicy) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    if (!options?.targetType) {
+      throw new Error(
+        '请传入主体类型，可选值为 USER、ROLE、ORG、GROUP，含义为用户、角色、组织机构节点、用户分组'
+      );
+    }
+    if (!options?.targetIdentifiers) {
+      throw new Error('请传入主体 id');
+    }
+    const {
+      namespace,
+      targetIdentifiers,
+      targetType,
+      appId,
+      inheritByChildren
+    } = options;
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/allow`,
+      data: {
+        targetType,
+        namespace,
+        targetIdentifiers,
+        inheritByChildren
+      }
+    });
+    return { code: 200, message: '允许主体访问应用的策略配置已生效' };
+  }
+  public async denyAccessApplication(options: IAppAccessPolicy) {
+    if (!options?.appId) {
+      throw new Error('请传入 appId');
+    }
+    if (!options?.targetType) {
+      throw new Error(
+        '请传入主体类型，可选值为 USER、ROLE、ORG、GROUP，含义为用户、角色、组织机构节点、用户分组'
+      );
+    }
+    if (!options?.targetIdentifiers) {
+      throw new Error('请传入主体 id');
+    }
+    const {
+      namespace,
+      targetIdentifiers,
+      targetType,
+      appId,
+      inheritByChildren
+    } = options;
+    await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/authorization/deny`,
+      data: {
+        targetType,
+        namespace,
+        targetIdentifiers,
+        inheritByChildren
+      }
+    });
+    return { code: 200, message: '拒绝主体访问应用的策略配置已生效' };
+  }
+  public async updateDefaultApplicationAccessPolicy(options: {
+    defaultStrategy: 'ALLOW_ALL' | 'DENY_ALL';
+    appId: string;
+  }): Promise<IApplication> {
+    if (!options?.appId) {
+      throw new Error('请传入应用 id');
+    }
+    if (!options?.defaultStrategy) {
+      throw new Error(
+        '请传入默认策略，可选值为 ALLOW_ALL、DENY_ALL，含义为默认允许所有用户登录应用、默认拒绝所有用户登录应用'
+      );
+    }
+    return await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${options.appId}`,
+      data: {
+        permissionStrategy: { defaultStrategy: options.defaultStrategy }
+      }
+    });
+  }
 
   /**
    * 编程访问账号列表
