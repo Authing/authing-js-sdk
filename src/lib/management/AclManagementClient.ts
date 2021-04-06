@@ -450,7 +450,7 @@ export class AclManagementClient {
     }
     return await this.httpClient.request({
       method: 'POST',
-      url: `${this.options.host}/api/v2/applications/${options.appId}/authorization/allow`,
+      url: `${this.options.host}/api/v2/applications/${options.appId}`,
       data: {
         permissionStrategy: { defaultStrategy: options.defaultStrategy }
       }

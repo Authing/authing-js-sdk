@@ -147,3 +147,54 @@ test('停用应用访问控制策略', async t => {
   });
   t.assert(res2.code === 200);
 });
+
+test('配置「允许主体（用户、角色、分组、组织机构节点）访问应用」的控制策略', async t => {
+  let username = Math.random()
+    .toString(26)
+    .slice(2);
+  let pwd = '123456';
+  let user = await managementClient.users.create({ username, password: pwd });
+  let res = await managementClient.acl.allowAccessApplication({
+    appId: process.env.AUTHING_APP_ID,
+    targetType: 'USER',
+    targetIdentifiers: [user.id],
+    namespace: 'default'
+  });
+  t.assert(res.code === 200);
+  let res2 = await managementClient.acl.getApplicationAccessPolicies({
+    appId: process.env.AUTHING_APP_ID
+  });
+  t.truthy(res2.list.find((v: any) => v.targetIdentifier === user.id));
+});
+
+test('配置「拒绝主体（用户、角色、分组、组织机构节点）访问应用」的控制策略', async t => {
+  let username = Math.random()
+    .toString(26)
+    .slice(2);
+  let pwd = '123456';
+  let user = await managementClient.users.create({ username, password: pwd });
+  let res = await managementClient.acl.denyAccessApplication({
+    appId: process.env.AUTHING_APP_ID,
+    targetType: 'USER',
+    targetIdentifiers: [user.id],
+    namespace: 'default'
+  });
+  t.assert(res.code === 200);
+  let res2 = await managementClient.acl.getApplicationAccessPolicies({
+    appId: process.env.AUTHING_APP_ID
+  });
+  t.truthy(res2.list.find((v: any) => v.targetIdentifier === user.id));
+});
+
+test('更改默认应用访问策略（默认拒绝所有用户访问应用、默认允许所有用户访问应用）', async t => {
+  let res2 = await managementClient.acl.updateDefaultApplicationAccessPolicy({
+    defaultStrategy: 'DENY_ALL',
+    appId: process.env.AUTHING_APP_ID
+  });
+  t.assert(res2.permissionStrategy.defaultStrategy === 'DENY_ALL');
+  let res3 = await managementClient.acl.updateDefaultApplicationAccessPolicy({
+    defaultStrategy: 'ALLOW_ALL',
+    appId: process.env.AUTHING_APP_ID
+  });
+  t.assert(res3.permissionStrategy.defaultStrategy === 'ALLOW_ALL');
+});
