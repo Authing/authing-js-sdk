@@ -61,7 +61,8 @@ import {
   convertUdv,
   convertUdvToKeyValuePair,
   encrypt,
-  formatAuthorizedResources
+  formatAuthorizedResources,
+  uploadFile
 } from '../utils';
 import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from '../..';
@@ -70,6 +71,7 @@ import { PublicKeyManager } from '../common/PublicKeyManager';
 import { KeyValuePair } from '../../types';
 import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
+import { ApplicationPublicDetail } from '../management/types';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   appId: undefined,
@@ -695,10 +697,10 @@ export class AuthenticationClient {
        * @deprecated use customData instead
        */
       params?: Array<{ key: string; value: any }>;
-            /**
+      /**
        * @description 将会写入配置的用户自定义字段
        */
-             customData?: { [x: string]: any };
+      customData?: { [x: string]: any };
       /**
        * @description 请求上下文，将会传递到 Pipeline 中
        */
@@ -1321,7 +1323,7 @@ export class AuthenticationClient {
    */
   async unLinkAccount(options: {
     primaryUserToken: string;
-    provider: ProviderType
+    provider: ProviderType;
   }) {
     await this.httpClient.request({
       method: 'POST',
@@ -1684,46 +1686,13 @@ export class AuthenticationClient {
    * @description 上传图片
    */
   private uploadPhoto(cb: (src: string) => void) {
-    const inputElem = document.createElement('input');
-    inputElem.type = 'file';
-    inputElem.accept = 'image/*';
-
     const authing = this;
-
-    inputElem.onchange = () => {
-      const file = inputElem.files[0];
-      let formData = new FormData();
-      formData.append('file', file);
-      let xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        // 上传成功
-        if (this.readyState === 4) {
-          try {
-            const data = JSON.parse(this.responseText);
-            const { code, message } = data;
-            if (code !== 200) {
-              authing.options.onError(code, message);
-              throw new Error(JSON.stringify({ code, message }));
-            }
-            const {
-              data: { url }
-            } = data;
-            cb(url);
-          } catch (error) {
-            const code = 500;
-            const message = `上传图片失败, error = ${error.message}`;
-            authing.options.onError(code, message);
-            throw new Error(JSON.stringify({ code, message }));
-          }
-        }
-      };
-      xhr.open(
-        'POST',
-        `${this.baseClient.appHost}/api/v2/upload?folder=avatar`
-      );
-      xhr.send(formData);
-    };
-    inputElem.click();
+    uploadFile({
+      accept: 'image/*',
+      url: `${this.baseClient.appHost}/api/v2/upload?folder=avatar`
+    })
+      .then(({ url }) => cb(url))
+      .catch(({ code, message }) => authing.options.onError(code, message));
   }
 
   /**
@@ -2459,5 +2428,23 @@ export class AuthenticationClient {
       ...(username && { username }),
       ...(valid !== 'yes' && { message: 'ticket 不合法' })
     };
+  }
+
+  /**
+   * @description 获取当前用户能够访问的应用
+   */
+  public async listApplications(params?: {
+    page: number;
+    limit: number;
+  }): Promise<{
+    totalCount: number;
+    list: ApplicationPublicDetail[];
+  }> {
+    const { page = 1, limit = 10 } = params || {};
+    const data = await this.httpClient.request({
+      url: `${this.baseClient.appHost}/api/v2/users/me/applications/allowed?page=${page}&limit=${limit}`,
+      method: 'GET'
+    });
+    return data;
   }
 }

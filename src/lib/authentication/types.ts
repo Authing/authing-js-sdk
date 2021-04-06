@@ -397,6 +397,8 @@ export interface ICasParams {
   service?: string;
 }
 
+export type TotpSource = 'APPLICATION' | 'SELF';
+
 export type ProviderType =
   | 'wechat:pc'
   | 'github'
