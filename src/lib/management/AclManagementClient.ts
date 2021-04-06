@@ -9,9 +9,6 @@ import {
   IResourceQueryFilter,
   IResourceResponse,
   IResourceUpdateDto,
-  ManagementClientOptions
-} from './types';
-import {
   ManagementClientOptions,
   ProgrammaticAccessAccount,
   ProgrammaticAccessAccountList
@@ -59,7 +56,6 @@ export class AclManagementClient {
   graphqlClient: GraphqlClient;
   httpClient: HttpClient;
   tokenProvider: ManagementTokenProvider;
-  httpClient: HttpClient;
 
   constructor(
     options: ManagementClientOptions,
