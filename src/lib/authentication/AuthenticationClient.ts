@@ -2090,7 +2090,7 @@ export class AuthenticationClient {
   }
 
   _buildSamlAuthorizeUrl() {
-    return this.baseClient.appHost + '/saml-idp/' + this.options.appId;
+    return this.baseClient.appHost + '/api/v2/saml-idp/' + this.options.appId;
   }
   _buildCasAuthorizeUrl(options: ICasParams) {
     if (options?.service) {
