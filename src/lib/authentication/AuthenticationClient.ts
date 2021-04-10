@@ -2473,4 +2473,35 @@ export class AuthenticationClient {
     });
     return data;
   }
+
+  /**
+   * @description 检验 idToken 或 accessToken
+   */
+  async validateToken(options: { accessToken?: string; idToken?: string }) {
+    if (!options) {
+      throw new Error('请在传入的参数对象中包含 accessToken 或 idToken 字段');
+    }
+    if (options.accessToken && options.idToken) {
+      throw new Error('accessToken 和 idToken 只能传入一个，不能同时传入');
+    }
+    if (options.idToken) {
+      const data = await this.naiveHttpClient.request({
+        url: `${this.baseClient.appHost}/api/v2/oidc/validate_token`,
+        method: 'GET',
+        params: {
+          id_token: options.idToken
+        }
+      });
+      return data;
+    } else if (options.accessToken) {
+      const data = await this.naiveHttpClient.request({
+        url: `${this.baseClient.appHost}/api/v2/oidc/validate_token`,
+        method: 'GET',
+        params: {
+          access_token: options.accessToken
+        }
+      });
+      return data;
+    }
+  }
 }

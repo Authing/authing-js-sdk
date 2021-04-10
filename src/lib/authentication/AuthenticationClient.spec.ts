@@ -474,7 +474,7 @@ test('getUdfValue', async t => {
   t.assert(data2.school === undefined);
 });
 
-test.only('拼接 OIDC 授权码模式授权链接', async t => {
+test('拼接 OIDC 授权码模式授权链接', async t => {
   const authing = new AuthenticationClient({
     appId: '9072248490655972',
     appHost: 'https://oidc1.authing.cn',
@@ -483,7 +483,10 @@ test.only('拼接 OIDC 授权码模式授权链接', async t => {
     tokenEndPointAuthMethod: 'client_secret_basic',
     protocol: 'oidc'
   });
-  let url1 = authing.buildAuthorizeUrl({ responseType: 'code', responseMode: 'form_post' });
+  let url1 = authing.buildAuthorizeUrl({
+    responseType: 'code',
+    responseMode: 'form_post'
+  });
   let url1Data = new URL(url1);
 
   t.assert(url1Data.hostname === 'oidc1.authing.cn');
@@ -797,4 +800,16 @@ test.skip('获取当前用户能访问的应用', async t => {
   const { list, totalCount } = await authing.listApplications();
   t.assert(list);
   t.assert(totalCount !== undefined);
+});
+
+test('在线验证 idToken 或 accessToken', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const email = generateRandomString() + '@test.com';
+  const password = generateRandomString();
+  await authing.registerByEmail(email, password);
+  let user2 = await authing.loginByEmail(email, password);
+  let res = await authing.validateToken({ idToken: user2.token });
+  t.assert(res.sub === user2.id);
 });
