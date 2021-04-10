@@ -1601,7 +1601,6 @@ export class AuthenticationClient {
    *
    * @example
    * const authenticationClient = new AuthenticationClient({
-   *   userPoolId: '你的用户池 ID',
    *   appId: '应用 ID'
    * })
    *
@@ -1649,7 +1648,6 @@ export class AuthenticationClient {
    *
    * @example
    * const authenticationClient = new AuthenticationClient({
-   *   userPoolId: '你的用户池 ID',
    *   appId: '应用 ID'
    * })
    *
@@ -1685,10 +1683,11 @@ export class AuthenticationClient {
   /**
    * @description 上传图片
    */
-  private uploadPhoto(cb: (src: string) => void) {
+  private uploadPhoto(accept: string, cb: (src: string) => void) {
+    accept = accept || 'image/*';
     const authing = this;
     uploadFile({
-      accept: 'image/*',
+      accept,
       url: `${this.baseClient.appHost}/api/v2/upload?folder=avatar`
     })
       .then(({ url }) => cb(url))
@@ -1696,14 +1695,42 @@ export class AuthenticationClient {
   }
 
   /**
+   * @deprecated use uploadAvatar instead
    * @description 更新用户头像
    */
-  public async updateAvatar() {
+  public async updateAvatar(options?: { accept?: string }) {
+    return await this.uploadAvatar(options);
+  }
+
+  /**
+   * @description 一键上传图片并更新用户头像
+   *
+   * @param {Object} options
+   * @param {string} options.accept 支持的图片格式，默认为 'image/*'
+   *
+   * @example
+   * const authenticationClient = new AuthenticationClient({
+   *   appId: 'APP_ID',
+   *   appHost: 'https://xxx.authing.cn'
+   * })
+   *
+   * // 会自动打开浏览器文件上传框，并自动完成图片文件上传 CDN、修改用户头像操作。
+   * authenticationClient.uploadAvatar()
+   *
+   * // 只支持 png 格式图片
+   * authenticationClient.uploadAvatar({
+   *   accept: '.png'
+   * })
+   *
+   * @returns
+   */
+  public async uploadAvatar(options?: { accept?: string }) {
+    const { accept } = options || {};
     this.checkLoggedIn();
 
     // TODO: 设置超时时间
     const task = new Promise(resolve => {
-      this.uploadPhoto(src => {
+      this.uploadPhoto(accept, src => {
         resolve(src);
       });
     });
