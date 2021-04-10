@@ -577,9 +577,6 @@ test('拼接 OAuth 授权链接', async t => {
 test('拼接 Saml 授权链接', async t => {
   const authing = new AuthenticationClient({
     appId: '9072248490655972',
-    secret: '16657960936447935',
-    redirectUri: 'https://baidu.com',
-    tokenEndPointAuthMethod: 'client_secret_basic',
     protocol: 'saml',
     appHost: 'https://oidc1.authing.cn'
   });
@@ -587,7 +584,7 @@ test('拼接 Saml 授权链接', async t => {
   let url1Data = new URL(url1);
 
   t.assert(url1Data.hostname === 'oidc1.authing.cn');
-  t.assert(url1Data.pathname === `/saml-idp/9072248490655972`);
+  t.assert(url1Data.pathname === `/api/v2/saml-idp/9072248490655972`);
 });
 
 test('拼接 CAS 授权链接', async t => {
