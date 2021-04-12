@@ -76,14 +76,14 @@ export class NamespaceManagementClient {
 
   /**
    * 创建权限分组
-   * @param name 权限分组名称
    * @param code 权限分组 Code
+   * @param name 权限分组名称
    * @param description 权限分组描述
    * @returns Promise<boolean>
    */
   public async create(
-    name: string,
     code: string,
+    name: string,
     description: string
   ): Promise<Namespace> {
     try {
