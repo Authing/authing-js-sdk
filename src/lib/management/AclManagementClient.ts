@@ -202,7 +202,7 @@ export class AclManagementClient {
       method: 'GET',
       url: `${this.options.host}/api/v2/resources`,
       params: {
-        namespaceCode: options?.namespaceCode,
+        namespaceCode: options?.namespace || options?.namespaceCode,
         type: options?.type,
         limit: options?.limit || 10,
         page: options?.page || 1
@@ -247,19 +247,19 @@ export class AclManagementClient {
   }
   public async deleteResource(
     code: string,
-    namespaceCode: string
+    namespace: string
   ): Promise<boolean> {
     if (!code) {
       throw new Error('请传入资源标识符');
     }
-    if (!namespaceCode) {
+    if (!namespace) {
       throw new Error('请传入权限分组标识符');
     }
     await this.httpClient.request({
       method: 'DELETE',
       url: `${this.options.host}/api/v2/resources/${code}`,
       params: {
-        namespace: namespaceCode
+        namespace
       }
     });
     return true;
@@ -267,7 +267,7 @@ export class AclManagementClient {
 
   public async getApplicationAccessPolicies(
     options: IAppAccessPolicyQueryFilter
-  ) : Promise<IApplicationAccessPolicies> {
+  ): Promise<IApplicationAccessPolicies> {
     if (!options?.appId) {
       throw new Error('请传入 appId');
     }

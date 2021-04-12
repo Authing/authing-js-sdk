@@ -338,7 +338,11 @@ export interface IResourceQueryFilter {
   page?: number;
   limit?: number;
   type?: 'DATA' | 'API' | 'MENU' | 'UI' | 'BUTTON';
+  /**
+   * @deprecated 请使用 namespace
+   */
   namespaceCode?: string;
+  namespace?: string;
 }
 
 export interface IResourceDto {
