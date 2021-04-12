@@ -1,4 +1,4 @@
-import { ManagementClientOptions, Namespaces } from './types';
+import { ManagementClientOptions, Namespaces, Namespace } from './types';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { HttpClient } from '../common/HttpClient';
 import { objectToQueryString } from '../utils';
@@ -6,7 +6,7 @@ import { objectToQueryString } from '../utils';
 /**
  * @class NamespaceManagementClient 权限分组管理
  * @name NamespaceManagementClient
- * @description 应用管理
+ * @description NamespaceManagementClient 权限分组管理
  *
  * @example
  *
@@ -17,8 +17,8 @@ import { objectToQueryString } from '../utils';
  *    userPoolId: "YOUR_USERPOOL_ID",
  *    secret: "YOUR_USERPOOL_SECRET",
  * })
- * managementClient.resource.list    // 权限分组列表
- * managementClient.resource.create // 创建权限分组
+ * managementClient.namespace.list    // 权限分组列表
+ * managementClient.namespace.create // 创建权限分组
  * \`\`\`
  *
  */
@@ -85,9 +85,9 @@ export class NamespaceManagementClient {
     name: string,
     code: string,
     description: string
-  ): Promise<boolean> {
+  ): Promise<Namespace> {
     try {
-      await this.httpClient.request({
+      const data = await this.httpClient.request({
         method: 'POST',
         url: `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}`,
         data: {
@@ -97,7 +97,7 @@ export class NamespaceManagementClient {
         }
       });
 
-      return true;
+      return data;
     } catch (error) {
       throw error;
     }
@@ -116,9 +116,9 @@ export class NamespaceManagementClient {
     name: string,
     code: string,
     description: string
-  ): Promise<boolean> {
+  ): Promise<Namespace> {
     try {
-      await this.httpClient.request({
+      const data = await this.httpClient.request({
         method: 'PUT',
         url: `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}/${namespaceId}`,
         data: {
@@ -128,7 +128,7 @@ export class NamespaceManagementClient {
         }
       });
 
-      return true;
+      return data;
     } catch (error) {
       throw error;
     }
