@@ -26,7 +26,8 @@ export class HttpClient {
       'x-authing-sdk-version': `js:${SDK_VERSION}`,
       'x-authing-userpool-id': this.options.userPoolId || '',
       'x-authing-request-from': this.options.requestFrom || 'sdk',
-      'x-authing-app-id': this.options.appId || ''
+      'x-authing-app-id': this.options.appId || '',
+      'x-authing-lang': this.options.lang || ''
     };
     if (!(config && config.headers && config.headers.authorization)) {
       // 如果用户不传 token，就使用 sdk 自己维护的
@@ -64,7 +65,8 @@ export class NaiveHttpClient extends HttpClient {
       'x-authing-sdk-version': `js:${SDK_VERSION}`,
       'x-authing-userpool-id': this.options.userPoolId || '',
       'x-authing-request-from': this.options.requestFrom || 'sdk',
-      'x-authing-app-id': this.options.appId || ''
+      'x-authing-app-id': this.options.appId || '',
+      'x-authing-lang': this.options.lang || ''
     };
 
     config.headers = { ...headers, ...config.headers };

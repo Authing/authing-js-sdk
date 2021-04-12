@@ -27,7 +27,8 @@ export class GraphqlClient {
       // @ts-ignore
       'x-authing-userpool-id': this.options.userPoolId || '',
       'x-authing-request-from': this.options.requestFrom || 'sdk',
-      'x-authing-app-id': this.options.appId || ''
+      'x-authing-app-id': this.options.appId || '',
+      'x-authing-lang': this.options.lang || ''
     };
     token && (headers.Authorization = `Bearer ${token}`);
     let data = null;

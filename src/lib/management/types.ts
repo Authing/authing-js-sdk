@@ -1,6 +1,7 @@
 import { Org } from '../../types/graphql.v2';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { HttpClient } from '../common/HttpClient';
+import { Lang } from '../../types';
 
 /**
  * 初始化 Authing SDK 的参数，secret 和 accessToken 必须传其中一个。
@@ -28,6 +29,10 @@ export interface ManagementClientOptions {
   publicKey?: string;
   httpClient?: typeof HttpClient;
   graphqlClient?: typeof GraphqlClient;
+  /**
+   * 语言
+   */
+  lang?: Lang;
 }
 
 /**

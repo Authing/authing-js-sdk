@@ -1,6 +1,7 @@
 import { GraphqlClient } from '../common/GraphqlClient';
 import { HttpClient } from '../common/HttpClient';
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
+import { Lang } from '../../types';
 
 /**
  * 初始化 AuthenticationClientOptions 的参数
@@ -48,6 +49,10 @@ export interface AuthenticationClientOptions {
   httpClient?: typeof HttpClient;
   graphqlClient?: typeof GraphqlClient;
   tokenProvider?: typeof AuthenticationTokenProvider;
+  /**
+   * 语言
+   */
+  lang?: Lang;
 
   /**
    * @deprecated 该参数已经废弃，请使用 appHost
