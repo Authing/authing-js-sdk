@@ -812,4 +812,6 @@ test('在线验证 idToken 或 accessToken', async t => {
   let user2 = await authing.loginByEmail(email, password);
   let res = await authing.validateToken({ idToken: user2.token });
   t.assert(res.sub === user2.id);
+  let res2 = await authing.validateToken({ idToken: '1' });
+  t.assert(res2.code === 400);
 });
