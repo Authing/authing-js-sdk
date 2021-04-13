@@ -197,7 +197,7 @@ export class AclManagementClient {
    */
   public async listResourcePermissions() {}
 
-  public async getResources(options?: IResourceQueryFilter) {
+  public async listResources(options?: IResourceQueryFilter) {
     return await this.httpClient.request({
       method: 'GET',
       url: `${this.options.host}/api/v2/resources`,
@@ -208,6 +208,14 @@ export class AclManagementClient {
         page: options?.page || 1
       }
     });
+  }
+
+  /**
+   * @deprecated use listResources
+   * @param options
+   */
+  public async getResources(options?: IResourceQueryFilter) {
+    return await this.listResources(options)
   }
 
   public async createResource(
