@@ -122,7 +122,7 @@ test('删除资源', async t => {
 });
 
 test('获取应用访问控制策略', async t => {
-  const list = await applications.getApplicationAccessPolicies(APP_ID);
+  const list = await applications.getAccessPolicies(APP_ID);
 
   t.assert(Array.isArray(list.list));
   t.assert(typeof list.totalCount === 'number');
@@ -134,15 +134,14 @@ test('配置「允许主体（用户、角色、分组、组织机构节点）�
     .slice(2);
   let pwd = '123456';
   let user = await managementClient.users.create({ username, password: pwd });
-  let res = await applications.allowAccessApplication(
+  let res = await applications.allowAccess(
     APP_ID,
     {
       targetType: 'USER',
       targetIdentifiers: [user.id],
-      namespace: 'default'
     });
   t.assert(res.code === 200);
-  let res2 = await applications.getApplicationAccessPolicies(APP_ID);
+  let res2 = await applications.getAccessPolicies(APP_ID);
   t.truthy(res2.list.find((v: any) => v.targetIdentifier === user.id));
 });
 
@@ -152,14 +151,13 @@ test('启用应用访问控制策略', async t => {
     .slice(2);
   let pwd = '123456';
   let user = await managementClient.users.create({ username, password: pwd });
-  await applications.allowAccessApplication(
+  await applications.allowAccess(
     APP_ID,
     {
       targetType: 'USER',
       targetIdentifiers: [user.id],
-      namespace: 'default'
     });
-  let res = await applications.enableApplicationAccessPolicy(
+  let res = await applications.enableAccessPolicy(
     APP_ID,
     {
       targetType: 'USER',
@@ -174,25 +172,24 @@ test('配置「拒绝主体（用户、角色、分组、组织机构节点）�
     .slice(2);
   let pwd = '123456';
   let user = await managementClient.users.create({ username, password: pwd });
-  let res = await applications.denyAccessApplication(
+  let res = await applications.denyAccess(
     APP_ID,
     {
       targetType: 'USER',
       targetIdentifiers: [user.id],
-      namespace: 'default'
     });
   t.assert(res.code === 200);
-  let res2 = await applications.getApplicationAccessPolicies(APP_ID);
+  let res2 = await applications.getAccessPolicies(APP_ID);
   t.truthy(res2.list.find((v: any) => v.targetIdentifier === user.id));
 });
 
 test('更改默认应用访问策略（默认拒绝所有用户访问应用、默认允许所有用户访问应用）', async t => {
-  let res2 = await applications.updateDefaultApplicationAccessPolicy(
+  let res2 = await applications.updateDefaultAccessPolicy(
     APP_ID,
     'DENY_ALL'
   );
   t.assert(res2.permissionStrategy.defaultStrategy === 'DENY_ALL');
-  let res3 = await applications.updateDefaultApplicationAccessPolicy(
+  let res3 = await applications.updateDefaultAccessPolicy(
     APP_ID,
     'ALLOW_ALL'
   );
@@ -206,7 +203,7 @@ test('创建角色', async t => {
     code: code
   });
 
-  const roleInfo = await applications.findRoleInfo(APP_ID, code);
+  const roleInfo = await applications.findRole(APP_ID, code);
   t.assert(role.code === roleInfo.code);
   t.assert(role.code === code);
 });
@@ -235,7 +232,7 @@ test('更新角色', async t => {
 test('查询角色详情', async t => {
   const code = generateRandomString(5);
   await applications.createRole(APP_ID, { code });
-  const role = await applications.findRoleInfo(APP_ID, code);
+  const role = await applications.findRole(APP_ID, code);
   t.assert(role);
   t.assert(role.code === code);
 });
@@ -244,7 +241,7 @@ test('删除角色', async t => {
   const code = generateRandomString(5);
   await applications.createRole(APP_ID, { code });
   await applications.deleteRole(APP_ID, code);
-  const role = await applications.findRoleInfo(APP_ID, code);
+  const role = await applications.findRole(APP_ID, code);
 
   t.assert(!role);
 });
@@ -267,7 +264,7 @@ test('批量删除角色', async t => {
 
 test("查询空 Code 的角色", async t => {
   const code = generateRandomString(5);
-  const role = await applications.findRoleInfo(APP_ID, code);
+  const role = await applications.findRole(APP_ID, code);
 
   t.assert(!role)
 })
@@ -277,7 +274,7 @@ test('listAuthorizedResources', async t => {
   const code = generateRandomString(5);
   await applications.createRole(APP_ID, { code });
 
-  const data = await applications.roleListAuthorizedResources(
+  const data = await applications.listAuthorizedResourcesByRole(
     APP_ID,
     code,
     ResourceType.Data

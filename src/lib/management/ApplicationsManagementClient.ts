@@ -165,7 +165,7 @@ export class ApplicationsManagementClient {
    * @param appId
    * @param options
    */
-  public async getApplicationAccessPolicies(
+  public async getAccessPolicies(
     appId: string,
     options?: {
       page?: number;
@@ -185,12 +185,12 @@ export class ApplicationsManagementClient {
    * @param appId
    * @param options
    */
-  public async enableApplicationAccessPolicy(
+  public async enableAccessPolicy(
     appId: string,
     options: {
       targetType: 'USER' | 'ROLE' | 'GROUP' | 'ORG';
       targetIdentifiers: string[];
-      inheritByChildren?: string;
+      inheritByChildren?: boolean;
     }
   ) {
     return await this.acl.enableApplicationAccessPolicy(
@@ -207,12 +207,12 @@ export class ApplicationsManagementClient {
    * @param appId
    * @param options
    */
-  public async disableApplicationAccessPolicy(
+  public async disableAccessPolicy(
     appId: string,
     options: {
       targetType: 'USER' | 'ROLE' | 'GROUP' | 'ORG';
       targetIdentifiers: string[];
-      inheritByChildren?: string;
+      inheritByChildren?: boolean;
     }
   ) {
     return await this.acl.disableApplicationAccessPolicy(
@@ -229,12 +229,12 @@ export class ApplicationsManagementClient {
    * @param appId
    * @param options
    */
-  public async deleteApplicationAccessPolicy(
+  public async deleteAccessPolicy(
     appId: string,
     options: {
       targetType: 'USER' | 'ROLE' | 'GROUP' | 'ORG';
       targetIdentifiers: string[];
-      inheritByChildren?: string;
+      inheritByChildren?: boolean;
     }
   ) {
     return await this.acl.deleteApplicationAccessPolicy(
@@ -251,19 +251,19 @@ export class ApplicationsManagementClient {
    * @param appId
    * @param options
    */
-  public async allowAccessApplication(
+  public async allowAccess(
     appId: string,
     options: {
       targetType: 'USER' | 'ROLE' | 'GROUP' | 'ORG';
       targetIdentifiers: string[];
-      namespace?: string;
-      inheritByChildren?: string;
+      inheritByChildren?: boolean;
     }
   ) {
     return await this.acl.allowAccessApplication(
       {
         ...options,
-        appId
+        appId,
+        namespace: appId
       }
     );
   }
@@ -273,19 +273,19 @@ export class ApplicationsManagementClient {
    * @param appId
    * @param options
    */
-  public async denyAccessApplication(
+  public async denyAccess(
     appId: string,
     options: {
       targetType: 'USER' | 'ROLE' | 'GROUP' | 'ORG';
       targetIdentifiers: string[];
-      namespace?: string;
-      inheritByChildren?: string;
+      inheritByChildren?: boolean;
     }
   ) {
     return await this.acl.denyAccessApplication(
       {
         ...options,
-        appId
+        appId,
+        namespace: appId
       }
     );
   }
@@ -295,7 +295,7 @@ export class ApplicationsManagementClient {
    * @param appId
    * @param defaultStrategy
    */
-  public async updateDefaultApplicationAccessPolicy(
+  public async updateDefaultAccessPolicy(
     appId: string,
     defaultStrategy: 'ALLOW_ALL' | 'DENY_ALL'
   ) {
@@ -355,14 +355,14 @@ export class ApplicationsManagementClient {
     );
   }
 
-  public async findRoleInfo(
+  public async findRole(
     appId: string,
     code: string
   ) {
     return this.roles.detail(code, appId);
   }
 
-  public async rolesList(
+  public async getRoles(
     appId: string,
     options?: {
       page?: number;
@@ -375,14 +375,14 @@ export class ApplicationsManagementClient {
     });
   }
 
-  public async rolesUsersList(
+  public async getUsersByRoleCode(
     appId: string,
     code: string
   ) {
     return await this.roles.listUsers(code, appId);
   }
 
-  public async roleAddUser(
+  public async addUsersToRole(
     appId: string,
     code: string,
     userIds: string[]
@@ -394,7 +394,7 @@ export class ApplicationsManagementClient {
     );
   }
 
-  public async roleRemoveUsers(
+  public async removeUsersFromRole(
     appId: string,
     code: string,
     userIds: string[]
@@ -406,7 +406,7 @@ export class ApplicationsManagementClient {
     );
   }
 
-  public async roleListAuthorizedResources(
+  public async listAuthorizedResourcesByRole(
     appId: string,
     code: string,
     resourceType?: ResourceType
