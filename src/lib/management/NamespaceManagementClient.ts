@@ -84,7 +84,7 @@ export class NamespaceManagementClient {
   public async create(
     code: string,
     name: string,
-    description: string
+    description?: string
   ): Promise<Namespace> {
     try {
       const data = await this.httpClient.request({
@@ -113,10 +113,13 @@ export class NamespaceManagementClient {
    */
   public async update(
     namespaceId: number,
-    name: string,
-    code: string,
-    description: string
+    updates: {
+      name?: string;
+      code?: string;
+      description?: string;
+    }
   ): Promise<Namespace> {
+    const { name, code, description } = updates;
     try {
       const data = await this.httpClient.request({
         method: 'PUT',
