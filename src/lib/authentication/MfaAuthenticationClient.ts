@@ -396,8 +396,8 @@ export class MfaAuthenticationClient {
    * @description 通过图片 URL 方式绑定人脸
    *
    * @param {object} options
-   * @param {string} options.photoA 人脸照片一地址
-   * @param {string} [options.photoB] 人脸照片二地址（用于比对）
+   * @param {string} options.baseFace 基础人脸照片
+   * @param {string} options.compareFace 用于对比的人脸照片地址
    * @param {string} [options.mfaToken] 若是在二次认证时绑定人脸，需要传入 mfaToken
    *
    * @example
@@ -410,11 +410,11 @@ export class MfaAuthenticationClient {
    * @memberof MfaAuthenticationClient
    */
   async associateFaceByUrl(options: {
-    photoA: string;
-    photoB?: string;
+    baseFace: string;
+    compareFace: string;
     mfaToken?: string;
   }): Promise<User> {
-    const { photoA, photoB, mfaToken } = options;
+    const { baseFace, compareFace, mfaToken } = options;
 
     const headers: AxiosRequestConfig['headers'] = {};
     if (mfaToken) {
@@ -426,8 +426,8 @@ export class MfaAuthenticationClient {
       method: 'POST',
       url: api,
       data: {
-        photoA,
-        photoB: photoB || photoA,
+        photoA: baseFace,
+        photoB: compareFace,
         isExternal: true
       },
       headers
@@ -487,8 +487,8 @@ export class MfaAuthenticationClient {
    * @description 通过传入 Blob 对象绑定人脸
    *
    * @param {object} options
-   * @param {string} options.blobA 人脸数据 Blob 对象一
-   * @param {string} [options.blobB] 人脸数据 Blob 对象二（用于比对）
+   * @param {string} options.baseFace 基础人脸数据 Blob 对象
+   * @param {string} options.compareFace 用于对比的人脸数据 Blob 对象
    * @param {string} [options.mfaToken] 若是在二次认证时绑定人脸，需要传入 mfaToken
    *
    * @example
@@ -502,10 +502,10 @@ export class MfaAuthenticationClient {
    */
   async associateFaceByBlob(opts: {
     mfaToken?: string;
-    blobA: Blob;
-    blobB: Blob;
+    baseFace: Blob;
+    compareFace: Blob;
   }): Promise<User> {
-    const { blobA, blobB, mfaToken } = opts;
+    const { baseFace, compareFace, mfaToken } = opts;
 
     const headers: AxiosRequestConfig['headers'] = {};
     if (mfaToken) {
@@ -516,11 +516,11 @@ export class MfaAuthenticationClient {
     let photoB;
     const uploadUrl = `${this.baseClient.appHost}/api/v2/upload?folder=face-photo&private=true`;
     try {
-      const { key: keyA } = await xhrUpload(blobA, uploadUrl);
+      const { key: keyA } = await xhrUpload(baseFace, uploadUrl);
       photoA = keyA;
 
-      if (blobB) {
-        const { key: keyB } = await xhrUpload(blobB, uploadUrl);
+      if (compareFace) {
+        const { key: keyB } = await xhrUpload(compareFace, uploadUrl);
         photoB = keyB;
       } else {
         photoB = keyA;
