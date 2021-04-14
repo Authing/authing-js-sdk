@@ -58,14 +58,14 @@ export class NamespaceManagementClient {
 
   /**
    * 删除权限分组
-   * @param namespaceId 权限分组 ID
+   * @param code 权限分组 Code
    * @returns Promise<boolean>
    */
-  public async delete(namespaceId: number): Promise<boolean> {
+  public async delete(code: string): Promise<boolean> {
     try {
       await this.httpClient.request({
         method: 'DELETE',
-        url: `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}/${namespaceId}`
+        url: `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}/code/${code}`
       });
 
       return true;
@@ -105,29 +105,28 @@ export class NamespaceManagementClient {
 
   /**
    * 修改权限分组
-   * @param namespaceId 权限分组 ID
+   * @param code 权限分组 Code
    * @param name 权限分组名称
    * @param code 权限分组 Code
    * @param description 权限分组描述
    * @returns Promise<boolean>
    */
   public async update(
-    namespaceId: number,
+    code: string,
     updates: {
       name?: string;
       code?: string;
       description?: string;
     }
   ): Promise<Namespace> {
-    const { name, code, description } = updates;
     try {
       const data = await this.httpClient.request({
         method: 'PUT',
-        url: `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}/${namespaceId}`,
+        url: `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}/code/${code}`,
         data: {
-          name,
-          code,
-          description
+          name: updates.name,
+          code: updates.code,
+          description: updates.description
         }
       });
 
