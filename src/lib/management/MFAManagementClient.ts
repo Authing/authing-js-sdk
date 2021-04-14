@@ -53,7 +53,7 @@ export class MFAManagementClient {
    * @memberof MFAManagementClient
    */
   async getStatus(userId: string): Promise<Record<UserMfaType, boolean>> {
-    const data = this.httpClient.request({
+    const data = await this.httpClient.request({
       method: 'GET',
       url: `${this.options.host}/api/v2/users/${userId}/mfa-bound`
     });
@@ -70,15 +70,15 @@ export class MFAManagementClient {
    *
    * @example
    *
-   * const mfaStatus = await managementClient.mfa.unAssociateMfa('USER_ID', UserMfaType.FACE);
+   * const mfaStatus = await managementClient.mfa.unAssociateMfa('USER_ID', 'FACE');
    *
    * @memberof MFAManagementClient
    */
-  async unAssociateMfa(userId: string, type: UserMfaType): Promise<void> {
-    const data = this.httpClient.request({
+  async unAssociateMfa(userId: string, type: UserMfaType): Promise<boolean> {
+    await this.httpClient.request({
       method: 'DELETE',
       url: `${this.options.host}/api/v2/users/${userId}/mfa-bound?type=${type}`
     });
-    return data;
+    return true;
   }
 }
