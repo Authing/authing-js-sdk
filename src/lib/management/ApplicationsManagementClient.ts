@@ -1,13 +1,15 @@
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import {
   ApplicationDetail,
-  ManagementClientOptions
+  ManagementClientOptions,
+  AgreementInput
 } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { AclManagementClient } from './AclManagementClient';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { RolesManagementClient } from './RolesManagementClient';
 import { ResourceType } from '../../types/graphql.v2';
+import { AgreementManagementClient } from './AgreementManagementClient';
 
 /**
  * @class ApplicationsManagementClient 管理分组
@@ -35,6 +37,7 @@ export class ApplicationsManagementClient {
   tokenProvider: ManagementTokenProvider;
   acl: AclManagementClient;
   roles: RolesManagementClient;
+  agreements: AgreementManagementClient;
 
   constructor(
     options: ManagementClientOptions,
@@ -55,6 +58,12 @@ export class ApplicationsManagementClient {
     this.roles = new RolesManagementClient(
       options,
       graphqlClient,
+      tokenProvider
+    );
+    this.agreements = new AgreementManagementClient(
+      options,
+      graphqlClient,
+      httpClient,
       tokenProvider
     );
   }
@@ -141,23 +150,14 @@ export class ApplicationsManagementClient {
       }>;
     }
   ) {
-    return await this.acl.updateResource(
-      options.code,
-      {
-        ...options,
-        namespace: appId
-      }
-    );
+    return await this.acl.updateResource(options.code, {
+      ...options,
+      namespace: appId
+    });
   }
 
-  public async deleteResource(
-    appId: string,
-    code: string
-  ) {
-    return await this.acl.deleteResource(
-      code,
-      appId
-    );
+  public async deleteResource(appId: string, code: string) {
+    return await this.acl.deleteResource(code, appId);
   }
 
   /**
@@ -172,12 +172,10 @@ export class ApplicationsManagementClient {
       limit?: number;
     }
   ) {
-    return await this.acl.getApplicationAccessPolicies(
-      {
-        ...options,
-        appId
-      }
-    );
+    return await this.acl.getApplicationAccessPolicies({
+      ...options,
+      appId
+    });
   }
 
   /**
@@ -193,13 +191,11 @@ export class ApplicationsManagementClient {
       inheritByChildren?: boolean;
     }
   ) {
-    return await this.acl.enableApplicationAccessPolicy(
-      {
-        ...options,
-        appId,
-        namespace: appId
-      }
-    );
+    return await this.acl.enableApplicationAccessPolicy({
+      ...options,
+      appId,
+      namespace: appId
+    });
   }
 
   /**
@@ -215,13 +211,11 @@ export class ApplicationsManagementClient {
       inheritByChildren?: boolean;
     }
   ) {
-    return await this.acl.disableApplicationAccessPolicy(
-      {
-        ...options,
-        appId,
-        namespace: appId
-      }
-    );
+    return await this.acl.disableApplicationAccessPolicy({
+      ...options,
+      appId,
+      namespace: appId
+    });
   }
 
   /**
@@ -237,13 +231,11 @@ export class ApplicationsManagementClient {
       inheritByChildren?: boolean;
     }
   ) {
-    return await this.acl.deleteApplicationAccessPolicy(
-      {
-        ...options,
-        appId,
-        namespace: appId
-      }
-    );
+    return await this.acl.deleteApplicationAccessPolicy({
+      ...options,
+      appId,
+      namespace: appId
+    });
   }
 
   /**
@@ -259,13 +251,11 @@ export class ApplicationsManagementClient {
       inheritByChildren?: boolean;
     }
   ) {
-    return await this.acl.allowAccessApplication(
-      {
-        ...options,
-        appId,
-        namespace: appId
-      }
-    );
+    return await this.acl.allowAccessApplication({
+      ...options,
+      appId,
+      namespace: appId
+    });
   }
 
   /**
@@ -281,13 +271,11 @@ export class ApplicationsManagementClient {
       inheritByChildren?: boolean;
     }
   ) {
-    return await this.acl.denyAccessApplication(
-      {
-        ...options,
-        appId,
-        namespace: appId
-      }
-    );
+    return await this.acl.denyAccessApplication({
+      ...options,
+      appId,
+      namespace: appId
+    });
   }
 
   /**
@@ -299,66 +287,45 @@ export class ApplicationsManagementClient {
     appId: string,
     defaultStrategy: 'ALLOW_ALL' | 'DENY_ALL'
   ) {
-    return await this.acl.updateDefaultApplicationAccessPolicy(
-      {
-        appId,
-        defaultStrategy
-      }
-    );
+    return await this.acl.updateDefaultApplicationAccessPolicy({
+      appId,
+      defaultStrategy
+    });
   }
 
   public async createRole(
     appId: string,
     options: {
-      code: string,
-      description?: string,
+      code: string;
+      description?: string;
     }
   ) {
-    return await this.roles.create(
-      options.code,
-      options.description,
-      appId
-    );
+    return await this.roles.create(options.code, options.description, appId);
   }
 
-  public async deleteRole(
-    appId: string,
-    code: string
-  ) {
-    return await this.roles.delete(
-      code,
-      appId
-    );
+  public async deleteRole(appId: string, code: string) {
+    return await this.roles.delete(code, appId);
   }
 
-  public async deleteRoles(
-    appId: string,
-    codes: string[]
-  ) {
+  public async deleteRoles(appId: string, codes: string[]) {
     return await this.roles.deleteMany(codes, appId);
   }
 
   public async updateRole(
     appId: string,
     options: {
-      code: string,
+      code: string;
       description?: string;
       newCode?: string;
     }
   ) {
-    return await this.roles.update(
-      options.code,
-      {
-        ...options,
-        namespace: appId
-      }
-    );
+    return await this.roles.update(options.code, {
+      ...options,
+      namespace: appId
+    });
   }
 
-  public async findRole(
-    appId: string,
-    code: string
-  ) {
+  public async findRole(appId: string, code: string) {
     return this.roles.detail(code, appId);
   }
 
@@ -375,23 +342,12 @@ export class ApplicationsManagementClient {
     });
   }
 
-  public async getUsersByRoleCode(
-    appId: string,
-    code: string
-  ) {
+  public async getUsersByRoleCode(appId: string, code: string) {
     return await this.roles.listUsers(code, appId);
   }
 
-  public async addUsersToRole(
-    appId: string,
-    code: string,
-    userIds: string[]
-  ) {
-    return await this.roles.addUsers(
-      code,
-      userIds,
-      appId
-    );
+  public async addUsersToRole(appId: string, code: string, userIds: string[]) {
+    return await this.roles.addUsers(code, userIds, appId);
   }
 
   public async removeUsersFromRole(
@@ -399,11 +355,7 @@ export class ApplicationsManagementClient {
     code: string,
     userIds: string[]
   ) {
-    return await this.roles.removeUsers(
-      code,
-      userIds,
-      appId
-    );
+    return await this.roles.removeUsers(code, userIds, appId);
   }
 
   public async listAuthorizedResourcesByRole(
@@ -411,12 +363,32 @@ export class ApplicationsManagementClient {
     code: string,
     resourceType?: ResourceType
   ) {
-    return await this.roles.listAuthorizedResources(
-      code,
-      appId,
-      {
-        resourceType
-      }
-    )
+    return await this.roles.listAuthorizedResources(code, appId, {
+      resourceType
+    });
+  }
+
+  public async createAgreement(appId: string, agreement: AgreementInput) {
+    return await this.agreements.create(appId, agreement);
+  }
+
+  public async deleteAgreement(appId: string, agreementId: number) {
+    return await this.agreements.delete(appId, agreementId);
+  }
+
+  public async modifyAgreement(
+    appId: string,
+    agreementId: number,
+    updates: AgreementInput
+  ) {
+    return await this.agreements.modify(appId, agreementId, updates);
+  }
+
+  public async listAgreement(appId: string) {
+    return await this.agreements.list(appId);
+  }
+
+  public async sortAgreement(appId: string, order: number[]) {
+    return await this.agreements.sort(appId, order);
   }
 }

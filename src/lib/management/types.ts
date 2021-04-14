@@ -657,3 +657,21 @@ export interface IApplication {
   skipMfa: boolean;
   permissionStrategy: PermissionStrategy;
 }
+
+export interface AgreementInput {
+  title: string;
+  required?: boolean;
+  lang?: Lang;
+}
+
+export interface AgreementDetail extends Required<AgreementInput> {
+  appId: string;
+  order: number;
+  userPoolId: string;
+  id: number;
+}
+
+export interface AgreementList {
+  list: AgreementDetail[];
+  totalCount: number;
+}
