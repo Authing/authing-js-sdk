@@ -113,7 +113,8 @@ export class AclManagementClient {
   async allow(
     userId: string,
     resource: string,
-    action: string
+    action: string,
+    // namespace: string
   ): Promise<CommonMessage> {
     const { allow: data } = await allow(
       this.graphqlClient,

@@ -195,8 +195,19 @@ export class RolesManagementClient {
   }
 
   /**
+   * @deprecated  已过时, 不建议使用
+   */
+  async detail(code: string, namespace?: string): Promise<DeepPartial<Role>> {
+    const { role: data } = await role(this.graphqlClient, this.tokenProvider, {
+      code,
+      namespace
+    });
+    return data;
+  }
+
+  /**
    *
-   * @name detail
+   * @name findByCode
    * @name_zh 获取角色详情
    * @description 获取角色详情
    *
@@ -209,11 +220,8 @@ export class RolesManagementClient {
    * @returns {Promise<DeepPartial<Role>>} 角色详情
    * @memberof RolesManagementClient
    */
-  async detail(code: string, namespace?: string): Promise<DeepPartial<Role>> {
-    const { role: data } = await role(this.graphqlClient, this.tokenProvider, {
-      code,
-      namespace
-    });
+  async findByCode(code: string, namespace?: string): Promise<DeepPartial<Role>> {
+    const data = await this.detail(code, namespace);
     return data;
   }
 
