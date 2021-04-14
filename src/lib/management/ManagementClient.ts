@@ -141,6 +141,7 @@ export class ManagementClient {
     this.applications = new ApplicationsManagementClient(
       this.options,
       this.httpClient,
+      this.graphqlClient,
       this.tokenProvider
     )
     this.mfa = new MFAManagementClient(

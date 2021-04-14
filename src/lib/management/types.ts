@@ -398,7 +398,7 @@ export interface IAppAccessPolicy {
   targetType: 'USER' | 'ROLE' | 'GROUP' | 'ORG';
   targetIdentifiers: string[];
   namespace?: string;
-  inheritByChildren?: string;
+  inheritByChildren?: boolean;
 }
 
 export interface Statement {
