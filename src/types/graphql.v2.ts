@@ -305,6 +305,8 @@ export type QuerySearchUserArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   departmentOpts?: Maybe<Array<Maybe<SearchUserDepartmentOpt>>>;
+  groupOpts?: Maybe<Array<Maybe<SearchUserGroupOpt>>>;
+  roleOpts?: Maybe<Array<Maybe<SearchUserRoleOpt>>>;
 };
 
 
@@ -878,6 +880,15 @@ export type UserDefinedDataMap = {
 export type SearchUserDepartmentOpt = {
   departmentId?: Maybe<Scalars['String']>;
   includeChildrenDepartments?: Maybe<Scalars['Boolean']>;
+};
+
+export type SearchUserGroupOpt = {
+  code?: Maybe<Scalars['String']>;
+};
+
+export type SearchUserRoleOpt = {
+  namespace?: Maybe<Scalars['String']>;
+  code: Scalars['String'];
 };
 
 export type JwtTokenStatus = {
