@@ -182,7 +182,7 @@ export class MfaAuthenticationClient {
       authenticatorType: string;
       totp?: string;
       source?: TotpSource;
-      mfaToken?: TotpSource;
+      mfaToken?: string;
     } = { authenticatorType: 'totp', source: 'SELF' }
   ): Promise<IMfaConfirmAssociation> {
     const api = `${this.baseClient.appHost}/api/v2/mfa/totp/associate/confirm`;
