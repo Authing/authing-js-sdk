@@ -328,6 +328,356 @@ export interface AdminLogsInfo {
 }
 
 export type UserMfaType = 'OTP' | 'FACE';
+export interface Application {
+  qrcodeScanning: {
+    redirect: boolean;
+    interval: number;
+  };
+  id: string;
+  userPoolId: string;
+  protocol: string;
+  name: string;
+  secret: string;
+  identifier: string;
+  jwks: {
+    keys: { [key: string]: string }[];
+  };
+  redirectUris: string[];
+  css: string;
+  oidcConfig: {
+    id: string;
+    client_secret: string;
+    redirect_uris: string[];
+    grants: string[];
+    access_token_lifetime: number;
+    refresh_token_lifetime: number;
+    introspection_endpoint_auth_method: string;
+    revocation_endpoint_auth_method: string;
+  };
+  oauthConfig: {
+    grant_types: string[];
+    response_types: string[];
+    id_token_signed_response_alg: string;
+    jwks_uri?: any;
+    token_endpoint_auth_method: string;
+    request_object_encryption_enc?: any;
+    request_object_encryption_alg?: any;
+    request_object_signing_alg?: any;
+    userinfo_encrypted_response_enc?: any;
+    userinfo_encrypted_response_alg?: any;
+    userinfo_signed_response_alg?: any;
+    id_token_encrypted_response_enc?: any;
+    id_token_encrypted_response_alg?: any;
+    jwks?: any;
+    authorization_code_expire: number;
+    id_token_expire: number;
+    access_token_expire: number;
+    refresh_token_expire: number;
+    cas_expire: number;
+    skip_consent: boolean;
+  };
+  createdAt: string;
+  updatedAt: string;
+  description?: any;
+  ssoPageCustomizationSettings?: any;
+  logo: string;
+  logoutRedirectUris?: any;
+  loginTabs?: any;
+  defaultLoginTab: string;
+  registerTabs?: any;
+  defaultRegisterTab: string;
+  ldapConnections?: any;
+  adConnections?: any;
+  disabledSocialConnections?: any;
+  disabledOidcConnections?: any;
+  disabledSamlConnections?: any;
+  disabledOauth2Connections?: any;
+  disabledCasConnections?: any;
+  disabledAzureAdConnections?: any;
+  extendsFields?: any;
+  ext?: any;
+  samlConfig?: any;
+  casConfig?: any;
+  skipMfa: boolean;
+  permissionStrategy: {
+    allowPolicyId?: string;
+    denyPolicyId?: string;
+    enabled: boolean;
+    defaultStrategy: string;
+  };
+  isOfficial: boolean;
+  isDeleted: boolean;
+  isDefault: boolean;
+  oidcProviderEnabled: boolean;
+  oauthProviderEnabled: boolean;
+  samlProviderEnabled: boolean;
+  casProviderEnabled: boolean;
+  registerDisabled: boolean;
+  extendsFieldsEnabled: boolean;
+  showAuthorizationPage: boolean;
+  enableSubAccount: boolean;
+  loginRequireEmailVerified: boolean;
+  agreementEnabled: boolean;
+}
+
+export interface ApplicationList {
+  totalCount: number;
+  list: Application[];
+}
+
+export interface ProgrammaticAccessAccount {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  appId: string;
+  secret: string;
+  remarks: string;
+  tokenLifetime: number;
+  enabled: boolean;
+  userId: string;
+}
+
+export interface ProgrammaticAccessAccountList {
+  totalCount: number;
+  list: ProgrammaticAccessAccount[];
+}
+
+export interface AccessControl {
+  assignedAt: string;
+  inheritByChildren?: any;
+  enabled: boolean;
+  policyId: string;
+  code: string;
+  policy: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    userPoolId: string;
+    isDefault: boolean;
+    isAuto: boolean;
+    hidden: boolean;
+    code: string;
+    description: string;
+    statements: {
+      resource: string;
+      actions: string[];
+      effect: string;
+      condition: any[];
+      resourceType?: any;
+    }[];
+    namespaceId: number;
+  };
+  targetType: string;
+  targetIdentifier: string;
+  target: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    userPoolId: string;
+    orgId: string;
+    name: string;
+    nameI18n?: any;
+    description?: any;
+    descriptionI18n?: any;
+    order?: any;
+    code?: any;
+    __id?: any;
+    __parentid?: any;
+    __groupid?: any;
+  };
+  namespace: string;
+}
+
+export interface AccessControlList {
+  totalCount: number;
+  list: AccessControl[];
+}
+
+export interface ActiveUser {
+  thirdPartyIdentity: {
+    provider: string;
+    refreshToken: string;
+    accessToken: string;
+    scope: string;
+    expiresIn: string;
+    updatedAt: string;
+  }[];
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  userPoolId: string;
+  isRoot: boolean;
+  status: string;
+  oauth?: string;
+  email?: string;
+  phone?: string;
+  username: string;
+  unionid?: string;
+  openid?: string;
+  nickname?: string;
+  company?: string;
+  photo: string;
+  browser?: string;
+  device?: string;
+  password: string;
+  salt?: string;
+  token: string;
+  tokenExpiredAt: string;
+  loginsCount: number;
+  lastIp: string;
+  name?: string;
+  givenName?: string;
+  familyName?: string;
+  middleName?: string;
+  profile?: string;
+  preferredUsername?: string;
+  website?: string;
+  gender: string;
+  birthdate?: string;
+  zoneinfo?: string;
+  locale?: string;
+  address?: string;
+  formatted?: boolean;
+  streetAddress?: string;
+  locality?: string;
+  region?: string;
+  postalCode?: string;
+  city?: string;
+  province?: string;
+  country?: string;
+  registerSource: string[];
+  secretInfo?: string;
+  emailVerified: boolean;
+  phoneVerified: boolean;
+  lastLogin: string;
+  blocked: boolean;
+  isDeleted: boolean;
+  sendSmsCount: number;
+  sendSmsLimitCount: number;
+  signedUp: string;
+  externalId?: string;
+  mainDepartmentId?: string;
+  mainDepartmentCode?: string;
+  lastMfaTime?: string;
+  passwordSecurityLevel: number;
+}
+
+export interface ActiveUsers {
+  totalCount: number;
+  list: ActiveUser[];
+}
+
+export interface UserAction {
+  operator_arn: string;
+  '@timestamp': string;
+  user_agent: string;
+  geoip: {
+    continent_code: string;
+    country_code2: string;
+    region_name: string;
+    city_name: string;
+    ip: string;
+    latitude: number;
+    region_code: string;
+    timezone: string;
+    country_code3: string;
+    longitude: number;
+    country_name: string;
+    location: {
+      lon: number;
+      lat: number;
+    };
+  };
+  message: string;
+  ua: {
+    build: string;
+    os: string;
+    device: string;
+    patch: string;
+    os_minor: string;
+    os_major: string;
+    os_name: string;
+    minor: string;
+    name: string;
+    major: string;
+  };
+  userpool_id: string;
+  host: string;
+  timestamp: string;
+  '@version': string;
+  app_id: string;
+  operation_name: string;
+  clientip: string;
+  extra_data: string;
+  request_id: string;
+  path: string;
+  user: {
+    userPoolId: string;
+    displayName: string;
+    id: string;
+    photo: string;
+  };
+  app: {
+    qrcodeScanning: { [key: string]: any };
+    id: string;
+    name: string;
+    description?: any;
+    identifier: string;
+    logo: string;
+    loginTabs: string[];
+    registerTabs: string[];
+    adConnections: any[];
+    disabledOidcConnections: any[];
+    disabledSamlConnections: any[];
+    extendsFields: any[];
+    disabledAzureAdConnections: any[];
+    disabledOauth2Connections: any[];
+    disabledCasConnections: any[];
+  };
+  operation_desc: string;
+}
+
+export interface UserActions {
+  totalCount: number;
+  list: UserAction[];
+}
+
+export interface Resource {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  userPoolId: string;
+  code: string;
+  actions: {
+    name: string;
+    description: string;
+  }[];
+  type: string;
+  description: string;
+  namespaceId: number;
+  apiIdentifier?: string;
+  namespace: string;
+}
+
+export interface Resources {
+  totalCount: number;
+  list: Resource[];
+}
+
+export interface Namespace {
+  id: number;
+  name: string;
+  code: string;
+  description: string;
+  status: number;
+  appId: string;
+  appName: string;
+}
+
+export interface Namespaces {
+  total: number;
+  list: Namespace[];
+}
 
 export type BatchFetchUserTypes =
   | 'id'

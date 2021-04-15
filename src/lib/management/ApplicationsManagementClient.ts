@@ -1,8 +1,10 @@
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import {
+  ActiveUsers,
+  Application,
+  AgreementInput,
   ApplicationDetail,
-  ManagementClientOptions,
-  AgreementInput
+  ManagementClientOptions
 } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { AclManagementClient } from './AclManagementClient';
@@ -89,6 +91,46 @@ export class ApplicationsManagementClient {
       }
     });
     return data;
+  }
+
+  /**
+   * 创建应用
+   * @param options.name 应用名称
+   * @param options.identifier 应用认证地址
+   * @param options.redirectUris 应用回调链接
+   * @param options.logo 应用 logo
+   * @returns Promise<Application>
+   */
+  public async create(options: {
+    name: string;
+    identifier: string;
+    redirectUris: string[];
+    logo?: string;
+  }): Promise<Application> {
+    const result = await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications`,
+      data: { ...options }
+    });
+    return result;
+  }
+
+  /**
+   * 删除应用
+   * @param appId 应用 ID
+   * @returns Promise<boolean>
+   */
+  public async delete(appId: string): Promise<boolean> {
+    try {
+      await this.httpClient.request({
+        method: 'DELETE',
+        url: `${this.options.host}/api/v2/applications/${appId}`
+      });
+
+      return true;
+    } catch (error) {
+      throw error;
+    }
   }
 
   /**
@@ -390,5 +432,37 @@ export class ApplicationsManagementClient {
 
   public async sortAgreement(appId: string, order: number[]) {
     return await this.agreements.sort(appId, order);
+  }
+
+  /**
+   * 查看应用下已登录用户
+   * @param appId 应用 ID
+   * @param page 当前页数
+   * @param limit 每页显示条数
+   * @returns Promise<Application>
+   */
+  public async activeUsers(
+    appId: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<ActiveUsers> {
+    const result = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/applications/${appId}/active-users?page=${page}&limit=${limit}`
+    });
+    return result;
+  }
+
+  /**
+   * 刷新应用密钥
+   * @param appId 应用 ID
+   * @returns Promise<Application>
+   */
+  public async refreshApplicationSecret(appId: string): Promise<Application> {
+    const result = await this.httpClient.request({
+      method: 'PATCH',
+      url: `${this.options.host}/api/v2/application/${appId}/refresh-secret`
+    });
+    return result;
   }
 }

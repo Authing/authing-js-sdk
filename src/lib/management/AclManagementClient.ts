@@ -9,7 +9,9 @@ import {
   IResourceQueryFilter,
   IResourceResponse,
   IResourceUpdateDto,
-  ManagementClientOptions
+  ManagementClientOptions,
+  ProgrammaticAccessAccount,
+  ProgrammaticAccessAccountList
 } from './types';
 import {
   allow,
@@ -52,8 +54,8 @@ import { HttpClient } from '../common/HttpClient';
 export class AclManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;
-  tokenProvider: ManagementTokenProvider;
   httpClient: HttpClient;
+  tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
@@ -65,6 +67,25 @@ export class AclManagementClient {
     this.graphqlClient = graphqlClient;
     this.httpClient = httpClient;
     this.tokenProvider = tokenProvider;
+  }
+
+  /**
+   * 生成随机字符串
+   * @param randomLenth 随机长度
+   * @returns string
+   */
+  public static randomString(randomLenth: number = 32): string {
+    randomLenth = randomLenth || 32;
+
+    const t = 'abcdefhijkmnprstwxyz2345678';
+    const a = t.length;
+    let n = '';
+
+    for (let i = 0; i < randomLenth; i++) {
+      n += t.charAt(Math.floor(Math.random() * a));
+    }
+
+    return n;
   }
 
   /**
@@ -92,7 +113,8 @@ export class AclManagementClient {
   async allow(
     userId: string,
     resource: string,
-    action: string
+    action: string,
+    // namespace: string
   ): Promise<CommonMessage> {
     const { allow: data } = await allow(
       this.graphqlClient,
@@ -465,5 +487,128 @@ export class AclManagementClient {
         permissionStrategy: { defaultStrategy: options.defaultStrategy }
       }
     });
+  }
+
+  /**
+   * 编程访问账号列表
+   * @param appId 应用 ID
+   * @param page 当前页数
+   * @param limit 每页显示条数
+   * @returns Promise<ProgrammaticAccessAccountList>
+   */
+  public async programmaticAccessAccountList(
+    appId: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<ProgrammaticAccessAccountList> {
+    const result = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/applications/${appId}/programmatic-access-accounts?limit=${limit}&page=${page}`
+    });
+    return result;
+  }
+
+  /**
+   * 添加编程访问账号
+   * @param appId 应用 ID
+   * @param options.tokenLifetime AccessToken 过期时间（秒）
+   * @param options.remarks 备注
+   * @returns Promise<ProgrammaticAccessAccount>
+   */
+  public async createProgrammaticAccessAccount(
+    appId: string,
+    options: {
+      tokenLifetime: number;
+      remarks?: string;
+    } = {
+      tokenLifetime: 600
+    }
+  ): Promise<ProgrammaticAccessAccount> {
+    const result = await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}/programmatic-access-accounts`,
+      data: { ...options }
+    });
+    return result;
+  }
+
+  /**
+   * 添加编程访问账号
+   * @param programmaticAccessAccountId 编程访问账号 ID
+   * @returns Promise<boolean>
+   */
+  public async deleteProgrammaticAccessAccount(
+    programmaticAccessAccountId: string
+  ): Promise<boolean> {
+    try {
+      await this.httpClient.request({
+        method: 'DELETE',
+        url: `${this.options.host}/api/v2/applications/programmatic-access-accounts?id=${programmaticAccessAccountId}`
+      });
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * 刷新编程访问账号密钥
+   * @param programmaticAccessAccountId 编程访问账号 ID
+   * @param programmaticAccessAccountSecret 编程访问账号 Secret
+   * @returns Promise<ProgrammaticAccessAccount>
+   */
+  public async refreshProgrammaticAccessAccountSecret(
+    programmaticAccessAccountId: string,
+    programmaticAccessAccountSecret: string = AclManagementClient.randomString(
+      32
+    )
+  ): Promise<ProgrammaticAccessAccount> {
+    const result = await this.httpClient.request({
+      method: 'PATCH',
+      url: `${this.options.host}/api/v2/applications/programmatic-access-accounts`,
+      data: {
+        id: programmaticAccessAccountId,
+        secret: programmaticAccessAccountSecret
+      }
+    });
+    return result;
+  }
+
+  /**
+   * 启用编程访问账号
+   * @param programmaticAccessAccountId 编程访问账号 ID
+   * @returns Promise<ProgrammaticAccessAccount>
+   */
+  public async enableProgrammaticAccessAccount(
+    programmaticAccessAccountId: string
+  ): Promise<ProgrammaticAccessAccount> {
+    const result = await this.httpClient.request({
+      method: 'PATCH',
+      url: `${this.options.host}/api/v2/applications/programmatic-access-accounts`,
+      data: {
+        id: programmaticAccessAccountId,
+        enabled: true
+      }
+    });
+    return result;
+  }
+
+  /**
+   * 禁用编程访问账号
+   * @param programmaticAccessAccountId 编程访问账号 ID
+   * @returns Promise<ProgrammaticAccessAccount>
+   */
+  public async disableProgrammaticAccessAccount(
+    programmaticAccessAccountId: string
+  ): Promise<ProgrammaticAccessAccount> {
+    const result = await this.httpClient.request({
+      method: 'PATCH',
+      url: `${this.options.host}/api/v2/applications/programmatic-access-accounts`,
+      data: {
+        id: programmaticAccessAccountId,
+        enabled: false
+      }
+    });
+    return result;
   }
 }

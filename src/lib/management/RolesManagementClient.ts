@@ -9,7 +9,9 @@ import {
   PaginatedUsers,
   PolicyAssignmentTargetType,
   ResourceType,
-  Role
+  Role,
+  SetUdfValueBatchInput,
+  UdfTargetType
 } from '../../types/graphql.v2';
 import {
   assignRole,
@@ -24,10 +26,15 @@ import {
   policyAssignments,
   addPolicyAssignments,
   removePolicyAssignments,
-  listRoleAuthorizedResources
+  listRoleAuthorizedResources,
+  udv,
+  udfValueBatch,
+  setUdvBatch,
+  setUdfValueBatch,
+  removeUdv
 } from '../graphqlapi';
-import { DeepPartial } from '../../types/index';
-import { formatAuthorizedResources } from '../utils';
+import { DeepPartial, KeyValuePair } from '../../types/index';
+import { convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
 
 /**
  * @class RolesManagementClient 管理角色
@@ -188,8 +195,19 @@ export class RolesManagementClient {
   }
 
   /**
+   * @deprecated  已过时, 不建议使用
+   */
+  async detail(code: string, namespace?: string): Promise<DeepPartial<Role>> {
+    const { role: data } = await role(this.graphqlClient, this.tokenProvider, {
+      code,
+      namespace
+    });
+    return data;
+  }
+
+  /**
    *
-   * @name detail
+   * @name findByCode
    * @name_zh 获取角色详情
    * @description 获取角色详情
    *
@@ -202,11 +220,8 @@ export class RolesManagementClient {
    * @returns {Promise<DeepPartial<Role>>} 角色详情
    * @memberof RolesManagementClient
    */
-  async detail(code: string, namespace?: string): Promise<DeepPartial<Role>> {
-    const { role: data } = await role(this.graphqlClient, this.tokenProvider, {
-      code,
-      namespace
-    });
+  async findByCode(code: string, namespace?: string): Promise<DeepPartial<Role>> {
+    const data = await this.detail(code, namespace);
     return data;
   }
 
@@ -455,5 +470,131 @@ export class RolesManagementClient {
       list,
       totalCount
     };
+  }
+
+  /**
+   * 获取某个角色扩展字段列表
+   * @param roleId 角色 ID
+   * @returns Promise<{ [key: string]: any }>
+   */
+  public async getUdfValue(roleId: string): Promise<{ [key: string]: any }> {
+    const { udv: list } = await udv(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.Role,
+      targetId: roleId
+    });
+    return convertUdvToKeyValuePair(list);
+  }
+
+  /**
+   * 获取某个角色某个扩展字段
+   * @param roleId 角色 ID
+   * @param udfKey 扩展字段 Key
+   * @returns Promise<{ [key: string]: any }>
+   */
+  public async getSpecificUdfValue(
+    roleId: string,
+    udfKey: string
+  ): Promise<{ [key: string]: any }> {
+    const { udv: list } = await udv(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.Role,
+      targetId: roleId
+    });
+
+    const udfMap = convertUdvToKeyValuePair(list);
+    const udfValue: { [key: string]: any } = {};
+
+    for (const key in udfMap) {
+      if (udfKey === key) {
+        udfValue[key] = udfMap[key];
+      }
+    }
+
+    return udfValue;
+  }
+
+  /**
+   * 获取多个角色扩展字段列表
+   * @param roleId 角色 ID 列表
+   * @returns Promise<{ [x: string]: KeyValuePair }>
+   */
+  public async getUdfValueBatch(
+    roleIds: string[]
+  ): Promise<{ [x: string]: KeyValuePair }> {
+    if (roleIds.length === 0) {
+      throw new Error('empty user id list');
+    }
+    const { udfValueBatch: result } = await udfValueBatch(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        targetType: UdfTargetType.Role,
+        targetIds: roleIds
+      }
+    );
+    let ret: { [x: string]: KeyValuePair } = {};
+    for (const { targetId, data } of result) {
+      ret[targetId] = convertUdvToKeyValuePair(data);
+    }
+    return ret;
+  }
+
+  /**
+   * 设置某个角色扩展字段列表
+   * @param roleId 角色 ID 列表
+   * @param data 扩展字段
+   */
+  public async setUdfValue(roleId: string, data: KeyValuePair) {
+    if (Object.keys(data).length === 0) {
+      throw new Error('empty udf value list');
+    }
+
+    await setUdvBatch(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.Role,
+      targetId: roleId,
+      udvList: Object.keys(data).map(key => ({
+        key,
+        value: JSON.stringify(data[key])
+      }))
+    });
+  }
+
+  /**
+   * 设置多个角色扩展字段列表
+   * @param input.roleId 角色 ID 列表
+   * @param input.data 扩展字段
+   */
+  public async setUdfValueBatch(
+    input: { roleId: string; data: KeyValuePair }[]
+  ) {
+    if (input.length === 0) {
+      throw new Error('empty input list');
+    }
+    const params: SetUdfValueBatchInput[] = [];
+    input.forEach(({ roleId: userId, data }) => {
+      for (const key of Object.keys(data)) {
+        params.push({
+          targetId: userId,
+          key,
+          value: JSON.stringify(data[key])
+        });
+      }
+    });
+    await setUdfValueBatch(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.Role,
+      input: params
+    });
+  }
+
+  /**
+   * 删除用户的扩展字段
+   * @param input.roleId 角色 ID 列表
+   * @param input.key 扩展字段名
+   */
+  public async removeUdfValue(roleId: string, key: string) {
+    await removeUdv(this.graphqlClient, this.tokenProvider, {
+      targetType: UdfTargetType.Role,
+      targetId: roleId,
+      key
+    });
   }
 }

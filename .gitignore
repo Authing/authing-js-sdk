@@ -11,3 +11,4 @@ build/
 package-lock.json
 .env
 build/main/lib/auth/index.spec.js
+src/test.ts
