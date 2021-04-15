@@ -627,7 +627,7 @@ export class AclManagementClient {
    * @param limit 每页显示条数
    * @returns Promise<Resources>
    */
-  public async listNamespace(page: number = 1, limit: number = 10): Promise<Namespaces> {
+  public async listNamespaces(page: number = 1, limit: number = 10): Promise<Namespaces> {
     const result = await this.httpClient.request({
       method: 'GET',
       url:
