@@ -1,6 +1,7 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
-import { ManagementClientOptions, BatchFetchUserTypes } from './types';
+import { BatchFetchUserTypes, ManagementClientOptions, UserActions } from './types';
+import { objectToQueryString } from '../utils';
 import {
   deleteUser,
   deleteUsers,
@@ -971,5 +972,41 @@ export class UsersManagementClient {
       }
     });
     return { code: 200, message: '强制下线成功' };
+  }
+
+  /**
+   * 审计日志列表
+   * @param options.page 当前页数
+   * @param options.limit 每页显示条数
+   * @param options.clientIp 客户端 IP 地址
+   * @param options.operationName 操作类型
+   * @param options.operatoArn 用户 Arn 通过 searchUser 方法获得
+   * @returns Promise<UserActions>
+   */
+  public async listUserActions(
+    options: {
+      page?: number;
+      limit?: number;
+      clientIp?: string;
+      operationName?: string;
+      operatoArn?: string;
+    } = {
+        page: 1,
+        limit: 10
+      }
+  ): Promise<UserActions> {
+    const result = await this.httpClient.request({
+      method: 'GET',
+      url:
+        `${this.options.host}/api/v2/analysis/user-action` +
+        objectToQueryString({
+          page: options.page?.toString(),
+          limit: options.limit?.toString(),
+          clientip: options.clientIp,
+          operation_name: options.operationName,
+          operator_arn: options.operatoArn
+        })
+    });
+    return result;
   }
 }

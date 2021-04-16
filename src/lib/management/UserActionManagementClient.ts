@@ -3,6 +3,7 @@ import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { HttpClient } from '../common/HttpClient';
 import { objectToQueryString } from '../utils';
 
+
 /**
  * @class UserActionManagementClient 审计管理
  * @name UserActionManagementClient
