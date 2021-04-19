@@ -10,6 +10,8 @@ import {
   IResourceResponse,
   IResourceUpdateDto,
   ManagementClientOptions,
+  Namespace,
+  Namespaces,
   ProgrammaticAccessAccount,
   ProgrammaticAccessAccountList
 } from './types';
@@ -26,7 +28,7 @@ import {
   PolicyAssignmentTargetType,
   ResourceType
 } from '../../types/graphql.v2';
-import { formatAuthorizedResources } from '../utils';
+import { formatAuthorizedResources, objectToQueryString } from '../utils';
 import { HttpClient } from '../common/HttpClient';
 
 /**
@@ -113,7 +115,7 @@ export class AclManagementClient {
   async allow(
     userId: string,
     resource: string,
-    action: string,
+    action: string
     // namespace: string
   ): Promise<CommonMessage> {
     const { allow: data } = await allow(
@@ -237,7 +239,7 @@ export class AclManagementClient {
    * @param options
    */
   public async getResources(options?: IResourceQueryFilter) {
-    return await this.listResources(options)
+    return await this.listResources(options);
   }
 
   public async createResource(
@@ -275,6 +277,7 @@ export class AclManagementClient {
       data: options
     });
   }
+
   public async deleteResource(
     code: string,
     namespace: string
@@ -311,6 +314,7 @@ export class AclManagementClient {
       }
     });
   }
+
   public async enableApplicationAccessPolicy(options: IAppAccessPolicy) {
     if (!options?.appId) {
       throw new Error('请传入 appId');
@@ -342,6 +346,7 @@ export class AclManagementClient {
     });
     return { code: 200, message: '启用应用访问控制策略成功' };
   }
+
   public async disableApplicationAccessPolicy(options: IAppAccessPolicy) {
     if (!options?.appId) {
       throw new Error('请传入 appId');
@@ -374,6 +379,7 @@ export class AclManagementClient {
     });
     return { code: 200, message: '停用应用访问控制策略成功' };
   }
+
   public async deleteApplicationAccessPolicy(options: IAppAccessPolicy) {
     if (!options?.appId) {
       throw new Error('请传入 appId');
@@ -406,6 +412,7 @@ export class AclManagementClient {
     });
     return { code: 200, message: '删除应用访问控制策略成功' };
   }
+
   public async allowAccessApplication(options: IAppAccessPolicy) {
     if (!options?.appId) {
       throw new Error('请传入 appId');
@@ -437,6 +444,7 @@ export class AclManagementClient {
     });
     return { code: 200, message: '允许主体访问应用的策略配置已生效' };
   }
+
   public async denyAccessApplication(options: IAppAccessPolicy) {
     if (!options?.appId) {
       throw new Error('请传入 appId');
@@ -468,6 +476,7 @@ export class AclManagementClient {
     });
     return { code: 200, message: '拒绝主体访问应用的策略配置已生效' };
   }
+
   public async updateDefaultApplicationAccessPolicy(options: {
     defaultStrategy: 'ALLOW_ALL' | 'DENY_ALL';
     appId: string;
@@ -610,5 +619,104 @@ export class AclManagementClient {
       }
     });
     return result;
+  }
+
+  /**
+   * 权限分组列表
+   * @param page 当前页数
+   * @param limit 每页显示条数
+   * @returns Promise<Resources>
+   */
+  public async listNamespaces(page: number = 1, limit: number = 10): Promise<Namespaces> {
+    const result = await this.httpClient.request({
+      method: 'GET',
+      url:
+        `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}` +
+        objectToQueryString({
+          page: page?.toString(),
+          limit: limit?.toString()
+        })
+    });
+    return result;
+  }
+
+  /**
+   * 删除权限分组
+   * @param code 权限分组 Code
+   * @returns Promise<boolean>
+   */
+  public async deleteNamespace(code: string): Promise<boolean> {
+    try {
+      await this.httpClient.request({
+        method: 'DELETE',
+        url: `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}/code/${code}`
+      });
+
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * 创建权限分组
+   * @param code 权限分组 Code
+   * @param name 权限分组名称
+   * @param description 权限分组描述
+   * @returns Promise<boolean>
+   */
+  public async createNamespace(
+    code: string,
+    name: string,
+    description?: string
+  ): Promise<Namespace> {
+    try {
+      const data = await this.httpClient.request({
+        method: 'POST',
+        url: `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}`,
+        data: {
+          name,
+          code,
+          description
+        }
+      });
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * 修改权限分组
+   * @param code 权限分组 Code
+   * @param name 权限分组名称
+   * @param code 权限分组 Code
+   * @param description 权限分组描述
+   * @returns Promise<boolean>
+   */
+  public async updateNamespace(
+    code: string,
+    updates: {
+      name?: string;
+      code?: string;
+      description?: string;
+    }
+  ): Promise<Namespace> {
+    try {
+      const data = await this.httpClient.request({
+        method: 'PUT',
+        url: `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}/code/${code}`,
+        data: {
+          name: updates.name,
+          code: updates.code,
+          description: updates.description
+        }
+      });
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 }

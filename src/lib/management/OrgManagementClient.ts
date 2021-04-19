@@ -634,7 +634,7 @@ export class OrgManagementClient {
    * @description 获取组织机构节点被授权的所有资源
    *
    * @param orgId: 组织机构 ID；
-   * @param code: 分组 code
+   * @param code: 节点 code
    * @param namespace: 权限组 namespace code
    * @param options.resourceType 资源类型
    */

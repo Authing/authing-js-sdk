@@ -19,7 +19,6 @@ import jwtDecode from 'jwt-decode';
 import { encrypt } from '../utils';
 import { PublicKeyManager } from '../common/PublicKeyManager';
 import { UserActionManagementClient } from './UserActionManagementClient';
-import { NamespaceManagementClient } from './NamespaceManagementClient';
 import { ApplicationsManagementClient } from './ApplicationsManagementClient';
 import { MFAManagementClient } from './MFAManagementClient';
 
@@ -54,7 +53,6 @@ export class ManagementClient {
   whitelist: WhitelistManagementClient;
   statistics: StatisticsManagementClient;
   userAction: UserActionManagementClient;
-  namespace: NamespaceManagementClient;
   applications: ApplicationsManagementClient
   mfa: MFAManagementClient;
 
@@ -143,11 +141,6 @@ export class ManagementClient {
       this.tokenProvider
     );
     this.userAction = new UserActionManagementClient(
-      this.options,
-      this.httpClient,
-      this.tokenProvider
-    );
-    this.namespace = new NamespaceManagementClient(
       this.options,
       this.httpClient,
       this.tokenProvider
