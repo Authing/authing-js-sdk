@@ -3158,6 +3158,8 @@ export type SearchUserVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   departmentOpts?: Maybe<Array<Maybe<SearchUserDepartmentOpt>>>;
+  groupOpts?: Maybe<Array<Maybe<SearchUserGroupOpt>>>;
+  roleOpts?: Maybe<Array<Maybe<SearchUserRoleOpt>>>;
 }>;
 
 
@@ -6160,8 +6162,8 @@ export const SearchNodesDocument = `
 }
     `;
 export const SearchUserDocument = `
-    query searchUser($query: String!, $fields: [String], $page: Int, $limit: Int, $departmentOpts: [SearchUserDepartmentOpt]) {
-  searchUser(query: $query, fields: $fields, page: $page, limit: $limit, departmentOpts: $departmentOpts) {
+    query searchUser($query: String!, $fields: [String], $page: Int, $limit: Int, $departmentOpts: [SearchUserDepartmentOpt], $groupOpts: [SearchUserGroupOpt], $roleOpts: [SearchUserRoleOpt]) {
+  searchUser(query: $query, fields: $fields, page: $page, limit: $limit, departmentOpts: $departmentOpts, groupOpts: $groupOpts, roleOpts: $roleOpts) {
     totalCount
     list {
       id

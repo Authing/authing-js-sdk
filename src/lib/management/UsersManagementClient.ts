@@ -39,7 +39,8 @@ import {
   PaginatedAuthorizedResources,
   UdfTargetType,
   SetUdfValueBatchInput,
-  ResourceType
+  ResourceType,
+  QuerySearchUserArgs
 } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
 import { DeepPartial, KeyValuePair } from '../../types/index';
@@ -526,14 +527,20 @@ export class UsersManagementClient {
       page?: number;
       limit?: number;
       // 所在的部门 ID 列表
-      departmentOpts?: Array<{
-        departmentId: string;
-        includeChildrenDepartments?: boolean;
-      }>;
+      departmentOpts?: QuerySearchUserArgs['departmentOpts'];
+      groupOpts?: QuerySearchUserArgs['groupOpts'];
+      roleOpts?: QuerySearchUserArgs['roleOpts'];
     }
   ): Promise<PaginatedUsers> {
     options = options || {};
-    const { fields, page = 1, limit = 10, departmentOpts } = options;
+    const {
+      fields,
+      page = 1,
+      limit = 10,
+      departmentOpts,
+      groupOpts,
+      roleOpts
+    } = options;
     const { searchUser: data } = await searchUser(
       this.graphqlClient,
       this.tokenProvider,
@@ -542,7 +549,9 @@ export class UsersManagementClient {
         fields,
         page,
         limit,
-        departmentOpts
+        departmentOpts,
+        groupOpts,
+        roleOpts
       }
     );
     return data;
