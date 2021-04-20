@@ -1,21 +1,42 @@
 import { KeyValuePair } from '../types';
 import { UdfDataType } from '../types/graphql.v2';
+// import { JSEncrypt } from 'jsencrypt';
+
+// 兼容 JSEncrypt
+if (typeof window === 'undefined' && global) {
+  // @ts-ignore
+  global.window = {};
+}
+const JSEncrypt = require('jsencrypt/bin/jsencrypt');
 
 export const encrypt = async (plainText: string, publicKey: string) => {
-  // 动态引入，为了在 rn 小程序等环境下构建的时候不会报错
-  const crypto = require('crypto');
-  const pawBuffer = Buffer.from(plainText);
-  const encryptText = crypto
-    .publicEncrypt(
-      {
-        key: Buffer.from(publicKey), // 如果通过文件方式读入就不必转成Buffer
-        padding: 1
-        // padding: crypto.constants.RSA_PKCS1_PADDING
-      },
-      pawBuffer
-    )
-    .toString('base64');
-  return encryptText;
+  return new Promise<string>((resolve, reject) => {
+    const jsencrypt = new JSEncrypt({});
+    jsencrypt.setPublicKey(publicKey); // 设置公钥
+
+    const encrypted = jsencrypt.encrypt(plainText);
+
+    if (encrypted) {
+      resolve(encrypted);
+    } else {
+      reject(encrypted);
+    }
+  });
+
+  // // 动态引入，为了在 rn 小程序等环境下构建的时候不会报错
+  // const crypto = require('crypto');
+  // const pawBuffer = Buffer.from(plainText);
+  // const encryptText = crypto
+  //   .publicEncrypt(
+  //     {
+  //       key: Buffer.from(publicKey), // 如果通过文件方式读入就不必转成Buffer
+  //       padding: 1
+  //       // padding: crypto.constants.RSA_PKCS1_PADDING
+  //     },
+  //     pawBuffer
+  //   )
+  //   .toString('base64');
+  // return encryptText;
 };
 
 export default function buildTree(nodes: any[]) {
