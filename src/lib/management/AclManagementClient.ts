@@ -19,7 +19,8 @@ import {
   allow,
   authorizeResource,
   isAllowed,
-  listAuthorizedResources
+  listAuthorizedResources,
+  resourcePermissions
 } from '../graphqlapi';
 import {
   AuthorizeResourceOpt,
@@ -217,9 +218,43 @@ export class AclManagementClient {
 
   /**
    * @description 获取具备某个（类）资源操作权限的用户、分组、角色、组织机构。
-   *
+   * @param namespace {string} 权限分组标识
+   * @param resource {string} 资源标识
+   * @param actions {string[]} 资源操作标识
+   * @param targetType {string} 筛选项，指定返回主体的类型，可选值为 'USER'、'ROLE'、'ORG'、'GROUP'
    */
-  public async listResourcePermissions() {}
+  public async getAuthorizedTargets(options: {
+    namespace: string;
+    resource: string;
+    resourceType: 'BUTTON' | 'UI' | 'MENU' | 'API' | 'DATA';
+    actions?: {
+      op: 'AND' | 'OR';
+      list: string[];
+    };
+    targetType?: 'USER' | 'ROLE' | 'ORG' | 'GROUP';
+  }) {
+    if (!options) {
+      throw new Error(
+        '请传入 options.namespace、options.resource、options.actions，含义为权限分组标识、资源标识、资源操作标识'
+      );
+    }
+    if (!options.namespace) {
+      throw new Error('请传入 options.namespace，含义为权限分组标识');
+    }
+    if (!options.resource) {
+      throw new Error('请传入 options.resource，含义为资源标识');
+    }
+    if (!options.resourceType) {
+      throw new Error('请传入 options.resourceType，含义为资源类型');
+    }
+    return await resourcePermissions(this.graphqlClient, this.tokenProvider, {
+      namespace: options.namespace,
+      resourceType: options.resourceType as any,
+      resource: options.resource,
+      targetType: options.targetType as any,
+      actions: options.actions as any
+    })
+  }
 
   public async listResources(options?: IResourceQueryFilter) {
     return await this.httpClient.request({
@@ -627,7 +662,10 @@ export class AclManagementClient {
    * @param limit 每页显示条数
    * @returns Promise<Resources>
    */
-  public async listNamespaces(page: number = 1, limit: number = 10): Promise<Namespaces> {
+  public async listNamespaces(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<Namespaces> {
     const result = await this.httpClient.request({
       method: 'GET',
       url:
