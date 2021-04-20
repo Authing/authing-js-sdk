@@ -230,3 +230,18 @@ test('更改默认应用访问策略（默认拒绝所有用户访问应用、�
   });
   t.assert(res3.permissionStrategy.defaultStrategy === 'ALLOW_ALL');
 });
+
+test.only('获取具备某个（类）资源操作权限的用户、分组、角色、组织机构。', async t => {
+  let res = await managementClient.acl.getAuthorizedTargets({
+    namespace: '6063f88dabb536e9a23a6c80',
+    resource: 'book',
+    resourceType: 'DATA',
+    actions: {
+      op: 'OR',
+      list: ['write']
+    },
+    targetType: 'USER'
+  })
+  console.log(JSON.stringify(res))
+  t.assert(res)
+})
