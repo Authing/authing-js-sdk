@@ -247,13 +247,16 @@ export class AclManagementClient {
     if (!options.resourceType) {
       throw new Error('请传入 options.resourceType，含义为资源类型');
     }
-    return await resourcePermissions(this.graphqlClient, this.tokenProvider, {
+    const {
+      resourcePermissions: authorizedTargets
+    } = await resourcePermissions(this.graphqlClient, this.tokenProvider, {
       namespace: options.namespace,
       resourceType: options.resourceType as any,
       resource: options.resource,
       targetType: options.targetType as any,
       actions: options.actions as any
-    })
+    });
+    return authorizedTargets;
   }
 
   public async listResources(options?: IResourceQueryFilter) {
