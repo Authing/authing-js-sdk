@@ -13,7 +13,7 @@ export type Scalars = {
 export type Query = {
   isActionAllowed: Scalars['Boolean'];
   isActionDenied: Scalars['Boolean'];
-  resourcePermissions?: Maybe<PaginatedResourcePermissionAssignments>;
+  authorizedTargets?: Maybe<PaginatedAuthorizedTargets>;
   qiniuUptoken?: Maybe<Scalars['String']>;
   isDomainAvaliable?: Maybe<Scalars['Boolean']>;
   /** 获取社会化登录定义 */
@@ -97,12 +97,12 @@ export type QueryIsActionDeniedArgs = {
 };
 
 
-export type QueryResourcePermissionsArgs = {
+export type QueryAuthorizedTargetsArgs = {
   namespace: Scalars['String'];
   resourceType: ResourceType;
   resource: Scalars['String'];
   targetType?: Maybe<PolicyAssignmentTargetType>;
-  actions?: Maybe<ResourcePermissionsActionsInput>;
+  actions?: Maybe<AuthorizedTargetsActionsInput>;
 };
 
 
@@ -319,6 +319,7 @@ export type QueryIsUserExistsArgs = {
   email?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
 };
 
 
@@ -363,7 +364,7 @@ export enum PolicyAssignmentTargetType {
   AkSk = 'AK_SK'
 }
 
-export type ResourcePermissionsActionsInput = {
+export type AuthorizedTargetsActionsInput = {
   op: Operator;
   list: Array<Maybe<Scalars['String']>>;
 };
@@ -373,7 +374,7 @@ export enum Operator {
   Or = 'OR'
 }
 
-export type PaginatedResourcePermissionAssignments = {
+export type PaginatedAuthorizedTargets = {
   list?: Maybe<Array<Maybe<ResourcePermissionAssignment>>>;
   totalCount?: Maybe<Scalars['Int']>;
 };
@@ -2786,6 +2787,17 @@ export type ArchivedUsersVariables = Exact<{
 
 export type ArchivedUsersResponse = { archivedUsers: { totalCount: number, list: Array<{ id: string, arn: string, status?: Maybe<UserStatus>, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string> }> } };
 
+export type AuthorizedTargetsVariables = Exact<{
+  namespace: Scalars['String'];
+  resourceType: ResourceType;
+  resource: Scalars['String'];
+  targetType?: Maybe<PolicyAssignmentTargetType>;
+  actions?: Maybe<AuthorizedTargetsActionsInput>;
+}>;
+
+
+export type AuthorizedTargetsResponse = { authorizedTargets?: Maybe<{ totalCount?: Maybe<number>, list?: Maybe<Array<Maybe<{ targetType?: Maybe<PolicyAssignmentTargetType>, targetIdentifier?: Maybe<string>, actions?: Maybe<Array<string>> }>>> }> };
+
 export type CheckLoginStatusVariables = Exact<{
   token?: Maybe<Scalars['String']>;
 }>;
@@ -2925,6 +2937,7 @@ export type IsUserExistsVariables = Exact<{
   email?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -3100,17 +3113,6 @@ export type QueryMfaVariables = Exact<{
 
 
 export type QueryMfaResponse = { queryMfa?: Maybe<{ id: string, userId: string, userPoolId: string, enable: boolean, secret?: Maybe<string> }> };
-
-export type ResourcePermissionsVariables = Exact<{
-  namespace: Scalars['String'];
-  resourceType: ResourceType;
-  resource: Scalars['String'];
-  targetType?: Maybe<PolicyAssignmentTargetType>;
-  actions?: Maybe<ResourcePermissionsActionsInput>;
-}>;
-
-
-export type ResourcePermissionsResponse = { resourcePermissions?: Maybe<{ totalCount?: Maybe<number>, list?: Maybe<Array<Maybe<{ targetType?: Maybe<PolicyAssignmentTargetType>, targetIdentifier?: Maybe<string>, actions?: Maybe<Array<string>> }>>> }> };
 
 export type RoleVariables = Exact<{
   code: Scalars['String'];
@@ -5236,6 +5238,18 @@ export const ArchivedUsersDocument = `
   }
 }
     `;
+export const AuthorizedTargetsDocument = `
+    query authorizedTargets($namespace: String!, $resourceType: ResourceType!, $resource: String!, $targetType: PolicyAssignmentTargetType, $actions: AuthorizedTargetsActionsInput) {
+  authorizedTargets(namespace: $namespace, resource: $resource, resourceType: $resourceType, targetType: $targetType, actions: $actions) {
+    totalCount
+    list {
+      targetType
+      targetIdentifier
+      actions
+    }
+  }
+}
+    `;
 export const CheckLoginStatusDocument = `
     query checkLoginStatus($token: String) {
   checkLoginStatus(token: $token) {
@@ -5555,8 +5569,8 @@ export const IsRootNodeDocument = `
 }
     `;
 export const IsUserExistsDocument = `
-    query isUserExists($email: String, $phone: String, $username: String) {
-  isUserExists(email: $email, phone: $phone, username: $username)
+    query isUserExists($email: String, $phone: String, $username: String, $externalId: String) {
+  isUserExists(email: $email, phone: $phone, username: $username, externalId: $externalId)
 }
     `;
 export const AuthorizedResourcesDocument = `
@@ -6006,18 +6020,6 @@ export const QueryMfaDocument = `
     userPoolId
     enable
     secret
-  }
-}
-    `;
-export const ResourcePermissionsDocument = `
-    query resourcePermissions($namespace: String!, $resourceType: ResourceType!, $resource: String!, $targetType: PolicyAssignmentTargetType, $actions: ResourcePermissionsActionsInput) {
-  resourcePermissions(namespace: $namespace, resource: $resource, resourceType: $resourceType, targetType: $targetType, actions: $actions) {
-    totalCount
-    list {
-      targetType
-      targetIdentifier
-      actions
-    }
   }
 }
     `;

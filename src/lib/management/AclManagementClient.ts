@@ -20,7 +20,7 @@ import {
   authorizeResource,
   isAllowed,
   listAuthorizedResources,
-  resourcePermissions
+  authorizedTargets
 } from '../graphqlapi';
 import {
   AuthorizeResourceOpt,
@@ -248,15 +248,15 @@ export class AclManagementClient {
       throw new Error('请传入 options.resourceType，含义为资源类型');
     }
     const {
-      resourcePermissions: authorizedTargets
-    } = await resourcePermissions(this.graphqlClient, this.tokenProvider, {
+      authorizedTargets: data
+    } = await authorizedTargets(this.graphqlClient, this.tokenProvider, {
       namespace: options.namespace,
       resourceType: options.resourceType as any,
       resource: options.resource,
       targetType: options.targetType as any,
       actions: options.actions as any
     });
-    return authorizedTargets;
+    return data;
   }
 
   public async listResources(options?: IResourceQueryFilter) {

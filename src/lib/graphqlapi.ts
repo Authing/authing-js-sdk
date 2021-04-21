@@ -316,9 +316,9 @@ import {
   AuthorizeResourceVariables,
   AuthorizeResourceResponse,
   AuthorizeResourceDocument,
-  ResourcePermissionsDocument,
-  ResourcePermissionsResponse,
-  ResourcePermissionsVariables
+  AuthorizedTargetsDocument,
+  AuthorizedTargetsResponse,
+  AuthorizedTargetsVariables
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1785,12 +1785,12 @@ export const authorizeResource = async (
 };
 
 
-export const resourcePermissions = async (
+export const authorizedTargets = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
-  variables: ResourcePermissionsVariables,
-): Promise<ResourcePermissionsResponse> => {
-  const query = ResourcePermissionsDocument;
+  variables: AuthorizedTargetsVariables,
+): Promise<AuthorizedTargetsResponse> => {
+  const query = AuthorizedTargetsDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
