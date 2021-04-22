@@ -382,6 +382,8 @@ export interface IOidcParams {
   state?: string;
   nonce?: string;
   scope?: string;
+  codeChallengeMethod?: 'plain' | 'S256'
+  codeChallenge?: string;
 }
 
 export interface IOauthParams {

@@ -1,4 +1,7 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
+import sha256 from 'crypto-js/sha256';
+import CryptoJS from 'crypto-js';
+
 import {
   bindEmail,
   bindPhone,
@@ -63,6 +66,7 @@ import {
   convertUdvToKeyValuePair,
   encrypt,
   formatAuthorizedResources,
+  generateRandomString,
   uploadFile
 } from '../utils';
 import jwtDecode from 'jwt-decode';
@@ -1883,13 +1887,21 @@ export class AuthenticationClient {
     let token = 'Basic ' + Buffer.from(id + ':' + s).toString('base64');
     return token;
   }
-  async _getAccessTokenByCodeWithClientSecretPost(code: string) {
+  /**
+   * @param {string} code 授权码 code
+   * @param {string} codeVerifier 校验码 codeVerifier
+   */
+  async _getAccessTokenByCodeWithClientSecretPost(
+    code: string,
+    codeVerifier?: string
+  ) {
     const qstr = this._generateTokenRequest({
       client_id: this.options.appId,
       client_secret: this.options.secret,
       grant_type: 'authorization_code',
       code,
-      redirect_uri: this.options.redirectUri
+      redirect_uri: this.options.redirectUri,
+      code_verifier: codeVerifier
     });
     let api = '';
     if (this.options.protocol === 'oidc') {
@@ -1907,7 +1919,14 @@ export class AuthenticationClient {
     });
     return tokenSet;
   }
-  async _getAccessTokenByCodeWithClientSecretBasic(code: string) {
+  /**
+   * @param {string} code 授权码 code
+   * @param {string} codeVerifier 校验码 codeVerifier
+   */
+  async _getAccessTokenByCodeWithClientSecretBasic(
+    code: string,
+    codeVerifier?: string
+  ) {
     let api = '';
     if (this.options.protocol === 'oidc') {
       api = `${this.baseClient.appHost}/oidc/token`;
@@ -1917,7 +1936,8 @@ export class AuthenticationClient {
     const qstr = this._generateTokenRequest({
       grant_type: 'authorization_code',
       code,
-      redirect_uri: this.options.redirectUri
+      redirect_uri: this.options.redirectUri,
+      code_verifier: codeVerifier
     });
     let tokenSet = await this.naiveHttpClient.request({
       data: qstr,
@@ -1929,7 +1949,11 @@ export class AuthenticationClient {
     });
     return tokenSet;
   }
-  async _getAccessTokenByCodeWithNone(code: string) {
+  /**
+   * @param {string} code 授权码 code
+   * @param {string} codeVerifier 校验码 codeVerifier
+   */
+  async _getAccessTokenByCodeWithNone(code: string, codeVerifier?: string) {
     let api = '';
     if (this.options.protocol === 'oidc') {
       api = `${this.baseClient.appHost}/oidc/token`;
@@ -1940,7 +1964,8 @@ export class AuthenticationClient {
       client_id: this.options.appId,
       grant_type: 'authorization_code',
       code,
-      redirect_uri: this.options.redirectUri
+      redirect_uri: this.options.redirectUri,
+      code_verifier: codeVerifier
     });
     let tokenSet = await this.naiveHttpClient.request({
       method: 'POST',
@@ -1949,7 +1974,10 @@ export class AuthenticationClient {
     });
     return tokenSet;
   }
-  async getAccessTokenByCode(code: string) {
+  async getAccessTokenByCode(
+    code: string,
+    options?: { codeVerifier?: string }
+  ) {
     if (!['oauth', 'oidc'].includes(this.options.protocol)) {
       throw new Error(
         '初始化 AuthenticationClient 时传入的 protocol 参数必须为 oauth 或 oidc，请检查参数'
@@ -1964,14 +1992,50 @@ export class AuthenticationClient {
       );
     }
     if (this.options.tokenEndPointAuthMethod === 'client_secret_post') {
-      return await this._getAccessTokenByCodeWithClientSecretPost(code);
+      return await this._getAccessTokenByCodeWithClientSecretPost(
+        code,
+        options?.codeVerifier
+      );
     }
     if (this.options.tokenEndPointAuthMethod === 'client_secret_basic') {
-      return await this._getAccessTokenByCodeWithClientSecretBasic(code);
+      return await this._getAccessTokenByCodeWithClientSecretBasic(
+        code,
+        options?.codeVerifier
+      );
     }
     if (this.options.tokenEndPointAuthMethod === 'none') {
-      return await this._getAccessTokenByCodeWithNone(code);
+      return await this._getAccessTokenByCodeWithNone(
+        code,
+        options?.codeVerifier
+      );
     }
+  }
+  generateCodeChallenge() {
+    return generateRandomString(43);
+  }
+  getCodeChallengeDigest(options: {
+    codeChallenge: string;
+    method: 'S256' | 'plain';
+  }) {
+    if (!options) {
+      throw new Error(
+        '请提供 options 参数，options.codeChallenge 为一个长度大于等于 43 的字符串，options.method 可选值为 S256、plain'
+      );
+    }
+    if (!options.codeChallenge) {
+      throw new Error(
+        '请提供 options.codeChallenge，值为一个长度大于等于 43 的字符串'
+      );
+    }
+    const { method = 'S256' } = options;
+    if (method === 'S256') {
+      // url safe base64
+      return sha256(options.codeChallenge).toString(CryptoJS.enc.Base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    }
+    if (method === 'plain') {
+      return options.codeChallenge;
+    }
+    throw new Error('不支持的 options.method，可选值为 S256、plain');
   }
   async getAccessTokenByClientCredentials(
     scope: string,
@@ -2061,7 +2125,9 @@ export class AuthenticationClient {
       nonce: 'nonce',
       responseMode: 'response_mode',
       responseType: 'response_type',
-      redirectUri: 'redirect_uri'
+      redirectUri: 'redirect_uri',
+      codeChallenge: 'code_challenge',
+      codeChallengeMethod: 'code_challenge_method'
     };
     let res: any = {
       nonce: Math.random()
@@ -2462,10 +2528,7 @@ export class AuthenticationClient {
    * @param roleCode 角色 Code
    * @param namespace 权限分组 ID
    */
-  public async hasRole(
-    roleCode: string,
-    namespace?: string
-  ): Promise<boolean> {
+  public async hasRole(roleCode: string, namespace?: string): Promise<boolean> {
     const { user } = await getUserRoles(
       this.graphqlClient,
       this.tokenProvider,

@@ -549,10 +549,64 @@ test('拼接 OIDC 带 refresh_token 能力的授权链接', async t => {
     url1Data.searchParams.get('scope') === 'openid profile offline_access'
   );
   t.assert(url1Data.searchParams.get('client_id') === '9072248490655972');
-  t.assert(url1Data.searchParams.get('response_mode') === 'query');
   t.assert(url1Data.searchParams.get('redirect_uri') === 'https://baidu.com');
   t.assert(url1Data.searchParams.get('response_type') === 'code');
   t.assert(url1Data.searchParams.get('prompt') === 'consent');
+});
+
+test('拼接 OIDC 授权码 + PKCE 带 refresh_token 能力的授权链接', async t => {
+  const authing = new AuthenticationClient({
+    appId: '9072248490655972',
+    appHost: 'https://oidc1.authing.cn',
+    secret: '16657960936447935',
+    redirectUri: 'https://baidu.com',
+    tokenEndPointAuthMethod: 'client_secret_basic',
+    protocol: 'oidc'
+  });
+  let codeChallenge = authing.generateCodeChallenge();
+  console.log(codeChallenge);
+  // 计算 code_verifier 的 SHA256 摘要
+  let codeChallengeDigest = authing.getCodeChallengeDigest({
+    codeChallenge,
+    method: 'S256'
+  });
+  // 如果需要获取 Refresh token，请在 scope 中加入 offline_access 项
+  console.log(codeChallengeDigest);
+  let url = authing.buildAuthorizeUrl({
+    codeChallenge: codeChallengeDigest,
+    codeChallengeMethod: 'S256',
+    scope: 'openid profile offline_access'
+  });
+  console.log(url);
+  let url1Data = new URL(url);
+
+  t.assert(url1Data.hostname === 'oidc1.authing.cn');
+  t.assert(url1Data.pathname === '/oidc/auth');
+  t.assert(typeof parseInt(url1Data.searchParams.get('nonce')) === 'number');
+  t.assert(typeof parseInt(url1Data.searchParams.get('state')) === 'number');
+  t.assert(
+    url1Data.searchParams.get('scope') === 'openid profile offline_access'
+  );
+  t.assert(url1Data.searchParams.get('client_id') === '9072248490655972');
+  t.assert(url1Data.searchParams.get('redirect_uri') === 'https://baidu.com');
+  t.assert(url1Data.searchParams.get('response_type') === 'code');
+  t.assert(url1Data.searchParams.get('prompt') === 'consent');
+  t.assert(url1Data.searchParams.get('code_challenge') === codeChallengeDigest);
+  t.assert(url1Data.searchParams.get('code_challenge_method') === 'S256');
+});
+
+test.only('OIDC 授权码 + PKCE code 换 token', async t => {
+  const authing = new AuthenticationClient({
+    appId: '5f17a529f64fb009b794a2ff',
+    appHost: 'https://oidc1.authing.cn',
+    redirectUri: 'https://baidu.com',
+    tokenEndPointAuthMethod: 'none',
+    protocol: 'oidc'
+  });
+  let res = await authing.getAccessTokenByCode('xoLxw18uPidrwNHWMFC8AwlBl5aciCP8Em_-NcvURZ-', {
+    codeVerifier: 'Bu6RP796BBiAwGwdUpHpKfhmQqahszBcGep8qT31XOy'
+  });
+  t.assert(res.access_token)
 });
 
 test('拼接 OAuth 授权链接', async t => {
