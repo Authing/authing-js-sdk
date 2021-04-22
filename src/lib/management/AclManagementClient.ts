@@ -150,15 +150,21 @@ export class AclManagementClient {
   async isAllowed(
     userId: string,
     resource: string,
-    action: string
+    action: string,
+    opts?: {
+      namespace?: string;
+    }
   ): Promise<boolean> {
+    const { namespace } = opts || {};
+
     const { isActionAllowed } = await isAllowed(
       this.graphqlClient,
       this.tokenProvider,
       {
         resource,
         action,
-        userId
+        userId,
+        namespace
       }
     );
     return isActionAllowed;
@@ -247,15 +253,17 @@ export class AclManagementClient {
     if (!options.resourceType) {
       throw new Error('请传入 options.resourceType，含义为资源类型');
     }
-    const {
-      authorizedTargets: data
-    } = await authorizedTargets(this.graphqlClient, this.tokenProvider, {
-      namespace: options.namespace,
-      resourceType: options.resourceType as any,
-      resource: options.resource,
-      targetType: options.targetType as any,
-      actions: options.actions as any
-    });
+    const { authorizedTargets: data } = await authorizedTargets(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        namespace: options.namespace,
+        resourceType: options.resourceType as any,
+        resource: options.resource,
+        targetType: options.targetType as any,
+        actions: options.actions as any
+      }
+    );
     return data;
   }
 

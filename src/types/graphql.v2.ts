@@ -87,6 +87,7 @@ export type QueryIsActionAllowedArgs = {
   resource: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 };
 
 
@@ -94,6 +95,7 @@ export type QueryIsActionDeniedArgs = {
   resource: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 };
 
 
@@ -2904,6 +2906,7 @@ export type IsActionAllowedVariables = Exact<{
   resource: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -2913,6 +2916,7 @@ export type IsActionDeniedVariables = Exact<{
   resource: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
+  namespace?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -5549,13 +5553,13 @@ export const GroupsDocument = `
 }
     `;
 export const IsActionAllowedDocument = `
-    query isActionAllowed($resource: String!, $action: String!, $userId: String!) {
-  isActionAllowed(resource: $resource, action: $action, userId: $userId)
+    query isActionAllowed($resource: String!, $action: String!, $userId: String!, $namespace: String) {
+  isActionAllowed(resource: $resource, action: $action, userId: $userId, namespace: $namespace)
 }
     `;
 export const IsActionDeniedDocument = `
-    query isActionDenied($resource: String!, $action: String!, $userId: String!) {
-  isActionDenied(resource: $resource, action: $action, userId: $userId)
+    query isActionDenied($resource: String!, $action: String!, $userId: String!, $namespace: String) {
+  isActionDenied(resource: $resource, action: $action, userId: $userId, namespace: $namespace)
 }
     `;
 export const IsDomainAvaliableDocument = `
