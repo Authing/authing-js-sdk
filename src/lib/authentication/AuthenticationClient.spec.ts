@@ -595,7 +595,7 @@ test('拼接 OIDC 授权码 + PKCE 带 refresh_token 能力的授权链接', asy
   t.assert(url1Data.searchParams.get('code_challenge_method') === 'S256');
 });
 
-test.only('OIDC 授权码 + PKCE code 换 token', async t => {
+test('OIDC 授权码 + PKCE code 换 token', async t => {
   const authing = new AuthenticationClient({
     appId: '5f17a529f64fb009b794a2ff',
     appHost: 'https://oidc1.authing.cn',
