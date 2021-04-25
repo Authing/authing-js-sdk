@@ -171,7 +171,8 @@ export enum SocialConnectionProvider {
   WEIBO = 'weibo',
   APPLE = 'apple',
   APPLE_WEB = 'apple:web',
-  OAUTH = 'oauth'
+  OAUTH = 'oauth',
+  BAIDU = 'baidu'
 }
 
 export enum Protocol {
@@ -382,7 +383,7 @@ export interface IOidcParams {
   state?: string;
   nonce?: string;
   scope?: string;
-  codeChallengeMethod?: 'plain' | 'S256'
+  codeChallengeMethod?: 'plain' | 'S256';
   codeChallenge?: string;
 }
 
