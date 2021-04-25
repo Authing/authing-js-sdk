@@ -1885,7 +1885,7 @@ export class AuthenticationClient {
         ret[key] = params[key];
       }
     });
-    let p = new URLSearchParams(params);
+    let p = new URLSearchParams(ret);
     return p.toString();
   }
   _generateBasicAuthToken(appId?: string, secret?: string) {
