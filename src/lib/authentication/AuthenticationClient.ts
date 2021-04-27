@@ -516,7 +516,7 @@ export class AuthenticationClient {
   /**
    * @name checkPasswordStrength
    * @name_zh 检查密码强度
-   * @description 检查密码强度，详情请见: https://docs.authing.co/security/config-user-pool-password-level.html
+   * @description 检查密码强度，详情请见: https://docs.authing.co/v2/guides/security/config-password.html
    *
    * @param {string} password
    * @example
@@ -1492,6 +1492,7 @@ export class AuthenticationClient {
    * @name listUdv
    * @name_zh 获取当前用户的自定义数据列表
    * @description 获取当前用户的自定义数据列表
+   * @deprecated use getUdfValue instead
    *
    * @example
    *

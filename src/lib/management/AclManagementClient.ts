@@ -116,8 +116,8 @@ export class AclManagementClient {
   async allow(
     userId: string,
     resource: string,
-    action: string
-    // namespace: string
+    action: string,
+    namespace: string
   ): Promise<CommonMessage> {
     const { allow: data } = await allow(
       this.graphqlClient,
@@ -125,7 +125,8 @@ export class AclManagementClient {
       {
         resource,
         action,
-        userId
+        userId,
+        namespace
       }
     );
     return data;
@@ -272,7 +273,7 @@ export class AclManagementClient {
       method: 'GET',
       url: `${this.options.host}/api/v2/resources`,
       params: {
-        namespaceCode: options?.namespace || options?.namespaceCode,
+        namespace: options?.namespace || options?.namespaceCode,
         type: options?.type,
         limit: options?.limit || 10,
         page: options?.page || 1
