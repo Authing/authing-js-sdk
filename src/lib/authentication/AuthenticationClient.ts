@@ -1879,7 +1879,14 @@ export class AuthenticationClient {
     return PasswordSecurityLevel.LOW;
   }
   _generateTokenRequest(params: { [x: string]: string }) {
-    let p = new URLSearchParams(params);
+    let ret: any = {};
+    // 删掉所有 undefined 的 kv
+    Object.keys(params).map(key => {
+      if (typeof params[key] !== 'undefined') {
+        ret[key] = params[key];
+      }
+    });
+    let p = new URLSearchParams(ret);
     return p.toString();
   }
   _generateBasicAuthToken(appId?: string, secret?: string) {
@@ -2031,7 +2038,11 @@ export class AuthenticationClient {
     const { method = 'S256' } = options;
     if (method === 'S256') {
       // url safe base64
-      return sha256(options.codeChallenge).toString(CryptoJS.enc.Base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+      return sha256(options.codeChallenge)
+        .toString(CryptoJS.enc.Base64)
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '');
     }
     if (method === 'plain') {
       return options.codeChallenge;

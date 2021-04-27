@@ -527,7 +527,7 @@ test('拼接 OIDC 隐式模式授权链接', async t => {
   t.assert(url1Data.searchParams.get('response_type') === 'id_token token');
 });
 
-test('拼接 OIDC 带 refresh_token 能力的授权链接', async t => {
+test.only('拼接 OIDC 带 refresh_token 能力的授权链接', async t => {
   const authing = new AuthenticationClient({
     appId: '9072248490655972',
     appHost: 'https://oidc1.authing.cn',
@@ -552,6 +552,7 @@ test('拼接 OIDC 带 refresh_token 能力的授权链接', async t => {
   t.assert(url1Data.searchParams.get('redirect_uri') === 'https://baidu.com');
   t.assert(url1Data.searchParams.get('response_type') === 'code');
   t.assert(url1Data.searchParams.get('prompt') === 'consent');
+  t.falsy(url1Data.searchParams.get('code_verifier'));
 });
 
 test('拼接 OIDC 授权码 + PKCE 带 refresh_token 能力的授权链接', async t => {
