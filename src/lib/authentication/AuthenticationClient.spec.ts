@@ -527,7 +527,7 @@ test('拼接 OIDC 隐式模式授权链接', async t => {
   t.assert(url1Data.searchParams.get('response_type') === 'id_token token');
 });
 
-test.only('拼接 OIDC 带 refresh_token 能力的授权链接', async t => {
+test('拼接 OIDC 带 refresh_token 能力的授权链接', async t => {
   const authing = new AuthenticationClient({
     appId: '9072248490655972',
     appHost: 'https://oidc1.authing.cn',
@@ -604,10 +604,13 @@ test('OIDC 授权码 + PKCE code 换 token', async t => {
     tokenEndPointAuthMethod: 'none',
     protocol: 'oidc'
   });
-  let res = await authing.getAccessTokenByCode('xoLxw18uPidrwNHWMFC8AwlBl5aciCP8Em_-NcvURZ-', {
-    codeVerifier: 'Bu6RP796BBiAwGwdUpHpKfhmQqahszBcGep8qT31XOy'
-  });
-  t.assert(res.access_token)
+  let res = await authing.getAccessTokenByCode(
+    'xoLxw18uPidrwNHWMFC8AwlBl5aciCP8Em_-NcvURZ-',
+    {
+      codeVerifier: 'Bu6RP796BBiAwGwdUpHpKfhmQqahszBcGep8qT31XOy'
+    }
+  );
+  t.assert(res.access_token);
 });
 
 test('拼接 OAuth 授权链接', async t => {
@@ -869,4 +872,91 @@ test('在线验证 idToken 或 accessToken', async t => {
   t.assert(res.sub === user2.id);
   let res2 = await authing.validateToken({ idToken: '1' });
   t.assert(res2.code === 400);
+});
+
+test.skip('使用 Access token 换用户信息，GET + query', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  let userInfo = await authing.getUserInfoByAccessToken(
+    'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRmTE90M0xibjhfYThwUk11ZXNzYW1xai1vM0RCQ3MxLW93SExRLVZNcVEifQ.eyJqdGkiOiJycEdYV0xBdDBVZDBPR3VtelZiM08iLCJzdWIiOiI1ZjcxOTk0NjUyNGVlMTA5OTIyOTQ5NmIiLCJpYXQiOjE2MTk1OTg0MjAsImV4cCI6MTYxOTYwMjAyMCwic2NvcGUiOiJwcm9maWxlIGVtYWlsIHBob25lIG9wZW5pZCBhZGRyZXNzIiwiaXNzIjoiaHR0cHM6Ly9vaWRjMS5hdXRoaW5nLmNuL29pZGMiLCJhdWQiOiI1ZjE3YTUyOWY2NGZiMDA5Yjc5NGEyZmYifQ.Pdfi8cVsGevMRm524kTMJq1v2hqZP2IP3IuFCTZuB9oObti_hpRd4xHGBfUhABnG1qY-oq2By99Ev3i10DhrArAiAh55bqJa7x0TbqihY3HVREHpNH0y5kLUaXKRRJf1KA31EvJm_x3v5qnil52tGgzDa1hqnIBXHSOH09-_co-XwyZS8Ai296tlAtnHBVrEXVJh1WFw81jJ4dQlw1Sgo0XBXkcMBazv-iYq9irspCl52ryDYcD8-ZDdJ1lrOjdmO5DaswGbYNGy75KdwAx4y8X5WqOXEhRe-HZqE7cPsBkNrqt5bUnc5A20mjbcZdR7kvF6bAH7UNqQh3qlI0CFUA',
+    {
+      method: 'GET',
+      tokenPlace: 'query'
+    }
+  );
+  t.truthy(userInfo.sub);
+});
+
+test.skip('使用 Access token 换用户信息，GET + body', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  try {
+    let userInfo = await authing.getUserInfoByAccessToken(
+      'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRmTE90M0xibjhfYThwUk11ZXNzYW1xai1vM0RCQ3MxLW93SExRLVZNcVEifQ.eyJqdGkiOiJycEdYV0xBdDBVZDBPR3VtelZiM08iLCJzdWIiOiI1ZjcxOTk0NjUyNGVlMTA5OTIyOTQ5NmIiLCJpYXQiOjE2MTk1OTg0MjAsImV4cCI6MTYxOTYwMjAyMCwic2NvcGUiOiJwcm9maWxlIGVtYWlsIHBob25lIG9wZW5pZCBhZGRyZXNzIiwiaXNzIjoiaHR0cHM6Ly9vaWRjMS5hdXRoaW5nLmNuL29pZGMiLCJhdWQiOiI1ZjE3YTUyOWY2NGZiMDA5Yjc5NGEyZmYifQ.Pdfi8cVsGevMRm524kTMJq1v2hqZP2IP3IuFCTZuB9oObti_hpRd4xHGBfUhABnG1qY-oq2By99Ev3i10DhrArAiAh55bqJa7x0TbqihY3HVREHpNH0y5kLUaXKRRJf1KA31EvJm_x3v5qnil52tGgzDa1hqnIBXHSOH09-_co-XwyZS8Ai296tlAtnHBVrEXVJh1WFw81jJ4dQlw1Sgo0XBXkcMBazv-iYq9irspCl52ryDYcD8-ZDdJ1lrOjdmO5DaswGbYNGy75KdwAx4y8X5WqOXEhRe-HZqE7cPsBkNrqt5bUnc5A20mjbcZdR7kvF6bAH7UNqQh3qlI0CFUA',
+      {
+        method: 'GET',
+        tokenPlace: 'body'
+      }
+    );
+    t.truthy(userInfo.sub);
+  } catch (_) {
+    t.pass();
+  }
+});
+
+test.skip('使用 Access token 换用户信息，GET + header', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  let userInfo = await authing.getUserInfoByAccessToken(
+    'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRmTE90M0xibjhfYThwUk11ZXNzYW1xai1vM0RCQ3MxLW93SExRLVZNcVEifQ.eyJqdGkiOiJycEdYV0xBdDBVZDBPR3VtelZiM08iLCJzdWIiOiI1ZjcxOTk0NjUyNGVlMTA5OTIyOTQ5NmIiLCJpYXQiOjE2MTk1OTg0MjAsImV4cCI6MTYxOTYwMjAyMCwic2NvcGUiOiJwcm9maWxlIGVtYWlsIHBob25lIG9wZW5pZCBhZGRyZXNzIiwiaXNzIjoiaHR0cHM6Ly9vaWRjMS5hdXRoaW5nLmNuL29pZGMiLCJhdWQiOiI1ZjE3YTUyOWY2NGZiMDA5Yjc5NGEyZmYifQ.Pdfi8cVsGevMRm524kTMJq1v2hqZP2IP3IuFCTZuB9oObti_hpRd4xHGBfUhABnG1qY-oq2By99Ev3i10DhrArAiAh55bqJa7x0TbqihY3HVREHpNH0y5kLUaXKRRJf1KA31EvJm_x3v5qnil52tGgzDa1hqnIBXHSOH09-_co-XwyZS8Ai296tlAtnHBVrEXVJh1WFw81jJ4dQlw1Sgo0XBXkcMBazv-iYq9irspCl52ryDYcD8-ZDdJ1lrOjdmO5DaswGbYNGy75KdwAx4y8X5WqOXEhRe-HZqE7cPsBkNrqt5bUnc5A20mjbcZdR7kvF6bAH7UNqQh3qlI0CFUA',
+    {
+      method: 'GET',
+      tokenPlace: 'header'
+    }
+  );
+  t.truthy(userInfo.sub);
+});
+
+test.skip('使用 Access token 换用户信息，POST + header', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  let userInfo = await authing.getUserInfoByAccessToken(
+    'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRmTE90M0xibjhfYThwUk11ZXNzYW1xai1vM0RCQ3MxLW93SExRLVZNcVEifQ.eyJqdGkiOiJycEdYV0xBdDBVZDBPR3VtelZiM08iLCJzdWIiOiI1ZjcxOTk0NjUyNGVlMTA5OTIyOTQ5NmIiLCJpYXQiOjE2MTk1OTg0MjAsImV4cCI6MTYxOTYwMjAyMCwic2NvcGUiOiJwcm9maWxlIGVtYWlsIHBob25lIG9wZW5pZCBhZGRyZXNzIiwiaXNzIjoiaHR0cHM6Ly9vaWRjMS5hdXRoaW5nLmNuL29pZGMiLCJhdWQiOiI1ZjE3YTUyOWY2NGZiMDA5Yjc5NGEyZmYifQ.Pdfi8cVsGevMRm524kTMJq1v2hqZP2IP3IuFCTZuB9oObti_hpRd4xHGBfUhABnG1qY-oq2By99Ev3i10DhrArAiAh55bqJa7x0TbqihY3HVREHpNH0y5kLUaXKRRJf1KA31EvJm_x3v5qnil52tGgzDa1hqnIBXHSOH09-_co-XwyZS8Ai296tlAtnHBVrEXVJh1WFw81jJ4dQlw1Sgo0XBXkcMBazv-iYq9irspCl52ryDYcD8-ZDdJ1lrOjdmO5DaswGbYNGy75KdwAx4y8X5WqOXEhRe-HZqE7cPsBkNrqt5bUnc5A20mjbcZdR7kvF6bAH7UNqQh3qlI0CFUA',
+    {
+      method: 'POST',
+      tokenPlace: 'header'
+    }
+  );
+  t.truthy(userInfo.sub);
+});
+test.skip('使用 Access token 换用户信息，POST + query', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  let userInfo = await authing.getUserInfoByAccessToken(
+    'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRmTE90M0xibjhfYThwUk11ZXNzYW1xai1vM0RCQ3MxLW93SExRLVZNcVEifQ.eyJqdGkiOiJycEdYV0xBdDBVZDBPR3VtelZiM08iLCJzdWIiOiI1ZjcxOTk0NjUyNGVlMTA5OTIyOTQ5NmIiLCJpYXQiOjE2MTk1OTg0MjAsImV4cCI6MTYxOTYwMjAyMCwic2NvcGUiOiJwcm9maWxlIGVtYWlsIHBob25lIG9wZW5pZCBhZGRyZXNzIiwiaXNzIjoiaHR0cHM6Ly9vaWRjMS5hdXRoaW5nLmNuL29pZGMiLCJhdWQiOiI1ZjE3YTUyOWY2NGZiMDA5Yjc5NGEyZmYifQ.Pdfi8cVsGevMRm524kTMJq1v2hqZP2IP3IuFCTZuB9oObti_hpRd4xHGBfUhABnG1qY-oq2By99Ev3i10DhrArAiAh55bqJa7x0TbqihY3HVREHpNH0y5kLUaXKRRJf1KA31EvJm_x3v5qnil52tGgzDa1hqnIBXHSOH09-_co-XwyZS8Ai296tlAtnHBVrEXVJh1WFw81jJ4dQlw1Sgo0XBXkcMBazv-iYq9irspCl52ryDYcD8-ZDdJ1lrOjdmO5DaswGbYNGy75KdwAx4y8X5WqOXEhRe-HZqE7cPsBkNrqt5bUnc5A20mjbcZdR7kvF6bAH7UNqQh3qlI0CFUA',
+    {
+      method: 'POST',
+      tokenPlace: 'query'
+    }
+  );
+  t.truthy(userInfo.sub);
+});
+
+test.skip('使用 Access token 换用户信息，POST + body', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  let userInfo = await authing.getUserInfoByAccessToken(
+    'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRmTE90M0xibjhfYThwUk11ZXNzYW1xai1vM0RCQ3MxLW93SExRLVZNcVEifQ.eyJqdGkiOiJycEdYV0xBdDBVZDBPR3VtelZiM08iLCJzdWIiOiI1ZjcxOTk0NjUyNGVlMTA5OTIyOTQ5NmIiLCJpYXQiOjE2MTk1OTg0MjAsImV4cCI6MTYxOTYwMjAyMCwic2NvcGUiOiJwcm9maWxlIGVtYWlsIHBob25lIG9wZW5pZCBhZGRyZXNzIiwiaXNzIjoiaHR0cHM6Ly9vaWRjMS5hdXRoaW5nLmNuL29pZGMiLCJhdWQiOiI1ZjE3YTUyOWY2NGZiMDA5Yjc5NGEyZmYifQ.Pdfi8cVsGevMRm524kTMJq1v2hqZP2IP3IuFCTZuB9oObti_hpRd4xHGBfUhABnG1qY-oq2By99Ev3i10DhrArAiAh55bqJa7x0TbqihY3HVREHpNH0y5kLUaXKRRJf1KA31EvJm_x3v5qnil52tGgzDa1hqnIBXHSOH09-_co-XwyZS8Ai296tlAtnHBVrEXVJh1WFw81jJ4dQlw1Sgo0XBXkcMBazv-iYq9irspCl52ryDYcD8-ZDdJ1lrOjdmO5DaswGbYNGy75KdwAx4y8X5WqOXEhRe-HZqE7cPsBkNrqt5bUnc5A20mjbcZdR7kvF6bAH7UNqQh3qlI0CFUA',
+    {
+      method: 'POST',
+      tokenPlace: 'body'
+    }
+  );
+  t.truthy(userInfo.sub);
 });

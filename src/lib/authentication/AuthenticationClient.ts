@@ -67,6 +67,7 @@ import {
   encrypt,
   formatAuthorizedResources,
   generateRandomString,
+  objectToQueryString,
   uploadFile
 } from '../utils';
 import jwtDecode from 'jwt-decode';
@@ -2091,21 +2092,99 @@ export class AuthenticationClient {
     });
     return tokenSet;
   }
-  async getUserInfoByAccessToken(accessToken: string) {
+  async getUserInfoByAccessToken(
+    accessToken: string,
+    options?: {
+      method?: 'POST' | 'GET';
+      tokenPlace?: 'query' | 'header' | 'body';
+    }
+  ) {
+    if (options) {
+      if (options.method && !['POST', 'GET'].includes(options.method)) {
+        throw new Error('options.method 参数的可选值为 POST、GET，请检查输入');
+      }
+      if (
+        options.tokenPlace &&
+        !['query', 'header', 'body'].includes(options.tokenPlace)
+      ) {
+        throw new Error(
+          'options.tokenPlace 参数的可选值为 query、header、body，请检查输入'
+        );
+      }
+      if (options.method === 'GET' && options.tokenPlace === 'body') {
+        throw new Error(
+          'options.method 参数为 GET 时，options.tokenPlace 参数不能为 body'
+        );
+      }
+      options.method = options.method || 'GET';
+      options.tokenPlace = options.tokenPlace || 'query';
+    }
     let api = '';
     if (this.options.protocol === 'oidc') {
       api = `${this.baseClient.appHost}/oidc/me`;
     } else if (this.options.protocol === 'oauth') {
       api = `${this.baseClient.appHost}/oauth/me`;
     }
-    let userInfo = await this.naiveHttpClient.request({
-      method: 'POST',
-      url: api,
-      headers: {
-        Authorization: 'Bearer ' + accessToken
+    if (options?.method === 'POST') {
+      if (options?.tokenPlace === 'header') {
+        let userInfo = await this.naiveHttpClient.request({
+          method: 'POST',
+          url: api,
+          headers: {
+            Authorization: 'Bearer ' + accessToken
+          }
+        });
+        return userInfo;
+      } else if (options?.tokenPlace === 'query') {
+        let userInfo = await this.naiveHttpClient.request({
+          method: 'POST',
+          url: api,
+          params: {
+            access_token: accessToken
+          }
+        });
+        return userInfo;
+      } else if (options?.tokenPlace === 'body') {
+        let userInfo = await this.naiveHttpClient.request({
+          method: 'POST',
+          url: api,
+          data: objectToQueryString({
+            access_token: accessToken
+          }).slice(1)
+        });
+        return userInfo;
       }
-    });
-    return userInfo;
+    } else if (options?.method === 'GET') {
+      if (options?.tokenPlace === 'header') {
+        let userInfo = await this.naiveHttpClient.request({
+          method: 'GET',
+          url: api,
+          headers: {
+            Authorization: 'Bearer ' + accessToken
+          }
+        });
+        return userInfo;
+      } else if (options?.tokenPlace === 'query') {
+        let userInfo = await this.naiveHttpClient.request({
+          method: 'GET',
+          url: api,
+          params: {
+            access_token: accessToken
+          }
+        });
+        return userInfo;
+      }
+    } else {
+      // 默认使用 GET + query 获取用户信息
+      let userInfo = await this.naiveHttpClient.request({
+        method: 'GET',
+        url: api,
+        params: {
+          access_token: accessToken
+        }
+      });
+      return userInfo;
+    }
   }
   buildAuthorizeUrl(options?: IOidcParams | IOauthParams | ICasParams) {
     if (!this.baseClient.appHost) {
