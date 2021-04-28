@@ -452,15 +452,17 @@ export class UsersManagementClient {
     username?: string;
     email?: string;
     phone?: string;
+    externalId?: string
   }): Promise<boolean> {
-    const { username, email, phone } = options;
+    const { username, email, phone, externalId } = options;
     const { isUserExists: data } = await isUserExists(
       this.graphqlClient,
       this.tokenProvider,
       {
         username,
         email,
-        phone
+        phone,
+        externalId
       }
     );
     return data;
