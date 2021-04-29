@@ -105,6 +105,40 @@ test('查询用户详情 # 不属于该用户池的用户', async t => {
   t.assert(detail === null);
 });
 
+test.skip('detail withCustomData', async t => {
+  const user = await managementClient.users.detail('608501a35c97c0520049e71e', {
+    withCustomData: true
+  })
+  console.log(user)
+  t.assert(user)
+})
+
+test.skip('find withCustomData', async t => {
+  const user = await managementClient.users.find({
+    withCustomData: true,
+    phone: '15210165828'
+  })
+  console.log(user)
+  t.assert(user)
+})
+
+test.skip('batch withCustomData', async t => {
+  const user = await managementClient.users.batch(['608501a35c97c0520049e71e'], {
+    queryField: 'id',
+    withCustomData: true
+  })
+  console.log(user)
+  t.assert(user)
+})
+
+test.only('list withCustomData', async t => {
+  const user = await managementClient.users.list(1, 10, {
+    withCustomData: true
+  })
+  console.log(user)
+  t.assert(user)
+})
+
 test('批量查询用户', async t => {
   const list = [];
   for (let i = 0; i <= 10; i++) {

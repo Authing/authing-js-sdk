@@ -1,6 +1,10 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
-import { BatchFetchUserTypes, ManagementClientOptions, UserActions } from './types';
+import {
+  BatchFetchUserTypes,
+  ManagementClientOptions,
+  UserActions
+} from './types';
 import { objectToQueryString } from '../utils';
 import {
   deleteUser,
@@ -26,7 +30,12 @@ import {
   udfValueBatch,
   setUdvBatch,
   removeUdv,
-  setUdfValueBatch
+  setUdfValueBatch,
+  usersWithCustomData,
+  userWithCustomData,
+  userBatchWithCustomData,
+  userBatch,
+  findUserWithCustomData
 } from '../graphqlapi';
 import {
   User,
@@ -283,11 +292,34 @@ export class UsersManagementClient {
    * @returns {Promise<User>}
    * @memberof UsersManagementClient
    */
-  async detail(userId: string): Promise<User> {
-    const { user: data } = await user(this.graphqlClient, this.tokenProvider, {
-      id: userId
-    });
-    return data;
+  async detail(
+    userId: string,
+    options?: {
+      withCustomData?: boolean;
+    }
+  ): Promise<User> {
+    const { withCustomData = false } = options || {};
+    if (withCustomData) {
+      const { user: data } = await userWithCustomData(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          id: userId
+        }
+      );
+      // @ts-ignore
+      data.customData = convertUdvToKeyValuePair(data.customData);
+      return data;
+    } else {
+      const { user: data } = await user(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          id: userId
+        }
+      );
+      return data;
+    }
   }
 
   /**
@@ -359,19 +391,42 @@ export class UsersManagementClient {
     ids: string[],
     options?: {
       queryField: BatchFetchUserTypes;
+      withCustomData?: boolean;
     }
   ): Promise<User[]> {
-    const { queryField = 'id' } = options || {};
+    const { queryField = 'id', withCustomData = false } = options || {};
 
-    const users = await this.httpClient.request({
-      url: `${this.options.host}/api/v2/users/batch`,
-      method: 'POST',
-      data: {
-        ids,
-        type: queryField
-      }
-    });
-    return users;
+    if (withCustomData) {
+      let { userBatch: list } = await userBatchWithCustomData(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          ids,
+          type: queryField
+        }
+      );
+      list = list.map(user => {
+        // @ts-ignore
+        user.customData = convertUdvToKeyValuePair(user.customData);
+        return user;
+      });
+      return list;
+    } else {
+      let { userBatch: list } = await userBatch(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          ids,
+          type: queryField
+        }
+      );
+      list = list.map(user => {
+        // @ts-ignore
+        user.customData = convertUdvToKeyValuePair(user.customData);
+        return user;
+      });
+      return list;
+    }
   }
 
   /**
@@ -389,16 +444,53 @@ export class UsersManagementClient {
    * @returns
    * @memberof UsersManagementClient
    */
-  async list(page: number = 1, limit: number = 10) {
-    const { users: data } = await users(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        page,
-        limit
-      }
-    );
-    return data;
+  async list(
+    page: number = 1,
+    limit: number = 10,
+    options?: {
+      withCustomData?: boolean;
+    }
+  ) {
+    const { withCustomData = false } = options || {};
+    if (withCustomData) {
+      const { users: data } = await usersWithCustomData(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          page,
+          limit
+        }
+      );
+      let { totalCount, list } = data;
+      list = list.map(user => {
+        // @ts-ignore
+        user.customData = convertUdvToKeyValuePair(user.customData);
+        return user;
+      });
+      return {
+        totalCount,
+        list
+      };
+    } else {
+      const { users: data } = await users(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          page,
+          limit
+        }
+      );
+      let { totalCount, list } = data;
+      list = list.map(user => {
+        // @ts-ignore
+        user.customData = convertUdvToKeyValuePair(user.customData);
+        return user;
+      });
+      return {
+        totalCount,
+        list
+      };
+    }
   }
 
   /**
@@ -452,7 +544,7 @@ export class UsersManagementClient {
     username?: string;
     email?: string;
     phone?: string;
-    externalId?: string
+    externalId?: string;
   }): Promise<boolean> {
     const { username, email, phone, externalId } = options;
     const { isUserExists: data } = await isUserExists(
@@ -486,19 +578,43 @@ export class UsersManagementClient {
     email?: string;
     phone?: string;
     externalId?: string;
+    withCustomData?: boolean;
   }) {
-    const { username, email, phone, externalId } = options;
-    const { findUser: user } = await findUser(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        username,
-        email,
-        phone,
-        externalId
-      }
-    );
-    return user;
+    const {
+      username,
+      email,
+      phone,
+      externalId,
+      withCustomData = false
+    } = options;
+
+    if (withCustomData) {
+      const { findUser: user } = await findUserWithCustomData(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          username,
+          email,
+          phone,
+          externalId
+        }
+      );
+      // @ts-ignore
+      user.customData = convertUdvToKeyValuePair(user.customData);
+      return user;
+    } else {
+      const { findUser: user } = await findUser(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          username,
+          email,
+          phone,
+          externalId
+        }
+      );
+      return user;
+    }
   }
 
   /**
@@ -1002,9 +1118,9 @@ export class UsersManagementClient {
       operationName?: string;
       operatoArn?: string;
     } = {
-        page: 1,
-        limit: 10
-      }
+      page: 1,
+      limit: 10
+    }
   ): Promise<UserActions> {
     const result = await this.httpClient.request({
       method: 'GET',

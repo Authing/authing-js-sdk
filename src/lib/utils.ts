@@ -208,7 +208,7 @@ export const convertUdv = (
 };
 
 export const convertUdvToKeyValuePair = (
-  data: Array<{ key: string; dataType: UdfDataType; value: any }>
+  data: Array<{ key: string; dataType: UdfDataType; value?: any }>
 ): KeyValuePair => {
   for (const item of data) {
     const { dataType, value } = item;

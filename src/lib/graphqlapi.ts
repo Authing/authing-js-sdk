@@ -318,7 +318,19 @@ import {
   AuthorizeResourceDocument,
   AuthorizedTargetsDocument,
   AuthorizedTargetsResponse,
-  AuthorizedTargetsVariables
+  AuthorizedTargetsVariables,
+  UsersWithCustomDataVariables,
+  UsersWithCustomDataResponse,
+  UsersWithCustomDataDocument,
+  UserWithCustomDataVariables,
+  UserWithCustomDataResponse,
+  UserWithCustomDataDocument,
+  UserBatchWithCustomDataVariables,
+  UserBatchWithCustomDataResponse,
+  UserBatchWithCustomDataDocument,
+  FindUserWithCustomDataVariables,
+  FindUserWithCustomDataResponse,
+  FindUserWithCustomDataDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -425,6 +437,20 @@ export const user = async (
   variables: UserVariables
 ): Promise<UserResponse> => {
   const query = UserDocument;
+  const token = await tokenProvider.getToken();
+  return await garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const userWithCustomData = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UserWithCustomDataVariables
+): Promise<UserWithCustomDataResponse> => {
+  const query = UserWithCustomDataDocument;
   const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,
@@ -727,6 +753,20 @@ export const users = async (
   });
 };
 
+export const usersWithCustomData = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UsersWithCustomDataVariables
+): Promise<UsersWithCustomDataResponse> => {
+  const query = UsersWithCustomDataDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
 export const archivedUsers = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
@@ -789,6 +829,20 @@ export const findUser = async (
   variables: FindUserVariables
 ): Promise<FindUserResponse> => {
   const query = FindUserDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const findUserWithCustomData = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: FindUserWithCustomDataVariables
+): Promise<FindUserWithCustomDataResponse> => {
+  const query = FindUserWithCustomDataDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
@@ -1097,6 +1151,20 @@ export const userBatch = async (
   variables: UserBatchVariables
 ): Promise<UserBatchResponse> => {
   const query = UserBatchDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const userBatchWithCustomData = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: UserBatchWithCustomDataVariables
+): Promise<UserBatchWithCustomDataResponse> => {
+  const query = UserBatchWithCustomDataDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,

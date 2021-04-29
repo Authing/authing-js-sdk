@@ -285,6 +285,7 @@ export type QueryUserArgs = {
 
 export type QueryUserBatchArgs = {
   ids: Array<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
 };
 
 
@@ -603,6 +604,8 @@ export type User = {
   authorizedResources?: Maybe<PaginatedAuthorizedResources>;
   /** 用户外部 ID */
   externalId?: Maybe<Scalars['String']>;
+  /** 用户自定义数据 */
+  customData?: Maybe<Array<Maybe<UserCustomData>>>;
 };
 
 
@@ -650,6 +653,7 @@ export type PaginatedRoles = {
 };
 
 export type Role = {
+  id: Scalars['String'];
   /** 权限组 code */
   namespace: Scalars['String'];
   /** 唯一标志 code */
@@ -752,6 +756,21 @@ export type NodeAuthorizedResourcesArgs = {
   namespace?: Maybe<Scalars['String']>;
   resourceType?: Maybe<Scalars['String']>;
 };
+
+export type UserCustomData = {
+  key: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
+  label?: Maybe<Scalars['String']>;
+  dataType: UdfDataType;
+};
+
+export enum UdfDataType {
+  String = 'STRING',
+  Number = 'NUMBER',
+  Datetime = 'DATETIME',
+  Boolean = 'BOOLEAN',
+  Object = 'OBJECT'
+}
 
 export type Mfa = {
   /** MFA ID */
@@ -858,14 +877,6 @@ export type UserDefinedData = {
   value: Scalars['String'];
   label?: Maybe<Scalars['String']>;
 };
-
-export enum UdfDataType {
-  String = 'STRING',
-  Number = 'NUMBER',
-  Datetime = 'DATETIME',
-  Boolean = 'BOOLEAN',
-  Object = 'OBJECT'
-}
 
 export type UserDefinedField = {
   targetType: UdfTargetType;
@@ -2292,7 +2303,7 @@ export type CreateRoleVariables = Exact<{
 }>;
 
 
-export type CreateRoleResponse = { createRole: { namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, parent?: Maybe<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
+export type CreateRoleResponse = { createRole: { id: string, namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, parent?: Maybe<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type CreateSocialConnectionInstanceVariables = Exact<{
   input: CreateSocialConnectionInstanceInput;
@@ -2756,7 +2767,7 @@ export type UpdateRoleVariables = Exact<{
 }>;
 
 
-export type UpdateRoleResponse = { updateRole: { namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, parent?: Maybe<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
+export type UpdateRoleResponse = { updateRole: { id: string, namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, parent?: Maybe<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type UpdateUserVariables = Exact<{
   id?: Maybe<Scalars['String']>;
@@ -2837,6 +2848,16 @@ export type FindUserVariables = Exact<{
 
 export type FindUserResponse = { findUser?: Maybe<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string> }> };
 
+export type FindUserWithCustomDataVariables = Exact<{
+  email?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
+}>;
+
+
+export type FindUserWithCustomDataResponse = { findUser?: Maybe<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> };
+
 export type FunctionVariables = Exact<{
   id?: Maybe<Scalars['String']>;
 }>;
@@ -2916,7 +2937,6 @@ export type IsActionDeniedVariables = Exact<{
   resource: Scalars['String'];
   action: Scalars['String'];
   userId: Scalars['String'];
-  namespace?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -3124,7 +3144,7 @@ export type RoleVariables = Exact<{
 }>;
 
 
-export type RoleResponse = { role?: Maybe<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, parent?: Maybe<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> }> };
+export type RoleResponse = { role?: Maybe<{ id: string, namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, parent?: Maybe<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> }> };
 
 export type RoleWithUsersVariables = Exact<{
   code: Scalars['String'];
@@ -3142,7 +3162,7 @@ export type RolesVariables = Exact<{
 }>;
 
 
-export type RolesResponse = { roles: { totalCount: number, list: Array<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
+export type RolesResponse = { roles: { totalCount: number, list: Array<{ id: string, namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
 export type RootNodeVariables = Exact<{
   orgId: Scalars['String'];
@@ -3232,10 +3252,26 @@ export type UserResponse = { user?: Maybe<{ id: string, arn: string, userPoolId:
 
 export type UserBatchVariables = Exact<{
   ids: Array<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
 }>;
 
 
 export type UserBatchResponse = { userBatch: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string> }> };
+
+export type UserBatchWithCustomDataVariables = Exact<{
+  ids: Array<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UserBatchWithCustomDataResponse = { userBatch: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> };
+
+export type UserWithCustomDataVariables = Exact<{
+  id?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UserWithCustomDataResponse = { user?: Maybe<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, userPoolId?: Maybe<string> }>>>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> };
 
 export type UserpoolVariables = Exact<{ [key: string]: never; }>;
 
@@ -3264,6 +3300,15 @@ export type UsersVariables = Exact<{
 
 
 export type UsersResponse = { users: { totalCount: number, list: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string> }> } };
+
+export type UsersWithCustomDataVariables = Exact<{
+  page?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SortByEnum>;
+}>;
+
+
+export type UsersWithCustomDataResponse = { users: { totalCount: number, list: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> } };
 
 export type WhitelistVariables = Exact<{
   type: WhitelistType;
@@ -3680,6 +3725,7 @@ export const CreatePolicyDocument = `
 export const CreateRoleDocument = `
     mutation createRole($namespace: String, $code: String!, $description: String, $parent: String) {
   createRole(namespace: $namespace, code: $code, description: $description, parent: $parent) {
+    id
     namespace
     code
     arn
@@ -5031,6 +5077,7 @@ export const UpdatePolicyDocument = `
 export const UpdateRoleDocument = `
     mutation updateRole($code: String!, $description: String, $newCode: String, $namespace: String) {
   updateRole(code: $code, description: $description, newCode: $newCode, namespace: $namespace) {
+    id
     namespace
     code
     arn
@@ -5370,6 +5417,68 @@ export const FindUserDocument = `
   }
 }
     `;
+export const FindUserWithCustomDataDocument = `
+    query findUserWithCustomData($email: String, $phone: String, $username: String, $externalId: String) {
+  findUser(email: $email, phone: $phone, username: $username, externalId: $externalId) {
+    id
+    arn
+    userPoolId
+    status
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    city
+    province
+    country
+    createdAt
+    updatedAt
+    externalId
+    customData {
+      key
+      value
+      dataType
+      label
+    }
+  }
+}
+    `;
 export const FunctionDocument = `
     query function($id: String) {
   function(id: $id) {
@@ -5558,8 +5667,8 @@ export const IsActionAllowedDocument = `
 }
     `;
 export const IsActionDeniedDocument = `
-    query isActionDenied($resource: String!, $action: String!, $userId: String!, $namespace: String) {
-  isActionDenied(resource: $resource, action: $action, userId: $userId, namespace: $namespace)
+    query isActionDenied($resource: String!, $action: String!, $userId: String!) {
+  isActionDenied(resource: $resource, action: $action, userId: $userId)
 }
     `;
 export const IsDomainAvaliableDocument = `
@@ -6030,6 +6139,7 @@ export const QueryMfaDocument = `
 export const RoleDocument = `
     query role($code: String!, $namespace: String) {
   role(code: $code, namespace: $namespace) {
+    id
     namespace
     code
     arn
@@ -6113,6 +6223,7 @@ export const RolesDocument = `
   roles(namespace: $namespace, page: $page, limit: $limit, sortBy: $sortBy) {
     totalCount
     list {
+      id
       namespace
       code
       arn
@@ -6387,8 +6498,8 @@ export const UserDocument = `
 }
     `;
 export const UserBatchDocument = `
-    query userBatch($ids: [String!]!) {
-  userBatch(ids: $ids) {
+    query userBatch($ids: [String!]!, $type: String) {
+  userBatch(ids: $ids, type: $type) {
     id
     arn
     userPoolId
@@ -6439,6 +6550,139 @@ export const UserBatchDocument = `
     createdAt
     updatedAt
     externalId
+  }
+}
+    `;
+export const UserBatchWithCustomDataDocument = `
+    query userBatchWithCustomData($ids: [String!]!, $type: String) {
+  userBatch(ids: $ids, type: $type) {
+    id
+    arn
+    userPoolId
+    status
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    city
+    province
+    country
+    createdAt
+    updatedAt
+    externalId
+    customData {
+      key
+      value
+      dataType
+      label
+    }
+  }
+}
+    `;
+export const UserWithCustomDataDocument = `
+    query userWithCustomData($id: String) {
+  user(id: $id) {
+    id
+    arn
+    userPoolId
+    status
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    identities {
+      openid
+      userIdInIdp
+      userId
+      connectionId
+      isSocial
+      provider
+      userPoolId
+    }
+    unionid
+    openid
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    city
+    province
+    country
+    createdAt
+    updatedAt
+    externalId
+    customData {
+      key
+      value
+      dataType
+      label
+    }
   }
 }
     `;
@@ -6610,6 +6854,71 @@ export const UsersDocument = `
       createdAt
       updatedAt
       externalId
+    }
+  }
+}
+    `;
+export const UsersWithCustomDataDocument = `
+    query usersWithCustomData($page: Int, $limit: Int, $sortBy: SortByEnum) {
+  users(page: $page, limit: $limit, sortBy: $sortBy) {
+    totalCount
+    list {
+      id
+      arn
+      userPoolId
+      status
+      username
+      email
+      emailVerified
+      phone
+      phoneVerified
+      unionid
+      openid
+      nickname
+      registerSource
+      photo
+      password
+      oauth
+      token
+      tokenExpiredAt
+      loginsCount
+      lastLogin
+      lastIP
+      signedUp
+      blocked
+      isDeleted
+      device
+      browser
+      company
+      name
+      givenName
+      familyName
+      middleName
+      profile
+      preferredUsername
+      website
+      gender
+      birthdate
+      zoneinfo
+      locale
+      address
+      formatted
+      streetAddress
+      locality
+      region
+      postalCode
+      city
+      province
+      country
+      createdAt
+      updatedAt
+      externalId
+      customData {
+        key
+        value
+        dataType
+        label
+      }
     }
   }
 }
