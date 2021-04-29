@@ -669,4 +669,21 @@ export class OrgManagementClient {
       totalCount
     };
   }
+
+  public async startSync(options: { providerType: 'dingtalk' | 'wechatwork' }) {
+    const { providerType } = options;
+    let url = '';
+    if (providerType === 'wechatwork') {
+      url = `${this.options.host}/connections/enterprise/wechatwork/start-sync`;
+    } else if (providerType === 'dingtalk') {
+      url = `${this.options.host}/connections/enterprise/dingtalk/start-sync`;
+    }
+
+    await this.httpClient.request({
+      method: 'POST',
+      url
+    });
+
+    return true;
+  }
 }
