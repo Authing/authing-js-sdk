@@ -20,7 +20,8 @@ import {
   nodeById,
   setMainDepartment,
   listNodeByIdAuthorizedResources,
-  listNodeByCodeAuthorizedResources
+  listNodeByCodeAuthorizedResources,
+  searchNodes
 } from '../graphqlapi';
 import {
   CommonMessage,
@@ -668,5 +669,22 @@ export class OrgManagementClient {
       list,
       totalCount
     };
+  }
+
+  /**
+   * @description 搜索组织机构节点
+   *
+   * @param keyword 查询关键词
+   * @returns
+   */
+  public async searchNodes(keyword: string) {
+    const { searchNodes: data } = await searchNodes(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        keyword
+      }
+    );
+    return data;
   }
 }
