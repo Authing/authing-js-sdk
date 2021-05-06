@@ -690,6 +690,7 @@ export class QrCodeAuthenticationClient {
         if (onError) {
           onError(error);
         }
+        clearInterval(timer);
         return;
       }
     }, interval);
