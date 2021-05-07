@@ -35,7 +35,8 @@ import {
   userWithCustomData,
   userBatchWithCustomData,
   userBatch,
-  findUserWithCustomData
+  findUserWithCustomData,
+  searchUserWithCustomData
 } from '../graphqlapi';
 import {
   User,
@@ -649,6 +650,7 @@ export class UsersManagementClient {
       departmentOpts?: QuerySearchUserArgs['departmentOpts'];
       groupOpts?: QuerySearchUserArgs['groupOpts'];
       roleOpts?: QuerySearchUserArgs['roleOpts'];
+      withCustomData?: boolean;
     }
   ): Promise<PaginatedUsers> {
     options = options || {};
@@ -658,22 +660,50 @@ export class UsersManagementClient {
       limit = 10,
       departmentOpts,
       groupOpts,
-      roleOpts
+      roleOpts,
+      withCustomData = false
     } = options;
-    const { searchUser: data } = await searchUser(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        query,
-        fields,
-        page,
-        limit,
-        departmentOpts,
-        groupOpts,
-        roleOpts
-      }
-    );
-    return data;
+
+    if (!withCustomData) {
+      const { searchUser: data } = await searchUser(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          query,
+          fields,
+          page,
+          limit,
+          departmentOpts,
+          groupOpts,
+          roleOpts
+        }
+      );
+      return data;
+    } else {
+      const { searchUser: data } = await searchUserWithCustomData(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          query,
+          fields,
+          page,
+          limit,
+          departmentOpts,
+          groupOpts,
+          roleOpts
+        }
+      );
+      let { totalCount, list } = data;
+      list = list.map(user => {
+        // @ts-ignore
+        user.customData = convertUdvToKeyValuePair(user.customData);
+        return user;
+      });
+      return {
+        totalCount,
+        list
+      };
+    }
   }
 
   /**

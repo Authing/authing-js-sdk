@@ -330,7 +330,16 @@ import {
   UserBatchWithCustomDataDocument,
   FindUserWithCustomDataVariables,
   FindUserWithCustomDataResponse,
-  FindUserWithCustomDataDocument
+  FindUserWithCustomDataDocument,
+  SearchUserWithCustomDataDocument,
+  SearchUserWithCustomDataResponse,
+  SearchUserWithCustomDataVariables,
+  RoleWithUsersWithCustomDataVariables,
+  RoleWithUsersWithCustomDataResponse,
+  RoleWithUsersWithCustomDataDocument,
+  GroupWithUsersWithCustomDataVariables,
+  GroupWithUsersWithCustomDataResponse,
+  GroupWithUsersWithCustomDataDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -823,6 +832,20 @@ export const searchUser = async (
   });
 };
 
+export const searchUserWithCustomData = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: SearchUserWithCustomDataVariables
+): Promise<SearchUserWithCustomDataResponse> => {
+  const query = SearchUserWithCustomDataDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
 export const findUser = async (
   garpqhlClient: GraphqlClient,
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
@@ -927,6 +950,20 @@ export const roleWithUsers = async (
   variables: RoleWithUsersVariables
 ): Promise<RoleWithUsersResponse> => {
   const query = RoleWithUsersDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const roleWithUsersWithCustomData = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: RoleWithUsersWithCustomDataVariables
+): Promise<RoleWithUsersWithCustomDataResponse> => {
+  const query = RoleWithUsersWithCustomDataDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,
@@ -1627,6 +1664,20 @@ export const groupWithUsers = async (
   variables: GroupWithUsersVariables
 ): Promise<GroupWithUsersResponse> => {
   const query = GroupWithUsersDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const groupWithUsersWithCustomData = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: GroupWithUsersWithCustomDataVariables
+): Promise<GroupWithUsersWithCustomDataResponse> => {
+  const query = GroupWithUsersWithCustomDataDocument;
   const token = await tokenProvider.getToken();
   return garpqhlClient.request({
     query,

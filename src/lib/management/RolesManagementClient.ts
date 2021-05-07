@@ -31,7 +31,8 @@ import {
   udfValueBatch,
   setUdvBatch,
   setUdfValueBatch,
-  removeUdv
+  removeUdv,
+  roleWithUsersWithCustomData
 } from '../graphqlapi';
 import { DeepPartial, KeyValuePair } from '../../types/index';
 import { convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
@@ -220,7 +221,10 @@ export class RolesManagementClient {
    * @returns {Promise<DeepPartial<Role>>} 角色详情
    * @memberof RolesManagementClient
    */
-  async findByCode(code: string, namespace?: string): Promise<DeepPartial<Role>> {
+  async findByCode(
+    code: string,
+    namespace?: string
+  ): Promise<DeepPartial<Role>> {
     const data = await this.detail(code, namespace);
     return data;
   }
@@ -275,17 +279,50 @@ export class RolesManagementClient {
    */
   async listUsers(
     code: string,
-    namespace?: string
+    options?: {
+      namespace?: string;
+      withCustomData?: boolean;
+      page?: number;
+      limit?: number;
+    }
   ): Promise<DeepPartial<PaginatedUsers>> {
-    const { role: data } = await roleWithUsers(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        code,
-        namespace
-      }
-    );
-    return data.users;
+    const { namespace, withCustomData = false, page = 1, limit = 10 } =
+      options || {};
+
+    if (!withCustomData) {
+      const { role: data } = await roleWithUsers(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          code,
+          namespace,
+          page,
+          limit
+        }
+      );
+      return data.users;
+    } else {
+      const { role: data } = await roleWithUsersWithCustomData(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          code,
+          namespace,
+          page,
+          limit
+        }
+      );
+      let { totalCount, list } = data.users;
+      list = list.map(user => {
+        // @ts-ignore
+        user.customData = convertUdvToKeyValuePair(user.customData);
+        return user;
+      });
+      return {
+        totalCount,
+        list
+      };
+    }
   }
 
   /**

@@ -8,6 +8,7 @@ import {
   getGroups,
   group,
   groupWithUsers,
+  groupWithUsersWithCustomData,
   listGroupAuthorizedResources,
   removeUserFromGroup,
   updateGroup
@@ -245,19 +246,45 @@ export class GroupsManagementClient {
    */
   async listUsers(
     code: string,
-    page: number = 1,
-    limit: number = 10
+    options?: {
+      withCustomData?: boolean;
+      page?: number;
+      limit?: number;
+    }
   ): Promise<DeepPartial<PaginatedUsers>> {
-    const { group: data } = await groupWithUsers(
-      this.graphqlClient,
-      this.tokenProvider,
-      {
-        code,
-        page,
-        limit
-      }
-    );
-    return data.users;
+    const { withCustomData = false, page = 1, limit = 10 } = options || {};
+    if (!withCustomData) {
+      const { group: data } = await groupWithUsers(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          code,
+          page,
+          limit
+        }
+      );
+      return data.users;
+    } else {
+      const { group: data } = await groupWithUsersWithCustomData(
+        this.graphqlClient,
+        this.tokenProvider,
+        {
+          code,
+          page,
+          limit
+        }
+      );
+      let { totalCount, list } = data.users;
+      list = list.map(user => {
+        // @ts-ignore
+        user.customData = convertUdvToKeyValuePair(user.customData);
+        return user;
+      });
+      return {
+        totalCount,
+        list
+      };
+    }
   }
 
   /**
