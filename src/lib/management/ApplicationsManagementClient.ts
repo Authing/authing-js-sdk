@@ -385,7 +385,9 @@ export class ApplicationsManagementClient {
   }
 
   public async getUsersByRoleCode(appId: string, code: string) {
-    return await this.roles.listUsers(code, appId);
+    return await this.roles.listUsers(code, {
+      namespace: appId
+    });
   }
 
   public async addUsersToRole(appId: string, code: string, userIds: string[]) {

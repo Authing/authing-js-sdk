@@ -137,7 +137,7 @@ test('addNode', async t => {
     generateRandomString()
   );
   const rootNode = org.rootNode;
-  const name = generateRandomString()
+  const name = generateRandomString();
   const newNode = await managementClient.org.addNode(org.id, rootNode.id, {
     name
   });
@@ -170,7 +170,7 @@ test('findById', async t => {
   t.assert(org.rootNode);
 });
 
-test.only('listAuthorizedResourcesByNodeId', async t => {
+test('listAuthorizedResourcesByNodeId', async t => {
   const data = await managementClient.org.listAuthorizedResourcesByNodeId(
     '603f4add1655b8d33f91a848',
     '6018bab016c246d458ef0ad2',
@@ -180,9 +180,9 @@ test.only('listAuthorizedResourcesByNodeId', async t => {
   );
   console.log(JSON.stringify(data, null, 4));
   t.assert(data);
-})
+});
 
-test.only('listAuthorizedResourcesByNodeCode', async t => {
+test('listAuthorizedResourcesByNodeCode', async t => {
   const data = await managementClient.org.listAuthorizedResourcesByNodeCode(
     '603f4add8d7971d877feaa94',
     'ou=devops,dc=example,dc=org',
@@ -193,4 +193,13 @@ test.only('listAuthorizedResourcesByNodeCode', async t => {
   );
   console.log(JSON.stringify(data, null, 4));
   t.assert(data);
-})
+});
+
+test.skip('startSync', async t => {
+  const data = await managementClient.org.startSync({
+    providerType: 'ad',
+    adConnectorId: '609650fca1069b3f9908a82e'
+  });
+  console.log(data)
+  t.assert(data)
+});

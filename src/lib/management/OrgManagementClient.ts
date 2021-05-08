@@ -670,18 +670,31 @@ export class OrgManagementClient {
     };
   }
 
-  public async startSync(options: { providerType: 'dingtalk' | 'wechatwork' }) {
-    const { providerType } = options;
+  public async startSync(options: {
+    providerType: 'dingtalk' | 'wechatwork' | 'ad';
+    adConnectorId?: string;
+  }) {
+    const { providerType, adConnectorId } = options;
     let url = '';
+    let body = {};
     if (providerType === 'wechatwork') {
       url = `${this.options.host}/connections/enterprise/wechatwork/start-sync`;
     } else if (providerType === 'dingtalk') {
       url = `${this.options.host}/connections/enterprise/dingtalk/start-sync`;
+    } else if (providerType === 'ad') {
+      if (!adConnectorId) {
+        throw new Error('must provider adConnectorId');
+      }
+      url = `${this.options.host}/api/v2/ad/sync`;
+      body = {
+        connectionId: adConnectorId
+      };
     }
 
     await this.httpClient.request({
       method: 'POST',
-      url
+      url,
+      data: body
     });
 
     return true;
