@@ -1,6 +1,7 @@
 import { GraphqlClient } from './../common/GraphqlClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import {
+  Application,
   BatchFetchUserTypes,
   ManagementClientOptions,
   UserActions
@@ -1131,6 +1132,29 @@ export class UsersManagementClient {
     return { code: 200, message: '强制下线成功' };
   }
 
+  /**
+   * @description 查询用户的登录状态
+   */
+  async checkLoginStatus(
+    userId: string,
+    appId?: string,
+    deviceId?: string
+  ): Promise<{
+    isLogin: boolean;
+    user?: User;
+    application?: Array<Application>;
+  }> {
+    const result = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/users/login-status`,
+      params: {
+        userId,
+        appId,
+        deviceId
+      }
+    });
+    return result;
+  }
   /**
    * 审计日志列表
    * @param options.page 当前页数

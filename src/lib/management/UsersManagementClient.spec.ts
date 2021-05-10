@@ -7,8 +7,10 @@ import {
 import test from 'ava';
 import moment from 'moment';
 import { ResourceType } from '../../types/graphql.v2';
+import { AuthenticationClient } from '../authentication/AuthenticationClient';
 
 const managementClient = new ManagementClient(getOptionsFromEnv());
+const authenticationClient = new AuthenticationClient(getOptionsFromEnv());
 
 test('创建用户', async t => {
   const username = generateRandomString(10);
@@ -108,36 +110,39 @@ test('查询用户详情 # 不属于该用户池的用户', async t => {
 test.skip('detail withCustomData', async t => {
   const user = await managementClient.users.detail('608501a35c97c0520049e71e', {
     withCustomData: true
-  })
-  console.log(user)
-  t.assert(user)
-})
+  });
+  console.log(user);
+  t.assert(user);
+});
 
 test.skip('find withCustomData', async t => {
   const user = await managementClient.users.find({
     withCustomData: true,
     phone: '15210165828'
-  })
-  console.log(user)
-  t.assert(user)
-})
+  });
+  console.log(user);
+  t.assert(user);
+});
 
 test.skip('batch withCustomData', async t => {
-  const user = await managementClient.users.batch(['608501a35c97c0520049e71e'], {
-    queryField: 'id',
-    withCustomData: true
-  })
-  console.log(user)
-  t.assert(user)
-})
+  const user = await managementClient.users.batch(
+    ['608501a35c97c0520049e71e'],
+    {
+      queryField: 'id',
+      withCustomData: true
+    }
+  );
+  console.log(user);
+  t.assert(user);
+});
 
-test.only('list withCustomData', async t => {
+test('list withCustomData', async t => {
   const user = await managementClient.users.list(1, 10, {
     withCustomData: true
-  })
-  console.log(user)
-  t.assert(user)
-})
+  });
+  console.log(user);
+  t.assert(user);
+});
 
 test('批量查询用户', async t => {
   const list = [];
@@ -326,4 +331,17 @@ test('踢下线一批用户', async t => {
   let user = await managementClient.users.create({ username, password: pwd });
   let data = await managementClient.users.kick([user.id]);
   t.assert(data.code === 200);
+});
+
+test.only('用户池管理员根据用户 id 查询用户的登录状态', async t => {
+  let username = Math.random()
+    .toString(26)
+    .slice(2);
+  let pwd = '123456';
+  let user = await managementClient.users.create({ username, password: pwd });
+  await authenticationClient.loginByUsername(username, pwd);
+  let res2 = await managementClient.users.checkLoginStatus(user.id);
+  t.assert(res2.isLogin === true)
+  t.assert(res2.user)
+  t.assert(res2.application.length > 0)
 });
