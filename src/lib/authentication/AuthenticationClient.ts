@@ -7,6 +7,7 @@ import {
   bindPhone,
   checkLoginStatus,
   checkPasswordStrength,
+  getUserDepartments,
   getUserRoles,
   listUserAuthorizedResources,
   loginByEmail,
@@ -1589,6 +1590,20 @@ export class AuthenticationClient {
       method: 'GET',
       url: `${this.baseClient.appHost}/api/v2/users/me/orgs`
     });
+  }
+
+  /**
+   * @description 获取用户
+   * 
+   */
+  public async listDepartments() {
+    const userId = this.checkLoggedIn();
+    const {
+      user: { departments }
+    } = await getUserDepartments(this.graphqlClient, this.tokenProvider, {
+      id: userId
+    });
+    return departments;
   }
 
   /**
