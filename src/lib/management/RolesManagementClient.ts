@@ -300,6 +300,12 @@ export class RolesManagementClient {
           limit
         }
       );
+      if (!data) {
+        return {
+          totalCount: 0,
+          list: []
+        };
+      }
       return data.users;
     } else {
       const { role: data } = await roleWithUsersWithCustomData(
@@ -312,6 +318,12 @@ export class RolesManagementClient {
           limit
         }
       );
+      if (!data) {
+        return {
+          totalCount: 0,
+          list: []
+        };
+      }
       let { totalCount, list } = data.users;
       list = list.map(user => {
         // @ts-ignore
