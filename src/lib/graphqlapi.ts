@@ -339,7 +339,10 @@ import {
   RoleWithUsersWithCustomDataDocument,
   GroupWithUsersWithCustomDataVariables,
   GroupWithUsersWithCustomDataResponse,
-  GroupWithUsersWithCustomDataDocument
+  GroupWithUsersWithCustomDataDocument,
+  MoveMembersVariables,
+  MoveMembersResponse,
+  MoveMembersDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -684,6 +687,20 @@ export const addMember = async (
   variables: AddMemberVariables
 ): Promise<AddMemberResponse> => {
   const query = AddMemberDocument;
+  const token = await tokenProvider.getToken();
+  return await garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const moveMembers = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider,
+  variables: MoveMembersVariables
+): Promise<MoveMembersResponse> => {
+  const query = MoveMembersDocument;
   const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,

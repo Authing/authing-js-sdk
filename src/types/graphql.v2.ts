@@ -1117,6 +1117,7 @@ export type Mutation = {
   addMember: Node;
   /** （批量）将成员从节点中移除 */
   removeMember: Node;
+  moveMembers?: Maybe<CommonMessage>;
   moveNode: Org;
   resetPassword?: Maybe<CommonMessage>;
   createPolicy: Policy;
@@ -1390,6 +1391,13 @@ export type MutationRemoveMemberArgs = {
 };
 
 
+export type MutationMoveMembersArgs = {
+  userIds: Array<Scalars['String']>;
+  sourceNodeId: Scalars['String'];
+  targetNodeId: Scalars['String'];
+};
+
+
 export type MutationMoveNodeArgs = {
   orgId: Scalars['String'];
   nodeId: Scalars['String'];
@@ -1589,6 +1597,7 @@ export type MutationRefreshTokenArgs = {
 export type MutationCreateUserArgs = {
   userInfo: CreateUserInput;
   keepPassword?: Maybe<Scalars['Boolean']>;
+  params?: Maybe<Scalars['String']>;
 };
 
 
@@ -2326,6 +2335,15 @@ export type CreateUserVariables = Exact<{
 
 export type CreateUserResponse = { createUser: { id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string> } };
 
+export type CreateUserWithCustomDataVariables = Exact<{
+  userInfo: CreateUserInput;
+  keepPassword?: Maybe<Scalars['Boolean']>;
+  params?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreateUserWithCustomDataResponse = { createUser: { id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> } };
+
 export type CreateUserpoolVariables = Exact<{
   name: Scalars['String'];
   domain: Scalars['String'];
@@ -2502,6 +2520,15 @@ export type LoginByUsernameVariables = Exact<{
 
 
 export type LoginByUsernameResponse = { loginByUsername?: Maybe<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string> }> };
+
+export type MoveMembersVariables = Exact<{
+  userIds: Array<Scalars['String']>;
+  sourceNodeId: Scalars['String'];
+  targetNodeId: Scalars['String'];
+}>;
+
+
+export type MoveMembersResponse = { moveMembers?: Maybe<{ code?: Maybe<number>, message?: Maybe<string> }> };
 
 export type MoveNodeVariables = Exact<{
   orgId: Scalars['String'];
@@ -3851,6 +3878,68 @@ export const CreateUserDocument = `
   }
 }
     `;
+export const CreateUserWithCustomDataDocument = `
+    mutation createUserWithCustomData($userInfo: CreateUserInput!, $keepPassword: Boolean, $params: String) {
+  createUser(userInfo: $userInfo, keepPassword: $keepPassword, params: $params) {
+    id
+    arn
+    userPoolId
+    status
+    username
+    email
+    emailVerified
+    phone
+    phoneVerified
+    unionid
+    openid
+    nickname
+    registerSource
+    photo
+    password
+    oauth
+    token
+    tokenExpiredAt
+    loginsCount
+    lastLogin
+    lastIP
+    signedUp
+    blocked
+    isDeleted
+    device
+    browser
+    company
+    name
+    givenName
+    familyName
+    middleName
+    profile
+    preferredUsername
+    website
+    gender
+    birthdate
+    zoneinfo
+    locale
+    address
+    formatted
+    streetAddress
+    locality
+    region
+    postalCode
+    city
+    province
+    country
+    createdAt
+    updatedAt
+    externalId
+    customData {
+      key
+      value
+      dataType
+      label
+    }
+  }
+}
+    `;
 export const CreateUserpoolDocument = `
     mutation createUserpool($name: String!, $domain: String!, $description: String, $logo: String, $userpoolTypes: [String!]) {
   createUserpool(name: $name, domain: $domain, description: $description, logo: $logo, userpoolTypes: $userpoolTypes) {
@@ -4354,6 +4443,14 @@ export const LoginByUsernameDocument = `
     createdAt
     updatedAt
     externalId
+  }
+}
+    `;
+export const MoveMembersDocument = `
+    mutation moveMembers($userIds: [String!]!, $sourceNodeId: String!, $targetNodeId: String!) {
+  moveMembers(userIds: $userIds, sourceNodeId: $sourceNodeId, targetNodeId: $targetNodeId) {
+    code
+    message
   }
 }
     `;

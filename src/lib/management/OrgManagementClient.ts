@@ -20,7 +20,8 @@ import {
   nodeById,
   setMainDepartment,
   listNodeByIdAuthorizedResources,
-  listNodeByCodeAuthorizedResources
+  listNodeByCodeAuthorizedResources,
+  moveMembers
 } from '../graphqlapi';
 import {
   CommonMessage,
@@ -480,6 +481,15 @@ export class OrgManagementClient {
       }
     );
     return data.users;
+  }
+
+  public async moveMembers(options: {
+    userIds: string[];
+    targetNodeId: string;
+    sourceNodeId: string;
+  }) {
+    await moveMembers(this.graphqlClient, this.tokenProvider, options);
+    return true;
   }
 
   /**
