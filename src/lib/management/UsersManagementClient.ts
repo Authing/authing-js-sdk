@@ -422,11 +422,6 @@ export class UsersManagementClient {
           type: queryField
         }
       );
-      list = list.map(user => {
-        // @ts-ignore
-        user.customData = convertUdvToKeyValuePair(user.customData);
-        return user;
-      });
       return list;
     }
   }
@@ -482,16 +477,7 @@ export class UsersManagementClient {
           limit
         }
       );
-      let { totalCount, list } = data;
-      list = list.map(user => {
-        // @ts-ignore
-        user.customData = convertUdvToKeyValuePair(user.customData);
-        return user;
-      });
-      return {
-        totalCount,
-        list
-      };
+      return data
     }
   }
 
