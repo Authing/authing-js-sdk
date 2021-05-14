@@ -342,7 +342,10 @@ import {
   GroupWithUsersWithCustomDataDocument,
   MoveMembersVariables,
   MoveMembersResponse,
-  MoveMembersDocument
+  MoveMembersDocument,
+  SearchNodesVariables,
+  SearchNodesDocument,
+  SearchNodesResponse
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -1934,3 +1937,17 @@ export const authorizedTargets = async (
     variables
   });
 };
+
+export const searchNodes = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider,
+  variables: SearchNodesVariables,
+): Promise<SearchNodesResponse> => {
+  const query = SearchNodesDocument;
+  const token = await tokenProvider.getToken();
+  return garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+}

@@ -21,7 +21,8 @@ import {
   setMainDepartment,
   listNodeByIdAuthorizedResources,
   listNodeByCodeAuthorizedResources,
-  moveMembers
+  moveMembers,
+  searchNodes
 } from '../graphqlapi';
 import {
   CommonMessage,
@@ -708,5 +709,22 @@ export class OrgManagementClient {
     });
 
     return true;
+  }
+  
+  /**
+   * @description 搜索组织机构节点
+   *
+   * @param keyword 查询关键词
+   * @returns
+   */
+  public async searchNodes(keyword: string) {
+    const { searchNodes: data } = await searchNodes(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        keyword
+      }
+    );
+    return data;
   }
 }
