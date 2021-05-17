@@ -477,7 +477,7 @@ export class UsersManagementClient {
           limit
         }
       );
-      return data
+      return data;
     }
   }
 
@@ -1113,6 +1113,21 @@ export class UsersManagementClient {
       method: 'POST',
       data: {
         userIds
+      }
+    });
+    return { code: 200, message: '强制下线成功' };
+  }
+
+  async logout(options: { appId?: string; userId: string }) {
+    if (!options || !options.userId) {
+      throw new Error('请传入 options.userId，内容为要下线的用户 ID');
+    }
+    await this.httpClient.request({
+      url: `${this.options.host}/logout`,
+      method: 'GET',
+      params: {
+        appId: options.appId,
+        userId: options.userId
       }
     });
     return { code: 200, message: '强制下线成功' };
