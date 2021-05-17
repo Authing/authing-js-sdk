@@ -75,7 +75,7 @@ import jwtDecode from 'jwt-decode';
 import { DecodedAccessToken } from '../..';
 import { SocialAuthenticationClient } from './SocialAuthenticationClient';
 import { PublicKeyManager } from '../common/PublicKeyManager';
-import { KeyValuePair } from '../../types';
+import { KeyValuePair, Lang } from '../../types';
 import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 import { ApplicationPublicDetail } from '../management/types';
@@ -1594,7 +1594,7 @@ export class AuthenticationClient {
 
   /**
    * @description 获取用户
-   * 
+   *
    */
   public async listDepartments() {
     const userId = this.checkLoggedIn();
@@ -2711,5 +2711,12 @@ export class AuthenticationClient {
       });
       return data;
     }
+  }
+
+  /**
+   * @description 设置语言
+   */
+  setLang(lang: Lang) {
+    this.options.lang = lang;
   }
 }

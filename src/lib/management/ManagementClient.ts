@@ -21,6 +21,7 @@ import { PublicKeyManager } from '../common/PublicKeyManager';
 import { UserActionManagementClient } from './UserActionManagementClient';
 import { ApplicationsManagementClient } from './ApplicationsManagementClient';
 import { MFAManagementClient } from './MFAManagementClient';
+import { Lang } from '../../types';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -53,7 +54,7 @@ export class ManagementClient {
   whitelist: WhitelistManagementClient;
   statistics: StatisticsManagementClient;
   userAction: UserActionManagementClient;
-  applications: ApplicationsManagementClient
+  applications: ApplicationsManagementClient;
   mfa: MFAManagementClient;
 
   constructor(options: ManagementClientOptions) {
@@ -150,7 +151,7 @@ export class ManagementClient {
       this.httpClient,
       this.graphqlClient,
       this.tokenProvider
-    )
+    );
     this.mfa = new MFAManagementClient(
       this.options,
       this.graphqlClient,
@@ -232,5 +233,12 @@ export class ManagementClient {
         password
       }
     });
+  }
+
+  /**
+   * @description 设置语言
+   */
+  setLang(lang: Lang) {
+    this.options.lang = lang;
   }
 }
