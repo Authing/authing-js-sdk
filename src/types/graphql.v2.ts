@@ -1082,6 +1082,8 @@ export type Mutation = {
   disableEmailTemplate: EmailTemplate;
   /** 发送邮件 */
   sendEmail: CommonMessage;
+  /** 管理员发送首次登录验证邮件 */
+  sendFirstLoginVerifyEmail: CommonMessage;
   /** 创建函数 */
   createFunction?: Maybe<Function>;
   /** 修改函数 */
@@ -1247,6 +1249,12 @@ export type MutationDisableEmailTemplateArgs = {
 export type MutationSendEmailArgs = {
   email: Scalars['String'];
   scene: EmailScene;
+};
+
+
+export type MutationSendFirstLoginVerifyEmailArgs = {
+  userId: Scalars['String'];
+  appId: Scalars['String'];
 };
 
 
@@ -2683,6 +2691,14 @@ export type SendEmailVariables = Exact<{
 
 
 export type SendEmailResponse = { sendEmail: { message?: Maybe<string>, code?: Maybe<number> } };
+
+export type SendFirstLoginVerifyEmailVariables = Exact<{
+  userId: Scalars['String'];
+  appId: Scalars['String'];
+}>;
+
+
+export type SendFirstLoginVerifyEmailResponse = { sendFirstLoginVerifyEmail: { message?: Maybe<string>, code?: Maybe<number> } };
 
 export type SetMainDepartmentVariables = Exact<{
   userId: Scalars['String'];
@@ -4844,6 +4860,14 @@ export const RevokeRoleDocument = `
 export const SendEmailDocument = `
     mutation sendEmail($email: String!, $scene: EmailScene!) {
   sendEmail(email: $email, scene: $scene) {
+    message
+    code
+  }
+}
+    `;
+export const SendFirstLoginVerifyEmailDocument = `
+    mutation sendFirstLoginVerifyEmail($userId: String!, $appId: String!) {
+  sendFirstLoginVerifyEmail(userId: $userId, appId: $appId) {
     message
     code
   }

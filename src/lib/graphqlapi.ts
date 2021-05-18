@@ -348,7 +348,10 @@ import {
   SearchNodesResponse,
   ResetPasswordByFirstLoginTokenVariables,
   ResetPasswordByFirstLoginTokenResponse,
-  ResetPasswordByFirstLoginTokenDocument
+  ResetPasswordByFirstLoginTokenDocument,
+  SendFirstLoginVerifyEmailVariables,
+  SendFirstLoginVerifyEmailResponse,
+  SendFirstLoginVerifyEmailDocument
 } from '../types/graphql.v2';
 
 export const isAllowed = async (
@@ -749,6 +752,20 @@ export const sendEmail = async (
   variables: SendEmailVariables
 ): Promise<SendEmailResponse> => {
   const query = SendEmailDocument;
+  const token = await tokenProvider.getToken();
+  return await garpqhlClient.request({
+    query,
+    token,
+    variables
+  });
+};
+
+export const sendFirstLoginVerifyEmail = async (
+  garpqhlClient: GraphqlClient,
+  tokenProvider: AuthenticationTokenProvider | ManagementTokenProvider,
+  variables: SendFirstLoginVerifyEmailVariables
+): Promise<SendFirstLoginVerifyEmailResponse> => {
+  const query = SendFirstLoginVerifyEmailDocument;
   const token = await tokenProvider.getToken();
   return await garpqhlClient.request({
     query,

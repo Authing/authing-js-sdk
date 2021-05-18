@@ -37,7 +37,8 @@ import {
   userBatchWithCustomData,
   userBatch,
   findUserWithCustomData,
-  searchUserWithCustomData
+  searchUserWithCustomData,
+  sendFirstLoginVerifyEmail
 } from '../graphqlapi';
 import {
   User,
@@ -1193,5 +1194,21 @@ export class UsersManagementClient {
         })
     });
     return result;
+  }
+
+  /**
+   * @description 发送首次登录验证邮件
+   *
+   */
+  public async sendFirstLoginVerifyEmail(options: {
+    appId: string;
+    userId: string;
+  }) {
+    await sendFirstLoginVerifyEmail(
+      this.graphqlClient,
+      this.tokenProvider,
+      options
+    );
+    return true;
   }
 }
