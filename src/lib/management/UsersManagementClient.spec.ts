@@ -333,7 +333,7 @@ test('踢下线一批用户', async t => {
   t.assert(data.code === 200);
 });
 
-test.only('用户池管理员根据用户 id 查询用户的登录状态', async t => {
+test('用户池管理员根据用户 id 查询用户的登录状态', async t => {
   let username = Math.random()
     .toString(26)
     .slice(2);
@@ -341,7 +341,34 @@ test.only('用户池管理员根据用户 id 查询用户的登录状态', async
   let user = await managementClient.users.create({ username, password: pwd });
   await authenticationClient.loginByUsername(username, pwd);
   let res2 = await managementClient.users.checkLoginStatus(user.id);
-  t.assert(res2.isLogin === true)
-  t.assert(res2.user)
-  t.assert(res2.application.length > 0)
+  t.assert(res2.isLogin === true);
+  t.assert(res2.user);
+  t.assert(res2.application.length > 0);
+});
+
+test.only('用户池管理员强制下线用户在某个应用的登录态', async t => {
+  let username = Math.random()
+    .toString(26)
+    .slice(2);
+  let pwd = '123456';
+  let user = await managementClient.users.create({ username, password: pwd });
+  await authenticationClient.loginByUsername(username, pwd);
+  let res2 = await managementClient.users.logout({
+    userId: user.id,
+    appId: getOptionsFromEnv().appId
+  });
+  t.assert(res2.code === 200);
+});
+
+test.only('用户池管理员强制下线用户在所有应用的登录态', async t => {
+  let username = Math.random()
+    .toString(26)
+    .slice(2);
+  let pwd = '123456';
+  let user = await managementClient.users.create({ username, password: pwd });
+  await authenticationClient.loginByUsername(username, pwd);
+  let res2 = await managementClient.users.logout({
+    userId: user.id,
+  });
+  t.assert(res2.code === 200);
 });
