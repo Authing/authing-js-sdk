@@ -1120,6 +1120,8 @@ export type Mutation = {
   moveMembers?: Maybe<CommonMessage>;
   moveNode: Org;
   resetPassword?: Maybe<CommonMessage>;
+  /** 通过首次登录的 Token 重置密码 */
+  resetPasswordByFirstLoginToken?: Maybe<CommonMessage>;
   createPolicy: Policy;
   updatePolicy: Policy;
   deletePolicy: CommonMessage;
@@ -1413,6 +1415,12 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationResetPasswordByFirstLoginTokenArgs = {
+  token: Scalars['String'];
+  password: Scalars['String'];
+};
+
+
 export type MutationCreatePolicyArgs = {
   namespace?: Maybe<Scalars['String']>;
   code: Scalars['String'];
@@ -1597,6 +1605,7 @@ export type MutationRefreshTokenArgs = {
 export type MutationCreateUserArgs = {
   userInfo: CreateUserInput;
   keepPassword?: Maybe<Scalars['Boolean']>;
+  resetPasswordOnFirstLogin?: Maybe<Scalars['Boolean']>;
   params?: Maybe<Scalars['String']>;
 };
 
@@ -2330,6 +2339,7 @@ export type CreateSocialConnectionInstanceResponse = { createSocialConnectionIns
 export type CreateUserVariables = Exact<{
   userInfo: CreateUserInput;
   keepPassword?: Maybe<Scalars['Boolean']>;
+  resetPasswordOnFirstLogin?: Maybe<Scalars['Boolean']>;
 }>;
 
 
@@ -2645,6 +2655,14 @@ export type ResetPasswordVariables = Exact<{
 
 
 export type ResetPasswordResponse = { resetPassword?: Maybe<{ message?: Maybe<string>, code?: Maybe<number> }> };
+
+export type ResetPasswordByFirstLoginTokenVariables = Exact<{
+  token: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type ResetPasswordByFirstLoginTokenResponse = { resetPasswordByFirstLoginToken?: Maybe<{ message?: Maybe<string>, code?: Maybe<number> }> };
 
 export type RevokeRoleVariables = Exact<{
   namespace?: Maybe<Scalars['String']>;
@@ -3823,8 +3841,8 @@ export const CreateSocialConnectionInstanceDocument = `
 }
     `;
 export const CreateUserDocument = `
-    mutation createUser($userInfo: CreateUserInput!, $keepPassword: Boolean) {
-  createUser(userInfo: $userInfo, keepPassword: $keepPassword) {
+    mutation createUser($userInfo: CreateUserInput!, $keepPassword: Boolean, $resetPasswordOnFirstLogin: Boolean) {
+  createUser(userInfo: $userInfo, keepPassword: $keepPassword, resetPasswordOnFirstLogin: $resetPasswordOnFirstLogin) {
     id
     arn
     userPoolId
@@ -4802,6 +4820,14 @@ export const RemoveWhitelistDocument = `
 export const ResetPasswordDocument = `
     mutation resetPassword($phone: String, $email: String, $code: String!, $newPassword: String!) {
   resetPassword(phone: $phone, email: $email, code: $code, newPassword: $newPassword) {
+    message
+    code
+  }
+}
+    `;
+export const ResetPasswordByFirstLoginTokenDocument = `
+    mutation resetPasswordByFirstLoginToken($token: String!, $password: String!) {
+  resetPasswordByFirstLoginToken(token: $token, password: $password) {
     message
     code
   }

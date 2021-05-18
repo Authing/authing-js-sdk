@@ -176,9 +176,11 @@ export class UsersManagementClient {
     userInfo: CreateUserInput,
     options?: {
       keepPassword?: boolean;
+      resetPasswordOnFirstLogin?: boolean;
     }
   ): Promise<User> {
-    const { keepPassword = false } = options || {};
+    const { keepPassword = false, resetPasswordOnFirstLogin = false } =
+      options || {};
     if (userInfo?.password) {
       userInfo.password = await this.options.encryptFunction(
         userInfo.password,
@@ -190,7 +192,8 @@ export class UsersManagementClient {
       this.tokenProvider,
       {
         userInfo,
-        keepPassword
+        keepPassword,
+        resetPasswordOnFirstLogin
       }
     );
     return user;
@@ -477,7 +480,7 @@ export class UsersManagementClient {
           limit
         }
       );
-      return data
+      return data;
     }
   }
 
