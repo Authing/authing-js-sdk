@@ -85,7 +85,7 @@ export class ApplicationsManagementClient {
     const data = await this.httpClient.request({
       url: `${this.options.host}/api/v2/applications`,
       method: 'GET',
-      data: {
+      params: {
         page,
         limit
       }
