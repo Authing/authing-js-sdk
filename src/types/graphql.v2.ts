@@ -2897,7 +2897,7 @@ export type ChildrenNodesVariables = Exact<{
 }>;
 
 
-export type ChildrenNodesResponse = { childrenNodes: Array<{ id: string, orgId?: Maybe<string>, name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, path: Array<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> };
+export type ChildrenNodesResponse = { childrenNodes: Array<{ id: string, orgId?: Maybe<string>, name: string, nameI18n?: Maybe<string>, description?: Maybe<string>, descriptionI18n?: Maybe<string>, order?: Maybe<number>, code?: Maybe<string>, root?: Maybe<boolean>, depth?: Maybe<number>, path: Array<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, children?: Maybe<Array<string>> }> };
 
 export type EmailTemplatesVariables = Exact<{ [key: string]: never; }>;
 
@@ -5527,6 +5527,7 @@ export const ChildrenNodesDocument = `
     path
     createdAt
     updatedAt
+    children
   }
 }
     `;
