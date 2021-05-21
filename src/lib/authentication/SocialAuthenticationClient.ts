@@ -111,6 +111,11 @@ export class SocialAuthenticationClient {
        * @description 将会写入配置的用户自定义字段
        */
       customData?: { [x: string]: any };
+
+      /**
+       * @description 获取的用户信息中是否包含 identities
+       */
+      withIdentities?: boolean
     }
   ) {
     options = options || {};
@@ -122,14 +127,16 @@ export class SocialAuthenticationClient {
       authorization_params,
       authorizationParams,
       context,
-      customData
+      customData,
+      withIdentities = false
     } = options;
     const query: Record<string, string> = {
       from_guard: '1',
       app_id: this.options.appId,
       authorization_params: JSON.stringify(
         authorization_params || authorizationParams
-      )
+      ),
+      with_identities: withIdentities ? '1' : '0'
     };
     if (context) {
       query.context = JSON.stringify(context);
