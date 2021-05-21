@@ -382,9 +382,8 @@ export class OrgManagementClient {
    * @returns {Promise<Node[]>}
    * @memberof OrgManagementClient
    */
-  async listChildren(orgId: string, nodeId: string) {
+  async listChildren(nodeId: string) {
     const res = await getChildrenNodes(this.graphqlClient, this.tokenProvider, {
-      orgId,
       nodeId
     });
     return res.childrenNodes;
@@ -710,7 +709,7 @@ export class OrgManagementClient {
 
     return true;
   }
-  
+
   /**
    * @description 搜索组织机构节点
    *
