@@ -22,14 +22,18 @@ export class GraphqlClient {
   async request(options: { query: string; variables?: any; token?: string }) {
     const { query, token, variables } = options;
     let headers: any = {
-      'content-type': 'application/json',
-      'x-authing-sdk-version': `js:${SDK_VERSION}`,
-      // @ts-ignore
-      'x-authing-userpool-id': this.options.userPoolId || '',
-      'x-authing-request-from': this.options.requestFrom || 'sdk',
-      'x-authing-app-id': this.options.appId || '',
-      'x-authing-lang': this.options.lang || ''
+      'content-type': 'application/json'
     };
+
+    headers[this.options.headers['app-id']] = this.options.appId || '';
+    headers[this.options.headers['userpool-id']] =
+      // @ts-ignore
+      this.options.userPoolId || '';
+    headers[this.options.headers['request-from']] =
+      this.options.requestFrom || 'sdk';
+    headers[this.options.headers['sdk-version']] = `js:${SDK_VERSION}`;
+    headers[this.options.headers.lang] = this.options.lang || '';
+
     token && (headers.Authorization = `Bearer ${token}`);
     let data = null;
     let errors = null;

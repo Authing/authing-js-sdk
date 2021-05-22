@@ -94,7 +94,14 @@ const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   },
   requestFrom: 'sdk',
   encryptFunction: encrypt,
-  host: 'https://core.authing.cn'
+  host: 'https://core.authing.cn',
+  headers: {
+    'userpool-id': 'x-authing-userpool-id',
+    'app-id': 'x-authing-app-id',
+    'request-from': 'x-authing-request-from',
+    'sdk-version': 'x-authing-sdk-version',
+    lang: 'x-authing-lang'
+  }
 };
 
 /**

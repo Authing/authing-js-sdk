@@ -33,6 +33,17 @@ export interface ManagementClientOptions {
    * 语言
    */
   lang?: Lang;
+
+  /**
+   * 请求头 key，适用于去 Authing 品牌化场景
+   */
+  headers?: {
+    'userpool-id': string;
+    'app-id': string;
+    'sdk-version': string;
+    'request-from': string;
+    lang: string;
+  };
 }
 
 /**

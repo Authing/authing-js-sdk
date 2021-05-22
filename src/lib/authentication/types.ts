@@ -62,6 +62,17 @@ export interface AuthenticationClientOptions {
    * @deprecated 该参数已经废弃，请使用 appHost
    */
   domain?: string;
+
+  /**
+   * 请求头 key，适用于去 Authing 品牌化场景
+   */
+  headers?: {
+    'userpool-id': string,
+    'app-id': string,
+    'sdk-version': string,
+    'request-from': string,
+    lang: string
+  }
 }
 
 export interface QRCodeUserInfo {
