@@ -30,7 +30,14 @@ const DEFAULT_OPTIONS: ManagementClientOptions = {
   },
   host: 'https://core.authing.cn',
   requestFrom: 'sdk',
-  encryptFunction: encrypt
+  encryptFunction: encrypt,
+  headers: {
+    'userpool-id': 'x-authing-userpool-id',
+    'app-id': 'x-authing-app-id',
+    'request-from': 'x-authing-request-from',
+    'sdk-version': 'x-authing-sdk-version',
+    lang: 'x-authing-lang'
+  }
 };
 
 export class ManagementClient {
