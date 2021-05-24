@@ -175,17 +175,22 @@ export class QrCodeAuthenticationClient {
       // onCodeDestroyed,
       tips = {},
       context,
-      customData
+      customData,
     } = options;
+
+    const {lang} = this.options
+    const nowLang = lang === 'zh-CN'
     const {
-      title = `使用 <strong> ${
+      title = nowLang ? `使用 <strong> ${
         this.scene === 'WXAPP_AUTH' ? '微信' : 'APP'
-      } </strong> 扫码登录`,
+      } </strong> 扫码登录` : `use <strong> ${
+        this.scene === 'WXAPP_AUTH' ? 'Wecaht' : 'APP'
+      } </strong> scan code login`,
       // scanned = '用户已扫码，等待确认',
-      canceled = '用户取消授权',
-      expired = '二维码已过期',
-      succeed = '扫码成功',
-      retry = '重试'
+      canceled = nowLang ? '用户取消授权' : 'User cancel authorization',
+      expired = nowLang ? '二维码已过期' : 'QR code has expired',
+      succeed = nowLang ? '扫码成功' : 'Scan code successfully',
+      retry = nowLang ? '重试' : 'Retry'
     } = tips;
 
     let node = document.getElementById(domId);
