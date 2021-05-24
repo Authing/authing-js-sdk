@@ -450,16 +450,18 @@ export class UsersManagementClient {
     limit: number = 10,
     options?: {
       withCustomData?: boolean;
+      excludeUsersInOrg?: boolean;
     }
   ) {
-    const { withCustomData = false } = options || {};
+    const { withCustomData = false, excludeUsersInOrg = false } = options || {};
     if (withCustomData) {
       const { users: data } = await usersWithCustomData(
         this.graphqlClient,
         this.tokenProvider,
         {
           page,
-          limit
+          limit,
+          excludeUsersInOrg
         }
       );
       let { totalCount, list } = data;
@@ -478,7 +480,8 @@ export class UsersManagementClient {
         this.tokenProvider,
         {
           page,
-          limit
+          limit,
+          excludeUsersInOrg
         }
       );
       return data;

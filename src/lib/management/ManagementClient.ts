@@ -7,7 +7,7 @@ import { UsersManagementClient } from './UsersManagementClient';
 import { sendEmail } from '../graphqlapi';
 import { EmailScene, User } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
-import Axios from 'axios';
+import Axios, { AxiosRequestConfig } from 'axios';
 import { RolesManagementClient } from './RolesManagementClient';
 import { PoliciesManagementClient } from './PoliciesManagementClient';
 import { UdfManagementClient } from './UdfManagementClient';
@@ -247,5 +247,26 @@ export class ManagementClient {
    */
   setLang(lang: Lang) {
     this.options.lang = lang;
+  }
+
+  /**
+   * @description 执行 GraphQL 请求
+   */
+  public async makeGraphqlRequest(options: { query: string; variables?: any }) {
+    const { query, variables } = options;
+    const token = await this.tokenProvider.getToken();
+    const data = await this.graphqlClient.request({
+      query,
+      variables,
+      token
+    });
+    return data;
+  }
+
+  /**
+   * @description 执行 RESTful 请求
+   */
+  public async makeRestRequest(config: AxiosRequestConfig) {
+    return await this.httpClient.request(config);
   }
 }

@@ -293,6 +293,7 @@ export type QueryUsersArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
+  excludeUsersInOrg?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -3396,6 +3397,7 @@ export type UsersVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
+  excludeUsersInOrg?: Maybe<Scalars['Boolean']>;
 }>;
 
 
@@ -3405,6 +3407,7 @@ export type UsersWithCustomDataVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
+  excludeUsersInOrg?: Maybe<Scalars['Boolean']>;
 }>;
 
 
@@ -7184,8 +7187,8 @@ export const UserpoolsDocument = `
 }
     `;
 export const UsersDocument = `
-    query users($page: Int, $limit: Int, $sortBy: SortByEnum) {
-  users(page: $page, limit: $limit, sortBy: $sortBy) {
+    query users($page: Int, $limit: Int, $sortBy: SortByEnum, $excludeUsersInOrg: Boolean) {
+  users(page: $page, limit: $limit, sortBy: $sortBy, excludeUsersInOrg: $excludeUsersInOrg) {
     totalCount
     list {
       id
@@ -7243,8 +7246,8 @@ export const UsersDocument = `
 }
     `;
 export const UsersWithCustomDataDocument = `
-    query usersWithCustomData($page: Int, $limit: Int, $sortBy: SortByEnum) {
-  users(page: $page, limit: $limit, sortBy: $sortBy) {
+    query usersWithCustomData($page: Int, $limit: Int, $sortBy: SortByEnum, $excludeUsersInOrg: Boolean) {
+  users(page: $page, limit: $limit, sortBy: $sortBy, excludeUsersInOrg: $excludeUsersInOrg) {
     totalCount
     list {
       id
