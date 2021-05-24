@@ -184,7 +184,7 @@ export class QrCodeAuthenticationClient {
       title = nowLang ? `使用 <strong> ${
         this.scene === 'WXAPP_AUTH' ? '微信' : 'APP'
       } </strong> 扫码登录` : `use <strong> ${
-        this.scene === 'WXAPP_AUTH' ? 'Wecaht' : 'APP'
+        this.scene === 'WXAPP_AUTH' ? 'Wechat' : 'APP'
       } </strong> scan code login`,
       // scanned = '用户已扫码，等待确认',
       canceled = nowLang ? '用户取消授权' : 'User cancel authorization',
