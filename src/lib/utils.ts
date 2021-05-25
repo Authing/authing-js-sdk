@@ -1,13 +1,7 @@
 import { KeyValuePair } from '../types';
 import { UdfDataType } from '../types/graphql.v2';
-// import { JSEncrypt } from 'jsencrypt';
 
-// 兼容 JSEncrypt
-if (typeof window === 'undefined' && global) {
-  // @ts-ignore
-  global.window = {};
-}
-const JSEncrypt = require('jsencrypt/bin/jsencrypt');
+const JSEncrypt = require('./jsencrypt');
 
 export const encrypt = async (plainText: string, publicKey: string) => {
   return new Promise<string>((resolve, reject) => {
@@ -229,7 +223,8 @@ export const convertUdvToKeyValuePair = (
   return ret;
 };
 
-export const isWechatBrowser = () => navigator?.userAgent && /MicroMessenger/i.test(navigator?.userAgent);
+export const isWechatBrowser = () =>
+  navigator?.userAgent && /MicroMessenger/i.test(navigator?.userAgent);
 
 export const formatAuthorizedResources = (resources: any[]) => {
   return resources.map(resource => {
