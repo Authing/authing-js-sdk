@@ -224,7 +224,7 @@ export const convertUdvToKeyValuePair = (
 };
 
 export const isWechatBrowser = () =>
-  navigator?.userAgent && /MicroMessenger/i.test(navigator?.userAgent);
+  /MicroMessenger/i.test(navigator?.userAgent);
 
 export const formatAuthorizedResources = (resources: any[]) => {
   return resources.map(resource => {
