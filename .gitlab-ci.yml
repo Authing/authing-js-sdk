@@ -31,8 +31,13 @@ publish:
     - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
     - npm publish ${PUBLISH_OPTS}
     - echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk  🚀"
+  artifacts:
+    untracked: false
+    paths:
+      - build
+    expire_in: 30 days
 
-upload:oss:
+upload:
   stage: upload
   image:
     name: fuergaosi/ossutil:latest
