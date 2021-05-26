@@ -2,6 +2,7 @@ image: node:12.14.0
 
 stages:
   - publish
+  - upload
 
 before_script:
   - mkdir -p ~/.ssh
@@ -30,3 +31,21 @@ publish:
     - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
     - npm publish ${PUBLISH_OPTS}
     - echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk  🚀"
+
+upload:oss:
+  stage: upload
+  image:
+    name: fuergaosi/ossutil:latest
+  script:
+    - export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+    - echo 上传包到 cdn
+    - echo $OSS_URL
+    - echo $OSS_REGION
+    - echo 版本 $VERSION
+    - ls -a
+    - >
+      ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
+      --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
+      -e ${OSS_REGION} cp -r -f build oss://${OSS_URL}/packages/authing-js-sdk/${VERSION}/
+  dependencies:
+    - publish
