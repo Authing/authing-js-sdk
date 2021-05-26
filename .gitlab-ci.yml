@@ -39,6 +39,7 @@ publish:
 
 upload:
   stage: upload
+  when: manual
   image:
     name: fuergaosi/ossutil:latest
   script:
