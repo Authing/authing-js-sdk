@@ -50,13 +50,10 @@ upload:
   script:
     - export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
     - echo 上传包到 cdn
-    - echo $OSS_URL
-    - echo $OSS_REGION
     - echo 版本 $VERSION
-    - ls -a
     - >
       ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
       --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
-      -e ${OSS_REGION} cp -r -f build oss://${OSS_URL}/packages/authing-js-sdk/${VERSION}/
+      -e ${OSS_REGION_PROD} cp -r -f build oss://${CDN_OSS_PROD}/packages/authing-js-sdk/${VERSION}/
   dependencies:
     - publish
