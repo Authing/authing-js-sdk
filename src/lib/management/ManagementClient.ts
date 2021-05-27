@@ -65,6 +65,7 @@ export class ManagementClient {
   mfa: MFAManagementClient;
 
   constructor(options: ManagementClientOptions) {
+    Object.keys(options).forEach((i: never) => !options[i] && delete options[i]);
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
     if (!this.options.userPoolId && !this.options.appId)
       throw new Error('请提供 userPoolId 或者 appId!');
