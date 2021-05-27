@@ -1176,6 +1176,7 @@ export class UsersManagementClient {
       clientIp?: string;
       operationName?: string;
       operatoArn?: string;
+      appId?: string
     } = {
       page: 1,
       limit: 10
@@ -1190,7 +1191,8 @@ export class UsersManagementClient {
           limit: options.limit?.toString(),
           clientip: options.clientIp,
           operation_name: options.operationName,
-          operator_arn: options.operatoArn
+          operator_arn: options.operatoArn,
+          app_id: options.appId
         })
     });
     return result;
