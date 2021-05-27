@@ -23,6 +23,11 @@ before_script:
     esac
 
 publish:
+  cache:
+    untracked: true
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - build
   stage: publish
   when: manual
   script:
