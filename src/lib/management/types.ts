@@ -1033,3 +1033,14 @@ export interface AgreementList {
   list: AgreementDetail[];
   totalCount: number;
 }
+
+export interface ISetTotpResp {
+  userId: string;
+  enable: boolean;
+  secret: string;
+  authenticatorType: string;
+  recoveryCode: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+}

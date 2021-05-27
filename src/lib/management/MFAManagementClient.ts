@@ -1,4 +1,4 @@
-import { ManagementClientOptions, UserMfaType } from './types';
+import { ISetTotpResp, ManagementClientOptions, UserMfaType } from './types';
 import { GraphqlClient } from '../common/GraphqlClient';
 import { HttpClient } from '../common/HttpClient';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
@@ -80,5 +80,34 @@ export class MFAManagementClient {
       url: `${this.options.host}/api/v2/users/${userId}/mfa-bound?type=${type}`
     });
     return true;
+  }
+  /**
+   * @name importTotp
+   * @name_zh 将已有的 TOTP 的 secret 和恢复代码导入到 Authing，并为用户开启 TOTP 多因素认证
+   * @description 设置用户 TOTP 的 secret 和恢复代码，并自动启用 MFA
+   *
+   * @param {string} userId 用户 ID
+   * @param {string} secret TOTP 密钥
+   * @param {string} recoveryCode 恢复代码
+   *
+   * @example
+   *
+   * const result = await managementClient.mfa.setTotp('USER_ID', 'SECRET', 'RECOVERY_CODE');
+   *
+   * @memberof MFAManagementClient
+   */
+  async importTotp(
+    userId: string,
+    secret: string,
+    recoveryCode?: string
+  ): Promise<ISetTotpResp> {
+    if (!userId || !secret) {
+      throw new Error('请传入用户 ID、TOTP 密钥');
+    }
+    return await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/mfa/totp/import`,
+      data: { userId, secret, recoveryCode }
+    });
   }
 }
