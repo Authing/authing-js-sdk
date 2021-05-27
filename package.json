@@ -36,7 +36,7 @@
 		"doc:generate": "node build-doc.js",
 		"version": "standard-version",
 		"reset": "git clean -dfx && git reset --hard && npm i",
-		"clean": "trash build test",
+		"clean": "rm -rf build && rm -rf test",
 		"prepare-release": "run-s reset test cov:check doc:html version doc:publish"
 	},
 	"scripts-info": {
