@@ -6,7 +6,6 @@ import {
   ManagementClientOptions,
   UserActions
 } from './types';
-import { objectToQueryString } from '../utils';
 import {
   deleteUser,
   deleteUsers,
@@ -1171,29 +1170,66 @@ export class UsersManagementClient {
    */
   public async listUserActions(
     options: {
+      clientIp?: string;
+      operationNames?: string[];
+      userIds?: string[];
       page?: number;
       limit?: number;
-      clientIp?: string;
-      operationName?: string;
-      operatoArn?: string;
+      excludeNonAppRecords?: boolean;
+      appIds?: string[]
     } = {
       page: 1,
       limit: 10
     }
   ): Promise<UserActions> {
-    const result = await this.httpClient.request({
+    let requestParam: any = {};
+    if (options?.clientIp) {
+      requestParam.clientip = options.clientIp;
+    }
+    if (options?.operationNames) {
+      requestParam.operation_name = options.operationNames;
+    }
+    if (options?.userIds?.length) {
+      requestParam.operator_arn = options.userIds.map(userId => {
+        return `arn:cn:authing:${this.options.userPoolId}:user:${userId}`;
+      });
+    }
+    if (options?.page) {
+      requestParam.page = options.page;
+    }
+    if (options?.limit) {
+      requestParam.limit = options.limit;
+    }
+    if (options?.excludeNonAppRecords) {
+      requestParam.exclude_non_app_records = '1';
+    }
+    if (options?.appIds) {
+      requestParam.appIds = options?.appIds
+    }
+    const result: any = await this.httpClient.request({
       method: 'GET',
-      url:
-        `${this.options.host}/api/v2/analysis/user-action` +
-        objectToQueryString({
-          page: options.page?.toString(),
-          limit: options.limit?.toString(),
-          clientip: options.clientIp,
-          operation_name: options.operationName,
-          operator_arn: options.operatoArn
-        })
+      url: `${this.options.host}/api/v2/analysis/user-action`,
+      params: { ...requestParam }
     });
-    return result;
+    const { list, totalCount } = result;
+    return {
+      list: list.map((log: any) => {
+        return {
+          userpoolId: log.userpool_id,
+          userId: log.user?.id,
+          username: log.user?.displayName,
+          cityName: log.geoip?.city_name,
+          regionName: log.geoip?.region_name,
+          clientIp: log.geoip?.ip,
+          operationDesc: log.operation_desc,
+          operationName: log.operation_name,
+          timestamp: log.timestamp,
+          appId: log.app_id,
+          appName: log.app?.name
+        };
+      }),
+      totalCount
+    };
   }
 
   /**

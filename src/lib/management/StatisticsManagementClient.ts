@@ -45,7 +45,9 @@ export class StatisticsManagementClient {
     operationNames?: string[];
     userIds?: string[];
     page?: number;
-    limit?: number
+    limit?: number;
+    excludeNonAppRecords?: boolean;
+    appIds?: string[]
   }): Promise<{ totalCount: number; list: UserLogsInfo[] }> {
     let requestParam: any = {};
     if (options?.clientIp) {
@@ -64,6 +66,12 @@ export class StatisticsManagementClient {
     }
     if (options?.limit) {
       requestParam.limit = options.limit;
+    }
+    if (options?.excludeNonAppRecords) {
+      requestParam.exclude_non_app_records = '1';
+    }
+    if (options?.appIds) {
+      requestParam.appIds = options?.appIds
     }
     const result: any = await this.httpClient.request({
       method: 'GET',
@@ -96,11 +104,24 @@ export class StatisticsManagementClient {
    * @param options.operationNames  SupportedAdminActionEnum
    */
   async listAuditLogs(options?: {
+    /**
+     * @description 客户端 IP
+     */
     clientIp?: string;
+    /**
+     * @description 操作名称
+     */
     operationNames?: string[];
-    operatorArns?: string[];
+    /**
+     * @description 用户 ID 列表
+     */
+    userIds?: string[];
+    /**
+     * @description 应用 ID 列表，默认获取所有应用
+     */
+    appIds?: string[];
     page?: number;
-    limit?: number
+    limit?: number;
   }): Promise<{ list: AdminLogsInfo[]; totalCount: number }> {
     let requestParam: any = {};
     if (options?.clientIp) {
@@ -109,8 +130,14 @@ export class StatisticsManagementClient {
     if (options?.operationNames) {
       requestParam.operation_name = options.operationNames;
     }
-    if (options?.operatorArns) {
-      requestParam.operator_arn = options.operatorArns;
+    if (options?.appIds) {
+      requestParam.app_id = options?.appIds;
+    }
+    if (options?.userIds) {
+      const operatorArns = options.userIds.map(
+        userId => `arn:cn:authing:user:${userId}`
+      );
+      requestParam.operator_arn = operatorArns;
     }
     if (options?.page) {
       requestParam.page = options.page;

@@ -141,6 +141,7 @@ export class AuthenticationClient {
   private publicKeyManager: PublicKeyManager;
 
   constructor(options: AuthenticationClientOptions) {
+    Object.keys(options).forEach((i: never) => !options[i] && delete options[i]);
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
     this.baseClient = new BaseAuthenticationClient(this.options);
     const graphqlEndpoint = `${this.baseClient.appHost}/graphql/v2`;
