@@ -80,6 +80,7 @@ import { KeyValuePair, Lang } from '../../types';
 import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 import { ApplicationPublicDetail } from '../management/types';
+import { PrincipalAuthenticationClient } from './PrincipalAuthentication';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   appId: undefined,
@@ -139,10 +140,13 @@ export class AuthenticationClient {
   mfa: MfaAuthenticationClient;
   social: SocialAuthenticationClient;
   enterprise: EnterpriseAuthenticationClient;
+  principal: PrincipalAuthenticationClient;
   private publicKeyManager: PublicKeyManager;
 
   constructor(options: AuthenticationClientOptions) {
-    Object.keys(options).forEach((i: never) => !options[i] && delete options[i]);
+    Object.keys(options).forEach(
+      (i: never) => !options[i] && delete options[i]
+    );
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
     this.baseClient = new BaseAuthenticationClient(this.options);
     const graphqlEndpoint = `${this.baseClient.appHost}/graphql/v2`;
@@ -191,6 +195,11 @@ export class AuthenticationClient {
       this.httpClient
     );
     this.enterprise = new EnterpriseAuthenticationClient(
+      this.options,
+      this.tokenProvider,
+      this.httpClient
+    );
+    this.principal = new PrincipalAuthenticationClient(
       this.options,
       this.tokenProvider,
       this.httpClient
