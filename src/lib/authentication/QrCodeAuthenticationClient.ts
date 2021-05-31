@@ -47,7 +47,7 @@ export class QrCodeAuthenticationClient {
     options: AuthenticationClientOptions,
     tokenProvider: AuthenticationTokenProvider,
     httpClient: HttpClient,
-    scene: 'WXAPP_AUTH' | 'APP_AUTH'
+    scene: 'WXAPP_AUTH' | 'APP_AUTH' | 'WECHATMP_AUTH'
   ) {
     this.options = options;
     this.tokenProvider = tokenProvider;
@@ -175,17 +175,19 @@ export class QrCodeAuthenticationClient {
       // onCodeDestroyed,
       tips = {},
       context,
-      customData,
+      customData
     } = options;
 
-    const {lang} = this.options
-    const nowLang = lang === 'zh-CN'
+    const { lang } = this.options;
+    const nowLang = lang === 'zh-CN';
     const {
-      title = nowLang ? `使用 <strong> ${
-        this.scene === 'WXAPP_AUTH' ? '微信' : 'APP'
-      } </strong> 扫码登录` : `use <strong> ${
-        this.scene === 'WXAPP_AUTH' ? 'Wechat' : 'APP'
-      } </strong> scan code login`,
+      title = nowLang
+        ? `使用 <strong> ${
+            this.scene === 'APP_AUTH' ? 'APP' : '微信'
+          } </strong> 扫码登录`
+        : `use <strong> ${
+            this.scene === 'APP_AUTH' ? 'APP' : 'Wechat'
+          } </strong> scan code login`,
       // scanned = '用户已扫码，等待确认',
       canceled = nowLang ? '用户取消授权' : 'User cancel authorization',
       expired = nowLang ? '二维码已过期' : 'QR code has expired',

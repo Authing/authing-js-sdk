@@ -136,6 +136,7 @@ export class AuthenticationClient {
   tokenProvider: AuthenticationTokenProvider;
   wxqrcode: QrCodeAuthenticationClient;
   qrcode: QrCodeAuthenticationClient;
+  wechatmpqrcode: QrCodeAuthenticationClient
   mfa: MfaAuthenticationClient;
   social: SocialAuthenticationClient;
   enterprise: EnterpriseAuthenticationClient;
@@ -177,6 +178,12 @@ export class AuthenticationClient {
       this.httpClient,
       'APP_AUTH'
     );
+    this.wechatmpqrcode = new QrCodeAuthenticationClient(
+      this.options,
+      this.tokenProvider,
+      this.httpClient,
+      'WECHATMP_AUTH'
+    )
     this.mfa = new MfaAuthenticationClient(
       this.options,
       this.tokenProvider,
