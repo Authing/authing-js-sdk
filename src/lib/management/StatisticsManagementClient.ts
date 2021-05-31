@@ -47,7 +47,9 @@ export class StatisticsManagementClient {
     page?: number;
     limit?: number;
     excludeNonAppRecords?: boolean;
-    appIds?: string[]
+    appIds?: string[];
+    start?: number;
+    end?: number;
   }): Promise<{ totalCount: number; list: UserLogsInfo[] }> {
     let requestParam: any = {};
     if (options?.clientIp) {
@@ -71,7 +73,13 @@ export class StatisticsManagementClient {
       requestParam.exclude_non_app_records = '1';
     }
     if (options?.appIds) {
-      requestParam.appIds = options?.appIds
+      requestParam.app_id = options?.appIds;
+    }
+    if (options?.start !== undefined) {
+      requestParam.start = options?.start;
+    }
+    if (options?.end !== undefined) {
+      requestParam.end = options?.end;
     }
     const result: any = await this.httpClient.request({
       method: 'GET',

@@ -1176,7 +1176,9 @@ export class UsersManagementClient {
       page?: number;
       limit?: number;
       excludeNonAppRecords?: boolean;
-      appIds?: string[]
+      appIds?: string[];
+      start?: number;
+      end?: number;
     } = {
       page: 1,
       limit: 10
@@ -1204,7 +1206,13 @@ export class UsersManagementClient {
       requestParam.exclude_non_app_records = '1';
     }
     if (options?.appIds) {
-      requestParam.appIds = options?.appIds
+      requestParam.app_id = options?.appIds;
+    }
+    if (options?.start !== undefined) {
+      requestParam.start = options?.start;
+    }
+    if (options?.end !== undefined) {
+      requestParam.end = options?.end;
     }
     const result: any = await this.httpClient.request({
       method: 'GET',

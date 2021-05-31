@@ -381,8 +381,10 @@ test.skip('statistics.listUserActions', async t => {
     excludeNonAppRecords: true,
     appIds: [
       '60af0ed56d13799e4cf384f5'
-    ]
+    ],
+    start: 1622362098786
   })
+  console.log(data)
   t.assert(data)
 })
 
