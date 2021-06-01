@@ -22,6 +22,7 @@ import { UserActionManagementClient } from './UserActionManagementClient';
 import { ApplicationsManagementClient } from './ApplicationsManagementClient';
 import { MFAManagementClient } from './MFAManagementClient';
 import { Lang } from '../../types';
+import { PrincipalManagementClient } from './PrincipalManagement';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -63,9 +64,12 @@ export class ManagementClient {
   userAction: UserActionManagementClient;
   applications: ApplicationsManagementClient;
   mfa: MFAManagementClient;
+  principal: PrincipalManagementClient;
 
   constructor(options: ManagementClientOptions) {
-    Object.keys(options).forEach((i: never) => !options[i] && delete options[i]);
+    Object.keys(options).forEach(
+      (i: never) => !options[i] && delete options[i]
+    );
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
     if (!this.options.userPoolId && !this.options.appId)
       throw new Error('请提供 userPoolId 或者 appId!');
@@ -161,6 +165,12 @@ export class ManagementClient {
       this.tokenProvider
     );
     this.mfa = new MFAManagementClient(
+      this.options,
+      this.graphqlClient,
+      this.httpClient,
+      this.tokenProvider
+    );
+    this.principal = new PrincipalManagementClient(
       this.options,
       this.graphqlClient,
       this.httpClient,
