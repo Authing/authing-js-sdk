@@ -2680,6 +2680,11 @@ concordance@^4.0.0:
     semver "^5.5.1"
     well-known-symbols "^2.0.0"
 
+conf-global@^1.0.0:
+  version "1.0.0"
+  resolved "https://nexus.forchange.cn/repository/npm-group/conf-global/-/conf-global-1.0.0.tgz#670ec9554ab132df084b362a565656202480f2ae"
+  integrity sha512-UWGiE8jq6iQTCMqKW0AIOXTjVZytouGSjlcOEWR8z6TdZ0gHJyuF9otg9y/rN0Cl0DDPfeFsPUR0z7s9+SQeXw==
+
 configstore@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npm.taobao.org/configstore/download/configstore-4.0.0.tgz#5933311e95d3687efb592c528b922d9262d227e7"

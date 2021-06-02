@@ -18,9 +18,9 @@
 		"build:main": "npm run copyFiles:main && tsc -p tsconfig.json",
 		"build:module": "npm run copyFiles:module && tsc -p tsconfig.module.json",
 		"build:umd": "npm run copyFiles:umd && tsc -p tsconfig.brower.json",
-    	"copyFiles:main": "copyfiles -u 1 \"src/**/*.js\" build/main",
-    	"copyFiles:module": "copyfiles -u 1 \"src/**/*.js\" build/module",
-    	"copyFiles:umd": "copyfiles -u 1 \"src/**/*.js\" build/umd",
+		"copyFiles:main": "copyfiles -u 1 \"src/**/*.js\" build/main",
+		"copyFiles:module": "copyfiles -u 1 \"src/**/*.js\" build/module",
+		"copyFiles:umd": "copyfiles -u 1 \"src/**/*.js\" build/umd",
 		"build:browser": "webpack",
 		"fix": "run-s fix:*",
 		"fix:prettier": "prettier \"src/**/*.ts\" --write",
@@ -57,6 +57,7 @@
 	},
 	"dependencies": {
 		"axios": "^0.19.2",
+		"conf-global": "^1.0.0",
 		"crypto-js": "^4.0.0",
 		"jsencrypt": "^3.1.0",
 		"jwt-decode": "^2.2.0"

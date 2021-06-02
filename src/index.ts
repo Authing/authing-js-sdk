@@ -1,3 +1,4 @@
+import "conf-global"
 export * from './lib/management/ManagementClient';
 export * from './lib/management/types';
 export * from './lib/management/ManagementTokenProvider';
