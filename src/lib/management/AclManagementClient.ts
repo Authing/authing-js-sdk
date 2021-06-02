@@ -281,6 +281,36 @@ export class AclManagementClient {
     });
   }
 
+  public async getResourceById(id: string) {
+    const data = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/resources/detail`,
+      params: {
+        id
+      }
+    });
+    if (!data) {
+      return null;
+    }
+    return data;
+  }
+
+  public async getResourceByCode(options: { namespace: string; code: string }) {
+    const { namespace, code } = options;
+    const data = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/resources/detail`,
+      params: {
+        namespace,
+        code
+      }
+    });
+    if (!data) {
+      return null;
+    }
+    return data;
+  }
+
   /**
    * @deprecated use listResources
    * @param options
