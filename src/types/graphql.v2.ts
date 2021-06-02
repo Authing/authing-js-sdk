@@ -963,6 +963,8 @@ export type UserPool = {
   loginFailCheck?: Maybe<LoginFailCheckConfig>;
   /** 登录失败检测 */
   loginPasswordFailCheck?: Maybe<LoginPasswordFailCheckConfig>;
+  /** 密码安全策略 */
+  loginFailStrategy?: Maybe<Scalars['String']>;
   /** 手机号修改策略 */
   changePhoneStrategy?: Maybe<ChangePhoneStrategy>;
   /** 邮箱修改策略 */
@@ -1009,7 +1011,6 @@ export type LoginPasswordFailCheckConfig = {
   timeInterval?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   enabled?: Maybe<Scalars['Boolean']>;
-  strategy?: Maybe<Scalars['String']>;
 };
 
 export type ChangePhoneStrategy = {
@@ -2070,6 +2071,7 @@ export type UpdateUserpoolInput = {
   tokenExpiresAfter?: Maybe<Scalars['Int']>;
   frequentRegisterCheck?: Maybe<FrequentRegisterCheckConfigInput>;
   loginFailCheck?: Maybe<LoginFailCheckConfigInput>;
+  loginFailStrategy?: Maybe<Scalars['String']>;
   loginPasswordFailCheck?: Maybe<LoginPasswordFailCheckConfigInput>;
   changePhoneStrategy?: Maybe<ChangePhoneStrategyInput>;
   changeEmailStrategy?: Maybe<ChangeEmailStrategyInput>;
@@ -2099,7 +2101,6 @@ export type LoginPasswordFailCheckConfigInput = {
   timeInterval?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   enabled?: Maybe<Scalars['Boolean']>;
-  strategy?: Maybe<Scalars['String']>;
 };
 
 export type ChangePhoneStrategyInput = {
@@ -2867,7 +2868,7 @@ export type UpdateUserpoolVariables = Exact<{
 }>;
 
 
-export type UpdateUserpoolResponse = { updateUserpool: { id: string, name: string, domain: string, description?: Maybe<string>, secret: string, jwtSecret: string, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, appSsoEnabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, packageType?: Maybe<number>, useCustomUserStore?: Maybe<boolean>, loginRequireEmailVerified?: Maybe<boolean>, verifyCodeLength?: Maybe<number>, userpoolTypes?: Maybe<Array<{ code?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string>, image?: Maybe<string>, sdks?: Maybe<Array<Maybe<string>>> }>>, frequentRegisterCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, loginFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, loginPasswordFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean>, strategy?: Maybe<string> }>, changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>, changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>, qrcodeLoginStrategy?: Maybe<{ qrcodeExpiresAfter?: Maybe<number>, returnFullUserInfo?: Maybe<boolean>, allowExchangeUserInfoFromBrowser?: Maybe<boolean>, ticketExpiresAfter?: Maybe<number> }>, app2WxappLoginStrategy?: Maybe<{ ticketExpriresAfter?: Maybe<number>, ticketExchangeUserInfoNeedSecret?: Maybe<boolean> }>, whitelist?: Maybe<{ phoneEnabled?: Maybe<boolean>, emailEnabled?: Maybe<boolean>, usernameEnabled?: Maybe<boolean> }>, customSMSProvider?: Maybe<{ enabled?: Maybe<boolean>, provider?: Maybe<string>, config?: Maybe<string> }> } };
+export type UpdateUserpoolResponse = { updateUserpool: { id: string, name: string, domain: string, description?: Maybe<string>, secret: string, jwtSecret: string, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, appSsoEnabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, loginFailStrategy?: Maybe<string>, packageType?: Maybe<number>, useCustomUserStore?: Maybe<boolean>, loginRequireEmailVerified?: Maybe<boolean>, verifyCodeLength?: Maybe<number>, userpoolTypes?: Maybe<Array<{ code?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string>, image?: Maybe<string>, sdks?: Maybe<Array<Maybe<string>>> }>>, frequentRegisterCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, loginFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, loginPasswordFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>, changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>, qrcodeLoginStrategy?: Maybe<{ qrcodeExpiresAfter?: Maybe<number>, returnFullUserInfo?: Maybe<boolean>, allowExchangeUserInfoFromBrowser?: Maybe<boolean>, ticketExpiresAfter?: Maybe<number> }>, app2WxappLoginStrategy?: Maybe<{ ticketExpriresAfter?: Maybe<number>, ticketExchangeUserInfoNeedSecret?: Maybe<boolean> }>, whitelist?: Maybe<{ phoneEnabled?: Maybe<boolean>, emailEnabled?: Maybe<boolean>, usernameEnabled?: Maybe<boolean> }>, customSMSProvider?: Maybe<{ enabled?: Maybe<boolean>, provider?: Maybe<string>, config?: Maybe<string> }> } };
 
 export type AccessTokenVariables = Exact<{
   userPoolId: Scalars['String'];
@@ -3394,7 +3395,7 @@ export type UserWithCustomDataResponse = { user?: Maybe<{ id: string, arn: strin
 export type UserpoolVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserpoolResponse = { userpool: { id: string, name: string, domain: string, description?: Maybe<string>, secret: string, jwtSecret: string, ownerId?: Maybe<string>, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, appSsoEnabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, packageType?: Maybe<number>, useCustomUserStore?: Maybe<boolean>, loginRequireEmailVerified?: Maybe<boolean>, verifyCodeLength?: Maybe<number>, userpoolTypes?: Maybe<Array<{ code?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string>, image?: Maybe<string>, sdks?: Maybe<Array<Maybe<string>>> }>>, frequentRegisterCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, loginFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, loginPasswordFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean>, strategy?: Maybe<string> }>, changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>, changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>, qrcodeLoginStrategy?: Maybe<{ qrcodeExpiresAfter?: Maybe<number>, returnFullUserInfo?: Maybe<boolean>, allowExchangeUserInfoFromBrowser?: Maybe<boolean>, ticketExpiresAfter?: Maybe<number> }>, app2WxappLoginStrategy?: Maybe<{ ticketExpriresAfter?: Maybe<number>, ticketExchangeUserInfoNeedSecret?: Maybe<boolean> }>, whitelist?: Maybe<{ phoneEnabled?: Maybe<boolean>, emailEnabled?: Maybe<boolean>, usernameEnabled?: Maybe<boolean> }>, customSMSProvider?: Maybe<{ enabled?: Maybe<boolean>, provider?: Maybe<string>, config?: Maybe<string> }> } };
+export type UserpoolResponse = { userpool: { id: string, name: string, domain: string, description?: Maybe<string>, secret: string, jwtSecret: string, ownerId?: Maybe<string>, logo: string, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, emailVerifiedDefault: boolean, sendWelcomeEmail: boolean, registerDisabled: boolean, appSsoEnabled: boolean, showWxQRCodeWhenRegisterDisabled?: Maybe<boolean>, allowedOrigins?: Maybe<string>, tokenExpiresAfter?: Maybe<number>, isDeleted?: Maybe<boolean>, loginFailStrategy?: Maybe<string>, packageType?: Maybe<number>, useCustomUserStore?: Maybe<boolean>, loginRequireEmailVerified?: Maybe<boolean>, verifyCodeLength?: Maybe<number>, userpoolTypes?: Maybe<Array<{ code?: Maybe<string>, name?: Maybe<string>, description?: Maybe<string>, image?: Maybe<string>, sdks?: Maybe<Array<Maybe<string>>> }>>, frequentRegisterCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, loginFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, loginPasswordFailCheck?: Maybe<{ timeInterval?: Maybe<number>, limit?: Maybe<number>, enabled?: Maybe<boolean> }>, changePhoneStrategy?: Maybe<{ verifyOldPhone?: Maybe<boolean> }>, changeEmailStrategy?: Maybe<{ verifyOldEmail?: Maybe<boolean> }>, qrcodeLoginStrategy?: Maybe<{ qrcodeExpiresAfter?: Maybe<number>, returnFullUserInfo?: Maybe<boolean>, allowExchangeUserInfoFromBrowser?: Maybe<boolean>, ticketExpiresAfter?: Maybe<number> }>, app2WxappLoginStrategy?: Maybe<{ ticketExpriresAfter?: Maybe<number>, ticketExchangeUserInfoNeedSecret?: Maybe<boolean> }>, whitelist?: Maybe<{ phoneEnabled?: Maybe<boolean>, emailEnabled?: Maybe<boolean>, usernameEnabled?: Maybe<boolean> }>, customSMSProvider?: Maybe<{ enabled?: Maybe<boolean>, provider?: Maybe<string>, config?: Maybe<string> }> } };
 
 export type UserpoolTypesVariables = Exact<{ [key: string]: never; }>;
 
@@ -5392,11 +5393,11 @@ export const UpdateUserpoolDocument = `
       limit
       enabled
     }
+    loginFailStrategy
     loginPasswordFailCheck {
       timeInterval
       limit
       enabled
-      strategy
     }
     changePhoneStrategy {
       verifyOldPhone
@@ -7136,8 +7137,8 @@ export const UserpoolDocument = `
       timeInterval
       limit
       enabled
-      strategy
     }
+    loginFailStrategy
     changePhoneStrategy {
       verifyOldPhone
     }
