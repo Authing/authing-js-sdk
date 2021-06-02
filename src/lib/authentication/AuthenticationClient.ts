@@ -102,7 +102,8 @@ const DEFAULT_OPTIONS: AuthenticationClientOptions = {
     'request-from': 'x-authing-request-from',
     'sdk-version': 'x-authing-sdk-version',
     lang: 'x-authing-lang'
-  }
+  },
+  lang: 'zh-CN'
 };
 
 /**
@@ -136,7 +137,7 @@ export class AuthenticationClient {
   tokenProvider: AuthenticationTokenProvider;
   wxqrcode: QrCodeAuthenticationClient;
   qrcode: QrCodeAuthenticationClient;
-  wechatmpqrcode: QrCodeAuthenticationClient
+  wechatmpqrcode: QrCodeAuthenticationClient;
   mfa: MfaAuthenticationClient;
   social: SocialAuthenticationClient;
   enterprise: EnterpriseAuthenticationClient;
@@ -183,7 +184,7 @@ export class AuthenticationClient {
       this.tokenProvider,
       this.httpClient,
       'WECHATMP_AUTH'
-    )
+    );
     this.mfa = new MfaAuthenticationClient(
       this.options,
       this.tokenProvider,
