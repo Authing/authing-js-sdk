@@ -38,7 +38,8 @@ const DEFAULT_OPTIONS: ManagementClientOptions = {
     'request-from': 'x-authing-request-from',
     'sdk-version': 'x-authing-sdk-version',
     lang: 'x-authing-lang'
-  }
+  },
+  lang: 'zh-CN'
 };
 
 export class ManagementClient {
