@@ -80,6 +80,7 @@ import { KeyValuePair, Lang } from '../../types';
 import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 import { ApplicationPublicDetail } from '../management/types';
+import { PrincipalAuthenticationClient } from './PrincipalAuthentication';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   appId: undefined,
@@ -101,7 +102,8 @@ const DEFAULT_OPTIONS: AuthenticationClientOptions = {
     'request-from': 'x-authing-request-from',
     'sdk-version': 'x-authing-sdk-version',
     lang: 'x-authing-lang'
-  }
+  },
+  lang: 'zh-CN'
 };
 
 /**
@@ -135,12 +137,17 @@ export class AuthenticationClient {
   tokenProvider: AuthenticationTokenProvider;
   wxqrcode: QrCodeAuthenticationClient;
   qrcode: QrCodeAuthenticationClient;
+  wechatmpqrcode: QrCodeAuthenticationClient;
   mfa: MfaAuthenticationClient;
   social: SocialAuthenticationClient;
   enterprise: EnterpriseAuthenticationClient;
+  principal: PrincipalAuthenticationClient;
   private publicKeyManager: PublicKeyManager;
 
   constructor(options: AuthenticationClientOptions) {
+    Object.keys(options).forEach(
+      (i: never) => !options[i] && delete options[i]
+    );
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
     this.baseClient = new BaseAuthenticationClient(this.options);
     const graphqlEndpoint = `${this.baseClient.appHost}/graphql/v2`;
@@ -172,6 +179,12 @@ export class AuthenticationClient {
       this.httpClient,
       'APP_AUTH'
     );
+    this.wechatmpqrcode = new QrCodeAuthenticationClient(
+      this.options,
+      this.tokenProvider,
+      this.httpClient,
+      'WECHATMP_AUTH'
+    );
     this.mfa = new MfaAuthenticationClient(
       this.options,
       this.tokenProvider,
@@ -183,6 +196,11 @@ export class AuthenticationClient {
       this.httpClient
     );
     this.enterprise = new EnterpriseAuthenticationClient(
+      this.options,
+      this.tokenProvider,
+      this.httpClient
+    );
+    this.principal = new PrincipalAuthenticationClient(
       this.options,
       this.tokenProvider,
       this.httpClient

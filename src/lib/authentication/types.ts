@@ -67,12 +67,12 @@ export interface AuthenticationClientOptions {
    * 请求头 key，适用于去 Authing 品牌化场景
    */
   headers?: {
-    'userpool-id': string,
-    'app-id': string,
-    'sdk-version': string,
-    'request-from': string,
-    lang: string
-  }
+    'userpool-id': string;
+    'app-id': string;
+    'sdk-version': string;
+    'request-from': string;
+    lang: string;
+  };
 }
 
 export interface QRCodeUserInfo {
@@ -439,3 +439,44 @@ export type ProviderType =
   | 'wechatwork:corp:qrconnect'
   | 'wechat:miniprogram:app-launch'
   | 'wechat:miniprogram:qrconnect';
+
+/**
+ * 实体认证类型
+ *
+ * P：个人认证
+ * E：企业认证
+ */
+export type PrincipalType = 'P' | 'E';
+export interface PrincipalDetail {
+  authenticationTime: string;
+  createdAt: string;
+  id: string;
+  principalCode: string;
+  principalName: string;
+  principalType: PrincipalType;
+  updatedAt: string;
+  userId: string;
+  userPoolId: string;
+}
+
+export type PrincipalInput =
+  | {
+      /** 认证类型 */
+      type: 'P';
+      /** 姓名 */
+      name: string;
+      /** 身份证 */
+      idCard: string;
+      /** 银行卡号 */
+      bankCard: string;
+    }
+  | {
+      /** 认证类型 */
+      type: 'E';
+      /** 企业名称 */
+      enterpriseName: string;
+      /** 统一社会信用代码/注册号/组织机构代码 */
+      enterpriseCode: string;
+      /** 企业法人名称 */
+      legalPersonName: string;
+    };

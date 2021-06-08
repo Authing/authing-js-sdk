@@ -1,6 +1,6 @@
 {
 	"name": "authing-js-sdk",
-	"version": "4.20.6-alpha.1",
+	"version": "4.20.19-alpha.1",
 	"description": "Official SDK of Authing",
 	"main": "build/main/index.js",
 	"typings": "build/main/index.d.ts",
@@ -14,10 +14,13 @@
 	],
 	"scripts": {
 		"describe": "npm-scripts-info",
-		"build": "run-s clean && run-p build:*",
-		"build:main": "tsc -p tsconfig.json",
-		"build:module": "tsc -p tsconfig.module.json",
-		"build:umd": "tsc -p tsconfig.brower.json",
+		"build": "run-s clean && run-s build:*",
+		"build:main": "npm run copyFiles:main && tsc -p tsconfig.json",
+		"build:module": "npm run copyFiles:module && tsc -p tsconfig.module.json",
+		"build:umd": "npm run copyFiles:umd && tsc -p tsconfig.brower.json",
+    	"copyFiles:main": "copyfiles -u 1 \"src/**/*.js\" build/main",
+    	"copyFiles:module": "copyfiles -u 1 \"src/**/*.js\" build/module",
+    	"copyFiles:umd": "copyfiles -u 1 \"src/**/*.js\" build/umd",
 		"build:browser": "webpack",
 		"fix": "run-s fix:*",
 		"fix:prettier": "prettier \"src/**/*.ts\" --write",
@@ -33,7 +36,7 @@
 		"doc:generate": "node build-doc.js",
 		"version": "standard-version",
 		"reset": "git clean -dfx && git reset --hard && npm i",
-		"clean": "trash build test",
+		"clean": "rm -rf build && rm -rf test",
 		"prepare-release": "run-s reset test cov:check doc:html version doc:publish"
 	},
 	"scripts-info": {
@@ -77,6 +80,7 @@
 		"body-parser": "^1.19.0",
 		"buffer": "^6.0.3",
 		"codecov": "^3.5.0",
+		"copyfiles": "^2.4.1",
 		"crypto-browserify": "^3.12.0",
 		"cz-conventional-changelog": "^2.1.0",
 		"dotenv": "^8.2.0",
