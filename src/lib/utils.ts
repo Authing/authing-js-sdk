@@ -211,7 +211,7 @@ export const convertUdvToKeyValuePair = (
     } else if (dataType === UdfDataType.Boolean) {
       item.value = JSON.parse(value);
     } else if (dataType === UdfDataType.Datetime) {
-      item.value = new Date(parseInt(value));
+      item.value = new Date(value);
     } else if (dataType === UdfDataType.Object) {
       item.value = JSON.parse(value);
     }
