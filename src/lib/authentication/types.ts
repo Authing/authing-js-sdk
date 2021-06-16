@@ -108,6 +108,7 @@ export interface QRCodeStatus {
 export interface QRCodeGenarateResult {
   random: string;
   url: string;
+  customLogo: string,
 }
 
 export type IMfaAuthenticators = Array<{
