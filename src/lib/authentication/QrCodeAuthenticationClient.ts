@@ -462,6 +462,8 @@ export class QrCodeAuthenticationClient {
       nodeWrapper.id = 'authing__qrcode-wrapper';
       nodeWrapper.style.textAlign = 'center';
       nodeWrapper.style.position = 'relative';
+      nodeWrapper.style.width = 'fit-content';
+      nodeWrapper.style.margin = 'auto';
       const qrcodeImage = await genImage(url);
       const qrcodeLogo = await genLogoInCenter(logo);
 
