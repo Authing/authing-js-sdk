@@ -8,6 +8,7 @@ import {
 import test from 'ava';
 import { EmailScene, UdfDataType, UdfTargetType } from '../../types/graphql.v2';
 import { ManagementClient } from '../management/ManagementClient';
+import { Cas20ValidationSuccessResult } from './types';
 
 const managementClient = new ManagementClient(getOptionsFromEnv());
 
@@ -959,4 +960,38 @@ test.skip('使用 Access token 换用户信息，POST + body', async t => {
     }
   );
   t.truthy(userInfo.sub);
+});
+
+test.skip('CAS 1.0 验证 ticket，validateTicketV1', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const ticket = 'ST-8125e8b0-a6e3-4253-9890-c6b403ed4736';
+  const service = 'https://baidu.com';
+  const result = await authing.validateTicketV1(ticket, service);
+  t.assert(result.valid === true);
+});
+
+test.skip('CAS 2.0 验证 ticket，validateTicketV2，XML 返回', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const ticket = 'ST-e6556a88-58d9-4960-bf3a-f679fb6b54c5';
+  const service = 'https://baidu.com';
+  const result = await authing.validateTicketV2(ticket, service, 'XML');
+  t.assert(typeof result === 'string');
+  t.assert((result as string)[0] === '<');
+});
+
+test.skip('CAS 2.0 验证 ticket，validateTicketV2，JSON 返回', async t => {
+  const authing = new AuthenticationClient({
+    ...getOptionsFromEnv()
+  });
+  const ticket = 'ST-b6259050-392d-4096-a589-fb8c0a4e2c8d';
+  const service = 'https://baidu.com';
+  const result = await authing.validateTicketV2(ticket, service, 'JSON');
+  t.truthy(
+    (result as Cas20ValidationSuccessResult).serviceResponse
+      .authenticationSuccess.attributes.email
+  );
 });

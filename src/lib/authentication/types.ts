@@ -108,6 +108,7 @@ export interface QRCodeStatus {
 export interface QRCodeGenarateResult {
   random: string;
   url: string;
+  customLogo: string;
 }
 
 export type IMfaAuthenticators = Array<{
@@ -480,3 +481,46 @@ export type PrincipalInput =
       /** 企业法人名称 */
       legalPersonName: string;
     };
+
+export type Cas20ValidationSuccessResult = {
+  serviceResponse: {
+    authenticationSuccess: {
+      user: string;
+      attributes: {
+        updated_at: string;
+        address: {
+          country: string;
+          postal_code: string;
+          region: string;
+          formatted: string;
+        };
+        phone_number_verified: boolean;
+        phone_number: string;
+        locale: string;
+        zoneinfo: string;
+        birthdate: string;
+        gender: string;
+        email_verified: boolean;
+        email: string;
+        website: string;
+        picture: string;
+        profile: string;
+        preferred_username: string;
+        nickname: string;
+        middle_name: string;
+        family_name: string;
+        given_name: string;
+        name: string;
+        sub: string;
+        external_id: string;
+        unionid: string;
+      };
+    };
+  };
+};
+export type Cas20ValidationFailureResult = {
+  authenticationFailure: {
+    code: string;
+    description: string;
+  },
+}

@@ -270,12 +270,61 @@ export class QrCodeAuthenticationClient {
     };
 
     const genImage = (src: string) => {
-      const qrcodeImage = document.createElement('img');
-      qrcodeImage.className = 'authing__qrcode';
-      qrcodeImage.src = src;
-      qrcodeImage.width = size.width;
-      qrcodeImage.height = size.height;
-      return qrcodeImage;
+      return new Promise<HTMLImageElement>(resolve => {
+        const qrcodeImage = document.createElement('img');
+        qrcodeImage.className = 'authing__qrcode';
+        qrcodeImage.src = src;
+        qrcodeImage.width = size.width;
+        qrcodeImage.height = size.height;
+        qrcodeImage.draggable = false;
+
+        qrcodeImage.onload = () => {
+          resolve(qrcodeImage);
+        };
+      });
+    };
+
+    const genLogoInCenter = (logo: string) => {
+      // logo 有可能是 undefined，走 onerror 不解除 display:none 即可
+      // 因此，即便是空的 src 地址，为了保证类型一致，同样要返回 HTMLImageElement
+      return new Promise<HTMLImageElement>(resolve => {
+        const qrcodeLogo = document.createElement('img');
+        qrcodeLogo.className = 'authing__qrcode__logo';
+        qrcodeLogo.src = logo;
+        qrcodeLogo.draggable = false;
+        qrcodeLogo.style.display = 'none';
+
+        // 按比例缩放
+        qrcodeLogo.width = size.width / 2.4;
+        qrcodeLogo.height = size.height / 2.4;
+        
+        // 计算得到 offset 数值
+        let containerHalfWidth = size.width / 2;
+        let containerHalfHeight = size.height / 2;
+        let logoHalfWidth = qrcodeLogo.width / 2;
+        let logoHalfHeight = qrcodeLogo.height / 2;
+        let offset = {
+          x: containerHalfWidth - logoHalfWidth,
+          y: containerHalfHeight - logoHalfHeight
+        };
+        
+        createCssClassStyleSheet(
+          'authing__qrcode__logo',
+          `
+            position: absolute;
+            left: ${offset.y}px;
+            top: ${offset.x}px;
+            border-radius: 50%;
+          `
+        );
+        qrcodeLogo.onload = () => {
+          qrcodeLogo.style.display = 'inline';
+          resolve(qrcodeLogo);
+        };
+        qrcodeLogo.onerror = () => {
+          resolve(qrcodeLogo);
+        };
+      });
     };
 
     const genShadow = (
@@ -346,7 +395,7 @@ export class QrCodeAuthenticationClient {
       return shadow;
     };
 
-    function genRetry(qrcodeElm: any, tipText: string, retryId?: string) {
+    async function genRetry(qrcodeElm: any, tipText: string, retryId?: string) {
       const tip = genTip(tipText);
 
       nodeWrapper = document.createElement('div');
@@ -354,7 +403,7 @@ export class QrCodeAuthenticationClient {
       nodeWrapper.style.textAlign = 'center';
       nodeWrapper.style.position = 'relative';
       // TODO: 这里换一个二维码
-      const qrcodeImage = genImage(
+      const qrcodeImage = await genImage(
         'https://usercontents.authing.cn/0ab3a1bf19c0d7106673e494d532f91a.png'
       );
 
@@ -387,6 +436,7 @@ export class QrCodeAuthenticationClient {
 
       let random: string = null;
       let url: string = null;
+      let logo: string = null;
       try {
         const data = await this.geneCode({
           context,
@@ -394,6 +444,7 @@ export class QrCodeAuthenticationClient {
         });
         random = data.random;
         url = data.url;
+        logo = data.customLogo;
       } catch (error) {
         error = error;
         genRetry(node, error.message);
@@ -411,90 +462,94 @@ export class QrCodeAuthenticationClient {
       nodeWrapper.id = 'authing__qrcode-wrapper';
       nodeWrapper.style.textAlign = 'center';
       nodeWrapper.style.position = 'relative';
-      const qrcodeImage = genImage(url);
-      qrcodeImage.onload = () => {
-        unloading();
-        if (onCodeShow) {
-          onCodeShow(random, url);
-        }
+      nodeWrapper.style.width = 'fit-content';
+      nodeWrapper.style.margin = 'auto';
+      const qrcodeImage = await genImage(url);
+      const qrcodeLogo = await genLogoInCenter(logo);
 
-        // 需要对用户的 onSuccess, onScanned, onExpired, onCancel 进行加工从而在页面上展示相关提示
-        let decoratedOnSuccess = (userInfo: QRCodeUserInfo, ticket: string) => {
-          const shadow = genShadow(succeed, null, '__authing_success_tip');
-          nodeWrapper.appendChild(shadow);
-          if (onSuccess) {
-            if (autoExchangeUserInfo) {
-              const { token } = userInfo;
-              if (!token) {
-                // 轮询接口不会返回完整用户信息，需要使用 ticket 换取
-                this.exchangeUserInfo(ticket).then(userInfo => {
-                  // @ts-ignore
-                  this.tokenProvider.setUser(userInfo);
-                  // @ts-ignore
-                  onSuccess(userInfo, ticket);
-                });
-              }
-            } else {
-              onSuccess(userInfo, ticket);
+      unloading();
+      if (onCodeShow) {
+        onCodeShow(random, url);
+      }
+
+      // 需要对用户的 onSuccess, onScanned, onExpired, onCancel 进行加工从而在页面上展示相关提示
+      let decoratedOnSuccess = (userInfo: QRCodeUserInfo, ticket: string) => {
+        const shadow = genShadow(succeed, null, '__authing_success_tip');
+        nodeWrapper.appendChild(shadow);
+        if (onSuccess) {
+          if (autoExchangeUserInfo) {
+            const { token } = userInfo;
+            if (!token) {
+              // 轮询接口不会返回完整用户信息，需要使用 ticket 换取
+              this.exchangeUserInfo(ticket).then(userInfo => {
+                // @ts-ignore
+                this.tokenProvider.setUser(userInfo);
+                // @ts-ignore
+                onSuccess(userInfo, ticket);
+              });
             }
+          } else {
+            onSuccess(userInfo, ticket);
           }
-        };
-
-        let decoratedOnScanned = function(userInfo: QRCodeUserInfo) {
-          const shadow = displayScannedUser(userInfo.nickname, userInfo.photo);
-          nodeWrapper.appendChild(shadow);
-          if (onScanned) {
-            onScanned(userInfo);
-          }
-        };
-
-        let decoratedOnCancel = function() {
-          const shadow = genShadow(canceled, null, '__authing_success_tip');
-          nodeWrapper.appendChild(shadow);
-          if (onCancel) {
-            onCancel();
-          }
-        };
-
-        let decoratedOnExpired = function() {
-          const shadow = genShadow(
-            expired,
-            () => {
-              nodeWrapper.innerHTML = '';
-              start();
-            },
-            '__authing_success_tip'
-          );
-          nodeWrapper.appendChild(shadow);
-          if (onExpired) {
-            onExpired();
-          }
-        };
-
-        let decoratedOnError = function(data: any) {
-          const { message } = data;
-          if (onError) {
-            onError(message);
-          }
-        };
-
-        // 开始轮询
-        this.startPolling(random, {
-          interval,
-          onStart,
-          onResult,
-          onScanned: decoratedOnScanned,
-          onExpired: decoratedOnExpired,
-          onSuccess: decoratedOnSuccess,
-          onCancel: decoratedOnCancel,
-          onError: decoratedOnError
-        });
-
-        const tip = genTip(title);
-        nodeWrapper.appendChild(qrcodeImage);
-        nodeWrapper.appendChild(tip);
-        node.appendChild(nodeWrapper);
+        }
       };
+
+      let decoratedOnScanned = function(userInfo: QRCodeUserInfo) {
+        const shadow = displayScannedUser(userInfo.nickname, userInfo.photo);
+        nodeWrapper.appendChild(shadow);
+        if (onScanned) {
+          onScanned(userInfo);
+        }
+      };
+
+      let decoratedOnCancel = function() {
+        const shadow = genShadow(canceled, null, '__authing_success_tip');
+        nodeWrapper.appendChild(shadow);
+        if (onCancel) {
+          onCancel();
+        }
+      };
+
+      let decoratedOnExpired = function() {
+        const shadow = genShadow(
+          expired,
+          () => {
+            nodeWrapper.innerHTML = '';
+            start();
+          },
+          '__authing_success_tip'
+        );
+        nodeWrapper.appendChild(shadow);
+        if (onExpired) {
+          onExpired();
+        }
+      };
+
+      let decoratedOnError = function(data: any) {
+        const { message } = data;
+        if (onError) {
+          onError(message);
+        }
+      };
+
+      // 开始轮询
+      this.startPolling(random, {
+        interval,
+        onStart,
+        onResult,
+        onScanned: decoratedOnScanned,
+        onExpired: decoratedOnExpired,
+        onSuccess: decoratedOnSuccess,
+        onCancel: decoratedOnCancel,
+        onError: decoratedOnError
+      });
+
+      nodeWrapper.appendChild(qrcodeImage);
+      nodeWrapper.appendChild(qrcodeLogo);
+
+      const tip = genTip(title);
+      nodeWrapper.appendChild(tip);
+      node.appendChild(nodeWrapper);
     };
 
     start();
@@ -527,6 +582,7 @@ export class QrCodeAuthenticationClient {
       method: 'POST',
       url: api,
       data: {
+        autoMergeQrCode: false,
         scene: this.scene,
         context,
         params: customData
