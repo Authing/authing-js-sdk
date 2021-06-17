@@ -1,4 +1,8 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
+import {
+  Cas20ValidationSuccessResult,
+  Cas20ValidationFailureResult
+} from './types';
 import sha256 from 'crypto-js/sha256';
 import CryptoJS from 'crypto-js';
 
@@ -2669,12 +2673,39 @@ export class AuthenticationClient {
         ticket
       }
     });
-    const [valid, username] = result.split('\n');
+    const [valid] = result.split('\n');
     return {
       valid: valid === 'yes',
-      ...(username && { username }),
       ...(valid !== 'yes' && { message: 'ticket 不合法' })
     };
+  }
+  async validateTicketV2(
+    ticket: string,
+    service: string,
+    format: 'XML' | 'JSON' = 'JSON'
+  ): Promise<
+    Cas20ValidationSuccessResult | Cas20ValidationFailureResult | string
+  > {
+    if (!ticket) {
+      throw new Error('请传入 ticket 一次性票据');
+    }
+    if (!service) {
+      throw new Error('请传入 service 服务地址');
+    }
+    if (format !== 'XML' && format !== 'JSON') {
+      throw new Error('format 参数可选值为 XML、JSON，请检查输入');
+    }
+    const api = `${this.baseClient.appHost}/cas-idp/${this.options.appId}/serviceValidate`;
+    let result = await this.naiveHttpClient.request({
+      method: 'GET',
+      url: api,
+      params: {
+        service,
+        ticket,
+        format
+      }
+    });
+    return result;
   }
 
   /**
