@@ -26,6 +26,7 @@ import {
   removeUdv,
   resetPassword,
   resetPasswordByFirstLoginToken,
+  resetPasswordByForceResetToken,
   sendEmail,
   setUdv,
   setUdvBatch,
@@ -1112,6 +1113,34 @@ export class AuthenticationClient {
       {
         token,
         password
+      }
+    );
+    return data;
+  }
+
+  public async resetPasswordByForceResetToken(params: {
+    token: string;
+    newPassword: string,
+    oldPassword: string
+  }) {
+    let { token, newPassword, oldPassword } = params;
+    newPassword = await this.options.encryptFunction(
+      newPassword,
+      await this.publicKeyManager.getPublicKey()
+    );
+    oldPassword = await this.options.encryptFunction(
+      oldPassword,
+      await this.publicKeyManager.getPublicKey()
+    );
+    const {
+      resetPasswordByForceResetToken: data
+    } = await resetPasswordByForceResetToken(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        token,
+        oldPassword,
+        newPassword
       }
     );
     return data;

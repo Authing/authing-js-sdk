@@ -962,6 +962,8 @@ export type UserPool = {
   frequentRegisterCheck?: Maybe<FrequentRegisterCheckConfig>;
   /** 登录失败检测 */
   loginFailCheck?: Maybe<LoginFailCheckConfig>;
+  /** 密码重置策略 */
+  passwordUpdatePolicy?: Maybe<PasswordUpdatePolicyConfig>;
   /** 登录失败检测 */
   loginPasswordFailCheck?: Maybe<LoginPasswordFailCheckConfig>;
   /** 密码安全策略 */
@@ -1006,6 +1008,12 @@ export type LoginFailCheckConfig = {
   timeInterval?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   enabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type PasswordUpdatePolicyConfig = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  forcedCycle?: Maybe<Scalars['Int']>;
+  differenceCycle?: Maybe<Scalars['Int']>;
 };
 
 export type LoginPasswordFailCheckConfig = {
@@ -1135,6 +1143,8 @@ export type Mutation = {
   resetPassword?: Maybe<CommonMessage>;
   /** 通过首次登录的 Token 重置密码 */
   resetPasswordByFirstLoginToken?: Maybe<CommonMessage>;
+  /** 通过密码强制更新临时 Token 修改密码 */
+  resetPasswordByForceResetToken?: Maybe<CommonMessage>;
   createPolicy: Policy;
   updatePolicy: Policy;
   deletePolicy: CommonMessage;
@@ -1437,6 +1447,13 @@ export type MutationResetPasswordArgs = {
 export type MutationResetPasswordByFirstLoginTokenArgs = {
   token: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationResetPasswordByForceResetTokenArgs = {
+  token: Scalars['String'];
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
 };
 
 
@@ -2072,6 +2089,8 @@ export type UpdateUserpoolInput = {
   tokenExpiresAfter?: Maybe<Scalars['Int']>;
   frequentRegisterCheck?: Maybe<FrequentRegisterCheckConfigInput>;
   loginFailCheck?: Maybe<LoginFailCheckConfigInput>;
+  /** 密码重置策略 */
+  passwordUpdatePolicy?: Maybe<PasswordUpdatePolicyInput>;
   loginFailStrategy?: Maybe<Scalars['String']>;
   loginPasswordFailCheck?: Maybe<LoginPasswordFailCheckConfigInput>;
   changePhoneStrategy?: Maybe<ChangePhoneStrategyInput>;
@@ -2096,6 +2115,12 @@ export type LoginFailCheckConfigInput = {
   timeInterval?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   enabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type PasswordUpdatePolicyInput = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  forcedCycle?: Maybe<Scalars['Int']>;
+  differenceCycle?: Maybe<Scalars['Int']>;
 };
 
 export type LoginPasswordFailCheckConfigInput = {
@@ -2171,6 +2196,12 @@ export type CreateSocialConnectionInput = {
   logo: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   fields?: Maybe<Array<SocialConnectionFieldInput>>;
+};
+
+export type PasswordUpdatePolicy = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  forcedCycle?: Maybe<Scalars['Int']>;
+  differenceCycle?: Maybe<Scalars['Int']>;
 };
 
 export type AddMemberVariables = Exact<{
@@ -2691,6 +2722,15 @@ export type ResetPasswordByFirstLoginTokenVariables = Exact<{
 
 
 export type ResetPasswordByFirstLoginTokenResponse = { resetPasswordByFirstLoginToken?: Maybe<{ message?: Maybe<string>, code?: Maybe<number> }> };
+
+export type ResetPasswordByForceResetTokenVariables = Exact<{
+  token: Scalars['String'];
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+}>;
+
+
+export type ResetPasswordByForceResetTokenResponse = { resetPasswordByForceResetToken?: Maybe<{ message?: Maybe<string>, code?: Maybe<number> }> };
 
 export type RevokeRoleVariables = Exact<{
   namespace?: Maybe<Scalars['String']>;
@@ -4865,6 +4905,14 @@ export const ResetPasswordDocument = `
 export const ResetPasswordByFirstLoginTokenDocument = `
     mutation resetPasswordByFirstLoginToken($token: String!, $password: String!) {
   resetPasswordByFirstLoginToken(token: $token, password: $password) {
+    message
+    code
+  }
+}
+    `;
+export const ResetPasswordByForceResetTokenDocument = `
+    mutation resetPasswordByForceResetToken($token: String!, $oldPassword: String!, $newPassword: String!) {
+  resetPasswordByForceResetToken(token: $token, oldPassword: $oldPassword, newPassword: $newPassword) {
     message
     code
   }
