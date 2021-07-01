@@ -74,6 +74,37 @@ test('创建用户 # 错误时间格式', async t => {
   t.assert(failed);
 });
 
+test.only('创建用户 # 附带身份信息', async t => {
+  const user = await managementClient.users.create(
+    {
+      username: generateRandomString()
+    },
+    {
+      identity: {
+        userIdInIdp: '1111',
+        provider: 'wechat'
+      }
+    }
+  );
+  const result = await managementClient.users.find({
+    identity: {
+      userIdInIdp: '1111',
+      provider: 'wechat'
+    }
+  });
+  t.assert(user.id === result.id);
+  const token = await managementClient.users.refreshToken(user.id)
+  console.log(token)
+  const result2 = await managementClient.users.find({
+    identity: {
+      userIdInIdp: '1111',
+      provider: 'wechat'
+    }
+  });
+  console.log(result2)
+  await managementClient.users.delete(user.id);
+});
+
 test('检查用户是否存在', async t => {
   const exists1 = await managementClient.users.exists({
     username: generateRandomString(10)
@@ -368,37 +399,28 @@ test('用户池管理员强制下线用户在所有应用的登录态', async t 
   let user = await managementClient.users.create({ username, password: pwd });
   await authenticationClient.loginByUsername(username, pwd);
   let res2 = await managementClient.users.logout({
-    userId: user.id,
+    userId: user.id
   });
   t.assert(res2.code === 200);
 });
 
 test.skip('statistics.listUserActions', async t => {
   const data = await managementClient.statistics.listUserActions({
-    operationNames: [
-      'login'
-    ],
+    operationNames: ['login'],
     excludeNonAppRecords: true,
-    appIds: [
-      '60af0ed56d13799e4cf384f5'
-    ],
+    appIds: ['60af0ed56d13799e4cf384f5'],
     start: 1622362098786
-  })
-  console.log(data)
-  t.assert(data)
-})
-
+  });
+  console.log(data);
+  t.assert(data);
+});
 
 test.skip('users.listUserActions', async t => {
   const data = await managementClient.statistics.listUserActions({
-    operationNames: [
-      'login'
-    ],
+    operationNames: ['login'],
     excludeNonAppRecords: true,
-    appIds: [
-      '60af0ed56d13799e4cf384f5'
-    ]
-  })
-  console.log(data)
-  t.assert(data)
-})
+    appIds: ['60af0ed56d13799e4cf384f5']
+  });
+  console.log(data);
+  t.assert(data);
+});

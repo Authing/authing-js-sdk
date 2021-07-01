@@ -177,9 +177,18 @@ export class UsersManagementClient {
     options?: {
       keepPassword?: boolean;
       resetPasswordOnFirstLogin?: boolean;
-    }
+      identity?: {
+        provider: string;
+        userIdInIdp: string;
+        openid?: string;
+        isSocial?: boolean;
+        connectionId?: string;
+        accessToken?: string;
+        refreshToken?: string;
+      }
+    },
   ): Promise<User> {
-    const { keepPassword = false, resetPasswordOnFirstLogin = false } =
+    const { keepPassword = false, resetPasswordOnFirstLogin = false, identity } =
       options || {};
     if (userInfo?.password) {
       userInfo.password = await this.options.encryptFunction(
@@ -193,7 +202,8 @@ export class UsersManagementClient {
       {
         userInfo,
         keepPassword,
-        resetPasswordOnFirstLogin
+        resetPasswordOnFirstLogin,
+        identity
       }
     );
     return user;
@@ -570,13 +580,18 @@ export class UsersManagementClient {
     phone?: string;
     externalId?: string;
     withCustomData?: boolean;
+    identity?: {
+      userIdInIdp: string;
+      provider: string;
+    }
   }) {
     const {
       username,
       email,
       phone,
       externalId,
-      withCustomData = false
+      withCustomData = false,
+      identity
     } = options;
 
     if (withCustomData) {
@@ -601,7 +616,8 @@ export class UsersManagementClient {
           username,
           email,
           phone,
-          externalId
+          externalId,
+          identity
         }
       );
       return user;

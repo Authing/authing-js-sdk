@@ -293,6 +293,7 @@ export type QueryUsersArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
+  excludeUsersInOrg?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -331,6 +332,7 @@ export type QueryFindUserArgs = {
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   externalId?: Maybe<Scalars['String']>;
+  identity?: Maybe<FindUserByIdentityInput>;
 };
 
 
@@ -924,6 +926,11 @@ export type JwtTokenStatusDetail = {
   id?: Maybe<Scalars['String']>;
   userPoolId?: Maybe<Scalars['String']>;
   arn?: Maybe<Scalars['String']>;
+};
+
+export type FindUserByIdentityInput = {
+  provider: Scalars['String'];
+  userIdInIdp: Scalars['String'];
 };
 
 export type UserPool = {
@@ -1642,6 +1649,7 @@ export type MutationCreateUserArgs = {
   keepPassword?: Maybe<Scalars['Boolean']>;
   resetPasswordOnFirstLogin?: Maybe<Scalars['Boolean']>;
   params?: Maybe<Scalars['String']>;
+  identity?: Maybe<CreateUserIdentityInput>;
 };
 
 
@@ -2017,6 +2025,16 @@ export type CreateUserInput = {
   postalCode?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
   externalId?: Maybe<Scalars['String']>;
+};
+
+export type CreateUserIdentityInput = {
+  provider: Scalars['String'];
+  userIdInIdp: Scalars['String'];
+  openid?: Maybe<Scalars['String']>;
+  isSocial?: Maybe<Scalars['Boolean']>;
+  connectionId?: Maybe<Scalars['String']>;
+  accessToken?: Maybe<Scalars['String']>;
+  refreshToken?: Maybe<Scalars['String']>;
 };
 
 export type UpdateUserInput = {
@@ -2396,6 +2414,8 @@ export type CreateSocialConnectionInstanceResponse = { createSocialConnectionIns
 
 export type CreateUserVariables = Exact<{
   userInfo: CreateUserInput;
+  params?: Maybe<Scalars['String']>;
+  identity?: Maybe<CreateUserIdentityInput>;
   keepPassword?: Maybe<Scalars['Boolean']>;
   resetPasswordOnFirstLogin?: Maybe<Scalars['Boolean']>;
 }>;
@@ -2968,6 +2988,7 @@ export type FindUserVariables = Exact<{
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   externalId?: Maybe<Scalars['String']>;
+  identity?: Maybe<FindUserByIdentityInput>;
 }>;
 
 
@@ -3915,8 +3936,8 @@ export const CreateSocialConnectionInstanceDocument = `
 }
     `;
 export const CreateUserDocument = `
-    mutation createUser($userInfo: CreateUserInput!, $keepPassword: Boolean, $resetPasswordOnFirstLogin: Boolean) {
-  createUser(userInfo: $userInfo, keepPassword: $keepPassword, resetPasswordOnFirstLogin: $resetPasswordOnFirstLogin) {
+    mutation createUser($userInfo: CreateUserInput!, $params: String, $identity: CreateUserIdentityInput, $keepPassword: Boolean, $resetPasswordOnFirstLogin: Boolean) {
+  createUser(userInfo: $userInfo, params: $params, identity: $identity, keepPassword: $keepPassword, resetPasswordOnFirstLogin: $resetPasswordOnFirstLogin) {
     id
     arn
     userPoolId
@@ -5621,8 +5642,8 @@ export const EmailTemplatesDocument = `
 }
     `;
 export const FindUserDocument = `
-    query findUser($email: String, $phone: String, $username: String, $externalId: String) {
-  findUser(email: $email, phone: $phone, username: $username, externalId: $externalId) {
+    query findUser($email: String, $phone: String, $username: String, $externalId: String, $identity: FindUserByIdentityInput) {
+  findUser(email: $email, phone: $phone, username: $username, externalId: $externalId, identity: $identity) {
     id
     arn
     userPoolId
