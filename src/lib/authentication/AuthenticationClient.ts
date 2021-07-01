@@ -13,6 +13,7 @@ import {
   checkPasswordStrength,
   getUserDepartments,
   getUserRoles,
+  isUserExists,
   listUserAuthorizedResources,
   loginByEmail,
   loginByPhoneCode,
@@ -1943,6 +1944,30 @@ export class AuthenticationClient {
       list,
       totalCount
     };
+  }
+
+
+  /**
+   * @description 检查用户是否存在
+   */
+  public async isUserExists(options: {
+    username?: string;
+    email?: string;
+    phone?: string;
+    externalId?: string;
+  }){
+    const { username, email, phone, externalId } = options;
+    const { isUserExists: data } = await isUserExists(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        username,
+        email,
+        phone,
+        externalId
+      }
+    );
+    return data;
   }
 
   /**
