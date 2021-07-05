@@ -74,7 +74,7 @@ test('创建用户 # 错误时间格式', async t => {
   t.assert(failed);
 });
 
-test.only('创建用户 # 附带身份信息', async t => {
+test.skip('创建用户 # 附带身份信息', async t => {
   const user = await managementClient.users.create(
     {
       username: generateRandomString()
@@ -138,13 +138,6 @@ test('查询用户详情 # 不属于该用户池的用户', async t => {
   t.assert(detail === null);
 });
 
-test.skip('detail withCustomData', async t => {
-  const user = await managementClient.users.detail('608501a35c97c0520049e71e', {
-    withCustomData: true
-  });
-  console.log(user);
-  t.assert(user);
-});
 
 test.skip('find withCustomData', async t => {
   const user = await managementClient.users.find({
@@ -155,17 +148,6 @@ test.skip('find withCustomData', async t => {
   t.assert(user);
 });
 
-test.skip('batch withCustomData', async t => {
-  const user = await managementClient.users.batch(
-    ['608501a35c97c0520049e71e'],
-    {
-      queryField: 'id',
-      withCustomData: true
-    }
-  );
-  console.log(user);
-  t.assert(user);
-});
 
 test('list withCustomData', async t => {
   const user = await managementClient.users.list(1, 10, {
@@ -424,3 +406,27 @@ test.skip('users.listUserActions', async t => {
   console.log(data);
   t.assert(data);
 });
+
+
+test.only('detail withCustomData', async t => {
+  const user = await managementClient.users.detail('60e31b9b94b5795362256698', {
+    withCustomData: true
+  })
+  console.log(JSON.stringify(user, null, 4))
+  t.assert(user.customData)
+})
+
+test.only('batch withCustomData', async t => {
+  const users = await managementClient.users.batch(
+    [
+      '60e31b9b94b5795362256698',
+      '60e320959d6c08c325a3510f'
+    ],
+    {
+      queryField: 'id',
+      withCustomData: true
+    }
+  )
+  console.log(JSON.stringify(users, null, 4))
+  t.assert(users)
+})

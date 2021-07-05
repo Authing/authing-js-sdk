@@ -31,8 +31,6 @@ import {
   removeUdv,
   setUdfValueBatch,
   usersWithCustomData,
-  userWithCustomData,
-  userBatchWithCustomData,
   findUserWithCustomData,
   searchUserWithCustomData,
   sendFirstLoginVerifyEmail
@@ -312,12 +310,11 @@ export class UsersManagementClient {
     }
   ): Promise<User> {
     const { withCustomData = false } = options || {};
-    const res = await this.httpClient.request({
+    const data = await this.httpClient.request({
       url: `${this.options.host}/api/v2/users/${userId}`,
-      params: { withCustomData },
+      params: { with_custom_data: withCustomData },
       method: 'GET',
     });
-    const { data } = res;
     if (withCustomData) {
       // @ts-ignore
       data.customData = convertUdvToKeyValuePair(data.customData);
@@ -399,16 +396,15 @@ export class UsersManagementClient {
     }
   ): Promise<User[]> {
     const { queryField = 'id', withCustomData = false } = options || {};
-    const res: { code: number, message: string, data: User [] }  = await this.httpClient.request({
-      url: `${this.options.host}/api/v2/users`,
+    const users: User []  = await this.httpClient.request({
+      url: `${this.options.host}/api/v2/users/batch`,
       method: 'POST',
-      params: { withCustomData },
       data: {
         ids,
-        type: queryField
+        type: queryField,
+        withCustomData
       }
     });
-    const { data: users } = res;
     if (withCustomData) {
       users.map(user => {
         // @ts-ignore
