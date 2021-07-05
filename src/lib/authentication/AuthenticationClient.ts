@@ -1,4 +1,8 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
+import {
+  Cas20ValidationSuccessResult,
+  Cas20ValidationFailureResult
+} from './types';
 import sha256 from 'crypto-js/sha256';
 import CryptoJS from 'crypto-js';
 
@@ -9,6 +13,7 @@ import {
   checkPasswordStrength,
   getUserDepartments,
   getUserRoles,
+  isUserExists,
   listUserAuthorizedResources,
   loginByEmail,
   loginByPhoneCode,
@@ -22,6 +27,7 @@ import {
   removeUdv,
   resetPassword,
   resetPasswordByFirstLoginToken,
+  resetPasswordByForceResetToken,
   sendEmail,
   setUdv,
   setUdvBatch,
@@ -1113,6 +1119,34 @@ export class AuthenticationClient {
     return data;
   }
 
+  public async resetPasswordByForceResetToken(params: {
+    token: string;
+    newPassword: string,
+    oldPassword: string
+  }) {
+    let { token, newPassword, oldPassword } = params;
+    newPassword = await this.options.encryptFunction(
+      newPassword,
+      await this.publicKeyManager.getPublicKey()
+    );
+    oldPassword = await this.options.encryptFunction(
+      oldPassword,
+      await this.publicKeyManager.getPublicKey()
+    );
+    const {
+      resetPasswordByForceResetToken: data
+    } = await resetPasswordByForceResetToken(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        token,
+        oldPassword,
+        newPassword
+      }
+    );
+    return data;
+  }
+
   /**
    * @name updateProfile
    * @name_zh 修改用户资料
@@ -1913,6 +1947,30 @@ export class AuthenticationClient {
     };
   }
 
+
+  /**
+   * @description 检查用户是否存在
+   */
+  public async isUserExists(options: {
+    username?: string;
+    email?: string;
+    phone?: string;
+    externalId?: string;
+  }){
+    const { username, email, phone, externalId } = options;
+    const { isUserExists: data } = await isUserExists(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        username,
+        email,
+        phone,
+        externalId
+      }
+    );
+    return data;
+  }
+
   /**
    * @name computedPasswordSecurityLevel
    * @name_zh 计算密码安全等级
@@ -2670,12 +2728,39 @@ export class AuthenticationClient {
         ticket
       }
     });
-    const [valid, username] = result.split('\n');
+    const [valid] = result.split('\n');
     return {
       valid: valid === 'yes',
-      ...(username && { username }),
       ...(valid !== 'yes' && { message: 'ticket 不合法' })
     };
+  }
+  async validateTicketV2(
+    ticket: string,
+    service: string,
+    format: 'XML' | 'JSON' = 'JSON'
+  ): Promise<
+    Cas20ValidationSuccessResult | Cas20ValidationFailureResult | string
+  > {
+    if (!ticket) {
+      throw new Error('请传入 ticket 一次性票据');
+    }
+    if (!service) {
+      throw new Error('请传入 service 服务地址');
+    }
+    if (format !== 'XML' && format !== 'JSON') {
+      throw new Error('format 参数可选值为 XML、JSON，请检查输入');
+    }
+    const api = `${this.baseClient.appHost}/cas-idp/${this.options.appId}/serviceValidate`;
+    let result = await this.naiveHttpClient.request({
+      method: 'GET',
+      url: api,
+      params: {
+        service,
+        ticket,
+        format
+      }
+    });
+    return result;
   }
 
   /**

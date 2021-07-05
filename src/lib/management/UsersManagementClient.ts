@@ -177,9 +177,18 @@ export class UsersManagementClient {
     options?: {
       keepPassword?: boolean;
       resetPasswordOnFirstLogin?: boolean;
-    }
+      identity?: {
+        provider: string;
+        userIdInIdp: string;
+        openid?: string;
+        isSocial?: boolean;
+        connectionId?: string;
+        accessToken?: string;
+        refreshToken?: string;
+      }
+    },
   ): Promise<User> {
-    const { keepPassword = false, resetPasswordOnFirstLogin = false } =
+    const { keepPassword = false, resetPasswordOnFirstLogin = false, identity } =
       options || {};
     if (userInfo?.password) {
       userInfo.password = await this.options.encryptFunction(
@@ -193,7 +202,8 @@ export class UsersManagementClient {
       {
         userInfo,
         keepPassword,
-        resetPasswordOnFirstLogin
+        resetPasswordOnFirstLogin,
+        identity
       }
     );
     return user;
@@ -449,16 +459,18 @@ export class UsersManagementClient {
     limit: number = 10,
     options?: {
       withCustomData?: boolean;
+      excludeUsersInOrg?: boolean;
     }
   ) {
-    const { withCustomData = false } = options || {};
+    const { withCustomData = false, excludeUsersInOrg = false } = options || {};
     if (withCustomData) {
       const { users: data } = await usersWithCustomData(
         this.graphqlClient,
         this.tokenProvider,
         {
           page,
-          limit
+          limit,
+          excludeUsersInOrg
         }
       );
       let { totalCount, list } = data;
@@ -477,7 +489,8 @@ export class UsersManagementClient {
         this.tokenProvider,
         {
           page,
-          limit
+          limit,
+          excludeUsersInOrg
         }
       );
       return data;
@@ -570,13 +583,18 @@ export class UsersManagementClient {
     phone?: string;
     externalId?: string;
     withCustomData?: boolean;
+    identity?: {
+      userIdInIdp: string;
+      provider: string;
+    }
   }) {
     const {
       username,
       email,
       phone,
       externalId,
-      withCustomData = false
+      withCustomData = false,
+      identity
     } = options;
 
     if (withCustomData) {
@@ -601,7 +619,8 @@ export class UsersManagementClient {
           username,
           email,
           phone,
-          externalId
+          externalId,
+          identity
         }
       );
       return user;

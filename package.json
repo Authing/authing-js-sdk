@@ -1,6 +1,6 @@
 {
 	"name": "authing-js-sdk",
-	"version": "4.20.19",
+	"version": "4.21.3",
 	"description": "Official SDK of Authing",
 	"main": "build/main/index.js",
 	"typings": "build/main/index.d.ts",
@@ -29,6 +29,7 @@
 		"test:lint": "tslint --project . && prettier \"src/**/*.ts\" --list-different",
 		"test:unit": "nyc --silent ava",
 		"watch": "run-s clean build:main && run-p \"build:main -- -w\"",
+		"watch:browser": "run-s clean build:browser && run-p \"build:browser -- -w\"",
 		"cov": "run-s build test:unit cov:html && open-cli coverage/index.html",
 		"cov:html": "nyc report --reporter=html",
 		"cov:send": "nyc report --reporter=lcov && codecov",

@@ -201,6 +201,14 @@ export const convertUdv = (
   return data;
 };
 
+const isNumeric = (str: string) => {
+  if (typeof str != 'string') return false; // we only process strings!
+  return (
+    // @ts-ignore
+    !isNaN(str) && !isNaN(parseFloat(str)) // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+  ); // ...and ensure strings of whitespace fail
+};
+
 export const convertUdvToKeyValuePair = (
   data: Array<{ key: string; dataType: UdfDataType; value?: any }>
 ): KeyValuePair => {
@@ -211,7 +219,9 @@ export const convertUdvToKeyValuePair = (
     } else if (dataType === UdfDataType.Boolean) {
       item.value = JSON.parse(value);
     } else if (dataType === UdfDataType.Datetime) {
-      item.value = new Date(parseInt(value));
+      item.value = isNumeric(value)
+        ? new Date(parseInt(value))
+        : new Date(value);
     } else if (dataType === UdfDataType.Object) {
       item.value = JSON.parse(value);
     }

@@ -293,6 +293,7 @@ export type QueryUsersArgs = {
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
+  excludeUsersInOrg?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -331,6 +332,7 @@ export type QueryFindUserArgs = {
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   externalId?: Maybe<Scalars['String']>;
+  identity?: Maybe<FindUserByIdentityInput>;
 };
 
 
@@ -926,6 +928,11 @@ export type JwtTokenStatusDetail = {
   arn?: Maybe<Scalars['String']>;
 };
 
+export type FindUserByIdentityInput = {
+  provider: Scalars['String'];
+  userIdInIdp: Scalars['String'];
+};
+
 export type UserPool = {
   id: Scalars['String'];
   name: Scalars['String'];
@@ -961,6 +968,8 @@ export type UserPool = {
   frequentRegisterCheck?: Maybe<FrequentRegisterCheckConfig>;
   /** 登录失败检测 */
   loginFailCheck?: Maybe<LoginFailCheckConfig>;
+  /** 密码重置策略 */
+  passwordUpdatePolicy?: Maybe<PasswordUpdatePolicyConfig>;
   /** 登录失败检测 */
   loginPasswordFailCheck?: Maybe<LoginPasswordFailCheckConfig>;
   /** 密码安全策略 */
@@ -1005,6 +1014,12 @@ export type LoginFailCheckConfig = {
   timeInterval?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   enabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type PasswordUpdatePolicyConfig = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  forcedCycle?: Maybe<Scalars['Int']>;
+  differenceCycle?: Maybe<Scalars['Int']>;
 };
 
 export type LoginPasswordFailCheckConfig = {
@@ -1134,6 +1149,8 @@ export type Mutation = {
   resetPassword?: Maybe<CommonMessage>;
   /** 通过首次登录的 Token 重置密码 */
   resetPasswordByFirstLoginToken?: Maybe<CommonMessage>;
+  /** 通过密码强制更新临时 Token 修改密码 */
+  resetPasswordByForceResetToken?: Maybe<CommonMessage>;
   createPolicy: Policy;
   updatePolicy: Policy;
   deletePolicy: CommonMessage;
@@ -1439,6 +1456,13 @@ export type MutationResetPasswordByFirstLoginTokenArgs = {
 };
 
 
+export type MutationResetPasswordByForceResetTokenArgs = {
+  token: Scalars['String'];
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+};
+
+
 export type MutationCreatePolicyArgs = {
   namespace?: Maybe<Scalars['String']>;
   code: Scalars['String'];
@@ -1625,6 +1649,7 @@ export type MutationCreateUserArgs = {
   keepPassword?: Maybe<Scalars['Boolean']>;
   resetPasswordOnFirstLogin?: Maybe<Scalars['Boolean']>;
   params?: Maybe<Scalars['String']>;
+  identity?: Maybe<CreateUserIdentityInput>;
 };
 
 
@@ -2002,6 +2027,16 @@ export type CreateUserInput = {
   externalId?: Maybe<Scalars['String']>;
 };
 
+export type CreateUserIdentityInput = {
+  provider: Scalars['String'];
+  userIdInIdp: Scalars['String'];
+  openid?: Maybe<Scalars['String']>;
+  isSocial?: Maybe<Scalars['Boolean']>;
+  connectionId?: Maybe<Scalars['String']>;
+  accessToken?: Maybe<Scalars['String']>;
+  refreshToken?: Maybe<Scalars['String']>;
+};
+
 export type UpdateUserInput = {
   /** 邮箱。直接修改用户邮箱需要管理员权限，普通用户修改邮箱请使用 **updateEmail** 接口。 */
   email?: Maybe<Scalars['String']>;
@@ -2071,6 +2106,8 @@ export type UpdateUserpoolInput = {
   tokenExpiresAfter?: Maybe<Scalars['Int']>;
   frequentRegisterCheck?: Maybe<FrequentRegisterCheckConfigInput>;
   loginFailCheck?: Maybe<LoginFailCheckConfigInput>;
+  /** 密码重置策略 */
+  passwordUpdatePolicy?: Maybe<PasswordUpdatePolicyInput>;
   loginFailStrategy?: Maybe<Scalars['String']>;
   loginPasswordFailCheck?: Maybe<LoginPasswordFailCheckConfigInput>;
   changePhoneStrategy?: Maybe<ChangePhoneStrategyInput>;
@@ -2095,6 +2132,12 @@ export type LoginFailCheckConfigInput = {
   timeInterval?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   enabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type PasswordUpdatePolicyInput = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  forcedCycle?: Maybe<Scalars['Int']>;
+  differenceCycle?: Maybe<Scalars['Int']>;
 };
 
 export type LoginPasswordFailCheckConfigInput = {
@@ -2170,6 +2213,12 @@ export type CreateSocialConnectionInput = {
   logo: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   fields?: Maybe<Array<SocialConnectionFieldInput>>;
+};
+
+export type PasswordUpdatePolicy = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  forcedCycle?: Maybe<Scalars['Int']>;
+  differenceCycle?: Maybe<Scalars['Int']>;
 };
 
 export type AddMemberVariables = Exact<{
@@ -2365,6 +2414,8 @@ export type CreateSocialConnectionInstanceResponse = { createSocialConnectionIns
 
 export type CreateUserVariables = Exact<{
   userInfo: CreateUserInput;
+  params?: Maybe<Scalars['String']>;
+  identity?: Maybe<CreateUserIdentityInput>;
   keepPassword?: Maybe<Scalars['Boolean']>;
   resetPasswordOnFirstLogin?: Maybe<Scalars['Boolean']>;
 }>;
@@ -2691,6 +2742,15 @@ export type ResetPasswordByFirstLoginTokenVariables = Exact<{
 
 export type ResetPasswordByFirstLoginTokenResponse = { resetPasswordByFirstLoginToken?: Maybe<{ message?: Maybe<string>, code?: Maybe<number> }> };
 
+export type ResetPasswordByForceResetTokenVariables = Exact<{
+  token: Scalars['String'];
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+}>;
+
+
+export type ResetPasswordByForceResetTokenResponse = { resetPasswordByForceResetToken?: Maybe<{ message?: Maybe<string>, code?: Maybe<number> }> };
+
 export type RevokeRoleVariables = Exact<{
   namespace?: Maybe<Scalars['String']>;
   roleCode?: Maybe<Scalars['String']>;
@@ -2928,6 +2988,7 @@ export type FindUserVariables = Exact<{
   phone?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   externalId?: Maybe<Scalars['String']>;
+  identity?: Maybe<FindUserByIdentityInput>;
 }>;
 
 
@@ -3415,6 +3476,7 @@ export type UsersVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
+  excludeUsersInOrg?: Maybe<Scalars['Boolean']>;
 }>;
 
 
@@ -3424,6 +3486,7 @@ export type UsersWithCustomDataVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
+  excludeUsersInOrg?: Maybe<Scalars['Boolean']>;
 }>;
 
 
@@ -3875,8 +3938,8 @@ export const CreateSocialConnectionInstanceDocument = `
 }
     `;
 export const CreateUserDocument = `
-    mutation createUser($userInfo: CreateUserInput!, $keepPassword: Boolean, $resetPasswordOnFirstLogin: Boolean) {
-  createUser(userInfo: $userInfo, keepPassword: $keepPassword, resetPasswordOnFirstLogin: $resetPasswordOnFirstLogin) {
+    mutation createUser($userInfo: CreateUserInput!, $params: String, $identity: CreateUserIdentityInput, $keepPassword: Boolean, $resetPasswordOnFirstLogin: Boolean) {
+  createUser(userInfo: $userInfo, params: $params, identity: $identity, keepPassword: $keepPassword, resetPasswordOnFirstLogin: $resetPasswordOnFirstLogin) {
     id
     arn
     userPoolId
@@ -4867,6 +4930,14 @@ export const ResetPasswordByFirstLoginTokenDocument = `
   }
 }
     `;
+export const ResetPasswordByForceResetTokenDocument = `
+    mutation resetPasswordByForceResetToken($token: String!, $oldPassword: String!, $newPassword: String!) {
+  resetPasswordByForceResetToken(token: $token, oldPassword: $oldPassword, newPassword: $newPassword) {
+    message
+    code
+  }
+}
+    `;
 export const RevokeRoleDocument = `
     mutation revokeRole($namespace: String, $roleCode: String, $roleCodes: [String], $userIds: [String!], $groupCodes: [String!], $nodeCodes: [String!]) {
   revokeRole(namespace: $namespace, roleCode: $roleCode, roleCodes: $roleCodes, userIds: $userIds, groupCodes: $groupCodes, nodeCodes: $nodeCodes) {
@@ -5573,8 +5644,8 @@ export const EmailTemplatesDocument = `
 }
     `;
 export const FindUserDocument = `
-    query findUser($email: String, $phone: String, $username: String, $externalId: String) {
-  findUser(email: $email, phone: $phone, username: $username, externalId: $externalId) {
+    query findUser($email: String, $phone: String, $username: String, $externalId: String, $identity: FindUserByIdentityInput) {
+  findUser(email: $email, phone: $phone, username: $username, externalId: $externalId, identity: $identity) {
     id
     arn
     userPoolId
@@ -7215,8 +7286,8 @@ export const UserpoolsDocument = `
 }
     `;
 export const UsersDocument = `
-    query users($page: Int, $limit: Int, $sortBy: SortByEnum) {
-  users(page: $page, limit: $limit, sortBy: $sortBy) {
+    query users($page: Int, $limit: Int, $sortBy: SortByEnum, $excludeUsersInOrg: Boolean) {
+  users(page: $page, limit: $limit, sortBy: $sortBy, excludeUsersInOrg: $excludeUsersInOrg) {
     totalCount
     list {
       id
@@ -7274,8 +7345,8 @@ export const UsersDocument = `
 }
     `;
 export const UsersWithCustomDataDocument = `
-    query usersWithCustomData($page: Int, $limit: Int, $sortBy: SortByEnum) {
-  users(page: $page, limit: $limit, sortBy: $sortBy) {
+    query usersWithCustomData($page: Int, $limit: Int, $sortBy: SortByEnum, $excludeUsersInOrg: Boolean) {
+  users(page: $page, limit: $limit, sortBy: $sortBy, excludeUsersInOrg: $excludeUsersInOrg) {
     totalCount
     list {
       id
