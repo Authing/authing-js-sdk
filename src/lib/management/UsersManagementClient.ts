@@ -9,7 +9,6 @@ import {
 import {
   deleteUser,
   deleteUsers,
-  user,
   users,
   getUserGroups,
   updateUser,
@@ -34,7 +33,6 @@ import {
   usersWithCustomData,
   userWithCustomData,
   userBatchWithCustomData,
-  userBatch,
   findUserWithCustomData,
   searchUserWithCustomData,
   sendFirstLoginVerifyEmail
@@ -314,27 +312,18 @@ export class UsersManagementClient {
     }
   ): Promise<User> {
     const { withCustomData = false } = options || {};
+    const res = await this.httpClient.request({
+      url: `${this.options.host}/api/v2/users/${userId}`,
+      params: { withCustomData },
+      method: 'GET',
+    });
+    const { data } = res;
     if (withCustomData) {
-      const { user: data } = await userWithCustomData(
-        this.graphqlClient,
-        this.tokenProvider,
-        {
-          id: userId
-        }
-      );
       // @ts-ignore
       data.customData = convertUdvToKeyValuePair(data.customData);
       return data;
-    } else {
-      const { user: data } = await user(
-        this.graphqlClient,
-        this.tokenProvider,
-        {
-          id: userId
-        }
-      );
-      return data;
     }
+    return data;
   }
 
   /**
@@ -410,33 +399,25 @@ export class UsersManagementClient {
     }
   ): Promise<User[]> {
     const { queryField = 'id', withCustomData = false } = options || {};
-
+    const res: { code: number, message: string, data: User [] }  = await this.httpClient.request({
+      url: `${this.options.host}/api/v2/users`,
+      method: 'POST',
+      params: { withCustomData },
+      data: {
+        ids,
+        type: queryField
+      }
+    });
+    const { data: users } = res;
     if (withCustomData) {
-      let { userBatch: list } = await userBatchWithCustomData(
-        this.graphqlClient,
-        this.tokenProvider,
-        {
-          ids,
-          type: queryField
-        }
-      );
-      list = list.map(user => {
+      users.map(user => {
         // @ts-ignore
         user.customData = convertUdvToKeyValuePair(user.customData);
         return user;
       });
-      return list;
-    } else {
-      let { userBatch: list } = await userBatch(
-        this.graphqlClient,
-        this.tokenProvider,
-        {
-          ids,
-          type: queryField
-        }
-      );
-      return list;
+      return users;
     }
+    return users;
   }
 
   /**
@@ -1199,9 +1180,9 @@ export class UsersManagementClient {
       start?: number;
       end?: number;
     } = {
-      page: 1,
-      limit: 10
-    }
+        page: 1,
+        limit: 10
+      }
   ): Promise<UserActions> {
     let requestParam: any = {};
     if (options?.clientIp) {

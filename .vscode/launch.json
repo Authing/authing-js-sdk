@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
-  "configurations": [{
+  "configurations": [
+    {
       "type": "node",
       "request": "launch",
       "name": "Debug Project",
@@ -10,7 +11,9 @@
       // automatically run the currently visible file with: "program": ${file}"
       "program": "${workspaceFolder}/src/cli/cli.ts",
       // "args": ["--no-install"],
-      "outFiles": ["${workspaceFolder}/build/main/**/*.js"],
+      "outFiles": [
+        "${workspaceFolder}/build/main/**/*.js"
+      ],
       "skipFiles": [
         "<node_internals>/**/*.js",
         "${workspaceFolder}/node_modules/**/*.js"
@@ -18,7 +21,9 @@
       "preLaunchTask": "npm: build",
       "stopOnEntry": true,
       "smartStep": true,
-      "runtimeArgs": ["--nolazy"],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
       "env": {
         "TYPESCRIPT_STARTER_REPO_URL": "${workspaceFolder}"
       },
@@ -29,11 +34,29 @@
       "request": "launch",
       "name": "Debug Spec",
       "program": "${workspaceRoot}/.vscode/debug-ts.js",
-      "args": ["${file}"],
-      "skipFiles": ["<node_internals>/**/*.js"],
+      "args": [
+        "${file}"
+      ],
+      "skipFiles": [
+        "<node_internals>/**/*.js"
+      ],
       // Consider using `npm run watch` or `yarn watch` for faster debugging
       // "preLaunchTask": "npm: build",
       // "smartStep": true,
-      "runtimeArgs": ["--nolazy"]
-    }]
+      "runtimeArgs": [
+        "--nolazy"
+      ]
+    },
+    {
+      "name": "Current TS File",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/ts-node/dist/bin.js",
+      "args": [
+        "${relativeFile}"
+      ],
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector"
+    },
+  ]
 }
