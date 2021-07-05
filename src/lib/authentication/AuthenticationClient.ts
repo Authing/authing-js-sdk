@@ -1504,6 +1504,7 @@ export class AuthenticationClient {
    * @memberof AuthenticationClient
    */
   async getCurrentUser(): Promise<User | null> {
+    // TODO: 这样子设计合理吗?
     try {
       const { user: data } = await user(
         this.graphqlClient,
