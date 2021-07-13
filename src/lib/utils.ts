@@ -212,6 +212,7 @@ const isNumeric = (str: string) => {
 export const convertUdvToKeyValuePair = (
   data: Array<{ key: string; dataType: UdfDataType; value?: any }>
 ): KeyValuePair => {
+  data = data || [];
   for (const item of data) {
     const { dataType, value } = item;
     if (dataType === UdfDataType.Number) {
