@@ -2,6 +2,7 @@ import { GraphqlClient } from '../common/GraphqlClient';
 import { HttpClient } from '../common/HttpClient';
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import { Lang } from '../../types';
+import { JWK, KeyLike } from '@authing/jose/types';
 
 /**
  * 初始化 AuthenticationClientOptions 的参数
@@ -49,6 +50,8 @@ export interface AuthenticationClientOptions {
   httpClient?: typeof HttpClient;
   graphqlClient?: typeof GraphqlClient;
   tokenProvider?: typeof AuthenticationTokenProvider;
+  /** 用于解密 Token 的私钥 */
+  privateKeys?: PrivateKey[];
   /**
    * 语言
    */
@@ -523,4 +526,20 @@ export type Cas20ValidationFailureResult = {
     code: string;
     description: string;
   },
+};
+
+export interface PrivateKey {
+  pkcs8Key: string;
+  alg: 'RSA-OAEP' | 'ECDH-ES';
+  kid?: string;
+}
+
+export interface JWKS {
+  keys: JWK[];
+}
+
+export interface KeyEntry {
+  kid?: string;
+  alg: string[];
+  key: KeyLike;
 }
