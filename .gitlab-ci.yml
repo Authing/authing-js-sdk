@@ -16,7 +16,6 @@ before_script:
     case "$CI_COMMIT_REF_NAME" in
       "master")
         PUBLISH_OPTS="--verbose"
-        export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
         ;;
       *)
         PUBLISH_OPTS="--verbose --tag=alpha"
@@ -55,16 +54,7 @@ release:
     - git clone https://lizuoqiang:lzq123456@git.authing.co/sdk/authing-js-sdk.git
     - git config --global user.email "gitlab@authing.cn"
     - git config --global user.name "GitLab CI/CD"
-    - |
-        case "$CI_COMMIT_REF_NAME" in
-          "master")
-            PUBLISH_OPTS="--verbose"
-            export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
-            ;;
-          *)
-            PUBLISH_OPTS="--verbose --tag=alpha"
-            ;;
-        esac
+    - export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
   script:
     - echo ${VERSION}
     - cd authing-js-sdk
