@@ -62,9 +62,10 @@ import {
   ResourceType,
   UdfTargetType,
   UpdateUserInput,
-  User,
+  // User,
   UserDefinedData
 } from '../../types/graphql.v2';
+import { User } from '../../types/index';
 import { QrCodeAuthenticationClient } from './QrCodeAuthenticationClient';
 import { MfaAuthenticationClient } from './MfaAuthenticationClient';
 import { HttpClient, NaiveHttpClient } from '../common/HttpClient';

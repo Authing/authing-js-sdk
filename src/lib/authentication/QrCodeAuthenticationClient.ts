@@ -6,7 +6,8 @@ import {
   QRCodeUserInfo
 } from './types';
 import { createCssClassStyleSheet } from '../utils';
-import { User } from '../../types/graphql.v2';
+// import { User } from '../../types/graphql.v2';
+import { User } from '../../types/index';
 import { HttpClient } from '../common/HttpClient';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
