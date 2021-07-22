@@ -60,7 +60,7 @@ release:
     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - echo "$SSH_CONFIG" > ~/.ssh/config
     - echo "140.82.112.3 github.com" >> /etc/hosts
-    - git clone https://wanglu:vanlusg2!@git.authing.co:sdk/authing-js-sdk.git
+    - git clone https://wanglu:vanlusg2!@git.authing.co/sdk/authing-js-sdk.git
     - git config --global user.email "gitlab@authing.cn"
     - git config --global user.name "GitLab CI/CD"
   script:
