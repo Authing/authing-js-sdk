@@ -63,7 +63,7 @@ release:
       - build
     expire_in: 30 days
   dependencies:
-    - build
+    - publish
 
 upload:
   stage: upload
