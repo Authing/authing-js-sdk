@@ -68,8 +68,8 @@ release:
     - echo $CI_COMMIT_REF_NAME
     - git tag -a ${VERSION} -m "${VERSION}"
     - git push origin master
-  dependencies:
-    - publish
+  # dependencies:
+  #   - publish
 
 # upload:
 #   stage: upload
