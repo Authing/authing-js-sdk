@@ -2,6 +2,7 @@ image: node:12.14.0
 
 stages:
   - publish
+  - release
   - upload
 
 before_script:
@@ -16,6 +17,7 @@ before_script:
     case "$CI_COMMIT_REF_NAME" in
       "master")
         PUBLISH_OPTS="--verbose"
+        export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
         ;;
       *)
         PUBLISH_OPTS="--verbose --tag=alpha"
@@ -45,6 +47,19 @@ publish:
     paths:
       - build
     expire_in: 30 days
+
+release:
+  stage: release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_TAG =~ "/^$/"'
+  script:
+    - echo $CI_COMMIT_REF_NAME
+    - git config --global user.name "${GITLAB_USER_NAME}"
+    - git config --global user.email "${GITLAB_USER_EMAIL}"
+    - git tag -a ${VERSION} -m "${VERSION}"
+    - git push git@git.authing.co:sdk/authing-js-sdk.git --tags
+  dependencies:
+    - publish
 
 upload:
   stage: upload
