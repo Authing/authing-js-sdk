@@ -1,4 +1,3 @@
-// import { User } from '../../types/graphql.v2';
 import { User } from '../../types/index';
 import { AuthenticationClientOptions } from './types';
 

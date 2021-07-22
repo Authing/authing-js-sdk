@@ -62,7 +62,6 @@ import {
   ResourceType,
   UdfTargetType,
   UpdateUserInput,
-  // User,
   UserDefinedData
 } from '../../types/graphql.v2';
 import { User } from '../../types/index';

@@ -11,7 +11,6 @@ import {
 } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { objectToQueryString, popupCenter, isWechatBrowser } from '../utils';
-// import { User } from '../../types/graphql.v2';
 import { User } from '../../types/index';
 import { generateUidKey } from '../utils';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';

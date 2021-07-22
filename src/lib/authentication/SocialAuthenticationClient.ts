@@ -6,7 +6,7 @@ import {
   popupCenter,
   isWechatBrowser,
 } from '../utils';
-import { User } from '../../types/graphql.v2';
+import { User } from '../../types/index';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
 /**
