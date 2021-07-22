@@ -36,7 +36,6 @@ import {
   sendFirstLoginVerifyEmail
 } from '../graphqlapi';
 import {
-  User,
   PaginatedUsers,
   CreateUserInput,
   RefreshToken,
@@ -54,6 +53,8 @@ import { HttpClient } from '../common/HttpClient';
 import { DeepPartial, KeyValuePair } from '../../types/index';
 import { PublicKeyManager } from '../common/PublicKeyManager';
 import { convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
+import { User } from "../../types/index";
+
 
 /**
  * @name UsersManagementClient

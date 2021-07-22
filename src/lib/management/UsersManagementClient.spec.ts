@@ -12,7 +12,7 @@ import { AuthenticationClient } from '../authentication/AuthenticationClient';
 const managementClient = new ManagementClient(getOptionsFromEnv());
 const authenticationClient = new AuthenticationClient(getOptionsFromEnv());
 
-test('创建用户', async t => {
+test.only('创建用户', async t => {
   const username = generateRandomString(10);
   const email = generateRandomString(10);
   const phone = generateRandomPhone();
