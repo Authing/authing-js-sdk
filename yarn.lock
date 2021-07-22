@@ -7716,9 +7716,9 @@ uid2@0.0.3:
   integrity sha1-SDEm4Rd03y9xuLY53NeZw3YWK4I=
 
 underscore@>=1.8.3, underscore@^1.9.1:
-  version "1.10.2"
-  resolved "https://registry.npm.taobao.org/underscore/download/underscore-1.10.2.tgz?cache=0&sync_timestamp=1585605854253&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Funderscore%2Fdownload%2Funderscore-1.10.2.tgz#73d6aa3668f3188e4adb0f1943bd12cfd7efaaaf"
-  integrity sha1-c9aqNmjzGI5K2w8ZQ70Sz9fvqq8=
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.1.tgz#0c1c6bd2df54b6b69f2314066d65b6cde6fcf9d1"
+  integrity sha512-hzSoAVtJF+3ZtiFX0VgfFPHEDRm7Y/QPjGyNo4TVdnDTdft3tr8hEkD25a1jC+TjTuE7tkHGKkhwCgs9dgBB2g==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
