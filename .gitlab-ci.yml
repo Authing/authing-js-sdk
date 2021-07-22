@@ -23,29 +23,29 @@ before_script:
         ;;
     esac
 
-publish:
-  cache:
-    untracked: true
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - build
-  stage: publish
-  rules:
-    - if: '$CI_COMMIT_REF_NAME != "master" && $CI_COMMIT_TAG =~ "/^$/"'
-      when: manual
-    - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_TAG =~ "/^$/"'
-      when: manual
-  script:
-    - npm install --registry https://registry.npm.taobao.org/
-    - npm run build
-    - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-    - npm publish ${PUBLISH_OPTS}
-    - echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk  🚀"
-  artifacts:
-    untracked: false
-    paths:
-      - build
-    expire_in: 30 days
+# publish:
+#   cache:
+#     untracked: true
+#     key: ${CI_COMMIT_REF_SLUG}
+#     paths:
+#       - build
+#   stage: publish
+#   rules:
+#     - if: '$CI_COMMIT_REF_NAME != "master" && $CI_COMMIT_TAG =~ "/^$/"'
+#       when: manual
+#     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_TAG =~ "/^$/"'
+#       when: manual
+#   script:
+#     - npm install --registry https://registry.npm.taobao.org/
+#     - npm run build
+#     - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+#     - npm publish ${PUBLISH_OPTS}
+#     - echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk  🚀"
+#   artifacts:
+#     untracked: false
+#     paths:
+#       - build
+#     expire_in: 30 days
 
 release:
   stage: release
@@ -60,18 +60,18 @@ release:
 #   dependencies:
 #     - publish
 
-upload:
-  stage: upload
-  # when: manual
-  image:
-    name: fuergaosi/ossutil:latest
-  script:
-    - export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
-    - echo 上传包到 cdn
-    - echo 版本 $VERSION
-    - >
-      ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
-      --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
-      -e ${OSS_REGION_PROD} cp -r -f build oss://${CDN_OSS_PROD}/packages/authing-js-sdk/${VERSION}/
-  dependencies:
-    - publish
+# upload:
+#   stage: upload
+#   # when: manual
+#   image:
+#     name: fuergaosi/ossutil:latest
+#   script:
+#     - export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+#     - echo 上传包到 cdn
+#     - echo 版本 $VERSION
+#     - >
+#       ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
+#       --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
+#       -e ${OSS_REGION_PROD} cp -r -f build oss://${CDN_OSS_PROD}/packages/authing-js-sdk/${VERSION}/
+#   dependencies:
+#     - publish
