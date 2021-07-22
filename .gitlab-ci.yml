@@ -2,6 +2,7 @@ image: node:12.14.0
 
 stages:
   - publish
+  - release
   - upload
 
 before_script:
