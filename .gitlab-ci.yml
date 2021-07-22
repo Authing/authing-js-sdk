@@ -56,7 +56,7 @@ release:
     - git config --global user.name "gitlab-ci"
     - git config --global user.email "ci@authing.cn"
     - git tag -a test -m "${VERSION}"
-    - git push
+    - git push origin master
 #   dependencies:
 #     - publish
 
