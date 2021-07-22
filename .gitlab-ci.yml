@@ -57,11 +57,8 @@ release:
     - git config --global user.email "${GITLAB_USER_EMAIL}"
     - git tag -a ${VERSION} -m "${VERSION}"
     - git push git@git.authing.co:sdk/authing-js-sdk.git --tags
-  artifacts:
-    untracked: false
-    paths:
-      - build
-    expire_in: 30 days
+  dependencies:
+    - publish
 
 upload:
   stage: upload
@@ -78,4 +75,3 @@ upload:
       -e ${OSS_REGION_PROD} cp -r -f build oss://${CDN_OSS_PROD}/packages/authing-js-sdk/${VERSION}/
   dependencies:
     - publish
-    - release
