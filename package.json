@@ -97,7 +97,7 @@
 		"parse-comments": "1.0.0",
 		"prettier": "^1.18.2",
 		"process": "^0.11.10",
-		"standard-version": "^6.0.1",
+		"standard-version": "^8.0.1",
 		"stream-browserify": "^3.0.0",
 		"trash-cli": "^3.0.0",
 		"ts-loader": "^8.0.14",
