@@ -78,7 +78,7 @@ release:
     - echo $CI_COMMIT_REF_NAME
     - git tag -a ${VERSION} -m "${VERSION}"
     - echo ${VERSION}
-    - git push origin master
+    - git push origin master --tag
   # dependencies:
   #   - publish
 
