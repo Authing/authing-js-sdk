@@ -12,6 +12,7 @@ before_script:
   - chmod 700 ~/.ssh/id_rsa
   - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
   - echo "$SSH_CONFIG" > ~/.ssh/config
+
   - |
     case "$CI_COMMIT_REF_NAME" in
       "master")
@@ -56,7 +57,7 @@ release:
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
     - git tag -a ${VERSION} -m "${VERSION}"
-    - git push --tags
+    - git push git@git.authing.co:sdk/authing-js-sdk.git --tags
   dependencies:
     - publish
 
