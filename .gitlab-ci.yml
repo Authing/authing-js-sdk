@@ -52,12 +52,22 @@ release:
   stage: release
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_TAG =~ "/^$/"'
+  before_script:
+    - mkdir -p ~/.ssh
+    - touch ~/.ssh/id_rsa
+    - touch ~/.ssh/config
+    - chmod 700 ~/.ssh/id_rsa
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - echo "$SSH_CONFIG" > ~/.ssh/config
+    - echo "140.82.112.3 github.com" >> /etc/hosts
+    - git clone git@git.authing.co:sdk/authing-js-sdk.git
+    - git config --global user.email "gitlab@authing.cn"
+    - git config --global user.name "GitLab CI/CD"
   script:
+    - cd authing-js-sdk
     - echo $CI_COMMIT_REF_NAME
-    - git config --global user.name "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
     - git tag -a ${VERSION} -m "${VERSION}"
-    - git push git@git.authing.co:sdk/authing-js-sdk.git --tags
+    - git push origin master
   dependencies:
     - publish
 
