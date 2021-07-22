@@ -315,7 +315,7 @@ export class UsersManagementClient {
       params: { with_custom_data: withCustomData },
       method: 'GET',
     });
-    if (withCustomData) {
+    if (withCustomData && data) {
       // @ts-ignore
       data.customData = convertUdvToKeyValuePair(data.customData);
       return data;
