@@ -1,7 +1,8 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import {
   Cas20ValidationSuccessResult,
-  Cas20ValidationFailureResult
+  Cas20ValidationFailureResult,
+  SsoSession
 } from './types';
 import sha256 from 'crypto-js/sha256';
 import CryptoJS from 'crypto-js';
@@ -1121,8 +1122,8 @@ export class AuthenticationClient {
 
   public async resetPasswordByForceResetToken(params: {
     token: string;
-    newPassword: string,
-    oldPassword: string
+    newPassword: string;
+    oldPassword: string;
   }) {
     let { token, newPassword, oldPassword } = params;
     newPassword = await this.options.encryptFunction(
@@ -1947,7 +1948,6 @@ export class AuthenticationClient {
     };
   }
 
-
   /**
    * @description 检查用户是否存在
    */
@@ -1956,7 +1956,7 @@ export class AuthenticationClient {
     email?: string;
     phone?: string;
     externalId?: string;
-  }){
+  }) {
     const { username, email, phone, externalId } = options;
     const { isUserExists: data } = await isUserExists(
       this.graphqlClient,
@@ -2845,6 +2845,20 @@ export class AuthenticationClient {
       });
       return data;
     }
+  }
+
+  /**
+   * @description sso 检测登录态
+   */
+  async trackSession() {
+    const data: {
+      session: SsoSession;
+      userInfo: User;
+    } = await this.naiveHttpClient.request({
+      url: `${this.baseClient.appHost}/cas/session`,
+      method: 'GET'
+    });
+    return data;
   }
 
   /**

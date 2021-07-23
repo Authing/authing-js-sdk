@@ -522,5 +522,20 @@ export type Cas20ValidationFailureResult = {
   authenticationFailure: {
     code: string;
     description: string;
-  },
+  };
+};
+
+export interface SsoSession {
+  _id: string;
+  cookie: {
+    originalMaxAge: number;
+    expires: string;
+    secure: boolean;
+    httpOnly: boolean;
+    path: string;
+    sameSite: string;
+    appId: string;
+    type: string;
+    userId: string;
+  };
 }
