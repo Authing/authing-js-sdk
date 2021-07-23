@@ -2850,11 +2850,11 @@ export class AuthenticationClient {
   /**
    * @description sso 检测登录态
    */
-  async trackSession() {
-    const data: {
-      session: SsoSession;
-      userInfo: User;
-    } = await this.naiveHttpClient.request({
+  async trackSession(): Promise<null | {
+    session: SsoSession;
+    userInfo: User;
+  }> {
+    const data = await this.naiveHttpClient.request({
       url: `${this.baseClient.appHost}/cas/session`,
       method: 'GET'
     });
