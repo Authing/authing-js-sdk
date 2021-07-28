@@ -3,17 +3,19 @@ import { NaiveHttpClient } from '../common/HttpClient';
 import { importECDHES, importRSAOAEP, importHS256, importAESKW } from './BrowserKeyImportHelper';
 import { parseJwk } from '@authing/jose';
 import { KeyLike } from '@authing/jose/types';
+import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
 export class KeyManager {
 
     keystore: Promise<KeyEntry[]>;
 
     constructor(
-        private options: AuthenticationClientOptions,
+        options: AuthenticationClientOptions,
         private naiveHttpClient: NaiveHttpClient,
+        private baseClient: BaseAuthenticationClient,
     ) {
         this.keystore = this.naiveHttpClient.request({
-            url: `${this.options.appHost}/oidc/.well-known/jwks.json`,
+            url: `${this.baseClient.appHost}/oidc/.well-known/jwks.json`,
             method: 'GET',
         }).then(async (serverJwks: JWKS) => {
             const ks: KeyEntry[] = [];
@@ -74,6 +76,10 @@ export class KeyManager {
             }
 
             return ks;
+        }).catch((e) => {
+            console.error('服务器 JWKS 端点请求失败');
+            console.error(e);
+            return [];
         });
     }
 

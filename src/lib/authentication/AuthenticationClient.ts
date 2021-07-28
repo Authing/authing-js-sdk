@@ -215,7 +215,11 @@ export class AuthenticationClient {
       this.tokenProvider,
       this.httpClient
     );
-    this.keyManager = new KeyManager(this.options, this.naiveHttpClient);
+    this.keyManager = new KeyManager(
+      this.options,
+      this.naiveHttpClient,
+      this.baseClient,
+    );
     if (this.options.token) {
       this.setToken(this.options.token);
     }
