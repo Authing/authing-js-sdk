@@ -76,6 +76,10 @@ export class KeyManager {
             }
 
             return ks;
+        }).catch((e) => {
+            console.error('服务器 JWKS 端点请求失败');
+            console.error(e);
+            return [];
         });
     }
 
