@@ -36,6 +36,49 @@ import { BaseAuthenticationClient } from './BaseAuthenticationClient';
  *
  * @name QrCodeAuthenticationClient
  */
+
+let roundedImage = (
+  context2D: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number
+) => {
+  context2D.beginPath();
+  context2D.moveTo(x + radius, y);
+  context2D.lineTo(x + width - radius, y);
+  context2D.quadraticCurveTo(x + width, y, x + width, y + radius);
+  context2D.lineTo(x + width, y + height - radius);
+  context2D.quadraticCurveTo(
+    x + width,
+    y + height,
+    x + width - radius,
+    y + height
+  );
+  context2D.lineTo(x + radius, y + height);
+  context2D.quadraticCurveTo(x, y + height, x, y + height - radius);
+  context2D.lineTo(x, y + radius);
+  context2D.quadraticCurveTo(x, y, x + radius, y);
+  context2D.closePath();
+};
+
+let getOffset = (size: any) => {
+  let containerHalfWidth = size.width / 2;
+  let containerHalfHeight = size.height / 2;
+  let ww = size.width / 2.4;
+  let hh = size.height / 2.4;
+
+  let logoHalfWidth = ww / 2;
+  let logoHalfHeight = hh / 2;
+
+  return {
+    x: containerHalfWidth - logoHalfWidth,
+    y: containerHalfHeight - logoHalfHeight,
+    ww: ww,
+    hh: hh
+  };
+};
 export class QrCodeAuthenticationClient {
   options: AuthenticationClientOptions;
   tokenProvider: AuthenticationTokenProvider;
@@ -272,11 +315,11 @@ export class QrCodeAuthenticationClient {
     const genImage = (src: string) => {
       return new Promise<HTMLImageElement>(resolve => {
         const qrcodeImage = document.createElement('img');
-        qrcodeImage.className = 'authing__qrcode';
+        // qrcodeImage.className = 'authing__qrcode';
         qrcodeImage.src = src;
         qrcodeImage.width = size.width;
         qrcodeImage.height = size.height;
-        qrcodeImage.draggable = false;
+        // qrcodeImage.draggable = false;
 
         qrcodeImage.onload = () => {
           resolve(qrcodeImage);
@@ -289,34 +332,35 @@ export class QrCodeAuthenticationClient {
       // 因此，即便是空的 src 地址，为了保证类型一致，同样要返回 HTMLImageElement
       return new Promise<HTMLImageElement>(resolve => {
         const qrcodeLogo = document.createElement('img');
-        qrcodeLogo.className = 'authing__qrcode__logo';
         qrcodeLogo.src = logo;
-        qrcodeLogo.draggable = false;
-        qrcodeLogo.style.display = 'none';
+        // qrcodeLogo.className = 'authing__qrcode__logo';
+        // qrcodeLogo.draggable = false;
+        // qrcodeLogo.style.display = 'none';
+        // qrcodeLogo.style.borderRadius = '50%';
 
-        // 按比例缩放
-        qrcodeLogo.width = size.width / 2.4;
-        qrcodeLogo.height = size.height / 2.4;
-        
-        // 计算得到 offset 数值
-        let containerHalfWidth = size.width / 2;
-        let containerHalfHeight = size.height / 2;
-        let logoHalfWidth = qrcodeLogo.width / 2;
-        let logoHalfHeight = qrcodeLogo.height / 2;
-        let offset = {
-          x: containerHalfWidth - logoHalfWidth,
-          y: containerHalfHeight - logoHalfHeight
-        };
-        
-        createCssClassStyleSheet(
-          'authing__qrcode__logo',
-          `
-            position: absolute;
-            left: ${offset.y}px;
-            top: ${offset.x}px;
-            border-radius: 50%;
-          `
-        );
+        // // 按比例缩放
+        // qrcodeLogo.width = size.width / 2.4;
+        // qrcodeLogo.height = size.height / 2.4;
+
+        // // 计算得到 offset 数值
+        // let containerHalfWidth = size.width / 2;
+        // let containerHalfHeight = size.height / 2;
+        // let logoHalfWidth = qrcodeLogo.width / 2;
+        // let logoHalfHeight = qrcodeLogo.height / 2;
+        // let offset = {
+        //   x: containerHalfWidth - logoHalfWidth,
+        //   y: containerHalfHeight - logoHalfHeight
+        // };
+
+        // createCssClassStyleSheet(
+        //   'authing__qrcode__logo',
+        //   `
+        //     border-radius: 50%;
+        //     position: absolute;
+        //     left: ${offset.y}px;
+        //     top: ${offset.x}px;
+        //   `
+        // );
         qrcodeLogo.onload = () => {
           qrcodeLogo.style.display = 'inline';
           resolve(qrcodeLogo);
@@ -462,10 +506,24 @@ export class QrCodeAuthenticationClient {
       nodeWrapper.id = 'authing__qrcode-wrapper';
       nodeWrapper.style.textAlign = 'center';
       nodeWrapper.style.position = 'relative';
-      nodeWrapper.style.width = 'fit-content';
       nodeWrapper.style.margin = 'auto';
       const qrcodeImage = await genImage(url);
       const qrcodeLogo = await genLogoInCenter(logo);
+
+      let canvas = document.createElement('canvas');
+      canvas.width = size.width;
+      canvas.height = size.height;
+      nodeWrapper.appendChild(canvas);
+
+      let context2D = canvas.getContext('2d');
+
+      context2D.drawImage(qrcodeImage, 0, 0, size.width, size.height);
+      let { x, y, ww, hh } = getOffset(size);
+      context2D.save();
+      roundedImage(context2D, x, y, ww, hh, ww / 2);
+      context2D.clip();
+      context2D.drawImage(qrcodeLogo, x, y, ww, hh);
+      context2D.restore();
 
       unloading();
       if (onCodeShow) {
@@ -544,12 +602,13 @@ export class QrCodeAuthenticationClient {
         onError: decoratedOnError
       });
 
-      nodeWrapper.appendChild(qrcodeImage);
-      nodeWrapper.appendChild(qrcodeLogo);
+      // nodeWrapper.appendChild(qrcodeImage);
+      // nodeWrapper.appendChild(qrcodeLogo);
 
       const tip = genTip(title);
       nodeWrapper.appendChild(tip);
       node.appendChild(nodeWrapper);
+      // node.appendChild(canvas);
     };
 
     start();
