@@ -122,6 +122,7 @@ export class ManagementClient {
     this.roles = new RolesManagementClient(
       this.options,
       this.graphqlClient,
+      this.httpClient,
       this.tokenProvider
     );
     this.policies = new PoliciesManagementClient(
