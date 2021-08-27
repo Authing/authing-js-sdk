@@ -36,7 +36,6 @@ import {
   sendFirstLoginVerifyEmail
 } from '../graphqlapi';
 import {
-  PaginatedUsers,
   CreateUserInput,
   RefreshToken,
   CommonMessage,
@@ -50,11 +49,10 @@ import {
   QuerySearchUserArgs
 } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
-import { DeepPartial, KeyValuePair } from '../../types/index';
+import { DeepPartial, KeyValuePair, PaginatedUsers } from '../../types/index';
 import { PublicKeyManager } from '../common/PublicKeyManager';
 import { convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
-import { User } from "../../types/index";
-
+import { User } from '../../types/index';
 
 /**
  * @name UsersManagementClient
@@ -182,11 +180,14 @@ export class UsersManagementClient {
         connectionId?: string;
         accessToken?: string;
         refreshToken?: string;
-      }
-    },
+      };
+    }
   ): Promise<User> {
-    const { keepPassword = false, resetPasswordOnFirstLogin = false, identity } =
-      options || {};
+    const {
+      keepPassword = false,
+      resetPasswordOnFirstLogin = false,
+      identity
+    } = options || {};
     if (userInfo?.password) {
       userInfo.password = await this.options.encryptFunction(
         userInfo.password,
@@ -314,7 +315,7 @@ export class UsersManagementClient {
     const data = await this.httpClient.request({
       url: `${this.options.host}/api/v2/users/${userId}`,
       params: { with_custom_data: withCustomData },
-      method: 'GET',
+      method: 'GET'
     });
     if (withCustomData && data) {
       // @ts-ignore
@@ -397,7 +398,7 @@ export class UsersManagementClient {
     }
   ): Promise<User[]> {
     const { queryField = 'id', withCustomData = false } = options || {};
-    const users: User []  = await this.httpClient.request({
+    const users: User[] = await this.httpClient.request({
       url: `${this.options.host}/api/v2/users/batch`,
       method: 'POST',
       data: {
@@ -439,7 +440,7 @@ export class UsersManagementClient {
       withCustomData?: boolean;
       excludeUsersInOrg?: boolean;
     }
-  ) {
+  ): Promise<PaginatedUsers> {
     const { withCustomData = false, excludeUsersInOrg = false } = options || {};
     if (withCustomData) {
       const { users: data } = await usersWithCustomData(
@@ -490,7 +491,10 @@ export class UsersManagementClient {
    * @returns
    * @memberof UsersManagementClient
    */
-  async listArchivedUsers(page: number = 1, limit: number = 10) {
+  async listArchivedUsers(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<PaginatedUsers> {
     const { archivedUsers: data } = await archivedUsers(
       this.graphqlClient,
       this.tokenProvider,
@@ -564,8 +568,8 @@ export class UsersManagementClient {
     identity?: {
       userIdInIdp: string;
       provider: string;
-    }
-  }) {
+    };
+  }): Promise<User> {
     const {
       username,
       email,
@@ -1177,9 +1181,9 @@ export class UsersManagementClient {
       start?: number;
       end?: number;
     } = {
-        page: 1,
-        limit: 10
-      }
+      page: 1,
+      limit: 10
+    }
   ): Promise<UserActions> {
     let requestParam: any = {};
     if (options?.clientIp) {

@@ -6,7 +6,6 @@ import {
   PaginatedAuthorizedResources,
   PaginatedPolicyAssignments,
   PaginatedRoles,
-  PaginatedUsers,
   PolicyAssignmentTargetType,
   ResourceType,
   Role,
@@ -34,7 +33,7 @@ import {
   removeUdv,
   roleWithUsersWithCustomData
 } from '../graphqlapi';
-import { DeepPartial, KeyValuePair } from '../../types/index';
+import { DeepPartial, KeyValuePair, PaginatedUsers } from '../../types/index';
 import { convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
 
 /**
@@ -332,6 +331,7 @@ export class RolesManagementClient {
       });
       return {
         totalCount,
+        // @ts-ignore
         list
       };
     }

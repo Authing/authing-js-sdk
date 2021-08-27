@@ -28,11 +28,10 @@ import {
   CommonMessage,
   Org,
   PaginatedAuthorizedResources,
-  PaginatedUsers,
   ResourceType
 } from '../../types/graphql.v2';
 import { HttpClient } from '../common/HttpClient';
-import { DeepPartial } from '../../types/index';
+import { DeepPartial, PaginatedUsers } from '../../types/index';
 
 /**
  * @class OrgManagementClient 管理组织机构

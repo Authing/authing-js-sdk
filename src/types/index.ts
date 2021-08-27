@@ -1,11 +1,15 @@
 import {
   User as originalUser,
-} from "./graphql.v2";
+  PaginatedUsers as originalPaginatedUsers
+} from './graphql.v2';
 
 export interface User extends Omit<originalUser, 'customData'> {
-  customData?: KeyValuePair
+  customData?: KeyValuePair;
 }
 
+export interface PaginatedUsers extends Omit<originalPaginatedUsers, 'list'> {
+  list: Array<User>;
+}
 
 export type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>;

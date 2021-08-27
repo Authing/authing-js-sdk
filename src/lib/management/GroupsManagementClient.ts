@@ -18,11 +18,10 @@ import {
   Group,
   PaginatedAuthorizedResources,
   PaginatedGroups,
-  PaginatedUsers,
   ResourceType
 } from '../../types/graphql.v2';
-import { DeepPartial } from '../../types/index';
-import { formatAuthorizedResources } from '../utils';
+import { DeepPartial, PaginatedUsers } from '../../types/index';
+import { convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
 
 /**
  * @class GroupsManagementClient 管理分组
@@ -282,6 +281,7 @@ export class GroupsManagementClient {
       });
       return {
         totalCount,
+        // @ts-ignore
         list
       };
     }
