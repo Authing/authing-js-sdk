@@ -1,7 +1,12 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import { AuthenticationClientOptions } from './types';
 import { HttpClient } from '../common/HttpClient';
-import { objectToQueryString, popupCenter, isMobileBrowser } from '../utils';
+import {
+  objectToQueryString,
+  popupCenter,
+  isMobileBrowser,
+  generateRandomString
+} from '../utils';
 import { User } from '../../types/index';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
@@ -117,10 +122,11 @@ export class SocialAuthenticationClient {
        * @description 协议类型
        */
       protocol?: string;
+      uuid?: string;
     }
   ) {
     options = options || {};
-    const {
+    let {
       position,
       popup = true,
       onSuccess,
@@ -130,8 +136,14 @@ export class SocialAuthenticationClient {
       context,
       customData,
       withIdentities = false,
-      protocol = 'oidc'
+      protocol = 'oidc',
+      uuid
     } = options;
+
+    if (!uuid) {
+      uuid = generateRandomString(20);
+    }
+
     const query: Record<string, string> = {
       from_guard: '1',
       app_id: this.options.appId,
@@ -139,7 +151,8 @@ export class SocialAuthenticationClient {
         authorization_params || authorizationParams
       ),
       with_identities: withIdentities ? '1' : '0',
-      protocol
+      protocol,
+      uuid
     };
     if (context) {
       query.context = JSON.stringify(context);
