@@ -238,6 +238,14 @@ export const isWechatBrowser = () =>
   typeof navigator !== 'undefined' &&
   /MicroMessenger/i.test(navigator?.userAgent);
 
+export const isLarkBrowser = () => {
+  typeof navigator !== 'undefined' && /Lark/i.test(navigator.userAgent);
+};
+
+export const isMobileBrowser = () => {
+  return isWechatBrowser() || isLarkBrowser();
+};
+
 export const formatAuthorizedResources = (resources: any[]) => {
   return resources.map(resource => {
     for (const key in resource) {

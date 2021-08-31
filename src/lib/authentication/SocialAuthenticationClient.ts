@@ -1,11 +1,7 @@
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import { AuthenticationClientOptions } from './types';
 import { HttpClient } from '../common/HttpClient';
-import {
-  objectToQueryString,
-  popupCenter,
-  isWechatBrowser,
-} from '../utils';
+import { objectToQueryString, popupCenter, isMobileBrowser } from '../utils';
 import { User } from '../../types/index';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 
@@ -115,7 +111,12 @@ export class SocialAuthenticationClient {
       /**
        * @description 获取的用户信息中是否包含 identities
        */
-      withIdentities?: boolean
+      withIdentities?: boolean;
+
+      /**
+       * @description 协议类型
+       */
+      protocol?: string;
     }
   ) {
     options = options || {};
@@ -128,7 +129,8 @@ export class SocialAuthenticationClient {
       authorizationParams,
       context,
       customData,
-      withIdentities = false
+      withIdentities = false,
+      protocol = 'oidc'
     } = options;
     const query: Record<string, string> = {
       from_guard: '1',
@@ -136,7 +138,8 @@ export class SocialAuthenticationClient {
       authorization_params: JSON.stringify(
         authorization_params || authorizationParams
       ),
-      with_identities: withIdentities ? '1' : '0'
+      with_identities: withIdentities ? '1' : '0',
+      protocol
     };
     if (context) {
       query.context = JSON.stringify(context);
@@ -173,7 +176,7 @@ export class SocialAuthenticationClient {
     };
     window.addEventListener('message', onMessage);
 
-    if (isWechatBrowser()) {
+    if (isMobileBrowser()) {
       // 在微信内直接打开
       window.location.href = url;
     } else if (popup) {
