@@ -319,6 +319,7 @@ export class QrCodeAuthenticationClient {
         qrcodeImage.src = src;
         qrcodeImage.width = size.width;
         qrcodeImage.height = size.height;
+        qrcodeImage.setAttribute('crossOrigin', 'Anonymous');
         // qrcodeImage.draggable = false;
 
         qrcodeImage.onload = () => {
@@ -333,6 +334,7 @@ export class QrCodeAuthenticationClient {
       return new Promise<HTMLImageElement>(resolve => {
         const qrcodeLogo = document.createElement('img');
         qrcodeLogo.src = logo;
+        qrcodeLogo.setAttribute('crossOrigin', 'Anonymous');
         // qrcodeLogo.className = 'authing__qrcode__logo';
         // qrcodeLogo.draggable = false;
         // qrcodeLogo.style.display = 'none';
@@ -513,17 +515,28 @@ export class QrCodeAuthenticationClient {
       let canvas = document.createElement('canvas');
       canvas.width = size.width;
       canvas.height = size.height;
-      nodeWrapper.appendChild(canvas);
 
       let context2D = canvas.getContext('2d');
-
       context2D.drawImage(qrcodeImage, 0, 0, size.width, size.height);
       let { x, y, ww, hh } = getOffset(size);
       context2D.save();
       roundedImage(context2D, x, y, ww, hh, ww / 2);
       context2D.clip();
-      context2D.drawImage(qrcodeLogo, x, y, ww, hh);
+      qrcodeLogo && context2D.drawImage(qrcodeLogo, x, y, ww, hh);
       context2D.restore();
+
+      try {
+        // 尝试创建 image 放入 nodeWrapper
+        // 目的是为了适配微信浏览器内【长按识别二维码】的功能
+        let base64 = canvas.toDataURL();
+        let img = document.createElement('img');
+        img.src = base64;
+        nodeWrapper.appendChild(img);
+      } catch {
+        // base64 不可行，可能被浏览器拦截（同源策略）
+        // 直接绘制 canvas 并渲染，确保基本功能可用
+        nodeWrapper.appendChild(canvas);
+      }
 
       unloading();
       if (onCodeShow) {
