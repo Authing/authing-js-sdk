@@ -517,12 +517,12 @@ export class QrCodeAuthenticationClient {
       canvas.height = size.height;
 
       let context2D = canvas.getContext('2d');
-      context2D.drawImage(qrcodeImage, 0, 0, size.width, size.height);
+      url && context2D.drawImage(qrcodeImage, 0, 0, size.width, size.height);
       let { x, y, ww, hh } = getOffset(size);
       context2D.save();
       roundedImage(context2D, x, y, ww, hh, ww / 2);
       context2D.clip();
-      qrcodeLogo && context2D.drawImage(qrcodeLogo, x, y, ww, hh);
+      logo && context2D.drawImage(qrcodeLogo, x, y, ww, hh);
       context2D.restore();
 
       try {
