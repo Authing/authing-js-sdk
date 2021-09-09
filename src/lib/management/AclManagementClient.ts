@@ -223,6 +223,26 @@ export class AclManagementClient {
     return data;
   }
 
+  public async revokeResource(params: {
+    namespace: string;
+    resource: string;
+    opts: {
+      targetType: PolicyAssignmentTargetType;
+      targetIdentifier: string;
+    }[];
+  }) {
+    const { namespace, resource, opts } = params;
+    await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/resources`,
+      data: {
+        namespace,
+        resource,
+        opts
+      }
+    });
+  }
+
   /**
    * @description 获取具备某个（类）资源操作权限的用户、分组、角色、组织机构。
    * @param namespace {string} 权限分组标识
