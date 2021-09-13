@@ -525,7 +525,7 @@ export class QrCodeAuthenticationClient {
       try {
         logo && context2D.drawImage(qrcodeLogo, x, y, ww, hh);
       } catch {
-        console.log('不画了');
+        console.log('Draw stop, check qrcodeLogo', qrcodeLogo);
       }
       context2D.restore();
 
