@@ -340,9 +340,9 @@ export class QrCodeAuthenticationClient {
         // qrcodeLogo.style.display = 'none';
         // qrcodeLogo.style.borderRadius = '50%';
 
-        // // 按比例缩放
-        // qrcodeLogo.width = size.width / 2.4;
-        // qrcodeLogo.height = size.height / 2.4;
+        // 这里设置宽高没啥意义，不设置可能会导致 safari 报错
+        qrcodeLogo.width = size.width / 2.4;
+        qrcodeLogo.height = size.height / 2.4;
 
         // // 计算得到 offset 数值
         // let containerHalfWidth = size.width / 2;
@@ -522,7 +522,11 @@ export class QrCodeAuthenticationClient {
       context2D.save();
       roundedImage(context2D, x, y, ww, hh, ww / 2);
       context2D.clip();
-      logo && context2D.drawImage(qrcodeLogo, x, y, ww, hh);
+      try {
+        logo && context2D.drawImage(qrcodeLogo, x, y, ww, hh);
+      } catch {
+        console.log('不画了');
+      }
       context2D.restore();
 
       try {
