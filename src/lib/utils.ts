@@ -239,7 +239,7 @@ export const isWechatBrowser = () =>
   /MicroMessenger/i.test(navigator?.userAgent);
 
 export const isLarkBrowser = () => {
-  typeof navigator !== 'undefined' && /Lark/i.test(navigator.userAgent);
+  return typeof navigator !== 'undefined' && /Lark/i.test(navigator.userAgent);
 };
 
 export const isMobileBrowser = () => {
