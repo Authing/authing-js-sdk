@@ -510,7 +510,11 @@ export class QrCodeAuthenticationClient {
       nodeWrapper.style.position = 'relative';
       nodeWrapper.style.margin = 'auto';
       const qrcodeImage = await genImage(url);
-      const qrcodeLogo = await genLogoInCenter(logo);
+
+      let qrcodeLogo;
+      if (logo) {
+        qrcodeLogo = await genLogoInCenter(logo);
+      }
 
       let canvas = document.createElement('canvas');
       canvas.width = size.width;
@@ -523,7 +527,7 @@ export class QrCodeAuthenticationClient {
       roundedImage(context2D, x, y, ww, hh, ww / 2);
       context2D.clip();
       try {
-        logo && context2D.drawImage(qrcodeLogo, x, y, ww, hh);
+        qrcodeLogo && context2D.drawImage(qrcodeLogo, x, y, ww, hh);
       } catch {
         console.log('Draw stop, check qrcodeLogo', qrcodeLogo);
       }
