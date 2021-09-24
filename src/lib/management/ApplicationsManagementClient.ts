@@ -60,6 +60,7 @@ export class ApplicationsManagementClient {
     this.roles = new RolesManagementClient(
       options,
       graphqlClient,
+      httpClient,
       tokenProvider
     );
     this.agreements = new AgreementManagementClient(

@@ -55,6 +55,17 @@ test('deleteMany', async t => {
   t.assert(!role);
 });
 
+test('findUsers', async t => {
+  const code = "teacher";
+  const options = {
+    namespace: '611c7ca421dbe5e3505aa609',
+    search: '',
+    page: 1,
+    limit: 10,
+  };
+  let role = await managementClient.roles.findUsers(code, options);
+  t.assert(Array.isArray(role.list));
+});
 
 test.skip('listAuthorizedResources', async t => {
   const data = await managementClient.roles.listAuthorizedResources(
