@@ -35,6 +35,7 @@ import {
 } from '../graphqlapi';
 import { DeepPartial, KeyValuePair, PaginatedUsers } from '../../types/index';
 import { convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
+import { HttpClient } from '../common/HttpClient';
 
 /**
  * @class RolesManagementClient 管理角色
@@ -59,15 +60,18 @@ import { convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
 export class RolesManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;
+  httpClient: HttpClient;
   tokenProvider: ManagementTokenProvider;
 
   constructor(
     options: ManagementClientOptions,
     graphqlClient: GraphqlClient,
+    httpClient: HttpClient,
     tokenProvider: ManagementTokenProvider
   ) {
     this.options = options;
     this.graphqlClient = graphqlClient;
+    this.httpClient = httpClient;
     this.tokenProvider = tokenProvider;
   }
 
@@ -335,6 +339,47 @@ export class RolesManagementClient {
         list
       };
     }
+  }
+
+  /**
+   * @name findUsers
+   * @name_zh 查找角色特定用户
+   * @description 查找角色特定用户
+   *
+   * @param {string} code 角色唯一标志符
+   * * @param {string} [namespace] 角色所属的 Namespace，默认值为 'default'
+   * * @param {string} [search] 匹配用户、手机、组织模糊搜索，默认值为 ''
+   *
+   * @example
+   * managementClient.roles.findUsers(code)
+   *
+   * @returns {Promise<DeepPartial<PaginatedUsers>>}
+   * @memberof RolesManagementClient
+   */
+   async findUsers(
+    code: string,
+    options?: {
+      namespace?: string;
+      search?: string;
+      page?: number;
+      limit?: number;
+    }
+  ): Promise<DeepPartial<PaginatedUsers>> {
+    const { namespace = 'default', search = '', page = 1, limit = 10 } =
+      options || {};
+
+      const data = await this.httpClient.request({
+        method: 'POST',
+        url: `${this.options.host}/api/v2/roles/roleUsers`,
+        data: {
+          namespace: namespace,
+          code: code,
+          limit: limit,
+          page: page,
+          search: search,
+        }
+      });
+      return data;
   }
 
   /**
