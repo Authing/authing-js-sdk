@@ -1,7 +1,7 @@
 import { KeyValuePair } from '../types';
 import { UdfDataType } from '../types/graphql.v2';
 
-const JSEncrypt = require('./jsencrypt');
+const { JSEncrypt } = require('./jsencrypt');
 
 export const encrypt = async (plainText: string, publicKey: string) => {
   return new Promise<string>((resolve, reject) => {
