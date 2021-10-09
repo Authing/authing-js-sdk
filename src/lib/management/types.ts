@@ -717,6 +717,7 @@ export interface IResourceDto {
     description: string;
   }>;
   namespace: string;
+  apiIdentifier?: string
 }
 
 export interface IResourceUpdateDto {
@@ -727,6 +728,7 @@ export interface IResourceUpdateDto {
     description: string;
   }>;
   namespace: string;
+  apiIdentifier?: string
 }
 
 export interface IResourceResponse {
