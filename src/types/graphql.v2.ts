@@ -602,7 +602,7 @@ export type User = {
   country?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
-  /** 用户所在的角色列表 */
+  /** 授权的角色列表 */
   roles?: Maybe<PaginatedRoles>;
   /** 用户所在的分组列表 */
   groups?: Maybe<PaginatedGroups>;
@@ -705,6 +705,7 @@ export type AuthorizedResource = {
   code: Scalars['String'];
   type?: Maybe<ResourceType>;
   actions?: Maybe<Array<Scalars['String']>>;
+  apiIdentifier?: Maybe<Scalars['String']>;
 };
 
 export type PaginatedGroups = {
@@ -754,6 +755,8 @@ export type Node = {
   children?: Maybe<Array<Scalars['String']>>;
   /** 节点的用户列表 */
   users: PaginatedUsers;
+  /** 授权的角色列表 */
+  roles?: Maybe<PaginatedRoles>;
   /** 被授权访问的所有资源 */
   authorizedResources?: Maybe<PaginatedAuthorizedResources>;
 };
@@ -764,6 +767,11 @@ export type NodeUsersArgs = {
   limit?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SortByEnum>;
   includeChildrenNodes?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type NodeRolesArgs = {
+  namespace?: Maybe<Scalars['String']>;
 };
 
 
@@ -3069,7 +3077,7 @@ export type GroupWithUsersVariables = Exact<{
 }>;
 
 
-export type GroupWithUsersResponse = { group?: Maybe<{ users: { totalCount: number, list: Array<{ id: string, arn: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string> }> } }> };
+export type GroupWithUsersResponse = { group?: Maybe<{ users: { totalCount: number, list: Array<{ id: string, arn: string, status?: Maybe<UserStatus>, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string> }> } }> };
 
 export type GroupWithUsersWithCustomDataVariables = Exact<{
   code: Scalars['String'];
@@ -3078,7 +3086,7 @@ export type GroupWithUsersWithCustomDataVariables = Exact<{
 }>;
 
 
-export type GroupWithUsersWithCustomDataResponse = { group?: Maybe<{ users: { totalCount: number, list: Array<{ id: string, arn: string, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> } }> };
+export type GroupWithUsersWithCustomDataResponse = { group?: Maybe<{ users: { totalCount: number, list: Array<{ id: string, arn: string, status?: Maybe<UserStatus>, userPoolId: string, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> } }> };
 
 export type GroupsVariables = Exact<{
   userId?: Maybe<Scalars['String']>;
@@ -3142,7 +3150,7 @@ export type AuthorizedResourcesVariables = Exact<{
 }>;
 
 
-export type AuthorizedResourcesResponse = { authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> };
+export type AuthorizedResourcesResponse = { authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>>, apiIdentifier?: Maybe<string> }> }> };
 
 export type ListGroupAuthorizedResourcesVariables = Exact<{
   code: Scalars['String'];
@@ -3151,7 +3159,7 @@ export type ListGroupAuthorizedResourcesVariables = Exact<{
 }>;
 
 
-export type ListGroupAuthorizedResourcesResponse = { group?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> }> };
+export type ListGroupAuthorizedResourcesResponse = { group?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>>, apiIdentifier?: Maybe<string> }> }> }> };
 
 export type ListNodeByCodeAuthorizedResourcesVariables = Exact<{
   orgId: Scalars['String'];
@@ -3161,7 +3169,7 @@ export type ListNodeByCodeAuthorizedResourcesVariables = Exact<{
 }>;
 
 
-export type ListNodeByCodeAuthorizedResourcesResponse = { nodeByCode?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> }> };
+export type ListNodeByCodeAuthorizedResourcesResponse = { nodeByCode?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>>, apiIdentifier?: Maybe<string> }> }> }> };
 
 export type ListNodeByIdAuthorizedResourcesVariables = Exact<{
   id: Scalars['String'];
@@ -3170,7 +3178,7 @@ export type ListNodeByIdAuthorizedResourcesVariables = Exact<{
 }>;
 
 
-export type ListNodeByIdAuthorizedResourcesResponse = { nodeById?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> }> };
+export type ListNodeByIdAuthorizedResourcesResponse = { nodeById?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>>, apiIdentifier?: Maybe<string> }> }> }> };
 
 export type ListRoleAuthorizedResourcesVariables = Exact<{
   code: Scalars['String'];
@@ -3179,7 +3187,7 @@ export type ListRoleAuthorizedResourcesVariables = Exact<{
 }>;
 
 
-export type ListRoleAuthorizedResourcesResponse = { role?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> }> };
+export type ListRoleAuthorizedResourcesResponse = { role?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>>, apiIdentifier?: Maybe<string> }> }> }> };
 
 export type ListUserAuthorizedResourcesVariables = Exact<{
   id: Scalars['String'];
@@ -3188,7 +3196,7 @@ export type ListUserAuthorizedResourcesVariables = Exact<{
 }>;
 
 
-export type ListUserAuthorizedResourcesResponse = { user?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>> }> }> }> };
+export type ListUserAuthorizedResourcesResponse = { user?: Maybe<{ authorizedResources?: Maybe<{ totalCount: number, list: Array<{ code: string, type?: Maybe<ResourceType>, actions?: Maybe<Array<string>>, apiIdentifier?: Maybe<string> }> }> }> };
 
 export type NodeByCodeVariables = Exact<{
   orgId: Scalars['String'];
@@ -5890,6 +5898,7 @@ export const GroupWithUsersDocument = `
       list {
         id
         arn
+        status
         userPoolId
         username
         email
@@ -5950,6 +5959,7 @@ export const GroupWithUsersWithCustomDataDocument = `
       list {
         id
         arn
+        status
         userPoolId
         username
         email
@@ -6055,6 +6065,7 @@ export const AuthorizedResourcesDocument = `
       code
       type
       actions
+      apiIdentifier
     }
   }
 }
@@ -6068,6 +6079,7 @@ export const ListGroupAuthorizedResourcesDocument = `
         code
         type
         actions
+        apiIdentifier
       }
     }
   }
@@ -6082,6 +6094,7 @@ export const ListNodeByCodeAuthorizedResourcesDocument = `
         code
         type
         actions
+        apiIdentifier
       }
     }
   }
@@ -6096,6 +6109,7 @@ export const ListNodeByIdAuthorizedResourcesDocument = `
         code
         type
         actions
+        apiIdentifier
       }
     }
   }
@@ -6110,6 +6124,7 @@ export const ListRoleAuthorizedResourcesDocument = `
         code
         type
         actions
+        apiIdentifier
       }
     }
   }
@@ -6124,6 +6139,7 @@ export const ListUserAuthorizedResourcesDocument = `
         code
         type
         actions
+        apiIdentifier
       }
     }
   }
