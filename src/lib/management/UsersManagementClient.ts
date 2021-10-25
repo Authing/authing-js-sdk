@@ -1033,14 +1033,19 @@ export class UsersManagementClient {
     if (Object.keys(data).length === 0) {
       throw new Error('empty udf value list');
     }
-    await setUdvBatch(this.graphqlClient, this.tokenProvider, {
-      targetType: UdfTargetType.User,
-      targetId: userId,
-      udvList: Object.keys(data).map(key => ({
-        key,
-        value: JSON.stringify(data[key])
-      }))
-    });
+    const { setUdvBatch: result } = await setUdvBatch(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        targetType: UdfTargetType.User,
+        targetId: userId,
+        udvList: Object.keys(data).map(key => ({
+          key,
+          value: JSON.stringify(data[key])
+        }))
+      }
+    );
+    return result;
   }
 
   /**
