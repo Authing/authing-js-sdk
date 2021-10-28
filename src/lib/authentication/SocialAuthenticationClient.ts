@@ -2,7 +2,7 @@ import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import { AuthenticationClientOptions } from './types';
 import { HttpClient } from '../common/HttpClient';
 import {
-  objectToQueryString,
+  serialize,
   popupCenter,
   isMobileBrowser,
   generateRandomString
@@ -162,7 +162,7 @@ export class SocialAuthenticationClient {
     }
     const url = `${
       this.baseClient.appHost
-    }/connections/social/${provider}${objectToQueryString(query)}`;
+    }/connections/social/${provider}?${serialize(query)}`;
     const onMessage = (e: MessageEvent) => {
       let { code, message, data: userInfo, event } = e.data;
       event = event || {};

@@ -29,7 +29,7 @@ import {
   PolicyAssignmentTargetType,
   ResourceType
 } from '../../types/graphql.v2';
-import { formatAuthorizedResources, objectToQueryString } from '../utils';
+import { formatAuthorizedResources, serialize } from '../utils';
 import { HttpClient } from '../common/HttpClient';
 
 /**
@@ -731,8 +731,8 @@ export class AclManagementClient {
     const result = await this.httpClient.request({
       method: 'GET',
       url:
-        `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}` +
-        objectToQueryString({
+        `${this.options.host}/api/v2/resource-namespace/${this.options.userPoolId}?` +
+        serialize({
           page: page?.toString(),
           limit: limit?.toString()
         })

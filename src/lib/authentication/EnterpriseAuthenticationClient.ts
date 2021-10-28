@@ -10,7 +10,7 @@ import {
   IOAuthConnectionConfig
 } from './types';
 import { HttpClient } from '../common/HttpClient';
-import { objectToQueryString, popupCenter, isWechatBrowser } from '../utils';
+import { popupCenter, isWechatBrowser, serialize } from '../utils';
 import { User } from '../../types/index';
 import { generateUidKey } from '../utils';
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
@@ -94,7 +94,7 @@ export class EnterpriseAuthenticationClient {
       case Protocol.OIDC:
         config = config as OIDCConnectionConfig;
 
-        const query = objectToQueryString({
+        const query = serialize({
           state,
           client_id: config.clientId,
           redirect_uri: config.redirectUri,

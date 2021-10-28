@@ -1,8 +1,7 @@
 import { ManagementClientOptions, UserActions } from './types';
 import { ManagementTokenProvider } from './ManagementTokenProvider';
 import { HttpClient } from '../common/HttpClient';
-import { objectToQueryString } from '../utils';
-
+import { serialize } from '../utils';
 
 /**
  * @class UserActionManagementClient 审计管理
@@ -62,8 +61,8 @@ export class UserActionManagementClient {
     const result = await this.httpClient.request({
       method: 'GET',
       url:
-        `${this.options.host}/api/v2/analysis/user-action` +
-        objectToQueryString({
+        `${this.options.host}/api/v2/analysis/user-action?` +
+        serialize({
           page: options.page?.toString(),
           limit: options.limit?.toString(),
           clientip: options.clientIp,

@@ -171,18 +171,6 @@ export const serialize = function(obj: any) {
   return str.join('&');
 };
 
-export const objectToQueryString = (queryParameters: {
-  [x: string]: string;
-}) => {
-  return queryParameters
-    ? Object.entries(queryParameters).reduce((queryString, [key, val]) => {
-        const symbol = queryString.length === 0 ? '?' : '&';
-        queryString += typeof val === 'string' ? `${symbol}${key}=${val}` : '';
-        return queryString;
-      }, '')
-    : '';
-};
-
 export const convertUdv = (
   data: Array<{ key: string; dataType: UdfDataType; value: any }>
 ): Array<{ key: string; dataType: UdfDataType; value: any }> => {

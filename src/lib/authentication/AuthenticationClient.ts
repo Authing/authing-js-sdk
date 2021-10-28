@@ -77,7 +77,7 @@ import {
   encrypt,
   formatAuthorizedResources,
   generateRandomString,
-  objectToQueryString,
+  serialize,
   uploadFile
 } from '../utils';
 import jwtDecode from 'jwt-decode';
@@ -218,7 +218,7 @@ export class AuthenticationClient {
     this.keyManager = new KeyManager(
       this.options,
       this.naiveHttpClient,
-      this.baseClient,
+      this.baseClient
     );
     if (this.options.token) {
       this.setToken(this.options.token);
@@ -2278,7 +2278,7 @@ export class AuthenticationClient {
         let userInfo = await this.naiveHttpClient.request({
           method: 'POST',
           url: api,
-          data: objectToQueryString({
+          data: serialize({
             access_token: accessToken
           }).slice(1)
         });
