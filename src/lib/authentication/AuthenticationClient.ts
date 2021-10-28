@@ -1878,14 +1878,18 @@ export class AuthenticationClient {
       throw new Error('empty udf value list');
     }
     const userId = this.checkLoggedIn();
-    const { setUdvBatch: result } = await setUdvBatch(this.graphqlClient, this.tokenProvider, {
-      targetType: UdfTargetType.User,
-      targetId: userId,
-      udvList: Object.keys(data).map(key => ({
-        key,
-        value: JSON.stringify(data[key])
-      }))
-    });
+    const { setUdvBatch: result } = await setUdvBatch(
+      this.graphqlClient,
+      this.tokenProvider,
+      {
+        targetType: UdfTargetType.User,
+        targetId: userId,
+        udvList: Object.keys(data).map(key => ({
+          key,
+          value: JSON.stringify(data[key])
+        }))
+      }
+    );
     return result;
   }
 
@@ -2281,7 +2285,7 @@ export class AuthenticationClient {
           url: api,
           data: serialize({
             access_token: accessToken
-          }).slice(1)
+          })
         });
         return userInfo;
       }
