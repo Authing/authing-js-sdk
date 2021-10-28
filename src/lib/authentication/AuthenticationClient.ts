@@ -1878,7 +1878,7 @@ export class AuthenticationClient {
       throw new Error('empty udf value list');
     }
     const userId = this.checkLoggedIn();
-    await setUdvBatch(this.graphqlClient, this.tokenProvider, {
+    const { setUdvBatch: result } = await setUdvBatch(this.graphqlClient, this.tokenProvider, {
       targetType: UdfTargetType.User,
       targetId: userId,
       udvList: Object.keys(data).map(key => ({
@@ -1886,6 +1886,7 @@ export class AuthenticationClient {
         value: JSON.stringify(data[key])
       }))
     });
+    return result;
   }
 
   /**
