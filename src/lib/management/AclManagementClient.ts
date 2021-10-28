@@ -233,8 +233,8 @@ export class AclManagementClient {
   }) {
     const { namespace, resource, opts } = params;
     await this.httpClient.request({
-      method: 'GET',
-      url: `${this.options.host}/api/v2/resources`,
+      method: 'POST',
+      url: `${this.options.host}/api/v2/acl/revoke-resource`,
       data: {
         namespace,
         resource,
