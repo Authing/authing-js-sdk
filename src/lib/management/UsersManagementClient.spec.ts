@@ -12,7 +12,7 @@ import { AuthenticationClient } from '../authentication/AuthenticationClient';
 const managementClient = new ManagementClient(getOptionsFromEnv());
 const authenticationClient = new AuthenticationClient(getOptionsFromEnv());
 
-test.only('创建用户', async t => {
+test('创建用户', async t => {
   const username = generateRandomString(10);
   const email = generateRandomString(10);
   const phone = generateRandomPhone();
@@ -93,15 +93,15 @@ test.skip('创建用户 # 附带身份信息', async t => {
     }
   });
   t.assert(user.id === result.id);
-  const token = await managementClient.users.refreshToken(user.id)
-  console.log(token)
+  const token = await managementClient.users.refreshToken(user.id);
+  console.log(token);
   const result2 = await managementClient.users.find({
     identity: {
       userIdInIdp: '1111',
       provider: 'wechat'
     }
   });
-  console.log(result2)
+  console.log(result2);
   await managementClient.users.delete(user.id);
 });
 
@@ -138,7 +138,6 @@ test('查询用户详情 # 不属于该用户池的用户', async t => {
   t.assert(detail === null);
 });
 
-
 test.skip('find withCustomData', async t => {
   const user = await managementClient.users.find({
     withCustomData: true,
@@ -148,6 +147,63 @@ test.skip('find withCustomData', async t => {
   t.assert(user);
 });
 
+test.only('管理员通过 username 查询用户', async t => {
+  const username = generateRandomString();
+  const password = generateRandomString();
+  await managementClient.users.create({
+    username,
+    password
+  });
+  const user = await managementClient.users.find({
+    username
+  });
+  t.assert(user.id);
+  await managementClient.users.delete(user.id);
+});
+test.only('管理员通过 emmail 查询用户', async t => {
+  const email = generateRandomString() + '@test.com';
+  const password = generateRandomString();
+  await managementClient.users.create({
+    email,
+    password
+  });
+  const user = await managementClient.users.find({
+    email
+  });
+  t.assert(user.id);
+  await managementClient.users.delete(user.id);
+});
+test.only('管理员通过 phone 查询用户', async t => {
+  let rand1 = Math.floor(Math.random() * 8999) + 1000;
+  let rand2 = Math.floor(Math.random() * 8999) + 1000;
+  const phone = '131' + rand1.toString() + rand2.toString();
+  const password = generateRandomString();
+  await managementClient.users.create({
+    phone,
+    password
+  });
+  const user = await managementClient.users.find({
+    phone
+  });
+  t.assert(user.id);
+  await managementClient.users.delete(user.id);
+});
+
+test.only('管理员通过 externalId 查询用户', async t => {
+  const username = generateRandomString();
+  const password = generateRandomString();
+  const userCreated = await managementClient.users.create({
+    username,
+    password
+  });
+  let externalId = generateRandomString();
+  await managementClient.users.update(userCreated.id, { externalId });
+  const user = await managementClient.users.find({
+    externalId
+  });
+  t.assert(user.id);
+  await managementClient.users.delete(user.id);
+});
 
 test('list withCustomData', async t => {
   const user = await managementClient.users.list(1, 10, {
@@ -407,26 +463,22 @@ test.skip('users.listUserActions', async t => {
   t.assert(data);
 });
 
-
-test.only('detail withCustomData', async t => {
+test('detail withCustomData', async t => {
   const user = await managementClient.users.detail('60e31b9b94b5795362256698', {
     withCustomData: true
-  })
-  console.log(JSON.stringify(user, null, 4))
-  t.assert(user.customData)
-})
+  });
+  console.log(JSON.stringify(user, null, 4));
+  t.assert(user.customData);
+});
 
-test.only('batch withCustomData', async t => {
+test('batch withCustomData', async t => {
   const users = await managementClient.users.batch(
-    [
-      '60e31b9b94b5795362256698',
-      '60e320959d6c08c325a3510f'
-    ],
+    ['60e31b9b94b5795362256698', '60e320959d6c08c325a3510f'],
     {
       queryField: 'id',
       withCustomData: true
     }
-  )
-  console.log(JSON.stringify(users, null, 4))
-  t.assert(users)
-})
+  );
+  console.log(JSON.stringify(users, null, 4));
+  t.assert(users);
+});
