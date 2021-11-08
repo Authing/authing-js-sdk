@@ -792,7 +792,8 @@ export enum UdfDataType {
   Number = 'NUMBER',
   Datetime = 'DATETIME',
   Boolean = 'BOOLEAN',
-  Object = 'OBJECT'
+  Object = 'OBJECT',
+  Select = 'SELECT'
 }
 
 export type Mfa = {
