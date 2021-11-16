@@ -213,6 +213,24 @@ test('list withCustomData', async t => {
   t.assert(user);
 });
 
+test('filter', async t => {
+  let users = await managementClient.users.filter({
+    filter: [
+      [
+        { type: "userDefinedFields", value: "isForbidden" },
+        "NEQ",
+        "forbidden"
+      ],
+      [
+        { type: "OtherFields", value: "app" },
+        "EQ",
+        { id: "60ab28843baf2e2c075dbeae", label: "新形态教材网" }
+      ]
+    ]
+  });
+  t.assert(users.list.length > 0);
+});
+
 test('批量查询用户', async t => {
   const list = [];
   for (let i = 0; i <= 10; i++) {

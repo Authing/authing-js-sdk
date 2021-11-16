@@ -477,6 +477,37 @@ export class UsersManagementClient {
   }
 
   /**
+   * @name filter
+   * @name_zh 筛选用户列表
+   * @description 筛选用户池用户列表
+   *
+   * @param {number} [page=1] 页码数, 从 1 开始
+   * @param {number} [limit=10] 每页包含的用户数
+   * @param {[]} [filter=[]] 筛选项
+   *
+   * @example
+   *
+   * const user = await managementClient.users.filter();
+   *
+   * @returns
+   * @memberof UsersManagementClient
+   */
+  async filter(
+    options?: {
+      page?: number,
+      limit?: number,
+      filter?: any[]
+    }
+  ): Promise<PaginatedUsers> {
+    const data = await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/users/filter`,
+      data: options
+    });
+    return data;
+  }
+
+  /**
    * @name listArchivedUsers
    * @name_zh 获取已归档用户列表
    * @description 获取已归档用户列表
