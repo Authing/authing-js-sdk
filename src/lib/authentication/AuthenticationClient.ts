@@ -93,6 +93,7 @@ import { KeyManager } from './KeyManager';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   appId: undefined,
+  tenantId: undefined,
   appHost: undefined,
   protocol: 'oidc', // 默认 oidc
   tokenEndPointAuthMethod: 'client_secret_post', // 默认 client_secret_post
@@ -110,6 +111,7 @@ const DEFAULT_OPTIONS: AuthenticationClientOptions = {
     'app-id': 'x-authing-app-id',
     'request-from': 'x-authing-request-from',
     'sdk-version': 'x-authing-sdk-version',
+    'tenant-id': 'x-authing-app-tenant-id',
     lang: 'x-authing-lang'
   },
   lang: 'zh-CN'

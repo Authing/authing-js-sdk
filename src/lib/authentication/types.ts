@@ -10,6 +10,8 @@ import { JWK, KeyLike } from '@authing/jose/types';
 export interface AuthenticationClientOptions {
   /** 应用 ID */
   appId: string;
+  /** 租户 ID */
+  tenantId?: string;
   /** 应用完整域名，如 https://sample-app.authing.cn，不带最后的斜线 '/'。 */
   appHost?: string;
   /** 应用密钥 */
@@ -72,6 +74,7 @@ export interface AuthenticationClientOptions {
   headers?: {
     'userpool-id': string;
     'app-id': string;
+    'tenant-id': string;
     'sdk-version': string;
     'request-from': string;
     lang: string;

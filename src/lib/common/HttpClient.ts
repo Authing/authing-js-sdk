@@ -24,12 +24,14 @@ export class HttpClient {
   async request(config: AxiosRequestConfig) {
     const headers: any = {};
     headers[this.options.headers['app-id']] = this.options.appId || '';
+    headers[this.options.headers['tenant-id']] = this.options.tenantId || '';
     headers[this.options.headers['userpool-id']] =
       this.options.userPoolId || '';
     headers[this.options.headers['request-from']] =
       this.options.requestFrom || 'sdk';
     headers[this.options.headers['sdk-version']] = `js:${SDK_VERSION}`;
     headers[this.options.headers.lang] = this.options.lang || '';
+
 
     if (!(config && config.headers && config.headers.authorization)) {
       // 如果用户不传 token，就使用 sdk 自己维护的
