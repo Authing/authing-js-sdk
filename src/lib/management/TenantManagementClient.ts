@@ -49,8 +49,8 @@ export class TenantManagementClient {
 
   /**
    * @name details
-   * @name_zh  获取用户池下租户列表
-   * @description 获取用户池下租户列表
+   * @name_zh  获取租户详情
+   * @description 获取租户详情
    */
   async details(tenantId :string) {
     const result  = await this.httpClient.request({
