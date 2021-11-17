@@ -24,6 +24,7 @@ import { ApplicationsManagementClient } from './ApplicationsManagementClient';
 import { MFAManagementClient } from './MFAManagementClient';
 import { Lang } from '../../types';
 import { PrincipalManagementClient } from './PrincipalManagement';
+import { TenantManagementClient } from './TenantManagementClient';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -68,6 +69,7 @@ export class ManagementClient {
   applications: ApplicationsManagementClient;
   mfa: MFAManagementClient;
   principal: PrincipalManagementClient;
+  tenant: TenantManagementClient;
 
   constructor(options: ManagementClientOptions) {
     Object.keys(options).forEach(
@@ -175,6 +177,12 @@ export class ManagementClient {
       this.tokenProvider
     );
     this.principal = new PrincipalManagementClient(
+      this.options,
+      this.graphqlClient,
+      this.httpClient,
+      this.tokenProvider
+    );
+    this.tenant = new TenantManagementClient(
       this.options,
       this.graphqlClient,
       this.httpClient,

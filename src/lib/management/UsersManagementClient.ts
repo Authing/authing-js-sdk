@@ -1292,4 +1292,17 @@ export class UsersManagementClient {
     );
     return true;
   }
+
+  /**
+   * @description 获取用户所在租户
+   *
+   */
+  public async getUserTenants(userId:string) {
+    const result  = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/users/${userId}/tenants`
+    });
+    return result;
+  }
 }
+

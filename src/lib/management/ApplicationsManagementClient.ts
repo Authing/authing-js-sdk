@@ -4,7 +4,10 @@ import {
   Application,
   AgreementInput,
   ApplicationDetail,
-  ManagementClientOptions
+  ManagementClientOptions,
+  IApplication,
+  ApplicationType,
+  ApplicationTenantDetails
 } from './types';
 import { HttpClient } from '../common/HttpClient';
 import { AclManagementClient } from './AclManagementClient';
@@ -80,7 +83,7 @@ export class ApplicationsManagementClient {
     limit: number;
   }): Promise<{
     totalCount: number;
-    list: ApplicationDetail[];
+    list: IApplication[];
   }> {
     const { page = 1, limit = 10 } = params || {};
     const data = await this.httpClient.request({
@@ -468,4 +471,34 @@ export class ApplicationsManagementClient {
     });
     return result;
   }
+
+
+  /**
+   * 更改应用类型
+   * @param appId 应用ID
+   * @param type 应用类型
+   */
+  public async changeApplicationType(appId:string,type:ApplicationType): Promise<IApplication> {
+    const result = await this.httpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/applications/${appId}`,
+      data:{
+        appType: type.toString()
+      }
+    });
+    return result;
+  }
+
+  /**
+   * 获取应用关联租户
+   * @param appId 应用ID
+   */
+  public async applicationTenants(appId:string): Promise<ApplicationTenantDetails> {
+    const result = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/application/${appId}/tenants`,
+    });
+    return result;
+  }
+
 }

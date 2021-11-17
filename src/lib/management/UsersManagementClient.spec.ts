@@ -147,7 +147,7 @@ test.skip('find withCustomData', async t => {
   t.assert(user);
 });
 
-test.only('管理员通过 username 查询用户', async t => {
+test('管理员通过 username 查询用户', async t => {
   const username = generateRandomString();
   const password = generateRandomString();
   await managementClient.users.create({
@@ -160,7 +160,7 @@ test.only('管理员通过 username 查询用户', async t => {
   t.assert(user.id);
   await managementClient.users.delete(user.id);
 });
-test.only('管理员通过 emmail 查询用户', async t => {
+test('管理员通过 emmail 查询用户', async t => {
   const email = generateRandomString() + '@test.com';
   const password = generateRandomString();
   await managementClient.users.create({
@@ -173,7 +173,7 @@ test.only('管理员通过 emmail 查询用户', async t => {
   t.assert(user.id);
   await managementClient.users.delete(user.id);
 });
-test.only('管理员通过 phone 查询用户', async t => {
+test('管理员通过 phone 查询用户', async t => {
   let rand1 = Math.floor(Math.random() * 8999) + 1000;
   let rand2 = Math.floor(Math.random() * 8999) + 1000;
   const phone = '131' + rand1.toString() + rand2.toString();
@@ -189,7 +189,7 @@ test.only('管理员通过 phone 查询用户', async t => {
   await managementClient.users.delete(user.id);
 });
 
-test.only('管理员通过 externalId 查询用户', async t => {
+test('管理员通过 externalId 查询用户', async t => {
   const username = generateRandomString();
   const password = generateRandomString();
   const userCreated = await managementClient.users.create({
@@ -499,4 +499,11 @@ test('batch withCustomData', async t => {
   );
   console.log(JSON.stringify(users, null, 4));
   t.assert(users);
+});
+
+
+test.only('getUserTenants', async t => {
+  const tenants = await managementClient.users.getUserTenants('6194bb53a6c4dca57363182c');
+  console.log(tenants);
+  t.assert(tenants);
 });

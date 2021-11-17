@@ -2,6 +2,7 @@ import { ManagementClient } from './ManagementClient';
 import test from 'ava';
 import { ResourceType } from '../../types/graphql.v2';
 import { generateRandomString } from '../testing-helper';
+import { ApplicationType } from './types';
 
 require('dotenv').config({
   path: '.env'
@@ -19,6 +20,7 @@ const applications = managementClient.applications;
 
 test('list applications', async t => {
   const { list, totalCount } = await managementClient.applications.list();
+  console.log(list)
   t.assert(totalCount);
   t.assert(list.length);
 });
@@ -311,4 +313,16 @@ test.serial('删除注册协议和注册协议列表', async t => {
   const newLength = (await applications.listAgreement(APP_ID)).totalCount;
 
   t.assert(oldLength - 1 === newLength);
+});
+
+test('changeTenantConfig', async t => {
+  const result = await applications.changeApplicationType('6194a3c595908f00ff698d3a', ApplicationType.BOTH);
+  console.log(result)
+  t.assert(result.appType === ApplicationType.BOTH);
+});
+
+test('applicationTenants', async t => {
+  const result = await applications.applicationTenants('6194a3c595908f00ff698d3a');
+  console.log(result)
+  t.assert(result.tenants);
 });

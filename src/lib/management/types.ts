@@ -909,6 +909,12 @@ export interface ApplicationDetail {
   enableSubAccount: boolean;
   loginRequireEmailVerified: boolean;
   agreementEnabled: boolean;
+  disabledSocialConnections:any;
+  disabledOidcConnections:any;
+  disabledSamlConnections:any;
+  disabledOauth2Connections:any;
+  disabledCasConnections:any;
+  disabledAzureAdConnections:any;
 }
 
 export interface QrcodeScanning {
@@ -1019,6 +1025,7 @@ export interface IApplication {
   agreementEnabled: boolean;
   skipMfa: boolean;
   permissionStrategy: PermissionStrategy;
+  appType?:string;
 }
 
 export interface AgreementInput {
@@ -1049,3 +1056,50 @@ export interface ISetTotpResp {
   updatedAt: string;
   id: string;
 }
+
+export enum ApplicationType {
+  /**
+   * 个体型
+   */
+  INDIVIDUAL= "INDIVIDUAL",
+  /**
+   * 租户型
+   */
+ Tenant ="Tenant" ,
+  /**
+   * 兼容型
+   */
+  BOTH ="BOTH"
+}
+
+export interface ApplicationTenantDetails {
+  id: string
+  name: string
+  logo: string
+  domain: string
+  description?: string
+  createdAt: string
+  updatedAt: string
+  protocol?: string,
+  isIntegrate : boolean,
+  tenants: TenantInfo[]
+}
+
+export interface TenantInfo {
+  id:string
+  createdAt: string
+  updatedAt:string
+  userPoolId: string
+  name:string
+  logo?: string,
+  description?:string
+  css: any
+  ssoPageCustomizationSettings:any
+  defaultLoginTab:string
+  defaultRegisterTab:string
+  passwordTabConfig: any
+  loginTabs: any
+  registerTabs: any
+  extendsFields: any
+}
+
