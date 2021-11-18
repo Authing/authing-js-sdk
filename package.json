@@ -1,6 +1,6 @@
 {
 	"name": "authing-js-sdk",
-	"version": "4.22.26-alpha.1",
+	"version": "4.22.26-alpha.2",
 	"description": "Official SDK of Authing",
 	"main": "build/main/index.js",
 	"typings": "build/main/index.d.ts",

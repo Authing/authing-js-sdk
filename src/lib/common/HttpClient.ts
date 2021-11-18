@@ -4,6 +4,7 @@ import { AuthenticationClientOptions } from '../authentication/types';
 import { AuthenticationTokenProvider } from '../authentication/AuthenticationTokenProvider';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
 import Axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { pickBy } from 'lodash';
 
 export class HttpClient {
   options: ManagementClientOptions;
@@ -24,16 +25,13 @@ export class HttpClient {
   async request(config: AxiosRequestConfig) {
     const headers: any = {};
     headers[this.options.headers['app-id']] = this.options.appId || '';
-    if (this.options.tenantId) {
-      headers[this.options.headers['tenant-id']] = this.options.tenantId;
-    }
+    headers[this.options.headers['tenant-id']] = this.options.tenantId;
     headers[this.options.headers['userpool-id']] =
       this.options.userPoolId || '';
     headers[this.options.headers['request-from']] =
       this.options.requestFrom || 'sdk';
     headers[this.options.headers['sdk-version']] = `js:${SDK_VERSION}`;
     headers[this.options.headers.lang] = this.options.lang || '';
-
 
     if (!(config && config.headers && config.headers.authorization)) {
       // 如果用户不传 token，就使用 sdk 自己维护的
@@ -44,7 +42,12 @@ export class HttpClient {
     }
     config.headers = headers;
     config.timeout = this.options.timeout;
-    const { data } = await this.axios.request(config);
+    const { data } = await this.axios.request({
+      ...config,
+      headers: {
+        ...pickBy(config.headers, i => !!i)
+      }
+    });
     const { code, message } = data;
     if (code !== 200) {
       this.options.onError(code, message, data.data);
@@ -70,17 +73,23 @@ export class NaiveHttpClient extends HttpClient {
     const headers: any = {};
 
     headers[this.options.headers['app-id']] = this.options.appId || '';
-    headers[this.options.headers['userpool-id']] =
-      this.options.userPoolId || '';
+    headers[this.options.headers['userpool-id']] = headers[
+      this.options.headers['tenant-id']
+    ] = this.options.tenantId;
+    this.options.userPoolId || '';
     headers[this.options.headers['request-from']] =
       this.options.requestFrom || 'sdk';
     headers[this.options.headers['sdk-version']] = `js:${SDK_VERSION}`;
     headers[this.options.headers.lang] = this.options.lang || '';
 
-
     config.headers = { ...headers, ...config.headers };
     config.timeout = this.options.timeout;
-    const { data } = await this.axios.request(config);
+    const { data } = await this.axios.request({
+      ...config,
+      headers: {
+        ...pickBy(config.headers, i => !!i)
+      }
+    });
     return data;
   }
 }
