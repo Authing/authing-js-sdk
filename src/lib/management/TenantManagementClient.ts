@@ -62,11 +62,11 @@ export class TenantManagementClient {
 
 
   /**
-   * @name add
+   * @name create
    * @name_zh  创建租户
    * @description 创建租户
    */
-  async add(options:{
+  async create(options:{
     name:string,
     appIds:string,
     logo?:string,

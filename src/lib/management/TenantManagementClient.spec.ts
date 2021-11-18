@@ -22,9 +22,9 @@ test('details', async t => {
   t.assert(tenant);
 });
 
-test('add', async t => {
+test('create', async t => {
 
-  const tenant = await managementClient.tenant.add({
+  const tenant = await managementClient.tenant.create({
     name:"qqqxx",
     appIds:"6194a3c595908f00ff698d3a",
   });
