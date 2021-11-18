@@ -140,7 +140,14 @@ export class TenantManagementClient {
    * @name_zh  获取租户成员列表
    * @description 获取租户成员列表
    */
-  async members(tenantId:string, page:number = 1,limit:number =10)  {
+  async members(tenantId:string, options?:{
+    page?:number,
+    limit?:number
+  })  {
+    const {
+      page = 1,
+      limit = 10,
+    } = options
     const result  = await this.httpClient.request({
       method: 'GET',
       url: `${this.options.host}/api/v2/tenant/${tenantId}/users?page=${page}&limit=${limit}`

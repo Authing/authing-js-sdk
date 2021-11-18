@@ -58,7 +58,7 @@ test('config', async t => {
 
 test('members', async t => {
 
-  const tenant = await managementClient.tenant.members('6194aeee9ccea057e89738f0');
+  const tenant = await managementClient.tenant.members('6194aeee9ccea057e89738f0',{page:1,limit:10});
   console.log(tenant)
   t.assert(tenant);
 });
