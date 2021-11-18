@@ -24,7 +24,9 @@ export class HttpClient {
   async request(config: AxiosRequestConfig) {
     const headers: any = {};
     headers[this.options.headers['app-id']] = this.options.appId || '';
-    headers[this.options.headers['tenant-id']] = this.options.tenantId || '';
+    if (this.options.tenantId) {
+      headers[this.options.headers['tenant-id']] = this.options.tenantId;
+    }
     headers[this.options.headers['userpool-id']] =
       this.options.userPoolId || '';
     headers[this.options.headers['request-from']] =
