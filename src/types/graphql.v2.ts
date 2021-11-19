@@ -16,14 +16,6 @@ export type Query = {
   authorizedTargets?: Maybe<PaginatedAuthorizedTargets>;
   qiniuUptoken?: Maybe<Scalars['String']>;
   isDomainAvaliable?: Maybe<Scalars['Boolean']>;
-  /** 获取社会化登录定义 */
-  socialConnection?: Maybe<SocialConnection>;
-  /** 获取所有社会化登录定义 */
-  socialConnections: Array<SocialConnection>;
-  /** 获取当前用户池的社会化登录配置 */
-  socialConnectionInstance: SocialConnectionInstance;
-  /** 获取当前用户池的所有社会化登录配置 */
-  socialConnectionInstances: Array<SocialConnectionInstance>;
   emailTemplates: Array<EmailTemplate>;
   previewEmail: Scalars['String'];
   /** 获取函数模版 */
@@ -116,16 +108,6 @@ export type QueryQiniuUptokenArgs = {
 
 export type QueryIsDomainAvaliableArgs = {
   domain: Scalars['String'];
-};
-
-
-export type QuerySocialConnectionArgs = {
-  provider: Scalars['String'];
-};
-
-
-export type QuerySocialConnectionInstanceArgs = {
-  provider: Scalars['String'];
 };
 
 
@@ -394,38 +376,6 @@ export type ResourcePermissionAssignment = {
   targetType?: Maybe<PolicyAssignmentTargetType>;
   targetIdentifier?: Maybe<Scalars['String']>;
   actions?: Maybe<Array<Scalars['String']>>;
-};
-
-export type SocialConnection = {
-  /** 社会化登录服务商唯一标志 */
-  provider: Scalars['String'];
-  /** 名称 */
-  name: Scalars['String'];
-  /** logo */
-  logo: Scalars['String'];
-  /** 描述信息 */
-  description?: Maybe<Scalars['String']>;
-  /** 表单字段 */
-  fields?: Maybe<Array<SocialConnectionField>>;
-};
-
-export type SocialConnectionField = {
-  key?: Maybe<Scalars['String']>;
-  label?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
-  placeholder?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<Maybe<SocialConnectionField>>>;
-};
-
-export type SocialConnectionInstance = {
-  provider: Scalars['String'];
-  enabled: Scalars['Boolean'];
-  fields?: Maybe<Array<Maybe<SocialConnectionInstanceField>>>;
-};
-
-export type SocialConnectionInstanceField = {
-  key: Scalars['String'];
-  value: Scalars['String'];
 };
 
 export type EmailTemplate = {
@@ -945,8 +895,9 @@ export type JwtTokenStatusDetail = {
 };
 
 export type FindUserByIdentityInput = {
-  provider: Scalars['String'];
+  identifier: Scalars['String'];
   userIdInIdp: Scalars['String'];
+  isSocial: Scalars['Boolean'];
 };
 
 export type CheckPasswordResult = {
@@ -1112,12 +1063,6 @@ export type Mutation = {
   allow: CommonMessage;
   /** 将一个（类）资源授权给用户、角色、分组、组织机构，且可以分别指定不同的操作权限。 */
   authorizeResource: CommonMessage;
-  /** 配置社会化登录 */
-  createSocialConnectionInstance: SocialConnectionInstance;
-  /** 开启社会化登录 */
-  enableSocialConnectionInstance: SocialConnectionInstance;
-  /** 关闭社会化登录 */
-  disableSocialConnectionInstance: SocialConnectionInstance;
   /** 设置用户在某个组织机构内所在的主部门 */
   setMainDepartment: CommonMessage;
   /** 配置自定义邮件模版 */
@@ -1255,21 +1200,6 @@ export type MutationAuthorizeResourceArgs = {
   resourceType?: Maybe<ResourceType>;
   resource?: Maybe<Scalars['String']>;
   opts?: Maybe<Array<Maybe<AuthorizeResourceOpt>>>;
-};
-
-
-export type MutationCreateSocialConnectionInstanceArgs = {
-  input: CreateSocialConnectionInstanceInput;
-};
-
-
-export type MutationEnableSocialConnectionInstanceArgs = {
-  provider: Scalars['String'];
-};
-
-
-export type MutationDisableSocialConnectionInstanceArgs = {
-  provider: Scalars['String'];
 };
 
 
@@ -1770,17 +1700,6 @@ export type AuthorizeResourceOpt = {
   actions?: Maybe<Array<Scalars['String']>>;
 };
 
-export type CreateSocialConnectionInstanceInput = {
-  /** 社会化登录 provider */
-  provider: Scalars['String'];
-  fields?: Maybe<Array<Maybe<CreateSocialConnectionInstanceFieldInput>>>;
-};
-
-export type CreateSocialConnectionInstanceFieldInput = {
-  key: Scalars['String'];
-  value: Scalars['String'];
-};
-
 export type ConfigEmailTemplateInput = {
   /** 邮件模版类型 */
   type: EmailTemplateType;
@@ -1808,7 +1727,9 @@ export enum EmailScene {
   /** 发送修改邮箱邮件，邮件中包含验证码 */
   ChangeEmail = 'CHANGE_EMAIL',
   /** 发送 MFA 验证邮件 */
-  MfaVerify = 'MFA_VERIFY'
+  MfaVerify = 'MFA_VERIFY',
+  /** 发送邮件验证码 */
+  VerifyCode = 'VERIFY_CODE'
 }
 
 export type CreateFunctionInput = {
@@ -2049,13 +1970,7 @@ export type CreateUserInput = {
 };
 
 export type CreateUserIdentityInput = {
-  provider: Scalars['String'];
-  userIdInIdp: Scalars['String'];
-  openid?: Maybe<Scalars['String']>;
-  isSocial?: Maybe<Scalars['Boolean']>;
-  connectionId?: Maybe<Scalars['String']>;
-  accessToken?: Maybe<Scalars['String']>;
-  refreshToken?: Maybe<Scalars['String']>;
+  dummy: Scalars['String'];
 };
 
 export type UpdateUserInput = {
@@ -2218,22 +2133,6 @@ export type BatchOperationResult = {
 export type KeyValuePair = {
   key: Scalars['String'];
   value: Scalars['String'];
-};
-
-export type SocialConnectionFieldInput = {
-  key?: Maybe<Scalars['String']>;
-  label?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
-  placeholder?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<Maybe<SocialConnectionFieldInput>>>;
-};
-
-export type CreateSocialConnectionInput = {
-  provider: Scalars['String'];
-  name: Scalars['String'];
-  logo: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  fields?: Maybe<Array<SocialConnectionFieldInput>>;
 };
 
 export type PasswordUpdatePolicy = {
@@ -2426,13 +2325,6 @@ export type CreateRoleVariables = Exact<{
 
 export type CreateRoleResponse = { createRole: { id: string, namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, parent?: Maybe<{ namespace: string, code: string, arn: string, description?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string> }> } };
 
-export type CreateSocialConnectionInstanceVariables = Exact<{
-  input: CreateSocialConnectionInstanceInput;
-}>;
-
-
-export type CreateSocialConnectionInstanceResponse = { createSocialConnectionInstance: { provider: string, enabled: boolean, fields?: Maybe<Array<Maybe<{ key: string, value: string }>>> } };
-
 export type CreateUserVariables = Exact<{
   userInfo: CreateUserInput;
   params?: Maybe<Scalars['String']>;
@@ -2551,13 +2443,6 @@ export type DisableEmailTemplateVariables = Exact<{
 
 export type DisableEmailTemplateResponse = { disableEmailTemplate: { type: EmailTemplateType, name: string, subject: string, sender: string, content: string, redirectTo?: Maybe<string>, hasURL?: Maybe<boolean>, expiresIn?: Maybe<number>, enabled?: Maybe<boolean>, isSystem?: Maybe<boolean> } };
 
-export type DisableSocialConnectionInstanceVariables = Exact<{
-  provider: Scalars['String'];
-}>;
-
-
-export type DisableSocialConnectionInstanceResponse = { disableSocialConnectionInstance: { provider: string, enabled: boolean, fields?: Maybe<Array<Maybe<{ key: string, value: string }>>> } };
-
 export type DisbalePolicyAssignmentVariables = Exact<{
   policy: Scalars['String'];
   targetType: PolicyAssignmentTargetType;
@@ -2584,13 +2469,6 @@ export type EnablePolicyAssignmentVariables = Exact<{
 
 
 export type EnablePolicyAssignmentResponse = { enablePolicyAssignment: { message?: Maybe<string>, code?: Maybe<number> } };
-
-export type EnableSocialConnectionInstanceVariables = Exact<{
-  provider: Scalars['String'];
-}>;
-
-
-export type EnableSocialConnectionInstanceResponse = { enableSocialConnectionInstance: { provider: string, enabled: boolean, fields?: Maybe<Array<Maybe<{ key: string, value: string }>>> } };
 
 export type LoginByEmailVariables = Exact<{
   input: LoginByEmailInput;
@@ -3392,30 +3270,6 @@ export type SearchUserWithCustomDataVariables = Exact<{
 
 export type SearchUserWithCustomDataResponse = { searchUser: { totalCount: number, list: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> } };
 
-export type SocialConnectionVariables = Exact<{
-  provider: Scalars['String'];
-}>;
-
-
-export type SocialConnectionResponse = { socialConnection?: Maybe<{ provider: string, name: string, logo: string, description?: Maybe<string>, fields?: Maybe<Array<{ key?: Maybe<string>, label?: Maybe<string>, type?: Maybe<string>, placeholder?: Maybe<string> }>> }> };
-
-export type SocialConnectionInstanceVariables = Exact<{
-  provider: Scalars['String'];
-}>;
-
-
-export type SocialConnectionInstanceResponse = { socialConnectionInstance: { provider: string, enabled: boolean, fields?: Maybe<Array<Maybe<{ key: string, value: string }>>> } };
-
-export type SocialConnectionInstancesVariables = Exact<{ [key: string]: never; }>;
-
-
-export type SocialConnectionInstancesResponse = { socialConnectionInstances: Array<{ provider: string, enabled: boolean, fields?: Maybe<Array<Maybe<{ key: string, value: string }>>> }> };
-
-export type SocialConnectionsVariables = Exact<{ [key: string]: never; }>;
-
-
-export type SocialConnectionsResponse = { socialConnections: Array<{ provider: string, name: string, logo: string, description?: Maybe<string>, fields?: Maybe<Array<{ key?: Maybe<string>, label?: Maybe<string>, type?: Maybe<string>, placeholder?: Maybe<string> }>> }> };
-
 export type TemplateCodeVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3946,18 +3800,6 @@ export const CreateRoleDocument = `
   }
 }
     `;
-export const CreateSocialConnectionInstanceDocument = `
-    mutation createSocialConnectionInstance($input: CreateSocialConnectionInstanceInput!) {
-  createSocialConnectionInstance(input: $input) {
-    provider
-    enabled
-    fields {
-      key
-      value
-    }
-  }
-}
-    `;
 export const CreateUserDocument = `
     mutation createUser($userInfo: CreateUserInput!, $params: String, $identity: CreateUserIdentityInput, $keepPassword: Boolean, $resetPasswordOnFirstLogin: Boolean) {
   createUser(userInfo: $userInfo, params: $params, identity: $identity, keepPassword: $keepPassword, resetPasswordOnFirstLogin: $resetPasswordOnFirstLogin) {
@@ -4246,18 +4088,6 @@ export const DisableEmailTemplateDocument = `
   }
 }
     `;
-export const DisableSocialConnectionInstanceDocument = `
-    mutation disableSocialConnectionInstance($provider: String!) {
-  disableSocialConnectionInstance(provider: $provider) {
-    provider
-    enabled
-    fields {
-      key
-      value
-    }
-  }
-}
-    `;
 export const DisbalePolicyAssignmentDocument = `
     mutation disbalePolicyAssignment($policy: String!, $targetType: PolicyAssignmentTargetType!, $targetIdentifier: String!, $namespace: String) {
   disbalePolicyAssignment(policy: $policy, targetType: $targetType, targetIdentifier: $targetIdentifier, namespace: $namespace) {
@@ -4287,18 +4117,6 @@ export const EnablePolicyAssignmentDocument = `
   enablePolicyAssignment(policy: $policy, targetType: $targetType, targetIdentifier: $targetIdentifier, namespace: $namespace) {
     message
     code
-  }
-}
-    `;
-export const EnableSocialConnectionInstanceDocument = `
-    mutation enableSocialConnectionInstance($provider: String!) {
-  enableSocialConnectionInstance(provider: $provider) {
-    provider
-    enabled
-    fields {
-      key
-      value
-    }
   }
 }
     `;
@@ -6843,62 +6661,6 @@ export const SearchUserWithCustomDataDocument = `
         dataType
         label
       }
-    }
-  }
-}
-    `;
-export const SocialConnectionDocument = `
-    query socialConnection($provider: String!) {
-  socialConnection(provider: $provider) {
-    provider
-    name
-    logo
-    description
-    fields {
-      key
-      label
-      type
-      placeholder
-    }
-  }
-}
-    `;
-export const SocialConnectionInstanceDocument = `
-    query socialConnectionInstance($provider: String!) {
-  socialConnectionInstance(provider: $provider) {
-    provider
-    enabled
-    fields {
-      key
-      value
-    }
-  }
-}
-    `;
-export const SocialConnectionInstancesDocument = `
-    query socialConnectionInstances {
-  socialConnectionInstances {
-    provider
-    enabled
-    fields {
-      key
-      value
-    }
-  }
-}
-    `;
-export const SocialConnectionsDocument = `
-    query socialConnections {
-  socialConnections {
-    provider
-    name
-    logo
-    description
-    fields {
-      key
-      label
-      type
-      placeholder
     }
   }
 }
