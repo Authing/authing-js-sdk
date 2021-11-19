@@ -5223,7 +5223,7 @@ export const UpdateRoleDocument = `
     `;
 export const UpdateUserDocument = `
     mutation updateUser($id: String, $input: UpdateUserInput!, $emailToken: String, $phoneToken: String) {
-  updateUser(id: $id, input: $input) {
+  updateUser(id: $id, input: $input, emailToken: $emailToken, phoneToken: $phoneToken) {
     id
     arn
     userPoolId
