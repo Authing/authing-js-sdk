@@ -1199,8 +1199,15 @@ export class AuthenticationClient {
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
    */
-  async updateProfile(updates: UpdateUserInput): Promise<User> {
+  async updateProfile(
+    updates: UpdateUserInput,
+    options?: {
+      emailToken?: string;
+      phoneToken?: string;
+    }
+  ): Promise<User> {
     const userId = this.checkLoggedIn();
+    const { emailToken, phoneToken } = options || {};
     if (updates && updates.password) {
       delete updates.password;
     }
@@ -1209,7 +1216,9 @@ export class AuthenticationClient {
       this.tokenProvider,
       {
         id: userId,
-        input: updates
+        input: updates,
+        emailToken,
+        phoneToken
       }
     );
     this.setCurrentUser(updated);

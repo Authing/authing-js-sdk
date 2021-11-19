@@ -1608,6 +1608,8 @@ export type MutationCreateUserArgs = {
 export type MutationUpdateUserArgs = {
   id?: Maybe<Scalars['String']>;
   input: UpdateUserInput;
+  emailToken?: Maybe<Scalars['String']>;
+  phoneToken?: Maybe<Scalars['String']>;
 };
 
 
@@ -2824,6 +2826,8 @@ export type UpdateRoleResponse = { updateRole: { id: string, namespace: string, 
 export type UpdateUserVariables = Exact<{
   id?: Maybe<Scalars['String']>;
   input: UpdateUserInput;
+  emailToken?: Maybe<Scalars['String']>;
+  phoneToken?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -5218,7 +5222,7 @@ export const UpdateRoleDocument = `
 }
     `;
 export const UpdateUserDocument = `
-    mutation updateUser($id: String, $input: UpdateUserInput!) {
+    mutation updateUser($id: String, $input: UpdateUserInput!, $emailToken: String, $phoneToken: String) {
   updateUser(id: $id, input: $input) {
     id
     arn
