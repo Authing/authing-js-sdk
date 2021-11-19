@@ -895,9 +895,10 @@ export type JwtTokenStatusDetail = {
 };
 
 export type FindUserByIdentityInput = {
-  identifier: Scalars['String'];
-  userIdInIdp: Scalars['String'];
-  isSocial: Scalars['Boolean'];
+  identifier?: Maybe<Scalars['String']>;
+  userIdInIdp?: Maybe<Scalars['String']>;
+  isSocial?: Maybe<Scalars['Boolean']>;
+  provider?: Maybe<Scalars['String']>;
 };
 
 export type CheckPasswordResult = {
@@ -1970,7 +1971,13 @@ export type CreateUserInput = {
 };
 
 export type CreateUserIdentityInput = {
-  dummy: Scalars['String'];
+  provider: Scalars['String'];
+  userIdInIdp: Scalars['String'];
+  openid?: Maybe<Scalars['String']>;
+  isSocial?: Maybe<Scalars['Boolean']>;
+  connectionId?: Maybe<Scalars['String']>;
+  accessToken?: Maybe<Scalars['String']>;
+  refreshToken?: Maybe<Scalars['String']>;
 };
 
 export type UpdateUserInput = {
