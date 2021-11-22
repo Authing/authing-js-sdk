@@ -1837,10 +1837,16 @@ export type RegisterByUsernameInput = {
   params?: Maybe<Scalars['String']>;
   /** 请求上下文信息，将会传递到 pipeline 中 */
   context?: Maybe<Scalars['String']>;
+  phoneToken?: Maybe<Scalars['String']>;
+  emailToken?: Maybe<Scalars['String']>;
 };
 
 export type RegisterProfile = {
   ip?: Maybe<Scalars['String']>;
+  /** 手机号，需要加 phoneToken 作为验证 */
+  phone?: Maybe<Scalars['String']>;
+  /** 邮箱，需要加 emailToken 作为验证 */
+  email?: Maybe<Scalars['String']>;
   oauth?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   nickname?: Maybe<Scalars['String']>;
@@ -1885,6 +1891,7 @@ export type RegisterByEmailInput = {
   params?: Maybe<Scalars['String']>;
   /** 请求上下文信息，将会传递到 pipeline 中 */
   context?: Maybe<Scalars['String']>;
+  phoneToken?: Maybe<Scalars['String']>;
 };
 
 export type RegisterByPhoneCodeInput = {
@@ -1899,6 +1906,7 @@ export type RegisterByPhoneCodeInput = {
   params?: Maybe<Scalars['String']>;
   /** 请求上下文信息，将会传递到 pipeline 中 */
   context?: Maybe<Scalars['String']>;
+  emailToken?: Maybe<Scalars['String']>;
 };
 
 export type SetUdfValueBatchInput = {

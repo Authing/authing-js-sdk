@@ -305,6 +305,11 @@ export class AuthenticationClient {
        * @description 请求上下文，将会传递到 Pipeline 中
        */
       context?: { [x: string]: any };
+
+      /**
+       * 如果注册的同时补全手机号信息，需要传此参数
+       */
+      phoneToken?: string;
     }
   ): Promise<User> {
     options = options || {};
@@ -315,7 +320,8 @@ export class AuthenticationClient {
       clientIp,
       params,
       context,
-      customData
+      customData,
+      phoneToken
     } = options;
     password = await this.options.encryptFunction(
       password,
@@ -343,7 +349,8 @@ export class AuthenticationClient {
           generateToken,
           clientIp,
           params: extraParams,
-          context: extraContext
+          context: extraContext,
+          phoneToken
         }
       }
     );
@@ -405,6 +412,14 @@ export class AuthenticationClient {
        * @description 请求上下文，将会传递到 Pipeline 中
        */
       context?: { [x: string]: any };
+      /**
+       * 如果注册的同时补全手机号信息，需要传此参数
+       */
+      phoneToken?: string;
+      /**
+       * 如果注册的同时补全邮箱信息，需要传此参数
+       */
+      emailToken?: string;
     }
   ): Promise<User> {
     options = options || {};
@@ -415,7 +430,9 @@ export class AuthenticationClient {
       clientIp,
       params,
       context,
-      customData
+      customData,
+      phoneToken,
+      emailToken
     } = options;
     password = await this.options.encryptFunction(
       password,
@@ -443,7 +460,9 @@ export class AuthenticationClient {
           generateToken,
           clientIp,
           params: extraParams,
-          context: extraContext
+          context: extraContext,
+          phoneToken,
+          emailToken
         }
       }
     );
@@ -507,6 +526,10 @@ export class AuthenticationClient {
        * @description 请求上下文，将会传递到 Pipeline 中
        */
       context?: { [x: string]: any };
+      /**
+       * 如果注册的同时补全邮箱信息，需要传此参数
+       */
+       emailToken?: string;
     }
   ): Promise<User> {
     options = options || {};
@@ -517,7 +540,8 @@ export class AuthenticationClient {
       clientIp,
       params,
       context,
-      customData
+      customData,
+      emailToken
     } = options;
     if (password) {
       password = await this.options.encryptFunction(
@@ -548,7 +572,8 @@ export class AuthenticationClient {
           generateToken,
           clientIp,
           params: extraParams,
-          context: extraContext
+          context: extraContext,
+          emailToken
         }
       }
     );
