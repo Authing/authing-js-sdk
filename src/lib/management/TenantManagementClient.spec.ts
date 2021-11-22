@@ -10,14 +10,14 @@ const managementClient = new ManagementClient(getOptionsFromEnv());
 
 test('list', async t => {
 
-  const tenants=await managementClient.tenant.list();
+  const tenants = await managementClient.tenant.list({page:1,limit:10});
   console.log(tenants)
   t.assert(tenants);
 });
 
 test('details', async t => {
 
-  const tenant = await managementClient.tenant.details('6194aeee9ccea057e89738f0');
+  const tenant = await managementClient.tenant.details('619b07312d6b99e1af7d8e4e');
   console.log(tenant)
   t.assert(tenant);
 });
@@ -25,8 +25,8 @@ test('details', async t => {
 test('create', async t => {
 
   const tenant = await managementClient.tenant.create({
-    name:"qqqxx",
-    appIds:"6194a3c595908f00ff698d3a",
+    name:"搜索",
+    appIds:"619b64e4ccc0467dcba00920",
   });
   console.log(tenant)
   t.assert(tenant);
@@ -35,8 +35,8 @@ test('create', async t => {
 
 test('update', async t => {
 
-  const tenant = await managementClient.tenant.update('6194aeee9ccea057e89738f0',{
-    name:"qq"
+  const tenant = await managementClient.tenant.update('619b64fd2cfccd07a8296839',{
+    name:"聚合搜索"
   });
   console.log(tenant)
   t.assert(tenant);
@@ -44,7 +44,7 @@ test('update', async t => {
 
 test('delete', async t => {
 
-  const tenant = await managementClient.tenant.delete('6194c58fa1a910549fc62aa5');
+  const tenant = await managementClient.tenant.delete('619b64fd2cfccd07a8296839');
   console.log(tenant)
   t.assert(tenant);
 });
@@ -75,3 +75,59 @@ test('removeMembers', async t => {
   console.log(tenant)
   t.assert(tenant);
 });
+
+test('listExtIdp', async t => {
+  const result = await managementClient.tenant.listExtIdp('619b07312d6b99e1af7d8e4e');
+  console.log(result)
+  t.assert(result);
+});
+
+test('extIdpDetail', async t => {
+  const result = await managementClient.tenant.extIdpDetail('619b33a00412723ba777eabf');
+  console.log(result)
+  t.assert(result);
+});
+
+test('createExtIdp', async t => {
+  // let options = {
+  //   tenantId: '619b07312d6b99e1af7d8e4e',
+  //    name: '飞书 SDK',
+  //    type: 'lark',
+  //    connections: [{
+  //      type: 'lark',
+  //      identifier: 'larka',
+  //      displayName: '飞书 SDK',
+  //      fields: {'ss':'ss'},
+  //      userMatchFields: ['ss'],
+  //      logo: ''
+  //    }]
+  // }
+  const result = await managementClient.tenant.createExtIdp({
+    tenantId: '619b07312d6b99e1af7d8e4e',
+     name: '飞书 SDK',
+     type: 'lark',
+     connections: [{
+       type: 'lark-internal',
+       identifier: 'feishusdk',
+       displayName: '飞书 SDK',
+       fields: {'clientSecret':'d1cuu12MdgGKrcItRyD6TeJLNqoWjRW0','clientID':'cli_a1118cb96bf95013','displayName':'飞书 SDK'},
+       userMatchFields: ['ss']
+     }]
+  });
+  console.log(result)
+  t.assert(result);
+});
+
+test('updateExtIdp', async t => {
+  const result = await managementClient.tenant.updateExtIdp('619b399e812c47c972900129',{'name':'飞书 SDK 端'});
+  console.log(result)
+  t.assert(result);
+});
+
+test('deleteExtIdp', async t => {
+  const result = await managementClient.tenant.deleteExtIdp('619b399e812c47c972900129');
+  console.log(result)
+  t.assert(result);
+});
+
+
