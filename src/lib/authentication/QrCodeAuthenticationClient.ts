@@ -220,7 +220,8 @@ export class QrCodeAuthenticationClient {
       // onCodeDestroyed,
       tips = {},
       context,
-      customData
+      customData,
+      extIdpConnId
     } = options;
 
     const { lang } = this.options;
@@ -488,7 +489,8 @@ export class QrCodeAuthenticationClient {
       try {
         const data = await this.geneCode({
           context,
-          customData
+          customData,
+          extIdpConnId
         });
         random = data.random;
         url = data.url;
