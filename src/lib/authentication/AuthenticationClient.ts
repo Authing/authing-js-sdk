@@ -722,6 +722,10 @@ export class AuthenticationClient {
         }
       }
     );
+    if (user.customData) {
+      // @ts-ignore
+      user.customData = convertUdvToKeyValuePair(user.customData);
+    }
     this.setCurrentUser(user);
     return user;
   }
@@ -818,6 +822,10 @@ export class AuthenticationClient {
         }
       }
     );
+    if (user.customData) {
+      // @ts-ignore
+      user.customData = convertUdvToKeyValuePair(user.customData);
+    }
     this.setCurrentUser(user);
     return user;
   }
@@ -887,6 +895,10 @@ export class AuthenticationClient {
         }
       }
     );
+    if (user.customData) {
+      // @ts-ignore
+      user.customData = convertUdvToKeyValuePair(user.customData);
+    }
     this.setCurrentUser(user);
     return user;
   }
@@ -979,6 +991,10 @@ export class AuthenticationClient {
         }
       }
     );
+    if (user.customData) {
+      // @ts-ignore
+      user.customData = convertUdvToKeyValuePair(user.customData);
+    }
     this.setCurrentUser(user);
     return user;
   }
@@ -1588,6 +1604,10 @@ export class AuthenticationClient {
         this.tokenProvider,
         {}
       );
+      if (data.customData) {
+        // @ts-ignore
+        data.customData = convertUdvToKeyValuePair(data.customData);
+      }
       this.setCurrentUser(data);
       return data;
     } catch {
