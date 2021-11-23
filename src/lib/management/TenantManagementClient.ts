@@ -296,7 +296,7 @@ export class TenantManagementClient {
    * @name_zh  更新身份源连接
    * @description 更新身份源连接
    */
-  async updateExtIdpConnection(identifier: string, options: {
+  async updateExtIdpConnection(extIdpConnectionId: string, options: {
     displayName: string,
     fields: object,
     userMatchFields?: string[],
@@ -304,7 +304,7 @@ export class TenantManagementClient {
   }){
    const result  = await this.httpClient.request({
      method: 'PUT',
-     url: `${this.options.host}/api/v2/extIdpConn/${identifier}`,
+     url: `${this.options.host}/api/v2/extIdpConn/${extIdpConnectionId}`,
      data:{...options}
    });
    return result;
