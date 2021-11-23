@@ -157,6 +157,9 @@ export class SocialAuthenticationClient {
     if (context) {
       query.context = JSON.stringify(context);
     }
+    if (this.options.tenantId) {
+      query.tenant_id = this.options.tenantId;
+    }
     if (customData) {
       query.custom_data = JSON.stringify(customData);
     }
