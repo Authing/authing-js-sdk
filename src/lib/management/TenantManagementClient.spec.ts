@@ -94,12 +94,12 @@ test('createExtIdp', async t => {
      name: '微信身份源',
      type: 'wechat',
      connections: [{
-       type: 'wechat:pc',
-       identifier: 'wechatc1',
-       displayName: '微信身份源连接',
-       fields: {'clientSecret':'d1cuu12MdgGKrcItRyD6TeJLNqoWjRW0','clientID':'cli_a1118cb96bf95013','displayName':'飞书身份源连接'},
-       userMatchFields: ['ss']
-     }]
+      type: 'wechat:pc',
+      identifier: 'wechatc1',
+      displayName: '微信身份源连接',
+      fields: {'clientSecret':'d1cuu12MdgGKrcItRyD6TeJLNqoWjRW0','clientID':'cli_a1118cb96bf95013','displayName':'飞书身份源连接'},
+      userMatchFields: ['ss']
+    }]
   });
   console.log(result)
   t.assert(result);
