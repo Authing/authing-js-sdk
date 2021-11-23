@@ -223,14 +223,14 @@ export class TenantManagementClient {
      tenantId?:string,
      name: string,
      type: string,
-     connections: [{
+     connections: {
        type: string,
        identifier: string,
        displayName: string,
        fields: any,
        userMatchFields?: string[],
        logo?: string
-     }]
+     }[]
    }){
     const result  = await this.httpClient.request({
       method: 'POST',
