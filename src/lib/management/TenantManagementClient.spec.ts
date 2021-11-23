@@ -77,7 +77,7 @@ test('removeMembers', async t => {
 });
 
 test('listExtIdp', async t => {
-  const result = await managementClient.tenant.listExtIdp('619b07312d6b99e1af7d8e4e');
+  const result = await managementClient.tenant.listExtIdp('619b64fd2cfccd07a8296839');
   console.log(JSON.stringify(result))
   t.assert(result);
 });
@@ -121,7 +121,7 @@ test('createExtIdpConnection', async t => {
   const result = await managementClient.tenant.createExtIdpConnection({
     extIdpId: '619c917f534a3b8ad988a209',
     type: 'wechatmp-qrcode',
-    identifier: 'wechatc2',
+    identifier: 'wechatc3',
     displayName: '微信身份源连接1',
     fields: {'clientSecret':'d1cuu12KrcItRyD6T','clientID':'cli_a196bf9013','displayName':'飞书身份源连接1'},
     userMatchFields: ['ss']
@@ -141,8 +141,31 @@ test('updateExtIdpConnection', async t => {
 });
 
 test('deleteExtIdpConnection', async t => {
-  const result = await managementClient.tenant.deleteExtIdpConnection('619c9490d7b1cec02bf982f6');
+  const result = await managementClient.tenant.deleteExtIdpConnection('619cc337075fdb26f5fdbfa2');
   console.log(result)
   t.assert(result);
 });
 
+test('checkExtIdpConnectionIdentifierUnique', async t => {
+  const result = await managementClient.tenant.checkExtIdpConnectionIdentifierUnique('wechatc4');
+  console.log(result)
+  t.assert(result);
+});
+
+test('changeExtIdpConnectionState', async t => {
+  const result = await managementClient.tenant.changeExtIdpConnectionState('619cc337075fdb26f5fdbfa2', {
+    tenantId: '619b64fd2cfccd07a8296839',
+    enabled: true
+  });
+  console.log(result)
+  t.assert(result);
+});
+
+test('batchChangeExtIdpConnectionState', async t => {
+  const result = await managementClient.tenant.batchChangeExtIdpConnectionState('619c917f534a3b8ad988a209', {
+    tenantId: '619b64fd2cfccd07a8296839',
+    enabled: true
+  });
+  console.log(result)
+  t.assert(result);
+});

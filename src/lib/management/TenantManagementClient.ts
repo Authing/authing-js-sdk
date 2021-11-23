@@ -315,10 +315,10 @@ export class TenantManagementClient {
    * @name_zh  删除身份源连接
    * @description 删除身份源连接
    */
-  async deleteExtIdpConnection(identifier: string){
+  async deleteExtIdpConnection(extIdpConnectionId: string){
    const result  = await this.httpClient.request({
      method: 'DELETE',
-     url: `${this.options.host}/api/v2/extIdpConn/${identifier}`,
+     url: `${this.options.host}/api/v2/extIdpConn/${extIdpConnectionId}`,
    });
    return result;
  }
@@ -329,14 +329,18 @@ export class TenantManagementClient {
    * @description 检查连接唯一标识是否冲突
    */
   async checkExtIdpConnectionIdentifierUnique(identifier: string){
-    const result  = await this.httpClient.request({
-      method: 'POST',
-      url: `${this.options.host}/api/v2/extIdpConn/identifier`,
-      data: {
-        identifier: identifier,
-      }
-    });
-    return result;
+    try {
+      await this.httpClient.request({
+        method: 'POST',
+        url: `${this.options.host}/api/v2/check/extIdpConn/identifier`,
+        data: {
+          identifier: identifier,
+        }
+      });
+      return false;
+    } catch (error) {
+      return true;
+    }
   }
 
   /**
@@ -344,17 +348,21 @@ export class TenantManagementClient {
    * @name_zh  开关身份源连接
    * @description 开关身份源连接
    */
-   async changeExtIdpConnectionState(identifier: string, options: {
+   async changeExtIdpConnectionState(extIdpConnectionId: string, options: {
      appId?: string,
      tenantId?: string,
-     enable: boolean
+     enabled: boolean
    }){
-    const result  = await this.httpClient.request({
-      method: 'PUT',
-      url: `${this.options.host}/api/v2/extIdpConn/${identifier}/state`,
-      data: {...options}
-    });
-    return result;
+    try {
+      await this.httpClient.request({
+        method: 'PUT',
+        url: `${this.options.host}/api/v2/extIdpConn/${extIdpConnectionId}/state`,
+        data: {...options}
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   /**
@@ -365,14 +373,18 @@ export class TenantManagementClient {
    async batchChangeExtIdpConnectionState(extIdpId: string, options: {
     appId?: string,
     tenantId?: string,
-    enable: boolean
+    enabled: boolean
   }){
-   const result  = await this.httpClient.request({
-     method: 'PUT',
-     url: `${this.options.host}/api/v2/extIdp/${extIdpId}/connState`,
-     data: {...options}
-   });
-   return result;
+   try {
+    await this.httpClient.request({
+      method: 'PUT',
+      url: `${this.options.host}/api/v2/extIdp/${extIdpId}/connState`,
+      data: {...options}
+    });
+    return true;
+   } catch (error) {
+     return false;
+   }
  }
 
 
