@@ -1785,12 +1785,12 @@ export class AuthenticationClient {
     username: string,
     password: string,
     options?: {
-      autoRegister?: boolean;
-      captchaCode?: string;
       clientIp?: string;
+      withCustomData?: boolean
     }
   ): Promise<User> {
     options = options || {};
+    const { clientIp, withCustomData } = options;
     const api = `${this.baseClient.appHost}/api/v2/ldap/verify-user`;
 
     const user = await this.httpClient.request({
@@ -1798,7 +1798,9 @@ export class AuthenticationClient {
       url: api,
       data: {
         username,
-        password
+        password,
+        clientIp,
+        withCustomData,
       }
     });
     this.setCurrentUser(user);
@@ -1827,7 +1829,12 @@ export class AuthenticationClient {
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
    */
-  async loginByAd(username: string, password: string): Promise<User> {
+  async loginByAd(username: string, password: string, options?: {
+    clientIp?: string;
+    withCustomData?: boolean
+  }): Promise<User> {
+    options = options || {};
+    const { clientIp, withCustomData } = options;
     const firstLevelDomain = new URL(this.baseClient.appHost).hostname
       .split('.')
       .slice(1)
@@ -1841,7 +1848,9 @@ export class AuthenticationClient {
       url: api,
       data: {
         username,
-        password
+        password,
+        clientIp,
+        withCustomData
       }
     });
     this.setCurrentUser(user);
