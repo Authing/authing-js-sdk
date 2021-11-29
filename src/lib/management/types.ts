@@ -1066,7 +1066,7 @@ export enum ApplicationType {
   /**
    * 租户型
    */
- Tenant ="Tenant" ,
+ TENANT = "Tenant" ,
   /**
    * 兼容型
    */
