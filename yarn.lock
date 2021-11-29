@@ -2,13 +2,6 @@
 # yarn lockfile v1
 
 
-"@authing/jose@1.0.2-beta":
-  version "1.0.2-beta"
-  resolved "https://registry.npmjs.org/@authing/jose/-/jose-1.0.2-beta.tgz#428611169b024358ed20c45ced4b36f7e84f9575"
-  integrity sha512-riSor59Q/vhna5IAwDn8mlwXeq6bdrxQOO0dZka9JJkooGidJWwCNi4iSwKmLGO23VhQG0WCY3PCYumwHFERzw==
-  dependencies:
-    "@types/node" "^16.7.13"
-
 "@ava/babel-plugin-throws-helper@^3.0.0":
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/@ava/babel-plugin-throws-helper/download/@ava/babel-plugin-throws-helper-3.0.0.tgz#2c933ec22da0c4ce1fc5369f2b95452c70420586"
@@ -1416,11 +1409,6 @@
   version "14.0.5"
   resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-14.0.5.tgz?cache=0&sync_timestamp=1590092219164&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.0.5.tgz#3d03acd3b3414cf67faf999aed11682ed121f22b"
   integrity sha1-PQOs07NBTPZ/r5ma7RFoLtEh8is=
-
-"@types/node@^16.7.13":
-  version "16.11.10"
-  resolved "https://registry.npmjs.org/@types/node/-/node-16.11.10.tgz#2e3ad0a680d96367103d3e670d41c2fed3da61ae"
-  integrity sha512-3aRnHa1KlOEEhJ6+CvyHKK5vE9BcLGjtUpwvqYLRvYNQKMfabu3BwfJaA/SLW8dxe28LsNDjtHwePTuzn3gmOA==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
