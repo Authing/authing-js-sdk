@@ -534,3 +534,17 @@ test.only('unlinkIdentity', async t => {
 });
 
 
+test('getApplicationLoginUserNum', async t => {
+  const res = await managementClient.users.getApplicationLoginUserNum({
+    appId: '60ab28843baf2e2c075dbeae'
+  });
+  t.assert(res);
+});
+
+test('getUdfFieldUserNum', async t => {
+  const res = await managementClient.users.getUdfFieldUserNum({
+    definedFieldKey: 'hep_isTeacher',
+    appId: '60ab28843baf2e2c075dbeae'
+  });
+  t.assert(res);
+});

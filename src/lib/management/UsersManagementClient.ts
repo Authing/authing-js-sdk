@@ -1346,5 +1346,57 @@ export class UsersManagementClient {
   }
 
 
+  /**
+   * @name getApplicationLoginUserNum
+   * @name_zh 查询登录过某个应用的用户数量
+   * @description 查询登录过某个应用的用户数量
+   *
+   * @param {string} [appId] 应用 ID
+   *
+   * @example
+   *
+   * const user = await managementClient.users.getApplicationLoginUserNum();
+   */
+   async getApplicationLoginUserNum(
+    options: {
+      appId: string
+    }
+  ) {
+    const data = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/analysis/total-login-count`,
+      params: { appId: options.appId }
+    });
+    return data;
+  }
+
+  /**
+   * @name getUdfFieldUserNum
+   * @name_zh 查询应用下使用了某个用户自定义字段的用户数量
+   * @description 查询使用了某个用户自定义字段的登录过某个应用的用户数量
+   *
+   * @param {string} [definedFieldKey] 用户自定义字段
+   * @param {string} [appId] 应用 ID
+   *
+   * @example
+   *
+   * const user = await managementClient.users.getUdfFieldUserNum();
+   */
+   async getUdfFieldUserNum(
+    options: {
+      definedFieldKey: string,
+      appId: string
+    }
+  ) {
+    const data = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/analysis/exist-defined-field-count`,
+      params: {
+        definedFieldKey: options.definedFieldKey,
+        appId: options.appId
+      }
+    });
+    return data;
+  }
 }
 
