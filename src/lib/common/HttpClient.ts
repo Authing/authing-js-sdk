@@ -57,6 +57,50 @@ export class HttpClient {
   }
 }
 
+// FastHttpClient 会返回 code 和 message
+export class FastHttpClient extends HttpClient {
+  options: ManagementClientOptions;
+  tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider;
+  axios: AxiosInstance;
+
+  constructor(
+    options: ManagementClientOptions | AuthenticationClientOptions,
+    tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider
+  ) {
+    super(options, tokenProvider);
+  }
+
+  async request(config: AxiosRequestConfig) {
+    const headers: any = {};
+    headers[this.options.headers['app-id']] = this.options.appId || '';
+    headers[this.options.headers['tenant-id']] = this.options.tenantId;
+    headers[this.options.headers['userpool-id']] =
+      this.options.userPoolId || '';
+    headers[this.options.headers['request-from']] =
+      this.options.requestFrom || 'sdk';
+    headers[this.options.headers['sdk-version']] = `js:${SDK_VERSION}`;
+    headers[this.options.headers.lang] = this.options.lang || '';
+
+    if (!(config && config.headers && config.headers.authorization)) {
+      // 如果用户不传 token，就使用 sdk 自己维护的
+      const token = await this.tokenProvider.getToken();
+      token && (headers.Authorization = `Bearer ${token}`);
+    } else {
+      headers.authorization = config.headers.authorization;
+    }
+    config.headers = headers;
+    config.timeout = this.options.timeout;
+    const { data } = await this.axios.request({
+      ...config,
+      headers: {
+        ...pickBy(config.headers, i => !!i)
+      }
+    });
+    return data;
+  }
+
+}
+
 export class NaiveHttpClient extends HttpClient {
   options: ManagementClientOptions;
   tokenProvider: ManagementTokenProvider | AuthenticationTokenProvider;

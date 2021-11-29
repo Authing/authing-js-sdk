@@ -7,7 +7,7 @@ import { UsersManagementClient } from './UsersManagementClient';
 import { sendEmail } from '../graphqlapi';
 import { EmailScene } from '../../types/graphql.v2';
 import { User } from "../../types/index";
-import { HttpClient } from '../common/HttpClient';
+import { FastHttpClient, HttpClient } from '../common/HttpClient';
 import Axios, { AxiosRequestConfig } from 'axios';
 import { RolesManagementClient } from './RolesManagementClient';
 import { PoliciesManagementClient } from './PoliciesManagementClient';
@@ -52,6 +52,7 @@ export class ManagementClient {
   // sub classes definitions
   private graphqlClient: GraphqlClient;
   private httpClient: HttpClient;
+  private fastHttpClient: FastHttpClient;
   private tokenProvider: ManagementTokenProvider;
   private publicKeyManager: PublicKeyManager;
 
@@ -102,11 +103,16 @@ export class ManagementClient {
       this.options,
       this.tokenProvider
     );
+    this.fastHttpClient = new (this.options.fastHttpClient || FastHttpClient)(
+      this.options,
+      this.tokenProvider
+    );
     this.publicKeyManager = new PublicKeyManager(this.options, this.httpClient);
     this.users = new UsersManagementClient(
       this.options,
       this.graphqlClient,
       this.httpClient,
+      this.fastHttpClient,
       this.tokenProvider,
       this.publicKeyManager
     );

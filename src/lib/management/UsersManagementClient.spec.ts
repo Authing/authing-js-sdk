@@ -507,3 +507,30 @@ test.only('getUserTenants', async t => {
   console.log(tenants);
   t.assert(tenants);
 });
+
+test.only('linkIdentity', async t => {
+  const result = await managementClient.users.linkIdentity({
+    userId: '619b07826feaa09f07b598de',
+    userIdInIdp: 'zy001',
+    isSocial: true,
+    type: 'openid',
+    identifier: 'wechat',
+  });
+  console.log(result);
+  t.assert(result);
+
+
+});
+
+test.only('unlinkIdentity', async t => {
+  const result = await managementClient.users.unlinkIdentity({
+    userId: '619b07826feaa09f07b598de',
+    isSocial: true,
+    type: 'openid',
+    identifier: 'wechat',
+  });
+  console.log(result);
+  t.assert(result);
+});
+
+

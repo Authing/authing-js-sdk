@@ -1,6 +1,6 @@
 import { Org } from '../../types/graphql.v2';
 import { GraphqlClient } from '../common/GraphqlClient';
-import { HttpClient } from '../common/HttpClient';
+import { FastHttpClient, HttpClient } from '../common/HttpClient';
 import { Lang } from '../../types';
 
 /**
@@ -30,6 +30,7 @@ export interface ManagementClientOptions {
   /** 密码传输加密公钥 */
   publicKey?: string;
   httpClient?: typeof HttpClient;
+  fastHttpClient?: typeof FastHttpClient;
   graphqlClient?: typeof GraphqlClient;
   /**
    * 语言
