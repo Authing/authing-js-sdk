@@ -73,7 +73,7 @@ export interface AuthenticationClientOptions {
   headers?: {
     'userpool-id': string;
     'app-id': string;
-    'tenant-id': string;
+    'tenant-id'?: string;
     'sdk-version': string;
     'request-from': string;
     lang: string;
