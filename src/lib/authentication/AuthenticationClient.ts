@@ -607,7 +607,7 @@ export class AuthenticationClient {
     const data = await this.httpClient.request({
       method: 'POST',
       url: api,
-      date: params,
+      data: params,
     });
 
     return data;
