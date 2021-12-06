@@ -2282,6 +2282,7 @@ export type BindEmailResponse = { bindEmail: { id: string, arn: string, userPool
 export type BindPhoneVariables = Exact<{
   phone: Scalars['String'];
   phoneCode: Scalars['String'];
+  phoneCountryCode?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -3641,8 +3642,8 @@ export const BindEmailDocument = `
 }
     `;
 export const BindPhoneDocument = `
-    mutation bindPhone($phone: String!, $phoneCode: String!) {
-  bindPhone(phone: $phone, phoneCode: $phoneCode) {
+    mutation bindPhone($phone: String!, $phoneCode: String!, $phoneCountryCode: String) {
+  bindPhone(phone: $phone, phoneCode: $phoneCode, phoneCountryCode: $phoneCountryCode) {
     id
     arn
     userPoolId
