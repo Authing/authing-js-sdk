@@ -507,6 +507,7 @@ export class AuthenticationClient {
        * @description 请求上下文，将会传递到 Pipeline 中
        */
       context?: { [x: string]: any };
+      phoneCountryCode?: string;
     }
   ): Promise<User> {
     options = options || {};
@@ -517,7 +518,8 @@ export class AuthenticationClient {
       clientIp,
       params,
       context,
-      customData
+      customData,
+      phoneCountryCode,
     } = options;
     if (password) {
       password = await this.options.encryptFunction(
@@ -542,6 +544,7 @@ export class AuthenticationClient {
         input: {
           phone,
           code,
+          phoneCountryCode,
           password,
           profile,
           forceLogin,
@@ -835,10 +838,11 @@ export class AuthenticationClient {
        * @description 将会写入配置的用户自定义字段
        */
       customData?: { [x: string]: any };
+      phoneCountryCode?: string;
     }
   ): Promise<User> {
     options = options || {};
-    const { clientIp, params, context, customData } = options;
+    const { clientIp, params, context, customData, phoneCountryCode } = options;
     let extraParams = null;
     if (customData) {
       extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
@@ -856,6 +860,7 @@ export class AuthenticationClient {
         input: {
           phone,
           code,
+          phoneCountryCode,
           clientIp,
           params: extraParams,
           context: extraContext
@@ -1449,13 +1454,18 @@ export class AuthenticationClient {
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
    */
-  async bindPhone(phone: string, phoneCode: string): Promise<User> {
+  async bindPhone(
+    phone: string,
+    phoneCode: string,
+    phoneCountryCode?: string,
+    ): Promise<User> {
     const { bindPhone: user } = await bindPhone(
       this.graphqlClient,
       this.tokenProvider,
       {
         phone,
-        phoneCode
+        phoneCode,
+        phoneCountryCode,
       }
     );
     this.setCurrentUser(user);
