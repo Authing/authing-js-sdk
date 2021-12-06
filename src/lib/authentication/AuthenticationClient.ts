@@ -597,13 +597,17 @@ export class AuthenticationClient {
    * @returns {Promise<CommonMessage>}
    * @memberof AuthenticationClient
    */
-  async sendSmsCode(phone: string): Promise<CommonMessage> {
+  async sendSmsCode(phone: string, phoneCountryCode?: string): Promise<CommonMessage> {
     // TODO: 这种链接从服务器动态拉取
     const api = `${this.baseClient.appHost}/api/v2/sms/send`;
+    const params: any = { phone };
+    if (phoneCountryCode) {
+      params.phoneCountryCode = phoneCountryCode;
+    }
     const data = await this.httpClient.request({
       method: 'POST',
       url: api,
-      data: { phone }
+      date: params,
     });
 
     return data;
