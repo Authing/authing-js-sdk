@@ -666,8 +666,8 @@ export class QrCodeAuthenticationClient {
   async geneCode(options?: {
     context?: { [x: string]: any };
     customData?: { [x: string]: any };
+    withCustomData?: boolean;
     extIdpConnId?: string;
-    withCustomData?: boolean
   }): Promise<QRCodeGenarateResult> {
     const { context, customData, extIdpConnId, withCustomData } = options || {};
     const api = `${this.baseClient.appHost}/api/v2/qrcode/gene`;
