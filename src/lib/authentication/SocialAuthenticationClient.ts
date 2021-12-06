@@ -119,6 +119,11 @@ export class SocialAuthenticationClient {
       withIdentities?: boolean;
 
       /**
+       * @description 是否获取用户自定义数据
+       */
+      withCustomData?: boolean;
+
+      /**
        * @description 协议类型
        */
       protocol?: string;
@@ -137,7 +142,8 @@ export class SocialAuthenticationClient {
       customData,
       withIdentities = false,
       protocol = 'oidc',
-      uuid
+      uuid,
+      withCustomData = false
     } = options;
 
     if (!uuid) {
@@ -151,6 +157,7 @@ export class SocialAuthenticationClient {
         authorization_params || authorizationParams
       ),
       with_identities: withIdentities ? '1' : '0',
+      with_custom_data: withCustomData ? '1' : '0',
       protocol,
       uuid
     };
