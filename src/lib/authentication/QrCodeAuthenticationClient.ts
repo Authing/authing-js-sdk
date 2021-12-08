@@ -199,7 +199,7 @@ export class QrCodeAuthenticationClient {
       /**
        * @description 是否获取用户自定义数据
        */
-      withCustomData?: boolean
+      withCustomData?: boolean;
     }
   ) {
     options = options || {};
@@ -475,13 +475,12 @@ export class QrCodeAuthenticationClient {
         unloading();
       };
 
-      if(onRetry) {
-        onRetry();
-      }
-
       const shadow = genShadow(
         retry,
         () => {
+          if (onRetry) {
+            onRetry();
+          }
           start();
         },
         retryId || '__authing_retry_btn'
