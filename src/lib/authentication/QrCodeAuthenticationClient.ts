@@ -123,6 +123,7 @@ export class QrCodeAuthenticationClient {
    * @param {Function} options.onCodeLoadFailed 二维码加载失败的事件。
    * @param {Function} options.onCodeDestroyed 二维码被销毁的事件。
    * @param {string} options.extIdpConnId 多租户用的额外的 Idp Id。
+   * @param {Function} options.onRetry 二维码重试事件。
    * @param {Object} options.size 二维码图片大小，默认为 240 * 240，单位为 px 。
    * @param {number} options.size.height 高度
    * @param {number} options.size.width 宽度
@@ -176,6 +177,7 @@ export class QrCodeAuthenticationClient {
       onCodeLoaded?: (random: string, url: string) => any;
       onCodeLoadFailed?: (message: string) => any;
       onCodeDestroyed?: (random: string) => any;
+      onRetry?: () => any;
       tips?: {
         title?: string;
         scanned?: string;
@@ -222,6 +224,7 @@ export class QrCodeAuthenticationClient {
       onCodeShow,
       onCodeLoaded,
       onCodeLoadFailed,
+      onRetry,
       // onCodeDestroyed,
       tips = {},
       context,
@@ -471,6 +474,10 @@ export class QrCodeAuthenticationClient {
       qrcodeImage.onload = () => {
         unloading();
       };
+
+      if(onRetry) {
+        onRetry();
+      }
 
       const shadow = genShadow(
         retry,
