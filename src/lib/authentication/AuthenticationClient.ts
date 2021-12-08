@@ -305,6 +305,11 @@ export class AuthenticationClient {
        * @description 请求上下文，将会传递到 Pipeline 中
        */
       context?: { [x: string]: any };
+
+      /**
+       * 如果注册的同时补全手机号信息，需要传此参数
+       */
+      phoneToken?: string;
     }
   ): Promise<User> {
     options = options || {};
@@ -315,7 +320,8 @@ export class AuthenticationClient {
       clientIp,
       params,
       context,
-      customData
+      customData,
+      phoneToken
     } = options;
     password = await this.options.encryptFunction(
       password,
@@ -343,7 +349,8 @@ export class AuthenticationClient {
           generateToken,
           clientIp,
           params: extraParams,
-          context: extraContext
+          context: extraContext,
+          phoneToken
         }
       }
     );
@@ -405,6 +412,14 @@ export class AuthenticationClient {
        * @description 请求上下文，将会传递到 Pipeline 中
        */
       context?: { [x: string]: any };
+      /**
+       * 如果注册的同时补全手机号信息，需要传此参数
+       */
+      phoneToken?: string;
+      /**
+       * 如果注册的同时补全邮箱信息，需要传此参数
+       */
+      emailToken?: string;
     }
   ): Promise<User> {
     options = options || {};
@@ -415,7 +430,9 @@ export class AuthenticationClient {
       clientIp,
       params,
       context,
-      customData
+      customData,
+      phoneToken,
+      emailToken
     } = options;
     password = await this.options.encryptFunction(
       password,
@@ -443,7 +460,9 @@ export class AuthenticationClient {
           generateToken,
           clientIp,
           params: extraParams,
-          context: extraContext
+          context: extraContext,
+          phoneToken,
+          emailToken
         }
       }
     );
@@ -508,6 +527,10 @@ export class AuthenticationClient {
        */
       context?: { [x: string]: any };
       phoneCountryCode?: string;
+      /**
+       * 如果注册的同时补全邮箱信息，需要传此参数
+       */
+       emailToken?: string;
     }
   ): Promise<User> {
     options = options || {};
@@ -520,6 +543,7 @@ export class AuthenticationClient {
       context,
       customData,
       phoneCountryCode,
+      emailToken
     } = options;
     if (password) {
       password = await this.options.encryptFunction(
@@ -551,7 +575,8 @@ export class AuthenticationClient {
           generateToken,
           clientIp,
           params: extraParams,
-          context: extraContext
+          context: extraContext,
+          emailToken
         }
       }
     );
@@ -704,6 +729,10 @@ export class AuthenticationClient {
         }
       }
     );
+    if (user.customData) {
+      // @ts-ignore
+      user.customData = convertUdvToKeyValuePair(user.customData);
+    }
     this.setCurrentUser(user);
     return user;
   }
@@ -800,6 +829,10 @@ export class AuthenticationClient {
         }
       }
     );
+    if (user.customData) {
+      // @ts-ignore
+      user.customData = convertUdvToKeyValuePair(user.customData);
+    }
     this.setCurrentUser(user);
     return user;
   }
@@ -871,6 +904,10 @@ export class AuthenticationClient {
         }
       }
     );
+    if (user.customData) {
+      // @ts-ignore
+      user.customData = convertUdvToKeyValuePair(user.customData);
+    }
     this.setCurrentUser(user);
     return user;
   }
@@ -963,6 +1000,10 @@ export class AuthenticationClient {
         }
       }
     );
+    if (user.customData) {
+      // @ts-ignore
+      user.customData = convertUdvToKeyValuePair(user.customData);
+    }
     this.setCurrentUser(user);
     return user;
   }
@@ -1208,8 +1249,15 @@ export class AuthenticationClient {
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
    */
-  async updateProfile(updates: UpdateUserInput): Promise<User> {
+  async updateProfile(
+    updates: UpdateUserInput,
+    options?: {
+      emailToken?: string;
+      phoneToken?: string;
+    }
+  ): Promise<User> {
     const userId = this.checkLoggedIn();
+    const { emailToken, phoneToken } = options || {};
     if (updates && updates.password) {
       delete updates.password;
     }
@@ -1218,7 +1266,9 @@ export class AuthenticationClient {
       this.tokenProvider,
       {
         id: userId,
-        input: updates
+        input: updates,
+        emailToken,
+        phoneToken
       }
     );
     this.setCurrentUser(updated);
@@ -1568,6 +1618,10 @@ export class AuthenticationClient {
         this.tokenProvider,
         {}
       );
+      if (data.customData) {
+        // @ts-ignore
+        data.customData = convertUdvToKeyValuePair(data.customData);
+      }
       this.setCurrentUser(data);
       return data;
     } catch {
@@ -1745,12 +1799,12 @@ export class AuthenticationClient {
     username: string,
     password: string,
     options?: {
-      autoRegister?: boolean;
-      captchaCode?: string;
       clientIp?: string;
+      withCustomData?: boolean
     }
   ): Promise<User> {
     options = options || {};
+    const { clientIp, withCustomData } = options;
     const api = `${this.baseClient.appHost}/api/v2/ldap/verify-user`;
 
     const user = await this.httpClient.request({
@@ -1758,7 +1812,9 @@ export class AuthenticationClient {
       url: api,
       data: {
         username,
-        password
+        password,
+        clientIp,
+        withCustomData,
       }
     });
     this.setCurrentUser(user);
@@ -1787,7 +1843,12 @@ export class AuthenticationClient {
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
    */
-  async loginByAd(username: string, password: string): Promise<User> {
+  async loginByAd(username: string, password: string, options?: {
+    clientIp?: string;
+    withCustomData?: boolean
+  }): Promise<User> {
+    options = options || {};
+    const { clientIp, withCustomData } = options;
     const firstLevelDomain = new URL(this.baseClient.appHost).hostname
       .split('.')
       .slice(1)
@@ -1801,7 +1862,9 @@ export class AuthenticationClient {
       url: api,
       data: {
         username,
-        password
+        password,
+        clientIp,
+        withCustomData
       }
     });
     this.setCurrentUser(user);
