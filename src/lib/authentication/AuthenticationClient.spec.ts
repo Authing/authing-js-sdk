@@ -504,6 +504,36 @@ test('拼接 OIDC 授权码模式授权链接', async t => {
   t.assert(url1Data.searchParams.get('response_type') === 'code');
 });
 
+test('拼接 OIDC 授权码模式 + 多租户授权链接', async t => {
+  const authing = new AuthenticationClient({
+    appId: '9072248490655972',
+    appHost: 'https://oidc1.authing.cn',
+    secret: '16657960936447935',
+    redirectUri: 'https://baidu.com',
+    tokenEndPointAuthMethod: 'client_secret_basic',
+    protocol: 'oidc',
+  });
+  let url1 = authing.buildAuthorizeUrl({
+    responseType: 'code',
+    responseMode: 'form_post',
+    tenantId: '12'
+  });
+  let url1Data = new URL(url1);
+
+  t.assert(url1Data.hostname === 'oidc1.authing.cn');
+  t.assert(url1Data.pathname === '/oidc/auth');
+  t.assert(typeof parseInt(url1Data.searchParams.get('nonce')) === 'number');
+  t.assert(typeof parseInt(url1Data.searchParams.get('state')) === 'number');
+  t.assert(
+    url1Data.searchParams.get('scope') === 'openid profile email phone address'
+  );
+  t.assert(url1Data.searchParams.get('client_id') === '9072248490655972');
+  t.assert(url1Data.searchParams.get('response_mode') === 'form_post');
+  t.assert(url1Data.searchParams.get('redirect_uri') === 'https://baidu.com');
+  t.assert(url1Data.searchParams.get('response_type') === 'code');
+  t.assert(url1Data.searchParams.get('tenant_id') === '12');
+});
+
 test('拼接 OIDC 隐式模式授权链接', async t => {
   const authing = new AuthenticationClient({
     appId: '9072248490655972',
