@@ -2,11 +2,6 @@
 # yarn lockfile v1
 
 
-"@authing/jose@^1.0.3":
-  version "1.0.5"
-  resolved "https://registry.nlark.com/@authing/jose/download/@authing/jose-1.0.5.tgz#d3e9c58aac74f47e5048a791d69c68f8bc52d7d8"
-  integrity sha1-0+nFiqx09H5QSKeR1pxo+LxS19g=
-
 "@ava/babel-plugin-throws-helper@^3.0.0":
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/@ava/babel-plugin-throws-helper/download/@ava/babel-plugin-throws-helper-3.0.0.tgz#2c933ec22da0c4ce1fc5369f2b95452c70420586"

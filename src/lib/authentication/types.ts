@@ -2,7 +2,6 @@ import { GraphqlClient } from '../common/GraphqlClient';
 import { HttpClient } from '../common/HttpClient';
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import { Lang } from '../../types';
-import { JWK, KeyLike } from '@authing/jose/types';
 
 /**
  * 初始化 AuthenticationClientOptions 的参数
@@ -74,7 +73,7 @@ export interface AuthenticationClientOptions {
   headers?: {
     'userpool-id': string;
     'app-id': string;
-    'tenant-id': string;
+    'tenant-id'?: string;
     'sdk-version': string;
     'request-from': string;
     lang: string;
@@ -551,14 +550,4 @@ export interface PrivateKey {
   pkcs8Key: string;
   alg: 'RSA-OAEP' | 'ECDH-ES';
   kid?: string;
-}
-
-export interface JWKS {
-  keys: JWK[];
-}
-
-export interface KeyEntry {
-  kid?: string;
-  alg: string[];
-  key: KeyLike;
 }

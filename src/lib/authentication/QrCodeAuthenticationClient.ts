@@ -122,6 +122,8 @@ export class QrCodeAuthenticationClient {
    * @param {Function} options.onCodeLoaded 二维码首次成功 Load 的事件。
    * @param {Function} options.onCodeLoadFailed 二维码加载失败的事件。
    * @param {Function} options.onCodeDestroyed 二维码被销毁的事件。
+   * @param {string} options.extIdpConnId 多租户用的额外的 Idp Id。
+   * @param {Function} options.onRetry 二维码重试事件。
    * @param {Object} options.size 二维码图片大小，默认为 240 * 240，单位为 px 。
    * @param {number} options.size.height 高度
    * @param {number} options.size.width 宽度
@@ -153,6 +155,7 @@ export class QrCodeAuthenticationClient {
   async startScanning(
     domId: string,
     options?: {
+      extIdpConnId?: string;
       autoExchangeUserInfo?: boolean;
       size?: {
         height: number;
@@ -174,6 +177,7 @@ export class QrCodeAuthenticationClient {
       onCodeLoaded?: (random: string, url: string) => any;
       onCodeLoadFailed?: (message: string) => any;
       onCodeDestroyed?: (random: string) => any;
+      onRetry?: () => any;
       tips?: {
         title?: string;
         scanned?: string;
@@ -195,7 +199,7 @@ export class QrCodeAuthenticationClient {
       /**
        * @description 是否获取用户自定义数据
        */
-      withCustomData?: boolean
+      withCustomData?: boolean;
     }
   ) {
     options = options || {};
@@ -220,10 +224,12 @@ export class QrCodeAuthenticationClient {
       onCodeShow,
       onCodeLoaded,
       onCodeLoadFailed,
+      onRetry,
       // onCodeDestroyed,
       tips = {},
       context,
       customData,
+      extIdpConnId,
       withCustomData
     } = options;
 
@@ -472,6 +478,9 @@ export class QrCodeAuthenticationClient {
       const shadow = genShadow(
         retry,
         () => {
+          if (onRetry) {
+            onRetry();
+          }
           start();
         },
         retryId || '__authing_retry_btn'
@@ -493,6 +502,7 @@ export class QrCodeAuthenticationClient {
         const data = await this.geneCode({
           context,
           customData,
+          extIdpConnId,
           withCustomData
         });
         random = data.random;
@@ -662,9 +672,10 @@ export class QrCodeAuthenticationClient {
   async geneCode(options?: {
     context?: { [x: string]: any };
     customData?: { [x: string]: any };
-    withCustomData?: boolean
+    withCustomData?: boolean;
+    extIdpConnId?: string;
   }): Promise<QRCodeGenarateResult> {
-    const { context, customData, withCustomData } = options || {};
+    const { context, customData, extIdpConnId, withCustomData } = options || {};
     const api = `${this.baseClient.appHost}/api/v2/qrcode/gene`;
     const data = await this.httpClient.request({
       method: 'POST',
@@ -674,6 +685,7 @@ export class QrCodeAuthenticationClient {
         scene: this.scene,
         context,
         params: customData,
+        extIdpConnId,
         withCustomData
       }
     });

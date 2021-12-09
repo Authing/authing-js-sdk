@@ -57,7 +57,6 @@
 		"node": ">=8.9"
 	},
 	"dependencies": {
-		"@authing/jose": "^1.0.3",
 		"axios": "^0.19.2",
 		"crypto-js": "^4.0.0",
 		"jsencrypt": "^3.1.0",

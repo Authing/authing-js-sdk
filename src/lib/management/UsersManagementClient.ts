@@ -48,7 +48,7 @@ import {
   ResourceType,
   QuerySearchUserArgs
 } from '../../types/graphql.v2';
-import { HttpClient } from '../common/HttpClient';
+import { FastHttpClient, HttpClient } from '../common/HttpClient';
 import { DeepPartial, KeyValuePair, PaginatedUsers } from '../../types/index';
 import { PublicKeyManager } from '../common/PublicKeyManager';
 import { convertUdvToKeyValuePair, formatAuthorizedResources } from '../utils';
@@ -84,6 +84,7 @@ export class UsersManagementClient {
   options: ManagementClientOptions;
   graphqlClient: GraphqlClient;
   httpClient: HttpClient;
+  fastHttpClient: FastHttpClient;
   tokenProvider: ManagementTokenProvider;
   publickKeyManager: PublicKeyManager;
 
@@ -91,6 +92,7 @@ export class UsersManagementClient {
     options: ManagementClientOptions,
     graphqlClient: GraphqlClient,
     httpClient: HttpClient,
+    fastHttpClient: FastHttpClient,
     tokenProvider: ManagementTokenProvider,
     publickKeyManager: PublicKeyManager
   ) {
@@ -98,6 +100,7 @@ export class UsersManagementClient {
     this.graphqlClient = graphqlClient;
     this.tokenProvider = tokenProvider;
     this.httpClient = httpClient;
+    this.fastHttpClient = fastHttpClient;
     this.publickKeyManager = publickKeyManager;
   }
 
@@ -1294,6 +1297,56 @@ export class UsersManagementClient {
   }
 
   /**
+   * @description 获取用户所在租户
+   *
+   */
+  public async getUserTenants(userId:string) {
+    const result  = await this.httpClient.request({
+      method: 'GET',
+      url: `${this.options.host}/api/v2/users/${userId}/tenants`
+    });
+    return result;
+  }
+
+  /**
+   * @description 给用户绑定一个身份
+   *
+   */
+   public async linkIdentity(options: {
+    userId: string;
+    userIdInIdp: string;
+    isSocial: boolean;
+    type?: string;
+    identifier: string;
+  }) {
+    const result  = await this.fastHttpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/users/identity/link`,
+      data:{...options}
+    });
+    return result;
+  }
+
+  /**
+   * @description 解除用户某个身份源下的所有身份
+   *
+   */
+   public async unlinkIdentity(options: {
+    userId: string;
+    isSocial: boolean;
+    type?: string;
+    identifier: string;
+  }) {
+    const result  = await this.fastHttpClient.request({
+      method: 'POST',
+      url: `${this.options.host}/api/v2/users/identity/unlink`,
+      data:{...options}
+    });
+    return result;
+  }
+
+
+  /**
    * @name getApplicationLoginUserNum
    * @name_zh 查询登录过某个应用的用户数量
    * @description 查询登录过某个应用的用户数量
@@ -1346,3 +1399,4 @@ export class UsersManagementClient {
     return data;
   }
 }
+
