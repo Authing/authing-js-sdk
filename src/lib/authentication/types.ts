@@ -403,6 +403,7 @@ export interface IOidcParams {
   scope?: string;
   codeChallengeMethod?: 'plain' | 'S256';
   codeChallenge?: string;
+  tenantId?: string;
 }
 
 export interface IOauthParams {

@@ -2418,7 +2418,8 @@ export class AuthenticationClient {
       responseType: 'response_type',
       redirectUri: 'redirect_uri',
       codeChallenge: 'code_challenge',
-      codeChallengeMethod: 'code_challenge_method'
+      codeChallengeMethod: 'code_challenge_method',
+      tenantId: 'tenant_id',
     };
     let res: any = {
       nonce: Math.random()
