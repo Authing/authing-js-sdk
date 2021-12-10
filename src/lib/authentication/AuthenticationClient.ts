@@ -1351,7 +1351,9 @@ export class AuthenticationClient {
     phone: string,
     phoneCode: string,
     oldPhone?: string,
-    oldPhoneCode?: string
+    oldPhoneCode?: string,
+    phoneCountryCode?: string,
+    oldPhoneCountryCode?: string,
   ): Promise<User> {
     const { updatePhone: user } = await updatePhone(
       this.graphqlClient,
@@ -1360,7 +1362,9 @@ export class AuthenticationClient {
         phone,
         phoneCode,
         oldPhone,
-        oldPhoneCode
+        oldPhoneCode,
+        phoneCountryCode,
+        oldPhoneCountryCode,
       }
     );
     return user;
