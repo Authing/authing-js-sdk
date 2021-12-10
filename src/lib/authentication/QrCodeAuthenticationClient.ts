@@ -191,6 +191,11 @@ export class QrCodeAuthenticationClient {
        * @description 请求上下文，将会传递到 Pipeline 中
        */
       context?: { [x: string]: any };
+
+      /**
+       * @description 是否获取用户自定义数据
+       */
+      withCustomData?: boolean
     }
   ) {
     options = options || {};
@@ -218,7 +223,8 @@ export class QrCodeAuthenticationClient {
       // onCodeDestroyed,
       tips = {},
       context,
-      customData
+      customData,
+      withCustomData
     } = options;
 
     const { lang } = this.options;
@@ -486,7 +492,8 @@ export class QrCodeAuthenticationClient {
       try {
         const data = await this.geneCode({
           context,
-          customData
+          customData,
+          withCustomData
         });
         random = data.random;
         url = data.url;
@@ -655,8 +662,9 @@ export class QrCodeAuthenticationClient {
   async geneCode(options?: {
     context?: { [x: string]: any };
     customData?: { [x: string]: any };
+    withCustomData?: boolean
   }): Promise<QRCodeGenarateResult> {
-    const { context, customData } = options || {};
+    const { context, customData, withCustomData } = options || {};
     const api = `${this.baseClient.appHost}/api/v2/qrcode/gene`;
     const data = await this.httpClient.request({
       method: 'POST',
@@ -665,7 +673,8 @@ export class QrCodeAuthenticationClient {
         autoMergeQrCode: false,
         scene: this.scene,
         context,
-        params: customData
+        params: customData,
+        withCustomData
       }
     });
     return data;
