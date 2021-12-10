@@ -606,6 +606,7 @@ export type Identity = {
   refreshToken?: Maybe<Scalars['String']>;
   accessToken?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
+  extIdpId?: Maybe<Scalars['String']>;
 };
 
 export type PaginatedRoles = {
@@ -1639,6 +1640,8 @@ export type MutationUpdatePhoneArgs = {
   phoneCode: Scalars['String'];
   oldPhone?: Maybe<Scalars['String']>;
   oldPhoneCode?: Maybe<Scalars['String']>;
+  phoneCountryCode?: Maybe<Scalars['String']>;
+  oldPhoneCountryCode?: Maybe<Scalars['String']>;
 };
 
 
@@ -2812,8 +2815,10 @@ export type UpdatePasswordResponse = { updatePassword: { id: string, arn: string
 export type UpdatePhoneVariables = Exact<{
   phone: Scalars['String'];
   phoneCode: Scalars['String'];
+  phoneCountryCode?: Maybe<Scalars['String']>;
   oldPhone?: Maybe<Scalars['String']>;
   oldPhoneCode?: Maybe<Scalars['String']>;
+  oldPhoneCountryCode?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -5181,8 +5186,8 @@ export const UpdatePasswordDocument = `
 }
     `;
 export const UpdatePhoneDocument = `
-    mutation updatePhone($phone: String!, $phoneCode: String!, $oldPhone: String, $oldPhoneCode: String) {
-  updatePhone(phone: $phone, phoneCode: $phoneCode, oldPhone: $oldPhone, oldPhoneCode: $oldPhoneCode) {
+    mutation updatePhone($phone: String!, $phoneCode: String!, $phoneCountryCode: String, $oldPhone: String, $oldPhoneCode: String, $oldPhoneCountryCode: String) {
+  updatePhone(phone: $phone, phoneCode: $phoneCode, oldPhone: $oldPhone, oldPhoneCode: $oldPhoneCode, phoneCountryCode: $phoneCountryCode, oldPhoneCountryCode: $oldPhoneCountryCode) {
     id
     arn
     userPoolId
