@@ -4,7 +4,7 @@ import { AuthenticationClientOptions } from '../authentication/types';
 import { AuthenticationTokenProvider } from '../authentication/AuthenticationTokenProvider';
 import { ManagementTokenProvider } from '../management/ManagementTokenProvider';
 import Axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { pickBy } from 'lodash';
+import { pickBy } from '../utils';
 
 export class HttpClient {
   options: ManagementClientOptions;
