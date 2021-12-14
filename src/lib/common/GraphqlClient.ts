@@ -2,6 +2,7 @@ import { SDK_VERSION } from '../version';
 import { ManagementClientOptions } from '../management/types';
 import { AuthenticationClientOptions } from '../authentication/types';
 import Axios, { AxiosInstance } from 'axios';
+import { pickBy } from '../utils';
 
 export class GraphqlClient {
   endpoint: string;
@@ -26,6 +27,7 @@ export class GraphqlClient {
     };
 
     headers[this.options.headers['app-id']] = this.options.appId || '';
+    headers[this.options.headers['tenant-id']] = this.options.tenantId;
     headers[this.options.headers['userpool-id']] =
       // @ts-ignore
       this.options.userPoolId || '';
@@ -45,7 +47,9 @@ export class GraphqlClient {
           variables
         },
         method: 'post',
-        headers,
+        headers: {
+          ...pickBy(headers, i => !!i)
+        },
         timeout: this.options.timeout
       });
       data = responseData.data;

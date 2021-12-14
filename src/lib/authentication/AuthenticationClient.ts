@@ -6,7 +6,6 @@ import {
 } from './types';
 import sha256 from 'crypto-js/sha256';
 import CryptoJS from 'crypto-js';
-import { compactDecrypt, compactVerify } from '@authing/jose';
 
 import {
   bindEmail,
@@ -89,10 +88,10 @@ import { EnterpriseAuthenticationClient } from './EnterpriseAuthenticationClient
 import { BaseAuthenticationClient } from './BaseAuthenticationClient';
 import { ApplicationPublicDetail } from '../management/types';
 import { PrincipalAuthenticationClient } from './PrincipalAuthentication';
-import { KeyManager } from './KeyManager';
 
 const DEFAULT_OPTIONS: AuthenticationClientOptions = {
   appId: undefined,
+  tenantId: undefined,
   appHost: undefined,
   protocol: 'oidc', // 默认 oidc
   tokenEndPointAuthMethod: 'client_secret_post', // 默认 client_secret_post
@@ -110,6 +109,7 @@ const DEFAULT_OPTIONS: AuthenticationClientOptions = {
     'app-id': 'x-authing-app-id',
     'request-from': 'x-authing-request-from',
     'sdk-version': 'x-authing-sdk-version',
+    'tenant-id': 'x-authing-app-tenant-id',
     lang: 'x-authing-lang'
   },
   lang: 'zh-CN'
@@ -152,7 +152,6 @@ export class AuthenticationClient {
   enterprise: EnterpriseAuthenticationClient;
   principal: PrincipalAuthenticationClient;
   private publicKeyManager: PublicKeyManager;
-  private keyManager: KeyManager;
 
   constructor(options: AuthenticationClientOptions) {
     Object.keys(options).forEach(
@@ -215,11 +214,7 @@ export class AuthenticationClient {
       this.tokenProvider,
       this.httpClient
     );
-    this.keyManager = new KeyManager(
-      this.options,
-      this.naiveHttpClient,
-      this.baseClient
-    );
+
     if (this.options.token) {
       this.setToken(this.options.token);
     }
@@ -2434,7 +2429,8 @@ export class AuthenticationClient {
       responseType: 'response_type',
       redirectUri: 'redirect_uri',
       codeChallenge: 'code_challenge',
-      codeChallengeMethod: 'code_challenge_method'
+      codeChallengeMethod: 'code_challenge_method',
+      tenantId: 'tenant_id',
     };
     let res: any = {
       nonce: Math.random()
@@ -2961,15 +2957,15 @@ export class AuthenticationClient {
    * @param token 待检验的 Token
    * @returns Token 的内容
    */
-  async validateTokenLocally(token: string) {
-    const { payload } = await compactVerify(token, (header: any) =>
-      this.keyManager.getKeyFor({
-        alg: header.alg,
-        kid: header.kid
-      })
-    );
-    return JSON.parse(new TextDecoder().decode(payload));
-  }
+  // async validateTokenLocally(token: string) {
+  //   const { payload } = await compactVerify(token, (header: any) =>
+  //     this.keyManager.getKeyFor({
+  //       alg: header.alg,
+  //       kid: header.kid
+  //     })
+  //   );
+  //   return JSON.parse(new TextDecoder().decode(payload));
+  // }
 
   /**
    * 在本地利用私钥解密 ID Token 或 Access Token ，检验其有效性并返回包含的内容。
@@ -2978,15 +2974,15 @@ export class AuthenticationClient {
    * @param token 待检验的 Token
    * @returns Token 的内容
    */
-  async decryptTokenLocally(token: string) {
-    const { plaintext } = await compactDecrypt(token, (header: any) =>
-      this.keyManager.getKeyFor({
-        alg: header.alg,
-        kid: header.kid
-      })
-    );
-    return this.validateTokenLocally(new TextDecoder().decode(plaintext));
-  }
+  // async decryptTokenLocally(token: string) {
+  //   const { plaintext } = await compactDecrypt(token, (header: any) =>
+  //     this.keyManager.getKeyFor({
+  //       alg: header.alg,
+  //       kid: header.kid
+  //     })
+  //   );
+  //   return this.validateTokenLocally(new TextDecoder().decode(plaintext));
+  // }
 
   /**
    * @description 设置语言

@@ -2,7 +2,6 @@ import { GraphqlClient } from '../common/GraphqlClient';
 import { HttpClient } from '../common/HttpClient';
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
 import { Lang } from '../../types';
-import { JWK, KeyLike } from '@authing/jose/types';
 
 /**
  * 初始化 AuthenticationClientOptions 的参数
@@ -10,6 +9,8 @@ import { JWK, KeyLike } from '@authing/jose/types';
 export interface AuthenticationClientOptions {
   /** 应用 ID */
   appId: string;
+  /** 租户 ID */
+  tenantId?: string;
   /** 应用完整域名，如 https://sample-app.authing.cn，不带最后的斜线 '/'。 */
   appHost?: string;
   /** 应用密钥 */
@@ -72,6 +73,7 @@ export interface AuthenticationClientOptions {
   headers?: {
     'userpool-id': string;
     'app-id': string;
+    'tenant-id'?: string;
     'sdk-version': string;
     'request-from': string;
     lang: string;
@@ -400,6 +402,7 @@ export interface IOidcParams {
   scope?: string;
   codeChallengeMethod?: 'plain' | 'S256';
   codeChallenge?: string;
+  tenantId?: string;
 }
 
 export interface IOauthParams {
@@ -547,14 +550,4 @@ export interface PrivateKey {
   pkcs8Key: string;
   alg: 'RSA-OAEP' | 'ECDH-ES';
   kid?: string;
-}
-
-export interface JWKS {
-  keys: JWK[];
-}
-
-export interface KeyEntry {
-  kid?: string;
-  alg: string[];
-  key: KeyLike;
 }

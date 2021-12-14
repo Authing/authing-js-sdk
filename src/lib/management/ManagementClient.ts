@@ -7,7 +7,7 @@ import { UsersManagementClient } from './UsersManagementClient';
 import { sendEmail } from '../graphqlapi';
 import { EmailScene } from '../../types/graphql.v2';
 import { User } from "../../types/index";
-import { HttpClient } from '../common/HttpClient';
+import { FastHttpClient, HttpClient } from '../common/HttpClient';
 import Axios, { AxiosRequestConfig } from 'axios';
 import { RolesManagementClient } from './RolesManagementClient';
 import { PoliciesManagementClient } from './PoliciesManagementClient';
@@ -24,6 +24,7 @@ import { ApplicationsManagementClient } from './ApplicationsManagementClient';
 import { MFAManagementClient } from './MFAManagementClient';
 import { Lang } from '../../types';
 import { PrincipalManagementClient } from './PrincipalManagement';
+import { TenantManagementClient } from './TenantManagementClient';
 
 const DEFAULT_OPTIONS: ManagementClientOptions = {
   timeout: 10000,
@@ -36,6 +37,7 @@ const DEFAULT_OPTIONS: ManagementClientOptions = {
   headers: {
     'userpool-id': 'x-authing-userpool-id',
     'app-id': 'x-authing-app-id',
+    'tenant-id': 'x-authing-app-tenant-id',
     'request-from': 'x-authing-request-from',
     'sdk-version': 'x-authing-sdk-version',
     lang: 'x-authing-lang'
@@ -50,6 +52,7 @@ export class ManagementClient {
   // sub classes definitions
   private graphqlClient: GraphqlClient;
   private httpClient: HttpClient;
+  private fastHttpClient: FastHttpClient;
   private tokenProvider: ManagementTokenProvider;
   private publicKeyManager: PublicKeyManager;
 
@@ -67,6 +70,7 @@ export class ManagementClient {
   applications: ApplicationsManagementClient;
   mfa: MFAManagementClient;
   principal: PrincipalManagementClient;
+  tenant: TenantManagementClient;
 
   constructor(options: ManagementClientOptions) {
     Object.keys(options).forEach(
@@ -99,11 +103,16 @@ export class ManagementClient {
       this.options,
       this.tokenProvider
     );
+    this.fastHttpClient = new (this.options.fastHttpClient || FastHttpClient)(
+      this.options,
+      this.tokenProvider
+    );
     this.publicKeyManager = new PublicKeyManager(this.options, this.httpClient);
     this.users = new UsersManagementClient(
       this.options,
       this.graphqlClient,
       this.httpClient,
+      this.fastHttpClient,
       this.tokenProvider,
       this.publicKeyManager
     );
@@ -174,6 +183,12 @@ export class ManagementClient {
       this.tokenProvider
     );
     this.principal = new PrincipalManagementClient(
+      this.options,
+      this.graphqlClient,
+      this.httpClient,
+      this.tokenProvider
+    );
+    this.tenant = new TenantManagementClient(
       this.options,
       this.graphqlClient,
       this.httpClient,

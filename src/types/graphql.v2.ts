@@ -566,6 +566,9 @@ export type User = {
   /** 用户自定义数据 */
   customData?: Maybe<Array<Maybe<UserCustomData>>>;
   phoneCountryCode?: Maybe<Scalars['String']>;
+  /** 用户设置的主部门信息 */
+  mainDepartmentId?: Maybe<Scalars['String']>;
+  mainDepartmentCode?: Maybe<Scalars['String']>;
 };
 
 
@@ -2053,6 +2056,9 @@ export type UpdateUserInput = {
   country?: Maybe<Scalars['String']>;
   externalId?: Maybe<Scalars['String']>;
   phoneCountryCode?: Maybe<Scalars['String']>;
+  /** 主部门信息 */
+  mainDepartmentId?: Maybe<Scalars['String']>;
+  mainDepartmentCode?: Maybe<Scalars['String']>;
 };
 
 export type UpdateUserpoolInput = {
@@ -2815,9 +2821,9 @@ export type UpdatePasswordResponse = { updatePassword: { id: string, arn: string
 export type UpdatePhoneVariables = Exact<{
   phone: Scalars['String'];
   phoneCode: Scalars['String'];
-  phoneCountryCode?: Maybe<Scalars['String']>;
   oldPhone?: Maybe<Scalars['String']>;
   oldPhoneCode?: Maybe<Scalars['String']>;
+  phoneCountryCode?: Maybe<Scalars['String']>;
   oldPhoneCountryCode?: Maybe<Scalars['String']>;
 }>;
 
@@ -3336,7 +3342,7 @@ export type UserVariables = Exact<{
 }>;
 
 
-export type UserResponse = { user?: Maybe<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, type?: Maybe<string>, userPoolId?: Maybe<string> }>>>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> };
+export type UserResponse = { user?: Maybe<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, type?: Maybe<string>, userPoolId?: Maybe<string>, extIdpId?: Maybe<string> }>>>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> };
 
 export type UserBatchVariables = Exact<{
   ids: Array<Scalars['String']>;
@@ -3344,7 +3350,7 @@ export type UserBatchVariables = Exact<{
 }>;
 
 
-export type UserBatchResponse = { userBatch: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, type?: Maybe<string>, userPoolId?: Maybe<string> }>>> }> };
+export type UserBatchResponse = { userBatch: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, type?: Maybe<string>, userPoolId?: Maybe<string>, extIdpId?: Maybe<string> }>>> }> };
 
 export type UserBatchWithCustomDataVariables = Exact<{
   ids: Array<Scalars['String']>;
@@ -3352,14 +3358,14 @@ export type UserBatchWithCustomDataVariables = Exact<{
 }>;
 
 
-export type UserBatchWithCustomDataResponse = { userBatch: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, type?: Maybe<string>, userPoolId?: Maybe<string> }>>>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> };
+export type UserBatchWithCustomDataResponse = { userBatch: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, type?: Maybe<string>, userPoolId?: Maybe<string>, extIdpId?: Maybe<string> }>>>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> };
 
 export type UserWithCustomDataVariables = Exact<{
   id?: Maybe<Scalars['String']>;
 }>;
 
 
-export type UserWithCustomDataResponse = { user?: Maybe<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, userPoolId?: Maybe<string> }>>>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> };
+export type UserWithCustomDataResponse = { user?: Maybe<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, userPoolId?: Maybe<string>, extIdpId?: Maybe<string> }>>>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> };
 
 export type UserpoolVariables = Exact<{ [key: string]: never; }>;
 
@@ -3388,7 +3394,7 @@ export type UsersVariables = Exact<{
 }>;
 
 
-export type UsersResponse = { users: { totalCount: number, list: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, type?: Maybe<string>, userPoolId?: Maybe<string> }>>> }> } };
+export type UsersResponse = { users: { totalCount: number, list: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, type?: Maybe<string>, userPoolId?: Maybe<string>, extIdpId?: Maybe<string> }>>> }> } };
 
 export type UsersWithCustomDataVariables = Exact<{
   page?: Maybe<Scalars['Int']>;
@@ -3398,7 +3404,7 @@ export type UsersWithCustomDataVariables = Exact<{
 }>;
 
 
-export type UsersWithCustomDataResponse = { users: { totalCount: number, list: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, type?: Maybe<string>, userPoolId?: Maybe<string> }>>>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> } };
+export type UsersWithCustomDataResponse = { users: { totalCount: number, list: Array<{ id: string, arn: string, userPoolId: string, status?: Maybe<UserStatus>, username?: Maybe<string>, email?: Maybe<string>, emailVerified?: Maybe<boolean>, phone?: Maybe<string>, phoneVerified?: Maybe<boolean>, unionid?: Maybe<string>, openid?: Maybe<string>, nickname?: Maybe<string>, registerSource?: Maybe<Array<string>>, photo?: Maybe<string>, password?: Maybe<string>, oauth?: Maybe<string>, token?: Maybe<string>, tokenExpiredAt?: Maybe<string>, loginsCount?: Maybe<number>, lastLogin?: Maybe<string>, lastIP?: Maybe<string>, signedUp?: Maybe<string>, blocked?: Maybe<boolean>, isDeleted?: Maybe<boolean>, device?: Maybe<string>, browser?: Maybe<string>, company?: Maybe<string>, name?: Maybe<string>, givenName?: Maybe<string>, familyName?: Maybe<string>, middleName?: Maybe<string>, profile?: Maybe<string>, preferredUsername?: Maybe<string>, website?: Maybe<string>, gender?: Maybe<string>, birthdate?: Maybe<string>, zoneinfo?: Maybe<string>, locale?: Maybe<string>, address?: Maybe<string>, formatted?: Maybe<string>, streetAddress?: Maybe<string>, locality?: Maybe<string>, region?: Maybe<string>, postalCode?: Maybe<string>, city?: Maybe<string>, province?: Maybe<string>, country?: Maybe<string>, createdAt?: Maybe<string>, updatedAt?: Maybe<string>, externalId?: Maybe<string>, phoneCountryCode?: Maybe<string>, identities?: Maybe<Array<Maybe<{ openid?: Maybe<string>, userIdInIdp?: Maybe<string>, userId?: Maybe<string>, connectionId?: Maybe<string>, isSocial?: Maybe<boolean>, provider?: Maybe<string>, type?: Maybe<string>, userPoolId?: Maybe<string>, extIdpId?: Maybe<string> }>>>, customData?: Maybe<Array<Maybe<{ key: string, value?: Maybe<string>, dataType: UdfDataType, label?: Maybe<string> }>>> }> } };
 
 export type WhitelistVariables = Exact<{
   type: WhitelistType;
@@ -5186,7 +5192,7 @@ export const UpdatePasswordDocument = `
 }
     `;
 export const UpdatePhoneDocument = `
-    mutation updatePhone($phone: String!, $phoneCode: String!, $phoneCountryCode: String, $oldPhone: String, $oldPhoneCode: String, $oldPhoneCountryCode: String) {
+    mutation updatePhone($phone: String!, $phoneCode: String!, $oldPhone: String, $oldPhoneCode: String, $phoneCountryCode: String, $oldPhoneCountryCode: String) {
   updatePhone(phone: $phone, phoneCode: $phoneCode, oldPhone: $oldPhone, oldPhoneCode: $oldPhoneCode, phoneCountryCode: $phoneCountryCode, oldPhoneCountryCode: $oldPhoneCountryCode) {
     id
     arn
@@ -6798,6 +6804,7 @@ export const UserDocument = `
       provider
       type
       userPoolId
+      extIdpId
     }
     unionid
     openid
@@ -6862,6 +6869,7 @@ export const UserBatchDocument = `
       provider
       type
       userPoolId
+      extIdpId
     }
     id
     arn
@@ -6929,6 +6937,7 @@ export const UserBatchWithCustomDataDocument = `
       provider
       type
       userPoolId
+      extIdpId
     }
     id
     arn
@@ -7010,6 +7019,7 @@ export const UserWithCustomDataDocument = `
       isSocial
       provider
       userPoolId
+      extIdpId
     }
     unionid
     openid
@@ -7195,6 +7205,7 @@ export const UsersDocument = `
         provider
         type
         userPoolId
+        extIdpId
       }
       id
       arn
@@ -7266,6 +7277,7 @@ export const UsersWithCustomDataDocument = `
         provider
         type
         userPoolId
+        extIdpId
       }
       arn
       userPoolId

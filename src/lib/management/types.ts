@@ -1,6 +1,6 @@
 import { Org } from '../../types/graphql.v2';
 import { GraphqlClient } from '../common/GraphqlClient';
-import { HttpClient } from '../common/HttpClient';
+import { FastHttpClient, HttpClient } from '../common/HttpClient';
 import { Lang } from '../../types';
 
 /**
@@ -11,6 +11,8 @@ export interface ManagementClientOptions {
   userPoolId?: string;
   /** 应用 ID */
   appId?: string;
+  /** 租户 ID */
+  tenantId?: string;
   /** 用户池/应用密钥 **/
   secret?: string;
   /** 用户池 accessToken，如果传入，请注意 token 过期状态，你需要自己维护此 Token 的状态，SDK 不会自动更新  **/
@@ -28,6 +30,7 @@ export interface ManagementClientOptions {
   /** 密码传输加密公钥 */
   publicKey?: string;
   httpClient?: typeof HttpClient;
+  fastHttpClient?: typeof FastHttpClient;
   graphqlClient?: typeof GraphqlClient;
   /**
    * 语言
@@ -40,6 +43,7 @@ export interface ManagementClientOptions {
   headers?: {
     'userpool-id': string;
     'app-id': string;
+    'tenant-id'?: string;
     'sdk-version': string;
     'request-from': string;
     lang: string;
@@ -717,7 +721,7 @@ export interface IResourceDto {
     description: string;
   }>;
   namespace: string;
-  apiIdentifier?: string
+  apiIdentifier?: string;
 }
 
 export interface IResourceUpdateDto {
@@ -728,7 +732,7 @@ export interface IResourceUpdateDto {
     description: string;
   }>;
   namespace: string;
-  apiIdentifier?: string
+  apiIdentifier?: string;
 }
 
 export interface IResourceResponse {
@@ -906,6 +910,12 @@ export interface ApplicationDetail {
   enableSubAccount: boolean;
   loginRequireEmailVerified: boolean;
   agreementEnabled: boolean;
+  disabledSocialConnections:any;
+  disabledOidcConnections:any;
+  disabledSamlConnections:any;
+  disabledOauth2Connections:any;
+  disabledCasConnections:any;
+  disabledAzureAdConnections:any;
 }
 
 export interface QrcodeScanning {
@@ -1016,6 +1026,7 @@ export interface IApplication {
   agreementEnabled: boolean;
   skipMfa: boolean;
   permissionStrategy: PermissionStrategy;
+  appType?:string;
 }
 
 export interface AgreementInput {
@@ -1046,3 +1057,50 @@ export interface ISetTotpResp {
   updatedAt: string;
   id: string;
 }
+
+export enum ApplicationType {
+  /**
+   * 个体型
+   */
+  INDIVIDUAL= "INDIVIDUAL",
+  /**
+   * 租户型
+   */
+ TENANT = "Tenant" ,
+  /**
+   * 兼容型
+   */
+  BOTH ="BOTH"
+}
+
+export interface ApplicationTenantDetails {
+  id: string
+  name: string
+  logo: string
+  domain: string
+  description?: string
+  createdAt: string
+  updatedAt: string
+  protocol?: string,
+  isIntegrate : boolean,
+  tenants: TenantInfo[]
+}
+
+export interface TenantInfo {
+  id:string
+  createdAt: string
+  updatedAt:string
+  userPoolId: string
+  name:string
+  logo?: string,
+  description?:string
+  css: any
+  ssoPageCustomizationSettings:any
+  defaultLoginTab:string
+  defaultRegisterTab:string
+  passwordTabConfig: any
+  loginTabs: any
+  registerTabs: any
+  extendsFields: any
+}
+
