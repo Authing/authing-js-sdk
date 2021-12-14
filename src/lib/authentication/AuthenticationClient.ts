@@ -320,7 +320,8 @@ export class AuthenticationClient {
     } = options;
     password = await this.options.encryptFunction(
       password,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     let extraParams = null;
     if (customData) {
@@ -431,7 +432,8 @@ export class AuthenticationClient {
     } = options;
     password = await this.options.encryptFunction(
       password,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     let extraParams = null;
     if (customData) {
@@ -541,7 +543,8 @@ export class AuthenticationClient {
     if (password) {
       password = await this.options.encryptFunction(
         password,
-        await this.publicKeyManager.getPublicKey()
+        await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
       );
     }
     let extraParams = null;
@@ -690,7 +693,8 @@ export class AuthenticationClient {
     } = options;
     password = await this.options.encryptFunction(
       password,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     let extraParams = null;
     if (customData) {
@@ -790,7 +794,8 @@ export class AuthenticationClient {
     } = options;
     password = await this.options.encryptFunction(
       password,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     let extraParams = null;
     if (customData) {
@@ -959,7 +964,8 @@ export class AuthenticationClient {
     } = options;
     password = await this.options.encryptFunction(
       password,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     let extraParams = null;
     if (customData) {
@@ -1006,7 +1012,8 @@ export class AuthenticationClient {
     const { captchaCode, clientIp } = options;
     password = await this.options.encryptFunction(
       password,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     const { loginBySubAccount: user } = await loginBySubAccount(
       this.graphqlClient,
@@ -1091,7 +1098,8 @@ export class AuthenticationClient {
   ): Promise<CommonMessage> {
     newPassword = await this.options.encryptFunction(
       newPassword,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     const { resetPassword: data } = await resetPassword(
       this.graphqlClient,
@@ -1128,7 +1136,8 @@ export class AuthenticationClient {
   ): Promise<CommonMessage> {
     newPassword = await this.options.encryptFunction(
       newPassword,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     const { resetPassword: data } = await resetPassword(
       this.graphqlClient,
@@ -1149,7 +1158,8 @@ export class AuthenticationClient {
     let { token, password } = params;
     password = await this.options.encryptFunction(
       password,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     const {
       resetPasswordByFirstLoginToken: data
@@ -1172,11 +1182,13 @@ export class AuthenticationClient {
     let { token, newPassword, oldPassword } = params;
     newPassword = await this.options.encryptFunction(
       newPassword,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     oldPassword = await this.options.encryptFunction(
       oldPassword,
-      await this.publicKeyManager.getPublicKey()
+      await this.publicKeyManager.getPublicKey(),
+      this.options.encryption,
     );
     const {
       resetPasswordByForceResetToken: data
@@ -1288,13 +1300,15 @@ export class AuthenticationClient {
       newPassword &&
       (await this.options.encryptFunction(
         newPassword,
-        await this.publicKeyManager.getPublicKey()
+        await this.publicKeyManager.getPublicKey(),
+        this.options.encryption,
       ));
     oldPassword =
       oldPassword &&
       (await this.options.encryptFunction(
         oldPassword,
-        await this.publicKeyManager.getPublicKey()
+        await this.publicKeyManager.getPublicKey(),
+        this.options.encryption,
       ));
 
     const { updatePassword: user } = await updatePassword(

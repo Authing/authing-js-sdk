@@ -45,7 +45,7 @@ export interface AuthenticationClientOptions {
   /** token */
   token?: string;
   /** 加密函数 */
-  encryptFunction?: (plainText: string, publicKey: string) => Promise<string>;
+  encryptFunction?: (plainText: string, publicKey: string, encryption?: Encryption) => Promise<string>;
   /** 密码传输加密公钥 */
   publicKey?: string;
   httpClient?: typeof HttpClient;

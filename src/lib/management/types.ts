@@ -26,7 +26,7 @@ export interface ManagementClientOptions {
   /** 请求来源 */
   requestFrom?: string;
   /** 加密函数 */
-  encryptFunction?: (plainText: string, publicKey: string) => Promise<string>;
+  encryptFunction?: (plainText: string, publicKey: string, encryption?: Encryption) => Promise<string>;
   /** 密码传输加密公钥 */
   publicKey?: string;
   httpClient?: typeof HttpClient;
