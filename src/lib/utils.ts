@@ -15,7 +15,7 @@ export function encrypt(plainText: string, publicKey: string) {
         throw new Error('未安装模块: sm-crypto');
       }
     } else {
-      console.log(_this.options?.encryption)
+      console.log(_this)
       throw new Error('未配置sm2');
     }
     const jsencrypt = new JSEncrypt({});
