@@ -523,6 +523,7 @@ export class AuthenticationClient {
        * @description 请求上下文，将会传递到 Pipeline 中
        */
       context?: { [x: string]: any };
+      phoneCountryCode?: string;
       /**
        * 如果注册的同时补全邮箱信息，需要传此参数
        */
@@ -538,6 +539,7 @@ export class AuthenticationClient {
       params,
       context,
       customData,
+      phoneCountryCode,
       emailToken
     } = options;
     if (password) {
@@ -564,6 +566,7 @@ export class AuthenticationClient {
         input: {
           phone,
           code,
+          phoneCountryCode,
           password,
           profile,
           forceLogin,
@@ -617,13 +620,17 @@ export class AuthenticationClient {
    * @returns {Promise<CommonMessage>}
    * @memberof AuthenticationClient
    */
-  async sendSmsCode(phone: string): Promise<CommonMessage> {
+  async sendSmsCode(phone: string, phoneCountryCode?: string): Promise<CommonMessage> {
     // TODO: 这种链接从服务器动态拉取
     const api = `${this.baseClient.appHost}/api/v2/sms/send`;
+    const params: any = { phone };
+    if (phoneCountryCode) {
+      params.phoneCountryCode = phoneCountryCode;
+    }
     const data = await this.httpClient.request({
       method: 'POST',
       url: api,
-      data: { phone }
+      data: params,
     });
 
     return data;
@@ -868,10 +875,11 @@ export class AuthenticationClient {
        * @description 将会写入配置的用户自定义字段
        */
       customData?: { [x: string]: any };
+      phoneCountryCode?: string;
     }
   ): Promise<User> {
     options = options || {};
-    const { clientIp, params, context, customData } = options;
+    const { clientIp, params, context, customData, phoneCountryCode } = options;
     let extraParams = null;
     if (customData) {
       extraParams = JSON.stringify(convertObjectToKeyValueList(customData));
@@ -889,6 +897,7 @@ export class AuthenticationClient {
         input: {
           phone,
           code,
+          phoneCountryCode,
           clientIp,
           params: extraParams,
           context: extraContext
@@ -1351,7 +1360,9 @@ export class AuthenticationClient {
     phone: string,
     phoneCode: string,
     oldPhone?: string,
-    oldPhoneCode?: string
+    oldPhoneCode?: string,
+    phoneCountryCode?: string,
+    oldPhoneCountryCode?: string,
   ): Promise<User> {
     const { updatePhone: user } = await updatePhone(
       this.graphqlClient,
@@ -1360,7 +1371,9 @@ export class AuthenticationClient {
         phone,
         phoneCode,
         oldPhone,
-        oldPhoneCode
+        oldPhoneCode,
+        phoneCountryCode,
+        oldPhoneCountryCode,
       }
     );
     return user;
@@ -1508,13 +1521,18 @@ export class AuthenticationClient {
    * @returns {Promise<User>}
    * @memberof AuthenticationClient
    */
-  async bindPhone(phone: string, phoneCode: string): Promise<User> {
+  async bindPhone(
+    phone: string,
+    phoneCode: string,
+    phoneCountryCode?: string,
+    ): Promise<User> {
     const { bindPhone: user } = await bindPhone(
       this.graphqlClient,
       this.tokenProvider,
       {
         phone,
-        phoneCode
+        phoneCode,
+        phoneCountryCode,
       }
     );
     this.setCurrentUser(user);
