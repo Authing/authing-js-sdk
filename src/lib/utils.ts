@@ -16,6 +16,7 @@ export const encrypt = async (plainText: string, publicKey: string, encryption?:
         console.log('encrypted', encrypted)
         return resolve(encrypted);
       } catch (err) {
+        console.log(err)
         throw new Error('未安装模块: sm-crypto');
       }
     }
