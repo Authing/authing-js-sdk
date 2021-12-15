@@ -12,11 +12,7 @@ export const encrypt = async (plainText: string, publicKey: string, encryption?:
       try {
         const { sm2 } = require('sm-crypto')
         const encrypted = sm2.doEncrypt(plainText, encryption.publicKey);
-        if (encrypted) {
-          resolve(encrypted);
-        } else {
-          reject(encrypted);
-        }
+        return resolve(encrypted);
       } catch (err) {
         throw new Error('未安装模块: sm-crypto');
       }
