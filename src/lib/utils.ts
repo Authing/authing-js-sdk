@@ -6,6 +6,9 @@ export const encrypt = async (plainText: string, publicKey: string, encryption?:
   return new Promise<string>((resolve, reject) => {
     // 国密支持，动态引入
     if (encryption &&  encryption?.type === 'sm2') {
+      if (!encryption.publicKey) {
+        throw new Error('未配置: encryption.publicKey');
+      }
       try {
         const { sm2 } = require('sm-crypto')
         const encrypted = sm2.doEncrypt(plainText, publicKey);
