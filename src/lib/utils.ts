@@ -11,12 +11,9 @@ export const encrypt = async (plainText: string, publicKey: string, encryption?:
       }
       try {
         const { sm2 } = require('sm-crypto')
-        console.log('模块加载成功')
-        const encrypted = sm2.doEncrypt(plainText, publicKey);
-        console.log('encrypted', encrypted)
-        return resolve(encrypted);
+        const encrypted = sm2.doEncrypt(plainText, encryption.publicKey);
+        resolve(encrypted);
       } catch (err) {
-        console.log(err)
         throw new Error('未安装模块: sm-crypto');
       }
     }
