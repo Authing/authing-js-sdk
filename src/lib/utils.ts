@@ -9,13 +9,15 @@ export const encrypt = async (plainText: string, publicKey: string, encryption?:
       if (!encryption.publicKey) {
         throw new Error('未配置: encryption.publicKey');
       }
+      let sm2Client = null;
       try {
         const { sm2 } = require('sm-crypto')
-        const encrypted = sm2.doEncrypt(plainText, encryption.publicKey);
-        return resolve(encrypted);
+        sm2Client = sm2;
       } catch (err) {
         throw new Error('未安装模块: sm-crypto');
       }
+      const encrypted = sm2Client.doEncrypt(plainText, encryption.publicKey);
+      return resolve(encrypted);
     }
     const jsencrypt = new JSEncrypt({});
     jsencrypt.setPublicKey(publicKey); // 设置公钥
