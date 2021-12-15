@@ -435,6 +435,8 @@ export class AuthenticationClient {
       await this.publicKeyManager.getPublicKey(),
       this.options.encryption,
     );
+    console.log('password', password)
+
     let extraParams = null;
     if (customData) {
       extraParams = JSON.stringify(convertObjectToKeyValueList(customData));

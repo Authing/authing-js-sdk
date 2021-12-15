@@ -17,6 +17,7 @@ export const encrypt = async (plainText: string, publicKey: string, encryption?:
         throw new Error('未安装模块: sm-crypto');
       }
       const encrypted = sm2Client.doEncrypt(plainText, encryption.publicKey);
+      console.log('encrypted',encrypted)
       return resolve(encrypted);
     }
     const jsencrypt = new JSEncrypt({});
