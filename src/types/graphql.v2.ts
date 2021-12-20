@@ -1405,6 +1405,7 @@ export type MutationResetPasswordArgs = {
   email?: Maybe<Scalars['String']>;
   code: Scalars['String'];
   newPassword: Scalars['String'];
+  phoneCountryCode?: Maybe<Scalars['String']>;
 };
 
 
@@ -2660,10 +2661,10 @@ export type RemoveWhitelistResponse = { removeWhitelist: Array<Maybe<{ createdAt
 
 export type ResetPasswordVariables = Exact<{
   phone?: Maybe<Scalars['String']>;
+  phoneCountryCode?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   code: Scalars['String'];
   newPassword: Scalars['String'];
-  phoneCountryCode?:  Maybe<Scalars['String']>;
 }>;
 
 
@@ -4833,8 +4834,8 @@ export const RemoveWhitelistDocument = `
 }
     `;
 export const ResetPasswordDocument = `
-    mutation resetPassword($phone: String, $email: String, $code: String!, $newPassword: String!) {
-  resetPassword(phone: $phone, email: $email, code: $code, newPassword: $newPassword) {
+    mutation resetPassword($phone: String, $phoneCountryCode: String, $email: String, $code: String!, $newPassword: String!) {
+  resetPassword(phone: $phone, phoneCountryCode: $phoneCountryCode, email: $email, code: $code, newPassword: $newPassword) {
     message
     code
   }
