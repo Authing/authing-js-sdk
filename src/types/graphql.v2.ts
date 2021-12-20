@@ -2663,6 +2663,7 @@ export type ResetPasswordVariables = Exact<{
   email?: Maybe<Scalars['String']>;
   code: Scalars['String'];
   newPassword: Scalars['String'];
+  phoneCountryCode?:  Maybe<Scalars['String']>;
 }>;
 
 
