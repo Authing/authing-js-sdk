@@ -1096,7 +1096,8 @@ export class AuthenticationClient {
   async resetPasswordByPhoneCode(
     phone: string,
     code: string,
-    newPassword: string
+    newPassword: string,
+    phoneCountryCode?: string,
   ): Promise<CommonMessage> {
     newPassword = await this.options.encryptFunction(
       newPassword,
@@ -1108,7 +1109,8 @@ export class AuthenticationClient {
       {
         phone,
         code,
-        newPassword
+        newPassword,
+        phoneCountryCode,
       }
     );
     return data;
