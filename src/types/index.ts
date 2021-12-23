@@ -20,3 +20,8 @@ export type KeyValuePair = {
 };
 
 export type Lang = 'zh-CN' | 'en-US';
+
+export interface Encryption {
+  type: string,
+  publicKey: string;
+}

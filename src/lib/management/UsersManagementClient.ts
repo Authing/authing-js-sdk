@@ -194,7 +194,8 @@ export class UsersManagementClient {
     if (userInfo?.password) {
       userInfo.password = await this.options.encryptFunction(
         userInfo.password,
-        await this.publickKeyManager.getPublicKey()
+        await this.publickKeyManager.getPublicKey(),
+        this.options.encryption,
       );
     }
     const { createUser: user } = await createUser(
@@ -280,7 +281,8 @@ export class UsersManagementClient {
     if (updates && updates.password) {
       updates.password = await this.options.encryptFunction(
         updates.password,
-        await this.publickKeyManager.getPublicKey()
+        await this.publickKeyManager.getPublicKey(),
+        this.options.encryption,
       );
     }
     const { updateUser: user } = await updateUser(

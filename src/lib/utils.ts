@@ -1,10 +1,23 @@
-import { KeyValuePair } from '../types';
+import { KeyValuePair, Encryption } from '../types';
 import { UdfDataType } from '../types/graphql.v2';
-
 const { JSEncrypt } = require('./jsencrypt');
 
-export const encrypt = async (plainText: string, publicKey: string) => {
+export const encrypt = async (plainText: string, publicKey: string, encryption?: Encryption) => {
   return new Promise<string>((resolve, reject) => {
+    // 国密支持，动态引入
+    if (encryption &&  encryption?.type === 'sm2') {
+      if (!encryption.publicKey) {
+        throw new Error('未配置: encryption.publicKey');
+      }
+      try {
+        const { sm2 } = require('sm-crypto')
+        const encrypted = sm2.doEncrypt(plainText, encryption.publicKey);
+        return resolve(`sm2:${encrypted}`);
+      } catch (err) {
+        throw new Error('未安装模块: sm-crypto');
+      }
+    }
+
     const jsencrypt = new JSEncrypt({});
     jsencrypt.setPublicKey(publicKey); // 设置公钥
 

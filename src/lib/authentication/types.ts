@@ -1,7 +1,7 @@
 import { GraphqlClient } from '../common/GraphqlClient';
 import { HttpClient } from '../common/HttpClient';
 import { AuthenticationTokenProvider } from './AuthenticationTokenProvider';
-import { Lang } from '../../types';
+import { Lang, Encryption } from '../../types';
 
 /**
  * 初始化 AuthenticationClientOptions 的参数
@@ -45,7 +45,7 @@ export interface AuthenticationClientOptions {
   /** token */
   token?: string;
   /** 加密函数 */
-  encryptFunction?: (plainText: string, publicKey: string) => Promise<string>;
+  encryptFunction?: (plainText: string, publicKey: string, encryption?: Encryption) => Promise<string>;
   /** 密码传输加密公钥 */
   publicKey?: string;
   httpClient?: typeof HttpClient;
@@ -78,6 +78,7 @@ export interface AuthenticationClientOptions {
     'request-from': string;
     lang: string;
   };
+  encryption?: Encryption;
 }
 
 export interface QRCodeUserInfo {
