@@ -1,14 +1,5 @@
 ---
-meta:
-  - name: description
-    content: Node.js/JavaScript SDK
----
-
-# {{$localeConfig.brandName}} - Node.js/JavaScript
-
-<LastUpdated/>
-
-{{$localeConfig.brandName}} JavaScript/Node SDK 由两部分组成：`ManagementClient` 和 `AuthenticationClient`。
+Authing JavaScript/Node SDK 由两部分组成：`ManagementClient` 和 `AuthenticationClient`。
 
 `AuthenticationClient` 以终端用户（End User）的身份进行请求，提供了登录、注册、登出、管理用户资料、获取授权资源等所有管理用户身份的方法；此模块还提供了各种身份协议的 SDK，如 [OpenID Connect](/guides/federation/oidc.md), [OAuth 2.0](/guides/federation/oauth.md), [SAML](/guides/federation/saml.md) 和 [CAS](/guides/federation/cas.md)。此模块适合用于非受信任的浏览器环境和纯后端交互的服务器环境。
 
