@@ -110,7 +110,7 @@ Authing 目前一共支持国内外将近 20 余种社会化登录，如微信�
 
 ### 小程序扫码登录
 
-小程序扫码登录指使用 Authing 小程序`小登录`进行微信登录，[点此了解更多](https://authing.cn/verify)。
+小程序扫码登录指使用 Authing 小程序`小登录`进行微信登录，[点此了解更多](https://docs.authing.cn/v2/reference/sdk-for-wxapp.html)。
 
 你可以使用 5 行代码实现一个完整的扫码登录表单：
 
@@ -300,4 +300,4 @@ const managementClient = new ManagementClient({
 
 ## 获取帮助
 
-Join us on Gitter: [#authing-chat](https://gitter.im/authing-chat/community)
+Join us on Gitter: [#authing-chat](https://forum.authing.cn/)
