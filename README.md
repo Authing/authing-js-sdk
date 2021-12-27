@@ -1,5 +1,16 @@
 # Authing - Node.js/JavaScript
 
+<div align=center><img src="https://files.authing.co/authing-console/authing-logo-new-20210924.svg"></div>
+
+<div align="center">
+  <a href="https://badge.fury.io/js/authing-js-sdk"><img src="https://badge.fury.io/js/authing-js-sdk.svg" alt="npm version" height="18"></a>
+  <a href="https://npmcharts.com/compare/authing-js-sdk" target="_blank"><img src="https://img.shields.io/npm/dm/authing-js-sdk" alt="download"></a>
+  <a href="https://standardjs.com" target="_blank"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="standardjs"></a>
+  <a href="https://github.com/authing-js-sdk" target="_blank"><img src="https://img.shields.io/npm/l/vue.svg" alt="License"></a>
+  <a href="javascript:;" target="_blank"><img src="https://img.shields.io/badge/node-%3E=12-green.svg" alt="Node"></a>
+</div>
+<br/>
+
 Authing JavaScript/Node SDK 由两部分组成：`ManagementClient` 和 `AuthenticationClient`。`AuthenticationClient` 包含注册登录、重置手机号邮箱、修改账号信息等方法，是以你的终端用户（End User）的身份进行请求，适合在浏览器和后端环境中使用。`ManagementClient` 适合在后端或者**可信任**的前端环境下使用。一般来说，你在 [Authing 控制台](https://console.authing.cn/console/userpool) 中能做的所有操作，都能用此 SDK 完成。
 
 ## 安装
@@ -297,6 +308,17 @@ const managementClient = new ManagementClient({
 [管理注册白名单](https://docs.authing.cn/v2/reference/sdk-for-node/management/WhitelistManagementClient.html)
 
 [管理用户池配置](https://docs.authing.cn/v2/reference/sdk-for-node/management/UserpoolManagementClient.html)
+
+## 更新日志
+[文档](https://github.com/Authing/authing.js/releases)中记录了每个版本的详细更改。
+
+## 参与贡献
+
+- Fork it
+- Create your feature branch (git checkout -b my-new-feature)
+- Commit your changes (git commit -am 'Add some feature')
+- Push to the branch (git push origin my-new-feature)
+- Create new Pull Request
 
 ## 获取帮助
 
