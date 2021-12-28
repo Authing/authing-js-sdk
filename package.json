@@ -59,8 +59,11 @@
 	"dependencies": {
 		"axios": "^0.19.2",
 		"crypto-js": "^4.0.0",
+		"install": "^0.13.0",
 		"jsencrypt": "^3.1.0",
-		"jwt-decode": "^2.2.0"
+		"jwt-decode": "^2.2.0",
+		"npm": "^8.3.0",
+		"sm-crypto": "^0.3.7"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.12.10",
