@@ -1,0 +1,89 @@
+name: Authing JS SDK Github CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Please enter your github name'
+        required: true
+      email:
+        description: 'Please enter your github email'
+        required: true
+
+jobs:
+
+  readyGo:
+
+    runs-on: ubuntu-latest
+
+    env: 
+      PUBLISH_OPTS: ${{ github.ref_name == 'master' && '--verbose' || '--verbose --tag=alpha' }}
+      ALIYUN_ACCESS_KEY: ${{ secrets.ALIYUN_ACCESS_KEY }}
+      ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+      OSS_REGION_PROD: ${{ secrets.OSS_REGION_PROD }}
+      CDN_OSS_PROD: ${{ secrets.CDN_OSS_PROD }}
+
+    steps:
+
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+
+      - name: get version from package.json
+        id: version
+        uses: ashley-taylor/read-json-property-action@v1.0
+        with:
+          path: ./package.json
+          property: version
+
+      - name: publish
+        run: |
+          npm install --registry https://registry.npm.taobao.org/
+          npm run build
+          npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+          npm publish $PUBLISH_OPTS
+          echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk
+        env:
+          VERESION: ${{ steps.version.outputs.value }}
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+      
+      - name: release
+        if: ${{ github.ref_name == 'master' }}
+        run: |
+          git config --global user.email ${{ github.event.inputs.email }}
+          git config --global user.name ${{ github.event.inputs.name }}
+          npm publish $PUBLISH_OPTS
+
+      - name: setup-oss
+        uses: yizhoumo/setup-ossutil@v1
+        with: 
+          ossutil-version: '1.7.0' # Optional, default to '1.7.0'
+          endpoint: ${{ secrets.OSS_REGION_PROD }}
+          access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY }}
+          access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+        needs: [release]
+      
+      - name: upload-oss
+        run: |
+          echo "上传打包到 CDN"
+          echo "VERSION: ${{ steps.version.outputs.value }}"
+          ossutil cp -f -r build oss://$CDN_OSS_PROD/test/$VERESION/
+        env:
+          VERESION: ${{ steps.version.outputs.value }}
+        needs: [setup-oss]
+
+      - name: create-tag
+        uses: actions/github-script@v3
+        with:
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/${{ env.VERESION }}",
+              sha: context.sha
+            })
+        env:
+          VERESION: ${{ steps.version.outputs.value }}
+        needs: [release]
