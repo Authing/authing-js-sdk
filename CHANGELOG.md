@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.23.6](https://github.com/authing/authing.js/compare/v4.24.0...v4.23.6) (2021-12-28)
+
+
+
 ## [4.24.0](https://github.com/authing/authing.js/compare/v4.3.2...v4.24.0) (2021-12-28)
 
 
