@@ -45,6 +45,9 @@ jobs:
           npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
           npm publish $PUBLISH_OPTS
           echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk
+        env:
+          VERESION: ${{ steps.version.outputs.value }}
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
       
       - name: release
         if: ${{ github.ref_name == 'master' }}
@@ -52,9 +55,6 @@ jobs:
           git config --global user.email ${{ github.event.inputs.email }}
           git config --global user.name ${{ github.event.inputs.name }}
           npm publish $PUBLISH_OPTS
-        env:
-          VERESION: ${{ steps.version.outputs.value }}
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
 
       - name: setup-oss
         uses: yizhoumo/setup-ossutil@v1
