@@ -57,24 +57,25 @@ jobs:
           npm publish $PUBLISH_OPTS
 
       - name: setup-oss
+        if: ${{ github.ref_name == 'master' }}
         uses: yizhoumo/setup-ossutil@v1
         with: 
           ossutil-version: '1.7.0' # Optional, default to '1.7.0'
           endpoint: ${{ secrets.OSS_REGION_PROD }}
           access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY }}
           access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-        needs: [release]
       
       - name: upload-oss
+        if: ${{ github.ref_name == 'master' }}
         run: |
           echo "上传打包到 CDN"
           echo "VERSION: ${{ steps.version.outputs.value }}"
           ossutil cp -f -r build oss://$CDN_OSS_PROD/test/$VERESION/
         env:
           VERESION: ${{ steps.version.outputs.value }}
-        needs: [setup-oss]
 
       - name: create-tag
+        if: ${{ github.ref_name == 'master' }}
         uses: actions/github-script@v3
         with:
           script: |
@@ -86,4 +87,3 @@ jobs:
             })
         env:
           VERESION: ${{ steps.version.outputs.value }}
-        needs: [release]
