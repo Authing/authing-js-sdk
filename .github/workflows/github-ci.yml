@@ -67,7 +67,7 @@ jobs:
         run: |
           echo "上传打包到 CDN"
           echo "VERSION: ${{ steps.version.outputs.value }}"
-          ossutil cp -f -r build oss://$CDN_OSS_PROD/test/$VERESION/
+          ossutil cp -f -r build oss://$CDN_OSS_PROD/packages/authing-js-sdk/$VERESION/
         env:
           VERESION: ${{ steps.version.outputs.value }}
 
