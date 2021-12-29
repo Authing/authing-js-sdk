@@ -195,7 +195,7 @@ const managementClient = new ManagementClient({
 
 ### 使用方法
 
-`ManagementClient` 可以  用于管理用户、角色、策略、分组、组织机构、用户池配置，理论上任何你在 [Authing 控制台](https://console.authing.cn/console/userpool) 中能做的操作，都能用此 SDK 完成。
+`ManagementClient` 可以用于管理用户、角色、策略、分组、组织机构、用户池配置，理论上任何你在 [Authing 控制台](https://console.authing.cn/console/userpool) 中能做的操作，都能用此 SDK 完成。
 
 获取用户目录列表:
 
