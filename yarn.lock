@@ -5518,11 +5518,6 @@ js-yaml@3.13.1, js-yaml@^3.10.0, js-yaml@^3.13.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-jsbn@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-1.1.0.tgz#b01307cb29b618a1ed26ec79e911f803c4da0040"
-  integrity sha1-sBMHyym2GKHtJux56RH4A8TaAEA=
-
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
@@ -8338,13 +8333,6 @@ slice-ansi@^3.0.0:
     ansi-styles "^4.0.0"
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
-
-sm-crypto@^0.3.7:
-  version "0.3.7"
-  resolved "https://registry.yarnpkg.com/sm-crypto/-/sm-crypto-0.3.7.tgz#d48ad948772eeed0c677c82f490f56925ffe7c0a"
-  integrity sha512-t9SVgGpFkqaQtA8P81+b+gNBDZUyGhSq46ojA8YWf1mKYk8qcRqeCPte+WxLSMaGT38CJLoj43ljfpKX3LZVfA==
-  dependencies:
-    jsbn "^1.1.0"
 
 smart-buffer@^4.1.0:
   version "4.2.0"

@@ -16,6 +16,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    container:
+      image: node:12.14.0
+
     env: 
       PUBLISH_OPTS: ${{ github.ref_name == 'master' && '--verbose' || '--verbose --tag=alpha' }}
       ALIYUN_ACCESS_KEY: ${{ secrets.ALIYUN_ACCESS_KEY }}

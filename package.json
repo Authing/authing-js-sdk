@@ -134,7 +134,5 @@
 			"**/*.spec.js"
 		]
 	},
-	"peerDependencies": {
-		"sm-crypto": "^0.3.7"
-	}
+	"peerDependencies": {}
 }
