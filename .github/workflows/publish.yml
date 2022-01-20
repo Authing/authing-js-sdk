@@ -28,6 +28,7 @@ jobs:
       ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
       OSS_REGION_PROD: ${{ secrets.OSS_REGION_PROD }}
       CDN_OSS_PROD: ${{ secrets.CDN_OSS_PROD }}
+      VERESION: ${{ github.event.inputs.version }}
 
     steps:
 
@@ -59,7 +60,6 @@ jobs:
           npm publish $PUBLISH_OPTS
           echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk 🚀"
         env:
-          VERESION: ${{ github.event.inputs.version }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: setup oss
@@ -77,8 +77,6 @@ jobs:
           echo "上传打包到 CDN"
           echo "VERSION: ${{ github.event.inputs.version }}"
           ossutil cp -f -r build oss://$CDN_OSS_PROD/packages/authing-js-sdk/$VERESION/
-        env:
-          VERESION: ${{ github.event.inputs.version }}
     
       - name: release
         if: ${{ github.ref_name == 'master' }}
@@ -91,5 +89,3 @@ jobs:
               ref: "refs/tags/${{ env.VERESION }}",
               sha: context.sha
             })
-        env:
-          VERESION: ${{ github.event.inputs.version }}
