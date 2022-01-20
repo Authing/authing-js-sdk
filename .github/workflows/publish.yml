@@ -81,6 +81,7 @@ jobs:
           VERESION: ${{ github.event.inputs.version }}
     
       - name: release
+        if: ${{ github.ref_name == 'master' }}
         uses: actions/github-script@v3
         with:
           script: |
