@@ -1,4 +1,4 @@
-name: Authing JS SDK Github CI
+name: Authing JS SDK publish CI
 
 on:
   workflow_dispatch:
