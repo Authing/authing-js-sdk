@@ -37,11 +37,6 @@ jobs:
           echo "Current user.name: ${{ github.event.inputs.name }}"
           echo "Current user.email: ${{ github.event.inputs.email }}"
 
-      - name: set git config
-        run: |
-          git config --global user.email ${{ github.event.inputs.email }}
-          git config --global user.name ${{ github.event.inputs.name }}
-
       - name: before scripts
         run: |
           echo "Current branch: ${{ github.ref_name }}"
@@ -53,9 +48,12 @@ jobs:
         run: |
           npm ci
 
+      - name: build
+        run: 
+          npm run build
+
       - name: publish
         run: |
-          npm run build
           npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
           npm publish $PUBLISH_OPTS --access public
           echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk 🚀"
