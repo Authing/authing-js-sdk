@@ -29,13 +29,18 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+          
+      - name: before scripts
+        run: |
+          echo "Current branch: ${{ github.ref_name }}"
+          echo "Current publish version: ${{ github.event.inputs.version }}"
+          echo "Current user.name: ${{ github.event.inputs.name }}"
+          echo "Current user.email: ${{ github.event.inputs.email }}"
 
-      - name: get version from package.json
-        id: version
-        uses: ashley-taylor/read-json-property-action@v1.0
-        with:
-          path: ./package.json
-          property: version
+      - name: set git config
+        run: |
+          git config --global user.email ${{ github.event.inputs.email }}
+          git config --global user.name ${{ github.event.inputs.name }}
 
       - name: before scripts
         run: |
@@ -68,7 +73,7 @@ jobs:
         if: ${{ github.ref_name == 'master' }}
         run: |
           echo "上传打包到 CDN"
-          echo "VERSION: ${{ steps.version.outputs.value }}"
+          echo "VERSION: ${{ github.event.inputs.version }}"
           ossutil cp -f -r build oss://$CDN_OSS_PROD/packages/authing-js-sdk/$VERESION/
         env:
           VERESION: ${{ steps.version.outputs.value }}
