@@ -1,14 +1,9 @@
-name: Authing JS SDK Github CI
+name: publish
 
 on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'Please enter your github name'
-        required: true
-      email:
-        description: 'Please enter your github email'
-        required: true
+  push:
+    tags:
+      - v*
 
 jobs:
 
@@ -25,6 +20,7 @@ jobs:
       ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
       OSS_REGION_PROD: ${{ secrets.OSS_REGION_PROD }}
       CDN_OSS_PROD: ${{ secrets.CDN_OSS_PROD }}
+      NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
     steps:
 
@@ -41,19 +37,25 @@ jobs:
           path: ./package.json
           property: version
 
+      - name: before scripts
+        run: |
+          echo "Current branch: ${{ github.ref_name }}"
+          echo "Current publish version: ${{ env.VERSION }}"
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+
+      - name: install packages
+        run: |
+          npm ci
+
       - name: publish
         run: |
-          npm install yarn -g
-          yarn
           npm run build
           npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
-          npm publish $PUBLISH_OPTS
+          npm publish $PUBLISH_OPTS --access public
           echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk 🚀"
-        env:
-          VERESION: ${{ steps.version.outputs.value }}
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
-      - name: setup-oss
+      - name: setup oss
         if: ${{ github.ref_name == 'master' }}
         uses: yizhoumo/setup-ossutil@v1
         with: 
@@ -62,31 +64,11 @@ jobs:
           access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY }}
           access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
       
-      - name: upload-oss
+      - name: upload oss
         if: ${{ github.ref_name == 'master' }}
         run: |
           echo "上传打包到 CDN"
           echo "VERSION: ${{ steps.version.outputs.value }}"
           ossutil cp -f -r build oss://$CDN_OSS_PROD/packages/authing-js-sdk/$VERESION/
-        env:
-          VERESION: ${{ steps.version.outputs.value }}
-
-      - name: set-git-config
-        if: ${{ github.ref_name == 'master' }}
-        run: |
-          git config --global user.email ${{ github.event.inputs.email }}
-          git config --global user.name ${{ github.event.inputs.name }}
-    
-      - name: release
-        if: ${{ github.ref_name == 'master' }}
-        uses: actions/github-script@v3
-        with:
-          script: |
-            github.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: "refs/tags/${{ env.VERESION }}",
-              sha: context.sha
-            })
         env:
           VERESION: ${{ steps.version.outputs.value }}
