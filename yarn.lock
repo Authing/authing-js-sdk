@@ -1615,10 +1615,6 @@ ansi-red@^0.1.1:
   dependencies:
     ansi-wrap "0.1.0"
 
-ansi-regex@^2.0.0:
-  version "2.1.1"
-  resolved "https://registry.npm.taobao.org/ansi-regex/download/ansi-regex-2.1.1.tgz"
-
 ansi-regex@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/ansi-regex/download/ansi-regex-3.0.0.tgz"
@@ -2135,7 +2131,7 @@ caniuse-lite@^1.0.30001181:
   version "1.0.30001181"
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001181.tgz"
 
-chalk@2.4.2, chalk@^2.0.0, chalk@^2.0.1, chalk@^2.3.0, chalk@^2.4.1, chalk@^2.4.2:
+chalk@^2.0.0, chalk@^2.0.1, chalk@^2.3.0, chalk@^2.4.1, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz"
   dependencies:
@@ -2224,14 +2220,6 @@ cli-truncate@^2.0.0:
     slice-ansi "^3.0.0"
     string-width "^4.2.0"
 
-cliui@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.npm.taobao.org/cliui/download/cliui-4.1.0.tgz"
-  dependencies:
-    string-width "^2.1.1"
-    strip-ansi "^4.0.0"
-    wrap-ansi "^2.0.0"
-
 cliui@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npm.taobao.org/cliui/download/cliui-5.0.0.tgz"
@@ -2239,6 +2227,14 @@ cliui@^5.0.0:
     string-width "^3.1.0"
     strip-ansi "^5.2.0"
     wrap-ansi "^5.1.0"
+
+cliui@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/cliui/-/cliui-6.0.0.tgz#511d702c0c4e41ca156d7d0e96021f23e13225b1"
+  dependencies:
+    string-width "^4.2.0"
+    strip-ansi "^6.0.0"
+    wrap-ansi "^6.2.0"
 
 cliui@^7.0.2:
   version "7.0.4"
@@ -2271,10 +2267,6 @@ code-excerpt@^2.1.1:
   resolved "https://registry.npm.taobao.org/code-excerpt/download/code-excerpt-2.1.1.tgz"
   dependencies:
     convert-to-spaces "^1.0.1"
-
-code-point-at@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.npm.taobao.org/code-point-at/download/code-point-at-1.1.0.tgz"
 
 codecov@^3.5.0:
   version "3.7.1"
@@ -2402,14 +2394,14 @@ content-type@~1.0.4:
   version "1.0.4"
   resolved "https://registry.npm.taobao.org/content-type/download/content-type-1.0.4.tgz"
 
-conventional-changelog-angular@^5.0.12, conventional-changelog-angular@^5.0.3:
+conventional-changelog-angular@^5.0.10, conventional-changelog-angular@^5.0.12:
   version "5.0.13"
   resolved "https://registry.npmjs.org/conventional-changelog-angular/-/conventional-changelog-angular-5.0.13.tgz"
   dependencies:
     compare-func "^2.0.0"
     q "^1.5.1"
 
-conventional-changelog-atom@^2.0.1, conventional-changelog-atom@^2.0.8:
+conventional-changelog-atom@^2.0.7, conventional-changelog-atom@^2.0.8:
   version "2.0.8"
   resolved "https://registry.npmjs.org/conventional-changelog-atom/-/conventional-changelog-atom-2.0.8.tgz"
   dependencies:
@@ -2425,24 +2417,25 @@ conventional-changelog-cli@^2.0.31:
     meow "^8.0.0"
     tempfile "^3.0.0"
 
-conventional-changelog-codemirror@^2.0.1, conventional-changelog-codemirror@^2.0.8:
+conventional-changelog-codemirror@^2.0.7, conventional-changelog-codemirror@^2.0.8:
   version "2.0.8"
   resolved "https://registry.npmjs.org/conventional-changelog-codemirror/-/conventional-changelog-codemirror-2.0.8.tgz"
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-config-spec@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npm.taobao.org/conventional-changelog-config-spec/download/conventional-changelog-config-spec-1.0.0.tgz"
+conventional-changelog-config-spec@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/conventional-changelog-config-spec/-/conventional-changelog-config-spec-2.1.0.tgz#874a635287ef8b581fd8558532bf655d4fb59f2d"
 
-conventional-changelog-conventionalcommits@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.npm.taobao.org/conventional-changelog-conventionalcommits/download/conventional-changelog-conventionalcommits-3.0.2.tgz"
+conventional-changelog-conventionalcommits@4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/conventional-changelog-conventionalcommits/-/conventional-changelog-conventionalcommits-4.3.0.tgz#c4205a659f7ca9d7881f29ee78a4e7d6aeb8b3c2"
   dependencies:
     compare-func "^1.3.1"
+    lodash "^4.17.15"
     q "^1.5.1"
 
-conventional-changelog-conventionalcommits@^4.5.0:
+conventional-changelog-conventionalcommits@^4.3.0, conventional-changelog-conventionalcommits@^4.5.0:
   version "4.6.3"
   resolved "https://registry.npmjs.org/conventional-changelog-conventionalcommits/-/conventional-changelog-conventionalcommits-4.6.3.tgz"
   dependencies:
@@ -2450,25 +2443,7 @@ conventional-changelog-conventionalcommits@^4.5.0:
     lodash "^4.17.15"
     q "^1.5.1"
 
-conventional-changelog-core@^3.2.2:
-  version "3.2.3"
-  resolved "https://registry.npm.taobao.org/conventional-changelog-core/download/conventional-changelog-core-3.2.3.tgz"
-  dependencies:
-    conventional-changelog-writer "^4.0.6"
-    conventional-commits-parser "^3.0.3"
-    dateformat "^3.0.0"
-    get-pkg-repo "^1.0.0"
-    git-raw-commits "2.0.0"
-    git-remote-origin-url "^2.0.0"
-    git-semver-tags "^2.0.3"
-    lodash "^4.2.1"
-    normalize-package-data "^2.3.5"
-    q "^1.5.1"
-    read-pkg "^3.0.0"
-    read-pkg-up "^3.0.0"
-    through2 "^3.0.0"
-
-conventional-changelog-core@^4.2.1:
+conventional-changelog-core@^4.1.7, conventional-changelog-core@^4.2.1:
   version "4.2.4"
   resolved "https://registry.npmjs.org/conventional-changelog-core/-/conventional-changelog-core-4.2.4.tgz"
   dependencies:
@@ -2487,55 +2462,40 @@ conventional-changelog-core@^4.2.1:
     read-pkg-up "^3.0.0"
     through2 "^4.0.0"
 
-conventional-changelog-ember@^2.0.2, conventional-changelog-ember@^2.0.9:
+conventional-changelog-ember@^2.0.8, conventional-changelog-ember@^2.0.9:
   version "2.0.9"
   resolved "https://registry.npmjs.org/conventional-changelog-ember/-/conventional-changelog-ember-2.0.9.tgz"
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-eslint@^3.0.2, conventional-changelog-eslint@^3.0.9:
+conventional-changelog-eslint@^3.0.8, conventional-changelog-eslint@^3.0.9:
   version "3.0.9"
   resolved "https://registry.npmjs.org/conventional-changelog-eslint/-/conventional-changelog-eslint-3.0.9.tgz"
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-express@^2.0.1, conventional-changelog-express@^2.0.6:
+conventional-changelog-express@^2.0.5, conventional-changelog-express@^2.0.6:
   version "2.0.6"
   resolved "https://registry.npmjs.org/conventional-changelog-express/-/conventional-changelog-express-2.0.6.tgz"
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-jquery@^3.0.11, conventional-changelog-jquery@^3.0.4:
+conventional-changelog-jquery@^3.0.10, conventional-changelog-jquery@^3.0.11:
   version "3.0.11"
   resolved "https://registry.npmjs.org/conventional-changelog-jquery/-/conventional-changelog-jquery-3.0.11.tgz"
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-jshint@^2.0.1, conventional-changelog-jshint@^2.0.9:
+conventional-changelog-jshint@^2.0.7, conventional-changelog-jshint@^2.0.9:
   version "2.0.9"
   resolved "https://registry.npmjs.org/conventional-changelog-jshint/-/conventional-changelog-jshint-2.0.9.tgz"
   dependencies:
     compare-func "^2.0.0"
     q "^1.5.1"
 
-conventional-changelog-preset-loader@^2.1.1, conventional-changelog-preset-loader@^2.3.4:
+conventional-changelog-preset-loader@^2.3.4:
   version "2.3.4"
   resolved "https://registry.npm.taobao.org/conventional-changelog-preset-loader/download/conventional-changelog-preset-loader-2.3.4.tgz"
-
-conventional-changelog-writer@^4.0.6:
-  version "4.0.16"
-  resolved "https://registry.npm.taobao.org/conventional-changelog-writer/download/conventional-changelog-writer-4.0.16.tgz"
-  dependencies:
-    compare-func "^1.3.1"
-    conventional-commits-filter "^2.0.6"
-    dateformat "^3.0.0"
-    handlebars "^4.7.6"
-    json-stringify-safe "^5.0.1"
-    lodash "^4.17.15"
-    meow "^7.0.0"
-    semver "^6.0.0"
-    split "^1.0.0"
-    through2 "^3.0.0"
 
 conventional-changelog-writer@^5.0.0:
   version "5.0.1"
@@ -2551,21 +2511,21 @@ conventional-changelog-writer@^5.0.0:
     split "^1.0.0"
     through2 "^4.0.0"
 
-conventional-changelog@3.1.8:
-  version "3.1.8"
-  resolved "https://registry.npm.taobao.org/conventional-changelog/download/conventional-changelog-3.1.8.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fconventional-changelog%2Fdownload%2Fconventional-changelog-3.1.8.tgz"
+conventional-changelog@3.1.21:
+  version "3.1.21"
+  resolved "https://registry.yarnpkg.com/conventional-changelog/-/conventional-changelog-3.1.21.tgz#4a774e6bf503acfd7e4685bb750da8c0eccf1e0d"
   dependencies:
-    conventional-changelog-angular "^5.0.3"
-    conventional-changelog-atom "^2.0.1"
-    conventional-changelog-codemirror "^2.0.1"
-    conventional-changelog-conventionalcommits "^3.0.2"
-    conventional-changelog-core "^3.2.2"
-    conventional-changelog-ember "^2.0.2"
-    conventional-changelog-eslint "^3.0.2"
-    conventional-changelog-express "^2.0.1"
-    conventional-changelog-jquery "^3.0.4"
-    conventional-changelog-jshint "^2.0.1"
-    conventional-changelog-preset-loader "^2.1.1"
+    conventional-changelog-angular "^5.0.10"
+    conventional-changelog-atom "^2.0.7"
+    conventional-changelog-codemirror "^2.0.7"
+    conventional-changelog-conventionalcommits "^4.3.0"
+    conventional-changelog-core "^4.1.7"
+    conventional-changelog-ember "^2.0.8"
+    conventional-changelog-eslint "^3.0.8"
+    conventional-changelog-express "^2.0.5"
+    conventional-changelog-jquery "^3.0.10"
+    conventional-changelog-jshint "^2.0.7"
+    conventional-changelog-preset-loader "^2.3.4"
 
 conventional-changelog@^3.1.24:
   version "3.1.25"
@@ -2587,14 +2547,14 @@ conventional-commit-types@^2.0.0:
   version "2.3.0"
   resolved "https://registry.npm.taobao.org/conventional-commit-types/download/conventional-commit-types-2.3.0.tgz"
 
-conventional-commits-filter@^2.0.2, conventional-commits-filter@^2.0.6, conventional-commits-filter@^2.0.7:
+conventional-commits-filter@^2.0.6, conventional-commits-filter@^2.0.7:
   version "2.0.7"
   resolved "https://registry.npmjs.org/conventional-commits-filter/-/conventional-commits-filter-2.0.7.tgz"
   dependencies:
     lodash.ismatch "^4.4.0"
     modify-values "^1.0.0"
 
-conventional-commits-parser@^3.0.2, conventional-commits-parser@^3.0.3, conventional-commits-parser@^3.2.0:
+conventional-commits-parser@^3.1.0, conventional-commits-parser@^3.2.0:
   version "3.2.4"
   resolved "https://registry.npmjs.org/conventional-commits-parser/-/conventional-commits-parser-3.2.4.tgz"
   dependencies:
@@ -2605,17 +2565,17 @@ conventional-commits-parser@^3.0.2, conventional-commits-parser@^3.0.3, conventi
     split2 "^3.0.0"
     through2 "^4.0.0"
 
-conventional-recommended-bump@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npm.taobao.org/conventional-recommended-bump/download/conventional-recommended-bump-5.0.0.tgz"
+conventional-recommended-bump@6.0.9:
+  version "6.0.9"
+  resolved "https://registry.yarnpkg.com/conventional-recommended-bump/-/conventional-recommended-bump-6.0.9.tgz#49ee74f52fbafcc63e89e2297d020279fea318f0"
   dependencies:
     concat-stream "^2.0.0"
-    conventional-changelog-preset-loader "^2.1.1"
-    conventional-commits-filter "^2.0.2"
-    conventional-commits-parser "^3.0.2"
+    conventional-changelog-preset-loader "^2.3.4"
+    conventional-commits-filter "^2.0.6"
+    conventional-commits-parser "^3.1.0"
     git-raw-commits "2.0.0"
-    git-semver-tags "^2.0.2"
-    meow "^4.0.0"
+    git-semver-tags "^4.0.0"
+    meow "^7.0.0"
     q "^1.5.1"
 
 convert-source-map@^1.6.0, convert-source-map@^1.7.0:
@@ -2727,7 +2687,7 @@ cross-spawn@^5.0.1:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-cross-spawn@^6.0.0, cross-spawn@^6.0.5:
+cross-spawn@^6.0.5:
   version "6.0.5"
   resolved "https://registry.npm.taobao.org/cross-spawn/download/cross-spawn-6.0.5.tgz"
   dependencies:
@@ -2904,13 +2864,13 @@ destroy@~1.0.4:
   version "1.0.4"
   resolved "https://registry.npm.taobao.org/destroy/download/destroy-1.0.4.tgz"
 
-detect-indent@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npm.taobao.org/detect-indent/download/detect-indent-6.0.0.tgz"
+detect-indent@^6.0.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/detect-indent/-/detect-indent-6.1.0.tgz#592485ebbbf6b3b1ab2be175c8393d04ca0d57e6"
 
-detect-newline@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npm.taobao.org/detect-newline/download/detect-newline-3.0.0.tgz?cache=0&sync_timestamp=1573634824396&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdetect-newline%2Fdownload%2Fdetect-newline-3.0.0.tgz"
+detect-newline@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-3.1.0.tgz#576f5dfc63ae1a192ff192d8ad3af6308991b651"
 
 diff@^4.0.1:
   version "4.0.2"
@@ -2958,9 +2918,9 @@ dotenv@^8.2.0:
   version "8.2.0"
   resolved "https://registry.npm.taobao.org/dotenv/download/dotenv-8.2.0.tgz"
 
-dotgitignore@2.1.0:
+dotgitignore@^2.1.0:
   version "2.1.0"
-  resolved "https://registry.npm.taobao.org/dotgitignore/download/dotgitignore-2.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/dotgitignore/-/dotgitignore-2.1.0.tgz#a4b15a4e4ef3cf383598aaf1dfa4a04bcc089b7b"
   dependencies:
     find-up "^3.0.0"
     minimatch "^3.0.4"
@@ -3210,18 +3170,6 @@ execa@^0.7.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-execa@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npm.taobao.org/execa/download/execa-1.0.0.tgz?cache=0&sync_timestamp=1590156534762&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fexeca%2Fdownload%2Fexeca-1.0.0.tgz"
-  dependencies:
-    cross-spawn "^6.0.0"
-    get-stream "^4.0.0"
-    is-stream "^1.1.0"
-    npm-run-path "^2.0.0"
-    p-finally "^1.0.0"
-    signal-exit "^3.0.0"
-    strip-eof "^1.0.0"
-
 execa@^4.0.2:
   version "4.1.0"
   resolved "https://registry.npmjs.org/execa/-/execa-4.1.0.tgz"
@@ -3331,13 +3279,7 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
-figures@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npm.taobao.org/figures/download/figures-3.0.0.tgz"
-  dependencies:
-    escape-string-regexp "^1.0.5"
-
-figures@^3.0.0:
+figures@^3.0.0, figures@^3.1.0:
   version "3.2.0"
   resolved "https://registry.npm.taobao.org/figures/download/figures-3.2.0.tgz"
   dependencies:
@@ -3392,12 +3334,6 @@ find-cache-dir@^2.1.0:
     make-dir "^2.0.0"
     pkg-dir "^3.0.0"
 
-find-up@3.0.0, find-up@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npm.taobao.org/find-up/download/find-up-3.0.0.tgz"
-  dependencies:
-    locate-path "^3.0.0"
-
 find-up@^1.0.0:
   version "1.1.2"
   resolved "https://registry.npm.taobao.org/find-up/download/find-up-1.1.2.tgz"
@@ -3410,6 +3346,12 @@ find-up@^2.0.0:
   resolved "https://registry.npm.taobao.org/find-up/download/find-up-2.1.0.tgz"
   dependencies:
     locate-path "^2.0.0"
+
+find-up@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.taobao.org/find-up/download/find-up-3.0.0.tgz"
+  dependencies:
+    locate-path "^3.0.0"
 
 find-up@^4.0.0, find-up@^4.1.0:
   version "4.1.0"
@@ -3458,9 +3400,9 @@ fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.npm.taobao.org/fresh/download/fresh-0.5.2.tgz"
 
-fs-access@1.0.1:
+fs-access@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.npm.taobao.org/fs-access/download/fs-access-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/fs-access/-/fs-access-1.0.1.tgz#d6a87f262271cefebec30c553407fb995da8777a"
   dependencies:
     null-check "^1.0.0"
 
@@ -3509,16 +3451,6 @@ get-graphql-schema@^2.1.2:
     minimist "^1.2.0"
     node-fetch "^2.2.0"
 
-get-pkg-repo@^1.0.0:
-  version "1.4.0"
-  resolved "https://registry.npm.taobao.org/get-pkg-repo/download/get-pkg-repo-1.4.0.tgz"
-  dependencies:
-    hosted-git-info "^2.1.4"
-    meow "^3.3.0"
-    normalize-package-data "^2.3.0"
-    parse-github-repo-url "^1.3.0"
-    through2 "^2.0.0"
-
 get-pkg-repo@^4.0.0:
   version "4.2.1"
   resolved "https://registry.npmjs.org/get-pkg-repo/-/get-pkg-repo-4.2.1.tgz"
@@ -3544,7 +3476,7 @@ get-stream@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/get-stream/download/get-stream-3.0.0.tgz"
 
-get-stream@^4.0.0, get-stream@^4.1.0:
+get-stream@^4.1.0:
   version "4.1.0"
   resolved "https://registry.npm.taobao.org/get-stream/download/get-stream-4.1.0.tgz"
   dependencies:
@@ -3614,21 +3546,7 @@ git-remote-origin-url@^2.0.0:
     gitconfiglocal "^1.0.0"
     pify "^2.3.0"
 
-git-semver-tags@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.npm.taobao.org/git-semver-tags/download/git-semver-tags-2.0.2.tgz"
-  dependencies:
-    meow "^4.0.0"
-    semver "^5.5.0"
-
-git-semver-tags@^2.0.2, git-semver-tags@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.npm.taobao.org/git-semver-tags/download/git-semver-tags-2.0.3.tgz"
-  dependencies:
-    meow "^4.0.0"
-    semver "^6.0.0"
-
-git-semver-tags@^4.1.1:
+git-semver-tags@^4.0.0, git-semver-tags@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/git-semver-tags/-/git-semver-tags-4.1.1.tgz"
   dependencies:
@@ -3743,7 +3661,7 @@ graphql@^14.0.2:
   dependencies:
     iterall "^1.2.2"
 
-handlebars@^4.1.2, handlebars@^4.7.6, handlebars@^4.7.7:
+handlebars@^4.1.2, handlebars@^4.7.7:
   version "4.7.7"
   resolved "https://registry.npmjs.org/handlebars/-/handlebars-4.7.7.tgz"
   dependencies:
@@ -3984,10 +3902,6 @@ interpret@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npmjs.org/interpret/-/interpret-2.2.0.tgz"
 
-invert-kv@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/invert-kv/download/invert-kv-2.0.0.tgz"
-
 ipaddr.js@1.9.1:
   version "1.9.1"
   resolved "https://registry.npm.taobao.org/ipaddr.js/download/ipaddr.js-1.9.1.tgz"
@@ -4075,12 +3989,6 @@ is-extglob@^2.1.1:
 is-finite@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/is-finite/download/is-finite-1.1.0.tgz"
-
-is-fullwidth-code-point@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npm.taobao.org/is-fullwidth-code-point/download/is-fullwidth-code-point-1.0.0.tgz"
-  dependencies:
-    number-is-nan "^1.0.0"
 
 is-fullwidth-code-point@^2.0.0:
   version "2.0.0"
@@ -4406,12 +4314,6 @@ lazy-cache@^2.0.1, lazy-cache@^2.0.2:
   dependencies:
     set-getter "^0.1.0"
 
-lcid@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/lcid/download/lcid-2.0.0.tgz"
-  dependencies:
-    invert-kv "^2.0.0"
-
 lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://registry.npm.taobao.org/lines-and-columns/download/lines-and-columns-1.1.6.tgz"
@@ -4524,7 +4426,7 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "^3.0.0"
 
-lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.2.1:
+lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15:
   version "4.17.15"
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.15.tgz"
 
@@ -4623,12 +4525,6 @@ make-error@^1.1.1:
   version "1.3.6"
   resolved "https://registry.npm.taobao.org/make-error/download/make-error-1.3.6.tgz"
 
-map-age-cleaner@^0.1.1:
-  version "0.1.3"
-  resolved "https://registry.npm.taobao.org/map-age-cleaner/download/map-age-cleaner-0.1.3.tgz"
-  dependencies:
-    p-defer "^1.0.0"
-
 map-obj@^1.0.0, map-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/map-obj/download/map-obj-1.0.1.tgz"
@@ -4711,14 +4607,6 @@ media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.npm.taobao.org/media-typer/download/media-typer-0.3.0.tgz"
 
-mem@^4.0.0:
-  version "4.3.0"
-  resolved "https://registry.npm.taobao.org/mem/download/mem-4.3.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmem%2Fdownload%2Fmem-4.3.0.tgz"
-  dependencies:
-    map-age-cleaner "^0.1.1"
-    mimic-fn "^2.0.0"
-    p-is-promise "^2.0.0"
-
 memory-fs@^0.5.0:
   version "0.5.0"
   resolved "https://registry.npmjs.org/memory-fs/-/memory-fs-0.5.0.tgz"
@@ -4730,7 +4618,7 @@ memorystream@^0.3.1:
   version "0.3.1"
   resolved "https://registry.npm.taobao.org/memorystream/download/memorystream-0.3.1.tgz"
 
-meow@^3.3.0, meow@^3.7.0:
+meow@^3.7.0:
   version "3.7.0"
   resolved "https://registry.npm.taobao.org/meow/download/meow-3.7.0.tgz"
   dependencies:
@@ -4871,7 +4759,7 @@ mimic-fn@^1.0.0:
   version "1.2.0"
   resolved "https://registry.npm.taobao.org/mimic-fn/download/mimic-fn-1.2.0.tgz"
 
-mimic-fn@^2.0.0, mimic-fn@^2.1.0:
+mimic-fn@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/mimic-fn/download/mimic-fn-2.1.0.tgz"
 
@@ -5004,7 +4892,7 @@ noms@0.0.0:
     inherits "^2.0.1"
     readable-stream "~1.0.31"
 
-normalize-package-data@^2.3.0, normalize-package-data@^2.3.2, normalize-package-data@^2.3.4, normalize-package-data@^2.3.5, normalize-package-data@^2.5.0:
+normalize-package-data@^2.3.2, normalize-package-data@^2.3.4, normalize-package-data@^2.5.0:
   version "2.5.0"
   resolved "https://registry.npm.taobao.org/normalize-package-data/download/normalize-package-data-2.5.0.tgz"
   dependencies:
@@ -5226,14 +5114,6 @@ os-homedir@^1.0.0, os-homedir@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/os-homedir/download/os-homedir-1.0.2.tgz"
 
-os-locale@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.npm.taobao.org/os-locale/download/os-locale-3.1.0.tgz"
-  dependencies:
-    execa "^1.0.0"
-    lcid "^2.0.0"
-    mem "^4.0.0"
-
 os-tmpdir@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/os-tmpdir/download/os-tmpdir-1.0.2.tgz"
@@ -5250,17 +5130,9 @@ p-cancelable@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/p-cancelable/download/p-cancelable-1.1.0.tgz"
 
-p-defer@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npm.taobao.org/p-defer/download/p-defer-1.0.0.tgz"
-
 p-finally@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/p-finally/download/p-finally-1.0.0.tgz"
-
-p-is-promise@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.npm.taobao.org/p-is-promise/download/p-is-promise-2.1.0.tgz"
 
 p-limit@^1.1.0:
   version "1.3.0"
@@ -5381,10 +5253,6 @@ parse-comments@1.0.0:
     snapdragon-node "^3.0.0"
     snapdragon-parser "^1.0.0"
     tokenize-comment "^3.0.1"
-
-parse-github-repo-url@^1.3.0:
-  version "1.4.1"
-  resolved "https://registry.npm.taobao.org/parse-github-repo-url/download/parse-github-repo-url-1.4.1.tgz"
 
 parse-json@^2.2.0:
   version "2.2.0"
@@ -5726,7 +5594,7 @@ read-pkg@^5.2.0:
     parse-json "^5.0.0"
     type-fest "^0.6.0"
 
-"readable-stream@2 || 3", readable-stream@3, readable-stream@^3.0.0, readable-stream@^3.0.2, readable-stream@^3.5.0, readable-stream@^3.6.0:
+readable-stream@3, readable-stream@^3.0.0, readable-stream@^3.0.2, readable-stream@^3.5.0, readable-stream@^3.6.0:
   version "3.6.0"
   resolved "https://registry.npm.taobao.org/readable-stream/download/readable-stream-3.6.0.tgz"
   dependencies:
@@ -6001,10 +5869,6 @@ semver-diff@^2.0.0:
   version "5.7.1"
   resolved "https://registry.npm.taobao.org/semver/download/semver-5.7.1.tgz?cache=0&sync_timestamp=1586886301819&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsemver%2Fdownload%2Fsemver-5.7.1.tgz"
 
-semver@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npm.taobao.org/semver/download/semver-6.0.0.tgz?cache=0&sync_timestamp=1586886301819&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsemver%2Fdownload%2Fsemver-6.0.0.tgz"
-
 semver@7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/semver/-/semver-7.0.0.tgz"
@@ -6013,7 +5877,7 @@ semver@^6.0.0, semver@^6.2.0:
   version "6.3.0"
   resolved "https://registry.npmjs.org/semver/-/semver-6.3.0.tgz"
 
-semver@^7.3.4:
+semver@^7.1.1, semver@^7.3.4:
   version "7.3.5"
   resolved "https://registry.npmjs.org/semver/-/semver-7.3.5.tgz"
   dependencies:
@@ -6253,24 +6117,25 @@ stack-utils@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/stack-utils/download/stack-utils-1.0.2.tgz"
 
-standard-version@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.npm.taobao.org/standard-version/download/standard-version-6.0.1.tgz"
+standard-version@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/standard-version/-/standard-version-8.0.1.tgz#4638d3cee1365c9d6773c3ac33429e4562f3f696"
   dependencies:
-    chalk "2.4.2"
-    conventional-changelog "3.1.8"
-    conventional-changelog-config-spec "1.0.0"
-    conventional-recommended-bump "5.0.0"
-    detect-indent "6.0.0"
-    detect-newline "3.0.0"
-    dotgitignore "2.1.0"
-    figures "3.0.0"
-    find-up "3.0.0"
-    fs-access "1.0.1"
-    git-semver-tags "2.0.2"
-    semver "6.0.0"
-    stringify-package "1.0.0"
-    yargs "13.2.2"
+    chalk "^2.4.2"
+    conventional-changelog "3.1.21"
+    conventional-changelog-config-spec "2.1.0"
+    conventional-changelog-conventionalcommits "4.3.0"
+    conventional-recommended-bump "6.0.9"
+    detect-indent "^6.0.0"
+    detect-newline "^3.1.0"
+    dotgitignore "^2.1.0"
+    figures "^3.1.0"
+    find-up "^4.1.0"
+    fs-access "^1.0.1"
+    git-semver-tags "^4.0.0"
+    semver "^7.1.1"
+    stringify-package "^1.0.1"
+    yargs "^15.3.1"
 
 "statuses@>= 1.5.0 < 2", statuses@~1.5.0:
   version "1.5.0"
@@ -6292,14 +6157,6 @@ stream-events@^1.0.5:
 strict-uri-encode@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/strict-uri-encode/download/strict-uri-encode-1.1.0.tgz"
-
-string-width@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.npm.taobao.org/string-width/download/string-width-1.0.2.tgz"
-  dependencies:
-    code-point-at "^1.0.0"
-    is-fullwidth-code-point "^1.0.0"
-    strip-ansi "^3.0.0"
 
 string-width@^2.1.1:
   version "2.1.1"
@@ -6385,15 +6242,9 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
-stringify-package@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npm.taobao.org/stringify-package/download/stringify-package-1.0.0.tgz"
-
-strip-ansi@^3.0.0, strip-ansi@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npm.taobao.org/strip-ansi/download/strip-ansi-3.0.1.tgz?cache=0&sync_timestamp=1573280549549&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fstrip-ansi%2Fdownload%2Fstrip-ansi-3.0.1.tgz"
-  dependencies:
-    ansi-regex "^2.0.0"
+stringify-package@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/stringify-package/-/stringify-package-1.0.1.tgz#e5aa3643e7f74d0f28628b72f3dad5cecfc3ba85"
 
 strip-ansi@^4.0.0:
   version "4.0.0"
@@ -6604,12 +6455,6 @@ through2@^2.0.0, through2@^2.0.1, through2@^2.0.2:
   dependencies:
     readable-stream "~2.3.6"
     xtend "~4.0.1"
-
-through2@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.npm.taobao.org/through2/download/through2-3.0.1.tgz"
-  dependencies:
-    readable-stream "2 || 3"
 
 through2@^4.0.0:
   version "4.0.2"
@@ -7093,13 +6938,6 @@ wordwrap@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/wordwrap/download/wordwrap-1.0.0.tgz"
 
-wrap-ansi@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.npm.taobao.org/wrap-ansi/download/wrap-ansi-2.1.0.tgz"
-  dependencies:
-    string-width "^1.0.1"
-    strip-ansi "^3.0.1"
-
 wrap-ansi@^5.1.0:
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/wrap-ansi/download/wrap-ansi-5.1.0.tgz"
@@ -7107,6 +6945,14 @@ wrap-ansi@^5.1.0:
     ansi-styles "^3.2.0"
     string-width "^3.0.0"
     strip-ansi "^5.0.0"
+
+wrap-ansi@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-6.2.0.tgz#e9393ba07102e6c91a3b221478f0257cd2856e53"
+  dependencies:
+    ansi-styles "^4.0.0"
+    string-width "^4.1.0"
+    strip-ansi "^6.0.0"
 
 wrap-ansi@^7.0.0:
   version "7.0.0"
@@ -7190,7 +7036,7 @@ yargs-parser@^13.0.0, yargs-parser@^13.1.2:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
-yargs-parser@^18.1.3:
+yargs-parser@^18.1.2, yargs-parser@^18.1.3:
   version "18.1.3"
   resolved "https://registry.npm.taobao.org/yargs-parser/download/yargs-parser-18.1.3.tgz?cache=0&sync_timestamp=1590107599564&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fyargs-parser%2Fdownload%2Fyargs-parser-18.1.3.tgz"
   dependencies:
@@ -7200,22 +7046,6 @@ yargs-parser@^18.1.3:
 yargs-parser@^20.2.2, yargs-parser@^20.2.3:
   version "20.2.9"
   resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-20.2.9.tgz"
-
-yargs@13.2.2:
-  version "13.2.2"
-  resolved "https://registry.npm.taobao.org/yargs/download/yargs-13.2.2.tgz"
-  dependencies:
-    cliui "^4.0.0"
-    find-up "^3.0.0"
-    get-caller-file "^2.0.1"
-    os-locale "^3.1.0"
-    require-directory "^2.1.1"
-    require-main-filename "^2.0.0"
-    set-blocking "^2.0.0"
-    string-width "^3.0.0"
-    which-module "^2.0.0"
-    y18n "^4.0.0"
-    yargs-parser "^13.0.0"
 
 yargs@^13.2.2:
   version "13.3.2"
@@ -7231,6 +7061,22 @@ yargs@^13.2.2:
     which-module "^2.0.0"
     y18n "^4.0.0"
     yargs-parser "^13.1.2"
+
+yargs@^15.3.1:
+  version "15.4.1"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.4.1.tgz#0d87a16de01aee9d8bec2bfbf74f67851730f4f8"
+  dependencies:
+    cliui "^6.0.0"
+    decamelize "^1.2.0"
+    find-up "^4.1.0"
+    get-caller-file "^2.0.1"
+    require-directory "^2.1.1"
+    require-main-filename "^2.0.0"
+    set-blocking "^2.0.0"
+    string-width "^4.2.0"
+    which-module "^2.0.0"
+    y18n "^4.0.0"
+    yargs-parser "^18.1.2"
 
 yargs@^16.1.0, yargs@^16.2.0:
   version "16.2.0"
