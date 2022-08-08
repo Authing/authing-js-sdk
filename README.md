@@ -1,6 +1,8 @@
-# Authing - Node.js/JavaScript
+<div align=center>
+  <img width="250" src="https://files.authing.co/authing-console/authing-logo-new-20210924.svg" />
+</div>
 
-<div align=center><img width="300" src="https://files.authing.co/authing-console/authing-logo-new-20210924.svg"></div>
+<br />
 
 <div align="center">
   <a href="https://badge.fury.io/js/authing-js-sdk"><img src="https://badge.fury.io/js/authing-js-sdk.svg" alt="npm version" height="18"></a>
@@ -9,46 +11,54 @@
   <a href="https://github.com/authing-js-sdk" target="_blank"><img src="https://img.shields.io/npm/l/vue.svg" alt="License"></a>
   <a href="javascript:;" target="_blank"><img src="https://img.shields.io/badge/node-%3E=12-green.svg" alt="Node"></a>
 </div>
+
 <br/>
 
-Authing JavaScript/Node SDK 由两部分组成：`ManagementClient` 和 `AuthenticationClient`。`AuthenticationClient` 包含注册登录、重置手机号邮箱、修改账号信息等方法，是以你的终端用户（End User）的身份进行请求，适合在浏览器和后端环境中使用。`ManagementClient` 适合在后端或者**可信任**的前端环境下使用。一般来说，你在 [Authing 控制台](https://console.authing.cn/console/userpool) 中能做的所有操作，都能用此 SDK 完成。
+English | [简体中文](./README-zh_CN.md)
 
-## 安装
+The Authing JavaScript / node SDK consists of two parts：`ManagementClient` 和 `AuthenticationClient`。
 
-使用 `npm`:
+- `Authenticationclient` includes the methods of registering and logging in, resetting the mobile phone number mailbox, and modifying the account information. It requests as your end user and is suitable for use in the browser and back-end environment.
+
+- `Managementclient` is suitable for use in the back-end or **trusted** front-end environment. Generally speaking, 
+All the operations you can do in the [Authing Console](https://console.authing.cn/console/userpool) can be completed with this SDK
+
+## Install
+
+Use `npm`:
 
 ```
 npm install authing-js-sdk
 ```
 
-使用 `yarn`:
+Use `yarn`:
 
 ```
 yarn add authing-js-sdk
 ```
 
-> 如果你要在 React Native 环境中使用，需要先在 RN 项目根目录运行：`npx rn-nodeify --install "crypto,stream"`，之后会在项目根目录生成一个 `shim.js` 文件，然后在 App.js 第一行引入 `import './shim.js'`。
+> If you want to use it in the react native environment, you need to run it in the RN project root directory first: `npx rn-nodeify --install "crypto,stream"`，after that, a `shim.js` file will be generated in the project root directory, and then in the App.js first line introduction `import './shim.js'`.
 
-使用 CDN:
+Use CDN:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/authing-js-sdk/build/browser/index.min.js"></script>
 
 <script>
-  /** 你可以通过全局变量 Authing 获取 AuthenticationClient 和 ManagementClient */
+  /** You can obtain the Authenticationclient and Managementclient through the global variable authenticating */
   var authing = new Authing.AuthenticationClient({
     appId: 'AUTHING_APP_ID',
   });
 </script>
 ```
 
-## 使用认证模块
+## Use Authentication module
 
-### 初始化
+### Initialize
 
-`AuthenticationClient` 初始化需要传入`AppId` （应用 ID）：
+`Authenticationclient` needs to pass in 'appId' for initialization:
 
-> 你可以在控制台的 **应用** 中查看自己的应用列表。
+> You can view your application list in **Applications** on the console
 
 ```js
 import { AuthenticationClient } from 'authing-js-sdk';
@@ -58,40 +68,39 @@ const authing = new AuthenticationClient({
 });
 ```
 
-完整参数列表如下:
+The complete parameter list is as follows:
 
-- `appId`: Authing 应用 ID（必填）；
-- `accessToken`: 通过用户的 `id_token` 初始化 SDK（可选，你可以在前端 localStorage 中缓存用户 `id_token`，实现记住登录的目的） 。
-- `timeout`: 请求超时时间，单位为毫秒，默认为 10000 （10 秒）。
-- `onError`: 错误处理函数，你可以用其来全局捕捉 Authing 客户端请求的所有异常。完整的错误代码请见[此文档](https://docs.authing.cn/v2/reference/error-code.html)。函数定义为：
+- `appId`: Authing appId, required；
+- `accessToken`: By user's `id_token` initializes the SDK (optional. You can cache the user's `id_token` in the front-end localstorage to realize the purpose of remembering login).
+- `timeout`: Request timeout, default: 10000 (10 seconds)。
+- `onError`: Error handling function, you can use it to catch all exceptions requested by the authoring client globally. See for complete error codes [doc](https://docs.authing.cn/v2/reference/error-code.html)。The function is defined as:
 
 ```js
 (code: number, message: string, data: any) => void
 ```
 
-- `host`: Authing 服务器地址。如果你使用的是公有云版本，请忽略请参数。如果你使用的是私有化部署的版本，此参数必填。格式如下: `https://authing-api.mydomain.com`，最后不带 `/`。
-- `preflight`: 是否开启网络状况预检，默认为 false。此参数适用于检查用户的网络是否屏蔽了 authing 服务器域名（某些企业的内网会屏蔽第三方网站），检查成功不进行任何通知，检查失败后会调用传入的错误处理函数。执行预检之后会导致 SDK 初始化速度变慢，请谨慎使用。
-- `cdnPreflight`: 是否开启 CDN 网络状况预检，默认为 false。此参数适用于检查用户的网络是否可以访问七牛云 CDN（某些开了代理的场景下无法访问），检查成功不进行任何通知，检查失败后调用传入的错误处理函数。执行 CDN 预检之后会导致 SDK 初始化速度变慢，请谨慎使用。
+- `host`: Authing server address. If you are using the public cloud version, please ignore the parameter. This parameter is required if you are using the version of privatized deployment. The format is as follows: `https://authing-api.mydomain.com`，No `/' at the end.
+- `preflight`: Whether to enable network status pre check. The default value is false. This parameter is used to check whether the user's network shields the domain name of the authing server (the intranet of some enterprises shields the third-party websites). No notification will be given if the check is successful, and the incoming error handling function will be called if the check fails. The SDK initialization speed will be slow after the pre check. Please use it with caution.
+- `cdnPreflight`: Whether to enable CDN network status pre check. The default value is false. This parameter is used to check whether the user's network can access the qiniu cloud CDN (which cannot be accessed in some scenarios where the agent is enabled). If the check succeeds, no notification will be given. If the check fails, the incoming error handling function will be called. After performing CDN pre check, the SDK initialization speed will be slow. Please use it with caution.
 
-### 使用方法
+### Usage
 
-如果在浏览器环境下使用该 SDK，在用户完成登录之后，SDK 会将用户的 `token` 写入到 `localStorage`，后续请求会携带 `token` 访问。
+If the SDK is used in the browser environment, after the user completes the login, the SDK will write the user's ` token` to `localStorage`, and subsequent requests will carry the `token` for access.
 
 ```js
 const email = 'test@example.com';
 const password = 'passw0rd';
-const user = await authing.loginByEmail(email, password); // 成功登录，将 token 写入 localStorage
+const user = await authing.loginByEmail(email, password); // Log in successfully and write the token to localStorage
 
-// 登录之后可以进行此操作
+//You can do this after logging in
 await authing.updateProfile((nickname: 'Bob'));
 ```
 
-### 社会化登录
+### Social Login
 
-通过 `authenticationClient.social.authorize` 发送授权登录请求，该方法会直接打开一个新窗口，跳转到第三方社会化登录服务商（如 GitHub、微信、钉钉等）的登录授权页面，用户
-完成授权之后，会自动关闭此窗口，并触发 `onSuccess` 回调函数，通过此函数，你可以获取到用户信息。
+Through `authenticationclient.social.authorize` send an authorized login request. This method will directly open a new window and jump to the login authorization page of a third-party social login service provider (such as GitHub, wechat, dingpin, etc.). The user after the authorization is completed, this window will be automatically closed and the 'onsuccess' callback function will be triggered. Through this function, you can obtain the user information.
 
-示例：
+Example：
 
 ```javascript
 const authenticationClient = new AuthenticationClient({
@@ -103,7 +112,7 @@ await authenticationClient.social.authorize('github', {
     console.log(user);
   },
   onError: (code, message) => {},
-  // 自定义弹出窗口的位置
+  // Customize the location of the pop-up window
   position: {
     w: 100,
     h: 100,
@@ -111,19 +120,19 @@ await authenticationClient.social.authorize('github', {
 });
 ```
 
-<details><summary><b>查看支持的社会化登录列表及接入流程</b></summary>
+<details><summary><b>View the supported social login list and access process</b></summary>
 
-Authing 目前一共支持国内外将近 20 余种社会化登录，如微信、GitHub、Sign in with Apple、支付宝等，以下是完整的列表：
+Authing currently supports nearly 20 kinds of social logins at home and abroad, such as wechat, GitHub, sign in with apple, Alipay, etc. the following is a complete list：
 
 !!!include(common/social-connections-table.md)!!!
 
 </details>
 
-### 小程序扫码登录
+### Small program code scanning login
 
-小程序扫码登录指使用 Authing 小程序`小登录`进行微信登录，[点此了解更多](https://docs.authing.cn/v2/reference/sdk-for-wxapp.html)。
+Small program code scanning login refers to wechat login using authing small program `Small Login`, [click here to learn more](https://docs.authing.cn/v2/reference/sdk-for-wxapp.html)。
 
-你可以使用 5 行代码实现一个完整的扫码登录表单：
+You can use 5 lines of code to realize a complete code scanning login form:
 
 ```js
 authenticationClient.wxqrcode.startScanning('qrcode', {
@@ -135,13 +144,13 @@ authenticationClient.wxqrcode.startScanning('qrcode', {
 
 <img src="https://usercontents.authing.cn/wxapp-scaning-demo.gif" style="display:block;margin: 0 auto;">
 
-完整的使用方式与参数请见 [扫码登录模块](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/QrCodeAuthenticationClient.html)。
+For complete usage and parameters, please refer to [Code scanning login module](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/QrCodeAuthenticationClient.html)。
 
-### App 扫码登录
+### App scan code login
 
-App 扫码登录指的是使用你自己的 App 扫码登录网站，[点此了解更多](https://docs.authing.cn/v2/guides/authentication/qrcode/use-self-build-app/)。
+App scanning login refers to using your own app scanning to login to the website，[click here to learn more](https://docs.authing.cn/v2/guides/authentication/qrcode/use-self-build-app/)。
 
-你可以使用 5 行代码实现一个完整的扫码登录表单：
+ou can use 5 lines of code to realize a complete code scanning login form:
 
 ```js
 authenticationClient.qrcode.startScanning('qrcode', {
@@ -151,20 +160,20 @@ authenticationClient.qrcode.startScanning('qrcode', {
 });
 ```
 
-### 模块列表
+### Module list
 
-- [AuthenticationClient](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/AuthenticationClient.html) 核心模块
-- [QrCodeAuthenticationClient](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/QrCodeAuthenticationClient.html) 小程序扫码登录和 APP 扫码登录
-- [MfaAuthenticationClient](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/MfaAuthenticationClient.html) 多因素认证模块
-- [SocialAuthenticationClient](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/SocialAuthenticationClient.html) 社会化登录模块
+- [AuthenticationClient](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/AuthenticationClient.html) Core module
+- [QrCodeAuthenticationClient](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/QrCodeAuthenticationClient.html) Small program code scanning login and app code scanning login
+- [MfaAuthenticationClient](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/MfaAuthenticationClient.html) Multi factor authentication module
+- [SocialAuthenticationClient](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/SocialAuthenticationClient.html) Social login module
 
-## 使用管理模块
+## Use management module
 
-### 初始化
+### Initialize
 
-`ManagementClient` 初始化需要传入用户池 ID `userPoolId` 和用户池密钥`secret`：
+`ManagementClient` initialization requires the user pool ID to be passed in `userPoolId` and user pool key `secret`：
 
-> 你可以在此了解[如何获取 userPoolId 和 secret](https://docs.authing.cn/v2/guides/faqs/get-userpool-id-and-secret.html)。
+> Click here to learn [how to get userPoolId and secret](https://docs.authing.cn/v2/guides/faqs/get-userpool-id-and-secret.html)。
 
 ```js
 import { ManagementClient } from 'authing-js-sdk';
@@ -175,78 +184,78 @@ const managementClient = new ManagementClient({
 });
 ```
 
-完整参数列表如下:
+The complete parameter list is as follows:
 
-- `userPoolId`: 用户池 ID。
-- `secret`: 用户池密钥。
-- `accessToken`: 通过管理员的 token 初始化 SDK。（可选，**secret 和 accessToken 必须填其中一种**）。
-- `timeout`: 请求超时时间，单位为毫秒，默认为 10000 （10 秒）。
-- `onError`: 错误处理函数，你可以用其来全局捕捉 Authing 客户端请求的所有异常。函数定义为：
+- `userPoolId`: User pool ID.
+- `secret`: User pool key.
+- `accessToken`: Initialize the SDK through the administrator's token。（Optional，**Either secret or accesstoken must be filled in**）。
+- `timeout`: Request timeout, in milliseconds; the default is 10000 (10 seconds).
+- `onError`: Error handling function, you can use it to catch all exceptions requested by the authoring client globally. The function is defined as:
 
 ```js
 (code: number, message: string, data: any) => void
 ```
 
-> 完整的错误代码请见[此文档](https://docs.authing.cn/v2/reference/error-code.html)。
+> See for complete error codes: [doc](https://docs.authing.cn/v2/reference/error-code.html)。
 
-- `host`: Authing 服务器地址。如果你使用的是公有云版本，请忽略请参数。如果你使用的是私有化部署的版本，此参数必填。格式如下: `https://authing-api.mydomain.com`，最后不带 `/`。
-- `preflight`: 是否开启网络状况预检，默认为 false。此参数适用于检查用户的网络是否屏蔽了 authing 服务器域名（某些企业的内网会屏蔽第三方网站），检查成功不进行任何通知，检查失败后会调用传入的错误处理函数。执行预检之后会导致 SDK 初始化速度变慢，请谨慎使用。
-- `cdnPreflight`: 是否开启 CDN 网络状况预检，默认为 false。此参数适用于检查用户的网络是否可以访问七牛云 CDN（某些开了代理的场景下无法访问），检查成功不进行任何通知，检查失败后调用传入的错误处理函数。执行 CDN 预检之后会导致 SDK 初始化速度变慢，请谨慎使用。
+- `host`: Authing server address. If you are using the public cloud version, please ignore the parameter. This parameter is required if you are using the version of privatized deployment. The format is as follows: `https://authing-api.mydomain.com`，No `/` at the end。
+- `preflight`: Whether to enable network status pre check. The default value is false. This parameter is used to check whether the user's network shields the domain name of the authing server (the intranet of some enterprises shields the third-party websites). No notification will be given if the check is successful, and the incoming error handling function will be called if the check fails. The SDK initialization speed will be slow after the pre check. Please use it with caution.
+- `cdnPreflight`: Whether to enable CDN network status pre check. The default value is false. This parameter is used to check whether the user's network can access the qiniu cloud CDN (which cannot be accessed in some scenarios where the agent is enabled). If the check succeeds, no notification will be given. If the check fails, the incoming error handling function will be called. After performing CDN pre check, the SDK initialization speed will be slow. Please use it with caution.
 
-### 使用方法
+### Usage
 
-`ManagementClient` 可以用于管理用户、角色、策略、分组、组织机构、用户池配置，理论上任何你在 [Authing 控制台](https://console.authing.cn/console/userpool) 中能做的操作，都能用此 SDK 完成。
+`ManagementClient`. It can be used to manage users, roles, policies, groups, organizations, and user pool configurations. Theoretically, any operation you can do in the [Authing Console](https://console.authing.cn/console/userpool) can be completed with this SDK
 
-获取用户目录列表:
+Get user directory list:
 
 ```js
-// list 当前页的用户列表
-// totalCount 用户总数
+// list: list of users on the current page
+// totalCount: total users
 const { list, totalCount } = await managementClient.users.list();
 ```
 
-创建角色:
+Create role:
 
 ```js
-const role = await managementClient.roles.create('code', '角色名称');
+const role = await managementClient.roles.create('code', 'Role name');
 ```
 
-修改用户池配置:
+Modify user pool configuration:
 
 ```js
 const userpool = await managementClient.userpool.update({
-  registerDisabled: true, // 关闭用户池注册
+  registerDisabled: true, // Close user pool registration
 });
 ```
 
-### 模块列表
+### Module list
 
-- [UsersManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/UsersManagementClient.html) 管理模块
-- [RolesManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/RolesManagementClient.html) 角色管理模块
-- [GroupsManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/GroupsManagementClient.html) 分组管理模块
-- [OrgManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/OrgManagementClient.html) 组织机构管理模块
-- [PoliciesManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/PoliciesManagementClient.html) 策略管理模块
-- [AclManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/AclManagementClient.html) 访问控制模块
-- [UdfManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/UdfManagementClient.html) 自定义字段元数据管理模块
-- [WhitelistManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/WhitelistManagementClient.html) 白名单管理模块
-- [UserPoolManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/UserpoolManagementClient.html) 用户池设置管理模块
+- [UsersManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/UsersManagementClient.html) Management module
+- [RolesManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/RolesManagementClient.html) Role management module
+- [GroupsManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/GroupsManagementClient.html) Group management module
+- [OrgManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/OrgManagementClient.html) Organization management module
+- [PoliciesManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/PoliciesManagementClient.html) Policy management module
+- [AclManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/AclManagementClient.html) Access control module
+- [UdfManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/UdfManagementClient.html) Custom field metadata management module
+- [WhitelistManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/WhitelistManagementClient.html) White list management module
+- [UserPoolManagementClient](https://docs.authing.cn/v2/reference/sdk-for-node/management/UserpoolManagementClient.html) User pool setting management module
 
-## 错误处理
+## Error handling
 
-你可以使用 `try catch` 进行错误处理:
+You can use `try catch` to handle errors:
 
 ```js
 try {
   const user = await authing.loginByEmail('test@example.com', 'passw0rd');
 } catch (error) {
   console.log(error.code); // 2004
-  console.log(error.message); // 用户不存在
+  console.log(error.message); // user does not exist
 }
 ```
 
-> 完整的错误代码请见[此文档](https://docs.authing.cn/v2/reference/error-code.html)。
+> See for complete error codes [doc](https://docs.authing.cn/v2/reference/error-code.html)。
 
-你还可以指定 `onError` 统一捕捉所有 Authing 请求异常，如使用 `antd` 等前端组件显示错误提示。
+You can also specify `onerror` to uniformly catch all authing request exceptions, such as using `antd` and other front-end components to display error prompts
 
 ```js
 import { message } from 'antd';
@@ -258,9 +267,9 @@ const authing = new AuthenticationClient({
 });
 ```
 
-## 私有化部署
+## Privatization deployment
 
-**私有化部署**场景需要指定你私有化的 Authing 服务的 GraphQL 端点（**不带协议头和 Path**），如果你不清楚可以联系 Authing IDaaS 服务管理员。
+In the **scenario of privatization deployment**, you need to specify the graphql endpoint of your privatized authoring service (**without protocol header and path**). If you are unclear, you can contact the authoring idaas service administrator.
 
 ```js
 import { AuthenticationClient, ManagementClient } from 'authing-js-sdk';
@@ -277,49 +286,45 @@ const managementClient = new ManagementClient({
 });
 ```
 
-## 接口索引
+## Interface index
 
-认证模块：
+Authentication module:
 
-[认证核心模块](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/AuthenticationClient.html)
+[Authentication core module](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/AuthenticationClient.html)
 
-[扫码登录模块](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/QrCodeAuthenticationClient.html)
+[Code scanning login module](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/QrCodeAuthenticationClient.html)
 
-[多因素认证模块](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/MfaAuthenticationClient.html)
+[Multi factor authentication module](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/MfaAuthenticationClient.html)
 
-[社会化登录模块](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/SocialAuthenticationClient.html)
+[Social login module](https://docs.authing.cn/v2/reference/sdk-for-node/authentication/SocialAuthenticationClient.html)
 
-管理模块：
+Management module:
 
-[管理用户](https://docs.authing.cn/v2/reference/sdk-for-node/management/UsersManagementClient.html)
+[Manage users](https://docs.authing.cn/v2/reference/sdk-for-node/management/UsersManagementClient.html)
 
-[管理角色](https://docs.authing.cn/v2/reference/sdk-for-node/management/RolesManagementClient.html)
+[Management role](https://docs.authing.cn/v2/reference/sdk-for-node/management/RolesManagementClient.html)
 
-[管理策略](https://docs.authing.cn/v2/reference/sdk-for-node/management/PoliciesManagementClient.html)
+[Management policy](https://docs.authing.cn/v2/reference/sdk-for-node/management/PoliciesManagementClient.html)
 
-[管理权限、访问控制](https://docs.authing.cn/v2/reference/sdk-for-node/management/AclManagementClient.html)
+[Management authority and access control](https://docs.authing.cn/v2/reference/sdk-for-node/management/AclManagementClient.html)
 
-[管理分组](https://docs.authing.cn/v2/reference/sdk-for-node/management/GroupsManagementClient.html)
+[Management Group](https://docs.authing.cn/v2/reference/sdk-for-node/management/GroupsManagementClient.html)
 
-[管理组织机构](https://docs.authing.cn/v2/reference/sdk-for-node/management/OrgManagementClient.html)
+[Management organization](https://docs.authing.cn/v2/reference/sdk-for-node/management/OrgManagementClient.html)
 
-[管理用户自定义字段](https://docs.authing.cn/v2/reference/sdk-for-node/management/UdfManagementClient.html)
+[Manage user defined fields](https://docs.authing.cn/v2/reference/sdk-for-node/management/UdfManagementClient.html)
 
-[管理注册白名单](https://docs.authing.cn/v2/reference/sdk-for-node/management/WhitelistManagementClient.html)
+[Manage registration white list](https://docs.authing.cn/v2/reference/sdk-for-node/management/WhitelistManagementClient.html)
 
-[管理用户池配置](https://docs.authing.cn/v2/reference/sdk-for-node/management/UserpoolManagementClient.html)
+[Manage user pool configuration](https://docs.authing.cn/v2/reference/sdk-for-node/management/UserpoolManagementClient.html)
 
-## 更新日志
+## Log
 [文档](https://github.com/Authing/authing.js/releases)中记录了每个版本的详细更改。
 
-## 参与贡献
+## Contribution
 
 - Fork it
 - Create your feature branch (git checkout -b my-new-feature)
 - Commit your changes (git commit -am 'Add some feature')
 - Push to the branch (git push origin my-new-feature)
 - Create new Pull Request
-
-## 获取帮助
-
-Join us on forum: [#authing-chat](https://forum.authing.cn/)
