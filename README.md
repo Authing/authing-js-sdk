@@ -319,7 +319,8 @@ Management module:
 [Manage user pool configuration](https://docs.authing.cn/v2/reference/sdk-for-node/management/UserpoolManagementClient.html)
 
 ## Log
-[文档](https://github.com/Authing/authing.js/releases)中记录了每个版本的详细更改。
+
+Detailed changes for each version are recorded in the [document](https://github.com/Authing/authing.js/releases).
 
 ## Contribution
 
