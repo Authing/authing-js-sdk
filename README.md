@@ -16,7 +16,7 @@
 
 English | [简体中文](./README-zh_CN.md)
 
-The Authing JavaScript / node SDK consists of two parts：`ManagementClient` 和 `AuthenticationClient`。
+The Authing JavaScript / node SDK consists of two parts：`ManagementClient` and `AuthenticationClient`。
 
 - `Authenticationclient` includes the methods of registering and logging in, resetting the mobile phone number mailbox, and modifying the account information. It requests as your end user and is suitable for use in the browser and back-end environment.
 
