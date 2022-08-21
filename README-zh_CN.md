@@ -116,13 +116,7 @@ await authenticationClient.social.authorize('github', {
 });
 ```
 
-<details><summary><b>查看支持的社会化登录列表及接入流程</b></summary>
-
-Authing 目前一共支持国内外将近 20 余种社会化登录，如微信、GitHub、Sign in with Apple、支付宝等，以下是完整的列表：
-
-!!!include(common/social-connections-table.md)!!!
-
-</details>
+Authing 目前一共支持国内外将近 20 余种社会化登录，如微信、GitHub、Sign in with Apple、支付宝等。
 
 ### 小程序扫码登录
 
@@ -319,8 +313,8 @@ const managementClient = new ManagementClient({
 
 ## 参与贡献
 
-- Fork it
-- Create your feature branch (git checkout -b my-new-feature)
-- Commit your changes (git commit -am 'Add some feature')
-- Push to the branch (git push origin my-new-feature)
-- Create new Pull Request
+- Fork 此仓库
+- 创建自己的 git 分支 (git checkout -b my-new-feature)
+- 提交你的修改 (git commit -am 'Add some feature')
+- 将修改内容推送到远程分支 (git push -u origin my-new-feature)
+- 创建一个 Pull Request

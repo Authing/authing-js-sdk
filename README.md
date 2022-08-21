@@ -120,13 +120,7 @@ await authenticationClient.social.authorize('github', {
 });
 ```
 
-<details><summary><b>View the supported social login list and access process</b></summary>
-
-Authing currently supports nearly 20 kinds of social logins at home and abroad, such as wechat, GitHub, sign in with apple, Alipay, etc. the following is a complete list：
-
-!!!include(common/social-connections-table.md)!!!
-
-</details>
+Authing currently supports nearly 20 kinds of social logins at home and abroad, such as wechat, GitHub, sign in with apple, Alipay.
 
 ### Small program code scanning login
 
