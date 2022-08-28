@@ -1,0 +1,25 @@
+{
+  "name": "@authing/miniprogram",
+  "version": "0.0.1-alpha.0",
+  "description": "AuthingMove template, convert wechat miniprogram api syntax into into multi platform miniapps & frameworks & quickapp",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "scripts": {
+    "autoinstall": "npm ci",
+    "dev": "node ./scripts/build.js watch",
+    "build": "node ./scripts/build.js"
+  },
+  "devDependencies": {
+    "@authing/authingmove-webpack-plugin": "^1.0.0-alpha.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Authing/authingmove-template.git"
+  },
+  "author": "https://github.com/authing",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Authing/authingmove-template/issues"
+  },
+  "homepage": "https://github.com/Authing/authingmove-template#readme"
+}

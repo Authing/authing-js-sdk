@@ -1,0 +1,13 @@
+{
+  "name": "@authing/miniprogram-taro",
+  "version": "0.0.1-alpha.0",
+  "description": "Authing miniprogram JS SDK for Taro",
+  "main": "lib/bundle-taro.js",
+  "types": "lib/typings/index.d.ts",
+  "author": "https://github.com/authing",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

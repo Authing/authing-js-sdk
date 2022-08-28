@@ -1,0 +1,13 @@
+{
+  "name": "@authing/miniprogram-wx",
+  "version": "0.0.1-alpha.0",
+  "description": "Authing miniprogram JS SDK for WX",
+  "main": "lib/bundle-wx.js",
+  "types": "lib/typings/index.d.ts",
+  "author": "https://github.com/authing",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}
