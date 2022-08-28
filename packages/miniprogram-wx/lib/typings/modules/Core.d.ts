@@ -17,6 +17,10 @@ export declare class Core {
     updateAvatar(): void;
     updateProfile(): void;
     private saveLoginState;
-    private clearLoginState;
+    clearLoginState(): void;
+    getLoginState(): Promise<{
+        idToken: import("@authing/authingmove-core").GetStorageSuccessData | import("@authing/authingmove-core").GetStorageFailData;
+        accessToken: import("@authing/authingmove-core").GetStorageSuccessData | import("@authing/authingmove-core").GetStorageFailData;
+    }>;
     private login;
 }

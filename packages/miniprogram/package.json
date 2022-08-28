@@ -14,12 +14,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Authing/authingmove-template.git"
+    "url": "git+https://github.com/Authing/authing-js-sdk.git"
   },
   "author": "https://github.com/authing",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Authing/authingmove-template/issues"
+    "url": "https://github.com/Authing/authing-js-sdk/issues"
   },
-  "homepage": "https://github.com/Authing/authingmove-template#readme"
+  "homepage": "https://github.com/Authing/authing-js-sdk#readme"
 }
