@@ -1,0 +1,9 @@
+{
+  "name": "@authing/miniprogram-jsencrypt",
+  "version": "0.0.1-alpha.0",
+  "description": "",
+  "module": "lib/index.js",
+  "types": "lib/jsencrypt.d.ts",
+  "author": "https://github.com/authing",
+  "license": "MIT"
+}

@@ -8,7 +8,9 @@ import {
 
 import { AuthingMove } from '../AuthingMove'
 
-export class StorageProvider {
+import { IStorageProvider } from '../types'
+
+export class StorageProvider implements IStorageProvider {
   get(key: string): Promise<GetStorageSuccessData | GetStorageFailData> {
     return AuthingMove.getStorage({
       key

@@ -2,6 +2,8 @@ import { AuthingOptions } from './types'
 
 import { Core } from './modules/Core'
 
+import { StorageProvider } from './helpers'
+
 export * from '@authing/authingmove-core'
 
 export class Authing {
@@ -13,6 +15,14 @@ export class Authing {
       host: options.host || 'https://core.authing.cn'
     }
 
-    this.core = new Core(_options)
+    const storage = new StorageProvider()
+
+    const encryptFunction = options.encryptFunction
+
+    this.core = new Core({
+      authingOptions: _options,
+      storage,
+      encryptFunction
+    })
   }
 }

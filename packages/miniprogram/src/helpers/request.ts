@@ -7,6 +7,6 @@ export async function request(options: WxRequestConfig) {
     const { data } = await AuthingMove.request(options)
     return data.data
   } catch (e) {
-    throw new Error('认证服务器返回错误')
+    console.error('认证服务器返回错误: ', e)
   }
 }
