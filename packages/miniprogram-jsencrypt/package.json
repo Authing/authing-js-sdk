@@ -4,6 +4,10 @@
   "description": "",
   "module": "lib/index.js",
   "types": "lib/jsencrypt.d.ts",
+  "scripts": {
+    "release:official": "npm publish --verbose --access public",
+    "release:alpha": "npm publish --verbose --tag=alpha --access public"
+  },
   "author": "https://github.com/authing",
   "license": "MIT"
 }

@@ -6,6 +6,10 @@
   "types": "lib/typings/index.d.ts",
   "author": "https://github.com/authing",
   "license": "MIT",
+  "scripts": {
+    "release:official": "npm publish --verbose --access public",
+    "release:alpha": "npm publish --verbose --tag=alpha --access public"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
