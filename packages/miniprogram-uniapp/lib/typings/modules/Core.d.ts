@@ -1,26 +1,32 @@
-import { AuthingOptions, LoginOptions } from '../types';
-export declare class Core {
-    private options;
-    private storage;
-    constructor(options: AuthingOptions);
-    loginByCode(data: LoginOptions): Promise<{
+import { WxLoginOptions, ModuleOptions, PasswordLoginOptions, UserInfo } from '../types';
+import { Base } from './Base';
+export declare class Core extends Base {
+    private readonly authingOptions;
+    private readonly storage;
+    private readonly encryptFunction?;
+    constructor(options: ModuleOptions);
+    loginByCode(data: WxLoginOptions): Promise<{
         accessToken: any;
         idToken: any;
     }>;
-    loginByPhone(data: LoginOptions): Promise<{
+    loginByPhone(data: WxLoginOptions): Promise<{
         accessToken: any;
         idToken: any;
     }>;
-    loginByPassword(): void;
+    loginByPassword(data: PasswordLoginOptions): Promise<{
+        accessToken: any;
+        idToken: any;
+    }>;
     logout(): void;
-    getPhone(): void;
+    getPhone(code: string): void;
+    getUserInfo(): Promise<any>;
     updateAvatar(): void;
-    updateProfile(): void;
+    updateUserInfo(data: UserInfo): Promise<any>;
     private saveLoginState;
     clearLoginState(): void;
     getLoginState(): Promise<{
-        idToken: import("@authing/authingmove-core").GetStorageSuccessData | import("@authing/authingmove-core").GetStorageFailData;
-        accessToken: import("@authing/authingmove-core").GetStorageSuccessData | import("@authing/authingmove-core").GetStorageFailData;
+        idToken: any;
+        accessToken: any;
     }>;
     private login;
 }
