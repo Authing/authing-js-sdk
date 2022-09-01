@@ -1,5 +1,5 @@
 {
-  "name": "@authing/browser",
+  "name": "@authing/web",
   "version": "5.0.0-alpha.2",
   "description": "Official SDK of Authing for Browser",
   "main": "dist/global/index.umd.js",
