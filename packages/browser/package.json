@@ -5,6 +5,9 @@
   "main": "dist/global/index.umd.js",
   "module": "dist/esm/index.esm.js",
   "types": "dist/typings/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "autoinstall": "npm ci",
     "build": "rm -rf ./dist && rollup -c",
@@ -38,5 +41,9 @@
   "bugs": {
     "url": "https://github.com/Authing/authing-js-sdk/issues"
   },
-  "homepage": "https://github.com/Authing/authing-js-sdk#readme"
+  "homepage": "https://github.com/Authing/authing-js-sdk#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
 }
