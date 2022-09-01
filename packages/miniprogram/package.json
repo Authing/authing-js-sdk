@@ -12,11 +12,11 @@
     "release:alpha": "npm publish --verbose --tag=alpha --access public"
   },
   "dependencies": {
-    "@authing/authingmove-api-proxy": "^1.0.1-alpha.1",
-    "@authing/authingmove-core": "^1.0.1-alpha.1"
+    "@authing/authingmove-api-proxy": "^1.0.1-alpha.2",
+    "@authing/authingmove-core": "^1.0.1-alpha.2"
   },
   "devDependencies": {
-    "@authing/authingmove-webpack-plugin": "^1.0.1-alpha.1"
+    "@authing/authingmove-webpack-plugin": "^1.0.1-alpha.2"
   },
   "repository": {
     "type": "git",
