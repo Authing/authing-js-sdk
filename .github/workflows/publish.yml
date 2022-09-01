@@ -1,23 +1,27 @@
-name: publish
+name: release
 
 on:
   workflow_dispatch:
-
+    inputs:
+      name:
+        description: 'Please enter your github name'
+        required: true
+      email:
+        description: 'Please enter your github email'
+        required: true
+      version:
+        description: 'Please enter your release version'
+        required: true
+        
 jobs:
 
   readyGo:
 
     runs-on: ubuntu-latest
 
-    container:
-      image: node:12.14.0
-
     env: 
       PUBLISH_OPTS: ${{ github.ref_name == 'master' && '--verbose' || '--verbose --tag=alpha' }}
-      ALIYUN_ACCESS_KEY: ${{ secrets.ALIYUN_ACCESS_KEY }}
-      ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-      OSS_REGION_PROD: ${{ secrets.OSS_REGION_PROD }}
-      CDN_OSS_PROD: ${{ secrets.CDN_OSS_PROD }}
+      VERSION: ${{ github.event.inputs.version }}
       NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
     steps:
@@ -25,51 +29,58 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 16.13.1
           registry-url: https://registry.npmjs.org/
           
-      - name: get version from package.json
-        id: version
-        uses: ashley-taylor/read-json-property-action@v1.0
-        with:
-          path: ./package.json
-          property: version
-
       - name: before scripts
         run: |
           echo "Current branch: ${{ github.ref_name }}"
-          echo "Current publish version: ${{ env.VERSION }}"
-        env:
-          VERSION: ${{ steps.version.outputs.value }}
-
+          echo "Current publish version: ${{ github.event.inputs.version }}"
+          echo "Current user.name: ${{ github.event.inputs.name }}"
+          echo "Current user.email: ${{ github.event.inputs.email }}"
+      
+      - name: set git config
+        run: |
+          git config --global user.email ${{ github.event.inputs.email }}
+          git config --global user.name ${{ github.event.inputs.name }}
+          
       - name: install packages
         run: |
           npm ci
+          lerna run autoinstall
+
+      - name: lint codes
+        run: |
+          npm run lint
 
       - name: build
-        run: 
-          npm run build
+        run: |
+          lerna run build
+          lerna link
+          npm run transfer-miniprogram-libs
 
-      - name: publish
+      - name: update version
+        run: |
+          lerna version $VERSION --yes
+          
+      - name: release official
+        if: ${{ github.ref_name == 'master' }}
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
-          npm publish $PUBLISH_OPTS --access public
-          echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk 🚀"
-
-      - name: setup oss
-        if: ${{ github.ref_name == 'master' }}
-        uses: yizhoumo/setup-ossutil@v1
-        with: 
-          ossutil-version: '1.7.0' # Optional, default to '1.7.0'
-          endpoint: ${{ secrets.OSS_REGION_PROD }}
-          access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY }}
-          access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-      
-      - name: upload oss
-        if: ${{ github.ref_name == 'master' }}
+          lerna run release:official
+          echo "release:official successfully 🚀"
+          
+      - name: release alpha
+        if: ${{ github.ref_name != 'master' }}
         run: |
-          echo "上传打包到 CDN"
-          echo "VERSION: ${{ github.event.inputs.version }}"
-          ossutil cp -f -r build oss://$CDN_OSS_PROD/packages/authing-js-sdk/$VERESION/
-        env:
-          VERESION: ${{ steps.version.outputs.value }}
+          npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
+          lerna run release:alpha
+          echo "release:alpha successfully 🚀"
+      
+      # - name: upload oss
+      #   run: |
+      #     npm run oss accessKeyId=$OSS_KEY_ID accessKeySecret=$OSS_KEY_SECRET
+      #   env:
+      #     OSS_KEY_ID: ${{ secrets.OSS_KEY_ID }}
+      #     OSS_KEY_SECRET: ${{ secrets.OSS_KEY_SECRET }}
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
