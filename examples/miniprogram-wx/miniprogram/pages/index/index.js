@@ -1,0 +1,5 @@
+// index.js
+
+Page({
+  data: {}
+})
