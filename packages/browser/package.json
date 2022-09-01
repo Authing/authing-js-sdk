@@ -4,7 +4,7 @@
   "description": "Official SDK of Authing for Browser",
   "main": "dist/global/index.umd.js",
   "module": "dist/esm/index.esm.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/typings/index.d.ts",
   "scripts": {
     "autoinstall": "npm ci",
     "build": "rm -rf ./dist && rollup -c",

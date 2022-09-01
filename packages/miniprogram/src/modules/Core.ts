@@ -1,27 +1,20 @@
 import {
   WxLoginOptions,
   ModuleOptions,
-  AuthingOptions,
-  IStorageProvider,
-  EncryptFunction,
   PasswordLoginOptions,
-  UserInfo
+  SendSmsOptions,
+  PassCodeLoginOptions,
+  RefreshTokenOptions,
+  ChangeQrcodeStatusOptions
 } from '../types'
 
-import { getAccessTokenKey, getIdTokenKey, request } from '../helpers'
+import { request } from '../helpers'
 
 import { Base } from './Base'
 
 export class Core extends Base {
-  private readonly authingOptions: AuthingOptions
-  private readonly storage: IStorageProvider
-  private readonly encryptFunction?: EncryptFunction
-
   constructor(options: ModuleOptions) {
-    super()
-    this.authingOptions = options.authingOptions
-    this.storage = options.storage
-    this.encryptFunction = options.encryptFunction
+    super(options)
   }
 
   async loginByCode(data: WxLoginOptions) {
@@ -41,92 +34,73 @@ export class Core extends Base {
   }
 
   async loginByPassword(data: PasswordLoginOptions) {
-    // Todo: 需要判断用户是否使用密码加密功能，目前控制台配置还有争议，待讨论
+    if (data.options?.passwordEncryptType === 'rsa') {
+      if (!this.encryptFunction) {
+        return console.error(
+          'encryptFunction is requiered, if passwordEncryptType is not "none"'
+        )
+      }
+
+      const publicKey = await this.getPublicKey()
+
+      data.passwordPayload.password = this.encryptFunction(
+        data.passwordPayload.password,
+        publicKey
+      )
+    }
+
     const _data: PasswordLoginOptions = {
       ...data,
       connection: 'PASSWORD'
     }
+
     return await this.login(_data, 'password')
   }
 
-  logout() {
+  async loginByPassCode(data: PassCodeLoginOptions) {
+    if (data.passCodePayload.phone) {
+      data.passCodePayload.phoneCountryCode =
+        data.passCodePayload.phoneCountryCode || '+86'
+    }
+
+    const _data: PassCodeLoginOptions = {
+      ...data,
+      connection: 'PASSCODE'
+    }
+
+    return await this.login(_data, 'passCode')
+  }
+
+  async logout() {
     // Todo：后端同时退出
     this.clearLoginState()
   }
 
-  getPhone(code: string) {
-    // Todo: 缺少根据 code、encryptedData、iv 解密用户手机号的接口
-  }
-
-  async getUserInfo() {
-    const { accessToken } = await this.getLoginState()
-
-    return await request({
-      method: 'GET',
-      url: `${this.authingOptions.host}/api/v3/get-profile`,
-      header: {
-        'x-authing-userpool-id': this.authingOptions.userPoolId,
-        Authorization: accessToken
-      }
-    })
-  }
-
-  updateAvatar() {}
-
-  async updateUserInfo(data: UserInfo) {
-    const { accessToken } = await this.getLoginState()
+  async sendSms(data: SendSmsOptions) {
+    data.phoneCountryCode = data.phoneCountryCode || '+86'
 
     return await request({
       method: 'POST',
-      url: `${this.authingOptions.host}/api/v3/update-profile`,
+      url: `${this.authingOptions.host}/api/v3/send-sms`,
       data,
       header: {
-        'x-authing-userpool-id': this.authingOptions.userPoolId,
-        Authorization: accessToken
+        'x-authing-userpool-id': this.authingOptions.userPoolId
       }
     })
   }
 
-  private async saveLoginState(accessToken: string, idToken: string) {
-    await this.storage.set(
-      getAccessTokenKey(this.authingOptions.appId),
-      accessToken
-    )
-
-    await this.storage.set(getIdTokenKey(this.authingOptions.appId), idToken)
-  }
-
-  public clearLoginState() {
-    this.storage.remove(getAccessTokenKey(this.authingOptions.appId))
-    this.storage.remove(getIdTokenKey(this.authingOptions.appId))
-  }
-
-  async getLoginState() {
-    const idTokenRes = await this.storage.get(
-      getIdTokenKey(this.authingOptions.appId)
-    )
-
-    const accessTokenRes = await this.storage.get(
-      getAccessTokenKey(this.authingOptions.appId)
-    )
-
-    return {
-      idToken: idTokenRes.data,
-      accessToken: accessTokenRes.data
-    }
-  }
-
   private async login(
-    data: WxLoginOptions | PasswordLoginOptions,
+    data: WxLoginOptions | PasswordLoginOptions | PassCodeLoginOptions,
     type: string
   ) {
     const urlMap: Record<string, string> = {
       code: '/api/v3/signin-by-mobile',
       phone: '/api/v3/signin-by-mobile',
-      password: '/api/v3/signin'
+      password: '/api/v3/signin',
+      passCode: '/api/v3/signin'
     }
 
-    const { access_token, id_token } = await request({
+    const { access_token, id_token, refresh_token } = await request({
       method: 'POST',
       url: this.authingOptions.host + urlMap[type],
       data,
@@ -135,11 +109,45 @@ export class Core extends Base {
       }
     })
 
-    await this.saveLoginState(access_token, id_token)
+    await this.saveLoginState(access_token, id_token, refresh_token)
 
     return {
       accessToken: access_token,
       idToken: id_token
     }
+  }
+
+  async refreshToken(data: RefreshTokenOptions) {
+    const { access_token, id_token, refresh_token } = await request({
+      method: 'POST',
+      url: `${this.authingOptions.host}/oidc/token`,
+      data,
+      header: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'x-authing-app-id': this.authingOptions.appId
+      }
+    })
+
+    await this.saveLoginState(access_token, id_token, refresh_token)
+
+    return {
+      accessToken: access_token,
+      idToken: id_token,
+      refreshToken: refresh_token
+    }
+  }
+
+  async changeQrcodeStatus(data: ChangeQrcodeStatusOptions) {
+    const { accessToken } = await this.getLoginState()
+
+    return await request({
+      method: 'POST',
+      url: `${this.authingOptions.host}/oidc/token`,
+      data,
+      header: {
+        'x-authing-userpool-id': this.authingOptions.userPoolId,
+        Authorization: accessToken
+      }
+    })
   }
 }

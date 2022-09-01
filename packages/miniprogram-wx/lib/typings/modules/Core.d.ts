@@ -1,9 +1,6 @@
-import { WxLoginOptions, ModuleOptions, PasswordLoginOptions, UserInfo } from '../types';
+import { WxLoginOptions, ModuleOptions, PasswordLoginOptions, SendSmsOptions, PassCodeLoginOptions, RefreshTokenOptions, ChangeQrcodeStatusOptions } from '../types';
 import { Base } from './Base';
 export declare class Core extends Base {
-    private readonly authingOptions;
-    private readonly storage;
-    private readonly encryptFunction?;
     constructor(options: ModuleOptions);
     loginByCode(data: WxLoginOptions): Promise<{
         accessToken: any;
@@ -13,20 +10,21 @@ export declare class Core extends Base {
         accessToken: any;
         idToken: any;
     }>;
-    loginByPassword(data: PasswordLoginOptions): Promise<{
+    loginByPassword(data: PasswordLoginOptions): Promise<void | {
         accessToken: any;
         idToken: any;
     }>;
-    logout(): void;
-    getPhone(code: string): void;
-    getUserInfo(): Promise<any>;
-    updateAvatar(): void;
-    updateUserInfo(data: UserInfo): Promise<any>;
-    private saveLoginState;
-    clearLoginState(): void;
-    getLoginState(): Promise<{
-        idToken: any;
+    loginByPassCode(data: PassCodeLoginOptions): Promise<{
         accessToken: any;
+        idToken: any;
     }>;
+    logout(): Promise<void>;
+    sendSms(data: SendSmsOptions): Promise<any>;
     private login;
+    refreshToken(data: RefreshTokenOptions): Promise<{
+        accessToken: any;
+        idToken: any;
+        refreshToken: any;
+    }>;
+    changeQrcodeStatus(data: ChangeQrcodeStatusOptions): Promise<any>;
 }

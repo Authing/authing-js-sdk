@@ -1,1 +1,1 @@
-export { Authing } from './Authing';
+export { Authing } from './Authing'

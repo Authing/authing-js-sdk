@@ -5,8 +5,8 @@
     "prepare": "husky install",
     "build:miniprogram": "cd packages/miniprogram && npm run autoinstall && npm run build",
     "link": "lerna link",
-    "lint": "eslint --ext .tsx,.ts packages/**/src/**",
-    "lint:fix": "eslint --fix --ext .tsx,.ts packages/**/src/**",
+    "lint": "eslint --ext .ts packages/**/src/**",
+    "lint:fix": "eslint --fix --ext .ts packages/**/src/**",
     "transfer-miniprogram-libs": "node scripts/transfer-miniprogram-libs.js"
   },
   "workspaces": [
@@ -16,10 +16,6 @@
     "node": ">=16.13.1"
   },
   "author": "https://github.com/authing",
-  "dependencies": {
-    "@authing/authingmove-api-proxy": "^1.0.0-alpha.0",
-    "@authing/authingmove-core": "^1.0.0-alpha.0"
-  },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.16.10",
     "@babel/preset-env": "^7.16.11",

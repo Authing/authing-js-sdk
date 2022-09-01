@@ -42,6 +42,16 @@ export interface PasswordLoginOptions {
     };
     options?: {
         passwordEncryptType?: 'none' | 'rsa' | 'sm2';
+        scope?: string;
+    };
+}
+export interface PassCodeLoginOptions {
+    connection?: 'PASSCODE';
+    passCodePayload: {
+        passCode: string;
+        email?: string;
+        phone?: string;
+        phoneCountryCode?: string;
     };
 }
 export interface UserInfo {
@@ -59,4 +69,28 @@ export interface UserInfo {
     gender?: string;
     username?: string;
     customData?: any;
+}
+export interface GetPhoneOptions {
+    extIdpConnidentifier: string;
+    code: string;
+}
+export declare type SmsChannel = 'CHANNEL_LOGIN' | 'CHANNEL_REGISTER' | 'CHANNEL_RESET_PASSWORD' | 'CHANNEL_BIND_PHONE' | 'CHANNEL_UNBIND_PHONE' | 'CHANNEL_BIND_MFA' | 'CHANNEL_VERIFY_MFA' | 'CHANNEL_UNBIND_MFA' | 'CHANNEL_COMPLETE_PHONE' | 'CHANNEL_IDENTITY_VERIFICATION' | 'CHANNEL_DELETE_ACCOUNT';
+export interface SendSmsOptions {
+    phoneNumber: string;
+    channel: SmsChannel;
+    phoneCountryCode?: string;
+}
+export interface RefreshTokenOptions {
+    grant_type: 'refresh_token';
+    redirect_uri: string;
+    refresh_token: string;
+}
+export interface UpdatePasswordOptions {
+    newPassword: string;
+    oldPassword: string;
+    passwordEncryptType?: 'none' | 'rsa' | 'sm2';
+}
+export interface ChangeQrcodeStatusOptions {
+    qrcodeId: string;
+    action: 'SCAN' | 'CONFIRM' | 'CANCEL';
 }
