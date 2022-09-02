@@ -7,6 +7,12 @@
   "files": [
     "dist"
   ],
+  "buildOptions": {
+    "formats": [
+      "esm",
+      "global"
+    ]
+  },
   "scripts": {
     "autoinstall": "npm ci",
     "build": "node scripts/build.js",
