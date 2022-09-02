@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@authing/miniprogram-wx": "^5.0.0-alpha.3"
+    "@authing/miniprogram-wx": "^5.0.0-alpha.6"
   }
 }

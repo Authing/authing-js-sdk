@@ -2,8 +2,8 @@
   "name": "@authing/miniprogram-uniapp",
   "version": "5.0.0-alpha.6",
   "description": "Authing miniprogram JS SDK for uniapp",
-  "main": "lib/bundle-uniapp.js",
-  "types": "lib/typings/index.d.ts",
+  "main": "dist/bundle-uniapp.js",
+  "types": "dist/typings/index.d.ts",
   "author": "https://github.com/authing",
   "license": "MIT",
   "files": [
