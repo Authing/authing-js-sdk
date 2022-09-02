@@ -1,7 +1,8 @@
 {
   "name": "@authing/miniprogram-jsencrypt",
   "version": "5.0.0-alpha.7",
-  "description": "",
+  "description": "JavaScript encrypt module for miniprogram",
+  "main": "lib/index.js",
   "module": "lib/index.js",
   "types": "lib/jsencrypt.d.ts",
   "files": [

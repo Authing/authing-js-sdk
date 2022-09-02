@@ -11,3 +11,7 @@ export declare class JSEncrypt {
   encrypt: (plainText: string) => string | false
   // expand more .......
 }
+
+export interface encryptFunction {
+  (plainText: string, publicKey: string): string
+}

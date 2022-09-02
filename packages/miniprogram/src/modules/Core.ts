@@ -1,5 +1,6 @@
 import {
-  WxLoginOptions,
+  WxPhoneLoginOptions,
+  WxCodeLoginOptions,
   ModuleOptions,
   PasswordLoginOptions,
   SendSmsOptions,
@@ -17,16 +18,16 @@ export class Core extends Base {
     super(options)
   }
 
-  async loginByCode(data: WxLoginOptions) {
-    const _data: WxLoginOptions = {
+  async loginByCode(data: WxCodeLoginOptions) {
+    const _data: WxCodeLoginOptions = {
       ...data,
       connection: 'wechat_mini_program_code'
     }
     return await this.login(_data, 'code')
   }
 
-  async loginByPhone(data: WxLoginOptions) {
-    const _data: WxLoginOptions = {
+  async loginByPhone(data: WxPhoneLoginOptions) {
+    const _data: WxPhoneLoginOptions = {
       ...data,
       connection: 'wechat_mini_program_phone'
     }
@@ -104,7 +105,11 @@ export class Core extends Base {
   }
 
   private async login(
-    data: WxLoginOptions | PasswordLoginOptions | PassCodeLoginOptions,
+    data:
+      | WxCodeLoginOptions
+      | WxPhoneLoginOptions
+      | PasswordLoginOptions
+      | PassCodeLoginOptions,
     type: string
   ) {
     const urlMap: Record<string, string> = {
@@ -128,7 +133,19 @@ export class Core extends Base {
     return loginState
   }
 
-  async refreshToken(data: RefreshTokenOptions) {
+  async refreshToken() {
+    const { refresh_token } = await this.getLoginState()
+
+    if (!refresh_token) {
+      return error('refreshToken', 'refresh_token must not be empty')
+    }
+
+    const data: RefreshTokenOptions = {
+      grant_type: 'refresh_token',
+      redirect_uri: '',
+      refresh_token
+    }
+
     const res = await request({
       method: 'POST',
       url: `${this.authingOptions.host}/oidc/token`,

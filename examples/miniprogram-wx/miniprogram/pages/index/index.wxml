@@ -1,1 +1,5 @@
 <button bindtap="loginByCode">loginByCode</button>
+<button bindtap="loginByPhone">loginByPhone</button>
+<button open-type="getPhoneNumber" bindgetphonenumber="getPhone">getPhone</button>
+<button bindtap="loginByPassword">loginByPassword</button>
+<button bindtap="loginBySmsCode">loginBySmsCode</button>

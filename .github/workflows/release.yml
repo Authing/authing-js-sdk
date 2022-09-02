@@ -59,11 +59,6 @@ jobs:
           lerna link
           npm run transfer-miniprogram-libs
 
-      # - name: commit legacy
-      #   run: |
-      #     git add .
-      #     git commit -m "feat: commit legacy content by CI"
-
       - name: update version
         run: |
           lerna version $VERSION --yes

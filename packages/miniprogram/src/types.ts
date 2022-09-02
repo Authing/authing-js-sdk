@@ -36,10 +36,20 @@ export declare abstract class IStorageProvider {
   remove(key: string): Promise<RemoveStorageSuccessData | RemoveStorageFailData>
 }
 
-export interface WxLoginOptions {
-  connection?: 'wechat_mini_program_code' | 'wechat_mini_program_phone'
+export interface WxCodeLoginOptions {
+  connection?: 'wechat_mini_program_code'
   extIdpConnidentifier: string
   wechatMiniProgramCodePayload: {
+    encryptedData: string
+    iv: string
+    code: string
+  }
+}
+
+export interface WxPhoneLoginOptions {
+  connection?: 'wechat_mini_program_phone'
+  extIdpConnidentifier: string
+  wechatMiniProgramPhonePayload: {
     encryptedData: string
     iv: string
     code: string
