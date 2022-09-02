@@ -1,6 +1,6 @@
 {
   "name": "@authing/miniprogram-wx",
-  "version": "5.0.0-alpha.5",
+  "version": "5.0.0-alpha.6",
   "description": "Authing miniprogram JS SDK for WX",
   "main": "lib/bundle-wx.js",
   "types": "lib/typings/index.d.ts",
