@@ -2,12 +2,18 @@
   "name": "@authing/web",
   "version": "5.0.0-alpha.3",
   "description": "Official SDK of Authing for Browser",
-  "main": "dist/global/index.umd.js",
+  "main": "dist/global/index.global.js",
   "module": "dist/esm/index.esm.js",
   "types": "dist/typings/index.d.ts",
   "files": [
     "dist"
   ],
+  "buildOptions": {
+    "formats": [
+      "esm",
+      "global"
+    ]
+  },
   "scripts": {
     "autoinstall": "npm ci",
     "build": "rm -rf ./dist && rollup -c",

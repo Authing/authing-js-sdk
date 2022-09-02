@@ -7,7 +7,8 @@
     "link": "lerna link",
     "lint": "eslint --ext .ts packages/**/src/**",
     "lint:fix": "eslint --fix --ext .ts packages/**/src/**",
-    "transfer-miniprogram-libs": "node scripts/transfer-miniprogram-libs.js"
+    "transfer-miniprogram-libs": "node scripts/transfer-miniprogram-libs.js",
+    "oss": "node scripts/oss.js"
   },
   "workspaces": [
     "packages/*"
