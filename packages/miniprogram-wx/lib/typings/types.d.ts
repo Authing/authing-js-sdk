@@ -94,3 +94,12 @@ export interface ChangeQrcodeStatusOptions {
     qrcodeId: string;
     action: 'SCAN' | 'CONFIRM' | 'CANCEL';
 }
+export interface LoginStateOptions {
+    access_token: string;
+    expires_in: number;
+    expires_at: number;
+    id_token: string;
+    scope: string;
+    token_type: string;
+    refresh_token?: string;
+}
