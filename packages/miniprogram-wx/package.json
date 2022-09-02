@@ -7,7 +7,7 @@
   "author": "https://github.com/authing",
   "license": "MIT",
   "files": [
-    "lib"
+    "dist"
   ],
   "scripts": {
     "release:official": "npm publish --verbose --access public",
