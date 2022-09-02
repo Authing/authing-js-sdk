@@ -71,11 +71,13 @@ export class User extends Base {
         sizeType: ['original']
       })
 
-      await AuthingMove.uploadFile({
+      const uploaded = await AuthingMove.uploadFile({
         url: `${this.authingOptions.host}/api/v2/upload?folder=avatar`,
         name: 'file',
         filePath: res.tempFiles[0].tempFilePath
       })
+
+      return uploaded
     } catch (e) {
       error('updateAvatar', e)
     }

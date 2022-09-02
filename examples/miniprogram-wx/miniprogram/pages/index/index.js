@@ -108,10 +108,36 @@ Page({
   },
 
   async refreshToken () {
-    const res = await authing.core.refreshToken({
-      grant_type: 'refresh_token',
-      redirect_uri: 'https://authing.cn',
-      refresh_token: ''
+    const res = await authing.core.refreshToken()
+    console.log('authing.core.refreshToken res: ', res)
+  },
+
+  async updatePassword () {
+    const res = await authing.user.updatePassword({
+      newPassword: '123',
+      oldPassword: '123',
+      // 小程序端使用 none 和 rsa
+      passwordEncryptType: 'none'
     })
+
+    console.log('authing.user.updatePassword res: ', res)
+  },
+
+  async getUserInfo () {
+    const res = await authing.user.getUserInfo()
+    console.log('authing.user.getUserInfo res: ', res)
+  },
+
+  async updateAvatar () {
+    const res = await authing.user.updateAvatar()
+    console.log('authing.user.updateAvatar res: ', JSON.parse(res.data))
+  },
+
+  async updateUserInfo () {
+    const res = await authing.user.updateUserInfo({
+      address: 'Hello world'
+    })
+
+    console.log('authing.user.updateUserInfo res: ', res)
   }
 })
