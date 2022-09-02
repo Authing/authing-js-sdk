@@ -146,3 +146,13 @@ export interface ChangeQrcodeStatusOptions {
   // CANCEL: 修改二维码状态为已取消，执行此操作前必须先执行 `SCAN 操作；
   action: 'SCAN' | 'CONFIRM' | 'CANCEL'
 }
+
+export interface LoginStateOptions {
+  access_token: string
+  expires_in: number
+  expires_at: number
+  id_token: string
+  scope: string
+  token_type: string
+  refresh_token?: string
+}

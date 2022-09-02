@@ -8,7 +8,7 @@ import {
   ChangeQrcodeStatusOptions
 } from '../types'
 
-import { request } from '../helpers'
+import { error, request } from '../helpers'
 
 import { Base } from './Base'
 
@@ -100,7 +100,7 @@ export class Core extends Base {
       passCode: '/api/v3/signin'
     }
 
-    const { access_token, id_token, refresh_token } = await request({
+    const res = await request({
       method: 'POST',
       url: this.authingOptions.host + urlMap[type],
       data,
@@ -109,16 +109,13 @@ export class Core extends Base {
       }
     })
 
-    await this.saveLoginState(access_token, id_token, refresh_token)
+    const loginState = await this.saveLoginState(res)
 
-    return {
-      accessToken: access_token,
-      idToken: id_token
-    }
+    return loginState
   }
 
   async refreshToken(data: RefreshTokenOptions) {
-    const { access_token, id_token, refresh_token } = await request({
+    const res = await request({
       method: 'POST',
       url: `${this.authingOptions.host}/oidc/token`,
       data,
@@ -128,17 +125,20 @@ export class Core extends Base {
       }
     })
 
-    await this.saveLoginState(access_token, id_token, refresh_token)
+    const loginState = await this.saveLoginState(res)
 
-    return {
-      accessToken: access_token,
-      idToken: id_token,
-      refreshToken: refresh_token
-    }
+    return loginState
   }
 
   async changeQrcodeStatus(data: ChangeQrcodeStatusOptions) {
-    const { accessToken } = await this.getLoginState()
+    const { access_token, expires_at } = await this.getLoginState()
+
+    if (expires_at < Date.now()) {
+      return error(
+        'changeQrcodeStatus',
+        'Token has expired, please login again'
+      )
+    }
 
     return await request({
       method: 'POST',
@@ -146,7 +146,7 @@ export class Core extends Base {
       data,
       header: {
         'x-authing-userpool-id': this.authingOptions.userPoolId,
-        Authorization: accessToken
+        Authorization: access_token
       }
     })
   }

@@ -2,15 +2,11 @@ import {
   ModuleOptions,
   AuthingOptions,
   IStorageProvider,
-  EncryptFunction
+  EncryptFunction,
+  LoginStateOptions
 } from '../types'
 
-import {
-  getAccessTokenKey,
-  getIdTokenKey,
-  getRefreshTokenKey,
-  request
-} from '../helpers'
+import { getLoginStateKey, request } from '../helpers'
 
 export class Base {
   protected readonly authingOptions: AuthingOptions
@@ -23,48 +19,30 @@ export class Base {
     this.encryptFunction = options.encryptFunction
   }
 
-  async getLoginState() {
-    const idTokenRes = await this.storage.get(
-      getIdTokenKey(this.authingOptions.appId)
+  async getLoginState(): Promise<LoginStateOptions> {
+    const res = await this.storage.get(
+      getLoginStateKey(this.authingOptions.appId)
     )
 
-    const accessTokenRes = await this.storage.get(
-      getAccessTokenKey(this.authingOptions.appId)
-    )
-
-    const refreshTokenRes = await this.storage.get(
-      getRefreshTokenKey(this.authingOptions.appId)
-    )
-
-    return {
-      idToken: idTokenRes.data,
-      accessToken: accessTokenRes.data,
-      refreshTokenRes: refreshTokenRes.data
-    }
+    return res.data
   }
 
   clearLoginState() {
-    this.storage.remove(getAccessTokenKey(this.authingOptions.appId))
-    this.storage.remove(getIdTokenKey(this.authingOptions.appId))
-    this.storage.remove(getRefreshTokenKey(this.authingOptions.appId))
+    this.storage.remove(getLoginStateKey(this.authingOptions.appId))
   }
 
-  protected async saveLoginState(
-    accessToken: string,
-    idToken: string,
-    refreshToken: string
-  ) {
-    await this.storage.set(
-      getAccessTokenKey(this.authingOptions.appId),
-      accessToken
-    )
-
-    await this.storage.set(getIdTokenKey(this.authingOptions.appId), idToken)
+  protected async saveLoginState(loginState: LoginStateOptions) {
+    const _loginState: LoginStateOptions = {
+      ...loginState,
+      expires_at: loginState.expires_in * 1000 + Date.now()
+    }
 
     await this.storage.set(
-      getRefreshTokenKey(this.authingOptions.appId),
-      refreshToken
+      getLoginStateKey(this.authingOptions.appId),
+      _loginState
     )
+
+    return _loginState
   }
 
   async getPublicKey() {

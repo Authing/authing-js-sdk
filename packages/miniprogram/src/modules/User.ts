@@ -17,7 +17,14 @@ export class User extends Base {
   }
 
   async updatePassword(data: UpdatePasswordOptions) {
-    const { accessToken } = await this.getLoginState()
+    const { access_token, expires_at } = await this.getLoginState()
+
+    if (expires_at < Date.now()) {
+      return error(
+        'changeQrcodeStatus',
+        'Token has expired, please login again'
+      )
+    }
 
     if (data.passwordEncryptType === 'rsa') {
       if (!this.encryptFunction) {
@@ -38,20 +45,20 @@ export class User extends Base {
       data,
       header: {
         'x-authing-userpool-id': this.authingOptions.userPoolId,
-        Authorization: accessToken
+        Authorization: access_token
       }
     })
   }
 
   async getUserInfo() {
-    const { accessToken } = await this.getLoginState()
+    const { access_token } = await this.getLoginState()
 
     return await request({
       method: 'GET',
       url: `${this.authingOptions.host}/api/v3/get-profile`,
       header: {
         'x-authing-userpool-id': this.authingOptions.userPoolId,
-        Authorization: accessToken
+        Authorization: access_token
       }
     })
   }
@@ -75,7 +82,14 @@ export class User extends Base {
   }
 
   async updateUserInfo(data: UserInfo) {
-    const { accessToken } = await this.getLoginState()
+    const { access_token, expires_at } = await this.getLoginState()
+
+    if (expires_at < Date.now()) {
+      return error(
+        'changeQrcodeStatus',
+        'Token has expired, please login again'
+      )
+    }
 
     return await request({
       method: 'POST',
@@ -83,7 +97,7 @@ export class User extends Base {
       data,
       header: {
         'x-authing-userpool-id': this.authingOptions.userPoolId,
-        Authorization: accessToken
+        Authorization: access_token
       }
     })
   }
