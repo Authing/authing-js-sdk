@@ -72,8 +72,22 @@ export class Core extends Base {
   }
 
   async logout() {
-    // Todo：后端同时退出
-    this.clearLoginState()
+    try {
+      const { access_token } = await this.getLoginState()
+
+      await request({
+        method: 'POST',
+        url: `${this.authingOptions.host}/oidc/token/revocation`,
+        data: {
+          client_id: this.authingOptions.appId,
+          token: access_token
+        }
+      })
+
+      await this.clearLoginState()
+    } catch (e) {
+      error('logout', e)
+    }
   }
 
   async sendSms(data: SendSmsOptions) {

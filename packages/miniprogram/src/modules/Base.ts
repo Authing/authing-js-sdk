@@ -27,8 +27,8 @@ export class Base {
     return res.data
   }
 
-  clearLoginState() {
-    this.storage.remove(getLoginStateKey(this.authingOptions.appId))
+  async clearLoginState() {
+    return await this.storage.remove(getLoginStateKey(this.authingOptions.appId))
   }
 
   protected async saveLoginState(loginState: LoginStateOptions) {

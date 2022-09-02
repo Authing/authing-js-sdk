@@ -17,17 +17,17 @@ function readyGo () {
 }
 
 function copyFiles (platform) {
-  rm.sync(resolve(`packages/miniprogram-${platform}/lib`))
+  rm.sync(resolve(`packages/miniprogram-${platform}/dist`))
 
   // copy bundle
   fs.copySync(
     resolve(`packages/miniprogram/dist/bundle-${platform}.js`),
-    resolve(`packages/miniprogram-${platform}/lib/bundle-${platform}.js`),
+    resolve(`packages/miniprogram-${platform}/dist/bundle-${platform}.js`),
   )
 
   // copy typings
   fs.copySync(
     resolve('packages/miniprogram/dist/typings'),
-    resolve(`packages/miniprogram-${platform}/lib/typings`)
+    resolve(`packages/miniprogram-${platform}/dist/typings`)
   )
 }
