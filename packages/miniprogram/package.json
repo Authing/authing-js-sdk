@@ -1,6 +1,6 @@
 {
   "name": "@authing/miniprogram",
-  "version": "5.0.0-alpha.9",
+  "version": "5.0.0-alpha.10",
   "description": "AuthingMove template, convert wechat miniprogram api syntax into into multi platform miniapps & frameworks & quickapp",
   "main": "src/index.ts",
   "module": "src/index.ts",
