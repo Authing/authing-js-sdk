@@ -10,5 +10,5 @@ exports.platforms = [
   'qa_ux', 
   'Mpx', 
   'Taro', 
-  'uniapp'
+  'uni'
 ]

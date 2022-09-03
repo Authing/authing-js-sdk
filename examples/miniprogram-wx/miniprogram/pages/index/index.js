@@ -86,24 +86,24 @@ Page({
     console.log('authing.core.loginByPassword res: ', res)
   },
 
-  async loginBySmsCode () {
+  async sendSms () {
     // 指定 channel 为 CHANNEL_LOGIN，发送登录所用的验证码
-    const res1 = await authing.core.sendSms({
-      phoneNumber: '13126919251',
+    const res = await authing.core.sendSms({
+      phoneNumber: '13100000000',
       phoneCountryCode: '+86',
       channel: 'CHANNEL_LOGIN'
     })
 
-    console.log('authing.core.sendSms: ', res1)
+    console.log('authing.core.sendSms res: ', res)
+  },
 
-    return
-
+  async loginByPassCode () {
     const res = await authing.core.loginByPassCode({
       connection: 'PASSCODE',
       passCodePayload: {
         // 手机收到的短信验证码
         passCode: '9973',
-        phone: '13126919251',
+        phone: '13100000000',
         phoneCountryCode: '+86'
       }
     })

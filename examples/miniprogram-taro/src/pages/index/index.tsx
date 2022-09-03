@@ -1,5 +1,5 @@
 import { Component, PropsWithChildren } from 'react'
-import { View, Text } from '@tarojs/components'
+import { View, Button } from '@tarojs/components'
 import './index.less'
 
 import Taro from '@tarojs/taro'
@@ -30,7 +30,21 @@ export default class Index extends Component<PropsWithChildren> {
   render () {
     return (
       <View className='index'>
-        <Text>Hello world!</Text>
+        <Button onClick={() => this.loginByCode()}>loginByCode</Button>
+        <Button onClick={() => this.loginByPhone()}>loginByPhone</Button>
+        <Button openType="getPhoneNumber" onClick={(e) => this.getPhone(e)}>getPhone</Button>
+        <Button onClick={() => this.loginByPassword()}>loginByPassword</Button>
+
+        <View>发送手机短信验证码</View>
+        <Button onClick={() => this.sendSms()}>sendSms</Button>
+        <View>使用手机短信验证码登录</View>
+        <Button onClick={() => this.loginByPassCode()}>loginByPassCode</Button>
+
+        <Button onClick={() => this.refreshToken()}>refreshToken</Button>
+        <Button onClick={() => this.updatePassword()}>updatePassword</Button>
+        <Button onClick={() => this.getUserInfo()}>getUserInfo</Button>
+        <Button onClick={() => this.updateAvatar()}>updateAvatar</Button>
+        <Button onClick={() => this.updateUserInfo()}>updateUserInfo</Button>
       </View>
     )
   }
@@ -53,9 +67,9 @@ export default class Index extends Component<PropsWithChildren> {
     })
 
     console.log('authing.core.loginByCode res: ', res)
-  },
+  }
 
-  async loginByPhone (e) {
+  async loginByPhone () {
     const { encryptedData, iv } = await Taro.getUserProfile({
       desc: 'getUserProfile'
     })
@@ -73,7 +87,7 @@ export default class Index extends Component<PropsWithChildren> {
     })
 
     console.log('authing.core.loginByPhone res: ', res)
-  },
+  }
 
   /**
    * 需要在真机上测试，微信开发者工具不会返回 code
@@ -88,7 +102,7 @@ export default class Index extends Component<PropsWithChildren> {
     })
 
     console.log('authing.user.getPhone res: ', res)
-  },
+  }
 
   async loginByPassword () {
     const res = await authing.core.loginByPassword({
@@ -105,33 +119,37 @@ export default class Index extends Component<PropsWithChildren> {
     })
 
     console.log('authing.core.loginByPassword res: ', res)
-  },
+  }
 
-  async loginBySmsCode () {
+  async sendSms () {
     // 指定 channel 为 CHANNEL_LOGIN，发送登录所用的验证码
-    await authing.core.sendSms({
-      phoneNumber: '13126919251',
+    const res = await authing.core.sendSms({
+      phoneNumber: '13100000000',
       phoneCountryCode: '+86',
       channel: 'CHANNEL_LOGIN'
     })
 
+    console.log('authing.core.sendSms res: ', res)
+  }
+
+  async loginByPassCode () {
     const res = await authing.core.loginByPassCode({
       connection: 'PASSCODE',
       passCodePayload: {
         // 手机收到的短信验证码
         passCode: '9973',
-        phone: '13126919251',
+        phone: '13100000000',
         phoneCountryCode: '+86'
       }
     })
 
     console.log('authing.core.loginByPassCode: ', res)
-  },
+  }
 
   async refreshToken () {
     const res = await authing.core.refreshToken()
     console.log('authing.core.refreshToken res: ', res)
-  },
+  }
 
   async updatePassword () {
     const res = await authing.user.updatePassword({
@@ -142,17 +160,17 @@ export default class Index extends Component<PropsWithChildren> {
     })
 
     console.log('authing.user.updatePassword res: ', res)
-  },
+  }
 
   async getUserInfo () {
     const res = await authing.user.getUserInfo()
     console.log('authing.user.getUserInfo res: ', res)
-  },
+  }
 
   async updateAvatar () {
     const res = await authing.user.updateAvatar()
     console.log('authing.user.updateAvatar res: ', JSON.parse(res.data))
-  },
+  }
 
   async updateUserInfo () {
     const res = await authing.user.updateUserInfo({
