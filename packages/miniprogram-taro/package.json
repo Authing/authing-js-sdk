@@ -1,6 +1,6 @@
 {
   "name": "@authing/miniprogram-taro",
-  "version": "5.0.0-alpha.10",
+  "version": "5.0.0-alpha.11",
   "description": "Authing miniprogram JS SDK for Taro",
   "main": "dist/bundle-taro.js",
   "types": "dist/typings/src/index.d.ts",
