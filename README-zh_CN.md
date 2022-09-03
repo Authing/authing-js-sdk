@@ -10,55 +10,55 @@
   <a href="javascript:;" target="_blank"><img src="https://img.shields.io/badge/node-%3E=12-green.svg" alt="Node"></a>
 </div>
 
-English | [简体中文](./README-zh_CN.md)
+[English](./README.md) | 简体中文
 
-Authing helps you build the sign-in, sign-out, sso, auth, and user identity within minutes.
+Authing 帮助您在几分钟内构建登录、注册、单点登录、用户身份验证等功能。
 
 <br />
 
-## 🌍 Ecosystem
+## 🌍 生态系统
 
-|Project|Status|Description
+|项目|状态|描述
 |-----|----|----|
-|@authing/miniprogram|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram.svg)](https://www.npmjs.com/package/@authing/miniprogram)|<a href="" target="_blank">Miniprogram source code</a>|
-|@authing/miniprogram-jsencrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-jsencrypt.svg)](https://www.npmjs.com/package/@authing/miniprogram-jsencrypt)|Javascript encrypt for miniprogram|
-|@authing/miniprogram-taro|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-taro.svg)](https://www.npmjs.com/package/@authing/miniprogram-taro)|<a href="" target="_blank">Authing miniprogram SDK for Taro</a>|
-|@authing/miniprogram-uniapp|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-uniapp.svg)](https://www.npmjs.com/package/@authing/miniprogram-uniapp)|<a href="" target="_blank">Authing miniprogram SDK for uniapp</a>|
-|@authing/miniprogram-wx|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-wx.svg)](https://www.npmjs.com/package/@authing/miniprogram-wx)|<a href="" target="_blank">Authing miniprogram SDK for Weixin</a>|
-|@authing/web|[![npm version](https://badge.fury.io/js/@authing%2Fweb.svg)](https://www.npmjs.com/package/@authing/web)|<a href="" target="_blank">Authing Browser SDK</a>|
-|@authing/weixin-official-account|[![npm version](https://badge.fury.io/js/@authing%2Fweixin-official-account.svg)](https://www.npmjs.com/package/@authing/weixin-official-account)|<a href="" target="_blank">Authing JS SDK for weixin official account</a>|
+|@authing/miniprogram|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram.svg)](https://www.npmjs.com/package/@authing/miniprogram)|<a href="" target="_blank">小程序 SDK 源码</a>|
+|@authing/miniprogram-jsencrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-jsencrypt.svg)](https://www.npmjs.com/package/@authing/miniprogram-jsencrypt)|适用于小程序的 JS 加密包|
+|@authing/miniprogram-taro|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-taro.svg)](https://www.npmjs.com/package/@authing/miniprogram-taro)|<a href="" target="_blank">适配小程序框架 Taro</a>|
+|@authing/miniprogram-uniapp|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-uniapp.svg)](https://www.npmjs.com/package/@authing/miniprogram-uniapp)|<a href="" target="_blank">适配小程序框架 uniapp</a>|
+|@authing/miniprogram-wx|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-wx.svg)](https://www.npmjs.com/package/@authing/miniprogram-wx)|<a href="" target="_blank">适配原生微信小程序</a>|
+|@authing/web|[![npm version](https://badge.fury.io/js/@authing%2Fweb.svg)](https://www.npmjs.com/package/@authing/web)|<a href="" target="_blank">快速为新开发的或已有的 Web 应用集成认证能力</a>|
+|@authing/weixin-official-account|[![npm version](https://badge.fury.io/js/@authing%2Fweixin-official-account.svg)](https://www.npmjs.com/package/@authing/weixin-official-account)|<a href="" target="_blank">适配微信公众号网页授权</a>|
 
-## ✨ Features
+## ✨ 特性
 
-### 🌈 Rich login and registration methods
+### 🌈 拥有丰富的登录注册方式
 
-Account password / phone verification / refresh token / social login / get user info.
+账号密码 / 手机验证码 / 刷新 token / 社会化登录 / 获取用户信息
 
-### 🎇 Compatible with all mainstream miniprogram frameworks
+### 🎇 兼容所有主流小程序框架
 
-Such as Taro, uniapp, in the future, we will also expand and support other miniprogram frameworks, it's very easy.
+例如 Taro, uniapp, 未来我们将继续扩展适配其他小程序框架或小程序平台
 
-### 🎨 SSO
+### 🎨 单点登录
 
-Authing supports many protocols such as OAuth2, OIDC, SAML, LDAP, etc. Developers can easily implement single sign-on within minutes
+Authing 支持 OAuth2、OIDC、SAML、LDAP 等多种协议，开发者可轻松在几分钟内实现单点登录。
 
-## 📚 Documentation
+## 📚 文档
 
-To check out live examples and docs, visit [docs](https://docs.authing.cn/v2/)
+更多示例和使用说明可参考[docs](https://docs.authing.cn/v2/)
 
-## ❓ Questions
+## ❓ 问题反馈
 
-For questions and support please use the [official forum](https://forum.authing.cn/). The issue list of this repo is exclusively for bug reports and feature requests.
+如果需要在线技术支持，可访问[官方论坛](https://forum.authing.cn/). 此仓库的 issue 仅用于上报 Bug 和提交新功能特性。
 
-## 🤝 Contribution
+## 🤝 开源共建
 
-- Fork it
-- Create your feature branch (git checkout -b my-new-feature)
-- Commit your changes (git commit -am 'Add some feature')
-- Push to the branch (git push -u origin my-new-feature)
-- Create new Pull Request
+- Fork 此仓库
+- 创建自己的 git 分支 (git checkout -b my-new-feature)
+- 提交你的修改 (git commit -am 'Add some feature')
+- 将修改内容推送到远程分支 (git push -u origin my-new-feature)
+- 创建一个 Pull Request
 
-Thank you to all the people who already contributed to Authing JS SDK!
+感谢所有为 Authing JS SDK 做出贡献的人！
 
 <div>
   <a href="https://github.com/leinue"><img width="30px" src="https://avatars.githubusercontent.com/u/2469688?v=4" /></a>
@@ -93,7 +93,7 @@ Thank you to all the people who already contributed to Authing JS SDK!
   <a href="https://github.com/zhaoyiming0803"><img width="30px" src="https://avatars.githubusercontent.com/u/25874685?s=96&v=4" /></a>
 </div>
 
-## 🎁 License
+## 🎁 开源许可
 
 [MIT](https://opensource.org/licenses/MIT)
 
