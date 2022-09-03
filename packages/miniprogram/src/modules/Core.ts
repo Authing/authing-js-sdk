@@ -6,7 +6,11 @@ import {
   SendSmsOptions,
   PassCodeLoginOptions,
   RefreshTokenOptions,
-  ChangeQrcodeStatusOptions
+  ChangeQrcodeStatusOptions,
+  LoginStateOptions,
+  NormalResponseData,
+  ChangeQrcodeStatusResponseData,
+  LogoutResponseData
 } from '../types'
 
 import { error, request } from '../helpers'
@@ -18,7 +22,7 @@ export class Core extends Base {
     super(options)
   }
 
-  async loginByCode(data: WxCodeLoginOptions) {
+  async loginByCode(data: WxCodeLoginOptions): Promise<LoginStateOptions> {
     const _data: WxCodeLoginOptions = {
       ...data,
       connection: 'wechat_mini_program_code'
@@ -26,7 +30,7 @@ export class Core extends Base {
     return await this.login(_data, 'code')
   }
 
-  async loginByPhone(data: WxPhoneLoginOptions) {
+  async loginByPhone(data: WxPhoneLoginOptions): Promise<LoginStateOptions> {
     const _data: WxPhoneLoginOptions = {
       ...data,
       connection: 'wechat_mini_program_phone'
@@ -34,10 +38,13 @@ export class Core extends Base {
     return await this.login(_data, 'phone')
   }
 
-  async loginByPassword(data: PasswordLoginOptions) {
+  async loginByPassword(
+    data: PasswordLoginOptions
+  ): Promise<LoginStateOptions | void> {
     if (data.options?.passwordEncryptType === 'rsa') {
       if (!this.encryptFunction) {
-        return console.error(
+        return error(
+          'loginByPassword',
           'encryptFunction is requiered, if passwordEncryptType is not "none"'
         )
       }
@@ -58,7 +65,9 @@ export class Core extends Base {
     return await this.login(_data, 'password')
   }
 
-  async loginByPassCode(data: PassCodeLoginOptions) {
+  async loginByPassCode(
+    data: PassCodeLoginOptions
+  ): Promise<LoginStateOptions> {
     if (data.passCodePayload.phone) {
       data.passCodePayload.phoneCountryCode =
         data.passCodePayload.phoneCountryCode || '+86'
@@ -72,7 +81,7 @@ export class Core extends Base {
     return await this.login(_data, 'passCode')
   }
 
-  async logout() {
+  async logout(): Promise<LogoutResponseData> {
     try {
       const { access_token } = await this.getLoginState()
 
@@ -85,13 +94,13 @@ export class Core extends Base {
         }
       })
 
-      await this.clearLoginState()
+      return await this.clearLoginState()
     } catch (e) {
       error('logout', e)
     }
   }
 
-  async sendSms(data: SendSmsOptions) {
+  async sendSms(data: SendSmsOptions): Promise<NormalResponseData> {
     data.phoneCountryCode = data.phoneCountryCode || '+86'
 
     return await request({
@@ -111,7 +120,7 @@ export class Core extends Base {
       | PasswordLoginOptions
       | PassCodeLoginOptions,
     type: string
-  ) {
+  ): Promise<LoginStateOptions> {
     const urlMap: Record<string, string> = {
       code: '/api/v3/signin-by-mobile',
       phone: '/api/v3/signin-by-mobile',
@@ -133,7 +142,7 @@ export class Core extends Base {
     return loginState
   }
 
-  async refreshToken() {
+  async refreshToken(): Promise<LoginStateOptions | void> {
     const { refresh_token } = await this.getLoginState()
 
     if (!refresh_token) {
@@ -161,7 +170,9 @@ export class Core extends Base {
     return loginState
   }
 
-  async changeQrcodeStatus(data: ChangeQrcodeStatusOptions) {
+  async changeQrcodeStatus(
+    data: ChangeQrcodeStatusOptions
+  ): Promise<ChangeQrcodeStatusResponseData | void> {
     const { access_token, expires_at } = await this.getLoginState()
 
     if (expires_at < Date.now()) {
@@ -173,7 +184,7 @@ export class Core extends Base {
 
     return await request({
       method: 'POST',
-      url: `${this.authingOptions.host}/oidc/token`,
+      url: `${this.authingOptions.host}/api/v3/change-qrcode-status`,
       data,
       header: {
         'x-authing-userpool-id': this.authingOptions.userPoolId,

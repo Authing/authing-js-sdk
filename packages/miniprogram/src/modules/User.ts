@@ -4,8 +4,11 @@ import { error, request } from '../helpers'
 
 import {
   GetPhoneOptions,
+  GetUserPhoneResponseData,
   ModuleOptions,
+  UpdateAvatarResponseData,
   UpdatePasswordOptions,
+  NormalResponseData,
   UserInfo
 } from '../types'
 
@@ -16,7 +19,9 @@ export class User extends Base {
     super(options)
   }
 
-  async updatePassword(data: UpdatePasswordOptions) {
+  async updatePassword(
+    data: UpdatePasswordOptions
+  ): Promise<NormalResponseData | void> {
     const { access_token, expires_at } = await this.getLoginState()
 
     if (expires_at < Date.now()) {
@@ -50,8 +55,12 @@ export class User extends Base {
     })
   }
 
-  async getUserInfo() {
-    const { access_token } = await this.getLoginState()
+  async getUserInfo(): Promise<UserInfo | void> {
+    const { access_token, expires_at } = await this.getLoginState()
+
+    if (expires_at < Date.now()) {
+      return error('getUserInfo', 'Token has expired, please login again')
+    }
 
     return await request({
       method: 'GET',
@@ -63,7 +72,7 @@ export class User extends Base {
     })
   }
 
-  async updateAvatar() {
+  async updateAvatar(): Promise<UpdateAvatarResponseData | void> {
     try {
       const res = await AuthingMove.chooseImage({
         count: 1,
@@ -83,7 +92,7 @@ export class User extends Base {
     }
   }
 
-  async updateUserInfo(data: UserInfo) {
+  async updateUserInfo(data: UserInfo): Promise<UserInfo | void> {
     const { access_token, expires_at } = await this.getLoginState()
 
     if (expires_at < Date.now()) {
@@ -104,8 +113,8 @@ export class User extends Base {
     })
   }
 
-  async getPhone(data: GetPhoneOptions) {
-    return await request({
+  async getPhone(data: GetPhoneOptions): Promise<GetUserPhoneResponseData> {
+    const { phone_info } = await request({
       method: 'POST',
       url: `${this.authingOptions.host}/api/v3/get-wechat-miniprogram-phone`,
       data,
@@ -113,5 +122,7 @@ export class User extends Base {
         'x-authing-userpool-id': this.authingOptions.userPoolId
       }
     })
+
+    return phone_info
   }
 }

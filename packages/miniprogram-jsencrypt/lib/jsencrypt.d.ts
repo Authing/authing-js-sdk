@@ -12,6 +12,4 @@ export declare class JSEncrypt {
   // expand more .......
 }
 
-export interface encryptFunction {
-  (plainText: string, publicKey: string): string
-}
+export declare function encryptFunction(plainText: string, publicKey: string): string

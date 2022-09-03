@@ -64,7 +64,7 @@ export interface PasswordLoginOptions {
     account?: string
     email?: string
     username?: string
-    phone: string
+    phone?: string
   }
   options?: {
     // 小程序端使用 none 和 rsa
@@ -166,3 +166,36 @@ export interface LoginStateOptions {
   token_type: string
   refresh_token?: string
 }
+
+export interface NormalResponseData {
+  message: string
+  statusCode: number
+}
+
+export interface UpdateAvatarResponseData {
+  code: number
+  message: string
+  data: {
+    key: string
+    url: string
+  }
+}
+
+export interface GetUserPhoneResponseData {
+  countryCode: string // '86'
+  phoneNumber: string
+  purePhoneNumber: string
+  watermark: {
+    appid: string
+    timestamp: number
+  }
+}
+
+export interface ChangeQrcodeStatusResponseData extends NormalResponseData {
+  apiCode: number
+}
+
+export type LogoutResponseData =
+  | RemoveStorageSuccessData
+  | RemoveStorageFailData
+  | void

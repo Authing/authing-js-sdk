@@ -63,7 +63,7 @@ Page({
 
     const res = await authing.user.getPhone({
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-      code: '5c3faecb5c72ac1c38396b04a6d273f1967b169787b479ff74bfddf46497c63c'
+      code: '97ae45d841722d56d3b1184d6a1fd727b3f2fd4675e2f21142f54f8d8742d2fa'
     })
 
     console.log('authing.user.getPhone res: ', res)
@@ -88,11 +88,15 @@ Page({
 
   async loginBySmsCode () {
     // 指定 channel 为 CHANNEL_LOGIN，发送登录所用的验证码
-    await authing.core.sendSms({
+    const res1 = await authing.core.sendSms({
       phoneNumber: '13126919251',
       phoneCountryCode: '+86',
       channel: 'CHANNEL_LOGIN'
     })
+
+    console.log('authing.core.sendSms: ', res1)
+
+    return
 
     const res = await authing.core.loginByPassCode({
       connection: 'PASSCODE',
