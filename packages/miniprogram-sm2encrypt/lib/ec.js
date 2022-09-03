@@ -326,7 +326,7 @@ class ECCurveFp {
   }
 }
 
-module.exports = {
+export {
   ECPointFp,
-  ECCurveFp,
+  ECCurveFp
 }

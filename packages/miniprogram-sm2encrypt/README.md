@@ -1,6 +1,6 @@
-# @authing/miniprogram-jsencrypt
+# @authing/miniprogram-sm2encrypt
 
-JavaScript rsa encrypt module for miniprogram
+JavaScript sm2 encrypt module for miniprogram
 
 ## Usage
 
@@ -9,7 +9,7 @@ Use in Authing miniprogram SDK
 ``` typescript
 import { Authing } from '@authing/miniprogram-wx'
 
-import { encryptFunction } from '@authing/miniprogram-jsencrypt'
+import { encryptFunction } from '@authing/miniprogram-sm2encrypt'
 
 const authing = new Authing({
   appId: '630b549efa97ba795338e2cd',
@@ -22,7 +22,7 @@ const authing = new Authing({
 Use alone
 
 ``` typescript
-import { encryptFunction } from '@authing/miniprogram-jsencrypt'
+import { encryptFunction } from '@authing/miniprogram-sm2encrypt'
 
 export async function getPublicKey () {
   const host = 'https://core.authing.cn'
@@ -31,10 +31,10 @@ export async function getPublicKey () {
 
   const res = await axios.get(api)
 
-  return res.data.data.rsa.publicKey
+  return res.data.data.sm2.publicKey
 }
 
-const publicKey = await getPublicKey('rsa')
+const publicKey = await getPublicKey('sm2')
 
 encryptFunction('this is planText', publicKey)
 ```

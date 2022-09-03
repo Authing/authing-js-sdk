@@ -125,7 +125,7 @@ export class Core extends Base {
       | PasswordLoginOptions
       | PassCodeLoginOptions,
     type: string
-  ): Promise<LoginStateOptions> {
+  ): Promise<LoginStateOptions | void> {
     const urlMap: Record<string, string> = {
       code: '/api/v3/signin-by-mobile',
       phone: '/api/v3/signin-by-mobile',
@@ -142,9 +142,12 @@ export class Core extends Base {
       }
     })
 
-    const loginState = await this.saveLoginState(res)
+    if (res.access_token) {
+      const loginState = await this.saveLoginState(res)
+      return loginState
+    }
 
-    return loginState
+    await this.clearLoginState()
   }
 
   async refreshToken(): Promise<LoginStateOptions | void> {
@@ -170,9 +173,12 @@ export class Core extends Base {
       }
     })
 
-    const loginState = await this.saveLoginState(res)
+    if (res.access_token) {
+      const loginState = await this.saveLoginState(res)
+      return loginState
+    }
 
-    return loginState
+    await this.clearLoginState()
   }
 
   async changeQrcodeStatus(

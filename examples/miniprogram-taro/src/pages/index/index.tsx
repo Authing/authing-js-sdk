@@ -6,7 +6,9 @@ import Taro from '@tarojs/taro'
 
 import { Authing } from '@authing/miniprogram-taro'
 
-import { encryptFunction } from '@authing/miniprogram-jsencrypt'
+// import { encryptFunction } from '@authing/miniprogram-jsencrypt'
+
+import { encryptFunction } from '@authing/miniprogram-sm2encrypt'
 
 const authing = new Authing({
   appId: '630b549efa97ba795338e2cd',
@@ -112,8 +114,7 @@ export default class Index extends Component<PropsWithChildren> {
         username: 'test'
       },
       options: {
-        // 小程序支持 ras 和 none 两种模式
-        passwordEncryptType: 'rsa',
+        passwordEncryptType: 'sm2',
         scope: 'offline_access openid profile'
       }
     })
@@ -155,7 +156,6 @@ export default class Index extends Component<PropsWithChildren> {
     const res = await authing.user.updatePassword({
       newPassword: '123',
       oldPassword: '123',
-      // 小程序端使用 none 和 rsa
       passwordEncryptType: 'none'
     })
 

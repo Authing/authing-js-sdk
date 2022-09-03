@@ -77,7 +77,6 @@ Page({
         username: 'test'
       },
       options: {
-        // 小程序支持 ras 和 none 两种模式
         passwordEncryptType: 'rsa',
         scope: 'offline_access openid profile'
       }
@@ -120,7 +119,6 @@ Page({
     const res = await authing.user.updatePassword({
       newPassword: '123',
       oldPassword: '123',
-      // 小程序端使用 none 和 rsa
       passwordEncryptType: 'none'
     })
 

@@ -21,7 +21,8 @@ Authing helps you build the sign-in, sign-out, sso, auth, and user identity with
 |Project|Status|Description
 |-----|----|----|
 |@authing/miniprogram|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram.svg)](https://www.npmjs.com/package/@authing/miniprogram)|<a href="" target="_blank">Miniprogram source code</a>|
-|@authing/miniprogram-jsencrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-jsencrypt.svg)](https://www.npmjs.com/package/@authing/miniprogram-jsencrypt)|Javascript encrypt for miniprogram|
+|@authing/miniprogram-jsencrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-jsencrypt.svg)](https://www.npmjs.com/package/@authing/miniprogram-jsencrypt)|Javascript rsa encrypt for miniprogram|
+|@authing/miniprogram-sm2encrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-sm2encrypt.svg)](https://www.npmjs.com/package/@authing/miniprogram-sm2encrypt)|Javascript sm2 encrypt for miniprogram|
 |@authing/miniprogram-taro|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-taro.svg)](https://www.npmjs.com/package/@authing/miniprogram-taro)|<a href="" target="_blank">Authing miniprogram SDK for Taro</a>|
 |@authing/miniprogram-uniapp|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-uniapp.svg)](https://www.npmjs.com/package/@authing/miniprogram-uniapp)|<a href="" target="_blank">Authing miniprogram SDK for uniapp</a>|
 |@authing/miniprogram-wx|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-wx.svg)](https://www.npmjs.com/package/@authing/miniprogram-wx)|<a href="" target="_blank">Authing miniprogram SDK for Weixin</a>|

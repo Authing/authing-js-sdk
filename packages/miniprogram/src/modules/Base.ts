@@ -48,10 +48,10 @@ export class Base {
     return _loginState
   }
 
-  async getPublicKey(encryptType: EncryptType) {
+  async getPublicKey(encryptType: EncryptType): Promise<string> {
     const res = await request({
       method: 'GET',
-      url: 'https://core.authing.cn/api/v3/system'
+      url: `${this.authingOptions.host}/api/v3/system`
     })
 
     return res[encryptType].publicKey
