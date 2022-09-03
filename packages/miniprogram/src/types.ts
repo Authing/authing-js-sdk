@@ -199,3 +199,5 @@ export type LogoutResponseData =
   | RemoveStorageSuccessData
   | RemoveStorageFailData
   | void
+
+export type EncryptType = 'rsa' | 'sm2'

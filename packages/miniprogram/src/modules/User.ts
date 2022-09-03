@@ -31,7 +31,7 @@ export class User extends Base {
       )
     }
 
-    if (data.passwordEncryptType === 'rsa') {
+    if (data.passwordEncryptType && data.passwordEncryptType !== 'none') {
       if (!this.encryptFunction) {
         return error(
           'updatePassword',
@@ -39,7 +39,7 @@ export class User extends Base {
         )
       }
 
-      const publicKey = await this.getPublicKey()
+      const publicKey = await this.getPublicKey(data.passwordEncryptType)
 
       data.newPassword = this.encryptFunction(data.newPassword, publicKey)
     }

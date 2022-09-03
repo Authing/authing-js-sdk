@@ -3,7 +3,8 @@ import {
   AuthingOptions,
   IStorageProvider,
   EncryptFunction,
-  LoginStateOptions
+  LoginStateOptions,
+  EncryptType
 } from '../types'
 
 import { getLoginStateKey, request } from '../helpers'
@@ -47,12 +48,12 @@ export class Base {
     return _loginState
   }
 
-  async getPublicKey() {
-    const { publicKey } = await request({
+  async getPublicKey(encryptType: EncryptType) {
+    const res = await request({
       method: 'GET',
-      url: 'https://core.authing.cn/api/v2/.well-known'
+      url: 'https://core.authing.cn/api/v3/system'
     })
 
-    return publicKey
+    return res[encryptType].publicKey
   }
 }

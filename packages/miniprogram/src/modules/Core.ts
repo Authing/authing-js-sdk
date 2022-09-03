@@ -41,7 +41,10 @@ export class Core extends Base {
   async loginByPassword(
     data: PasswordLoginOptions
   ): Promise<LoginStateOptions | void> {
-    if (data.options?.passwordEncryptType === 'rsa') {
+    if (
+      data.options?.passwordEncryptType &&
+      data.options?.passwordEncryptType !== 'none'
+    ) {
       if (!this.encryptFunction) {
         return error(
           'loginByPassword',
@@ -49,7 +52,9 @@ export class Core extends Base {
         )
       }
 
-      const publicKey = await this.getPublicKey()
+      const publicKey = await this.getPublicKey(
+        data.options?.passwordEncryptType
+      )
 
       data.passwordPayload.password = this.encryptFunction(
         data.passwordPayload.password,
