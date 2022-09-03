@@ -4,7 +4,7 @@ var __DEFINE__ = function(modId, func, req) { var m = { exports: {}, _tempexport
 var __REQUIRE__ = function(modId, source) { if(!__MODS__[modId]) return require(source); if(!__MODS__[modId].status) { var m = __MODS__[modId].m; m._exports = m._tempexports; var desp = Object.getOwnPropertyDescriptor(m, "exports"); if (desp && desp.configurable) Object.defineProperty(m, "exports", { set: function (val) { if(typeof val === "object" && val !== m._exports) { m._exports.__proto__ = val.__proto__; Object.keys(val).forEach(function (k) { m._exports[k] = val[k]; }); } m._tempexports = val }, get: function () { return m._tempexports; } }); __MODS__[modId].status = 1; __MODS__[modId].func(__MODS__[modId].req, m, m.exports); } return __MODS__[modId].m.exports; };
 var __REQUIRE_WILDCARD__ = function(obj) { if(obj && obj.__esModule) { return obj; } else { var newObj = {}; if(obj != null) { for(var k in obj) { if (Object.prototype.hasOwnProperty.call(obj, k)) newObj[k] = obj[k]; } } newObj.default = obj; return newObj; } };
 var __REQUIRE_DEFAULT__ = function(obj) { return obj && obj.__esModule ? obj.default : obj; };
-__DEFINE__(1662085259064, function(require, module, exports) {
+__DEFINE__(1662085259076, function(require, module, exports) {
 /******/ var __webpack_modules__ = ([
 /* 0 */,
 /* 1 */
@@ -15,7 +15,7 @@ __DEFINE__(1662085259064, function(require, module, exports) {
   /* harmony export */   "Core": () => (/* binding */ Core)
   /* harmony export */ });
   /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __authing_webpack_require__(2);
-  /* harmony import */ var _Base__WEBPACK_IMPORTED_MODULE_1__ = __authing_webpack_require__(24);
+  /* harmony import */ var _Base__WEBPACK_IMPORTED_MODULE_1__ = __authing_webpack_require__(25);
   var __extends = (undefined && undefined.__extends) || (function () {
       var extendStatics = function (d, b) {
           extendStatics = Object.setPrototypeOf ||
@@ -312,8 +312,8 @@ __DEFINE__(1662085259064, function(require, module, exports) {
   /* harmony export */ });
   /* harmony import */ var _StorageProvider__WEBPACK_IMPORTED_MODULE_0__ = __authing_webpack_require__(3);
   /* harmony import */ var _request__WEBPACK_IMPORTED_MODULE_1__ = __authing_webpack_require__(21);
-  /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __authing_webpack_require__(22);
-  /* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_3__ = __authing_webpack_require__(23);
+  /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __authing_webpack_require__(23);
+  /* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_3__ = __authing_webpack_require__(24);
   
   
   
@@ -911,6 +911,18 @@ __DEFINE__(1662085259064, function(require, module, exports) {
   /* harmony export */   "request": () => (/* binding */ request)
   /* harmony export */ });
   /* harmony import */ var _AuthingMove__WEBPACK_IMPORTED_MODULE_0__ = __authing_webpack_require__(4);
+  /* harmony import */ var _package_json__WEBPACK_IMPORTED_MODULE_1__ = __authing_webpack_require__(22);
+  var __assign = (undefined && undefined.__assign) || function () {
+      __assign = Object.assign || function(t) {
+          for (var s, i = 1, n = arguments.length; i < n; i++) {
+              s = arguments[i];
+              for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                  t[p] = s[p];
+          }
+          return t;
+      };
+      return __assign.apply(this, arguments);
+  };
   var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
       function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
       return new (P || (P = Promise))(function (resolve, reject) {
@@ -948,14 +960,18 @@ __DEFINE__(1662085259064, function(require, module, exports) {
       }
   };
   
+  
   function request(options) {
       return __awaiter(this, void 0, void 0, function () {
-          var data, e_1;
+          var _options, data, e_1;
           return __generator(this, function (_a) {
               switch (_a.label) {
                   case 0:
                       _a.trys.push([0, 2, , 3]);
-                      return [4 /*yield*/, _AuthingMove__WEBPACK_IMPORTED_MODULE_0__.AuthingMove.request(options)
+                      _options = Object.assign({}, options, {
+                          header: __assign(__assign({}, options.header), { 'x-authing-from': 'miniprogram', 'x-client-version': _package_json__WEBPACK_IMPORTED_MODULE_1__.version })
+                      });
+                      return [4 /*yield*/, _AuthingMove__WEBPACK_IMPORTED_MODULE_0__.AuthingMove.request(_options)
                           // 例如 /oidc/token 直接返回 data，没有 data.data
                       ];
                   case 1:
@@ -975,6 +991,12 @@ __DEFINE__(1662085259064, function(require, module, exports) {
   
   /***/ }),
   /* 22 */
+  /***/ ((module) => {
+  
+  module.exports = JSON.parse('{"name":"@authing/miniprogram","version":"5.0.0-alpha.9","description":"AuthingMove template, convert wechat miniprogram api syntax into into multi platform miniapps & frameworks & quickapp","main":"src/index.ts","module":"src/index.ts","scripts":{"autoinstall":"npm ci","dev":"node ./scripts/build.js watch","build":"node ./scripts/build.js","release:official":"npm publish --verbose --access public","release:alpha":"npm publish --verbose --tag=alpha --access public"},"dependencies":{"@authing/authingmove-api-proxy":"^1.0.1-alpha.2","@authing/authingmove-core":"^1.0.1-alpha.2"},"devDependencies":{"@authing/authingmove-webpack-plugin":"^1.0.1-alpha.2"},"repository":{"type":"git","url":"git+https://github.com/Authing/authing-js-sdk.git"},"author":"https://github.com/authing","license":"MIT","bugs":{"url":"https://github.com/Authing/authing-js-sdk/issues"},"homepage":"https://github.com/Authing/authing-js-sdk#readme","publishConfig":{"access":"public","registry":"https://registry.npmjs.org"}}');
+  
+  /***/ }),
+  /* 23 */
   /***/ ((__unused_webpack_module, __authing_webpack_exports__, __authing_webpack_require__) => {
   
   __authing_webpack_require__.r(__authing_webpack_exports__);
@@ -987,7 +1009,7 @@ __DEFINE__(1662085259064, function(require, module, exports) {
   
   
   /***/ }),
-  /* 23 */
+  /* 24 */
   /***/ ((__unused_webpack_module, __authing_webpack_exports__, __authing_webpack_require__) => {
   
   __authing_webpack_require__.r(__authing_webpack_exports__);
@@ -1000,7 +1022,7 @@ __DEFINE__(1662085259064, function(require, module, exports) {
   
   
   /***/ }),
-  /* 24 */
+  /* 25 */
   /***/ ((__unused_webpack_module, __authing_webpack_exports__, __authing_webpack_require__) => {
   
   __authing_webpack_require__.r(__authing_webpack_exports__);
@@ -1122,7 +1144,7 @@ __DEFINE__(1662085259064, function(require, module, exports) {
   
   
   /***/ }),
-  /* 25 */
+  /* 26 */
   /***/ ((__unused_webpack_module, __authing_webpack_exports__, __authing_webpack_require__) => {
   
   __authing_webpack_require__.r(__authing_webpack_exports__);
@@ -1131,7 +1153,7 @@ __DEFINE__(1662085259064, function(require, module, exports) {
   /* harmony export */ });
   /* harmony import */ var _AuthingMove__WEBPACK_IMPORTED_MODULE_0__ = __authing_webpack_require__(4);
   /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __authing_webpack_require__(2);
-  /* harmony import */ var _Base__WEBPACK_IMPORTED_MODULE_2__ = __authing_webpack_require__(24);
+  /* harmony import */ var _Base__WEBPACK_IMPORTED_MODULE_2__ = __authing_webpack_require__(25);
   var __extends = (undefined && undefined.__extends) || (function () {
       var extendStatics = function (d, b) {
           extendStatics = Object.setPrototypeOf ||
@@ -1389,7 +1411,7 @@ __DEFINE__(1662085259064, function(require, module, exports) {
   /* harmony export */   "Authing": () => (/* binding */ Authing)
   /* harmony export */ });
   /* harmony import */ var _modules_Core__WEBPACK_IMPORTED_MODULE_0__ = __authing_webpack_require__(1);
-  /* harmony import */ var _modules_User__WEBPACK_IMPORTED_MODULE_1__ = __authing_webpack_require__(25);
+  /* harmony import */ var _modules_User__WEBPACK_IMPORTED_MODULE_1__ = __authing_webpack_require__(26);
   /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __authing_webpack_require__(2);
   /* harmony import */ var _authing_authingmove_core__WEBPACK_IMPORTED_MODULE_3__ = __authing_webpack_require__(5);
   var __assign = (undefined && undefined.__assign) || function () {
@@ -1433,7 +1455,7 @@ __DEFINE__(1662085259064, function(require, module, exports) {
   if (!exports.__esModule) Object.defineProperty(exports, "__esModule", { value: true });Object.defineProperty(exports, 'Authing', { enumerable: true, configurable: true, get: function() { return __authing_webpack_exports__Authing; } });
   
 }, function(modId) {var map = {}; return __REQUIRE__(map[modId], modId); })
-return __REQUIRE__(1662085259064);
+return __REQUIRE__(1662085259076);
 })()
 //miniprogram-npm-outsideDeps=[]
 //# sourceMappingURL=index.js.map

@@ -53,15 +53,15 @@ jobs:
         run: |
           npm run lint
 
+      - name: update version
+        run: |
+          lerna version $VERSION --yes
+
       - name: build
         run: |
           lerna run build
           lerna link
           npm run transfer-miniprogram-libs
-
-      - name: update version
-        run: |
-          lerna version $VERSION --yes
           
       - name: release official
         if: ${{ github.ref_name == 'master' }}
