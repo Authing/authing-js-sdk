@@ -38,5 +38,9 @@
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
     "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "@authing/miniprogram-jsencrypt": "file:packages/miniprogram-jsencrypt",
+    "@authing/miniprogram-wx": "file:packages/miniprogram-wx"
   }
 }
