@@ -49,11 +49,11 @@
 
 		methods: {
 			async loginByCode () {
-				const { encryptedData, iv } = await Taro.getUserProfile({
+				const { encryptedData, iv } = await uni.getUserProfile({
 					desc: 'getUserProfile'
 				})
 
-				const { code } = await Taro.login()
+				const { code } = await uni.login()
 				
 				const res = await authing.core.loginByCode({
 					connection: 'wechat_mini_program_code',
@@ -72,11 +72,11 @@
 			},
 
 			async loginByPhone () {
-				const { encryptedData, iv } = await Taro.getUserProfile({
+				const { encryptedData, iv } = await uni.getUserProfile({
 					desc: 'getUserProfile'
 				})
 
-				const { code } = await Taro.login()
+				const { code } = await uni.login()
 				
 				const res = await authing.core.loginByPhone({
 					connection: 'wechat_mini_program_phone',
