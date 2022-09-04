@@ -1,9 +1,9 @@
 ---
 name: Bug report
-about: For reporting bugs or errors in the authing.js
+about: For reporting bugs or errors in the Authing JS SDK
 title: 'Issue: Open an issue'
 labels: bug
-assignees: liaochangjiang, yelexin, zhaoyiming0803
+assignees: zhaoyiming0803
 
 ---
 

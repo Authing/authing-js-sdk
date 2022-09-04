@@ -4,5 +4,5 @@ contact_links:
    url: https://forum.authing.cn/
    about: For general questions, support requests and discussions
  - name: Document
-   url: https://docs.authing.cn/v2/reference/sdk-for-node/
-   about: Authing SDK for Node.js/JavaScript
+   url: https://docs.authing.cn/v2/reference/
+   about: Authing JS SDK

@@ -1,0 +1,25 @@
+{
+  "name": "@authing/miniprogram-sm2encrypt",
+  "version": "5.0.0-alpha.17",
+  "description": "JavaScript sm2 encrypt module for miniprogram",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/sm2encrypt.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "autoinstall": "npm ci",
+    "release:official": "npm publish --verbose --access public",
+    "release:alpha": "npm publish --verbose --tag=alpha --access public"
+  },
+  "author": "https://github.com/authing",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "dependencies": {
+    "jsbn": "^1.1.0"
+  }
+}

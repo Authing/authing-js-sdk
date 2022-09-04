@@ -1,0 +1,26 @@
+<div id="app">
+  <h2>Website 2</h2>
+  <div>
+    <p>
+      Access Token: <br />
+      <textarea cols="100" rows="10" readOnly>{{
+        loginState?.accessToken | json
+      }}</textarea>
+    </p>
+    <p>
+      User Info:<br />
+      <textarea cols="100" rows="15" readOnly>{{
+        loginState?.parsedIdToken | json
+      }}</textarea>
+    </p>
+    <p>
+      Access Token Info:<br />
+      <textarea v-if="loginState" cols="100" rows="15" readOnly>{{
+        loginState?.parsedAccessToken | json
+      }}</textarea>
+    </p>
+    <p>
+      Expire At: <code>{{ loginState?.expireAt }}</code>
+    </p>
+  </div>
+</div>

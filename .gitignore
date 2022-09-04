@@ -1,13 +1,6 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
 node_modules
-test
-src/**.js
-.idea/*
-
-coverage
-.nyc_output
-*.log
-
-build/
-.env
-build/main/lib/auth/index.spec.js
-src/test.ts
+.DS_Store
+dist
+.angular

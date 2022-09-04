@@ -1,0 +1,35 @@
+{
+  "name": "@authing/miniprogram",
+  "version": "5.0.0-alpha.17",
+  "description": "Authing miniprogram sdk source code",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "scripts": {
+    "autoinstall": "npm ci",
+    "dev": "node ./scripts/build.js watch",
+    "build": "node ./scripts/build.js",
+    "release:official": "npm publish --verbose --access public",
+    "release:alpha": "npm publish --verbose --tag=alpha --access public"
+  },
+  "dependencies": {
+    "@authing/authingmove-api-proxy": "^1.0.1-alpha.4",
+    "@authing/authingmove-core": "^1.0.1-alpha.4"
+  },
+  "devDependencies": {
+    "@authing/authingmove-webpack-plugin": "^1.0.1-alpha.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Authing/authing-js-sdk.git"
+  },
+  "author": "https://github.com/authing",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Authing/authing-js-sdk/issues"
+  },
+  "homepage": "https://github.com/Authing/authing-js-sdk#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

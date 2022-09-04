@@ -1,0 +1,27 @@
+{
+  "name": "@authing/miniprogram-uniapp",
+  "version": "5.0.0-alpha.17",
+  "description": "Authing miniprogram JS SDK for uniapp",
+  "main": "dist/bundle-uniapp.js",
+  "types": "dist/typings/src/index.d.ts",
+  "author": "https://github.com/authing",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "release:official": "npm publish --verbose --access public",
+    "release:alpha": "npm publish --verbose --tag=alpha --access public"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/authing/authing-js-sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/authing/authing-js-sdk/issues"
+  }
+}

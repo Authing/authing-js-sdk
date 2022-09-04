@@ -1,0 +1,55 @@
+{
+  "name": "@authing/web",
+  "version": "5.0.0-alpha.17",
+  "description": "Official SDK of Authing for Browser",
+  "main": "dist/global/index.global.js",
+  "module": "dist/esm/index.esm.js",
+  "types": "dist/typings/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "buildOptions": {
+    "formats": [
+      "esm",
+      "global"
+    ]
+  },
+  "scripts": {
+    "autoinstall": "npm ci",
+    "build": "rm -rf ./dist && rollup -c",
+    "release:official": "npm publish --verbose --access public",
+    "release:alpha": "npm publish --verbose --tag=alpha --access public"
+  },
+  "dependencies": {
+    "axios": "^0.26.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.19.0",
+    "eslint": "^8.13.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.2",
+    "rollup": "^2.75.7",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.32.1",
+    "typescript": "^4.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Authing/authing-js-sdk.git"
+  },
+  "author": "https://github.com/authing",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Authing/authing-js-sdk/issues"
+  },
+  "homepage": "https://github.com/Authing/authing-js-sdk#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

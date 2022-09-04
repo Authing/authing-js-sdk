@@ -1,0 +1,15 @@
+<button bindtap="loginByCode">loginByCode</button>
+<button bindtap="loginByPhone">loginByPhone</button>
+<button open-type="getPhoneNumber" bindgetphonenumber="getPhone">getPhone</button>
+<button bindtap="loginByPassword">loginByPassword</button>
+
+<!-- 发送手机短信验证码 -->
+<button bindtap="sendSms">sendSms</button>
+<!-- 使用手机短信验证码登录 -->
+<button bindtap="loginByPassCode">loginByPassCode</button>
+
+<button bindtap="refreshToken">refreshToken</button>
+<button bindtap="updatePassword">updatePassword</button>
+<button bindtap="getUserInfo">getUserInfo</button>
+<button bindtap="updateAvatar">updateAvatar</button>
+<button bindtap="updateUserInfo">updateUserInfo</button>

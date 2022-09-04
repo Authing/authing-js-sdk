@@ -1,0 +1,20 @@
+<div id="app">
+  <h2>Angular 快速集成 Authing Demo</h2>
+  <p>
+    <button (click)="loginWithPopup()">login with popup</button>
+    <button (click)="loginWithRedirect()">loginWithRedirect</button>
+    <button (click)="logout()">logout</button>
+    <button (click)="getLoginState()">getLoginState</button>
+    <button (click)="getUserInfo()">getUserInfo</button>
+    <button (click)="handleResource()">handleResource</button>
+  </p>
+  <p *ngIf="loginState">
+    <textarea cols="100" rows="20" readOnly>{{ loginState | json }}</textarea>
+  </p>
+  <p *ngIf="userInfo">
+    <textarea cols="100" rows="15" readOnly>{{ userInfo | json }}</textarea>
+  </p>
+  <p *ngIf="resource">
+    <textarea cols="100" rows="5" readOnly>{{ resource | json }}</textarea>
+  </p>
+</div>

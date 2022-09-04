@@ -1,0 +1,36 @@
+{
+  "name": "@authing/weixin-official-account",
+  "version": "5.0.0-alpha.17",
+  "description": "Authing SDK for Weixin official account",
+  "module": "dist/esm/weixin-official-account.min.js",
+  "types": "dist/typings/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "buildOptions": {
+    "formats": [
+      "esm",
+      "global"
+    ]
+  },
+  "scripts": {
+    "autoinstall": "npm ci",
+    "build": "node scripts/build.js",
+    "release:official": "npm publish --verbose --access public",
+    "release:alpha": "npm publish --verbose --tag=alpha --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Authing/authing-js-sdk.git"
+  },
+  "author": "https://github.com/authing",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Authing/authing-js-sdk/issues"
+  },
+  "homepage": "https://github.com/Authing/authing-js-sdk#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

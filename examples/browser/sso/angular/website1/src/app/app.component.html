@@ -1,0 +1,27 @@
+<div id="app">
+  <h2>{{ title }}</h2>
+  <p>
+    <a href="https://localhost:8001" rel="noreferrer" target="_blank">
+      redirect to website2
+    </a>
+  </p>
+  <p>
+    <button (click)="loginWithPopup()">login with popup</button>
+  </p>
+  <p>
+    <button (click)="loginWithRedirect()">loginWithRedirect</button>
+    <button (click)="logoutWithRedirect()">logoutWithRedirect</button>
+  </p>
+  <p>
+    <button (click)="getLoginState()">getLoginState</button>
+  </p>
+  <p *ngIf="loginState">
+    <textarea cols="100" rows="20" readOnly>{{ loginState | json }}</textarea>
+  </p>
+  <p>
+    <button (click)="getUserInfo()">getUserInfo</button>
+  </p>
+  <p *ngIf="userInfo">
+    <textarea cols="100" rows="15" readOnly>{{ userInfo | json }}</textarea>
+  </p>
+</div>
