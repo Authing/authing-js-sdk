@@ -6,7 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 
 const pkg = require('./package.json');
 
-const libraryName = 'AuthingWebFactory';
+const libraryName = 'AuthingFactory';
 
 export default {
   input: `src/index.ts`,
