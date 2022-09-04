@@ -6,10 +6,10 @@ import {
   GetPhoneOptions,
   GetUserPhoneResponseData,
   ModuleOptions,
-  UpdateAvatarResponseData,
   UpdatePasswordOptions,
   NormalResponseData,
-  UserInfo
+  UserInfo,
+  UploadFileResponseData
 } from '../types'
 
 import { Base } from './Base'
@@ -72,7 +72,7 @@ export class User extends Base {
     })
   }
 
-  async updateAvatar(): Promise<UpdateAvatarResponseData | void> {
+  async updateAvatar(): Promise<UploadFileResponseData | void> {
     try {
       const res = await AuthingMove.chooseImage({
         count: 1,
@@ -86,7 +86,7 @@ export class User extends Base {
         filePath: res.tempFiles[0].tempFilePath
       })
 
-      return uploaded
+      return JSON.parse(uploaded.data)
     } catch (e) {
       error('updateAvatar', e)
     }

@@ -4,7 +4,7 @@ var __DEFINE__ = function(modId, func, req) { var m = { exports: {}, _tempexport
 var __REQUIRE__ = function(modId, source) { if(!__MODS__[modId]) return require(source); if(!__MODS__[modId].status) { var m = __MODS__[modId].m; m._exports = m._tempexports; var desp = Object.getOwnPropertyDescriptor(m, "exports"); if (desp && desp.configurable) Object.defineProperty(m, "exports", { set: function (val) { if(typeof val === "object" && val !== m._exports) { m._exports.__proto__ = val.__proto__; Object.keys(val).forEach(function (k) { m._exports[k] = val[k]; }); } m._tempexports = val }, get: function () { return m._tempexports; } }); __MODS__[modId].status = 1; __MODS__[modId].func(__MODS__[modId].req, m, m.exports); } return __MODS__[modId].m.exports; };
 var __REQUIRE_WILDCARD__ = function(obj) { if(obj && obj.__esModule) { return obj; } else { var newObj = {}; if(obj != null) { for(var k in obj) { if (Object.prototype.hasOwnProperty.call(obj, k)) newObj[k] = obj[k]; } } newObj.default = obj; return newObj; } };
 var __REQUIRE_DEFAULT__ = function(obj) { return obj && obj.__esModule ? obj.default : obj; };
-__DEFINE__(1662259787330, function(require, module, exports) {
+__DEFINE__(1662259787357, function(require, module, exports) {
 /******/ var __webpack_modules__ = ([
 /* 0 */,
 /* 1 */
@@ -1002,7 +1002,7 @@ __DEFINE__(1662259787330, function(require, module, exports) {
   /* 22 */
   /***/ ((module) => {
   
-  module.exports = JSON.parse('{"name":"@authing/miniprogram","version":"5.0.0-alpha.15","description":"Authing miniprogram sdk source code","main":"src/index.ts","module":"src/index.ts","scripts":{"autoinstall":"npm ci","dev":"node ./scripts/build.js watch","build":"node ./scripts/build.js","release:official":"npm publish --verbose --access public","release:alpha":"npm publish --verbose --tag=alpha --access public"},"dependencies":{"@authing/authingmove-api-proxy":"^1.0.1-alpha.3","@authing/authingmove-core":"^1.0.1-alpha.3"},"devDependencies":{"@authing/authingmove-webpack-plugin":"^1.0.1-alpha.3"},"repository":{"type":"git","url":"git+https://github.com/Authing/authing-js-sdk.git"},"author":"https://github.com/authing","license":"MIT","bugs":{"url":"https://github.com/Authing/authing-js-sdk/issues"},"homepage":"https://github.com/Authing/authing-js-sdk#readme","publishConfig":{"access":"public","registry":"https://registry.npmjs.org"}}');
+  module.exports = JSON.parse('{"name":"@authing/miniprogram","version":"5.0.0-alpha.16","description":"Authing miniprogram sdk source code","main":"src/index.ts","module":"src/index.ts","scripts":{"autoinstall":"npm ci","dev":"node ./scripts/build.js watch","build":"node ./scripts/build.js","release:official":"npm publish --verbose --access public","release:alpha":"npm publish --verbose --tag=alpha --access public"},"dependencies":{"@authing/authingmove-api-proxy":"^1.0.1-alpha.3","@authing/authingmove-core":"^1.0.1-alpha.3"},"devDependencies":{"@authing/authingmove-webpack-plugin":"^1.0.1-alpha.3"},"repository":{"type":"git","url":"git+https://github.com/Authing/authing-js-sdk.git"},"author":"https://github.com/authing","license":"MIT","bugs":{"url":"https://github.com/Authing/authing-js-sdk/issues"},"homepage":"https://github.com/Authing/authing-js-sdk#readme","publishConfig":{"access":"public","registry":"https://registry.npmjs.org"}}');
   
   /***/ }),
   /* 23 */
@@ -1301,7 +1301,7 @@ __DEFINE__(1662259787330, function(require, module, exports) {
                               })];
                       case 2:
                           uploaded = _a.sent();
-                          return [2 /*return*/, uploaded];
+                          return [2 /*return*/, JSON.parse(uploaded.data)];
                       case 3:
                           e_1 = _a.sent();
                           (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.error)('updateAvatar', e_1);
@@ -1470,7 +1470,7 @@ __DEFINE__(1662259787330, function(require, module, exports) {
   if (!exports.__esModule) Object.defineProperty(exports, "__esModule", { value: true });Object.defineProperty(exports, 'Authing', { enumerable: true, configurable: true, get: function() { return __authing_webpack_exports__Authing; } });
   
 }, function(modId) {var map = {}; return __REQUIRE__(map[modId], modId); })
-return __REQUIRE__(1662259787330);
+return __REQUIRE__(1662259787357);
 })()
 //miniprogram-npm-outsideDeps=[]
 //# sourceMappingURL=index.js.map

@@ -62,6 +62,9 @@
 						encryptedData,
 						iv,
 						code
+					},
+					options: {
+						scope: 'openid profile offline_access'
 					}
 				})
 
@@ -82,6 +85,9 @@
 						encryptedData,
 						iv,
 						code
+					},
+					options: {
+						scope: 'openid profile offline_access'
 					}
 				})
 
@@ -166,7 +172,7 @@
 
 			async updateAvatar () {
 				const res = await authing.user.updateAvatar()
-				console.log('authing.user.updateAvatar res: ', JSON.parse(res.data))
+				console.log('authing.user.updateAvatar res: ', res)
 			},
 
 			async updateUserInfo () {

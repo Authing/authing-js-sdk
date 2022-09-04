@@ -40,7 +40,7 @@ export declare abstract class IStorageProvider {
 interface WxLoginOptions {
   connection?: string
   extIdpConnidentifier: string
-  options: {
+  options?: {
     // openid：必须包含
     // profile：返回 birthdate, family_name, gender, given_name, locale, middle_name, name, nickname, picture, preferred_username, profile, update_at, website, zoneinfo
     // username： 返回 username
@@ -206,15 +206,6 @@ export interface NormalResponseData {
   statusCode: number
 }
 
-export interface UpdateAvatarResponseData {
-  code: number
-  message: string
-  data: {
-    key: string
-    url: string
-  }
-}
-
 export interface GetUserPhoneResponseData {
   countryCode: string // '86'
   phoneNumber: string
@@ -235,3 +226,12 @@ export type LogoutResponseData =
   | void
 
 export type EncryptType = 'rsa' | 'sm2'
+
+export interface UploadFileResponseData {
+  code: number
+  message: string
+  data: {
+    key: string
+    url: string
+  }
+}

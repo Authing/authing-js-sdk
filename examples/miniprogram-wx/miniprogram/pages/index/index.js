@@ -143,7 +143,7 @@ Page({
 
   async updateAvatar () {
     const res = await authing.user.updateAvatar()
-    console.log('authing.user.updateAvatar res: ', JSON.parse(res.data))
+    console.log('authing.user.updateAvatar res: ', res)
   },
 
   async updateUserInfo () {

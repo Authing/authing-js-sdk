@@ -65,6 +65,9 @@ export default class Index extends Component<PropsWithChildren> {
         encryptedData,
         iv,
         code
+      },
+      options: {
+        scope: 'openid profile offline_access'
       }
     })
 
@@ -85,6 +88,9 @@ export default class Index extends Component<PropsWithChildren> {
         encryptedData,
         iv,
         code
+      },
+      options: {
+        scope: 'openid profile offline_access'
       }
     })
 
@@ -169,7 +175,7 @@ export default class Index extends Component<PropsWithChildren> {
 
   async updateAvatar () {
     const res = await authing.user.updateAvatar()
-    console.log('authing.user.updateAvatar res: ', JSON.parse(res.data))
+    console.log('authing.user.updateAvatar res: ', res)
   }
 
   async updateUserInfo () {
