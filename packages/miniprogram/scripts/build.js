@@ -25,7 +25,7 @@ const { watch = false, modes = platforms } = parseArgv()
 const webpackConfigs = modes.reduce((configs, mode) => {
   const options = {
     __authing_move_src_mode__: 'wx',
-    __authing_move_mode__: mode === 'uni' ? 'uniapp' : mode,
+    __authing_move_mode__: mode,
     compilerMode: watch ? 'none': 'production'
   }
   return configs.concat(getWebpackConfig(options))

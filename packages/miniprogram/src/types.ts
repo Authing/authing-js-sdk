@@ -122,6 +122,21 @@ export interface PassCodeLoginOptions {
     // 默认 +86,手机区号，中国大陆手机号可不填
     phoneCountryCode?: string
   }
+  options?: {
+    // 小程序端使用 none 和 rsa
+    passwordEncryptType?: 'none' | 'rsa' | 'sm2'
+    // openid：必须包含
+    // profile：返回 birthdate, family_name, gender, given_name, locale, middle_name, name, nickname, picture, preferred_username, profile, update_at, website, zoneinfo
+    // username： 返回 username
+    // email：返回 email、email_verified
+    // phone：返回 phone_number, phone_number_verified
+    // offline_access: 如果存在此参数，token 接口会返回 refresh_token 字段
+    // roles: 返回用户的角色列表
+    // external_id：用户在原有系统的用户 ID
+    // extended_fields：返回用户的扩展字段信息，内容为一个对象，key 为扩展字段，value 为扩展字段值
+    // tenant_id：返回用户的租户 id
+    scope?: string
+  }
 }
 
 export interface UserInfo {
