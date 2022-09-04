@@ -22,7 +22,7 @@
   - 域名校验文件内容：前面记录的 txt 文本内容
   - Callback URL：你的业务回调链接，必填。配置的回调地址支持使用通配符，例如你配置的回调地址为`https://*.example.com/*`，下面的回调地址也是允许的：`https://forum.example.com/t/topic/1234`。
 
-## Install
+## 安装
 
 使用 NPM:
 ``` shell
@@ -34,8 +34,8 @@ npm install --save @authing/weixin-official-account
 <script src="https://cdn.authing.co/packages/weixin-official-account/5.0.0/weixin-official-account.min.js"></script>
 ```
 
-## Usage
-### Init
+## 使用
+### 初始化
 
 ``` typescript
 import { AuthingWxmp } from '@authing/weixin-official-account'
