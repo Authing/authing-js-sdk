@@ -34,7 +34,7 @@ export async function getPublicKey () {
   return res.data.data.rsa.publicKey
 }
 
-const publicKey = await getPublicKey('rsa')
+const publicKey = await getPublicKey()
 
 encryptFunction('this is planText', publicKey)
 ```

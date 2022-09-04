@@ -4,7 +4,8 @@ import {
   IStorageProvider,
   EncryptFunction,
   LoginStateOptions,
-  EncryptType
+  EncryptType,
+  RefreshTokenResponseData
 } from '../types'
 
 import { getLoginStateKey, request } from '../helpers'
@@ -34,8 +35,10 @@ export class Base {
     )
   }
 
-  protected async saveLoginState(loginState: LoginStateOptions) {
-    const _loginState: LoginStateOptions = {
+  protected async saveLoginState(
+    loginState: LoginStateOptions
+  ): Promise<LoginStateOptions | RefreshTokenResponseData> {
+    const _loginState: LoginStateOptions | RefreshTokenResponseData = {
       ...loginState,
       expires_at: loginState.expires_in * 1000 + Date.now()
     }

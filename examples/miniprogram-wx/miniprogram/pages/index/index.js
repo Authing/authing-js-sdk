@@ -2,7 +2,9 @@
 import { Authing } from '@authing/miniprogram-wx'
 
 // 按需使用，加密密码
-import { encryptFunction } from '@authing/miniprogram-jsencrypt'
+// import { encryptFunction } from '@authing/miniprogram-jsencrypt'
+
+import { encryptFunction } from '@authing/miniprogram-sm2encrypt'
 
 const authing = new Authing({
   appId: '630b549efa97ba795338e2cd',
@@ -28,6 +30,9 @@ Page({
         encryptedData,
         iv,
         code
+      },
+      options: {
+        scope: 'openid profile offline_access'
       }
     })
 
@@ -48,6 +53,9 @@ Page({
         encryptedData,
         iv,
         code
+      },
+      options: {
+        scope: 'openid profile offline_access'
       }
     })
 
@@ -63,7 +71,7 @@ Page({
 
     const res = await authing.user.getPhone({
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-      code: '97ae45d841722d56d3b1184d6a1fd727b3f2fd4675e2f21142f54f8d8742d2fa'
+      code: '13a6011af350ce43bd8331d6af25f7dad596e273e41b66058b4d070f06ad33b2'
     })
 
     console.log('authing.user.getPhone res: ', res)
@@ -77,7 +85,7 @@ Page({
         username: 'test'
       },
       options: {
-        passwordEncryptType: 'rsa',
+        passwordEncryptType: 'sm2',
         scope: 'offline_access openid profile'
       }
     })
@@ -101,9 +109,12 @@ Page({
       connection: 'PASSCODE',
       passCodePayload: {
         // 手机收到的短信验证码
-        passCode: '9973',
+        passCode: '5671',
         phone: '13100000000',
         phoneCountryCode: '+86'
+      },
+      options: {
+        scope: 'openid profile offline_access'
       }
     })
 

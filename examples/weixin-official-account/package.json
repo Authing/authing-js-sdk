@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@authing/wxmp": "^1.3.3-alpha.4"
+    "@authing/weixin-official-account": "^5.0.0-alpha.15"
   },
   "devDependencies": {
     "html-webpack-plugin": "^3.2.0",

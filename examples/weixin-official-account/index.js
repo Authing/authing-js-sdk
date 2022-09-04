@@ -1,4 +1,4 @@
-import { AuthingWxmp } from '@authing/wxmp'
+import { AuthingWxmp } from '@authing/weixin-official-account'
 
 
 const authingWx = new AuthingWxmp({
@@ -31,7 +31,7 @@ if (+query.init === 1) {
 } else {
   const { ok, userInfo, message } = authingWx.getUserInfo()
   if (ok) {
-    console.log(userInfo)
+    console.log('userInfo: ', userInfo)
   } else if (message) {
     console.log(message)
   }

@@ -10,7 +10,8 @@ import {
   LoginStateOptions,
   NormalResponseData,
   ChangeQrcodeStatusResponseData,
-  LogoutResponseData
+  LogoutResponseData,
+  RefreshTokenResponseData
 } from '../types'
 
 import { error, request } from '../helpers'
@@ -22,7 +23,9 @@ export class Core extends Base {
     super(options)
   }
 
-  async loginByCode(data: WxCodeLoginOptions): Promise<LoginStateOptions> {
+  async loginByCode(
+    data: WxCodeLoginOptions
+  ): Promise<LoginStateOptions | void> {
     const _data: WxCodeLoginOptions = {
       ...data,
       connection: 'wechat_mini_program_code'
@@ -30,7 +33,9 @@ export class Core extends Base {
     return await this.login(_data, 'code')
   }
 
-  async loginByPhone(data: WxPhoneLoginOptions): Promise<LoginStateOptions> {
+  async loginByPhone(
+    data: WxPhoneLoginOptions
+  ): Promise<LoginStateOptions | void> {
     const _data: WxPhoneLoginOptions = {
       ...data,
       connection: 'wechat_mini_program_phone'
@@ -72,7 +77,7 @@ export class Core extends Base {
 
   async loginByPassCode(
     data: PassCodeLoginOptions
-  ): Promise<LoginStateOptions> {
+  ): Promise<LoginStateOptions | void> {
     if (data.passCodePayload.phone) {
       data.passCodePayload.phoneCountryCode =
         data.passCodePayload.phoneCountryCode || '+86'
@@ -150,7 +155,9 @@ export class Core extends Base {
     await this.clearLoginState()
   }
 
-  async refreshToken(): Promise<LoginStateOptions | void> {
+  async refreshToken(): Promise<
+    LoginStateOptions | RefreshTokenResponseData | void
+    > {
     const { refresh_token } = await this.getLoginState()
 
     if (!refresh_token) {
