@@ -148,7 +148,7 @@ Page({
 
   async updateUserInfo () {
     const res = await authing.updateUserInfo({
-      address: 'Hello world'
+      address: 'Hello world 12'
     })
 
     console.log('authing.updateUserInfo res: ', res)
