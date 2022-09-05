@@ -45,7 +45,7 @@ Authing 支持 OAuth2、OIDC、SAML、LDAP 等多种协议，开发者可轻松�
 
 ## 📚 文档
 
-更多示例和使用说明可参考[docs](https://docs.authing.cn/v2/)
+更多示例和使用说明可参考[docs](https://docs.authing.cn/v2/reference/)
 
 ## ❓ 问题反馈
 

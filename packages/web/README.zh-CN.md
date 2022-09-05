@@ -5,7 +5,7 @@
 </div>
 
 <div align=center>
-  <a href="https://badge.fury.io/js/@authing%2Fbrowser" target="_blank"><img src="https://badge.fury.io/js/@authing%2Fbrowser.svg" alt="npm version"></a>
+  <a href="https://badge.fury.io/js/@authing%2Fweb" target="_blank"><img src="https://badge.fury.io/js/@authing%2Fweb.svg" alt="npm version"></a>
   <a href="https://npmcharts.com/compare/@authing/web" target="_blank"><img src="https://img.shields.io/npm/dm/@authing/web" alt="download"></a>
   <a href="https://forum.authing.cn/" target="_blank"><img src="https://img.shields.io/badge/chat-forum-blue" /></a>
   <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-success" alt="License"></a>

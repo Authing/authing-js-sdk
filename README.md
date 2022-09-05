@@ -45,7 +45,7 @@ Authing supports many protocols such as OAuth2, OIDC, SAML, LDAP, etc. Developer
 
 ## 📚 Documentation
 
-To check out live examples and docs, visit [docs](https://docs.authing.cn/v2/)
+To check out live examples and docs, visit [docs](https://docs.authing.cn/v2/reference/)
 
 ## ❓ Questions
 
