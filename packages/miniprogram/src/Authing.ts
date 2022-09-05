@@ -111,7 +111,7 @@ export class Authing {
       if (!this.encryptFunction) {
         return error(
           'loginByPassword',
-          'encryptFunction is requiered, if passwordEncryptType is not "none"'
+          'encryptFunction is required, if passwordEncryptType is not "none"'
         )
       }
 
@@ -285,7 +285,7 @@ export class Authing {
       if (!this.encryptFunction) {
         return error(
           'updatePassword',
-          'encryptFunction is requiered, if passwordEncryptType is not "none"'
+          'encryptFunction is required, if passwordEncryptType is not "none"'
         )
       }
 
