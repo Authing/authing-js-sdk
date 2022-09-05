@@ -49,13 +49,13 @@
 
 		methods: {
 			async loginByCode () {
-				const { encryptedData, iv } = await uni.getUserProfile({
+				const [, { encryptedData, iv }] = await uni.getUserProfile({
 					desc: 'getUserProfile'
 				})
 
-				const { code } = await uni.login()
+				const [, { code }] = await uni.login()
 				
-				const res = await authing.core.loginByCode({
+				const res = await authing.loginByCode({
 					connection: 'wechat_mini_program_code',
 					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
 					wechatMiniProgramCodePayload: {
@@ -68,17 +68,17 @@
 					}
 				})
 
-				console.log('authing.core.loginByCode res: ', res)
+				console.log('authing.loginByCode res: ', res)
 			},
 
 			async loginByPhone () {
-				const { encryptedData, iv } = await uni.getUserProfile({
+				const [, { encryptedData, iv }] = await uni.getUserProfile({
 					desc: 'getUserProfile'
 				})
 
-				const { code } = await uni.login()
+				const [, { code }] = await uni.login()
 				
-				const res = await authing.core.loginByPhone({
+				const res = await authing.loginByPhone({
 					connection: 'wechat_mini_program_phone',
 					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
 					wechatMiniProgramPhonePayload: {
@@ -91,7 +91,7 @@
 					}
 				})
 
-				console.log('authing.core.loginByPhone res: ', res)
+				console.log('authing.loginByPhone res: ', res)
 			},
 
 			/**
@@ -101,16 +101,16 @@
 			async getPhone (e) {
 				const { code } = e.detail
 
-				const res = await authing.user.getPhone({
+				const res = await authing.getPhone({
 					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
 					code
 				})
 
-				console.log('authing.user.getPhone res: ', res)
+				console.log('authing.getPhone res: ', res)
 			},
 
 			async loginByPassword () {
-				const res = await authing.core.loginByPassword({
+				const res = await authing.loginByPassword({
 					connection: 'PASSWORD',
 					passwordPayload: {
 						password: '123',
@@ -122,22 +122,22 @@
 					}
 				})
 
-				console.log('authing.core.loginByPassword res: ', res)
+				console.log('authing.loginByPassword res: ', res)
 			},
 
 			async sendSms () {
 				// 指定 channel 为 CHANNEL_LOGIN，发送登录所用的验证码
-				const res = await authing.core.sendSms({
+				const res = await authing.sendSms({
 					phoneNumber: '13100000000',
 					phoneCountryCode: '+86',
 					channel: 'CHANNEL_LOGIN'
 				})
 
-				console.log('authing.core.sendSms res: ', res)
+				console.log('authing.sendSms res: ', res)
 			},
 
 			async loginByPassCode () {
-				const res = await authing.core.loginByPassCode({
+				const res = await authing.loginByPassCode({
 					connection: 'PASSCODE',
 					passCodePayload: {
 						// 手机收到的短信验证码
@@ -147,40 +147,40 @@
 					}
 				})
 
-				console.log('authing.core.loginByPassCode: ', res)
+				console.log('authing.loginByPassCode: ', res)
 			},
 
 			async refreshToken () {
-				const res = await authing.core.refreshToken()
-				console.log('authing.core.refreshToken res: ', res)
+				const res = await authing.refreshToken()
+				console.log('authing.refreshToken res: ', res)
 			},
 
 			async updatePassword () {
-				const res = await authing.user.updatePassword({
+				const res = await authing.updatePassword({
 					newPassword: '123',
 					oldPassword: '123',
 					passwordEncryptType: 'none'
 				})
 
-				console.log('authing.user.updatePassword res: ', res)
+				console.log('authing.updatePassword res: ', res)
 			},
 
 			async getUserInfo () {
-				const res = await authing.user.getUserInfo()
-				console.log('authing.user.getUserInfo res: ', res)
+				const res = await authing.getUserInfo()
+				console.log('authing.getUserInfo res: ', res)
 			},
 
 			async updateAvatar () {
-				const res = await authing.user.updateAvatar()
-				console.log('authing.user.updateAvatar res: ', res)
+				const res = await authing.updateAvatar()
+				console.log('authing.updateAvatar res: ', res)
 			},
 
 			async updateUserInfo () {
-				const res = await authing.user.updateUserInfo({
+				const res = await authing.updateUserInfo({
 					address: 'Hello world'
 				})
 
-				console.log('authing.user.updateUserInfo res: ', res)
+				console.log('authing.updateUserInfo res: ', res)
 			}
 		}
 	}

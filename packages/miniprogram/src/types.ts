@@ -14,12 +14,6 @@ export interface AuthingOptions {
   encryptFunction?: EncryptFunction
 }
 
-export interface ModuleOptions {
-  authingOptions: AuthingOptions
-  storage: IStorageProvider
-  encryptFunction?: EncryptFunction
-}
-
 export interface LoginState {
   idToken: string
   accessToken: string
