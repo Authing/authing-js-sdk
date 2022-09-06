@@ -13,3 +13,5 @@
 <button bindtap="getUserInfo">getUserInfo</button>
 <button bindtap="updateAvatar">updateAvatar</button>
 <button bindtap="updateUserInfo">updateUserInfo</button>
+
+<button bindtap="logout">logout</button>

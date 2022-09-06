@@ -31,53 +31,73 @@ export declare abstract class IStorageProvider {
   remove(key: string): Promise<RemoveStorageSuccessData | RemoveStorageFailData>
 }
 
-interface WxLoginOptions {
-  connection?: string
-  extIdpConnidentifier: string
-  options?: {
-    // openid：必须包含
-    // profile：返回 birthdate, family_name, gender, given_name, locale, middle_name, name, nickname, picture, preferred_username, profile, update_at, website, zoneinfo
-    // username： 返回 username
-    // email：返回 email、email_verified
-    // phone：返回 phone_number, phone_number_verified
-    // offline_access: 如果存在此参数，token 接口会返回 refresh_token 字段
-    // roles: 返回用户的角色列表
-    // external_id：用户在原有系统的用户 ID
-    // extended_fields：返回用户的扩展字段信息，内容为一个对象，key 为扩展字段，value 为扩展字段值
-    // tenant_id：返回用户的租户 id
-    scope?: string
-    // 额外请求上下文，将会传递到认证前和认证后的 [Pipeline](https://docs.authing.cn/v2/guides/pipeline/) 的 `context` 对象中。了解[如何在 Pipeline 的 `context` 参数中获取传入的额外 context](https://docs.authing.cn/v2/guides/pipeline/context-object.html)。
-    // {
-    //   source: 'utm',
-    // }
-    context?: IObject
-    // 租户 ID
-    tenantId?: string
-    // 设置额外的用户自定义数据，你需要先在 Authing 控制台[配置自定义数据](https://docs.authing.cn/v2/guides/users/user-defined-field/)。
-    // {
-    //   school: 'pku',
-    //   age: '20',
-    // }
-    customData?: IObject
-  }
+export interface LoginOptions {
+  // openid：必须包含
+  // profile：返回 birthdate, family_name, gender, given_name, locale, middle_name, name, nickname, picture, preferred_username, profile, update_at, website, zoneinfo
+  // username： 返回 username
+  // email：返回 email、email_verified
+  // phone：返回 phone_number, phone_number_verified
+  // offline_access: 如果存在此参数，token 接口会返回 refresh_token 字段
+  // roles: 返回用户的角色列表
+  // external_id：用户在原有系统的用户 ID
+  // extended_fields：返回用户的扩展字段信息，内容为一个对象，key 为扩展字段，value 为扩展字段值
+  // tenant_id：返回用户的租户 id
+  scope?: string
+  // 额外请求上下文，将会传递到认证前和认证后的 [Pipeline](https://docs.authing.cn/v2/guides/pipeline/) 的 `context` 对象中。了解[如何在 Pipeline 的 `context` 参数中获取传入的额外 context](https://docs.authing.cn/v2/guides/pipeline/context-object.html)。
+  // {
+  //   source: 'utm',
+  // }
+  context?: IObject
+  // 租户 ID
+  tenantId?: string
+  // 设置额外的用户自定义数据，你需要先在 Authing 控制台[配置自定义数据](https://docs.authing.cn/v2/guides/users/user-defined-field/)。
+  // {
+  //   school: 'pku',
+  //   age: '20',
+  // }
+  customData?: IObject
 }
 
-export interface WxCodeLoginOptions extends WxLoginOptions {
+export interface WxCodeLoginOptions {
   connection?: 'wechat_mini_program_code'
+  extIdpConnidentifier: string
   wechatMiniProgramCodePayload: {
     encryptedData: string
     iv: string
     code: string
   }
+  options?: LoginOptions
 }
 
-export interface WxPhoneLoginOptions extends WxLoginOptions {
+export interface LoginByCodeOptions {
+  connection?: 'wechat_mini_program_code'
+  extIdpConnidentifier: string,
+  wechatMiniProgramCodePayload: {
+    encryptedData: string
+    iv: string
+  },
+  options?: LoginOptions
+}
+
+export interface LoginByPhoneOptions {
   connection?: 'wechat_mini_program_phone'
+  extIdpConnidentifier: string,
+  wechatMiniProgramPhonePayload: {
+    encryptedData: string
+    iv: string
+  },
+  options?: LoginOptions
+}
+
+export interface WxPhoneLoginOptions {
+  connection?: 'wechat_mini_program_phone'
+  extIdpConnidentifier: string
   wechatMiniProgramPhonePayload: {
     encryptedData: string
     iv: string
     code: string
   }
+  options?: LoginOptions
 }
 
 export interface PasswordLoginOptions {
