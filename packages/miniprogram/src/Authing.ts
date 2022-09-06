@@ -19,10 +19,12 @@ import {
   GetUserPhoneResponseData,
   UserInfo,
   UpdatePasswordOptions,
-  UploadFileResponseData
+  UploadFileResponseData,
+  LoginByCodeOptions,
+  LoginByPhoneOptions
 } from './types'
 
-import { error, getLoginStateKey, request, StorageProvider } from './helpers'
+import { error, getLoginStateKey, request, StorageProvider, getCodeKey } from './helpers'
 
 import { AuthingMove } from './AuthingMove'
 
@@ -43,11 +45,24 @@ export class Authing {
   }
 
   async getLoginState(): Promise<LoginStateOptions> {
-    const res = await this.storage.get(
-      getLoginStateKey(this.options.appId)
-    )
-
-    return res.data
+    try {
+      const res = await this.storage.get(
+        getLoginStateKey(this.options.appId)
+      )
+  
+      return res.data
+    } catch (e) {
+      error('getLoginState', e)
+      return {
+        access_token: '',
+        expires_in: 0,
+        expires_at: 0,
+        id_token: '',
+        scope: '',
+        token_type: '',
+        refresh_token: ''
+      }
+    }
   }
 
   async clearLoginState() {
@@ -81,23 +96,84 @@ export class Authing {
     return res[encryptType].publicKey
   }
 
-  async loginByCode(
-    data: WxCodeLoginOptions
-  ): Promise<LoginStateOptions | void> {
-    const _data: WxCodeLoginOptions = {
-      ...data,
-      connection: 'wechat_mini_program_code'
+  private async getCodeCache () {
+    try {
+      const codeCache = await this.storage.get(
+        getCodeKey(this.options.appId)
+      )
+      return codeCache.data
+    } catch (e) {
+      return ''
     }
+  }
+
+  private async setCodeCache (code: string) {
+    try {
+      await this.storage.set(getCodeKey(this.options.appId), code)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  private async getLoginCode () {
+    let code = await this.getCodeCache()
+
+    try {
+      if (!code) {
+        const loginRes = await AuthingMove.login()
+        code = loginRes.code
+        await this.setCodeCache(code)
+      } else {
+        await AuthingMove.checkSession()
+        code = await this.getCodeCache()
+      }
+    } catch (e) {
+      const loginRes = await AuthingMove.login()
+      code = loginRes.code
+      await this.setCodeCache(code)
+    } finally {
+      return code
+    }
+  }
+
+  async loginByCode(
+    data: LoginByCodeOptions
+  ): Promise<LoginStateOptions | void> {
+    const code = await this.getLoginCode()
+
+    const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
+
+    const _data: WxCodeLoginOptions = {
+      connection: connection || 'wechat_mini_program_code',
+      extIdpConnidentifier,
+      wechatMiniProgramCodePayload: {
+        ...wechatMiniProgramCodePayload,
+        code
+      },
+      options
+    }
+
     return await this.login(_data, 'code')
   }
 
   async loginByPhone(
-    data: WxPhoneLoginOptions
+    data: LoginByPhoneOptions
   ): Promise<LoginStateOptions | void> {
+    const code = await this.getLoginCode()
+
+    const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
+
     const _data: WxPhoneLoginOptions = {
-      ...data,
-      connection: 'wechat_mini_program_phone'
+      connection: connection || 'wechat_mini_program_phone',
+      extIdpConnidentifier,
+      wechatMiniProgramPhonePayload: {
+        ...wechatMiniProgramPhonePayload,
+        code
+      },
+      options
     }
+
     return await this.login(_data, 'phone')
   }
 
@@ -149,9 +225,14 @@ export class Authing {
     return await this.login(_data, 'passCode')
   }
 
-  async logout(): Promise<LogoutResponseData> {
+  async logout(): Promise<LogoutResponseData | void> {
     try {
       const { access_token } = await this.getLoginState()
+
+      if (!access_token) {
+        error('logout', 'access_token has expired')
+        return
+      }
 
       await request({
         method: 'POST',
@@ -159,13 +240,17 @@ export class Authing {
         data: {
           client_id: this.options.appId,
           token: access_token
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded'
         }
       })
-
-      return await this.clearLoginState()
     } catch (e) {
       error('logout', e)
+      return
     }
+
+    return await this.clearLoginState()
   }
 
   async sendSms(data: SendSmsOptions): Promise<NormalResponseData> {

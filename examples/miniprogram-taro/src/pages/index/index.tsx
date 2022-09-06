@@ -55,16 +55,13 @@ export default class Index extends Component<PropsWithChildren> {
     const { encryptedData, iv } = await Taro.getUserProfile({
       desc: 'getUserProfile'
     })
-
-    const { code } = await Taro.login()
     
     const res = await authing.loginByCode({
       connection: 'wechat_mini_program_code',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramCodePayload: {
         encryptedData,
-        iv,
-        code
+        iv
       },
       options: {
         scope: 'openid profile offline_access'
@@ -78,16 +75,13 @@ export default class Index extends Component<PropsWithChildren> {
     const { encryptedData, iv } = await Taro.getUserProfile({
       desc: 'getUserProfile'
     })
-
-    const { code } = await Taro.login()
     
     const res = await authing.loginByPhone({
       connection: 'wechat_mini_program_phone',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramPhonePayload: {
         encryptedData,
-        iv,
-        code
+        iv
       },
       options: {
         scope: 'openid profile offline_access'

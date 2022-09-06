@@ -7,9 +7,14 @@ import { Authing } from '@authing/miniprogram-wx'
 import { encryptFunction } from '@authing/miniprogram-sm2encrypt'
 
 const authing = new Authing({
-  appId: '630b549efa97ba795338e2cd',
-  host: 'http://localhost:3000',
-  userPoolId: '630b549d5a697473a2d7fa20',
+  appId: '62e752f0d8c681db4ed3f743',
+  host: 'https://console.pre.authing.cn',
+  userPoolId: '62e221f85f5ac5cc47037a39',
+
+  // appId: '630b549efa97ba795338e2cd',
+  // host: 'http://localhost:3000',
+  // userPoolId: '630b549d5a697473a2d7fa20',
+  
   encryptFunction
 })
 
@@ -18,18 +23,15 @@ Page({
 
   async loginByCode () {
     const { encryptedData, iv } = await wx.getUserProfile({
-      desc: 'getUserProfile'
+      desc: 'getUserProfile1'
     })
-
-    const { code } = await wx.login()
     
     const res = await authing.loginByCode({
       connection: 'wechat_mini_program_code',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramCodePayload: {
         encryptedData,
-        iv,
-        code
+        iv
       },
       options: {
         scope: 'openid profile offline_access'
@@ -43,16 +45,13 @@ Page({
     const { encryptedData, iv } = await wx.getUserProfile({
       desc: 'getUserProfile'
     })
-
-    const { code } = await wx.login()
     
     const res = await authing.loginByPhone({
       connection: 'wechat_mini_program_phone',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramPhonePayload: {
         encryptedData,
-        iv,
-        code
+        iv
       },
       options: {
         scope: 'openid profile offline_access'
@@ -71,7 +70,7 @@ Page({
 
     const res = await authing.getPhone({
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-      code: '13a6011af350ce43bd8331d6af25f7dad596e273e41b66058b4d070f06ad33b2'
+      code
     })
 
     console.log('authing.getPhone res: ', res)
@@ -152,5 +151,9 @@ Page({
     })
 
     console.log('authing.updateUserInfo res: ', res)
+  },
+
+  logout () {
+    authing.logout()
   }
 })
