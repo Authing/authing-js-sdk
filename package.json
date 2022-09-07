@@ -3,11 +3,11 @@
   "private": true,
   "scripts": {
     "prepare": "husky install",
-    "build:miniprogram": "cd packages/miniprogram && npm run autoinstall && npm run build",
+    "build:miniapp": "cd packages/miniapp && npm run autoinstall && npm run build",
     "link": "lerna link",
     "lint": "eslint --ext .ts packages/**/src/**",
     "lint:fix": "eslint --fix --ext .ts packages/**/src/**",
-    "transfer-miniprogram-libs": "node scripts/transfer-miniprogram-libs.js",
+    "transfer-miniapp-libs": "node scripts/transfer-miniapp-libs.js",
     "oss": "node scripts/oss.js"
   },
   "workspaces": [
@@ -40,7 +40,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@authing/miniprogram-jsencrypt": "file:packages/miniprogram-jsencrypt",
-    "@authing/miniprogram-wx": "file:packages/miniprogram-wx"
+    "@authing/miniapp-jsencrypt": "file:packages/miniapp-jsencrypt",
+    "@authing/miniapp-wx": "file:packages/miniapp-wx"
   }
 }

@@ -1,1 +1,0 @@
-# @authing/miniprogram-wx demo
