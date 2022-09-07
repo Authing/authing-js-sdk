@@ -14,7 +14,6 @@ import {
   PassCodeLoginOptions,
   SendSmsOptions,
   NormalResponseData,
-  LogoutResponseData,
   GetPhoneOptions,
   GetUserPhoneResponseData,
   UserInfo,
@@ -66,8 +65,12 @@ export class Authing {
   }
 
   async clearLoginState() {
-    return await this.storage.remove(
+    await this.storage.remove(
       getLoginStateKey(this.options.appId)
+    )
+
+    await this.storage.remove(
+      getCodeKey(this.options.appId)
     )
   }
 
@@ -107,7 +110,7 @@ export class Authing {
     }
   }
 
-  private async setCodeCache (code: string) {
+  private async setCodeCache (code: string): Promise<boolean> {
     try {
       await this.storage.set(getCodeKey(this.options.appId), code)
       return true
@@ -225,13 +228,13 @@ export class Authing {
     return await this.login(_data, 'passCode')
   }
 
-  async logout(): Promise<LogoutResponseData | void> {
+  async logout(): Promise<boolean> {
     try {
       const { access_token } = await this.getLoginState()
 
       if (!access_token) {
         error('logout', 'access_token has expired')
-        return
+        return false
       }
 
       await request({
@@ -247,10 +250,12 @@ export class Authing {
       })
     } catch (e) {
       error('logout', e)
-      return
+      return false
     }
 
-    return await this.clearLoginState()
+    await this.clearLoginState()
+
+    return true
   }
 
   async sendSms(data: SendSmsOptions): Promise<NormalResponseData> {
@@ -356,22 +361,24 @@ export class Authing {
 
   async updatePassword(
     data: UpdatePasswordOptions
-  ): Promise<NormalResponseData | void> {
+  ): Promise<boolean> {
     const { access_token, expires_at } = await this.getLoginState()
 
     if (expires_at < Date.now()) {
-      return error(
+      error(
         'changeQrcodeStatus',
         'Token has expired, please login again'
       )
+      return false
     }
 
     if (data.passwordEncryptType && data.passwordEncryptType !== 'none') {
       if (!this.encryptFunction) {
-        return error(
+        error(
           'updatePassword',
           'encryptFunction is required, if passwordEncryptType is not "none"'
         )
+        return false
       }
 
       const publicKey = await this.getPublicKey(data.passwordEncryptType)
@@ -379,7 +386,7 @@ export class Authing {
       data.newPassword = this.encryptFunction(data.newPassword, publicKey)
     }
 
-    return await request({
+    const res = await request({
       method: 'POST',
       url: `${this.options.host}/api/v3/update-password`,
       data,
@@ -388,6 +395,8 @@ export class Authing {
         Authorization: access_token
       }
     })
+
+    return res.statusCode === 200
   }
 
   async getUserInfo(): Promise<UserInfo | void> {

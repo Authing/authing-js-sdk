@@ -20,14 +20,14 @@ Authing 帮助您在几分钟内构建登录、注册、单点登录、用户身
 
 |项目|状态|描述
 |-----|----|----|
-|@authing/miniprogram|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram.svg)](https://www.npmjs.com/package/@authing/miniprogram)|<a href="" target="_blank">小程序 SDK 源码</a>|
+|@authing/miniprogram|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram.svg)](https://www.npmjs.com/package/@authing/miniprogram)|小程序 SDK 源码|
 |@authing/miniprogram-jsencrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-jsencrypt.svg)](https://www.npmjs.com/package/@authing/miniprogram-jsencrypt)|适用于小程序的 JS rsa 加密包|
 |@authing/miniprogram-sm2encrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-sm2encrypt.svg)](https://www.npmjs.com/package/@authing/miniprogram-sm2encrypt)|适用于小程序的 JS sm2 加密包|
-|@authing/miniprogram-taro|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-taro.svg)](https://www.npmjs.com/package/@authing/miniprogram-taro)|<a href="" target="_blank">适配小程序框架 Taro</a>|
-|@authing/miniprogram-uniapp|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-uniapp.svg)](https://www.npmjs.com/package/@authing/miniprogram-uniapp)|<a href="" target="_blank">适配小程序框架 uniapp</a>|
-|@authing/miniprogram-wx|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-wx.svg)](https://www.npmjs.com/package/@authing/miniprogram-wx)|<a href="" target="_blank">适配原生微信小程序</a>|
-|@authing/web|[![npm version](https://badge.fury.io/js/@authing%2Fweb.svg)](https://www.npmjs.com/package/@authing/web)|<a href="" target="_blank">快速为新开发的或已有的 Web 应用集成认证能力</a>|
-|@authing/weixin-official-account|[![npm version](https://badge.fury.io/js/@authing%2Fweixin-official-account.svg)](https://www.npmjs.com/package/@authing/weixin-official-account)|<a href="" target="_blank">适配微信公众号网页授权</a>|
+|@authing/miniprogram-taro|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-taro.svg)](https://www.npmjs.com/package/@authing/miniprogram-taro)|<a href="https://docs.authing.cn/v2/reference/sdk-for-miniprogram.html" target="_blank">适配小程序框架 Taro</a>|
+|@authing/miniprogram-uniapp|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-uniapp.svg)](https://www.npmjs.com/package/@authing/miniprogram-uniapp)|<a href="https://docs.authing.cn/v2/reference/sdk-for-miniprogram.html" target="_blank">适配小程序框架 uniapp</a>|
+|@authing/miniprogram-wx|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-wx.svg)](https://www.npmjs.com/package/@authing/miniprogram-wx)|<a href="https://docs.authing.cn/v2/reference/sdk-for-miniprogram.html" target="_blank">适配原生微信小程序</a>|
+|@authing/web|[![npm version](https://badge.fury.io/js/@authing%2Fweb.svg)](https://www.npmjs.com/package/@authing/web)|<a href="https://docs.authing.cn/v2/reference/sdk-for-sso-spa.html" target="_blank">快速为新开发的或已有的 Web 应用集成认证能力</a>|
+|@authing/weixin-official-account|[![npm version](https://badge.fury.io/js/@authing%2Fweixin-official-account.svg)](https://www.npmjs.com/package/@authing/weixin-official-account)|<a href="https://docs.authing.cn/v2/reference/sdk-for-weixin-official-account.html" target="_blank">适配微信公众号网页授权</a>|
 
 ## ✨ 特性
 

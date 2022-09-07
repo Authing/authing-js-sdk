@@ -1,6 +1,6 @@
 {
   "name": "@authing/miniprogram",
-  "version": "5.0.0-alpha.22",
+  "version": "5.0.0-alpha.24",
   "description": "Authing miniprogram sdk source code",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -12,11 +12,11 @@
     "release:alpha": "npm publish --verbose --tag=alpha --access public"
   },
   "dependencies": {
-    "@authing/authingmove-api-proxy": "^1.0.1-alpha.8",
-    "@authing/authingmove-core": "^1.0.1-alpha.8"
+    "@authing/authingmove-api-proxy": "^1.0.1-alpha.11",
+    "@authing/authingmove-core": "^1.0.1-alpha.11"
   },
   "devDependencies": {
-    "@authing/authingmove-webpack-plugin": "^1.0.1-alpha.8"
+    "@authing/authingmove-webpack-plugin": "^1.0.1-alpha.11"
   },
   "repository": {
     "type": "git",

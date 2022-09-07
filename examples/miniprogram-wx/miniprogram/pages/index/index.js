@@ -7,9 +7,13 @@ import { Authing } from '@authing/miniprogram-wx'
 import { encryptFunction } from '@authing/miniprogram-sm2encrypt'
 
 const authing = new Authing({
-  appId: '62e752f0d8c681db4ed3f743',
-  host: 'https://console.pre.authing.cn',
+  appId: '630ed3137dd6f2fd7001da24',
+  host: 'https://core.authing.cn',
   userPoolId: '62e221f85f5ac5cc47037a39',
+
+  // appId: '62e752f0d8c681db4ed3f743',
+  // host: 'https://console.pre.authing.cn',
+  // userPoolId: '62e221f85f5ac5cc47037a39',
 
   // appId: '630b549efa97ba795338e2cd',
   // host: 'http://localhost:3000',
@@ -153,7 +157,8 @@ Page({
     console.log('authing.updateUserInfo res: ', res)
   },
 
-  logout () {
-    authing.logout()
+  async logout () {
+    const res = await authing.logout()
+    console.log('authing.logout res: ', res)
   }
 })

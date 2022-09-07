@@ -20,14 +20,14 @@ Authing helps you build the sign-in, sign-out, sso, auth, and user identity with
 
 |Project|Status|Description
 |-----|----|----|
-|@authing/miniprogram|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram.svg)](https://www.npmjs.com/package/@authing/miniprogram)|<a href="" target="_blank">Miniprogram source code</a>|
+|@authing/miniprogram|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram.svg)](https://www.npmjs.com/package/@authing/miniprogram)|Miniprogram source code|
 |@authing/miniprogram-jsencrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-jsencrypt.svg)](https://www.npmjs.com/package/@authing/miniprogram-jsencrypt)|Javascript rsa encrypt for miniprogram|
 |@authing/miniprogram-sm2encrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-sm2encrypt.svg)](https://www.npmjs.com/package/@authing/miniprogram-sm2encrypt)|Javascript sm2 encrypt for miniprogram|
-|@authing/miniprogram-taro|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-taro.svg)](https://www.npmjs.com/package/@authing/miniprogram-taro)|<a href="" target="_blank">Authing miniprogram SDK for Taro</a>|
-|@authing/miniprogram-uniapp|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-uniapp.svg)](https://www.npmjs.com/package/@authing/miniprogram-uniapp)|<a href="" target="_blank">Authing miniprogram SDK for uniapp</a>|
-|@authing/miniprogram-wx|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-wx.svg)](https://www.npmjs.com/package/@authing/miniprogram-wx)|<a href="" target="_blank">Authing miniprogram SDK for Weixin</a>|
-|@authing/web|[![npm version](https://badge.fury.io/js/@authing%2Fweb.svg)](https://www.npmjs.com/package/@authing/web)|<a href="" target="_blank">Authing Browser SDK</a>|
-|@authing/weixin-official-account|[![npm version](https://badge.fury.io/js/@authing%2Fweixin-official-account.svg)](https://www.npmjs.com/package/@authing/weixin-official-account)|<a href="" target="_blank">Authing JS SDK for weixin official account</a>|
+|@authing/miniprogram-taro|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-taro.svg)](https://www.npmjs.com/package/@authing/miniprogram-taro)|<a href="https://docs.authing.cn/v2/reference/sdk-for-miniprogram.html" target="_blank">Authing miniprogram SDK for Taro</a>|
+|@authing/miniprogram-uniapp|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-uniapp.svg)](https://www.npmjs.com/package/@authing/miniprogram-uniapp)|<a href="https://docs.authing.cn/v2/reference/sdk-for-miniprogram.html" target="_blank">Authing miniprogram SDK for uniapp</a>|
+|@authing/miniprogram-wx|[![npm version](https://badge.fury.io/js/@authing%2Fminiprogram-wx.svg)](https://www.npmjs.com/package/@authing/miniprogram-wx)|<a href="https://docs.authing.cn/v2/reference/sdk-for-miniprogram.html" target="_blank">Authing miniprogram SDK for Weixin</a>|
+|@authing/web|[![npm version](https://badge.fury.io/js/@authing%2Fweb.svg)](https://www.npmjs.com/package/@authing/web)|<a href="https://docs.authing.cn/v2/reference/sdk-for-sso-spa.html" target="_blank">Authing Browser SDK</a>|
+|@authing/weixin-official-account|[![npm version](https://badge.fury.io/js/@authing%2Fweixin-official-account.svg)](https://www.npmjs.com/package/@authing/weixin-official-account)|<a href="https://docs.authing.cn/v2/reference/sdk-for-weixin-official-account.html" target="_blank">Authing JS SDK for weixin official account</a>|
 
 ## ✨ Features
 

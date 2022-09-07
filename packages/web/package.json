@@ -1,6 +1,6 @@
 {
   "name": "@authing/web",
-  "version": "5.0.0-alpha.22",
+  "version": "5.0.0-alpha.24",
   "description": "Official SDK of Authing for Browser",
   "main": "dist/global/index.global.js",
   "module": "dist/esm/index.esm.js",
