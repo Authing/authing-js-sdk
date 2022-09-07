@@ -19,6 +19,6 @@ export async function request(options: WxRequestConfig) {
     // 例如 /oidc/token 直接返回 data，没有 data.data
     return data.data || data
   } catch (e) {
-    console.error('认证服务器返回错误: ', e)
+    throw new Error('Authing server error: ' + JSON.stringify(e))
   }
 }

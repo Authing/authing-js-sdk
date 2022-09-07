@@ -249,11 +249,6 @@ export interface ChangeQrcodeStatusResponseData extends NormalResponseData {
   apiCode: number
 }
 
-export type LogoutResponseData =
-  | RemoveStorageSuccessData
-  | RemoveStorageFailData
-  | void
-
 export type EncryptType = 'rsa' | 'sm2'
 
 export interface UploadFileResponseData {
