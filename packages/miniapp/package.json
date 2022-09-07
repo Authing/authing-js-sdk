@@ -1,6 +1,6 @@
 {
   "name": "@authing/miniapp",
-  "version": "5.0.0-alpha.26",
+  "version": "5.0.0",
   "description": "Authing miniapp sdk source code",
   "main": "src/index.ts",
   "module": "src/index.ts",

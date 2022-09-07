@@ -1,6 +1,6 @@
 {
   "name": "@authing/miniapp-jsencrypt",
-  "version": "5.0.0-alpha.26",
+  "version": "5.0.0",
   "description": "JavaScript encrypt module for miniapp",
   "main": "lib/index.js",
   "module": "lib/index.js",
