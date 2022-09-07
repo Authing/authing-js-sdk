@@ -65,8 +65,12 @@ export class Authing {
   }
 
   async clearLoginState() {
-    return await this.storage.remove(
+    await this.storage.remove(
       getLoginStateKey(this.options.appId)
+    )
+
+    await this.storage.remove(
+      getCodeKey(this.options.appId)
     )
   }
 
@@ -106,7 +110,7 @@ export class Authing {
     }
   }
 
-  private async setCodeCache (code: string) {
+  private async setCodeCache (code: string): Promise<boolean> {
     try {
       await this.storage.set(getCodeKey(this.options.appId), code)
       return true
