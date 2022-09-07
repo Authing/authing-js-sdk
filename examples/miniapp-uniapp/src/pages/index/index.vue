@@ -55,7 +55,7 @@
 				
 				const res = await authing.loginByCode({
 					connection: 'wechat_mini_program_code',
-					extIdpConnidentifier: 'authing-zhaoyiming-miniapp',
+					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
 					wechatMiniProgramCodePayload: {
 						encryptedData,
 						iv
@@ -75,7 +75,7 @@
 				
 				const res = await authing.loginByPhone({
 					connection: 'wechat_mini_program_phone',
-					extIdpConnidentifier: 'authing-zhaoyiming-miniapp',
+					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
 					wechatMiniProgramPhonePayload: {
 						encryptedData,
 						iv
@@ -96,7 +96,7 @@
 				const { code } = e.detail
 
 				const res = await authing.getPhone({
-					extIdpConnidentifier: 'authing-zhaoyiming-miniapp',
+					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
 					code
 				})
 

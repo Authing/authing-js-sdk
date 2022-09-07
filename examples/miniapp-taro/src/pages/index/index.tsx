@@ -58,7 +58,7 @@ export default class Index extends Component<PropsWithChildren> {
     
     const res = await authing.loginByCode({
       connection: 'wechat_mini_program_code',
-      extIdpConnidentifier: 'authing-zhaoyiming-miniapp',
+      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramCodePayload: {
         encryptedData,
         iv
@@ -78,7 +78,7 @@ export default class Index extends Component<PropsWithChildren> {
     
     const res = await authing.loginByPhone({
       connection: 'wechat_mini_program_phone',
-      extIdpConnidentifier: 'authing-zhaoyiming-miniapp',
+      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramPhonePayload: {
         encryptedData,
         iv
@@ -99,7 +99,7 @@ export default class Index extends Component<PropsWithChildren> {
     const { code } = e.detail
 
     const res = await authing.getPhone({
-      extIdpConnidentifier: 'authing-zhaoyiming-miniapp',
+      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       code
     })
 
