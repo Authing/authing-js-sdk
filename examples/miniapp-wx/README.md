@@ -1,0 +1,1 @@
+# @authing/miniapp-wx demo

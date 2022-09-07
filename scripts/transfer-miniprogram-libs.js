@@ -19,17 +19,17 @@ function readyGo () {
 function copyFiles (platform) {
   const _platform = platform === 'uni' ? 'uniapp' : platform
 
-  rm.sync(resolve(`packages/miniprogram-${_platform}/dist`))
+  rm.sync(resolve(`packages/miniapp-${_platform}/dist`))
 
   // copy bundle
   fs.copySync(
-    resolve(`packages/miniprogram/dist/bundle-${platform}.js`),
-    resolve(`packages/miniprogram-${_platform}/dist/bundle-${_platform}.js`),
+    resolve(`packages/miniapp/dist/bundle-${platform}.js`),
+    resolve(`packages/miniapp-${_platform}/dist/bundle-${_platform}.js`),
   )
 
   // copy typings
   fs.copySync(
-    resolve('packages/miniprogram/dist/typings'),
-    resolve(`packages/miniprogram-${_platform}/dist/typings`)
+    resolve('packages/miniapp/dist/typings'),
+    resolve(`packages/miniapp-${_platform}/dist/typings`)
   )
 }

@@ -61,7 +61,7 @@ jobs:
         run: |
           lerna run build
           lerna link
-          npm run transfer-miniprogram-libs
+          npm run transfer-miniapp-libs
           
       - name: release official
         if: ${{ github.ref_name == 'master' }}
