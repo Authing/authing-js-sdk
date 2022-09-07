@@ -99,7 +99,7 @@ Page({
   async sendSms () {
     // 指定 channel 为 CHANNEL_LOGIN，发送登录所用的验证码
     const res = await authing.sendSms({
-      phoneNumber: '13126919251',
+      phoneNumber: '13100000000',
       phoneCountryCode: '+86',
       channel: 'CHANNEL_LOGIN'
     })
