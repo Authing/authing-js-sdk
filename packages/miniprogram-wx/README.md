@@ -25,16 +25,13 @@ Page({
     const { encryptedData, iv } = await wx.getUserProfile({
       desc: 'getUserProfile'
     })
-
-    const { code } = await wx.login()
     
     const res = await authing.loginByCode({
       connection: 'wechat_mini_program_code',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramCodePayload: {
         encryptedData,
-        iv,
-        code
+        iv
       }
     })
 
@@ -45,16 +42,13 @@ Page({
     const { encryptedData, iv } = await wx.getUserProfile({
       desc: 'getUserProfile'
     })
-
-    const { code } = await wx.login()
     
     const res = await authing.loginByPhone({
       connection: 'wechat_mini_program_phone',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramPhonePayload: {
         encryptedData,
-        iv,
-        code
+        iv
       }
     })
 
@@ -70,7 +64,7 @@ Page({
 
     const res = await authing.getPhone({
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-      code: '97ae45d841722d56d3b1184d6a1fd727b3f2fd4675e2f21142f54f8d8742d2fa'
+      code
     })
 
     console.log('authing.getPhone res: ', res)
