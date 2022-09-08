@@ -1,4 +1,4 @@
-// index.js
+// index.ts
 import { Authing } from '@authing/miniapp-wx'
 
 // 按需使用，加密密码
@@ -21,6 +21,8 @@ const authing = new Authing({
   
   encryptFunction
 })
+
+console.log('authing: ', authing)
 
 Page({
   data: {},
