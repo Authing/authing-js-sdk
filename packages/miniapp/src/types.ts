@@ -124,6 +124,16 @@ export interface PasswordLoginOptions {
     // extended_fields：返回用户的扩展字段信息，内容为一个对象，key 为扩展字段，value 为扩展字段值
     // tenant_id：返回用户的租户 id
     scope?: string
+    // 客户端真实 IP 地址。默认情况下，Authing 会将请求来源的 IP 识别为用户登录的 IP 地址，如果你在后端服务器中调用此接口，需要将此 IP 设置为用户的真实请求 IP。
+    clientIp?: string
+    // 额外请求上下文，将会传递到认证前和认证后的 Pipeline 的 context 对象中。了解如何在 Pipeline 的 context 参数中获取传入的额外 context。
+    context?: string
+    // 租户 ID
+    tenantId?: string
+    // 设置额外的用户自定义数据，你需要先在 Authing 控制台配置自定义数据。
+    customData?: Record<string, unknown>
+    // 是否开启自动注册。如果设置为 true，当用户不存在的时候，会先自动为其创建一个账号。
+    autoRegister?: boolean
   }
 }
 
@@ -150,6 +160,16 @@ export interface PassCodeLoginOptions {
     // extended_fields：返回用户的扩展字段信息，内容为一个对象，key 为扩展字段，value 为扩展字段值
     // tenant_id：返回用户的租户 id
     scope?: string
+    // 客户端真实 IP 地址。默认情况下，Authing 会将请求来源的 IP 识别为用户登录的 IP 地址，如果你在后端服务器中调用此接口，需要将此 IP 设置为用户的真实请求 IP。
+    clientIp?: string
+    // 额外请求上下文，将会传递到认证前和认证后的 Pipeline 的 context 对象中。了解如何在 Pipeline 的 context 参数中获取传入的额外 context。
+    context?: string
+    // 租户 ID
+    tenantId?: string
+    // 设置额外的用户自定义数据，你需要先在 Authing 控制台配置自定义数据。
+    customData?: Record<string, unknown>
+    // 是否开启自动注册。如果设置为 true，当用户不存在的时候，会先自动为其创建一个账号。
+    autoRegister?: boolean
   }
 }
 
