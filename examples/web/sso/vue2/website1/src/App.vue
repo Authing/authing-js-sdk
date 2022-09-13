@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { Authing } from "@authing/browser";
+import { Authing } from "@authing/web";
 
 export default {
   name: "App",
@@ -61,6 +61,8 @@ export default {
 
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: "https://localhost:8000",
+
+      userPoolId: '62e221f85f5ac5cc47037a39'
     });
   },
   mounted() {
