@@ -42,7 +42,7 @@ function mergeOptions (options?: AxiosRequestConfig<string>): AxiosRequestConfig
     headers: {
       ...options?.headers,
       'x-authing-request-from': 'sdk-web',
-      'x-authing-client-version': version
+      'x-authing-sdk-version': version
     }
   })
   return _options

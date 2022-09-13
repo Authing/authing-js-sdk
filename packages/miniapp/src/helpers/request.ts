@@ -10,7 +10,7 @@ export async function request(options: WxRequestConfig) {
       header: {
         ...options.header,
         'x-authing-request-from': 'sdk-miniapp',
-        'x-authing-client-version': version
+        'x-authing-sdk-version': version
       }
     })
 

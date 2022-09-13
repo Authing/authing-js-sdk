@@ -19,10 +19,10 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@authing/web@^5.0.0":
-  "integrity" "sha512-yB6qIZ2UH/LiEh+S3yeaqgdpDRN0WHcGB9pfgLuLLVoHp26lP9kW3/b7JrhonIhWzdWJnBJ/akLssKje+fpUbA=="
-  "resolved" "https://registry.npmjs.org/@authing/web/-/web-5.0.0.tgz"
-  "version" "5.0.0"
+"@authing/web@^5.0.1-alpha.0":
+  "integrity" "sha512-kR9RoNCjVZAB6KYxi5kU9WoZN0R1VJ5CPS+ZkpKeAX3d7t9QxPEy/Bbifh0ES8cweB7DTcFF1BNtjwPaHTkZcw=="
+  "resolved" "https://registry.npmjs.org/@authing/web/-/web-5.0.1-alpha.0.tgz"
+  "version" "5.0.1-alpha.0"
   dependencies:
     "axios" "^0.26.1"
 
