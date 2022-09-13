@@ -31,6 +31,11 @@ export interface AuthingSPAInitOptions {
   redirectUri: string | null
 
   /**
+   * 用户池 ID
+   */
+  userPoolId: string
+
+  /**
    * 登出回调地址，需要在控制台『应用配置 - 登出回调 URL』中指定
    *
    * 如果为空，登出流程会在 Authing 中止，不会进行后续的回调
@@ -161,6 +166,44 @@ export interface OIDCWebMessageResponse {
   error?: string
   errorDesc?: string
   state?: string
+}
+
+export interface GetUserInfoRes {
+  name?: string
+  nickname?: string
+  photo?: string
+  externalId?: string
+  birthdate?: string
+  country?: string
+  province?: string
+  city?: string
+  address?: string
+  streetAddress?: string
+  postalCode?: string
+  gender?: string
+  username?: string
+  customData?: any
+  createdAt?: string
+  email?: string
+  emailVerified?: boolean
+  identities?: Array<{
+    extIdpId?: string
+    identityId?: string
+    originConnIds?: string[]
+    provider?: string
+    type?: string
+    userIdInIdp?: string
+  }>
+  lastIp?: string
+  lastLogin?: string
+  loginsCount?: number
+  passwordLastSetAt?: string
+  phoneCountryCode?: string
+  phoneVerified?: boolean
+  resetPasswordOnNextLogin?: boolean
+  status?: string
+  updatedAt?: string
+  userId?: string
 }
 
 export interface UserInfo extends Record<string, any> {

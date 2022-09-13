@@ -366,7 +366,7 @@ export class Authing {
 
     if (expires_at < Date.now()) {
       error(
-        'changeQrcodeStatus',
+        'updatePassword',
         'Token has expired, please login again'
       )
       return false
@@ -424,13 +424,19 @@ export class Authing {
         sizeType: ['original']
       })
 
-      const uploaded = await AuthingMove.uploadFile({
+      const uploadRes = await AuthingMove.uploadFile({
         url: `${this.options.host}/api/v2/upload?folder=avatar`,
         name: 'file',
         filePath: res.tempFiles[0].tempFilePath
       })
 
-      return JSON.parse(uploaded.data)
+      const parsedUploadRed = JSON.parse(uploadRes.data)
+
+      await this.updateUserInfo({
+        photo: parsedUploadRed.data.url
+      })
+
+      return parsedUploadRed
     } catch (e) {
       error('updateAvatar', e)
     }
@@ -441,7 +447,7 @@ export class Authing {
 
     if (expires_at < Date.now()) {
       return error(
-        'changeQrcodeStatus',
+        'updateUserInfo',
         'Token has expired, please login again'
       )
     }
@@ -460,7 +466,7 @@ export class Authing {
   async getPhone(data: GetPhoneOptions): Promise<GetUserPhoneResponseData> {
     const { phone_info } = await request({
       method: 'POST',
-      url: `${this.options.host}/api/v3/get-wechat-miniapp-phone`,
+      url: `${this.options.host}/api/v3/get-wechat-miniprogram-phone`,
       data,
       header: {
         'x-authing-userpool-id': this.options.userPoolId

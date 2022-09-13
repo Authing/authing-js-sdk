@@ -4,7 +4,7 @@
   "description": "Official SDK of Authing for Browser",
   "main": "dist/global/index.global.js",
   "module": "dist/esm/index.esm.js",
-  "types": "dist/typings/index.d.ts",
+  "types": "dist/typings/src/index.d.ts",
   "files": [
     "dist"
   ],

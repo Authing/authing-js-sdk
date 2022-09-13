@@ -168,6 +168,27 @@ export interface UserInfo {
   gender?: string
   username?: string
   customData?: any
+  createdAt?: string
+  email?: string
+  emailVerified?: boolean
+  identities?: Array<{
+    extIdpId?: string
+    identityId?: string
+    originConnIds?: string[]
+    provider?: string
+    type?: string
+    userIdInIdp?: string
+  }>
+  lastIp?: string
+  lastLogin?: string
+  loginsCount?: number
+  passwordLastSetAt?: string
+  phoneCountryCode?: string
+  phoneVerified?: boolean
+  resetPasswordOnNextLogin?: boolean
+  status?: string
+  updatedAt?: string
+  userId?: string
 }
 
 export interface GetPhoneOptions {
