@@ -9,8 +9,8 @@ export async function request(options: WxRequestConfig) {
     const _options = Object.assign({}, options, {
       header: {
         ...options.header,
-        'x-authing-request-from': 'miniapp-sdk',
-        'x-authing-client-version': version
+        'x-authing-request-from': 'sdk-miniapp',
+        'x-authing-sdk-version': version
       }
     })
 

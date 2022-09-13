@@ -19,7 +19,7 @@ import {
   OIDCTokenResponse,
   LoginStateWithCustomStateData,
   LogoutURLParams,
-  UserInfo
+  GetUserInfoRes
 } from './global'
 import { InMemoryStorageProvider } from './storage/InMemoryStorgeProvider'
 import { StorageProvider } from './storage/interface'
@@ -569,20 +569,21 @@ export class Authing {
     options: {
       accessToken?: string
     } = {}
-  ): Promise<UserInfo> {
+  ): Promise<GetUserInfoRes> {
     const accessToken =
       options.accessToken ?? (await this.getLoginState())?.accessToken
     if (!accessToken) {
       throw new Error('未传入 access token')
     }
 
-    const { data } = await axiosGet(`${this.domain}/oidc/me`, {
+    const { data } = await axiosGet(`${this.domain}/api/v3/get-profile`, {
       headers: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'x-authing-userpool-id': this.options.userPoolId
       }
     })
 
-    return data as UserInfo
+    return data as GetUserInfoRes
   }
 
   /**

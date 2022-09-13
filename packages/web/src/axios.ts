@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 
+import { version } from '../package.json'
+
 function isAxiosError(e: any): e is AxiosError {
   return e.isAxiosError
 }
@@ -22,7 +24,8 @@ export async function axiosGet(
   url: string,
   options?: AxiosRequestConfig<string>
 ) {
-  return axiosPromiseWrapper(axios.get(url, options))
+  const _options = mergeOptions(options)
+  return axiosPromiseWrapper(axios.get(url, _options))
 }
 
 export async function axiosPost(
@@ -30,5 +33,17 @@ export async function axiosPost(
   data?: any,
   options?: AxiosRequestConfig<string>
 ) {
-  return axiosPromiseWrapper(axios.post(url, data, options))
+  const _options = mergeOptions(options)
+  return axiosPromiseWrapper(axios.post(url, data, _options))
+}
+
+function mergeOptions (options?: AxiosRequestConfig<string>): AxiosRequestConfig {
+  const _options = Object.assign({}, options || {}, {
+    headers: {
+      ...options?.headers,
+      'x-authing-request-from': 'sdk-web',
+      'x-authing-sdk-version': version
+    }
+  })
+  return _options
 }

@@ -3,7 +3,7 @@
     "allowJs": true,
     "target": "es5",
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "moduleResolution": "Node",
     "module": "ESNext",
     "declaration": true,
