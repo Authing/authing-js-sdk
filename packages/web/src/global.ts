@@ -168,7 +168,7 @@ export interface OIDCWebMessageResponse {
   state?: string
 }
 
-export interface GetUserInfoRes {
+export interface IUserInfo {
   name?: string
   nickname?: string
   photo?: string

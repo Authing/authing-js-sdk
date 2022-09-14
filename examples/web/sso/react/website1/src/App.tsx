@@ -1,28 +1,30 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Authing } from '@authing/browser';
+import { Authing } from '@authing/web';
 import type {
+  GetUserInfoRes,
   LoginState,
-  UserInfo,
-} from '@authing/browser/dist/types/global';
+} from '@authing/web/dist/typings/src/global';
 
 function App() {
   const sdk = useMemo(() => {
     return new Authing({
       // 很重要，请仔细填写！
       // 如果应用开启 SSO，这儿就要写单点登录的“应用面板地址”；否则填写应用的“认证地址”。
-      // domain: 'bazooka.pre.authing.cn',
-      domain: 'enccibbmkpbhiman.pre.authing.cn',
+      domain: "https://mlbkhepjgjiihaap.authing.cn",
 
       // 应用 ID
-      appId: '62c3b5bd8950b50610ecbef1',
+      appId: "62e752f0d8c681db4ed3f743",
 
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
-      redirectUri: 'https://localhost:8000',
+      redirectUri: "https://localhost:8000",
+
+      // 用户池 ID
+      userPoolId: '62e221f85f5ac5cc47037a39'
     });
   }, []);
 
   const [loginState, setLoginState] = useState<LoginState | null>();
-  const [userInfo, setUserInfo] = useState<UserInfo | null>();
+  const [userInfo, setUserInfo] = useState<GetUserInfoRes | null>();
 
   const loginWithPopup = async () => {
     const res = await sdk.loginWithPopup();

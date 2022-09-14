@@ -19,7 +19,7 @@ import {
   OIDCTokenResponse,
   LoginStateWithCustomStateData,
   LogoutURLParams,
-  GetUserInfoRes
+  IUserInfo
 } from './global'
 import { InMemoryStorageProvider } from './storage/InMemoryStorgeProvider'
 import { StorageProvider } from './storage/interface'
@@ -569,7 +569,7 @@ export class Authing {
     options: {
       accessToken?: string
     } = {}
-  ): Promise<GetUserInfoRes> {
+  ): Promise<IUserInfo> {
     const accessToken =
       options.accessToken ?? (await this.getLoginState())?.accessToken
     if (!accessToken) {
@@ -583,7 +583,7 @@ export class Authing {
       }
     })
 
-    return data as GetUserInfoRes
+    return data.data as IUserInfo
   }
 
   /**

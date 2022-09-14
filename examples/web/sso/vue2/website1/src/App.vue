@@ -62,6 +62,7 @@ export default {
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: "https://localhost:8000",
 
+      // 用户池 ID
       userPoolId: '62e221f85f5ac5cc47037a39'
     });
   },

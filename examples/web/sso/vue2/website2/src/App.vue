@@ -18,7 +18,7 @@
           cols="100"
           rows="15"
           readOnly
-          :value="JSON.stringify(loginState.parsedIdToken, null, 2)"
+          :value="JSON.stringify(userInfo, null, 2)"
         ></textarea>
       </p>
       <p>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { Authing } from "@authing/browser";
+import { Authing } from "@authing/web";
 
 export default {
   name: "App",
@@ -47,6 +47,7 @@ export default {
     return {
       sdk: null,
       loginState: null,
+      userInfo: null
     };
   },
   created() {
@@ -60,6 +61,8 @@ export default {
 
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: "https://localhost:8001",
+
+      userPoolId: '62e221f85f5ac5cc47037a39'
     });
   },
   mounted() {
@@ -78,6 +81,7 @@ export default {
     } else {
       console.log("normal");
       this.getLoginState();
+      this.getUserInfo();
     }
   },
   methods: {
@@ -90,6 +94,10 @@ export default {
         this.sdk.loginWithRedirect();
       }
     },
+    async getUserInfo () {
+      const res = await this.sdk.getUserInfo()
+      this.userInfo = res.data
+    }
   },
 };
 </script>
