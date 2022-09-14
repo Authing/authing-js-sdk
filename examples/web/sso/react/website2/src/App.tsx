@@ -44,9 +44,7 @@ function App() {
   }, [sdk]);
 
   const geteUserInfo = async () => {
-    debugger
     const userInfo = await sdk.getUserInfo()
-    console.log('userInfo111: ', userInfo)
     setUserInfo(userInfo)
   }
 
