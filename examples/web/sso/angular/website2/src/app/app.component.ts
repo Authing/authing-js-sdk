@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Authing } from '@authing/web';
 import type {
-  GetUserInfoRes,
+  IUserInfo,
   LoginState
 } from '@authing/web/dist/typings/src/global';
 

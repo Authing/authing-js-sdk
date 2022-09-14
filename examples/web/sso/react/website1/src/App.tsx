@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Authing } from '@authing/web';
 import type {
-  GetUserInfoRes,
+  IUserInfo,
   LoginState,
+  NormalError
 } from '@authing/web/dist/typings/src/global';
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
   }, []);
 
   const [loginState, setLoginState] = useState<LoginState | null>();
-  const [userInfo, setUserInfo] = useState<GetUserInfoRes | null>();
+  const [userInfo, setUserInfo] = useState<IUserInfo | NormalError>();
 
   const loginWithPopup = async () => {
     const res = await sdk.loginWithPopup();
@@ -41,10 +42,10 @@ function App() {
   }, [sdk]);
 
   const getUserInfo = async () => {
-    if (!loginState) {
-      alert('用户未登录');
-      return;
-    }
+    // if (!loginState) {
+    //   alert('用户未登录');
+    //   return;
+    // }
     const userInfo = await sdk.getUserInfo({
       accessToken: loginState?.accessToken,
     });

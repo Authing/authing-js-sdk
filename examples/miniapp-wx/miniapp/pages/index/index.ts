@@ -74,6 +74,8 @@ Page({
   async getPhone (e) {
     const { code } = e.detail
 
+    console.log('code: ', code)
+
     const res = await authing.getPhone({
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       code

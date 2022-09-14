@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Authing } from '@authing/web';
-import type { LoginState } from '@authing/web/dist/typings/src/global';
+import type { LoginState, IUserInfo, NormalError } from '@authing/web/dist/typings/src/global';
 
 function App() {
   const sdk = useMemo(() => {
@@ -21,6 +21,7 @@ function App() {
   }, []);
 
   const [loginState, setLoginState] = useState<LoginState | null>();
+  const [userInfo, setUserInfo] = useState<IUserInfo | NormalError>();
 
   useEffect(() => {
     if (sdk.isRedirectCallback()) {
@@ -42,6 +43,13 @@ function App() {
     }
   }, [sdk]);
 
+  const geteUserInfo = async () => {
+    debugger
+    const userInfo = await sdk.getUserInfo()
+    console.log('userInfo111: ', userInfo)
+    setUserInfo(userInfo)
+  }
+
   return (
     <div className="App">
       <h2>Website 2</h2>
@@ -58,17 +66,6 @@ function App() {
           )}
         </p>
         <p>
-          User Info: <br />
-          {loginState && (
-            <textarea
-              cols={100}
-              rows={15}
-              readOnly
-              value={JSON.stringify(loginState?.parsedIdToken, null, 2)}
-            ></textarea>
-          )}
-        </p>
-        <p>
           Access Token Info:<br />
           {loginState && (
             <textarea
@@ -81,6 +78,18 @@ function App() {
         </p>
         <p>
           Expire At: <code>{loginState?.expireAt}</code>
+        </p>
+        <button onClick={() => geteUserInfo()}>geteUserInfo</button>
+        <p>
+          User Info: <br />
+          {userInfo && (
+            <textarea
+              cols={100}
+              rows={15}
+              readOnly
+              value={JSON.stringify(userInfo, null, 2)}
+            ></textarea>
+          )}
         </p>
       </div>
     </div>
