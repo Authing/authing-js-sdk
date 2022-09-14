@@ -584,10 +584,7 @@ export class Authing {
       }
     })
 
-    console.log('data.data: ', data)
-
     if (data.data) {
-      console.log('datea::: ', data)
       return data.data as IUserInfo
     }
 
