@@ -18,18 +18,10 @@ export class AppComponent {
   userInfo: IUserInfo | NormalError | null = null;
 
   private sdk = new Authing({
-    // 很重要，请仔细填写！
-    // 如果应用开启 SSO，这儿就要写单点登录的“应用面板地址”；否则填写应用的“认证地址”。
-    domain: "https://mlbkhepjgjiihaap.authing.cn",
-
-    // 应用 ID
-    appId: "62e752f0d8c681db4ed3f743",
-
-    // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
-    redirectUri: "https://localhost:8000",
-
-    // 用户池 ID
-    userPoolId: '62e221f85f5ac5cc47037a39'
+    domain: "",
+    appId: "",
+    redirectUri: "",
+    userPoolId: ''
   });
 
   async ngOnInit() {
