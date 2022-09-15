@@ -108,6 +108,7 @@ export default {
       const userInfo = await this.sdk.getUserInfo({
         accessToken: state.accessToken
       });
+
       console.log('userInfo: ', userInfo);
     },
     /**

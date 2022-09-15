@@ -3,6 +3,7 @@ import { Authing } from '@authing/web';
 import type {
   LoginState,
   IUserInfo,
+  NormalError,
 } from '@authing/web/dist/typings/src/global';
 
 @Component({
@@ -14,7 +15,7 @@ export class AppComponent {
   title = 'website1';
 
   loginState: LoginState | null = null;
-  userInfo: IUserInfo | null = null;
+  userInfo: IUserInfo | NormalError | null = null;
 
   private sdk = new Authing({
     // 很重要，请仔细填写！
@@ -46,7 +47,6 @@ export class AppComponent {
       });
     } else {
       await this.getLoginState();
-      await this.getUserInfo()
     }
   }
 

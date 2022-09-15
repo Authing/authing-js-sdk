@@ -6,7 +6,6 @@
     <button @click="logout">logout</button>
     <button @click="getLoginState">getLoginState</button>
     <button @click="getUserInfo">getUserInfo</button>
-    <button @click="handleResource">handleResource</button>
   </p>
   <p v-if="loginState">
     <textarea
@@ -29,7 +28,7 @@
 
 <script>
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import { Authing } from "@authing/browser";
+import { Authing } from "@authing/web";
 
 export default defineComponent({
   name: "App",
@@ -44,6 +43,7 @@ export default defineComponent({
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: process.env.VUE_APP_SDK_REDIRECT_URI,
       scope: process.env.VUE_APP_SDK_SCOPE,
+      userPoolId: process.env.USER_POOL_ID
     });
 
     const state = reactive({
@@ -57,6 +57,7 @@ export default defineComponent({
      */
     const getLoginState = async () => {
       const res = await sdk.getLoginState();
+      console.log('loginState: ', res)
       state.loginState = res;
     };
 
@@ -96,24 +97,6 @@ export default defineComponent({
       sdk.logoutWithRedirect();
     };
 
-    /**
-     * 使用 Access Token 调用资源 API
-     */
-    const handleResource = async () => {
-      try {
-        let res = await fetch(process.env.VUE_APP_RESOURCE_API, {
-          headers: {
-            Authorization: `Bearer ${state.loginState.accessToken}`,
-          },
-          method: "GET",
-        });
-        let data = await res.json();
-        state.resource = data;
-      } catch (err) {
-        alert("无权访问接口");
-      }
-    };
-
     onMounted(() => {
       // 校验当前 url 是否是登录回调地址
       if (sdk.isRedirectCallback()) {
@@ -138,8 +121,7 @@ export default defineComponent({
       loginWithPopup,
       loginWithRedirect,
       getUserInfo,
-      logout,
-      handleResource,
+      logout
     };
   },
 });

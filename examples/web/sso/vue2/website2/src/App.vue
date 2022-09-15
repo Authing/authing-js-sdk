@@ -95,8 +95,7 @@ export default {
       }
     },
     async getUserInfo () {
-      const res = await this.sdk.getUserInfo()
-      this.userInfo = res.data
+      this.userInfo = await this.sdk.getUserInfo()
     }
   },
 };

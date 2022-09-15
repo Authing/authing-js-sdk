@@ -14,7 +14,7 @@ function App() {
       domain: "https://mlbkhepjgjiihaap.authing.cn",
 
       // 应用 ID
-      appId: "62e752f0d8c681db4ed3f743",
+      appId: "6322c6a6c8f7e51c04309097",
 
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: "https://localhost:8000",
@@ -42,10 +42,10 @@ function App() {
   }, [sdk]);
 
   const getUserInfo = async () => {
-    // if (!loginState) {
-    //   alert('用户未登录');
-    //   return;
-    // }
+    if (!loginState) {
+      alert('用户未登录');
+      return;
+    }
     const userInfo = await sdk.getUserInfo({
       accessToken: loginState?.accessToken,
     });
@@ -53,7 +53,9 @@ function App() {
   };
 
   const logoutWithRedirect = async () => {
-    await sdk.logoutWithRedirect();
+    await sdk.logoutWithRedirect({
+      redirectUri: 'https://www.baidu.com'
+    });
   };
 
   useEffect(() => {
