@@ -1,6 +1,6 @@
 {
   "name": "@authing/weixin-official-account",
-  "version": "5.0.2-alpha.12",
+  "version": "5.0.2-alpha.13",
   "description": "Authing SDK for Weixin official account",
   "module": "dist/esm/weixin-official-account.min.js",
   "types": "dist/typings/index.d.ts",
