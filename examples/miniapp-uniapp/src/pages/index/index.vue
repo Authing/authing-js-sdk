@@ -27,9 +27,9 @@
 	import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
 	const authing = new Authing({
-		appId: '630b549efa97ba795338e2cd',
-		host: 'http://localhost:3000',
-		userPoolId: '630b549d5a697473a2d7fa20',
+		appId: '',
+		host: '',
+		userPoolId: '',
 		encryptFunction
 	})
 

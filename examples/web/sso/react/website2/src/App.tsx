@@ -8,7 +8,7 @@ function App() {
       domain: "",
       appId: "",
       redirectUri: "",
-      userPoolId: ''
+      userPoolId: ""
     });
   }, []);
 
