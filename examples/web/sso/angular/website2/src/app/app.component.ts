@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Authing } from '@authing/browser';
+import { Authing } from '@authing/web';
 import type {
-  LoginState,
-  UserInfo,
-} from '@authing/browser/dist/types/global';
+  IUserInfo,
+  LoginState
+} from '@authing/web/dist/typings/src/global';
 
 @Component({
   selector: 'app-root',
@@ -14,18 +14,13 @@ export class AppComponent {
   title = 'website2';
 
   loginState: LoginState | null = null;
-  userInfo: UserInfo | null = null;
+  userInfo: String = ''
 
   private sdk = new Authing({
-    // 很重要，请仔细填写！
-    // 如果应用开启 SSO，这儿就要写单点登录的“应用面板地址”；否则填写应用的“认证地址”。
-    domain: 'enccibbmkpbhiman.pre.authing.cn',
-
-    // 应用 ID
-    appId: '62c3b5aec67b1553af9de3f8',
-
-    // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
-    redirectUri: 'https://localhost:8001',
+    domain: "",
+    appId: "",
+    redirectUri: "",
+    userPoolId: ''
   });
 
   ngOnInit() {
@@ -52,12 +47,15 @@ export class AppComponent {
    * 获取用户的登录状态
    */
   async getLoginState() {
-    const res = await this.sdk.getLoginState();
-    if (res) {
-      this.loginState = res;
+    const loginState = await this.sdk.getLoginState()
+    
+    if (loginState) {
+      this.loginState = loginState
+      const userInfo = await this.sdk.getUserInfo()
+      this.userInfo = JSON.stringify(userInfo, null, 4)
     } else {
       // 静默登录。取不到用户信息直接跳转到授权中心
-      this.sdk.loginWithRedirect();
+      this.sdk.loginWithRedirect()
     }
   }
 }

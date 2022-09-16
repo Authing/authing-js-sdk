@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { Authing } from '@authing/browser';
+import { Authing } from '@authing/web';
 import type {
-  UserInfo,
+  IUserInfo,
   LoginState,
-} from '@authing/browser/dist/types/global';
+  NormalError,
+} from '@authing/web/dist/typings/src/global';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ import type {
 export class AppComponent {
 
   loginState: LoginState | null = null;
-  userInfo: UserInfo | null = null;
+  userInfo: IUserInfo | NormalError | null = null;
   resource: object | null = null;
 
   private sdk = new Authing({
@@ -26,7 +27,8 @@ export class AppComponent {
     logoutRedirectUri: '登出回调地址',
     // 应用侧向 Authing 请求的权限，以空格分隔，默认为 'openid profile'
     // 成功获取的权限会出现在 Access Token 的 scope 字段中
-    scope: 'openid profile order:read'
+    scope: 'openid profile order:read',
+    userPoolId: '用户池 ID'
   });
 
   ngOnInit() {
@@ -68,6 +70,7 @@ export class AppComponent {
    */
   async getLoginState() {
     const state = await this.sdk.getLoginState();
+    console.log('loginState: ', state)
     this.loginState = state;
   }
 
@@ -89,24 +92,8 @@ export class AppComponent {
    * 登出
    */
   logout() {
-    this.sdk.logoutWithRedirect();
-  }
-
-  /**
-   * 使用 Access Token 调用资源 API
-   */
-  async handleResource() {
-    try {
-      let res = await fetch('http://localhost:5000/api/protected', {
-        headers: {
-          Authorization: `Bearer ${this.loginState?.accessToken}`,
-        },
-        method: "GET",
-      });
-      let data = await res.json();
-      this.resource = data;
-    } catch (err) {
-      alert("无权访问接口");
-    }
+    this.sdk.logoutWithRedirect({
+      redirectUri: 'https://authing.cn'
+    });
   }
 }

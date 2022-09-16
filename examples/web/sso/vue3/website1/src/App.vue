@@ -7,7 +7,7 @@
       </a>
     </p>
     <p>
-      <button @click="loginWithPopup">login with popup</button>
+      <button @click="loginWithPopup">loginWithPopup</button>
     </p>
     <p>
       <button @click="loginWithRedirect">loginWithRedirect</button>
@@ -40,21 +40,16 @@
 
 <script>
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import { Authing } from "@authing/browser";
+import { Authing } from "@authing/web";
 
 export default defineComponent({
   name: "App",
   setup() {
     const sdk = new Authing({
-      // 很重要，请仔细填写！
-      // 如果应用开启 SSO，这儿就要写单点登录的“应用面板地址”；否则填写应用的“认证地址”。
-      domain: "应用面板地址",
-
-      // 应用 ID
-      appId: "应用 ID",
-
-      // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
-      redirectUri: "登录回调地址",
+      domain: "",
+      appId: "",
+      redirectUri: "",
+      userPoolId: ''
     });
 
     const state = reactive({
@@ -82,7 +77,9 @@ export default defineComponent({
      * 以跳转方式打开 Authing 托管的登录页
      */
     const loginWithRedirect = () => {
-      sdk.loginWithRedirect();
+      sdk.loginWithRedirect({
+        forced: true
+      });
     };
 
     /**
@@ -103,6 +100,7 @@ export default defineComponent({
      * 登出
      */
     const logout = () => {
+      console.log(sdk.logoutWithRedirect)
       sdk.logoutWithRedirect();
     };
 

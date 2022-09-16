@@ -43,19 +43,19 @@ Authing Browser SDK 支持通过包管理器安装、script 标签引入的方�
 ### 使用 NPM 安装
 
 ```shell
-$ npm install @authing/browser
+$ npm install @authing/web
 ```
 
 ### 使用 Yarn 安装
 
 ```shell
-$ yarn add @authing/browser
+$ yarn add @authing/web
 ```
 
 ### 使用 script 标签直接引入
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@authing/browser"></script>
+<script src="https://cdn.authing.co/packages/web/5.0.2/index.global.js"></script>
 <script>
 const sdk = new Authing({
   // 很重要，请仔细填写！
@@ -63,7 +63,9 @@ const sdk = new Authing({
   domain: '认证域名',
   appId: '应用 ID',
   // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
-  redirectUri: '登录回调地址'
+  redirectUri: '登录回调地址',
+  // 用户池 ID
+  userPoolId: '用户池 ID'
 });
 </script>
 
@@ -92,7 +94,7 @@ const sdk = new Authing({
 为了使用 Authing Browser SDK，你需要填写`应用 ID`、`认证域名`、`回调地址`等参数，如下示例：
 
 ```js
-import { Authing } from '@authing/browser';
+import { Authing } from '@authing/web';
 
 const sdk = new Authing({
   // 很重要，请仔细填写！
@@ -100,7 +102,9 @@ const sdk = new Authing({
   domain: '认证域名',
   appId: '应用 ID',
   // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
-  redirectUri: '登录回调地址'
+  redirectUri: '登录回调地址',
+  // 用户池 ID
+  userPoolId: '用户池 ID'
 });
 ```
 
@@ -118,8 +122,8 @@ Authing Browser SDK 可以向 Authing 发起认证授权请求，目前支持三
 
 ```tsx{22-27}
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Authing } from '@authing/browser';
-import type { LoginState } from '@authing/browser/dist/types/global';
+import { Authing } from '@authing/web';
+import type { LoginState } from '@authing/web/dist/types/global';
 
 function App() {
   const sdk = useMemo(() => {
@@ -133,6 +137,9 @@ function App() {
 
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: '登录回调 URL',
+
+      // 用户池 ID
+      userPoolId: '用户池 ID'
     });
   }, []);
 
@@ -213,8 +220,8 @@ const login = () => {
 
 ```tsx{22-28}
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Authing } from '@authing/browser';
-import type { LoginState } from '@authing/browser/dist/types/global';
+import { Authing } from '@authing/web';
+import type { LoginState } from '@authing/web/dist/types/global';
 
 function App() {
   const sdk = useMemo(() => {
@@ -228,6 +235,9 @@ function App() {
 
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: '登录回调 URL',
+
+      // 用户池 ID
+      userPoolId: '用户池 ID'
     });
   }, []);
 
@@ -295,8 +305,8 @@ const login = async () => {
 
 ```tsx{22-44}
 import React, { useEffect, useMemo, useState } from 'react';
-import { Authing } from '@authing/browser';
-import type { LoginState } from '@authing/browser/dist/types/global';
+import { Authing } from '@authing/web';
+import type { LoginState } from '@authing/web/dist/types/global';
 
 function App() {
   const sdk = useMemo(() => {
@@ -310,6 +320,9 @@ function App() {
 
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: '登录回调 URL',
+
+      // 用户池 ID
+      userPoolId: '用户池 ID'
     });
   }, []);
 
@@ -366,7 +379,7 @@ export default App;
 每次发起登录本质是访问一个 URL 地址，可以携带许多参数。Authing Browser SDK 默认会使用缺省参数。如果你需要精细控制登录请求参数，可以参考本示例。
 
 ```js
-import { Authing } from '@authing/browser';
+import { Authing } from '@authing/web';
 
 const sdk = new Authing({
   // 很重要，请仔细填写！
@@ -413,8 +426,8 @@ const sdk = new Authing({
 
 ```tsx{29-36}
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Authing } from '@authing/browser';
-import type { LoginState } from '@authing/browser/dist/types/global';
+import { Authing } from '@authing/web';
+import type { LoginState } from '@authing/web/dist/types/global';
 
 function App() {
   const sdk = useMemo(() => {
@@ -428,6 +441,9 @@ function App() {
 
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: '登录回调 URL',
+
+      // 用户池 ID
+      userPoolId: '用户池 ID'
     });
   }, []);
 
@@ -485,8 +501,8 @@ export default App;
 
 ```tsx{38-50}
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Authing } from '@authing/browser';
-import type { LoginState, UserInfo } from '@authing/browser/dist/types/global';
+import { Authing } from '@authing/web';
+import type { LoginState, UserInfo } from '@authing/web/dist/types/global';
 
 function App() {
   const sdk = useMemo(() => {
@@ -500,6 +516,9 @@ function App() {
 
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: '登录回调 URL',
+
+      // 用户池 ID
+      userPoolId: '用户池 ID'
     });
   }, []);
 
@@ -575,8 +594,8 @@ export default App;
 
 ```tsx{36-43}
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Authing } from '@authing/browser';
-import type { LoginState } from '@authing/browser/dist/types/global';
+import { Authing } from '@authing/web';
+import type { LoginState } from '@authing/web/dist/types/global';
 
 function App() {
   const sdk = useMemo(() => {
@@ -590,6 +609,9 @@ function App() {
 
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: '登录回调 URL',
+
+      // 用户池 ID
+      userPoolId: '用户池 ID'
     });
   }, []);
 

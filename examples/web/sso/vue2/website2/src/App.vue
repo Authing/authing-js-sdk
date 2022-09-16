@@ -18,7 +18,7 @@
           cols="100"
           rows="15"
           readOnly
-          :value="JSON.stringify(loginState.parsedIdToken, null, 2)"
+          :value="JSON.stringify(userInfo, null, 2)"
         ></textarea>
       </p>
       <p>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { Authing } from "@authing/browser";
+import { Authing } from "@authing/web";
 
 export default {
   name: "App",
@@ -47,19 +47,15 @@ export default {
     return {
       sdk: null,
       loginState: null,
+      userInfo: null
     };
   },
   created() {
     this.sdk = new Authing({
-      // 很重要，请仔细填写！
-      // 如果应用开启 SSO，这儿就要写单点登录的“应用面板地址”；否则填写应用的“认证地址”。
-      domain: "https://mlbkhepjgjiihaap.authing.cn",
-
-      // 应用 ID
-      appId: "62e22721c889dd44bad1dda2",
-
-      // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
-      redirectUri: "https://localhost:8001",
+      domain: "",
+      appId: "",
+      redirectUri: "",
+      userPoolId: ''
     });
   },
   mounted() {
@@ -78,6 +74,7 @@ export default {
     } else {
       console.log("normal");
       this.getLoginState();
+      this.getUserInfo();
     }
   },
   methods: {
@@ -90,6 +87,9 @@ export default {
         this.sdk.loginWithRedirect();
       }
     },
+    async getUserInfo () {
+      this.userInfo = await this.sdk.getUserInfo()
+    }
   },
 };
 </script>

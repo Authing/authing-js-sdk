@@ -168,7 +168,7 @@ export interface OIDCWebMessageResponse {
   state?: string
 }
 
-export interface GetUserInfoRes {
+export interface IUserInfo {
   name?: string
   nickname?: string
   photo?: string
@@ -240,4 +240,10 @@ export interface AccessToken {
   scope: string
   iss: string
   aud: string
+}
+
+export interface NormalError {
+  apiCode: number
+  message: string
+  statusCode: number
 }

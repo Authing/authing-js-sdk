@@ -12,13 +12,14 @@
           :value="JSON.stringify(loginState.accessToken, null, 2)"
         ></textarea>
       </p>
-      <p>
+      <button @click="getUserInfo">获取用户信息</button>
+      <p v-if="userInfo">
         User Info:<br />
         <textarea
           cols="100"
           rows="15"
           readOnly
-          :value="JSON.stringify(loginState.parsedIdToken, null, 2)"
+          :value="JSON.stringify(userInfo, null, 2)"
         ></textarea>
       </p>
       <p>
@@ -34,31 +35,30 @@
       <p>
         Expire At: <code>{{ loginState.expireAt }}</code>
       </p>
+      <p>
+        <button @click="logout">退出登录</button>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import { Authing } from "@authing/browser";
+import { Authing } from "@authing/web";
 
 export default defineComponent({
   name: "App",
   setup() {
     const sdk = new Authing({
-      // 很重要，请仔细填写！
-      // 如果应用开启 SSO，这儿就要写单点登录的“应用面板地址”；否则填写应用的“认证地址”。
-      domain: "应用面板地址",
-
-      // 应用 ID
-      appId: "应用 ID",
-
-      // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
-      redirectUri: "登录回调地址",
+      domain: "",
+      appId: "",
+      redirectUri: "",
+      userPoolId: ''
     });
 
     const state = reactive({
       loginState: null,
+      userInfo: null
     });
 
     /**
@@ -72,6 +72,15 @@ export default defineComponent({
         sdk.loginWithRedirect();
       }
     };
+
+    const logout = () => sdk.logoutWithRedirect({
+      redirectUri: 'https://www.so.com'
+    })
+
+    const getUserInfo = async () => {
+      const userInfo = await sdk.getUserInfo()
+      state.userInfo = userInfo
+    }
 
     onMounted(() => {
       // 校验当前 url 是否是登录回调地址
@@ -95,6 +104,8 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      logout,
+      getUserInfo
     };
   },
 });

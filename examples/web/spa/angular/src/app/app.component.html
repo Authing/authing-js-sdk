@@ -6,7 +6,6 @@
     <button (click)="logout()">logout</button>
     <button (click)="getLoginState()">getLoginState</button>
     <button (click)="getUserInfo()">getUserInfo</button>
-    <button (click)="handleResource()">handleResource</button>
   </p>
   <p *ngIf="loginState">
     <textarea cols="100" rows="20" readOnly>{{ loginState | json }}</textarea>

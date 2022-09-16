@@ -1,23 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Authing } from '@authing/browser';
-import type { LoginState } from '@authing/browser/dist/types/global';
+import { Authing } from '@authing/web';
+import type { LoginState, IUserInfo, NormalError } from '@authing/web/dist/typings/src/global';
 
 function App() {
   const sdk = useMemo(() => {
     return new Authing({
-      // 很重要，请仔细填写！
-      // 如果应用开启 SSO，这儿就要写单点登录的“应用面板地址”；否则填写应用的“认证地址”。
-      domain: 'enccibbmkpbhiman.pre.authing.cn',
-
-      // 应用 ID
-      appId: '62c3b5aec67b1553af9de3f8',
-
-      // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
-      redirectUri: 'https://localhost:8001',
+      domain: "",
+      appId: "",
+      redirectUri: "",
+      userPoolId: ""
     });
   }, []);
 
   const [loginState, setLoginState] = useState<LoginState | null>();
+  const [userInfo, setUserInfo] = useState<IUserInfo | NormalError>();
 
   useEffect(() => {
     if (sdk.isRedirectCallback()) {
@@ -39,6 +35,11 @@ function App() {
     }
   }, [sdk]);
 
+  const geteUserInfo = async () => {
+    const userInfo = await sdk.getUserInfo()
+    setUserInfo(userInfo)
+  }
+
   return (
     <div className="App">
       <h2>Website 2</h2>
@@ -55,17 +56,6 @@ function App() {
           )}
         </p>
         <p>
-          User Info: <br />
-          {loginState && (
-            <textarea
-              cols={100}
-              rows={15}
-              readOnly
-              value={JSON.stringify(loginState?.parsedIdToken, null, 2)}
-            ></textarea>
-          )}
-        </p>
-        <p>
           Access Token Info:<br />
           {loginState && (
             <textarea
@@ -78,6 +68,18 @@ function App() {
         </p>
         <p>
           Expire At: <code>{loginState?.expireAt}</code>
+        </p>
+        <button onClick={() => geteUserInfo()}>geteUserInfo</button>
+        <p>
+          User Info: <br />
+          {userInfo && (
+            <textarea
+              cols={100}
+              rows={15}
+              readOnly
+              value={JSON.stringify(userInfo, null, 2)}
+            ></textarea>
+          )}
         </p>
       </div>
     </div>

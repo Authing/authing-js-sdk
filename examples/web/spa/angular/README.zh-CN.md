@@ -43,6 +43,7 @@ private sdk = new Authing({
   // 应用侧向 Authing 请求的权限，以空格分隔，默认为 'openid profile'
   // 成功获取的权限会出现在 Access Token 的 scope 字段中
   scope: 'openid profile order:read',
+  userPoolId: '用户池 ID'
 });
 ```
 

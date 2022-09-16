@@ -7,7 +7,6 @@
       <button @click="logout">logout</button>
       <button @click="getLoginState">getLoginState</button>
       <button @click="getUserInfo">getUserInfo</button>
-      <button @click="handleResource">handleResource</button>
     </p>
     <p v-if="loginState">
       <textarea
@@ -30,7 +29,7 @@
 </template>
 
 <script>
-import { Authing } from "@authing/browser";
+import { Authing } from "@authing/web";
 
 export default {
   name: "App",
@@ -53,6 +52,7 @@ export default {
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: process.env.VUE_APP_SDK_REDIRECT_URI,
       scope: process.env.VUE_APP_SDK_SCOPE,
+      userPoolId: process.env.USER_POOL_ID
     });
   },
   mounted() {
@@ -112,25 +112,10 @@ export default {
      * 登出
      */
     logout() {
-      this.sdk.logoutWithRedirect();
-    },
-    /**
-     * 使用 Access Token 调用资源 API
-     */
-    async handleResource() {
-      try {
-        let res = await fetch(process.env.VUE_APP_RESOURCE_API, {
-          headers: {
-            Authorization: `Bearer ${this.loginState.accessToken}`,
-          },
-          method: "GET",
-        });
-        let data = await res.json();
-        this.resource = data;
-      } catch (err) {
-        alert("无权访问接口");
-      }
-    },
+      this.sdk.logoutWithRedirect({
+        redirectUri: 'https://authing.cn'
+      });
+    }
   },
 };
 </script>

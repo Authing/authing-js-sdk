@@ -1,28 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Authing } from '@authing/browser';
+import { Authing } from '@authing/web';
 import type {
+  IUserInfo,
   LoginState,
-  UserInfo,
-} from '@authing/browser/dist/types/global';
+  NormalError
+} from '@authing/web/dist/typings/src/global';
 
 function App() {
   const sdk = useMemo(() => {
     return new Authing({
-      // 很重要，请仔细填写！
-      // 如果应用开启 SSO，这儿就要写单点登录的“应用面板地址”；否则填写应用的“认证地址”。
-      // domain: 'bazooka.pre.authing.cn',
-      domain: 'enccibbmkpbhiman.pre.authing.cn',
-
-      // 应用 ID
-      appId: '62c3b5bd8950b50610ecbef1',
-
-      // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
-      redirectUri: 'https://localhost:8000',
+      domain: "",
+      appId: "",
+      redirectUri: "",
+      userPoolId: ''
     });
   }, []);
 
   const [loginState, setLoginState] = useState<LoginState | null>();
-  const [userInfo, setUserInfo] = useState<UserInfo | null>();
+  const [userInfo, setUserInfo] = useState<IUserInfo | NormalError>();
 
   const loginWithPopup = async () => {
     const res = await sdk.loginWithPopup();
@@ -50,7 +45,9 @@ function App() {
   };
 
   const logoutWithRedirect = async () => {
-    await sdk.logoutWithRedirect();
+    await sdk.logoutWithRedirect({
+      redirectUri: 'https://www.baidu.com'
+    });
   };
 
   useEffect(() => {
