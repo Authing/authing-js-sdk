@@ -79,7 +79,7 @@ export class Authing {
   ): Promise<LoginStateOptions | RefreshTokenResponseData> {
     const _loginState: LoginStateOptions | RefreshTokenResponseData = {
       ...loginState,
-      expires_at: loginState.expires_in * 1000 + Date.now()
+      expires_at: loginState.expires_in * 1000 + Date.now() - 3600 * 2
     }
 
     await this.storage.set(
@@ -211,10 +211,10 @@ export class Authing {
 
   async logout(): Promise<boolean> {
     try {
-      const { access_token } = await this.getLoginState()
+      const { access_token, expires_at } = await this.getLoginState()
 
-      if (!access_token) {
-        error('logout', 'access_token has expired')
+      if (!access_token || expires_at < Date.now()) {
+        error('logout', 'access_token has expired, please login again')
         return false
       }
 
@@ -287,10 +287,14 @@ export class Authing {
   async refreshToken(): Promise<
     LoginStateOptions | RefreshTokenResponseData | void
     > {
-    const { refresh_token } = await this.getLoginState()
+    const { refresh_token, expires_at } = await this.getLoginState()
 
     if (!refresh_token) {
       return error('refreshToken', 'refresh_token must not be empty')
+    }
+
+    if (expires_at < Date.now()) {
+      return error('refreshToken', 'refresh_token has expired, please login again')
     }
 
     const data: RefreshTokenOptions = {
