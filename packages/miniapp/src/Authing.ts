@@ -99,60 +99,30 @@ export class Authing {
     return res[encryptType].publicKey
   }
 
-  private async getCodeCache () {
-    try {
-      const codeCache = await this.storage.get(
-        getCodeKey(this.options.appId)
-      )
-      return codeCache.data
-    } catch (e) {
-      return ''
-    }
-  }
-
-  private async setCodeCache (code: string): Promise<boolean> {
-    try {
-      await this.storage.set(getCodeKey(this.options.appId), code)
-      return true
-    } catch (e) {
-      return false
-    }
-  }
-
-  private async getLoginCode () {
-    let code = await this.getCodeCache()
-
-    try {
-      if (!code) {
-        const loginRes = await AuthingMove.login()
-        code = loginRes.code
-        await this.setCodeCache(code)
-      } else {
-        await AuthingMove.checkSession()
-        code = await this.getCodeCache()
-      }
-    } catch (e) {
-      const loginRes = await AuthingMove.login()
-      code = loginRes.code
-      await this.setCodeCache(code)
-    } finally {
-      return code
-    }
-  }
-
   async loginByCode(
     data: LoginByCodeOptions
   ): Promise<LoginStateOptions | void> {
-    const code = await this.getLoginCode()
+    const loginState = await this.getLoginState()
 
-    const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
+    if (loginState && loginState.expires_at > Date.now()) {
+      return loginState
+    }
+
+    const { encryptedData, iv } = await AuthingMove.getUserProfile({
+      desc: 'Authing JS SDK getUserProfile'
+    })
+
+    const { code } = await AuthingMove.login()
+
+    const { extIdpConnidentifier, connection, options } = data
 
     const _data: WxCodeLoginOptions = {
       connection: connection || 'wechat_mini_program_code',
       extIdpConnidentifier,
       wechatMiniProgramCodePayload: {
-        ...wechatMiniProgramCodePayload,
-        code
+        code,
+        encryptedData,
+        iv
       },
       options
     }
@@ -163,16 +133,27 @@ export class Authing {
   async loginByPhone(
     data: LoginByPhoneOptions
   ): Promise<LoginStateOptions | void> {
-    const code = await this.getLoginCode()
+    const loginState = await this.getLoginState()
 
-    const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
+    if (loginState && loginState.expires_at > Date.now()) {
+      return loginState
+    }
+
+    const { encryptedData, iv } = await AuthingMove.getUserProfile({
+      desc: 'Authing JS SDK getUserProfile'
+    })
+
+    const { code } = await AuthingMove.login()
+
+    const { extIdpConnidentifier, connection, options } = data
 
     const _data: WxPhoneLoginOptions = {
       connection: connection || 'wechat_mini_program_phone',
       extIdpConnidentifier,
       wechatMiniProgramPhonePayload: {
-        ...wechatMiniProgramPhonePayload,
-        code
+        code,
+        encryptedData,
+        iv
       },
       options
     }

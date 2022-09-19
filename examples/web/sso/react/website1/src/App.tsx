@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Authing } from '@authing/web';
-import type {
-  GetUserInfoRes,
+import {
+  IUserInfo,
   LoginState,
+  NormalError,
 } from '@authing/web/dist/typings/src/global';
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
   }, []);
 
   const [loginState, setLoginState] = useState<LoginState | null>();
-  const [userInfo, setUserInfo] = useState<GetUserInfoRes | null>();
+  const [userInfo, setUserInfo] = useState<IUserInfo | NormalError | null>();
 
   const loginWithPopup = async () => {
     const res = await sdk.loginWithPopup();

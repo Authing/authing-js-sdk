@@ -7,17 +7,17 @@ import { Authing } from '@authing/miniapp-wx'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: '630ed3137dd6f2fd7001da24',
-  host: 'https://core.authing.cn',
-  userPoolId: '62e221f85f5ac5cc47037a39',
+  // appId: '630ed3137dd6f2fd7001da24',
+  // host: 'https://core.authing.cn',
+  // userPoolId: '62e221f85f5ac5cc47037a39',
 
   // appId: '62e752f0d8c681db4ed3f743',
   // host: 'https://console.pre.authing.cn',
   // userPoolId: '62e221f85f5ac5cc47037a39',
 
-  // appId: '630b549efa97ba795338e2cd',
-  // host: 'http://localhost:3000',
-  // userPoolId: '630b549d5a697473a2d7fa20',
+  appId: '630b549efa97ba795338e2cd',
+  host: 'http://localhost:3000',
+  userPoolId: '630b549d5a697473a2d7fa20',
   
   encryptFunction
 })
@@ -28,16 +28,16 @@ Page({
   data: {},
 
   async loginByCode () {
-    const { encryptedData, iv } = await wx.getUserProfile({
-      desc: 'getUserProfile1'
-    })
+    // const { encryptedData, iv } = await wx.getUserProfile({
+    //   desc: 'getUserProfile1'
+    // })
     
     const res = await authing.loginByCode({
       connection: 'wechat_mini_program_code',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramCodePayload: {
-        encryptedData,
-        iv
+        encryptedData: '1',
+        iv:'2'
       },
       options: {
         scope: 'openid profile offline_access'

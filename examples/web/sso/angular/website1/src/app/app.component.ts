@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Authing } from '@authing/web';
 import type {
   LoginState,
-  GetUserInfoRes,
+  IUserInfo,
 } from '@authing/web/dist/typings/src/global';
 
 @Component({
@@ -14,7 +14,7 @@ export class AppComponent {
   title = 'website1';
 
   loginState: LoginState | null = null;
-  userInfo: GetUserInfoRes | null = null;
+  userInfo: IUserInfo | null = null;
 
   private sdk = new Authing({
     // 很重要，请仔细填写！

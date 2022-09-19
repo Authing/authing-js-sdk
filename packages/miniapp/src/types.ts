@@ -72,20 +72,12 @@ export interface WxCodeLoginOptions {
 export interface LoginByCodeOptions {
   connection?: 'wechat_mini_program_code'
   extIdpConnidentifier: string,
-  wechatMiniProgramCodePayload: {
-    encryptedData: string
-    iv: string
-  },
   options?: LoginOptions
 }
 
 export interface LoginByPhoneOptions {
   connection?: 'wechat_mini_program_phone'
   extIdpConnidentifier: string,
-  wechatMiniProgramPhonePayload: {
-    encryptedData: string
-    iv: string
-  },
   options?: LoginOptions
 }
 
