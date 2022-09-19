@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Authing } from "@authing/browser";
+import { Authing } from "@authing/web";
 import type {
-  LoginState,
-  UserInfo,
-} from "@authing/browser/dist/types/global";
+  IUserInfo,
+  NormalError,
+  LoginState
+} from "@authing/web/dist/typings/src/global";
 
 function App() {
   const sdk = useMemo(() => {
@@ -17,11 +18,13 @@ function App() {
       // 登录回调地址，需要在控制台『应用配置 - 登录回调 URL』中指定
       redirectUri: process.env.REACT_APP_SDK_REDIRECT_URI as string,
       scope: process.env.REACT_APP_SDK_SCOPE,
+      // 用户池 ID
+      userPoolId: process.env.USER_POOL_ID as string
     });
   }, []);
 
   const [loginState, setLoginState] = useState<LoginState | null>();
-  const [userInfo, setUserInfo] = useState<UserInfo | null>();
+  const [userInfo, setUserInfo] = useState<IUserInfo | NormalError | null>();
   const [resource, setResource] = useState<object | null>();
 
   /**
@@ -44,6 +47,7 @@ function App() {
    */
   const getLoginState = useCallback(async () => {
     const state = await sdk.getLoginState();
+    console.log('loginState: ', state)
     setLoginState(state);
   }, [sdk]);
 
@@ -65,25 +69,9 @@ function App() {
    * 登出
    */
   const logout = async () => {
-    await sdk.logoutWithRedirect();
-  };
-
-  /**
-   * 使用 Access Token 调用资源 API
-   */
-  const handleResource = async () => {
-    try {
-      let res = await fetch(process.env.REACT_APP_RESOURCE_API as string, {
-        headers: {
-          Authorization: `Bearer ${loginState?.accessToken}`,
-        },
-        method: "GET",
-      });
-      let data = await res.json();
-      setResource(data);
-    } catch (err) {
-      alert("无权访问接口");
-    }
+    await sdk.logoutWithRedirect({
+      redirectUri: 'https://authing.cn'
+    });
   };
 
   useEffect(() => {
@@ -107,7 +95,6 @@ function App() {
         <button onClick={logout}>logout</button>
         <button onClick={getLoginState}>getLoginState</button>
         <button onClick={getUserInfo}>getUserInfo</button>
-        <button onClick={handleResource}>handleResource</button>
       </p>
       <p>
         {loginState && (

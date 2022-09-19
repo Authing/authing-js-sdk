@@ -19,7 +19,8 @@ import {
   OIDCTokenResponse,
   LoginStateWithCustomStateData,
   LogoutURLParams,
-  IUserInfo
+  IUserInfo,
+  NormalError
 } from './global'
 import { InMemoryStorageProvider } from './storage/InMemoryStorgeProvider'
 import { StorageProvider } from './storage/interface'
@@ -569,7 +570,7 @@ export class Authing {
     options: {
       accessToken?: string
     } = {}
-  ): Promise<IUserInfo> {
+  ): Promise<IUserInfo | NormalError> {
     const accessToken =
       options.accessToken ?? (await this.getLoginState())?.accessToken
     if (!accessToken) {
@@ -583,7 +584,15 @@ export class Authing {
       }
     })
 
-    return data.data as IUserInfo
+    if (data.data) {
+      return data.data as IUserInfo
+    }
+
+    return {
+      apiCode: data.apiCode,
+      message: data.message,
+      statusCode: data.statusCode
+    }
   }
 
   /**

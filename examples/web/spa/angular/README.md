@@ -47,7 +47,8 @@ private sdk = new Authing({
   // separated by spaces, the default is 'openid profile', 
   // the successfully obtained permissions will appear in 
   // the scope field of the Access Token
-  scope: 'openid profile order:read'
+  scope: 'openid profile order:read',
+  userPoolId: '用户池 ID'
 });
 ```
 

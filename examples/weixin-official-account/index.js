@@ -2,10 +2,10 @@ import { AuthingWxmp } from '@authing/weixin-official-account'
 
 
 const authingWx = new AuthingWxmp({
-  identifier: "authing-official-account",
-  appId: "62e7f0c91073aaba0db4d65b",
-  host: "https://test-application-2022.authing.cn",
-  redirectUrl: 'http://localhost:3001'
+  identifier: "此社会化身份源的唯一标志，你在 Authing 控制台创建微信身份源的时候填写的",
+  appId: "Authing 应用 ID",
+  host: "Authing 应用域名，如 https://my-awesome-app.authing.cn",
+  redirectUrl: '指定的回调链接，选填，默认使用控制台配置的回调地址'
 })
 
 const query =  (function (){

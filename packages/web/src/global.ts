@@ -241,3 +241,9 @@ export interface AccessToken {
   iss: string
   aud: string
 }
+
+export interface NormalError {
+  apiCode: number
+  message: string
+  statusCode: number
+}
