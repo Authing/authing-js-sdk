@@ -27,9 +27,9 @@
 	import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
 	const authing = new Authing({
-		appId: '',
-		host: '',
-		userPoolId: '',
+		appId: '630b549efa97ba795338e2cd',
+		host: 'http://localhost:3000',
+		userPoolId: '630b549d5a697473a2d7fa20',
 		encryptFunction
 	})
 
@@ -48,18 +48,10 @@
 		},
 
 		methods: {
-			async loginByCode () {
-				const [, { encryptedData, iv }] = await uni.getUserProfile({
-					desc: 'getUserProfile'
-				})
-				
+			async loginByCode () {				
 				const res = await authing.loginByCode({
 					connection: 'wechat_mini_program_code',
 					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-					wechatMiniProgramCodePayload: {
-						encryptedData,
-						iv
-					},
 					options: {
 						scope: 'openid profile offline_access'
 					}
@@ -68,18 +60,10 @@
 				console.log('authing.loginByCode res: ', res)
 			},
 
-			async loginByPhone () {
-				const [, { encryptedData, iv }] = await uni.getUserProfile({
-					desc: 'getUserProfile'
-				})
-				
+			async loginByPhone () {				
 				const res = await authing.loginByPhone({
 					connection: 'wechat_mini_program_phone',
 					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-					wechatMiniProgramPhonePayload: {
-						encryptedData,
-						iv
-					},
 					options: {
 						scope: 'openid profile offline_access'
 					}

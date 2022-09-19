@@ -2,8 +2,6 @@ import { Component, PropsWithChildren } from 'react'
 import { View, Button } from '@tarojs/components'
 import './index.less'
 
-import Taro from '@tarojs/taro'
-
 import { Authing } from '@authing/miniapp-taro'
 
 // import { encryptFunction } from '@authing/miniapp-jsencrypt'
@@ -11,9 +9,9 @@ import { Authing } from '@authing/miniapp-taro'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: '',
-  host: '',
-  userPoolId: '',
+  appId: '630b549efa97ba795338e2cd',
+  host: 'http://localhost:3000',
+  userPoolId: '630b549d5a697473a2d7fa20',
   encryptFunction
 })
 
@@ -52,17 +50,9 @@ export default class Index extends Component<PropsWithChildren> {
   }
 
   async loginByCode () {
-    const { encryptedData, iv } = await Taro.getUserProfile({
-      desc: 'getUserProfile'
-    })
-    
     const res = await authing.loginByCode({
       connection: 'wechat_mini_program_code',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-      wechatMiniProgramCodePayload: {
-        encryptedData,
-        iv
-      },
       options: {
         scope: 'openid profile offline_access'
       }
@@ -71,18 +61,10 @@ export default class Index extends Component<PropsWithChildren> {
     console.log('authing.loginByCode res: ', res)
   }
 
-  async loginByPhone () {
-    const { encryptedData, iv } = await Taro.getUserProfile({
-      desc: 'getUserProfile'
-    })
-    
+  async loginByPhone () {    
     const res = await authing.loginByPhone({
       connection: 'wechat_mini_program_phone',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-      wechatMiniProgramPhonePayload: {
-        encryptedData,
-        iv
-      },
       options: {
         scope: 'openid profile offline_access'
       }

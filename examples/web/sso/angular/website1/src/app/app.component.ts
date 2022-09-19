@@ -3,7 +3,7 @@ import { Authing } from '@authing/web';
 import type {
   LoginState,
   IUserInfo,
-  NormalError,
+  NormalError
 } from '@authing/web/dist/typings/src/global';
 
 @Component({
