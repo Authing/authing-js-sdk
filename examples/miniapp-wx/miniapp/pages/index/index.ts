@@ -7,9 +7,9 @@ import { Authing } from '@authing/miniapp-wx'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: '',
-  host: '',
-  userPoolId: '',
+  appId: '630b549efa97ba795338e2cd',
+  host: 'http://localhost:3000',
+  userPoolId: '630b549d5a697473a2d7fa20',
   encryptFunction
 })
 
@@ -39,17 +39,9 @@ Page({
   },
 
   async loginByPhone (e) {
-    const { encryptedData, iv } = await wx.getUserProfile({
-      desc: 'getUserProfile'
-    })
-    
     const res = await authing.loginByPhone({
       connection: 'wechat_mini_program_phone',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-      wechatMiniProgramPhonePayload: {
-        encryptedData,
-        iv
-      },
       options: {
         scope: 'openid profile offline_access'
       }
@@ -64,8 +56,6 @@ Page({
    */
   async getPhone (e) {
     const { code } = e.detail
-
-    console.log('code: ', code)
 
     const res = await authing.getPhone({
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
