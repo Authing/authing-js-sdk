@@ -1,6 +1,6 @@
 {
   "name": "@authing/miniapp-wx",
-  "version": "5.0.3",
+  "version": "5.0.4-alpha.0",
   "description": "Authing miniapp JS SDK for WX",
   "main": "dist/bundle-wx.js",
   "types": "dist/typings/src/index.d.ts",
