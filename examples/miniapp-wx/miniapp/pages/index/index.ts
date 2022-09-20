@@ -19,16 +19,16 @@ Page({
   data: {},
 
   async loginByCode () {
-    // const { encryptedData, iv } = await wx.getUserProfile({
-    //   desc: 'getUserProfile1'
-    // })
+    const { encryptedData, iv } = await wx.getUserProfile({
+      desc: 'getUserProfile1'
+    })
     
     const res = await authing.loginByCode({
       connection: 'wechat_mini_program_code',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramCodePayload: {
-        encryptedData: '1',
-        iv:'2'
+        encryptedData,
+        iv
       },
       options: {
         scope: 'openid profile offline_access'

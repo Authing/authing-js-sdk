@@ -2,6 +2,8 @@ import { Component, PropsWithChildren } from 'react'
 import { View, Button } from '@tarojs/components'
 import './index.less'
 
+import Taro from '@tarojs/taro'
+
 import { Authing } from '@authing/miniapp-taro'
 
 // import { encryptFunction } from '@authing/miniapp-jsencrypt'
@@ -32,7 +34,7 @@ export default class Index extends Component<PropsWithChildren> {
       <View className='index'>
         <Button onClick={() => this.loginByCode()}>loginByCode</Button>
         <Button onClick={() => this.loginByPhone()}>loginByPhone</Button>
-        <Button openType="getPhoneNumber" onClick={(e) => this.getPhone(e)}>getPhone</Button>
+        <Button openType="getPhoneNumber"  onGetPhoneNumber={(e) => this.getPhone(e)}>getPhone</Button>
         <Button onClick={() => this.loginByPassword()}>loginByPassword</Button>
 
         <View>发送手机短信验证码</View>
@@ -50,9 +52,17 @@ export default class Index extends Component<PropsWithChildren> {
   }
 
   async loginByCode () {
+    const { encryptedData, iv } = await Taro.getUserProfile({
+      desc: 'getUserProfile'
+    })
+
     const res = await authing.loginByCode({
       connection: 'wechat_mini_program_code',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
+      wechatMiniProgramCodePayload: {
+        encryptedData,
+        iv
+      },
       options: {
         scope: 'openid profile offline_access'
       }
@@ -61,24 +71,14 @@ export default class Index extends Component<PropsWithChildren> {
     console.log('authing.loginByCode res: ', res)
   }
 
-  async loginByPhone () {    
-    const res = await authing.loginByPhone({
-      connection: 'wechat_mini_program_phone',
-      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-      options: {
-        scope: 'openid profile offline_access'
-      }
-    })
-
-    console.log('authing.loginByPhone res: ', res)
-  }
-
   /**
    * 需要在真机上测试，微信开发者工具不会返回 code
    * @param {*} e 
    */
   async getPhone (e) {
     const { code } = e.detail
+
+    console.log('code: ', e)
 
     const res = await authing.getPhone({
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',

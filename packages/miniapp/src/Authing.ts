@@ -28,7 +28,7 @@ import { error, getLoginStateKey, request, StorageProvider, getCodeKey } from '.
 import { AuthingMove } from './AuthingMove'
 
 export class Authing {
-  private readonly storage: IStorageProvider
+  private storage: IStorageProvider
   private readonly options: AuthingOptions
   private readonly encryptFunction?: EncryptFunction
 
@@ -43,24 +43,21 @@ export class Authing {
     this.encryptFunction = options.encryptFunction
   }
 
-  async getLoginState(): Promise<LoginStateOptions> {
+  async getLoginState(): Promise<LoginStateOptions | null> {
     try {
       const res = await this.storage.get(
         getLoginStateKey(this.options.appId)
       )
   
-      return res.data
-    } catch (e) {
-      error('getLoginState', e)
-      return {
-        access_token: '',
-        expires_in: 0,
-        expires_at: 0,
-        id_token: '',
-        scope: '',
-        token_type: '',
-        refresh_token: ''
+      const loginState = res.data as LoginStateOptions
+
+      if (loginState.expires_at > Date.now()) {
+        return loginState
       }
+
+      return null
+    } catch (e) {
+      return null
     }
   }
 
@@ -79,7 +76,7 @@ export class Authing {
   ): Promise<LoginStateOptions | RefreshTokenResponseData> {
     const _loginState: LoginStateOptions | RefreshTokenResponseData = {
       ...loginState,
-      expires_at: loginState.expires_in * 1000 + Date.now() - 3600 * 2
+      expires_at: loginState.expires_in * 1000 + Date.now() - 3600 * 1000 * 2
     }
 
     await this.storage.set(
@@ -108,21 +105,16 @@ export class Authing {
       return loginState
     }
 
-    const { encryptedData, iv } = await AuthingMove.getUserProfile({
-      desc: 'Authing JS SDK getUserProfile'
-    })
-
     const { code } = await AuthingMove.login()
 
-    const { extIdpConnidentifier, connection, options } = data
+    const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
 
     const _data: WxCodeLoginOptions = {
       connection: connection || 'wechat_mini_program_code',
       extIdpConnidentifier,
       wechatMiniProgramCodePayload: {
-        code,
-        encryptedData,
-        iv
+        ...wechatMiniProgramCodePayload,
+        code
       },
       options
     }
@@ -139,21 +131,16 @@ export class Authing {
       return loginState
     }
 
-    const { encryptedData, iv } = await AuthingMove.getUserProfile({
-      desc: 'Authing JS SDK getUserProfile'
-    })
-
     const { code } = await AuthingMove.login()
 
-    const { extIdpConnidentifier, connection, options } = data
+    const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
 
     const _data: WxPhoneLoginOptions = {
       connection: connection || 'wechat_mini_program_phone',
       extIdpConnidentifier,
       wechatMiniProgramPhonePayload: {
-        code,
-        encryptedData,
-        iv
+        ...wechatMiniProgramPhonePayload,
+        code
       },
       options
     }
@@ -211,11 +198,17 @@ export class Authing {
 
   async logout(): Promise<boolean> {
     try {
-      const { access_token, expires_at } = await this.getLoginState()
+      const loginState = await this.getLoginState()
+
+      if (!loginState) {
+        return true
+      }
+
+      const { access_token, expires_at } = loginState
 
       if (!access_token || expires_at < Date.now()) {
-        error('logout', 'access_token has expired, please login again')
-        return false
+        await this.clearLoginState()
+        return true
       }
 
       await request({
@@ -287,7 +280,13 @@ export class Authing {
   async refreshToken(): Promise<
     LoginStateOptions | RefreshTokenResponseData | void
     > {
-    const { refresh_token, expires_at } = await this.getLoginState()
+    const loginState = await this.getLoginState()
+
+    if (!loginState) {
+      return error('refreshToken', 'refresh_token has expired, please login again')
+    }
+
+    const { refresh_token, expires_at } = loginState
 
     if (!refresh_token) {
       return error('refreshToken', 'refresh_token must not be empty')
@@ -324,7 +323,16 @@ export class Authing {
   async changeQrcodeStatus(
     data: ChangeQrcodeStatusOptions
   ): Promise<ChangeQrcodeStatusResponseData | void> {
-    const { access_token, expires_at } = await this.getLoginState()
+    const loginState = await this.getLoginState()
+
+    if (!loginState) {
+      return error(
+        'changeQrcodeStatus',
+        'Token has expired, please login again'
+      )
+    }
+
+    const { access_token, expires_at } = loginState
 
     if (expires_at < Date.now()) {
       return error(
@@ -347,7 +355,17 @@ export class Authing {
   async updatePassword(
     data: UpdatePasswordOptions
   ): Promise<boolean> {
-    const { access_token, expires_at } = await this.getLoginState()
+    const loginState = await this.getLoginState()
+
+    if (!loginState) {
+      error(
+        'updatePassword',
+        'Token has expired, please login again'
+      )
+      return false
+    }
+
+    const { access_token, expires_at } = loginState
 
     if (expires_at < Date.now()) {
       error(
@@ -385,7 +403,13 @@ export class Authing {
   }
 
   async getUserInfo(): Promise<UserInfo | void> {
-    const { access_token, expires_at } = await this.getLoginState()
+    const loginState = await this.getLoginState()
+
+    if (!loginState) {
+      return error('getUserInfo', 'Token has expired, please login again')
+    }
+
+    const { access_token, expires_at } = loginState
 
     if (expires_at < Date.now()) {
       return error('getUserInfo', 'Token has expired, please login again')
@@ -428,7 +452,16 @@ export class Authing {
   }
 
   async updateUserInfo(data: UserInfo): Promise<UserInfo | void> {
-    const { access_token, expires_at } = await this.getLoginState()
+    const loginState = await this.getLoginState()
+
+    if (!loginState) {
+      return error(
+        'updateUserInfo',
+        'Token has expired, please login again'
+      )
+    }
+
+    const { access_token, expires_at }  = loginState
 
     if (expires_at < Date.now()) {
       return error(
