@@ -48,28 +48,24 @@
 		},
 
 		methods: {
-			async loginByCode () {				
+			async loginByCode () {		
+				const [, { encryptedData, iv }] = await uni.getUserProfile({
+					desc: 'getUserProfile'
+				})
+
 				const res = await authing.loginByCode({
 					connection: 'wechat_mini_program_code',
 					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
+					wechatMiniProgramCodePayload: {
+						encryptedData,
+						iv
+					},
 					options: {
 						scope: 'openid profile offline_access'
 					}
 				})
 
 				console.log('authing.loginByCode res: ', res)
-			},
-
-			async loginByPhone () {				
-				const res = await authing.loginByPhone({
-					connection: 'wechat_mini_program_phone',
-					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-					options: {
-						scope: 'openid profile offline_access'
-					}
-				})
-
-				console.log('authing.loginByPhone res: ', res)
 			},
 
 			/**
