@@ -28,7 +28,7 @@ import { error, getLoginStateKey, request, StorageProvider, getCodeKey } from '.
 import { AuthingMove } from './AuthingMove'
 
 export class Authing {
-  readonly storage: IStorageProvider
+  private storage: IStorageProvider
   private readonly options: AuthingOptions
   private readonly encryptFunction?: EncryptFunction
 
@@ -201,15 +201,14 @@ export class Authing {
       const loginState = await this.getLoginState()
 
       if (!loginState) {
-        error('logout', 'access_token has expired, please login again')
-        return false
+        return true
       }
 
       const { access_token, expires_at } = loginState
 
       if (!access_token || expires_at < Date.now()) {
-        error('logout', 'access_token has expired, please login again')
-        return false
+        await this.clearLoginState()
+        return true
       }
 
       await request({
