@@ -28,7 +28,7 @@ import { error, getLoginStateKey, request, StorageProvider, getCodeKey } from '.
 import { AuthingMove } from './AuthingMove'
 
 export class Authing {
-  private readonly storage: IStorageProvider
+  readonly storage: IStorageProvider
   private readonly options: AuthingOptions
   private readonly encryptFunction?: EncryptFunction
 
@@ -51,7 +51,7 @@ export class Authing {
   
       const loginState = res.data as LoginStateOptions
 
-      if (loginState.expires_at < Date.now()) {
+      if (loginState.expires_at > Date.now()) {
         return loginState
       }
 
