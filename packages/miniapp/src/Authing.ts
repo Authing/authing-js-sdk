@@ -1,12 +1,9 @@
 import {
   IStorageProvider,
   EncryptFunction,
-  LoginStateOptions,
+  LoginState,
   EncryptType,
-  RefreshTokenResponseData,
   AuthingOptions,
-  ChangeQrcodeStatusOptions,
-  ChangeQrcodeStatusResponseData,
   RefreshTokenOptions,
   WxCodeLoginOptions,
   WxPhoneLoginOptions,
@@ -19,11 +16,10 @@ import {
   UserInfo,
   UpdatePasswordOptions,
   UploadFileResponseData,
-  LoginByCodeOptions,
-  LoginByPhoneOptions
+  LoginByCodeOptions
 } from './types'
 
-import { error, getLoginStateKey, request, StorageProvider, getCodeKey } from './helpers'
+import { error, getLoginStateKey, getWxLoginCodeKey, request, StorageProvider } from './helpers'
 
 import { AuthingMove } from './AuthingMove'
 
@@ -43,17 +39,19 @@ export class Authing {
     this.encryptFunction = options.encryptFunction
   }
 
-  async getLoginState(): Promise<LoginStateOptions | null> {
+  async getLoginState(): Promise<LoginState | null> {
     try {
       const res = await this.storage.get(
         getLoginStateKey(this.options.appId)
       )
   
-      const loginState = res.data as LoginStateOptions
+      const loginState = res.data
 
       if (loginState.expires_at > Date.now()) {
         return loginState
       }
+
+      error('getLoginState', 'loginState has expired, please login again')
 
       return null
     } catch (e) {
@@ -61,20 +59,22 @@ export class Authing {
     }
   }
 
-  async clearLoginState() {
-    await this.storage.remove(
-      getLoginStateKey(this.options.appId)
-    )
-
-    await this.storage.remove(
-      getCodeKey(this.options.appId)
-    )
+  async clearLoginState(): Promise<boolean> {
+    try {
+      await this.storage.remove(
+        getLoginStateKey(this.options.appId)
+      )
+      return true
+    } catch (e) {
+      error('clearLoginState', e)
+      return false
+    }
   }
 
-  protected async saveLoginState(
-    loginState: LoginStateOptions
-  ): Promise<LoginStateOptions | RefreshTokenResponseData> {
-    const _loginState: LoginStateOptions | RefreshTokenResponseData = {
+  private async saveLoginState(
+    loginState: LoginState
+  ): Promise<LoginState> {
+    const _loginState: LoginState = {
       ...loginState,
       expires_at: loginState.expires_in * 1000 + Date.now() - 3600 * 1000 * 2
     }
@@ -88,24 +88,59 @@ export class Authing {
   }
 
   async getPublicKey(encryptType: EncryptType): Promise<string> {
-    const res = await request({
-      method: 'GET',
-      url: `${this.options.host}/api/v3/system`
-    })
+    try {
+      const res = await request({
+        method: 'GET',
+        url: `${this.options.host}/api/v3/system`
+      })
+  
+      return res[encryptType].publicKey
+    } catch (e) {
+      error('getPublicKey', e)
+      return ''
+    }
+  }
 
-    return res[encryptType].publicKey
+  private async resetWxCode () {
+    const { code } = await AuthingMove.login()
+
+    await this.storage.set(
+      getWxLoginCodeKey(this.options.appId),
+      code
+    )
+
+    return code
+  }
+
+  private async getCachedWxLoginCode () {
+    try {
+      const res = await this.storage.get(getWxLoginCodeKey(this.options.appId))
+      return res.data
+    } catch (e) {
+      return ''
+    }
   }
 
   async loginByCode(
     data: LoginByCodeOptions
-  ): Promise<LoginStateOptions | void> {
+  ): Promise<LoginState | void> {
     const loginState = await this.getLoginState()
 
     if (loginState && loginState.expires_at > Date.now()) {
       return loginState
     }
 
-    const { code } = await AuthingMove.login()
+    let code = await this.getCachedWxLoginCode()
+
+    if (code) {
+      try {
+        await AuthingMove.checkSession()
+      } catch (e) {
+        code = await this.resetWxCode()
+      }
+    } else {
+      code = await this.resetWxCode()
+    }
 
     const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
 
@@ -122,35 +157,9 @@ export class Authing {
     return await this.login(_data, 'code')
   }
 
-  async loginByPhone(
-    data: LoginByPhoneOptions
-  ): Promise<LoginStateOptions | void> {
-    const loginState = await this.getLoginState()
-
-    if (loginState && loginState.expires_at > Date.now()) {
-      return loginState
-    }
-
-    const { code } = await AuthingMove.login()
-
-    const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
-
-    const _data: WxPhoneLoginOptions = {
-      connection: connection || 'wechat_mini_program_phone',
-      extIdpConnidentifier,
-      wechatMiniProgramPhonePayload: {
-        ...wechatMiniProgramPhonePayload,
-        code
-      },
-      options
-    }
-
-    return await this.login(_data, 'phone')
-  }
-
   async loginByPassword(
     data: PasswordLoginOptions
-  ): Promise<LoginStateOptions | void> {
+  ): Promise<LoginState | void> {
     if (
       data.options?.passwordEncryptType &&
       data.options?.passwordEncryptType !== 'none'
@@ -165,6 +174,10 @@ export class Authing {
       const publicKey = await this.getPublicKey(
         data.options?.passwordEncryptType
       )
+
+      if (!publicKey) {
+        return error('loginByPassword', 'publicKey is invalid')
+      }
 
       data.passwordPayload.password = this.encryptFunction(
         data.passwordPayload.password,
@@ -182,7 +195,7 @@ export class Authing {
 
   async loginByPassCode(
     data: PassCodeLoginOptions
-  ): Promise<LoginStateOptions | void> {
+  ): Promise<LoginState | void> {
     if (data.passCodePayload.phone) {
       data.passCodePayload.phoneCountryCode =
         data.passCodePayload.phoneCountryCode || '+86'
@@ -197,35 +210,30 @@ export class Authing {
   }
 
   async logout(): Promise<boolean> {
-    try {
-      const loginState = await this.getLoginState()
+    const loginState = await this.getLoginState()
 
-      if (!loginState) {
-        return true
-      }
-
-      const { access_token, expires_at } = loginState
-
-      if (!access_token || expires_at < Date.now()) {
-        await this.clearLoginState()
-        return true
-      }
-
-      await request({
-        method: 'POST',
-        url: `${this.options.host}/oidc/token/revocation`,
-        data: {
-          client_id: this.options.appId,
-          token: access_token
-        },
-        header: {
-          'content-type': 'application/x-www-form-urlencoded'
-        }
-      })
-    } catch (e) {
-      error('logout', e)
-      return false
+    if (!loginState) {
+      return true
     }
+
+    const { access_token, expires_at } = loginState
+
+    if (!access_token || expires_at < Date.now()) {
+      await this.clearLoginState()
+      return true
+    }
+
+    await request({
+      method: 'POST',
+      url: `${this.options.host}/oidc/token/revocation`,
+      data: {
+        client_id: this.options.appId,
+        token: access_token
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+    })
 
     await this.clearLoginState()
 
@@ -252,7 +260,7 @@ export class Authing {
       | PasswordLoginOptions
       | PassCodeLoginOptions,
     type: string
-  ): Promise<LoginStateOptions | void> {
+  ): Promise<LoginState | void> {
     const urlMap: Record<string, string> = {
       code: '/api/v3/signin-by-mobile',
       phone: '/api/v3/signin-by-mobile',
@@ -269,17 +277,17 @@ export class Authing {
       }
     })
 
-    if (res.access_token) {
+    if (res.access_token || res.id_token) {
       const loginState = await this.saveLoginState(res)
       return loginState
     }
 
     await this.clearLoginState()
+
+    error('login', res)
   }
 
-  async refreshToken(): Promise<
-    LoginStateOptions | RefreshTokenResponseData | void
-    > {
+  async refreshToken(): Promise<LoginState | void> {
     const loginState = await this.getLoginState()
 
     if (!loginState) {
@@ -312,44 +320,12 @@ export class Authing {
       }
     })
 
-    if (res.access_token) {
+    if (res.access_token || res.id_token) {
       const loginState = await this.saveLoginState(res)
       return loginState
     }
 
-    await this.clearLoginState()
-  }
-
-  async changeQrcodeStatus(
-    data: ChangeQrcodeStatusOptions
-  ): Promise<ChangeQrcodeStatusResponseData | void> {
-    const loginState = await this.getLoginState()
-
-    if (!loginState) {
-      return error(
-        'changeQrcodeStatus',
-        'Token has expired, please login again'
-      )
-    }
-
-    const { access_token, expires_at } = loginState
-
-    if (expires_at < Date.now()) {
-      return error(
-        'changeQrcodeStatus',
-        'Token has expired, please login again'
-      )
-    }
-
-    return await request({
-      method: 'POST',
-      url: `${this.options.host}/api/v3/change-qrcode-status`,
-      data,
-      header: {
-        'x-authing-userpool-id': this.options.userPoolId,
-        Authorization: access_token
-      }
-    })
+    error('refreshToken', res)
   }
 
   async updatePassword(
@@ -386,6 +362,11 @@ export class Authing {
 
       const publicKey = await this.getPublicKey(data.passwordEncryptType)
 
+      if (!publicKey) {
+        error('loginByPassword', 'publicKey is invalid')
+        return false
+      }
+
       data.newPassword = this.encryptFunction(data.newPassword, publicKey)
     }
 
@@ -399,7 +380,13 @@ export class Authing {
       }
     })
 
-    return res.statusCode === 200
+    if (res.statusCode === 200) {
+      return true
+    }
+
+    error('updatePassword', res)
+
+    return false
   }
 
   async getUserInfo(): Promise<UserInfo | void> {
@@ -415,7 +402,7 @@ export class Authing {
       return error('getUserInfo', 'Token has expired, please login again')
     }
 
-    return await request({
+    const res = await request({
       method: 'GET',
       url: `${this.options.host}/api/v3/get-profile`,
       header: {
@@ -423,6 +410,12 @@ export class Authing {
         Authorization: access_token
       }
     })
+
+    if (res.userId) {
+      return res
+    }
+
+    error('getUserInfo', res)
   }
 
   async updateAvatar(): Promise<UploadFileResponseData | void> {
@@ -470,7 +463,7 @@ export class Authing {
       )
     }
 
-    return await request({
+    const res = await request({
       method: 'POST',
       url: `${this.options.host}/api/v3/update-profile`,
       data,
@@ -479,10 +472,16 @@ export class Authing {
         Authorization: access_token
       }
     })
+
+    if (res.userId) {
+      return res
+    }
+
+    error('updateUserInfo', res)
   }
 
   async getPhone(data: GetPhoneOptions): Promise<GetUserPhoneResponseData> {
-    const { phone_info } = await request({
+    const res = await request({
       method: 'POST',
       url: `${this.options.host}/api/v3/get-wechat-miniprogram-phone`,
       data,
@@ -491,6 +490,6 @@ export class Authing {
       }
     })
 
-    return phone_info
+    return res.phone_info || error('getPhone', res)
   }
 }

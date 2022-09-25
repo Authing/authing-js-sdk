@@ -42,7 +42,7 @@ $ yarn add @authing/web
 ### Use script tag
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@authing/web"></script>
+<script src="https://cdn.authing.co/packages/web/5.0.4/index.global.js"></script>
 <script>
   const sdk = new Authing({
     // Very important, please fill in carefully!

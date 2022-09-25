@@ -1,6 +1,5 @@
 import {
-  GetStorageFailData,
-  GetStorageSuccessData,
+  GetStorageCallbackData,
   RemoveStorageFailData,
   RemoveStorageSuccessData,
   SetStorageCallbackData
@@ -11,7 +10,7 @@ import { AuthingMove } from '../AuthingMove'
 import { IStorageProvider } from '../types'
 
 export class StorageProvider implements IStorageProvider {
-  get(key: string): Promise<GetStorageSuccessData | GetStorageFailData> {
+  get(key: string): Promise<GetStorageCallbackData> {
     return AuthingMove.getStorage({
       key
     })

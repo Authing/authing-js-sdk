@@ -15,8 +15,7 @@
 
 ## 简介
 
-你可以使用 Authing Browser SDK 快速为新开发的或已有的 Web 应用集成认证能力
-
+你可以使用 Authing Web SDK 快速为新开发的或已有的 Web 应用集成认证能力
 
 ## 参考文档
 
@@ -43,7 +42,7 @@ $ yarn add @authing/web
 ### 使用 script 标签直接引入
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@authing/web"></script>
+<script src="https://cdn.authing.co/packages/web/5.0.4/index.global.js"></script>
 <script>
 const sdk = new Authing({
   // 很重要，请仔细填写！

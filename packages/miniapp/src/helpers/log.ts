@@ -1,6 +1,6 @@
-export function error(errorFunction: string, errorContent: unknown) {
+export function error(errorFunction: string, errorContent: any) {
   console.error(
-    `Authing miniapp sdk error in "${errorFunction}": `,
+    `Authing Miniapp SDK error in "${errorFunction}": `,
     errorContent
   )
 }
