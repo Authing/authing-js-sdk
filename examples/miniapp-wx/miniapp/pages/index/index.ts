@@ -7,9 +7,9 @@ import { Authing } from '@authing/miniapp-wx'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: '630b549efa97ba795338e2cd',
-  host: 'http://localhost:3000',
-  userPoolId: '630b549d5a697473a2d7fa20',
+  appId: '630ed3137dd6f2fd7001da24',
+  host: 'https://core.authing.cn',
+  userPoolId: '62e221f85f5ac5cc47037a39',
   encryptFunction
 })
 
@@ -38,18 +38,6 @@ Page({
     console.log('authing.loginByCode res: ', res)
   },
 
-  async loginByPhone (e) {
-    const res = await authing.loginByPhone({
-      connection: 'wechat_mini_program_phone',
-      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-      options: {
-        scope: 'openid profile offline_access'
-      }
-    })
-
-    console.log('authing.loginByPhone res: ', res)
-  },
-
   /**
    * 需要在真机上测试，微信开发者工具不会返回 code
    * @param {*} e 
@@ -66,7 +54,7 @@ Page({
   },
 
   async loginByPassword () {
-    const res = await authing.loginByPassword({
+    authing.loginByPassword({
       connection: 'PASSWORD',
       passwordPayload: {
         password: '123',
@@ -76,9 +64,10 @@ Page({
         passwordEncryptType: 'sm2',
         scope: 'offline_access openid profile'
       }
+    }).then(res => {
+      console.log('res: ', res)
     })
-
-    console.log('authing.loginByPassword res: ', res)
+    // console.log('authing.loginByPassword res: ', res)
   },
 
   async sendSms () {
@@ -145,5 +134,15 @@ Page({
   async logout () {
     const res = await authing.logout()
     console.log('authing.logout res: ', res)
+  },
+
+  async getLoginState () {
+    const res = await authing.getLoginState()
+    console.log('authing.getLoginState res: ', res)
+  },
+
+  async clearLoginState () {
+    const res = await authing.clearLoginState()
+    console.log('authing.clearLoginState res: ', res)
   }
 })

@@ -1,5 +1,4 @@
 <button bindtap="loginByCode">loginByCode</button>
-<button bindtap="loginByPhone">loginByPhone</button>
 <button open-type="getPhoneNumber" bindgetphonenumber="getPhone">getPhone</button>
 <button bindtap="loginByPassword">loginByPassword</button>
 
@@ -15,3 +14,6 @@
 <button bindtap="updateUserInfo">updateUserInfo</button>
 
 <button bindtap="logout">logout</button>
+
+<button bindtap="getLoginState">getLoginState</button>
+<button bindtap="clearLoginState">clearLoginState</button>
