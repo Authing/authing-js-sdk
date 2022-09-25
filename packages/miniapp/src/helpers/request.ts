@@ -16,9 +16,10 @@ export async function request(options: WxRequestConfig) {
 
     const { data } = await AuthingMove.request(_options)
 
-    // 例如 /oidc/token 直接返回 data，没有 data.data
+    // /oidc/token 直接返回 data，没有 data.data
+    // /api/v3/update-password 只返回 message 和 statusCode，没有 data.data
     return data.data || data
   } catch (e) {
-    throw new Error('Authing server error: ' + JSON.stringify(e))
+    return e
   }
 }

@@ -1,6 +1,5 @@
 import {
-  GetStorageFailData,
-  GetStorageSuccessData,
+  GetStorageCallbackData,
   IObject,
   RemoveStorageFailData,
   RemoveStorageSuccessData,
@@ -24,7 +23,7 @@ export interface EncryptFunction {
 }
 
 export declare abstract class IStorageProvider {
-  get(key: string): Promise<GetStorageSuccessData | GetStorageFailData>
+  get(key: string): Promise<GetStorageCallbackData>
 
   set(key: string, data: unknown): Promise<SetStorageCallbackData>
 
@@ -257,7 +256,7 @@ export interface ChangeQrcodeStatusOptions {
   action: 'SCAN' | 'CONFIRM' | 'CANCEL'
 }
 
-export interface LoginStateOptions {
+export interface LoginState {
   access_token: string
   expires_in: number
   expires_at: number
@@ -267,13 +266,15 @@ export interface LoginStateOptions {
   refresh_token?: string
 }
 
-export interface RefreshTokenResponseData extends LoginStateOptions {
-  refresh_token: string
-}
-
-export interface NormalResponseData {
+export interface SimpleResponseData {
   message: string
   statusCode: number
+}
+
+export interface NormalResponseData extends SimpleResponseData {
+  data?: {
+    data: any
+  }
 }
 
 export interface GetUserPhoneResponseData {
@@ -286,7 +287,7 @@ export interface GetUserPhoneResponseData {
   }
 }
 
-export interface ChangeQrcodeStatusResponseData extends NormalResponseData {
+export interface ChangeQrcodeStatusResponseData extends SimpleResponseData {
   apiCode: number
 }
 
