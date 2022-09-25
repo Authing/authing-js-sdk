@@ -19,7 +19,7 @@ import {
   LoginByCodeOptions
 } from './types'
 
-import { error, getLoginStateKey, request, StorageProvider } from './helpers'
+import { error, getLoginStateKey, getWxLoginCodeKey, request, StorageProvider } from './helpers'
 
 import { AuthingMove } from './AuthingMove'
 
@@ -71,7 +71,7 @@ export class Authing {
     }
   }
 
-  protected async saveLoginState(
+  private async saveLoginState(
     loginState: LoginState
   ): Promise<LoginState> {
     const _loginState: LoginState = {
@@ -101,6 +101,26 @@ export class Authing {
     }
   }
 
+  private async resetWxCode () {
+    const { code } = await AuthingMove.login()
+
+    await this.storage.set(
+      getWxLoginCodeKey(this.options.appId),
+      code
+    )
+
+    return code
+  }
+
+  private async getCachedWxLoginCode () {
+    try {
+      const res = await this.storage.get(getWxLoginCodeKey(this.options.appId))
+      return res.data
+    } catch (e) {
+      return ''
+    }
+  }
+
   async loginByCode(
     data: LoginByCodeOptions
   ): Promise<LoginState | void> {
@@ -110,7 +130,17 @@ export class Authing {
       return loginState
     }
 
-    const { code } = await AuthingMove.login()
+    let code = await this.getCachedWxLoginCode()
+
+    if (code) {
+      try {
+        await AuthingMove.checkSession()
+      } catch (e) {
+        code = await this.resetWxCode()
+      }
+    } else {
+      code = await this.resetWxCode()
+    }
 
     const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
 
