@@ -123,7 +123,7 @@ export class Authing {
 
   async loginByCode(
     data: LoginByCodeOptions
-  ): Promise<LoginState | void> {
+  ): Promise<LoginState | undefined> {
     const loginState = await this.getLoginState()
 
     if (loginState && loginState.expires_at > Date.now()) {
@@ -159,7 +159,7 @@ export class Authing {
 
   async loginByPassword(
     data: PasswordLoginOptions
-  ): Promise<LoginState | void> {
+  ): Promise<LoginState | undefined> {
     if (
       data.options?.passwordEncryptType &&
       data.options?.passwordEncryptType !== 'none'
@@ -195,7 +195,7 @@ export class Authing {
 
   async loginByPassCode(
     data: PassCodeLoginOptions
-  ): Promise<LoginState | void> {
+  ): Promise<LoginState | undefined> {
     if (data.passCodePayload.phone) {
       data.passCodePayload.phoneCountryCode =
         data.passCodePayload.phoneCountryCode || '+86'
@@ -260,7 +260,7 @@ export class Authing {
       | PasswordLoginOptions
       | PassCodeLoginOptions,
     type: string
-  ): Promise<LoginState | void> {
+  ): Promise<LoginState | undefined> {
     const urlMap: Record<string, string> = {
       code: '/api/v3/signin-by-mobile',
       phone: '/api/v3/signin-by-mobile',
@@ -287,7 +287,7 @@ export class Authing {
     error('login', res)
   }
 
-  async refreshToken(): Promise<LoginState | void> {
+  async refreshToken(): Promise<LoginState | undefined> {
     const loginState = await this.getLoginState()
 
     if (!loginState) {
@@ -389,7 +389,7 @@ export class Authing {
     return false
   }
 
-  async getUserInfo(): Promise<UserInfo | void> {
+  async getUserInfo(): Promise<UserInfo | undefined> {
     const loginState = await this.getLoginState()
 
     if (!loginState) {
@@ -418,7 +418,7 @@ export class Authing {
     error('getUserInfo', res)
   }
 
-  async updateAvatar(): Promise<UploadFileResponseData | void> {
+  async updateAvatar(): Promise<UploadFileResponseData | undefined> {
     try {
       const res = await AuthingMove.chooseImage({
         count: 1,
@@ -444,7 +444,7 @@ export class Authing {
     }
   }
 
-  async updateUserInfo(data: UserInfo): Promise<UserInfo | void> {
+  async updateUserInfo(data: UserInfo): Promise<UserInfo | undefined> {
     const loginState = await this.getLoginState()
 
     if (!loginState) {
