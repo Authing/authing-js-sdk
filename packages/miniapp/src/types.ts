@@ -301,3 +301,5 @@ export interface UploadFileResponseData {
     url: string
   }
 }
+
+export type Maybe<T> = T | null
