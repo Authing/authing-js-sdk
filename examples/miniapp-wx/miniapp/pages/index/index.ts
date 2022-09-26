@@ -114,7 +114,7 @@ Page({
   },
 
   async getUserInfo () {
-    const res: UserInfo | void = await authing.getUserInfo()
+    const res: UserInfo | null = await authing.getUserInfo()
     console.log('authing.getUserInfo res: ', res)
   },
 
