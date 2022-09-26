@@ -4,7 +4,7 @@ import './index.less'
 
 import Taro from '@tarojs/taro'
 
-import { Authing } from '@authing/miniapp-taro'
+import { Authing, UserInfo } from '@authing/miniapp-taro'
 
 // import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
@@ -144,7 +144,7 @@ export default class Index extends Component<PropsWithChildren> {
   }
 
   async getUserInfo () {
-    const res = await authing.getUserInfo()
+    const res: UserInfo | null = await authing.getUserInfo()
     console.log('authing.getUserInfo res: ', res)
   }
 

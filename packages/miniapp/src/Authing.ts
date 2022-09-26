@@ -16,7 +16,8 @@ import {
   UserInfo,
   UpdatePasswordOptions,
   UploadFileResponseData,
-  LoginByCodeOptions
+  LoginByCodeOptions,
+  Maybe
 } from './types'
 
 import { error, getLoginStateKey, getWxLoginCodeKey, request, StorageProvider } from './helpers'
@@ -123,7 +124,7 @@ export class Authing {
 
   async loginByCode(
     data: LoginByCodeOptions
-  ): Promise<LoginState | void> {
+  ): Promise<Maybe<LoginState>> {
     const loginState = await this.getLoginState()
 
     if (loginState && loginState.expires_at > Date.now()) {
@@ -159,16 +160,17 @@ export class Authing {
 
   async loginByPassword(
     data: PasswordLoginOptions
-  ): Promise<LoginState | void> {
+  ): Promise<Maybe<LoginState>> {
     if (
       data.options?.passwordEncryptType &&
       data.options?.passwordEncryptType !== 'none'
     ) {
       if (!this.encryptFunction) {
-        return error(
+        error(
           'loginByPassword',
           'encryptFunction is required, if passwordEncryptType is not "none"'
         )
+        return null
       }
 
       const publicKey = await this.getPublicKey(
@@ -176,7 +178,8 @@ export class Authing {
       )
 
       if (!publicKey) {
-        return error('loginByPassword', 'publicKey is invalid')
+        error('loginByPassword', 'publicKey is invalid')
+        return null
       }
 
       data.passwordPayload.password = this.encryptFunction(
@@ -195,7 +198,7 @@ export class Authing {
 
   async loginByPassCode(
     data: PassCodeLoginOptions
-  ): Promise<LoginState | void> {
+  ): Promise<Maybe<LoginState>> {
     if (data.passCodePayload.phone) {
       data.passCodePayload.phoneCountryCode =
         data.passCodePayload.phoneCountryCode || '+86'
@@ -260,7 +263,7 @@ export class Authing {
       | PasswordLoginOptions
       | PassCodeLoginOptions,
     type: string
-  ): Promise<LoginState | void> {
+  ): Promise<Maybe<LoginState>> {
     const urlMap: Record<string, string> = {
       code: '/api/v3/signin-by-mobile',
       phone: '/api/v3/signin-by-mobile',
@@ -285,23 +288,28 @@ export class Authing {
     await this.clearLoginState()
 
     error('login', res)
+
+    return null
   }
 
-  async refreshToken(): Promise<LoginState | void> {
+  async refreshToken(): Promise<Maybe<LoginState>> {
     const loginState = await this.getLoginState()
 
     if (!loginState) {
-      return error('refreshToken', 'refresh_token has expired, please login again')
+      error('refreshToken', 'refresh_token has expired, please login again')
+      return null
     }
 
     const { refresh_token, expires_at } = loginState
 
     if (!refresh_token) {
-      return error('refreshToken', 'refresh_token must not be empty')
+      error('refreshToken', 'refresh_token must not be empty')
+      return null
     }
 
     if (expires_at < Date.now()) {
-      return error('refreshToken', 'refresh_token has expired, please login again')
+      error('refreshToken', 'refresh_token has expired, please login again')
+      return null
     }
 
     const data: RefreshTokenOptions = {
@@ -326,6 +334,8 @@ export class Authing {
     }
 
     error('refreshToken', res)
+
+    return null
   }
 
   async updatePassword(
@@ -389,17 +399,19 @@ export class Authing {
     return false
   }
 
-  async getUserInfo(): Promise<UserInfo | void> {
+  async getUserInfo(): Promise<Maybe<UserInfo>> {
     const loginState = await this.getLoginState()
 
     if (!loginState) {
-      return error('getUserInfo', 'Token has expired, please login again')
+      error('getUserInfo', 'Token has expired, please login again')
+      return null
     }
 
     const { access_token, expires_at } = loginState
 
     if (expires_at < Date.now()) {
-      return error('getUserInfo', 'Token has expired, please login again')
+      error('getUserInfo', 'Token has expired, please login again')
+      return null
     }
 
     const res = await request({
@@ -416,9 +428,11 @@ export class Authing {
     }
 
     error('getUserInfo', res)
+
+    return null
   }
 
-  async updateAvatar(): Promise<UploadFileResponseData | void> {
+  async updateAvatar(): Promise<Maybe<UploadFileResponseData>> {
     try {
       const res = await AuthingMove.chooseImage({
         count: 1,
@@ -441,23 +455,25 @@ export class Authing {
       return parsedUploadRed
     } catch (e) {
       error('updateAvatar', e)
+      return null
     }
   }
 
-  async updateUserInfo(data: UserInfo): Promise<UserInfo | void> {
+  async updateUserInfo(data: UserInfo): Promise<Maybe<UserInfo>> {
     const loginState = await this.getLoginState()
 
     if (!loginState) {
-      return error(
+      error(
         'updateUserInfo',
         'Token has expired, please login again'
       )
+      return null
     }
 
     const { access_token, expires_at }  = loginState
 
     if (expires_at < Date.now()) {
-      return error(
+      error(
         'updateUserInfo',
         'Token has expired, please login again'
       )
@@ -478,6 +494,8 @@ export class Authing {
     }
 
     error('updateUserInfo', res)
+
+    return null
   }
 
   async getPhone(data: GetPhoneOptions): Promise<GetUserPhoneResponseData> {

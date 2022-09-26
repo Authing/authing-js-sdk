@@ -208,6 +208,7 @@ export interface UserInfo {
   status?: string
   updatedAt?: string
   userId?: string
+  company?: string
 }
 
 export interface GetPhoneOptions {
@@ -301,3 +302,5 @@ export interface UploadFileResponseData {
     url: string
   }
 }
+
+export type Maybe<T> = T | null
