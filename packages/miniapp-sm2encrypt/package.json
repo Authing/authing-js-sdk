@@ -1,6 +1,6 @@
 {
   "name": "@authing/miniapp-sm2encrypt",
-  "version": "5.0.5",
+  "version": "5.0.6-alpha.0",
   "description": "JavaScript sm2 encrypt module for miniapp",
   "main": "lib/index.js",
   "module": "lib/index.js",
