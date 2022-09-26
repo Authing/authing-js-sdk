@@ -208,6 +208,7 @@ export interface UserInfo {
   status?: string
   updatedAt?: string
   userId?: string
+  company?: string
 }
 
 export interface GetPhoneOptions {
