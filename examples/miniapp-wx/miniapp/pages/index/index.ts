@@ -1,5 +1,5 @@
 // index.ts
-import { Authing } from '@authing/miniapp-wx'
+import { Authing,  UserInfo } from '@authing/miniapp-wx'
 
 // 按需使用，加密密码
 // import { encryptFunction } from '@authing/miniapp-jsencrypt'
@@ -114,7 +114,7 @@ Page({
   },
 
   async getUserInfo () {
-    const res = await authing.getUserInfo()
+    const res: UserInfo | void = await authing.getUserInfo()
     console.log('authing.getUserInfo res: ', res)
   },
 
