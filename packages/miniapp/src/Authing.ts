@@ -18,7 +18,8 @@ import {
   UploadFileResponseData,
   LoginByCodeOptions,
   Maybe,
-  LoginByPhoneOptions
+  LoginByPhoneOptions,
+  UpdateUserInfo
 } from './types'
 
 import { error, getLoginStateKey, request, StorageProvider } from './helpers'
@@ -456,7 +457,7 @@ export class Authing {
     }
   }
 
-  async updateUserInfo(data: UserInfo): Promise<Maybe<UserInfo>> {
+  async updateUserInfo(data: UpdateUserInfo): Promise<Maybe<UserInfo>> {
     const loginState = await this.getLoginState()
 
     if (!loginState) {
