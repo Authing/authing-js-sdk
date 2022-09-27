@@ -13,11 +13,6 @@ export interface AuthingOptions {
   encryptFunction?: EncryptFunction
 }
 
-export interface LoginState {
-  idToken: string
-  accessToken: string
-}
-
 export interface EncryptFunction {
   (plainText: string, publicKey: string): string
 }
@@ -194,7 +189,7 @@ export interface UserInfo {
     extIdpId?: string
     identityId?: string
     originConnIds?: string[]
-    provider?: string
+    provider?: IdentityProvider
     type?: string
     userIdInIdp?: string
   }>
@@ -205,11 +200,37 @@ export interface UserInfo {
   phoneCountryCode?: string
   phoneVerified?: boolean
   resetPasswordOnNextLogin?: boolean
-  status?: string
   updatedAt?: string
   userId?: string
   company?: string
+  region?: string
+  status?: 'Suspended' | 'Resigned' | 'Activated' | 'Archived' | 'Deactivated'
+  browser?: string
+  device?: string
+  givenName?: string
+  familyName?: string
+  middleName?: string
+  profile?: string
+  preferredUsername?: string
+  website?: string
+  zoneinfo?: string
+  locale?: string
+  formatted?: string
+  userSourceType?: 'excel' | 'register' | 'adminCreated' | 'syncTask'
+  userSourceId?: string
+  lastLoginApp?: string
+  mainDepartmentId?: string
+  lastMfaTime?: string
+  passwordSecurityLevel?: number
+  departmentIds?: string[]
 }
+
+export type IdentityProvider = 'wechat' | 'qq' | 'wechatwork' | 'dingtalk' | 'weibo' 
+| 'github' | 'alipay' | 'baidu' | 'lark' 
+| 'welink' | 'yidun' | 'qingcloud' | 'google' 
+| 'gitlab' | 'gitee' | 'twitter' | 'facebook' 
+| 'slack' | 'linkedin' | 'instagram' | 'oidc' 
+| 'oauth2' | 'saml' | 'ldap' | 'ad' | 'cas' | 'azure-ad'
 
 export interface GetPhoneOptions {
   extIdpConnidentifier: string
