@@ -17,7 +17,8 @@ import {
   UpdatePasswordOptions,
   UploadFileResponseData,
   LoginByCodeOptions,
-  Maybe
+  Maybe,
+  LoginByPhoneOptions
 } from './types'
 
 import { error, getLoginStateKey, request, StorageProvider } from './helpers'
@@ -126,6 +127,32 @@ export class Authing {
     }
 
     return await this.login(_data, 'code')
+  }
+
+  async loginByPhone(
+    data: LoginByPhoneOptions
+  ): Promise<Maybe<LoginState>> {
+    const loginState = await this.getLoginState()
+
+    if (loginState && loginState.expires_at > Date.now()) {
+      return loginState
+    }
+
+    const { code } = await AuthingMove.login()
+
+    const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
+
+    const _data: WxPhoneLoginOptions = {
+      connection: connection || 'wechat_mini_program_phone',
+      extIdpConnidentifier,
+      wechatMiniProgramPhonePayload: {
+        ...wechatMiniProgramPhonePayload,
+        code
+      },
+      options
+    }
+
+    return await this.login(_data, 'phone')
   }
 
   async loginByPassword(
