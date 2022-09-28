@@ -38,6 +38,26 @@ Page({
     console.log('authing.loginByCode res: ', res)
   },
 
+  async loginByPhone () {
+    const { encryptedData, iv } = await wx.getUserProfile({
+      desc: 'getUserProfile1'
+    })
+    
+    const res = await authing.loginByPhone({
+      connection: 'wechat_mini_program_phone',
+      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
+      wechatMiniProgramPhonePayload: {
+        encryptedData,
+        iv
+      },
+      options: {
+        scope: 'openid profile offline_access'
+      }
+    })
+
+    console.log('authing.loginByPhone res: ', res)
+  },
+
   /**
    * 需要在真机上测试，微信开发者工具不会返回 code
    * @param {*} e 
