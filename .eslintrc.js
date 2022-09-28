@@ -39,6 +39,7 @@ module.exports = {
     '@typescript-eslint/no-empty-interface': 'off',
     'prefer-const': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
-    'prettier/prettier': 'off'
+    'prettier/prettier': 'off',
+    '@typescript-eslint/no-this-alias': 'off'
   }
 }
