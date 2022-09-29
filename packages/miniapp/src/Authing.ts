@@ -120,14 +120,19 @@ export class Authing {
       await this.storage.set(getWxLoginCodeKey(this.options.appId), code)
       return code
     } catch (e) {
+      error('cacheWxLoginCode', e)
       return ''
     }
   }
 
   private async resetWxLoginCode (): Promise<string> {
     const next = async () => {
-      const { code } = await AuthingMove.login()
-      await this.cacheWxLoginCode(code)
+      try {
+        const wxLoginRes = await AuthingMove.login()
+        await this.cacheWxLoginCode(wxLoginRes.code)
+      } catch (e) {
+        error('resetWxLoginCode', e)
+      }
     }
 
     try {
@@ -154,27 +159,36 @@ export class Authing {
 
     const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
 
-    const code  = await this.resetWxLoginCode()
+    let retryCount = 0
 
-    const _data: WxCodeLoginOptions = {
-      connection: connection || 'wechat_mini_program_code',
-      extIdpConnidentifier,
-      wechatMiniProgramCodePayload: {
-        ...wechatMiniProgramCodePayload,
-        code
-      },
-      options
+    const login = async (): Promise<Maybe<LoginState>> => {
+      const code  = await this.resetWxLoginCode()
+
+      const _data: WxCodeLoginOptions = {
+        connection: connection || 'wechat_mini_program_code',
+        extIdpConnidentifier,
+        wechatMiniProgramCodePayload: {
+          ...wechatMiniProgramCodePayload,
+          code
+        },
+        options
+      }
+
+      const loginRes = await this.login(_data, 'code')
+
+      if (loginRes) {
+        return loginRes
+      }
+
+      if (retryCount === 0) {
+        retryCount += 1        
+        return await login()
+      }
+
+      return null
     }
 
-    const loginRes = await this.login(_data, 'code')
-
-    if (loginRes) {
-      return loginRes
-    }
-
-    await this.resetWxLoginCode()
-
-    return null
+    return await login()
   }
 
   async loginByPhone(
@@ -188,27 +202,36 @@ export class Authing {
 
     const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
 
-    const { code } = await AuthingMove.login()
+    let retryCount = 0
 
-    const _data: WxPhoneLoginOptions = {
-      connection: connection || 'wechat_mini_program_phone',
-      extIdpConnidentifier,
-      wechatMiniProgramPhonePayload: {
-        ...wechatMiniProgramPhonePayload,
-        code
-      },
-      options
+    const login = async (): Promise<Maybe<LoginState>> => {
+      const code  = await this.resetWxLoginCode()
+
+      const _data: WxPhoneLoginOptions = {
+        connection: connection || 'wechat_mini_program_phone',
+        extIdpConnidentifier,
+        wechatMiniProgramPhonePayload: {
+          ...wechatMiniProgramPhonePayload,
+          code
+        },
+        options
+      }
+
+      const loginRes = await this.login(_data, 'phone')
+
+      if (loginRes) {
+        return loginRes
+      }
+
+      if (retryCount === 0) {
+        retryCount += 1        
+        return await login()
+      }
+
+      return null
     }
 
-    const loginRes = await this.login(_data, 'phone')
-
-    if (loginRes) {
-      return loginRes
-    }
-
-    await this.resetWxLoginCode()
-
-    return null
+    return await login()
   }
 
   async loginByPassword(
