@@ -180,7 +180,7 @@ export class Authing {
         return loginRes
       }
 
-      if (retryCount === 0) {
+      if (retryCount <= 1) {
         retryCount += 1        
         return await login()
       }
@@ -223,7 +223,7 @@ export class Authing {
         return loginRes
       }
 
-      if (retryCount === 0) {
+      if (retryCount <= 1) {
         retryCount += 1        
         return await login()
       }
