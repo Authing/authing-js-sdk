@@ -17,10 +17,11 @@ import {
   UpdatePasswordOptions,
   UploadFileResponseData,
   LoginByCodeOptions,
-  Maybe
+  Maybe,
+  UpdateUserInfo
 } from './types'
 
-import { error, getLoginStateKey, request, StorageProvider } from './helpers'
+import { error, getLoginStateKey, getWxLoginCodeKey, request, StorageProvider } from './helpers'
 
 import { AuthingMove } from './AuthingMove'
 
@@ -38,6 +39,8 @@ export class Authing {
     this.storage = new StorageProvider()
 
     this.encryptFunction = options.encryptFunction
+
+    this.resetWxLoginCode()
   }
 
   async getLoginState(): Promise<LoginState | null> {
@@ -102,6 +105,49 @@ export class Authing {
     }
   }
 
+  private async getCachedWxLoginCode (): Promise<string> {
+    try {
+      const res = await this.storage.get(getWxLoginCodeKey(this.options.appId))
+      return res.data
+    } catch (e) {
+      return ''
+    }
+  }
+
+  private async cacheWxLoginCode (code: string): Promise<string> {
+    try {
+      await this.storage.set(getWxLoginCodeKey(this.options.appId), code)
+      return code
+    } catch (e) {
+      error('cacheWxLoginCode', e)
+      return ''
+    }
+  }
+
+  private async resetWxLoginCode (): Promise<string> {
+    const next = async () => {
+      try {
+        const wxLoginRes = await AuthingMove.login()
+        await this.cacheWxLoginCode(wxLoginRes.code)
+      } catch (e) {
+        error('resetWxLoginCode', e)
+      }
+    }
+
+    try {
+      await AuthingMove.checkSession()
+      const code = await this.getCachedWxLoginCode()
+      if (!code) {
+        await next()
+      }
+    } catch (e) {
+      this.storage.remove(getWxLoginCodeKey(this.options.appId))
+      await next()
+    } finally {
+      return await this.getCachedWxLoginCode()
+    }
+  }
+
   async loginByCode(
     data: LoginByCodeOptions
   ): Promise<Maybe<LoginState>> {
@@ -111,9 +157,14 @@ export class Authing {
       return loginState
     }
 
-    const { code } = await AuthingMove.login()
-
     const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
+
+    const code  = await this.resetWxLoginCode()
+
+    if (!code) {
+      error('loginByCode', 'get wx login code error')
+      return null
+    }
 
     const _data: WxCodeLoginOptions = {
       connection: connection || 'wechat_mini_program_code',
@@ -127,6 +178,37 @@ export class Authing {
 
     return await this.login(_data, 'code')
   }
+
+  // async loginByPhone(
+  //   data: LoginByPhoneOptions
+  // ): Promise<Maybe<LoginState>> {
+  //   const loginState = await this.getLoginState()
+
+  //   if (loginState && loginState.expires_at > Date.now()) {
+  //     return loginState
+  //   }
+
+  //   const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
+
+  //   const code  = await this.resetWxLoginCode()
+
+  //   if (!code) {
+  //     error('loginByPhone', 'get wx login code error')
+  //     return null
+  //   }
+
+  //   const _data: WxPhoneLoginOptions = {
+  //     connection: connection || 'wechat_mini_program_phone',
+  //     extIdpConnidentifier,
+  //     wechatMiniProgramPhonePayload: {
+  //       ...wechatMiniProgramPhonePayload,
+  //       code
+  //     },
+  //     options
+  //   }
+
+  //   return await this.login(_data, 'phone')
+  // }
 
   async loginByPassword(
     data: PasswordLoginOptions
@@ -429,7 +511,7 @@ export class Authing {
     }
   }
 
-  async updateUserInfo(data: UserInfo): Promise<Maybe<UserInfo>> {
+  async updateUserInfo(data: UpdateUserInfo): Promise<Maybe<UserInfo>> {
     const loginState = await this.getLoginState()
 
     if (!loginState) {

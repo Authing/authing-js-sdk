@@ -167,6 +167,25 @@ export interface PassCodeLoginOptions {
   }
 }
 
+export interface UpdateUserInfo {
+  name?: string
+  nickname?: string
+  photo?: string
+  externalId?: string
+  birthdate?: string
+  country?: string
+  province?: string
+  city?: string
+  address?: string
+  streetAddress?: string
+  postalCode?: string
+  gender?: Gender
+  username?: string
+  customData?: Record<string, unknown>
+}
+
+export type Gender = 'M' | 'F' | 'U'
+
 export interface UserInfo {
   name?: string
   nickname?: string
@@ -179,7 +198,8 @@ export interface UserInfo {
   address?: string
   streetAddress?: string
   postalCode?: string
-  gender?: string
+  gender?: Gender
+  phone?: string
   username?: string
   customData?: any
   createdAt?: string
