@@ -18,7 +18,6 @@ import {
   UploadFileResponseData,
   LoginByCodeOptions,
   Maybe,
-  LoginByPhoneOptions,
   UpdateUserInfo
 } from './types'
 
@@ -142,6 +141,7 @@ export class Authing {
         await next()
       }
     } catch (e) {
+      this.storage.remove(getWxLoginCodeKey(this.options.appId))
       await next()
     } finally {
       return await this.getCachedWxLoginCode()
@@ -159,80 +159,56 @@ export class Authing {
 
     const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
 
-    let retryCount = 0
+    const code  = await this.resetWxLoginCode()
 
-    const login = async (): Promise<Maybe<LoginState>> => {
-      const code  = await this.resetWxLoginCode()
-
-      const _data: WxCodeLoginOptions = {
-        connection: connection || 'wechat_mini_program_code',
-        extIdpConnidentifier,
-        wechatMiniProgramCodePayload: {
-          ...wechatMiniProgramCodePayload,
-          code
-        },
-        options
-      }
-
-      const loginRes = await this.login(_data, 'code')
-
-      if (loginRes) {
-        return loginRes
-      }
-
-      if (retryCount <= 1) {
-        retryCount += 1        
-        return await login()
-      }
-
+    if (!code) {
+      error('loginByCode', 'get wx login code error')
       return null
     }
 
-    return await login()
-  }
-
-  async loginByPhone(
-    data: LoginByPhoneOptions
-  ): Promise<Maybe<LoginState>> {
-    const loginState = await this.getLoginState()
-
-    if (loginState && loginState.expires_at > Date.now()) {
-      return loginState
+    const _data: WxCodeLoginOptions = {
+      connection: connection || 'wechat_mini_program_code',
+      extIdpConnidentifier,
+      wechatMiniProgramCodePayload: {
+        ...wechatMiniProgramCodePayload,
+        code
+      },
+      options
     }
 
-    const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
-
-    let retryCount = 0
-
-    const login = async (): Promise<Maybe<LoginState>> => {
-      const code  = await this.resetWxLoginCode()
-
-      const _data: WxPhoneLoginOptions = {
-        connection: connection || 'wechat_mini_program_phone',
-        extIdpConnidentifier,
-        wechatMiniProgramPhonePayload: {
-          ...wechatMiniProgramPhonePayload,
-          code
-        },
-        options
-      }
-
-      const loginRes = await this.login(_data, 'phone')
-
-      if (loginRes) {
-        return loginRes
-      }
-
-      if (retryCount <= 1) {
-        retryCount += 1        
-        return await login()
-      }
-
-      return null
-    }
-
-    return await login()
+    return await this.login(_data, 'code')
   }
+
+  // async loginByPhone(
+  //   data: LoginByPhoneOptions
+  // ): Promise<Maybe<LoginState>> {
+  //   const loginState = await this.getLoginState()
+
+  //   if (loginState && loginState.expires_at > Date.now()) {
+  //     return loginState
+  //   }
+
+  //   const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
+
+  //   const code  = await this.resetWxLoginCode()
+
+  //   if (!code) {
+  //     error('loginByPhone', 'get wx login code error')
+  //     return null
+  //   }
+
+  //   const _data: WxPhoneLoginOptions = {
+  //     connection: connection || 'wechat_mini_program_phone',
+  //     extIdpConnidentifier,
+  //     wechatMiniProgramPhonePayload: {
+  //       ...wechatMiniProgramPhonePayload,
+  //       code
+  //     },
+  //     options
+  //   }
+
+  //   return await this.login(_data, 'phone')
+  // }
 
   async loginByPassword(
     data: PasswordLoginOptions
