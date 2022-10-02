@@ -1,583 +1,567 @@
 import {
-	IStorageProvider,
-	EncryptFunction,
-	LoginState,
-	EncryptType,
-	AuthingOptions,
-	RefreshTokenOptions,
-	WxCodeLoginOptions,
-	WxPhoneLoginOptions,
-	PasswordLoginOptions,
-	PassCodeLoginOptions,
-	SendSmsOptions,
-	GetPhoneOptions,
-	GetUserPhoneResponseData,
-	UserInfo,
-	UpdatePasswordOptions,
-	UploadFileResponseData,
-	LoginByCodeOptions,
-	SDKResponse,
-	UpdateUserInfo,
-	SimpleResponseData
+  IStorageProvider,
+  EncryptFunction,
+  LoginState,
+  EncryptType,
+  AuthingOptions,
+  RefreshTokenOptions,
+  WxCodeLoginOptions,
+  WxPhoneLoginOptions,
+  PasswordLoginOptions,
+  PassCodeLoginOptions,
+  SendSmsOptions,
+  NormalResponseData,
+  GetPhoneOptions,
+  GetUserPhoneResponseData,
+  UserInfo,
+  UpdatePasswordOptions,
+  UploadFileResponseData,
+  LoginByCodeOptions,
+  Maybe,
+  UpdateUserInfo
 } from './types'
 
-import { returnSuccess, returnError } from './helpers/return'
-
-import { getLoginStateKey, getWxLoginCodeKey, request, StorageProvider } from './helpers'
+import { error, getLoginStateKey, getWxLoginCodeKey, request, StorageProvider } from './helpers'
 
 import { AuthingMove } from './AuthingMove'
 
 export class Authing {
-	private storage: IStorageProvider
-	private readonly options: AuthingOptions
-	private readonly encryptFunction?: EncryptFunction
+  private storage: IStorageProvider
+  private readonly options: AuthingOptions
+  private readonly encryptFunction?: EncryptFunction
 
-	constructor(options: AuthingOptions) {
-		this.options = {
-			...options,
-			host: options.host || 'https://core.authing.cn'
-		}
+  constructor(options: AuthingOptions) {
+    this.options = {
+      ...options,
+      host: options.host || 'https://core.authing.cn'
+    }
 
-		this.storage = new StorageProvider()
+    this.storage = new StorageProvider()
 
-		this.encryptFunction = options.encryptFunction
+    this.encryptFunction = options.encryptFunction
 
-		this.resetWxLoginCode()
-	}
+    this.resetWxLoginCode()
+  }
 
-	async getLoginState(): Promise<SDKResponse<LoginState>> {
-		try {
-			const res = await this.storage.get(
-				getLoginStateKey(this.options.appId)
-			)
+  async getLoginState(): Promise<LoginState | null> {
+    try {
+      const res = await this.storage.get(
+        getLoginStateKey(this.options.appId)
+      )
   
-			const loginState: LoginState = res.data
+      const loginState = res.data
 
-			if (loginState.expires_at > Date.now()) {
-				return returnSuccess(loginState)
-			}
+      if (loginState.expires_at > Date.now()) {
+        return loginState
+      }
 
-			return returnError({
-				message: 'login state has expired, please login again'
-			})
-		} catch (e) {
-			return returnError({
-				message: JSON.stringify(e)
-			})
-		}
-	}
+      error('getLoginState', 'loginState has expired, please login again')
 
-	async clearLoginState(): Promise<SDKResponse<boolean>> {
-		try {
-			await this.storage.remove(
-				getLoginStateKey(this.options.appId)
-			)
-			return returnSuccess(true)
-		} catch (e) {
-			return returnError({
-				message: JSON.stringify(e)
-			})
-		}
-	}
+      return null
+    } catch (e) {
+      return null
+    }
+  }
 
-	private async saveLoginState(
-		loginState: LoginState
-	): Promise<LoginState> {
-		const _loginState: LoginState = {
-			...loginState,
-			expires_at: loginState.expires_in * 1000 + Date.now() - 3600 * 1000 * 2
-		}
+  async clearLoginState(): Promise<boolean> {
+    try {
+      await this.storage.remove(
+        getLoginStateKey(this.options.appId)
+      )
+      return true
+    } catch (e) {
+      error('clearLoginState', e)
+      return false
+    }
+  }
 
-		await this.storage.set(
-			getLoginStateKey(this.options.appId),
-			_loginState
-		)
+  private async saveLoginState(
+    loginState: LoginState
+  ): Promise<LoginState> {
+    const _loginState: LoginState = {
+      ...loginState,
+      expires_at: loginState.expires_in * 1000 + Date.now() - 3600 * 1000 * 2
+    }
 
-		return _loginState
-	}
+    await this.storage.set(
+      getLoginStateKey(this.options.appId),
+      _loginState
+    )
 
-	async getPublicKey(encryptType: EncryptType): Promise<SDKResponse<string>> {
-		try {
-			const [error, res] = await request({
-				method: 'GET',
-				url: `${this.options.host}/api/v3/system`
-			})
+    return _loginState
+  }
 
-			if (error) {
-				return returnError(error)
-			}
+  async getPublicKey(encryptType: EncryptType): Promise<string> {
+    try {
+      const res = await request({
+        method: 'GET',
+        url: `${this.options.host}/api/v3/system`
+      })
   
-			return returnSuccess(res[encryptType].publicKey)
-		} catch (e) {
-			return returnError({
-				message: 'get public key error: ' + JSON.stringify(e)
-			})
-		}
-	}
+      return res[encryptType].publicKey
+    } catch (e) {
+      error('getPublicKey', e)
+      return ''
+    }
+  }
 
-	private async getCachedWxLoginCode (): Promise<string> {
-		try {
-			const res = await this.storage.get(getWxLoginCodeKey(this.options.appId))
-			return res.data
-		} catch (e) {
-			return ''
-		}
-	}
+  private async getCachedWxLoginCode (): Promise<string> {
+    try {
+      const res = await this.storage.get(getWxLoginCodeKey(this.options.appId))
+      return res.data
+    } catch (e) {
+      return ''
+    }
+  }
 
-	private async cacheWxLoginCode (code: string): Promise<string> {
-		try {
-			await this.storage.set(getWxLoginCodeKey(this.options.appId), code)
-			return code
-		} catch (e) {
-			return ''
-		}
-	}
+  private async cacheWxLoginCode (code: string): Promise<string> {
+    try {
+      await this.storage.set(getWxLoginCodeKey(this.options.appId), code)
+      return code
+    } catch (e) {
+      error('cacheWxLoginCode', e)
+      return ''
+    }
+  }
 
-	private async resetWxLoginCode (): Promise<string> {
-		const next = async () => {
-			try {
-				const wxLoginRes = await AuthingMove.login()
-				await this.cacheWxLoginCode(wxLoginRes.code)
-				return true
-			} catch (e) {
-				return false
-			}
-		}
+  private async resetWxLoginCode (): Promise<string> {
+    const next = async () => {
+      try {
+        const wxLoginRes = await AuthingMove.login()
+        await this.cacheWxLoginCode(wxLoginRes.code)
+      } catch (e) {
+        error('resetWxLoginCode', e)
+      }
+    }
 
-		try {
-			await AuthingMove.checkSession()
-			const code = await this.getCachedWxLoginCode()
-			if (!code) {
-				await next()
-			}
-		} catch (e) {
-			this.storage.remove(getWxLoginCodeKey(this.options.appId))
-			await next()
-		} finally {
-			return await this.getCachedWxLoginCode()
-		}
-	}
+    try {
+      await AuthingMove.checkSession()
+      const code = await this.getCachedWxLoginCode()
+      if (!code) {
+        await next()
+      }
+    } catch (e) {
+      this.storage.remove(getWxLoginCodeKey(this.options.appId))
+      await next()
+    } finally {
+      return await this.getCachedWxLoginCode()
+    }
+  }
 
-	async loginByCode(
-		data: LoginByCodeOptions
-	): Promise<SDKResponse<LoginState>> {
-		const [, loginState] = await this.getLoginState()
+  async loginByCode(
+    data: LoginByCodeOptions
+  ): Promise<Maybe<LoginState>> {
+    const loginState = await this.getLoginState()
 
-		if (loginState && loginState.expires_at > Date.now()) {
-			return returnSuccess(loginState)
-		}
+    if (loginState && loginState.expires_at > Date.now()) {
+      return loginState
+    }
 
-		const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
+    const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
 
-		const code  = await this.resetWxLoginCode()
+    const code  = await this.resetWxLoginCode()
 
-		if (!code) {
-			return returnError({
-				message: 'get wx login code error'
-			})
-		}
+    if (!code) {
+      error('loginByCode', 'get wx login code error')
+      return null
+    }
 
-		const _data: WxCodeLoginOptions = {
-			connection: connection || 'wechat_mini_program_code',
-			extIdpConnidentifier,
-			wechatMiniProgramCodePayload: {
-				...wechatMiniProgramCodePayload,
-				code
-			},
-			options
-		}
+    const _data: WxCodeLoginOptions = {
+      connection: connection || 'wechat_mini_program_code',
+      extIdpConnidentifier,
+      wechatMiniProgramCodePayload: {
+        ...wechatMiniProgramCodePayload,
+        code
+      },
+      options
+    }
 
-		return await this.login(_data, 'code')
-	}
+    return await this.login(_data, 'code')
+  }
 
-	// async loginByPhone(
-	//   data: LoginByPhoneOptions
-	// ): Promise<Maybe<LoginState>> {
-	//   const loginState = await this.getLoginState()
+  // async loginByPhone(
+  //   data: LoginByPhoneOptions
+  // ): Promise<Maybe<LoginState>> {
+  //   const loginState = await this.getLoginState()
 
-	//   if (loginState && loginState.expires_at > Date.now()) {
-	//     return loginState
-	//   }
+  //   if (loginState && loginState.expires_at > Date.now()) {
+  //     return loginState
+  //   }
 
-	//   const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
+  //   const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
 
-	//   const code  = await this.resetWxLoginCode()
+  //   const code  = await this.resetWxLoginCode()
 
-	//   if (!code) {
-	//     error('loginByPhone', 'get wx login code error')
-	//     return null
-	//   }
+  //   if (!code) {
+  //     error('loginByPhone', 'get wx login code error')
+  //     return null
+  //   }
 
-	//   const _data: WxPhoneLoginOptions = {
-	//     connection: connection || 'wechat_mini_program_phone',
-	//     extIdpConnidentifier,
-	//     wechatMiniProgramPhonePayload: {
-	//       ...wechatMiniProgramPhonePayload,
-	//       code
-	//     },
-	//     options
-	//   }
+  //   const _data: WxPhoneLoginOptions = {
+  //     connection: connection || 'wechat_mini_program_phone',
+  //     extIdpConnidentifier,
+  //     wechatMiniProgramPhonePayload: {
+  //       ...wechatMiniProgramPhonePayload,
+  //       code
+  //     },
+  //     options
+  //   }
 
-	//   return await this.login(_data, 'phone')
-	// }
+  //   return await this.login(_data, 'phone')
+  // }
 
-	async loginByPassword(
-		data: PasswordLoginOptions
-	): Promise<SDKResponse<LoginState>> {
-		if (
-			data.options?.passwordEncryptType &&
+  async loginByPassword(
+    data: PasswordLoginOptions
+  ): Promise<Maybe<LoginState>> {
+    if (
+      data.options?.passwordEncryptType &&
       data.options?.passwordEncryptType !== 'none'
-		) {
-			if (!this.encryptFunction) {
-				return returnError({
-					message: 'encryptFunction is required, if passwordEncryptType is not "none"'
-				})
-			}
+    ) {
+      if (!this.encryptFunction) {
+        error(
+          'loginByPassword',
+          'encryptFunction is required, if passwordEncryptType is not "none"'
+        )
+        return null
+      }
 
-			const [error, publicKey] = await this.getPublicKey(
-				data.options?.passwordEncryptType
-			)
+      const publicKey = await this.getPublicKey(
+        data.options?.passwordEncryptType
+      )
 
-			if (error) {
-				return returnError(error)
-			}
+      if (!publicKey) {
+        error('loginByPassword', 'publicKey is invalid')
+        return null
+      }
 
-			data.passwordPayload.password = this.encryptFunction(
-				data.passwordPayload.password,
-        publicKey as string
-			)
-		}
+      data.passwordPayload.password = this.encryptFunction(
+        data.passwordPayload.password,
+        publicKey
+      )
+    }
 
-		const _data: PasswordLoginOptions = {
-			...data,
-			connection: 'PASSWORD'
-		}
+    const _data: PasswordLoginOptions = {
+      ...data,
+      connection: 'PASSWORD'
+    }
 
-		return await this.login(_data, 'password')
-	}
+    return await this.login(_data, 'password')
+  }
 
-	async loginByPassCode(
-		data: PassCodeLoginOptions
-	): Promise<SDKResponse<LoginState>> {
-		if (data.passCodePayload.phone) {
-			data.passCodePayload.phoneCountryCode =
+  async loginByPassCode(
+    data: PassCodeLoginOptions
+  ): Promise<Maybe<LoginState>> {
+    if (data.passCodePayload.phone) {
+      data.passCodePayload.phoneCountryCode =
         data.passCodePayload.phoneCountryCode || '+86'
-		}
+    }
 
-		const _data: PassCodeLoginOptions = {
-			...data,
-			connection: 'PASSCODE'
-		}
+    const _data: PassCodeLoginOptions = {
+      ...data,
+      connection: 'PASSCODE'
+    }
 
-		return await this.login(_data, 'passCode')
-	}
+    return await this.login(_data, 'passCode')
+  }
 
-	async logout(): Promise<SDKResponse<boolean>> {
-		await this.storage.remove(getWxLoginCodeKey(this.options.appId))
-    
-		const [loginStateError, loginState] = await this.getLoginState()
+  async logout(): Promise<boolean> {
+    await this.storage.remove(getWxLoginCodeKey(this.options.appId))
 
-		if (loginStateError) {
-			return returnSuccess(true)
-		}
+    const loginState = await this.getLoginState()
 
-		const { access_token, expires_at } = loginState as LoginState
+    if (!loginState) {
+      return true
+    }
 
-		if (!access_token || expires_at < Date.now()) {
-			await this.clearLoginState()
-			return returnSuccess(true)
-		}
+    const { access_token, expires_at } = loginState
 
-		const [logoutError] = await request({
-			method: 'POST',
-			url: `${this.options.host}/oidc/token/revocation`,
-			data: {
-				client_id: this.options.appId,
-				token: access_token
-			},
-			header: {
-				'content-type': 'application/x-www-form-urlencoded'
-			}
-		})
+    if (!access_token || expires_at < Date.now()) {
+      await this.clearLoginState()
+      return true
+    }
 
-		if (logoutError) {
-			return returnError(logoutError)
-		}
+    await request({
+      method: 'POST',
+      url: `${this.options.host}/oidc/token/revocation`,
+      data: {
+        client_id: this.options.appId,
+        token: access_token
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+    })
 
-		await this.clearLoginState()
+    await this.clearLoginState()
 
-		return returnSuccess(true)
-	}
+    return true
+  }
 
-	async sendSms(data: SendSmsOptions): Promise<SDKResponse<SimpleResponseData>> {
-		data.phoneCountryCode = data.phoneCountryCode || '+86'
+  async sendSms(data: SendSmsOptions): Promise<NormalResponseData> {
+    data.phoneCountryCode = data.phoneCountryCode || '+86'
 
-		const [error, res] = await request({
-			method: 'POST',
-			url: `${this.options.host}/api/v3/send-sms`,
-			data,
-			header: {
-				'x-authing-userpool-id': this.options.userPoolId
-			}
-		})
+    return await request({
+      method: 'POST',
+      url: `${this.options.host}/api/v3/send-sms`,
+      data,
+      header: {
+        'x-authing-userpool-id': this.options.userPoolId
+      }
+    })
+  }
 
-		if (error) {
-			return returnError(error)
-		}
-
-		return returnSuccess(res)
-	}
-
-	private async login(
-		data:
+  private async login(
+    data:
       | WxCodeLoginOptions
       | WxPhoneLoginOptions
       | PasswordLoginOptions
       | PassCodeLoginOptions,
-		type: string
-	): Promise<SDKResponse<LoginState>> {
-		const urlMap: Record<string, string> = {
-			code: '/api/v3/signin-by-mobile',
-			phone: '/api/v3/signin-by-mobile',
-			password: '/api/v3/signin',
-			passCode: '/api/v3/signin'
-		}
+    type: string
+  ): Promise<Maybe<LoginState>> {
+    const urlMap: Record<string, string> = {
+      code: '/api/v3/signin-by-mobile',
+      phone: '/api/v3/signin-by-mobile',
+      password: '/api/v3/signin',
+      passCode: '/api/v3/signin'
+    }
 
-		const [error, res] = await request({
-			method: 'POST',
-			url: this.options.host + urlMap[type],
-			data,
-			header: {
-				'x-authing-app-id': this.options.appId
-			}
-		})
+    const res = await request({
+      method: 'POST',
+      url: this.options.host + urlMap[type],
+      data,
+      header: {
+        'x-authing-app-id': this.options.appId
+      }
+    })
 
-		if (error) {
-			return returnError(error)
-		}
+    if (res.access_token || res.id_token) {
+      const loginState = await this.saveLoginState(res)
+      return loginState
+    }
 
-		if (res.access_token || res.id_token) {
-			const loginState = await this.saveLoginState(res)
-			return returnSuccess(loginState)
-		}
+    await this.clearLoginState()
 
-		await this.clearLoginState()
+    error('login', res)
 
-		return returnError(res)
-	}
+    return null
+  }
 
-	async refreshToken(): Promise<SDKResponse<LoginState>> {
-		const [error, loginState] = await this.getLoginState()
+  async refreshToken(): Promise<Maybe<LoginState>> {
+    const loginState = await this.getLoginState()
 
-		if (error) {
-			return returnError({
-				message: 'refresh_token has expired, please login again'
-			})
-		}
+    if (!loginState) {
+      error('refreshToken', 'refresh_token has expired, please login again')
+      return null
+    }
 
-		const { refresh_token, expires_at } = loginState as LoginState
+    const { refresh_token, expires_at } = loginState
 
-		if (!refresh_token) {
-			return returnError({
-				message: 'refresh_token must not be empty'
-			})
-		}
+    if (!refresh_token) {
+      error('refreshToken', 'refresh_token must not be empty')
+      return null
+    }
 
-		if (expires_at < Date.now()) {
-			return returnError({
-				message: 'refresh_token has expired, please login again'
-			})
-		}
+    if (expires_at < Date.now()) {
+      error('refreshToken', 'refresh_token has expired, please login again')
+      return null
+    }
 
-		const data: RefreshTokenOptions = {
-			grant_type: 'refresh_token',
-			redirect_uri: '',
-			refresh_token
-		}
+    const data: RefreshTokenOptions = {
+      grant_type: 'refresh_token',
+      redirect_uri: '',
+      refresh_token
+    }
 
-		const [refreshTokenError, refreshTokenRes] = await request({
-			method: 'POST',
-			url: `${this.options.host}/oidc/token`,
-			data,
-			header: {
-				'content-type': 'application/x-www-form-urlencoded',
-				'x-authing-app-id': this.options.appId
-			}
-		})
+    const res = await request({
+      method: 'POST',
+      url: `${this.options.host}/oidc/token`,
+      data,
+      header: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'x-authing-app-id': this.options.appId
+      }
+    })
 
-		if (refreshTokenError) {
-			return returnError(refreshTokenError)
-		}
+    if (res.access_token || res.id_token) {
+      const loginState = await this.saveLoginState(res)
+      return loginState
+    }
 
-		const newLoginState = await this.saveLoginState(refreshTokenRes)
-		return returnSuccess(newLoginState)
-	}
+    error('refreshToken', res)
 
-	async updatePassword(
-		data: UpdatePasswordOptions
-	): Promise<SDKResponse<SimpleResponseData>> {
-		const [error, loginState] = await this.getLoginState()
+    return null
+  }
 
-		if (error) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
+  async updatePassword(
+    data: UpdatePasswordOptions
+  ): Promise<boolean> {
+    const loginState = await this.getLoginState()
 
-		const { access_token, expires_at } = loginState as LoginState
+    if (!loginState) {
+      error(
+        'updatePassword',
+        'Token has expired, please login again'
+      )
+      return false
+    }
 
-		if (expires_at < Date.now()) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
+    const { access_token, expires_at } = loginState
 
-		if (data.passwordEncryptType && data.passwordEncryptType !== 'none') {
-			if (!this.encryptFunction) {
-				return returnError({
-					message: 'encryptFunction is required, if passwordEncryptType is not "none"'
-				})
-			}
+    if (expires_at < Date.now()) {
+      error(
+        'updatePassword',
+        'Token has expired, please login again'
+      )
+      return false
+    }
 
-			const [publicKeyError, publicKey] = await this.getPublicKey(data.passwordEncryptType)
+    if (data.passwordEncryptType && data.passwordEncryptType !== 'none') {
+      if (!this.encryptFunction) {
+        error(
+          'updatePassword',
+          'encryptFunction is required, if passwordEncryptType is not "none"'
+        )
+        return false
+      }
 
-			if (publicKeyError) {
-				return returnError(publicKeyError)
-			}
+      const publicKey = await this.getPublicKey(data.passwordEncryptType)
 
-			data.newPassword = this.encryptFunction(data.newPassword, publicKey as string)
-		}
+      if (!publicKey) {
+        error('loginByPassword', 'publicKey is invalid')
+        return false
+      }
 
-		const [updatePasswordError, updatePasswordRes] = await request({
-			method: 'POST',
-			url: `${this.options.host}/api/v3/update-password`,
-			data,
-			header: {
-				'x-authing-userpool-id': this.options.userPoolId,
-				Authorization: access_token
-			}
-		})
+      data.newPassword = this.encryptFunction(data.newPassword, publicKey)
+    }
 
-		if (updatePasswordError) {
-			return returnError(updatePasswordError)
-		}
+    const res = await request({
+      method: 'POST',
+      url: `${this.options.host}/api/v3/update-password`,
+      data,
+      header: {
+        'x-authing-userpool-id': this.options.userPoolId,
+        Authorization: access_token
+      }
+    })
 
-		return returnSuccess(updatePasswordRes)
-	}
+    if (res.statusCode === 200) {
+      return true
+    }
 
-	async getUserInfo(): Promise<SDKResponse<UserInfo>> {
-		const [error, loginState] = await this.getLoginState()
+    error('updatePassword', res)
 
-		if (error) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
+    return false
+  }
 
-		const { access_token, expires_at } = loginState as LoginState
+  async getUserInfo(): Promise<Maybe<UserInfo>> {
+    const loginState = await this.getLoginState()
 
-		if (expires_at < Date.now()) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
+    if (!loginState) {
+      error('getUserInfo', 'Token has expired, please login again')
+      return null
+    }
 
-		const [getProfileError, getProfileRes] = await request({
-			method: 'GET',
-			url: `${this.options.host}/api/v3/get-profile`,
-			header: {
-				'x-authing-userpool-id': this.options.userPoolId,
-				Authorization: access_token
-			}
-		})
+    const { access_token, expires_at } = loginState
 
-		if (getProfileError) {
-			return returnError(getProfileError)
-		}
+    if (expires_at < Date.now()) {
+      error('getUserInfo', 'Token has expired, please login again')
+      return null
+    }
 
-		return returnSuccess(getProfileRes)
-	}
+    const res = await request({
+      method: 'GET',
+      url: `${this.options.host}/api/v3/get-profile`,
+      header: {
+        'x-authing-userpool-id': this.options.userPoolId,
+        Authorization: access_token
+      }
+    })
 
-	async updateAvatar(): Promise<SDKResponse<UploadFileResponseData>> {
-		try {
-			const res = await AuthingMove.chooseImage({
-				count: 1,
-				sourceType: ['album', 'camera'],
-				sizeType: ['original']
-			})
+    if (res.userId) {
+      return res
+    }
 
-			const uploadRes = await AuthingMove.uploadFile({
-				url: `${this.options.host}/api/v2/upload?folder=avatar`,
-				name: 'file',
-				filePath: res.tempFiles[0].tempFilePath
-			})
+    error('getUserInfo', res)
 
-			const parsedUploadRed = JSON.parse(uploadRes.data)
+    return null
+  }
 
-			await this.updateUserInfo({
-				photo: parsedUploadRed.data.url
-			})
+  async updateAvatar(): Promise<Maybe<UploadFileResponseData>> {
+    try {
+      const res = await AuthingMove.chooseImage({
+        count: 1,
+        sourceType: ['album', 'camera'],
+        sizeType: ['original']
+      })
 
-			return returnSuccess(parsedUploadRed)
-		} catch (e) {
-			return returnError({
-				message: JSON.stringify(e)
-			})
-		}
-	}
+      const uploadRes = await AuthingMove.uploadFile({
+        url: `${this.options.host}/api/v2/upload?folder=avatar`,
+        name: 'file',
+        filePath: res.tempFiles[0].tempFilePath
+      })
 
-	async updateUserInfo(data: UpdateUserInfo): Promise<SDKResponse<UserInfo>> {
-		const [error, loginState] = await this.getLoginState()
+      const parsedUploadRed = JSON.parse(uploadRes.data)
 
-		if (error) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
+      await this.updateUserInfo({
+        photo: parsedUploadRed.data.url
+      })
 
-		const { access_token, expires_at }  = loginState as LoginState
+      return parsedUploadRed
+    } catch (e) {
+      error('updateAvatar', e)
+      return null
+    }
+  }
 
-		if (expires_at < Date.now()) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
+  async updateUserInfo(data: UpdateUserInfo): Promise<Maybe<UserInfo>> {
+    const loginState = await this.getLoginState()
 
-		const [updateProfileError, updateProfileRes] = await request({
-			method: 'POST',
-			url: `${this.options.host}/api/v3/update-profile`,
-			data,
-			header: {
-				'x-authing-userpool-id': this.options.userPoolId,
-				Authorization: access_token
-			}
-		})
+    if (!loginState) {
+      error(
+        'updateUserInfo',
+        'Token has expired, please login again'
+      )
+      return null
+    }
 
-		if (updateProfileError) {
-			return returnError(updateProfileError)
-		}
+    const { access_token, expires_at }  = loginState
 
-		return returnSuccess(updateProfileRes)
-	}
+    if (expires_at < Date.now()) {
+      error(
+        'updateUserInfo',
+        'Token has expired, please login again'
+      )
+    }
 
-	async getPhone(data: GetPhoneOptions): Promise<SDKResponse<GetUserPhoneResponseData>> {
-		const [getPhoneError, getPhoneRes] = await request({
-			method: 'POST',
-			url: `${this.options.host}/api/v3/get-wechat-miniprogram-phone`,
-			data,
-			header: {
-				'x-authing-userpool-id': this.options.userPoolId
-			}
-		})
+    const res = await request({
+      method: 'POST',
+      url: `${this.options.host}/api/v3/update-profile`,
+      data,
+      header: {
+        'x-authing-userpool-id': this.options.userPoolId,
+        Authorization: access_token
+      }
+    })
 
-		if (getPhoneError) {
-			return returnError(getPhoneError)
-		}
+    if (res.userId) {
+      return res
+    }
 
-		if (getPhoneRes.phone_info) {
-			return returnSuccess(getPhoneRes.phone_info)
-		}
+    error('updateUserInfo', res)
 
-		return returnError(getPhoneRes)
-	}
+    return null
+  }
+
+  async getPhone(data: GetPhoneOptions): Promise<GetUserPhoneResponseData> {
+    const res = await request({
+      method: 'POST',
+      url: `${this.options.host}/api/v3/get-wechat-miniprogram-phone`,
+      data,
+      header: {
+        'x-authing-userpool-id': this.options.userPoolId
+      }
+    })
+
+    return res.phone_info || error('getPhone', res)
+  }
 }

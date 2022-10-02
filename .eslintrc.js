@@ -28,12 +28,11 @@ module.exports = {
       'error',
       'never'
     ],
-    "indent": [ "error", "tab", { "SwitchCase": 1 } ],
     // `eslint/no-unused-vars` will check all qualified ts files, include d.ts
     // using interface to define function types is compliant, but `eslint/no-unused-vars` will prompt for unused parameters......
     // so set `args === none` here
     // and leave `no-unused-vars` to `@typescript-eslint/no-unused-vars`
-    "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false, varsIgnorePattern: '.*' }],
+    "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
     "@typescript-eslint/no-unused-vars": ['error'],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-var-requires': 'off',
