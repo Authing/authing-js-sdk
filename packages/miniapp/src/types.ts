@@ -1,9 +1,9 @@
 import {
-  GetStorageCallbackData,
-  IObject,
-  RemoveStorageFailData,
-  RemoveStorageSuccessData,
-  SetStorageCallbackData
+	GetStorageCallbackData,
+	IObject,
+	RemoveStorageFailData,
+	RemoveStorageSuccessData,
+	SetStorageCallbackData
 } from '@authing/authingmove-core'
 
 export interface AuthingOptions {
@@ -18,11 +18,11 @@ export interface EncryptFunction {
 }
 
 export declare abstract class IStorageProvider {
-  get(key: string): Promise<GetStorageCallbackData>
+	get(key: string): Promise<GetStorageCallbackData>
 
-  set(key: string, data: unknown): Promise<SetStorageCallbackData>
+	set(key: string, data: unknown): Promise<SetStorageCallbackData>
 
-  remove(key: string): Promise<RemoveStorageSuccessData | RemoveStorageFailData>
+	remove(key: string): Promise<RemoveStorageSuccessData | RemoveStorageFailData>
 }
 
 export interface LoginOptions {
@@ -344,4 +344,14 @@ export interface UploadFileResponseData {
   }
 }
 
-export type Maybe<T> = T | null
+export type SDKResponse<T> = SDKResponseSuccess<T> | SDKResponseError
+
+export type SDKResponseSuccess<T> = [null, T]
+
+export type SDKResponseError = [ErrorData, undefined]
+
+export interface ErrorData {
+  message: unknown
+  statusCode?: number
+  apiCode?: number
+}
