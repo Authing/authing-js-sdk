@@ -265,6 +265,8 @@ export class Authing {
   }
 
   async logout(): Promise<boolean> {
+    await this.storage.remove(getWxLoginCodeKey(this.options.appId))
+
     const loginState = await this.getLoginState()
 
     if (!loginState) {
