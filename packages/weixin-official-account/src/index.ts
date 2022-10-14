@@ -45,7 +45,7 @@ export class AuthingWxmp {
 		).toString()}`
 	}
 
-	getUserInfo(search: string) {
+	getUserInfo(search?: string) {
 		search = search || window.location.search
 
 		const urlParams = new URLSearchParams(search)
