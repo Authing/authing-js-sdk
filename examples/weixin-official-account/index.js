@@ -2,10 +2,16 @@ import { AuthingWxmp } from '@authing/weixin-official-account'
 
 
 const authingWx = new AuthingWxmp({
-  identifier: "此社会化身份源的唯一标志，你在 Authing 控制台创建微信身份源的时候填写的",
-  appId: "Authing 应用 ID",
-  host: "Authing 应用域名，如 https://my-awesome-app.authing.cn",
-  redirectUrl: '指定的回调链接，选填，默认使用控制台配置的回调地址'
+  // 此社会化身份源的唯一标志，你在 Authing 控制台创建微信身份源的时候填写的
+  identifier: "AUTHING_IDENTIFIER",
+
+  appId: "AUTHING_APP_ID",
+
+  // Authing 控制台 -> 选择已创建的小程序应用 -> 应用配置 -> -> 认证配置 -> 认证地址
+  host: "https://my-awesome-app.authing.cn",
+
+  // Authing 控制台 -> 选择已创建的小程序应用 -> 应用配置 -> -> 认证配置 -> 登录回调 URL
+  redirectUrl: ''
 })
 
 const query =  (function (){

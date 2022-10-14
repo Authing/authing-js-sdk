@@ -8,7 +8,7 @@ import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
   appId: '630ed3137dd6f2fd7001da24',
-  host: 'https://core.authing.cn',
+  host: 'https://test-auth-zhaoyiming.authing.cn',
   userPoolId: '62e221f85f5ac5cc47037a39',
   encryptFunction
 })
@@ -24,7 +24,6 @@ Page({
     })
     
     const res = await authing.loginByCode({
-      connection: 'wechat_mini_program_code',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramCodePayload: {
         encryptedData,
@@ -54,7 +53,7 @@ Page({
   },
 
   async loginByPassword () {
-    authing.loginByPassword({
+    const res = await authing.loginByPassword({
       connection: 'PASSWORD',
       passwordPayload: {
         password: '123',
@@ -64,10 +63,8 @@ Page({
         passwordEncryptType: 'sm2',
         scope: 'offline_access openid profile'
       }
-    }).then(res => {
-      console.log('res: ', res)
     })
-    // console.log('authing.loginByPassword res: ', res)
+    console.log('authing.loginByPassword res: ', res)
   },
 
   async sendSms () {
@@ -83,7 +80,6 @@ Page({
 
   async loginByPassCode () {
     const res = await authing.loginByPassCode({
-      connection: 'PASSCODE',
       passCodePayload: {
         // 手机收到的短信验证码
         passCode: '5671',
