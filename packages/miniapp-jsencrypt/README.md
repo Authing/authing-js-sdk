@@ -12,9 +12,16 @@ import { Authing } from '@authing/miniapp-wx'
 import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
 const authing = new Authing({
-  appId: '630b549efa97ba795338e2cd',
-  host: 'http://localhost:3000',
-  userPoolId: '630b549d5a697473a2d7fa20',
+  appId: 'AUTHING_APP_ID',
+
+  // 公有云部署：Authing 控制台 -> 选择已创建的小程序应用 -> 应用配置 -> 认证配置 -> 认证地址
+  // 私有化部署：填写你的私有服务地址
+  host: 'https://my-authing-app.example.com',
+
+  // 用户池 ID
+  userPoolId: '62e221xxxxxxxxxxx7037a39',
+
+  // 非必传，密码默认将以明文传输
   encryptFunction
 })
 ```
