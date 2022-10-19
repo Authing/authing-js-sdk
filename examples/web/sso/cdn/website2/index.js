@@ -74,7 +74,7 @@ getUserInfo.onclick = function () {
   })
 }
 
-loginState.onclick = function () {
+getLoginState.onclick = function () {
   authing.getLoginState().then(loginState => {
     console.log('loginState: ', loginState)
   })

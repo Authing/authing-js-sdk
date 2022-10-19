@@ -82,13 +82,7 @@ export default {
     } else {
       console.log("normal");
 
-      this.authing.getLoginState().then((res) => {
-        this.loginState = res;
-        if (!res) {
-          // 静默登录。取不到用户信息直接跳转到授权中心
-          this.authing.loginWithRedirect();
-        }
-      });
+      this.getLoginState()
     }
   },
   methods: {

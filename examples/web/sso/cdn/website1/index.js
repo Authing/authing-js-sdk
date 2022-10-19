@@ -14,18 +14,14 @@ var authing = new AuthingFactory.Authing({
 
 if (authing.isRedirectCallback()) {
   console.log('redirect')
-  authing.handleRedirectCallback().then((loginState) => {
+  authing.handleRedirectCallback().then(loginState => {
     console.log('loginState: ', loginState)
     // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
     window.location.replace('/')
   })
 } else {
   authing.getLoginState().then(loginState => {
-    console.log('loginState: ', loginState)
-    if (!loginState) {
-      // 静默登录。取不到用户信息直接跳转到授权中心
-      authing.loginWithRedirect();
-    }
+    console.log(loginState)
   })
 }
 
@@ -58,6 +54,7 @@ loginWithRedirect.onclick = function () {
     // 自定义的中间状态，会被传递到回调端点
     customState: {}
   }
+  // authing.loginWithRedirect(params)
   authing.loginWithRedirect()
 }
 
@@ -74,7 +71,7 @@ getUserInfo.onclick = function () {
   })
 }
 
-loginState.onclick = function () {
+getLoginState.onclick = function () {
   authing.getLoginState().then(loginState => {
     console.log('loginState: ', loginState)
   })

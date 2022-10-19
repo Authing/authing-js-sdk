@@ -137,14 +137,8 @@ export default defineComponent({
         });
       } else {
         console.log("normal");
-        // 静默登录，直接获取到用户信息
-        authing.getLoginState().then((res) => {
-          state.loginState = res;
-          if (!res) {
-            // 静默登录。取不到用户信息直接跳转到授权中心
-            authing.loginWithRedirect();
-          }
-        });
+        
+        getLoginState()
       }
     });
 
