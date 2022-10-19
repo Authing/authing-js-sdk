@@ -20,7 +20,7 @@ if (authing.isRedirectCallback()) {
     window.location.replace('/')
   })
 } else {
-  authing.getLoginState({ ignoreCache: true }).then(loginState => {
+  authing.getLoginState().then(loginState => {
     console.log('loginState: ', loginState)
     if (!loginState) {
       // 静默登录。取不到用户信息直接跳转到授权中心
