@@ -20,7 +20,7 @@ if (authing.isRedirectCallback()) {
     window.location.replace('/')
   })
 } else {
-  authing.getLoginState({ ignoreCache: true }).then(loginState => {
+  authing.getLoginState().then(loginState => {
     console.log('loginState: ', loginState)
     if (!loginState) {
       // 静默登录。取不到用户信息直接跳转到授权中心
@@ -33,6 +33,7 @@ var loginWithPopup = document.querySelector('#loginWithPopup')
 var loginWithRedirect = document.querySelector('#loginWithRedirect')
 var logoutWithRedirect = document.querySelector('#logoutWithRedirect')
 var getUserInfo = document.querySelector('#getUserInfo')
+var getLoginState = document.querySelector('#getLoginState')
 
 loginWithPopup.onclick = function () {
   const params = {
@@ -62,12 +63,19 @@ loginWithRedirect.onclick = function () {
 
 logoutWithRedirect.onclick = function () {
   authing.logoutWithRedirect({
-    redirectUri: 'https://www.baidu.com'
+    // 可选项，如果传入此参数，需要在控制台配置【登出回调 URL】
+    redirectUri: 'YOUR_REDIRECT_URL'
   })
 }
 
 getUserInfo.onclick = function () {
   authing.getUserInfo().then(userInfo => {
     console.log('userInfo: ', userInfo)
+  })
+}
+
+loginState.onclick = function () {
+  authing.getLoginState().then(loginState => {
+    console.log('loginState: ', loginState)
   })
 }

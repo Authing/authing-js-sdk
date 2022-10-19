@@ -68,7 +68,11 @@ export default defineComponent({
      * 以弹窗方式打开 Authing 托管的登录页
      */
     const loginWithPopup = async () => {
-      const res = await authing.loginWithPopup();
+      const params = {
+        // 即使在用户已登录时也提示用户再次登录
+        forced: true
+      }
+      const res = await authing.loginWithPopup(params);
       state.loginState = res;
     };
 
@@ -76,22 +80,26 @@ export default defineComponent({
      * 以跳转方式打开 Authing 托管的登录页
      */
     const loginWithRedirect = () => {
-      authing.loginWithRedirect({
-        forced: true
-      });
+      const params = {
+        redirectUri: 'YOUR_REDIRECT_URL',
+
+        // 发起登录的 URL，若设置了 redirectToOriginalUri 会在登录结束后重定向回到此页面，默认为当前 URL
+        originalUri: 'YOUR_ORIGINAL_URL',
+
+        // 即使在用户已登录时也提示用户再次登录
+        forced: true,
+
+        // 自定义的中间状态，会被传递到回调端点
+        customState: {}
+      }
+      authing.loginWithRedirect(params);
     };
 
     /**
-     * 用 Access Token 获取用户身份信息
+     * 获取用户身份信息
      */
     const getUserInfo = async () => {
-      if (!state.loginState) {
-        alert("用户未登录");
-        return;
-      }
-      const userInfo = await authing.getUserInfo({
-        accessToken: state.loginState.accessToken,
-      });
+      const userInfo = await authing.getUserInfo();
       state.userInfo = userInfo;
     };
 
@@ -101,35 +109,42 @@ export default defineComponent({
      const getLoginState = async () => {
       const res = await authing.getLoginState();
       state.loginState = res;
-
-      if (res) {
-        getUserInfo()
-      }
     };
 
     /**
      * 登出
      */
     const logout = () => {
-      console.log(authing.logoutWithRedirect)
-      authing.logoutWithRedirect();
+      authing.logoutWithRedirect({
+        // 可选项，如果传入此参数，需要在控制台配置【登出回调 URL】
+        redirectUri: 'YOUR_REDIRECT_URL'
+      });
     };
 
     onMounted(() => {
-      // 校验当前 url 是否是登录回调地址
+      // 校验当前 url 是否是登录回调 URL
       if (authing.isRedirectCallback()) {
         console.log("redirect");
 
         /**
-         * 以跳转方式打开 Authing 托管的登录页，认证成功后，需要配合 handleRedirectCallback，
+         * 以跳转方式打开 Authing 托管的登录页，认证成功后需要配合 handleRedirectCallback 方法，
          * 在回调端点处理 Authing 发送的授权码或 token，获取用户登录态
          */
         authing.handleRedirectCallback().then((res) => {
           state.loginState = res;
+          // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
           window.location.replace("/");
         });
       } else {
-        getLoginState();
+        console.log("normal");
+        // 静默登录，直接获取到用户信息
+        authing.getLoginState().then((res) => {
+          state.loginState = res;
+          if (!res) {
+            // 静默登录。取不到用户信息直接跳转到授权中心
+            authing.loginWithRedirect();
+          }
+        });
       }
     });
 
