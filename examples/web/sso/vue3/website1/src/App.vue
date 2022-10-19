@@ -7,14 +7,14 @@
       </a>
     </p>
     <p>
-      <button @click="loginWithPopup">loginWithPopup</button>
+      <button @click="loginWithPopup">Login With Popup</button>
     </p>
     <p>
-      <button @click="loginWithRedirect">loginWithRedirect</button>
-      <button @click="logout">logout</button>
+      <button @click="loginWithRedirect">Login With Redirect</button>
+      <button @click="logout">Logout</button>
     </p>
     <p>
-      <button @click="getLoginState">getLoginState</button>
+      <button @click="getLoginState">Get Login State</button>
     </p>
     <p v-if="loginState">
       <textarea
@@ -25,7 +25,7 @@
       ></textarea>
     </p>
     <p>
-      <button @click="getUserInfo">getUserInfo</button>
+      <button @click="getUserInfo">Get User Info</button>
     </p>
     <p v-if="userInfo">
       <textarea
@@ -99,7 +99,7 @@ export default defineComponent({
      * 获取用户的登录状态
      */
      const getLoginState = async () => {
-      const res = await authing.getLoginState({ ignoreCache: true });
+      const res = await authing.getLoginState();
       state.loginState = res;
 
       if (res) {

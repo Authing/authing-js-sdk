@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     async getLoginState() {
-      const res = await this.authing.getLoginState({ ignoreCache: true });
+      const res = await this.authing.getLoginState();
       if (res) {
         this.loginState = res;
         this.getUserInfo();

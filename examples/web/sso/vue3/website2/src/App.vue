@@ -12,7 +12,7 @@
           :value="JSON.stringify(loginState.accessToken, null, 2)"
         ></textarea>
       </p>
-      <button @click="getUserInfo">获取用户信息</button>
+      <button @click="getUserInfo">Get User Info</button>
       <p v-if="userInfo">
         User Info:<br />
         <textarea
@@ -36,7 +36,7 @@
         Expire At: <code>{{ loginState.expireAt }}</code>
       </p>
       <p>
-        <button @click="logout">退出登录</button>
+        <button @click="logout">Logout</button>
       </p>
     </div>
   </div>
@@ -72,7 +72,7 @@ export default defineComponent({
      * 获取用户的登录状态
      */
     const getLoginState = async () => {
-      const res = await authing.getLoginState({ ignoreCache: true });
+      const res = await authing.getLoginState();
       state.loginState = res;
 
       if (!res) {
