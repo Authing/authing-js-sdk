@@ -45,11 +45,18 @@ import { Authing } from "@authing/web";
 export default defineComponent({
   name: "App",
   setup() {
-    const sdk = new Authing({
-      domain: "",
-      appId: "",
-      redirectUri: "",
-      userPoolId: ''
+    const authing = new Authing({
+      // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
+      domain: 'AUTHING_DOMAIN_URL',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 端点信息 -> APP ID
+      appId: 'AUTHING_APP_ID',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 认证配置 -> 登录回调 URL
+      redirectUri: 'YOUR_REDIRECT_URL',
+
+      // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
+      userPoolId: 'AUTHING_USER_POOL_ID'
     });
 
     const state = reactive({
@@ -58,18 +65,10 @@ export default defineComponent({
     });
 
     /**
-     * 获取用户的登录状态
-     */
-    const getLoginState = async () => {
-      const res = await sdk.getLoginState();
-      state.loginState = res;
-    };
-
-    /**
      * 以弹窗方式打开 Authing 托管的登录页
      */
     const loginWithPopup = async () => {
-      const res = await sdk.loginWithPopup();
+      const res = await authing.loginWithPopup();
       state.loginState = res;
     };
 
@@ -77,7 +76,7 @@ export default defineComponent({
      * 以跳转方式打开 Authing 托管的登录页
      */
     const loginWithRedirect = () => {
-      sdk.loginWithRedirect({
+      authing.loginWithRedirect({
         forced: true
       });
     };
@@ -90,30 +89,42 @@ export default defineComponent({
         alert("用户未登录");
         return;
       }
-      const userInfo = await sdk.getUserInfo({
+      const userInfo = await authing.getUserInfo({
         accessToken: state.loginState.accessToken,
       });
       state.userInfo = userInfo;
     };
 
     /**
+     * 获取用户的登录状态
+     */
+     const getLoginState = async () => {
+      const res = await authing.getLoginState({ ignoreCache: true });
+      state.loginState = res;
+
+      if (res) {
+        getUserInfo()
+      }
+    };
+
+    /**
      * 登出
      */
     const logout = () => {
-      console.log(sdk.logoutWithRedirect)
-      sdk.logoutWithRedirect();
+      console.log(authing.logoutWithRedirect)
+      authing.logoutWithRedirect();
     };
 
     onMounted(() => {
       // 校验当前 url 是否是登录回调地址
-      if (sdk.isRedirectCallback()) {
+      if (authing.isRedirectCallback()) {
         console.log("redirect");
 
         /**
          * 以跳转方式打开 Authing 托管的登录页，认证成功后，需要配合 handleRedirectCallback，
          * 在回调端点处理 Authing 发送的授权码或 token，获取用户登录态
          */
-        sdk.handleRedirectCallback().then((res) => {
+        authing.handleRedirectCallback().then((res) => {
           state.loginState = res;
           window.location.replace("/");
         });

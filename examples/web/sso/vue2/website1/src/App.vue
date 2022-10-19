@@ -52,10 +52,17 @@ export default {
   },
   created() {
     this.authing = new Authing({
-      domain: 'https://lljoanfkdaaphfih.authing.cn',
-      appId: '634fb2b5721713dc06fc7696',
-      redirectUri: 'https://localhost:8001/',
-      userPoolId: '63466a5f4d528fa71040b0ee',
+      // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
+      domain: 'AUTHING_DOMAIN_URL',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 端点信息 -> APP ID
+      appId: 'AUTHING_APP_ID',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 认证配置 -> 登录回调 URL
+      redirectUri: 'YOUR_REDIRECT_URL',
+
+      // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
+      userPoolId: 'AUTHING_USER_POOL_ID'
     });
   },
   mounted() {
