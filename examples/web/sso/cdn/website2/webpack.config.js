@@ -45,7 +45,7 @@ module.exports = {
   devServer: {
     host: 'localhost',
     inline: false, // 启用热更新
-    port: 8002,
+    port: 8001,
     progress: true,
     contentBase: resolve('./'),
     compress: true,

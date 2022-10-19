@@ -57,7 +57,7 @@ loginWithRedirect.onclick = function () {
     // 自定义的中间状态，会被传递到回调端点
     customState: {}
   }
-  authing.loginWithRedirect(params)
+  authing.loginWithRedirect()
 }
 
 logoutWithRedirect.onclick = function () {
