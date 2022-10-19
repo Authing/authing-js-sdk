@@ -45,29 +45,29 @@ export default {
   name: "App",
   data() {
     return {
-      sdk: null,
+      authing: null,
       loginState: null,
       userInfo: null,
     };
   },
   created() {
-    this.sdk = new Authing({
-      domain: "",
-      appId: "",
-      redirectUri: "",
-      userPoolId: ''
+    this.authing = new Authing({
+      domain: 'https://lljoanfkdaaphfih.authing.cn',
+      appId: '634fb2b5721713dc06fc7696',
+      redirectUri: 'https://localhost:8001/',
+      userPoolId: '63466a5f4d528fa71040b0ee',
     });
   },
   mounted() {
-    // 校验当前 url 是否是登录回调地址
-    if (this.sdk.isRedirectCallback()) {
+   // 校验当前 url 是否是登录回调地址
+   if (this.authing.isRedirectCallback()) {
       console.log("redirect");
 
       /**
        * 以跳转方式打开 Authing 托管的登录页，认证成功后，需要配合 handleRedirectCallback，
        * 在回调端点处理 Authing 发送的授权码或 token，获取用户登录态
        */
-      this.sdk.handleRedirectCallback().then((res) => {
+      this.authing.handleRedirectCallback().then((res) => {
         this.loginState = res;
         window.location.replace("/");
       });
@@ -80,28 +80,25 @@ export default {
      * 以弹窗方式打开 Authing 托管的登录页
      */
     async loginWithPopup() {
-      const res = await this.sdk.loginWithPopup();
+      const res = await this.authing.loginWithPopup();
       this.loginState = res;
     },
     /**
      * 以跳转方式打开 Authing 托管的登录页
      */
     loginWithRedirect() {
-      this.sdk.loginWithRedirect();
+      this.authing.loginWithRedirect();
     },
     /**
      * 获取用户的登录状态
      */
-    async getLoginState() {
-      const state = await this.sdk.getLoginState();
+     async getLoginState() {
+      const state = await this.authing.getLoginState({ ignoreCache: true });
       this.loginState = state;
-      console.log(this.loginState);
+      if (state) {
+        this.getUserInfo()
+      }
 
-      const userInfo = await this.sdk.getUserInfo({
-        accessToken: state.accessToken
-      });
-
-      console.log('userInfo: ', userInfo);
     },
     /**
      * 用 Access Token 获取用户身份信息
@@ -111,7 +108,7 @@ export default {
         alert("用户未登录");
         return;
       }
-      const userInfo = await this.sdk.getUserInfo({
+      const userInfo = await this.authing.getUserInfo({
         accessToken: this.loginState.accessToken,
       });
       this.userInfo = userInfo;
@@ -120,7 +117,7 @@ export default {
      * 登出
      */
     logoutWithRedirect() {
-      this.sdk.logoutWithRedirect();
+      this.authing.logoutWithRedirect();
     },
   },
 };

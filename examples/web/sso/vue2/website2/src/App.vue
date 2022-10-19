@@ -45,50 +45,57 @@ export default {
   name: "App",
   data() {
     return {
-      sdk: null,
+      authing: null,
       loginState: null,
       userInfo: null
     };
   },
   created() {
-    this.sdk = new Authing({
-      domain: "",
-      appId: "",
-      redirectUri: "",
-      userPoolId: ''
+    this.authing = new Authing({
+      domain: 'https://lljoanfkdaaphfih.authing.cn',
+      appId: '634fb2d776ee8e6b35dc191d',
+      redirectUri: 'https://localhost:8002/',
+      userPoolId: '63466a5f4d528fa71040b0ee'
     });
   },
   mounted() {
     // 校验当前 url 是否是登录回调地址
-    if (this.sdk.isRedirectCallback()) {
+    if (this.authing.isRedirectCallback()) {
       console.log("redirect");
 
       /**
        * 以跳转方式打开 Authing 托管的登录页，认证成功后，需要配合 handleRedirectCallback，
        * 在回调端点处理 Authing 发送的授权码或 token，获取用户登录态
        */
-      this.sdk.handleRedirectCallback().then((res) => {
+      this.authing.handleRedirectCallback().then((res) => {
         this.loginState = res;
         window.location.replace("/");
       });
     } else {
       console.log("normal");
       this.getLoginState();
-      this.getUserInfo();
     }
   },
   methods: {
     async getLoginState() {
-      const res = await this.sdk.getLoginState();
+      const res = await this.authing.getLoginState({ ignoreCache: true });
       if (res) {
         this.loginState = res;
+        this.getUserInfo();
       } else {
         // 静默登录。取不到用户信息直接跳转到授权中心
-        this.sdk.loginWithRedirect();
+        this.authing.loginWithRedirect();
       }
     },
     async getUserInfo () {
-      this.userInfo = await this.sdk.getUserInfo()
+      if (!this.loginState) {
+        alert("用户未登录");
+        return;
+      }
+      const userInfo = await this.authing.getUserInfo({
+        accessToken: this.loginState.accessToken,
+      });
+      this.userInfo = userInfo;
     }
   },
 };
