@@ -3,12 +3,19 @@ import { Authing } from '@authing/web';
 import type { LoginState, IUserInfo, NormalError } from '@authing/web/dist/typings/src/global';
 
 function App() {
-  const sdk = useMemo(() => {
+  const authing = useMemo(() => {
     return new Authing({
-      domain: "",
-      appId: "",
-      redirectUri: "",
-      userPoolId: ""
+      // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
+      domain: 'AUTHING_DOMAIN_URL',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 端点信息 -> APP ID
+      appId: 'AUTHING_APP_ID',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 认证配置 -> 登录回调 URL
+      redirectUri: 'YOUR_REDIRECT_URL',
+
+      // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
+      userPoolId: 'AUTHING_USER_POOL_ID'
     });
   }, []);
 
@@ -16,28 +23,32 @@ function App() {
   const [userInfo, setUserInfo] = useState<IUserInfo | NormalError>();
 
   useEffect(() => {
-    if (sdk.isRedirectCallback()) {
+    if (authing.isRedirectCallback()) {
       console.log('redirect');
-      sdk.handleRedirectCallback().then((res) => {
+      authing.handleRedirectCallback().then((res) => {
         setLoginState(res);
         window.location.replace('/');
       });
     } else {
       console.log('normal');
 
-      sdk.getLoginState().then((res) => {
+      authing.getLoginState().then((res) => {
         if (res) {
           setLoginState(res);
         } else {
-          sdk.loginWithRedirect();
+          authing.loginWithRedirect();
         }
       });
     }
-  }, [sdk]);
+  }, []);
 
   const geteUserInfo = async () => {
-    const userInfo = await sdk.getUserInfo()
+    const userInfo = await authing.getUserInfo()
     setUserInfo(userInfo)
+  }
+
+  const logout = () => {
+    authing.logoutWithRedirect()
   }
 
   return (
@@ -69,7 +80,8 @@ function App() {
         <p>
           Expire At: <code>{loginState?.expireAt}</code>
         </p>
-        <button onClick={() => geteUserInfo()}>geteUserInfo</button>
+        <button onClick={() => geteUserInfo()}>Get User Info</button>
+        <button onClick={() => logout()}>Logout</button>
         <p>
           User Info: <br />
           {userInfo && (

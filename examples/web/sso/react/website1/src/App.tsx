@@ -7,12 +7,19 @@ import {
 } from '@authing/web/dist/typings/src/global';
 
 function App() {
-  const sdk = useMemo(() => {
+  const authing = useMemo(() => {
     return new Authing({
-      domain: "",
-      appId: "",
-      redirectUri: "",
-      userPoolId: ''
+      // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
+      domain: 'AUTHING_DOMAIN_URL',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 端点信息 -> APP ID
+      appId: 'AUTHING_APP_ID',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 认证配置 -> 登录回调 URL
+      redirectUri: 'YOUR_REDIRECT_URL',
+
+      // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
+      userPoolId: 'AUTHING_USER_POOL_ID'
     });
   }, []);
 
@@ -20,47 +27,41 @@ function App() {
   const [userInfo, setUserInfo] = useState<IUserInfo | NormalError | null>();
 
   const loginWithPopup = async () => {
-    const res = await sdk.loginWithPopup();
-    setLoginState(res);
+    const loginState = await authing.loginWithPopup();
+    setLoginState(loginState);
   };
 
   const loginWithRedirect = () => {
-    sdk.loginWithRedirect();
+    authing.loginWithRedirect();
   };
 
   const getLoginState = useCallback(async () => {
-    const state = await sdk.getLoginState();
-    setLoginState(state);
-  }, [sdk]);
+    const loginState = await authing.getLoginState();
+    setLoginState(loginState)
+  }, []);
 
   const getUserInfo = async () => {
-    if (!loginState) {
-      alert('用户未登录');
-      return;
-    }
-    const userInfo = await sdk.getUserInfo({
-      accessToken: loginState?.accessToken,
-    });
-    setUserInfo(userInfo);
+    const userInfo = await authing.getUserInfo()
+    setUserInfo(userInfo)
   };
 
   const logoutWithRedirect = async () => {
-    await sdk.logoutWithRedirect({
-      redirectUri: 'https://www.baidu.com'
+    await authing.logoutWithRedirect({
+      redirectUri: 'https://authing.cn'
     });
   };
 
   useEffect(() => {
-    if (sdk.isRedirectCallback()) {
-      console.log('redirect');
-      sdk.handleRedirectCallback().then((res) => {
+    if (authing.isRedirectCallback()) {
+      authing.handleRedirectCallback().then((res) => {
         setLoginState(res);
+        // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
         window.location.replace('/');
       });
     } else {
       getLoginState();
     }
-  }, [getLoginState, sdk]);
+  }, []);
 
   return (
     <div className="App">
@@ -71,14 +72,14 @@ function App() {
         </a>
       </p>
       <p>
-        <button onClick={loginWithPopup}>login with popup</button>
+        <button onClick={loginWithPopup}>Login With Popup</button>
       </p>
       <p>
-        <button onClick={loginWithRedirect}>loginWithRedirect</button>
-        <button onClick={logoutWithRedirect}>logoutWithRedirect</button>
+        <button onClick={loginWithRedirect}>Login With Redirect</button>
+        <button onClick={logoutWithRedirect}>Logout With Redirect</button>
       </p>
       <p>
-        <button onClick={getLoginState}>getLoginState</button>
+        <button onClick={getLoginState}>Get Login State</button>
       </p>
       <p>
         {loginState && (
@@ -91,7 +92,7 @@ function App() {
         )}
       </p>
       <p>
-        <button onClick={getUserInfo}>getUserInfo</button>
+        <button onClick={getUserInfo}>Get User Info</button>
       </p>
       <p>
         {userInfo && (

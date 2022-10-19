@@ -30,7 +30,7 @@ You can use the Authing Browser SDK to quickly integrate authentication capabili
 ### NPM
 
 ```bash
-$ npm install @authing/web
+$ npm install --save @authing/web
 ```
 
 ### Yarn
@@ -42,17 +42,21 @@ $ yarn add @authing/web
 ### Use script tag
 
 ```html
-<script src="https://cdn.authing.co/packages/web/5.0.4/index.global.js"></script>
+<script src="https://cdn.authing.co/packages/web/5.1.0/index.global.js"></script>
 <script>
-  const sdk = new Authing({
+  const authing = new Authing({
     // Very important, please fill in carefully!
     // If the application enables SSO, you must write the "App Panel Address" for SSO here;
     // otherwise, fill in the application's "Subdomain".
     domain: "SSO App Panel Address",
+
     appId: "App ID",
+
     // The login callback address needs to be specified in the console
     // "Configuration - Authentication Configuration - Login Callback URL"
     redirectUri: "Login Callback URL",
+
+    userPoolId: 'AUTHING_USER_POOL_ID'
   });
 </script>
 ```
