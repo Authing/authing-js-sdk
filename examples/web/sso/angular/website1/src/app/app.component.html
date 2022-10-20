@@ -6,20 +6,20 @@
     </a>
   </p>
   <p>
-    <button (click)="loginWithPopup()">login with popup</button>
+    <button (click)="loginWithPopup()">Login With Popup</button>
   </p>
   <p>
-    <button (click)="loginWithRedirect()">loginWithRedirect</button>
-    <button (click)="logoutWithRedirect()">logoutWithRedirect</button>
+    <button (click)="loginWithRedirect()">Login With Redirect</button>
+    <button (click)="logoutWithRedirect()">Logout With Redirect</button>
   </p>
   <p>
-    <button (click)="getLoginState()">getLoginState</button>
+    <button (click)="getLoginState()">Get Login State</button>
   </p>
   <p *ngIf="loginState">
     <textarea cols="100" rows="20" readOnly>{{ loginState | json }}</textarea>
   </p>
   <p>
-    <button (click)="getUserInfo()">getUserInfo</button>
+    <button (click)="getUserInfo()">Get User Info</button>
   </p>
   <p *ngIf="userInfo">
     <textarea cols="100" rows="15" readOnly>{{ userInfo | json }}</textarea>

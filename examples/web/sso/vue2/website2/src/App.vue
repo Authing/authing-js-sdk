@@ -45,50 +45,64 @@ export default {
   name: "App",
   data() {
     return {
-      sdk: null,
+      authing: null,
       loginState: null,
       userInfo: null
     };
   },
   created() {
-    this.sdk = new Authing({
-      domain: "",
-      appId: "",
-      redirectUri: "",
-      userPoolId: ''
+    this.authing = new Authing({
+      // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
+      domain: 'AUTHING_DOMAIN_URL',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 端点信息 -> APP ID
+      appId: 'AUTHING_APP_ID',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 认证配置 -> 登录回调 URL
+      redirectUri: 'YOUR_REDIRECT_URL',
+
+      // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
+      userPoolId: 'AUTHING_USER_POOL_ID'
     });
   },
   mounted() {
     // 校验当前 url 是否是登录回调地址
-    if (this.sdk.isRedirectCallback()) {
+    if (this.authing.isRedirectCallback()) {
       console.log("redirect");
 
       /**
        * 以跳转方式打开 Authing 托管的登录页，认证成功后，需要配合 handleRedirectCallback，
        * 在回调端点处理 Authing 发送的授权码或 token，获取用户登录态
        */
-      this.sdk.handleRedirectCallback().then((res) => {
+      this.authing.handleRedirectCallback().then((res) => {
         this.loginState = res;
         window.location.replace("/");
       });
     } else {
       console.log("normal");
       this.getLoginState();
-      this.getUserInfo();
     }
   },
   methods: {
     async getLoginState() {
-      const res = await this.sdk.getLoginState();
+      const res = await this.authing.getLoginState();
       if (res) {
         this.loginState = res;
+        this.getUserInfo();
       } else {
         // 静默登录。取不到用户信息直接跳转到授权中心
-        this.sdk.loginWithRedirect();
+        this.authing.loginWithRedirect();
       }
     },
     async getUserInfo () {
-      this.userInfo = await this.sdk.getUserInfo()
+      if (!this.loginState) {
+        alert("用户未登录");
+        return;
+      }
+      const userInfo = await this.authing.getUserInfo({
+        accessToken: this.loginState.accessToken,
+      });
+      this.userInfo = userInfo;
     }
   },
 };

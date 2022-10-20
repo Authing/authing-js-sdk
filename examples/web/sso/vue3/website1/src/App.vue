@@ -7,14 +7,14 @@
       </a>
     </p>
     <p>
-      <button @click="loginWithPopup">loginWithPopup</button>
+      <button @click="loginWithPopup">Login With Popup</button>
     </p>
     <p>
-      <button @click="loginWithRedirect">loginWithRedirect</button>
-      <button @click="logout">logout</button>
+      <button @click="loginWithRedirect">Login With Redirect</button>
+      <button @click="logout">Logout</button>
     </p>
     <p>
-      <button @click="getLoginState">getLoginState</button>
+      <button @click="getLoginState">Get Login State</button>
     </p>
     <p v-if="loginState">
       <textarea
@@ -25,7 +25,7 @@
       ></textarea>
     </p>
     <p>
-      <button @click="getUserInfo">getUserInfo</button>
+      <button @click="getUserInfo">Get User Info</button>
     </p>
     <p v-if="userInfo">
       <textarea
@@ -45,11 +45,18 @@ import { Authing } from "@authing/web";
 export default defineComponent({
   name: "App",
   setup() {
-    const sdk = new Authing({
-      domain: "",
-      appId: "",
-      redirectUri: "",
-      userPoolId: ''
+    const authing = new Authing({
+      // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
+      domain: 'AUTHING_DOMAIN_URL',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 端点信息 -> APP ID
+      appId: 'AUTHING_APP_ID',
+
+      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 认证配置 -> 登录回调 URL
+      redirectUri: 'YOUR_REDIRECT_URL',
+
+      // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
+      userPoolId: 'AUTHING_USER_POOL_ID'
     });
 
     const state = reactive({
@@ -58,18 +65,14 @@ export default defineComponent({
     });
 
     /**
-     * 获取用户的登录状态
-     */
-    const getLoginState = async () => {
-      const res = await sdk.getLoginState();
-      state.loginState = res;
-    };
-
-    /**
      * 以弹窗方式打开 Authing 托管的登录页
      */
     const loginWithPopup = async () => {
-      const res = await sdk.loginWithPopup();
+      const params = {
+        // 即使在用户已登录时也提示用户再次登录
+        forced: true
+      }
+      const res = await authing.loginWithPopup(params);
       state.loginState = res;
     };
 
@@ -77,48 +80,65 @@ export default defineComponent({
      * 以跳转方式打开 Authing 托管的登录页
      */
     const loginWithRedirect = () => {
-      sdk.loginWithRedirect({
-        forced: true
-      });
+      const params = {
+        redirectUri: 'YOUR_REDIRECT_URL',
+
+        // 发起登录的 URL，若设置了 redirectToOriginalUri 会在登录结束后重定向回到此页面，默认为当前 URL
+        originalUri: 'YOUR_ORIGINAL_URL',
+
+        // 即使在用户已登录时也提示用户再次登录
+        forced: true,
+
+        // 自定义的中间状态，会被传递到回调端点
+        customState: {}
+      }
+      authing.loginWithRedirect(params);
     };
 
     /**
-     * 用 Access Token 获取用户身份信息
+     * 获取用户身份信息
      */
     const getUserInfo = async () => {
-      if (!state.loginState) {
-        alert("用户未登录");
-        return;
-      }
-      const userInfo = await sdk.getUserInfo({
-        accessToken: state.loginState.accessToken,
-      });
+      const userInfo = await authing.getUserInfo();
       state.userInfo = userInfo;
+    };
+
+    /**
+     * 获取用户的登录状态
+     */
+     const getLoginState = async () => {
+      const res = await authing.getLoginState();
+      state.loginState = res;
     };
 
     /**
      * 登出
      */
     const logout = () => {
-      console.log(sdk.logoutWithRedirect)
-      sdk.logoutWithRedirect();
+      authing.logoutWithRedirect({
+        // 可选项，如果传入此参数，需要在控制台配置【登出回调 URL】
+        redirectUri: 'YOUR_REDIRECT_URL'
+      });
     };
 
     onMounted(() => {
-      // 校验当前 url 是否是登录回调地址
-      if (sdk.isRedirectCallback()) {
+      // 校验当前 url 是否是登录回调 URL
+      if (authing.isRedirectCallback()) {
         console.log("redirect");
 
         /**
-         * 以跳转方式打开 Authing 托管的登录页，认证成功后，需要配合 handleRedirectCallback，
+         * 以跳转方式打开 Authing 托管的登录页，认证成功后需要配合 handleRedirectCallback 方法，
          * 在回调端点处理 Authing 发送的授权码或 token，获取用户登录态
          */
-        sdk.handleRedirectCallback().then((res) => {
+        authing.handleRedirectCallback().then((res) => {
           state.loginState = res;
+          // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
           window.location.replace("/");
         });
       } else {
-        getLoginState();
+        console.log("normal");
+        
+        getLoginState()
       }
     });
 

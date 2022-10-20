@@ -204,7 +204,7 @@ export class Authing {
 					`登录态获取失败，认证服务器返回错误: error=${res.error}, error_description=${res.errorDesc}`
 				)
 			} else {
-				console.info('用户未登录')
+				console.warn('用户未登录')
 			}
 			return null
 		}
@@ -574,7 +574,7 @@ export class Authing {
 		const accessToken =
       options.accessToken ?? (await this.getLoginState())?.accessToken
 		if (!accessToken) {
-			throw new Error('未传入 access token')
+			throw new Error('access token 不存在，请重新登录')
 		}
 
 		const { data } = await axiosGet(`${this.domain}/api/v3/get-profile`, {

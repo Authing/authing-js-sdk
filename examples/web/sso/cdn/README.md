@@ -1,16 +1,16 @@
-# authing/web demo for Vue2
+# authing/web demo for CDN
 
 1. 进入 `website1` 和 `website2` 目录，分别运行以下命令：
 
 ``` shell
 npm ci
-npm run serve
+npm run dev
 ```
 
-2. 分别修改 `website1` 和 `website2` 中的 `App.vue` 中实例化 SDK 的配置：
+2. 分别修改 `website1` 和 `website2` 中的 `index.js` 中实例化 SDK 的配置：
 
 ``` javascript
-this.authing = new Authing({
+var authing = new AuthingFactory.Authing({
   // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
   domain: 'AUTHING_DOMAIN_URL',
 

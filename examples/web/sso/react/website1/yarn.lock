@@ -18,10 +18,11 @@
     "json-schema" "^0.4.0"
     "jsonpointer" "^5.0.0"
     "leven" "^3.1.0"
-"@authing/web@^5.0.2":
-  "integrity" "sha512-xzOWzkdHEWqasB958q0pxD4m5VhG9oVH0zgdtofeoc6uKCPVx6Zn1dMZtk2u1v6NvEEZYZZY4GTRx2NaXwL0fw=="
-  "resolved" "https://registry.npmjs.org/@authing/web/-/web-5.0.2.tgz"
-  "version" "5.0.2"
+
+"@authing/web@^5.1.0":
+  "integrity" "sha512-AQRT+K3Zoy3gMn7Hg6irT+WF/vnHVIw16fd6s/CurVuXPjqYCfxyyWs1q4t7L1gmOcXAsrE4ybjTJIqGoVhx5g=="
+  "resolved" "https://registry.npmjs.org/@authing/web/-/web-5.1.0.tgz"
+  "version" "5.1.0"
   dependencies:
     "axios" "^0.26.1"
 
