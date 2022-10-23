@@ -8,7 +8,7 @@ import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
   appId: '630ed3137dd6f2fd7001da24',
-  host: 'https://test-auth-zhaoyiming.authing.cn',
+  host: 'https://test-auth-zhaoyiming.pre.authing.cn',
   userPoolId: '62e221f85f5ac5cc47037a39',
   encryptFunction
 })
@@ -69,7 +69,7 @@ Page({
   async sendSms () {
     // 指定 channel 为 CHANNEL_LOGIN，发送登录所用的验证码
     const res = await authing.sendSms({
-      phoneNumber: '13100000000',
+      phoneNumber: '13126919251',
       phoneCountryCode: '+86',
       channel: 'CHANNEL_LOGIN'
     })
@@ -81,8 +81,8 @@ Page({
     const res = await authing.loginByPassCode({
       passCodePayload: {
         // 手机收到的短信验证码
-        passCode: '5671',
-        phone: '13100000000',
+        passCode: '845603',
+        phone: '13126919251',
         phoneCountryCode: '+86'
       },
       options: {
