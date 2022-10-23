@@ -4,16 +4,16 @@ import './index.less'
 
 import Taro from '@tarojs/taro'
 
-import { Authing, UserInfo } from '@authing/miniapp-taro'
+import { Authing } from '@authing/miniapp-taro'
 
 // import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: '',
-  host: '',
-  userPoolId: '',
+  appId: '630ed3137dd6f2fd7001da24',
+  host: 'https://test-auth-zhaoyiming.authing.cn',
+  userPoolId: '62e221f85f5ac5cc47037a39',
   encryptFunction
 })
 
@@ -46,6 +46,8 @@ export default class Index extends Component<PropsWithChildren> {
         <Button onClick={() => this.getUserInfo()}>getUserInfo</Button>
         <Button onClick={() => this.updateAvatar()}>updateAvatar</Button>
         <Button onClick={() => this.updateUserInfo()}>updateUserInfo</Button>
+
+        <Button onClick={() => this.getLoginState()}>getLoginState</Button>
       </View>
     )
   }
@@ -56,7 +58,6 @@ export default class Index extends Component<PropsWithChildren> {
     })
 
     const res = await authing.loginByCode({
-      connection: 'wechat_mini_program_code',
       extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramCodePayload: {
         encryptedData,
@@ -89,7 +90,6 @@ export default class Index extends Component<PropsWithChildren> {
 
   async loginByPassword () {
     const res = await authing.loginByPassword({
-      connection: 'PASSWORD',
       passwordPayload: {
         password: '123',
         username: 'test'
@@ -116,7 +116,6 @@ export default class Index extends Component<PropsWithChildren> {
 
   async loginByPassCode () {
     const res = await authing.loginByPassCode({
-      connection: 'PASSCODE',
       passCodePayload: {
         // 手机收到的短信验证码
         passCode: '9973',
@@ -144,7 +143,7 @@ export default class Index extends Component<PropsWithChildren> {
   }
 
   async getUserInfo () {
-    const res: UserInfo | null = await authing.getUserInfo()
+    const res = await authing.getUserInfo()
     console.log('authing.getUserInfo res: ', res)
   }
 
@@ -160,4 +159,10 @@ export default class Index extends Component<PropsWithChildren> {
 
     console.log('authing.updateUserInfo res: ', res)
   }
+
+  async getLoginState () {
+    const res = await authing.getLoginState()
+
+    console.log('authing.getLoginState res: ', res)
+  } 
 }
