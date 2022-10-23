@@ -320,7 +320,7 @@ export interface NormalResponseData extends SimpleResponseData {
 }
 
 export interface GetUserPhoneResponseData {
-  countryCode: string // '+86'
+  countryCode: string // '86'
   phoneNumber: string
   purePhoneNumber: string
   watermark: {
