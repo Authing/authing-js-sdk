@@ -17,6 +17,8 @@
 			<button @click="getUserInfo">getUserInfo</button>
 			<button @click="updateAvatar">updateAvatar</button>
 			<button @click="updateUserInfo">updateUserInfo</button>
+
+			<button @click="getLoginState">getLoginState</button>
 		</view>
 	</view>
 </template>
@@ -26,9 +28,9 @@
 	import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
 	const authing = new Authing({
-		appId: '',
-		host: '',
-		userPoolId: '',
+		appId: '630ed3137dd6f2fd7001da24',
+		host: 'https://test-auth-zhaoyiming.authing.cn',
+		userPoolId: '62e221f85f5ac5cc47037a39',
 		encryptFunction
 	})
 
@@ -53,7 +55,6 @@
 				})
 
 				const res = await authing.loginByCode({
-					connection: 'wechat_mini_program_code',
 					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
 					wechatMiniProgramCodePayload: {
 						encryptedData,
@@ -111,7 +112,6 @@
 
 			async loginByPassCode () {
 				const res = await authing.loginByPassCode({
-					connection: 'PASSCODE',
 					passCodePayload: {
 						// 手机收到的短信验证码
 						passCode: '9973',
@@ -154,6 +154,12 @@
 				})
 
 				console.log('authing.updateUserInfo res: ', res)
+			},
+
+			async getLoginState () {
+				const res = await authing.getLoginState()
+
+				console.log('authing.getLoginState res: ', res)
 			}
 		}
 	}
