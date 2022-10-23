@@ -574,6 +574,10 @@ export class Authing {
 			return returnError(getPhoneError)
 		}
 
-		return returnSuccess(getPhoneRes)
+		if (getPhoneRes.phone_info) {
+			return returnSuccess(getPhoneRes.phone_info)
+		}
+
+		return returnError(getPhoneRes)
 	}
 }
