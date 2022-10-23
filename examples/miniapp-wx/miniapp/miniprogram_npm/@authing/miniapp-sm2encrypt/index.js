@@ -4,15 +4,15 @@ var __DEFINE__ = function(modId, func, req) { var m = { exports: {}, _tempexport
 var __REQUIRE__ = function(modId, source) { if(!__MODS__[modId]) return require(source); if(!__MODS__[modId].status) { var m = __MODS__[modId].m; m._exports = m._tempexports; var desp = Object.getOwnPropertyDescriptor(m, "exports"); if (desp && desp.configurable) Object.defineProperty(m, "exports", { set: function (val) { if(typeof val === "object" && val !== m._exports) { m._exports.__proto__ = val.__proto__; Object.keys(val).forEach(function (k) { m._exports[k] = val[k]; }); } m._tempexports = val }, get: function () { return m._tempexports; } }); __MODS__[modId].status = 1; __MODS__[modId].func(__MODS__[modId].req, m, m.exports); } return __MODS__[modId].m.exports; };
 var __REQUIRE_WILDCARD__ = function(obj) { if(obj && obj.__esModule) { return obj; } else { var newObj = {}; if(obj != null) { for(var k in obj) { if (Object.prototype.hasOwnProperty.call(obj, k)) newObj[k] = obj[k]; } } newObj.default = obj; return newObj; } };
 var __REQUIRE_DEFAULT__ = function(obj) { return obj && obj.__esModule ? obj.default : obj; };
-__DEFINE__(1666531187995, function(require, module, exports) {
+__DEFINE__(1666531188013, function(require, module, exports) {
 var __TEMP__ = require('./sm2');var doEncrypt = __TEMP__['doEncrypt'];
 
 if (!exports.__esModule) Object.defineProperty(exports, "__esModule", { value: true });function encryptFunction (plainText, publicKey) {
   return doEncrypt(plainText, publicKey)
 };exports.encryptFunction = encryptFunction
 
-}, function(modId) {var map = {"./sm2":1666531187996}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1666531187996, function(require, module, exports) {
+}, function(modId) {var map = {"./sm2":1666531188014}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1666531188014, function(require, module, exports) {
 /* eslint-disable no-use-before-define */
 var __TEMP__ = require('jsbn');var BigInteger = __TEMP__['BigInteger'];
 var __TEMP__ = require('./utils');var _ = __REQUIRE_WILDCARD__(__TEMP__);
@@ -71,8 +71,8 @@ if (!exports.__esModule) Object.defineProperty(exports, "__esModule", { value: t
 
 
 
-}, function(modId) { var map = {"./utils":1666531187997,"./sm3":1666531187999}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1666531187997, function(require, module, exports) {
+}, function(modId) { var map = {"./utils":1666531188015,"./sm3":1666531188017}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1666531188015, function(require, module, exports) {
 /* eslint-disable no-bitwise, no-mixed-operators, no-use-before-define, max-len */
 var __TEMP__ = require('jsbn');var BigInteger = __TEMP__['BigInteger'];var SecureRandom = __TEMP__['SecureRandom'];
 var __TEMP__ = require('./ec');var ECCurveFp = __TEMP__['ECCurveFp'];
@@ -268,8 +268,8 @@ if (!exports.__esModule) Object.defineProperty(exports, "__esModule", { value: t
 
 
 
-}, function(modId) { var map = {"./ec":1666531187998}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1666531187998, function(require, module, exports) {
+}, function(modId) { var map = {"./ec":1666531188016}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1666531188016, function(require, module, exports) {
 /* eslint-disable no-case-declarations, max-len */
 var __TEMP__ = require('jsbn');var BigInteger = __TEMP__['BigInteger'];
 
@@ -604,7 +604,7 @@ if (!exports.__esModule) Object.defineProperty(exports, "__esModule", { value: t
 
 
 }, function(modId) { var map = {}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1666531187999, function(require, module, exports) {
+__DEFINE__(1666531188017, function(require, module, exports) {
 /**
  * 循环左移
  */
@@ -851,7 +851,7 @@ if (!exports.__esModule) Object.defineProperty(exports, "__esModule", { value: t
 
 
 }, function(modId) { var map = {}; return __REQUIRE__(map[modId], modId); })
-return __REQUIRE__(1666531187995);
+return __REQUIRE__(1666531188013);
 })()
 //miniprogram-npm-outsideDeps=["jsbn"]
 //# sourceMappingURL=index.js.map
