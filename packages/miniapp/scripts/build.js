@@ -26,7 +26,7 @@ const webpackConfigs = modes.reduce((configs, mode) => {
   const options = {
     __authing_move_src_mode__: 'wx',
     __authing_move_mode__: mode,
-    compilerMode: watch ? 'none': 'none'
+    compilerMode: watch ? 'none': 'production'
   }
   return configs.concat(getWebpackConfig(options))
 }, [])
