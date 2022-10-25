@@ -351,7 +351,7 @@ export type SDKResponseSuccess<T> = [null, T]
 export type SDKResponseError = [ErrorData, undefined]
 
 export interface ErrorData {
-  message: unknown
+  message: string
   statusCode?: number
   apiCode?: number
 }
