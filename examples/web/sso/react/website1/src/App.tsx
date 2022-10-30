@@ -1,67 +1,68 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Authing } from '@authing/web';
+import React, { useEffect, useState } from 'react'
+
+import { Authing } from '@authing/web'
+
 import {
   IUserInfo,
   LoginState,
-  NormalError,
-} from '@authing/web/dist/typings/src/global';
+  NormalError
+} from '@authing/web/dist/typings/src/global'
 
-function App() {
-  const authing = useMemo(() => {
-    return new Authing({
-      // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
-      domain: 'AUTHING_DOMAIN_URL',
+export default function App() {
+  const authing = new Authing({
+    // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
+    domain: 'AUTHING_DOMAIN_URL',
 
-      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 端点信息 -> APP ID
-      appId: 'AUTHING_APP_ID',
+    // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 端点信息 -> APP ID
+    appId: 'AUTHING_APP_ID',
 
-      // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 认证配置 -> 登录回调 URL
-      redirectUri: 'YOUR_REDIRECT_URL',
+    // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 认证配置 -> 登录回调 URL
+    redirectUri: 'YOUR_REDIRECT_URL',
 
-      // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
-      userPoolId: 'AUTHING_USER_POOL_ID'
-    });
-  }, []);
+    // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
+    userPoolId: 'AUTHING_USER_POOL_ID'
+  })
 
-  const [loginState, setLoginState] = useState<LoginState | null>();
-  const [userInfo, setUserInfo] = useState<IUserInfo | NormalError | null>();
+  const [loginState, setLoginState] = useState<LoginState | null>(null)
+
+  const [userInfo, setUserInfo] = useState<IUserInfo | NormalError | null>(null)
 
   const loginWithPopup = async () => {
-    const loginState = await authing.loginWithPopup();
-    setLoginState(loginState);
-  };
+    const loginState = await authing.loginWithPopup()
+    setLoginState(loginState)
+  }
 
   const loginWithRedirect = () => {
-    authing.loginWithRedirect();
-  };
+    authing.loginWithRedirect()
+  }
 
-  const getLoginState = useCallback(async () => {
-    const loginState = await authing.getLoginState();
-    setLoginState(loginState)
-  }, []);
+  const getLoginState = async () => {
+    const loginState = await authing.getLoginState()
+    if (loginState) {
+      setLoginState(loginState)
+    }
+  }
 
   const getUserInfo = async () => {
     const userInfo = await authing.getUserInfo()
     setUserInfo(userInfo)
-  };
+  }
 
   const logoutWithRedirect = async () => {
-    await authing.logoutWithRedirect({
-      redirectUri: 'https://authing.cn'
-    });
-  };
+    await authing.logoutWithRedirect()
+  }
 
   useEffect(() => {
     if (authing.isRedirectCallback()) {
-      authing.handleRedirectCallback().then((res) => {
-        setLoginState(res);
+      authing.handleRedirectCallback().then(res => {
+        setLoginState(res)
         // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
-        window.location.replace('/');
-      });
+        window.location.replace('/')
+      })
     } else {
-      getLoginState();
+      getLoginState()
     }
-  }, []);
+  }, [])
 
   return (
     <div className="App">
@@ -105,7 +106,5 @@ function App() {
         )}
       </p>
     </div>
-  );
+  )
 }
-
-export default App;
