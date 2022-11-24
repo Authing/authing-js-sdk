@@ -18,7 +18,8 @@ import {
 	LoginByCodeOptions,
 	SDKResponse,
 	UpdateUserInfo,
-	SimpleResponseData
+	SimpleResponseData,
+	LoginByPhoneOptions
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -190,36 +191,37 @@ export class Authing {
 		return await this.login(_data, 'code')
 	}
 
-	// async loginByPhone(
-	//   data: LoginByPhoneOptions
-	// ): Promise<Maybe<LoginState>> {
-	//   const loginState = await this.getLoginState()
+	async loginByPhone(
+	  data: LoginByPhoneOptions
+	): Promise<SDKResponse<LoginState>> {
+	  const [, loginState] = await this.getLoginState()
 
-	//   if (loginState && loginState.expires_at > Date.now()) {
-	//     return loginState
-	//   }
+	  if (loginState && loginState.expires_at > Date.now()) {
+			return returnSuccess(loginState)
+		}
 
-	//   const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
+	  const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
 
-	//   const code  = await this.resetWxLoginCode()
+	  const code  = await this.resetWxLoginCode()
 
-	//   if (!code) {
-	//     error('loginByPhone', 'get wx login code error')
-	//     return null
-	//   }
+	  if (!code) {
+			return returnError({
+				message: 'get wx login code error'
+			})
+		}
 
-	//   const _data: WxPhoneLoginOptions = {
-	//     connection: connection || 'wechat_mini_program_phone',
-	//     extIdpConnidentifier,
-	//     wechatMiniProgramPhonePayload: {
-	//       ...wechatMiniProgramPhonePayload,
-	//       code
-	//     },
-	//     options
-	//   }
+	  const _data: WxPhoneLoginOptions = {
+	    connection: connection || 'wechat_mini_program_phone',
+	    extIdpConnidentifier,
+	    wechatMiniProgramPhonePayload: {
+	      ...wechatMiniProgramPhonePayload,
+	      code
+	    },
+	    options
+	  }
 
-	//   return await this.login(_data, 'phone')
-	// }
+	  return await this.login(_data, 'phone')
+	}
 
 	async loginByPassword(
 		data: PasswordLoginOptions
