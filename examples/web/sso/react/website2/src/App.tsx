@@ -22,30 +22,35 @@ function App() {
   const [loginState, setLoginState] = useState<LoginState | null>();
   const [userInfo, setUserInfo] = useState<IUserInfo | NormalError>();
 
+  const getUserInfo = async () => {
+    const userInfo = await authing.getUserInfo()
+    setUserInfo(userInfo)
+  }
+
   useEffect(() => {
     if (authing.isRedirectCallback()) {
       console.log('redirect');
       authing.handleRedirectCallback().then((res) => {
-        setLoginState(res);
-        window.location.replace('/');
+        // setLoginState(res);
+        window.location.replace('/?a=1');
       });
     } else {
-      console.log('normal');
 
-      authing.getLoginState().then((res) => {
-        if (res) {
-          setLoginState(res);
-        } else {
-          authing.loginWithRedirect();
+      try {
+        const a = +window.location.search.split('?')[1].split('=')[1]
+        if (a === 1) {
+          getUserInfo()
+          return
         }
-      });
+        
+        console.log('normal');
+        authing.getLoginStateWithRedirect()
+      } catch (e) {
+        console.log('normal');
+        authing.getLoginStateWithRedirect()
+      }
     }
   }, []);
-
-  const geteUserInfo = async () => {
-    const userInfo = await authing.getUserInfo()
-    setUserInfo(userInfo)
-  }
 
   const logout = () => {
     authing.logoutWithRedirect()
@@ -80,7 +85,7 @@ function App() {
         <p>
           Expire At: <code>{loginState?.expireAt}</code>
         </p>
-        <button onClick={() => geteUserInfo()}>Get User Info</button>
+        <button onClick={() => getUserInfo()}>Get User Info</button>
         <button onClick={() => logout()}>Logout</button>
         <p>
           User Info: <br />

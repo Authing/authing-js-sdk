@@ -85,6 +85,46 @@ export class Authing {
 		options.scope = options.scope ?? DEFAULT_SCOPE
 	}
 
+	async getLoginStateWithRedirect() {
+		const state = createRandomString(16)
+		const nonce = createRandomString(16)
+		const redirectUri = this.options.redirectUri ?? window.location.origin
+
+		const params: AuthzURLParams = {
+			redirect_uri: redirectUri,
+			response_mode: this.options.redirectResponseMode || 'query',
+			response_type: this.options.useImplicitMode
+				? this.options.implicitResponseType
+				: 'code',
+			client_id: this.options.appId,
+			state,
+			nonce,
+			scope: this.options.scope
+		}
+
+		let codeVerifier: string | undefined
+		if (!this.options.useImplicitMode) {
+			const { codeChallenge, codeVerifier: v } = await genPKCEPair()
+			params.code_challenge = codeChallenge
+			params.code_challenge_method = 'S256'
+			codeVerifier = v
+		}
+
+		await this.transactionProvider.put(
+			transactionKey(this.options.appId, state),
+			{
+				codeVerifier,
+				state,
+				redirectUri,
+				nonce
+			}
+		)
+
+		window.location.replace(
+			`${this.domain}/oidc/auth?${createQueryParams(params)}`
+		)
+	}
+
 	/**
    * 按顺序用以下方式获取用户登录态：
    *
