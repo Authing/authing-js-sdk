@@ -44,10 +44,10 @@ function App() {
         }
         
         console.log('normal');
-        authing.getLoginStateByRedirect()
+        authing.getLoginStateWithRedirect()
       } catch (e) {
         console.log('normal');
-        authing.getLoginStateByRedirect()
+        authing.getLoginStateWithRedirect()
       }
     }
   }, []);
