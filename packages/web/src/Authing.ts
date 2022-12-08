@@ -85,7 +85,7 @@ export class Authing {
 		options.scope = options.scope ?? DEFAULT_SCOPE
 	}
 
-	async getLoginStateByRedirect() {
+	async getLoginStateWithRedirect() {
 		const state = createRandomString(16)
 		const nonce = createRandomString(16)
 		const redirectUri = this.options.redirectUri ?? window.location.origin
