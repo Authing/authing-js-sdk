@@ -18,7 +18,9 @@ import {
 	LoginByCodeOptions,
 	SDKResponse,
 	UpdateUserInfo,
-	SimpleResponseData
+	SimpleResponseData,
+	WxCodeAndPhoneLoginOptions,
+	LoginByCodeAndPhoneOptions
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -272,6 +274,43 @@ export class Authing {
 		return await this.login(_data, 'passCode')
 	}
 
+	/**
+	 * 仅限 Authing Cloud 小程序使用
+	 */
+	async loginByCodeAndPhone (data: LoginByCodeAndPhoneOptions): Promise<SDKResponse<LoginState>> {
+		const [, loginState] = await this.getLoginState()
+
+		if (loginState && loginState.expires_at > Date.now()) {
+			return returnSuccess(loginState)
+		}
+
+		const { extIdpConnidentifier, wechatMiniProgramCodeAndPhonePayload, options } = data
+
+		const code  = await this.resetWxLoginCode()
+
+		if (!code) {
+			return returnError({
+				message: 'get wx login code error'
+			})
+		}
+
+		const _data: WxCodeAndPhoneLoginOptions = {
+			connection: 'wechat_mini_program_code_and_phone',
+			extIdpConnidentifier,
+			wechatMiniProgramCodeAndPhonePayload: {
+				wxPhoneInfo: wechatMiniProgramCodeAndPhonePayload.wxPhoneInfo,
+				wxLoginInfo: {
+					encryptedData: wechatMiniProgramCodeAndPhonePayload?.wxLoginInfo?.encryptedData || '',
+					iv: wechatMiniProgramCodeAndPhonePayload?.wxLoginInfo?.iv || '',
+					code
+				}
+			},
+			options
+		}
+
+		return await this.login(_data, 'codeAndPhone')
+	}
+
 	async logout(): Promise<SDKResponse<boolean>> {
   	const [loginStateError, loginState] = await this.getLoginState()
 
@@ -332,12 +371,14 @@ export class Authing {
       | WxCodeLoginOptions
       | WxPhoneLoginOptions
       | PasswordLoginOptions
-      | PassCodeLoginOptions,
+      | PassCodeLoginOptions
+			| WxCodeAndPhoneLoginOptions,
 		type: string
 	): Promise<SDKResponse<LoginState>> {
 		const urlMap: Record<string, string> = {
 			code: '/api/v3/signin-by-mobile',
 			phone: '/api/v3/signin-by-mobile',
+			codeAndPhone: '/api/v3/signin-by-mobile',
 			password: '/api/v3/signin',
 			passCode: '/api/v3/signin'
 		}

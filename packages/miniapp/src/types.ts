@@ -94,6 +94,36 @@ export interface WxPhoneLoginOptions {
   options?: LoginOptions
 }
 
+export interface LoginByCodeAndPhoneOptions {
+  extIdpConnidentifier: string
+  wechatMiniProgramCodeAndPhonePayload: {
+    wxLoginInfo?: {
+      encryptedData?: string
+      iv?: string
+    },
+    wxPhoneInfo: {
+      code: string
+    }
+  }
+  options?: LoginOptions
+}
+
+export interface WxCodeAndPhoneLoginOptions {
+  connection: 'wechat_mini_program_code_and_phone'
+  extIdpConnidentifier: string
+  wechatMiniProgramCodeAndPhonePayload: {
+    wxLoginInfo: {
+      encryptedData: string
+      iv: string
+      code: string
+    }
+    wxPhoneInfo: {
+      code: string
+    }
+  }
+  options?: LoginOptions
+}
+
 export interface PasswordLoginOptions {
   connection?: 'PASSWORD'
   passwordPayload: {
