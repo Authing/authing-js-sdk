@@ -273,11 +273,10 @@ export class Authing {
 	}
 
 	async logout(): Promise<SDKResponse<boolean>> {
-		await this.storage.remove(getWxLoginCodeKey(this.options.appId))
-    
-		const [loginStateError, loginState] = await this.getLoginState()
+  	const [loginStateError, loginState] = await this.getLoginState()
 
 		if (loginStateError) {
+			this.clearLoginState()
 			return returnSuccess(true)
 		}
 

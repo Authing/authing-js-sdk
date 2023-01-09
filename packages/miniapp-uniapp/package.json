@@ -1,6 +1,6 @@
 {
   "name": "@authing/miniapp-uniapp",
-  "version": "5.1.3-alpha.2",
+  "version": "5.1.3-alpha.3",
   "description": "Authing miniapp JS SDK for uniapp",
   "main": "dist/bundle-uniapp.js",
   "types": "dist/typings/src/index.d.ts",
