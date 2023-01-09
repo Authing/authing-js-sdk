@@ -7,9 +7,9 @@ import { Authing } from '@authing/miniapp-wx'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: '630ed3137dd6f2fd7001da24',
-  host: 'https://test-auth-zhaoyiming.authing.cn',
-  userPoolId: '62e221f85f5ac5cc47037a39',
+  appId: '63b4718d86ef2f8dd654c153',
+  host: 'https://core.authing.me',
+  userPoolId: '59f86b4832eb28071bdd9214',
   encryptFunction
 })
 
@@ -64,6 +64,22 @@ Page({
       }
     })
     console.log('authing.loginByPassword res: ', res)
+  },
+
+  async loginByCodeAndPhone (e) {
+    const { code } = e.detail
+
+    authing.loginByCodeAndPhone({
+      extIdpConnidentifier: 'root-wx-miniapp-scan-login',
+      wechatMiniProgramCodeAndPhonePayload: {
+        wxPhoneInfo: {
+          code
+        }
+      },
+      options: {
+        scope: 'openid profile offline_access'
+      }
+    })
   },
 
   async sendSms () {
