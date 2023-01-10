@@ -160,6 +160,10 @@ export class Authing {
 		}
 	}
 
+	async getLoginCode () {
+		return await this.resetWxLoginCode()
+	}
+
 	async loginByCode(
 		data: LoginByCodeOptions
 	): Promise<SDKResponse<LoginState>> {
