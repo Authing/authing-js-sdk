@@ -7,8 +7,8 @@ import { Authing } from '@authing/miniapp-wx'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: '63b4718d86ef2f8dd654c153',
-  host: 'https://core.authing.me',
+  appId: '63bec445fc0c544d72b28033',
+  host: 'https://core.sy1.authing-inc.co',
   userPoolId: '59f86b4832eb28071bdd9214',
   encryptFunction
 })
@@ -24,7 +24,7 @@ Page({
     })
     
     const res = await authing.loginByCode({
-      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
+      extIdpConnidentifier: 'awesome-miniapp',
       wechatMiniProgramCodePayload: {
         encryptedData,
         iv
@@ -45,7 +45,7 @@ Page({
     const { code } = e.detail
 
     const res = await authing.getPhone({
-      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
+      extIdpConnidentifier: 'awesome-miniapp',
       code
     })
 
