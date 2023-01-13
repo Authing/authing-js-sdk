@@ -187,7 +187,8 @@ export class Authing {
 			connection: connection || 'wechat_mini_program_code',
 			extIdpConnidentifier,
 			wechatMiniProgramCodePayload: {
-				...wechatMiniProgramCodePayload,
+				encryptedData: wechatMiniProgramCodePayload?.encryptedData || '',
+				iv: wechatMiniProgramCodePayload?.iv || '',
 				code
 			},
 			options
