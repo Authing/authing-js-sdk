@@ -7,9 +7,9 @@ import { Authing } from '@authing/miniapp-wx'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: '63bec445fc0c544d72b28033',
-  host: 'https://core.sy1.authing-inc.co',
-  userPoolId: '59f86b4832eb28071bdd9214',
+  appId: 'AUTHING_APP_ID',
+  host: 'AUTHING_HOST',
+  userPoolId: 'AUTHING_USER_POOL_ID',
   encryptFunction
 })
 
@@ -18,17 +18,9 @@ console.log('authing: ', authing)
 Page({
   data: {},
 
-  async loginByCode () {
-    const { encryptedData, iv } = await wx.getUserProfile({
-      desc: 'getUserProfile1'
-    })
-    
+  async loginByCode () {    
     const res = await authing.loginByCode({
       extIdpConnidentifier: 'awesome-miniapp',
-      wechatMiniProgramCodePayload: {
-        encryptedData,
-        iv
-      },
       options: {
         scope: 'openid profile offline_access'
       }
