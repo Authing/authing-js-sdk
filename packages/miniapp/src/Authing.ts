@@ -20,7 +20,7 @@ import {
 	UpdateUserInfo,
 	SimpleResponseData,
 	WxCodeAndPhoneLoginOptions,
-	LoginByCodeAndPhoneOptions
+	LoginByPhoneOptions
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -197,37 +197,6 @@ export class Authing {
 		return await this.login(_data, 'code')
 	}
 
-	// async loginByPhone(
-	//   data: LoginByPhoneOptions
-	// ): Promise<Maybe<LoginState>> {
-	//   const loginState = await this.getLoginState()
-
-	//   if (loginState && loginState.expires_at > Date.now()) {
-	//     return loginState
-	//   }
-
-	//   const { extIdpConnidentifier, connection, wechatMiniProgramPhonePayload, options } = data
-
-	//   const code  = await this.resetWxLoginCode()
-
-	//   if (!code) {
-	//     error('loginByPhone', 'get wx login code error')
-	//     return null
-	//   }
-
-	//   const _data: WxPhoneLoginOptions = {
-	//     connection: connection || 'wechat_mini_program_phone',
-	//     extIdpConnidentifier,
-	//     wechatMiniProgramPhonePayload: {
-	//       ...wechatMiniProgramPhonePayload,
-	//       code
-	//     },
-	//     options
-	//   }
-
-	//   return await this.login(_data, 'phone')
-	// }
-
 	async loginByPassword(
 		data: PasswordLoginOptions
 	): Promise<SDKResponse<LoginState>> {
@@ -279,10 +248,7 @@ export class Authing {
 		return await this.login(_data, 'passCode')
 	}
 
-	/**
-	 * 仅限 Authing Cloud 小程序使用
-	 */
-	async loginByCodeAndPhone (data: LoginByCodeAndPhoneOptions): Promise<SDKResponse<LoginState>> {
+	async loginByPhone (data: LoginByPhoneOptions): Promise<SDKResponse<LoginState>> {
 		const [, loginState] = await this.getLoginState()
 
 		if (loginState && loginState.expires_at > Date.now()) {
@@ -383,7 +349,6 @@ export class Authing {
 		const urlMap: Record<string, string> = {
 			code: '/api/v3/signin-by-mobile',
 			phone: '/api/v3/signin-by-mobile',
-			codeAndPhone: '/api/v3/signin-by-mobile',
 			password: '/api/v3/signin',
 			passCode: '/api/v3/signin'
 		}
