@@ -279,7 +279,7 @@ export class Authing {
 			options
 		}
 
-		return await this.login(_data, 'codeAndPhone')
+		return await this.login(_data, 'phone')
 	}
 
 	async logout(): Promise<SDKResponse<boolean>> {
