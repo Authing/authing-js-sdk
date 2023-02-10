@@ -18,6 +18,10 @@ console.log('authing: ', authing)
 Page({
   data: {},
 
+  /**
+   * 需要在真机上测试，微信开发者工具不会返回 code
+   * @param {*} e 
+   */
   async loginByPhone (e) {
     const { code } = e.detail
     const res = await authing.loginByPhone({
