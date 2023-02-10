@@ -4,6 +4,7 @@
 		<view>
 			<text class="title">{{title}}</text>
 			<button @click="loginByCode">loginByCode</button>
+			<button open-type="getPhoneNumber" @getphonenumber="loginByPhone">loginByPhone</button>
 			<button open-type="getPhoneNumber" @getphonenumber="getPhone">getPhone</button>
 			<button @click="loginByPassword">loginByPassword</button>
 
@@ -19,6 +20,7 @@
 			<button @click="updateUserInfo">updateUserInfo</button>
 
 			<button @click="getLoginState">getLoginState</button>
+			<button @click="logout">logout</button>
 		</view>
 	</view>
 </template>
@@ -28,9 +30,9 @@
 	import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
 	const authing = new Authing({
-		appId: '630ed3137dd6f2fd7001da24',
-		host: 'https://test-auth-zhaoyiming.authing.cn',
-		userPoolId: '62e221f85f5ac5cc47037a39',
+		appId: 'AUTHING_APP_ID',
+		host: 'AUTHING_Host',
+		userPoolId: 'AUTHING_USER_POOL_ID',
 		encryptFunction
 	})
 
@@ -49,17 +51,25 @@
 		},
 
 		methods: {
-			async loginByCode () {		
-				const [, { encryptedData, iv }] = await uni.getUserProfile({
-					desc: 'getUserProfile'
-				})
-
-				const res = await authing.loginByCode({
-					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-					wechatMiniProgramCodePayload: {
-						encryptedData,
-						iv
+			async loginByPhone (e) {
+				const { code } = e.detail
+				const res = await authing.loginByPhone({
+					extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+					wechatMiniProgramCodeAndPhonePayload: {
+						wxPhoneInfo: {
+							code
+						}
 					},
+					options: {
+						scope: 'openid profile offline_access'
+					}
+				})
+				console.log('authing.loginByPhone res: ', res)
+			},
+
+			async loginByCode () {		
+				const res = await authing.loginByCode({
+					extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
 					options: {
 						scope: 'openid profile offline_access'
 					}
@@ -76,7 +86,7 @@
 				const { code } = e.detail
 
 				const res = await authing.getPhone({
-					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
+					extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
 					code
 				})
 
@@ -160,6 +170,11 @@
 				const res = await authing.getLoginState()
 
 				console.log('authing.getLoginState res: ', res)
+			},
+
+			async logout () {
+				const res = await authing.logout()
+    		console.log('authing.logout res: ', res)
 			}
 		}
 	}

@@ -50,7 +50,7 @@
   "dependencies": {
     "@authing/miniapp-jsencrypt": "^5.1.0",
     "@authing/miniapp-sm2encrypt": "^5.1.0",
-    "@authing/miniapp-uniapp": "^5.1.0",
+    "@authing/miniapp-uniapp": "^5.1.4-alpha.2",
     "@dcloudio/uni-app-plus": "^2.0.1-35320220729002",
     "@dcloudio/uni-h5": "^2.0.1-35320220729002",
     "@dcloudio/uni-helper-json": "*",

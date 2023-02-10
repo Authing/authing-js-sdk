@@ -7,9 +7,9 @@ import { Authing } from '@authing/miniapp-wx'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: 'AUTHING_APP_ID',
-  host: 'AUTHING_HOST',
-  userPoolId: 'AUTHING_USER_POOL_ID',
+  appId: '63e5b3081fc288ff3b79b2b1',
+  host: 'https://awesome-miniapp-zhaoyiming.mysql.authing-inc.co',
+  userPoolId: '63b7dd421f7b95aac78871b4',
   encryptFunction
 })
 
@@ -20,8 +20,11 @@ Page({
 
   async loginByPhone (e) {
     const { code } = e.detail
+    const loginCodeRes = await authing.getLoginCode()
+    console.log('loginCodeRes: ', loginCodeRes)
+    console.log('phoneCode: ', code)
     const res = await authing.loginByPhone({
-      extIdpConnidentifier: 'awesome-miniapp',
+      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       wechatMiniProgramCodeAndPhonePayload: {
         wxPhoneInfo: {
           code
@@ -31,12 +34,15 @@ Page({
         scope: 'openid profile offline_access'
       }
     })
-    console.log('loginByPhone res: ', res)
+    console.log('authing.loginByPhone res: ', res)
+
+    const loginCodeRes1 = await authing.getLoginCode()
+    console.log('loginCodeRes1: ', loginCodeRes1)
   },
 
   async loginByCode () {    
     const res = await authing.loginByCode({
-      extIdpConnidentifier: 'awesome-miniapp',
+      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       options: {
         scope: 'openid profile offline_access'
       }
@@ -53,7 +59,7 @@ Page({
     const { code } = e.detail
 
     const res = await authing.getPhone({
-      extIdpConnidentifier: 'awesome-miniapp',
+      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
       code
     })
 
