@@ -31,7 +31,7 @@
 
 	const authing = new Authing({
 		appId: 'AUTHING_APP_ID',
-		host: 'AUTHING_Host',
+		host: 'AUTHING_HOST',
 		userPoolId: 'AUTHING_USER_POOL_ID',
 		encryptFunction
 	})

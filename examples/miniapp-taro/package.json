@@ -37,7 +37,7 @@
   "dependencies": {
     "@authing/miniapp-jsencrypt": "^5.1.0",
     "@authing/miniapp-sm2encrypt": "^5.1.0",
-    "@authing/miniapp-taro": "^5.1.0",
+    "@authing/miniapp-taro": "^5.1.4-alpha.3",
     "@authing/miniapp-wx": "^5.0.4-alpha.2",
     "@babel/runtime": "^7.7.7",
     "@tarojs/components": "3.5.4",
