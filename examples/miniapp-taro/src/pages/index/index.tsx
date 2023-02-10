@@ -11,9 +11,9 @@ import { Authing } from '@authing/miniapp-taro'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: '630ed3137dd6f2fd7001da24',
-  host: 'https://test-auth-zhaoyiming.authing.cn',
-  userPoolId: '62e221f85f5ac5cc47037a39',
+  appId: 'AUTHING_APP_ID',
+  host: 'AUTHING_HOST',
+  userPoolId: 'AUTHING_USER_POOL_ID',
   encryptFunction
 })
 
@@ -33,7 +33,7 @@ export default class Index extends Component<PropsWithChildren> {
     return (
       <View className='index'>
         <Button onClick={() => this.loginByCode()}>loginByCode</Button>
-        <Button openType="getPhoneNumber"  onGetPhoneNumber={(e) => this.getPhone(e)}>getPhone</Button>
+        <Button openType="getPhoneNumber"  onGetPhoneNumber={(e) => this.loginByPhone(e)}>loginByPhone</Button>
         <Button onClick={() => this.loginByPassword()}>loginByPassword</Button>
 
         <View>发送手机短信验证码</View>
@@ -41,6 +41,7 @@ export default class Index extends Component<PropsWithChildren> {
         <View>使用手机短信验证码登录</View>
         <Button onClick={() => this.loginByPassCode()}>loginByPassCode</Button>
 
+        <Button openType="getPhoneNumber"  onGetPhoneNumber={(e) => this.getPhone(e)}>getPhone</Button>
         <Button onClick={() => this.refreshToken()}>refreshToken</Button>
         <Button onClick={() => this.updatePassword()}>updatePassword</Button>
         <Button onClick={() => this.getUserInfo()}>getUserInfo</Button>
@@ -53,22 +54,30 @@ export default class Index extends Component<PropsWithChildren> {
   }
 
   async loginByCode () {
-    const { encryptedData, iv } = await Taro.getUserProfile({
-      desc: 'getUserProfile'
-    })
-
     const res = await authing.loginByCode({
-      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
-      wechatMiniProgramCodePayload: {
-        encryptedData,
-        iv
-      },
+      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
       options: {
         scope: 'openid profile offline_access'
       }
     })
 
     console.log('authing.loginByCode res: ', res)
+  }
+
+  async loginByPhone (e) {
+    const { code } = e.detail
+    const res = await authing.loginByPhone({
+      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      wechatMiniProgramCodeAndPhonePayload: {
+        wxPhoneInfo: {
+          code
+        }
+      },
+      options: {
+        scope: 'openid profile offline_access'
+      }
+    })
+    console.log('authing.loginByPhone res: ', res)
   }
 
   /**
@@ -78,10 +87,8 @@ export default class Index extends Component<PropsWithChildren> {
   async getPhone (e) {
     const { code } = e.detail
 
-    console.log('code: ', e)
-
     const res = await authing.getPhone({
-      extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
+      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
       code
     })
 

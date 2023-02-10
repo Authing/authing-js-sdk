@@ -18,9 +18,25 @@ console.log('authing: ', authing)
 Page({
   data: {},
 
+  async loginByPhone (e) {
+    const { code } = e.detail
+    const res = await authing.loginByPhone({
+      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      wechatMiniProgramCodeAndPhonePayload: {
+        wxPhoneInfo: {
+          code
+        }
+      },
+      options: {
+        scope: 'openid profile offline_access'
+      }
+    })
+    console.log('authing.loginByPhone res: ', res)
+  },
+
   async loginByCode () {    
     const res = await authing.loginByCode({
-      extIdpConnidentifier: 'awesome-miniapp',
+      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
       options: {
         scope: 'openid profile offline_access'
       }
@@ -37,7 +53,7 @@ Page({
     const { code } = e.detail
 
     const res = await authing.getPhone({
-      extIdpConnidentifier: 'awesome-miniapp',
+      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
       code
     })
 
@@ -56,22 +72,6 @@ Page({
       }
     })
     console.log('authing.loginByPassword res: ', res)
-  },
-
-  async loginByCodeAndPhone (e) {
-    const { code } = e.detail
-
-    authing.loginByCodeAndPhone({
-      extIdpConnidentifier: 'root-wx-miniapp-scan-login',
-      wechatMiniProgramCodeAndPhonePayload: {
-        wxPhoneInfo: {
-          code
-        }
-      },
-      options: {
-        scope: 'openid profile offline_access'
-      }
-    })
   },
 
   async sendSms () {
