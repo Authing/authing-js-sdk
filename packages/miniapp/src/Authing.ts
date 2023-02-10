@@ -257,9 +257,17 @@ export class Authing {
 
 		const { extIdpConnidentifier, wechatMiniProgramCodeAndPhonePayload, options } = data
 
-		const code  = await this.resetWxLoginCode()
+		const { wxPhoneInfo } = wechatMiniProgramCodeAndPhonePayload
 
-		if (!code) {
+		if (!wxPhoneInfo || !wxPhoneInfo.code) {
+			return returnError({
+				message: 'wxPhoneInfo.code is required'
+			})
+		}
+
+		const wxLoginCode  = await this.resetWxLoginCode()
+
+		if (!wxLoginCode) {
 			return returnError({
 				message: 'get wx login code error'
 			})
@@ -269,11 +277,11 @@ export class Authing {
 			connection: 'wechat_mini_program_code_and_phone',
 			extIdpConnidentifier,
 			wechatMiniProgramCodeAndPhonePayload: {
-				wxPhoneInfo: wechatMiniProgramCodeAndPhonePayload.wxPhoneInfo,
+				wxPhoneInfo,
 				wxLoginInfo: {
 					encryptedData: wechatMiniProgramCodeAndPhonePayload?.wxLoginInfo?.encryptedData || '',
 					iv: wechatMiniProgramCodeAndPhonePayload?.wxLoginInfo?.iv || '',
-					code
+					code: wxLoginCode
 				}
 			},
 			options
@@ -286,7 +294,7 @@ export class Authing {
   	const [loginStateError, loginState] = await this.getLoginState()
 
 		if (loginStateError) {
-			this.clearLoginState()
+			await this.clearLoginState()
 			return returnSuccess(true)
 		}
 
