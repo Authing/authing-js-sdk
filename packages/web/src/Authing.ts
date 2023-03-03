@@ -3,7 +3,9 @@ import {
 	DEFAULT_IFRAME_LOGINSTATE_TIMEOUT,
 	DEFAULT_POPUP_HEIGHT,
 	DEFAULT_POPUP_WIDTH,
+	DEFAULT_RETRY_TIMES,
 	DEFAULT_SCOPE,
+	DEFAULT_SOCKET_URI,
 	MSG_CROSS_ORIGIN_ISOLATED,
 	MSG_PENDING_AUTHZ
 } from './constants'
@@ -40,7 +42,6 @@ import {
 	parseToken,
 	transactionKey
 } from './utils'
-
 export class Authing {
 	private globalMsgListener: MsgListener | null | undefined
 
@@ -48,8 +49,16 @@ export class Authing {
 	private readonly loginStateProvider: StorageProvider<LoginState>
 	private readonly transactionProvider: StorageProvider<LoginTransaction>
 	private readonly domain: string
+	private wsMap: {[propName: string]: {
+    socket: WebSocket,
+    lockConnect: boolean,
+    timeConnect: number
+  }}
+	private eventBus: {[propName: string]: [(data: string) => any, undefined | ((data: string) => any)][]}
 
 	constructor(options: AuthingSPAInitOptions) {
+		this.wsMap = {}
+		this.eventBus = {}
 		this.options = options as any
 		this.domain = domainC14n(this.options.domain)
 
@@ -83,6 +92,8 @@ export class Authing {
 		options.popupWidth = options.popupWidth ?? DEFAULT_POPUP_WIDTH
 		options.popupHeight = options.popupHeight ?? DEFAULT_POPUP_HEIGHT
 		options.scope = options.scope ?? DEFAULT_SCOPE
+		options.retryTimes = options.retryTimes ?? DEFAULT_RETRY_TIMES
+		options.socketUri = options.socketUri ?? DEFAULT_SOCKET_URI
 	}
 
 	async getLoginStateWithRedirect() {
@@ -837,4 +848,164 @@ export class Authing {
 
 		return paramDict
 	}
+
+
+	// socket 重连
+	private reconnect(eventName: string) {
+		return new Promise((resolve, reject) => {
+			if (this.options.retryTimes && this.wsMap[eventName].timeConnect < this.options.retryTimes) {
+				if (!this.wsMap[eventName].lockConnect) {
+					this.wsMap[eventName].lockConnect = true
+					this.wsMap[eventName].timeConnect ++
+
+					setTimeout(() => {
+						this.wsMap[eventName].lockConnect = false
+						this.initWebSocket(eventName, true).then(() => {
+							resolve(true)
+						}).catch((e) => {
+							reject(e)
+						})
+					}, 2000)
+				}
+			} else {
+				reject('socket 服务器连接超时')
+			}
+		})
+	}
+
+	// 消息通信
+	private postMessage(eventName: string) {
+		this.wsMap[eventName].socket.addEventListener('message', (event) => {
+			if (this.eventBus[eventName]) {
+				this.eventBus[eventName].forEach(callback => {
+					callback[0](event.data.toString('utf8'))
+				})
+			} else {
+				// 未订阅事件
+				console.warn('未订阅的事件：', eventName)
+			}
+		})
+	}
+
+	// 错误重连
+	private connectError(eventName: string) {
+		return new Promise((resolve, reject) => {
+			this.wsMap[eventName].socket.addEventListener('error', async(e) => {
+				try {
+					await this.reconnect(eventName)
+					resolve(true)
+				} catch (error) {
+					return reject(`socket 连接异常：${JSON.stringify(e)}`)
+				}
+			})
+
+			this.wsMap[eventName].socket.onclose = async() => {
+				try {
+					await this.reconnect(eventName)
+					resolve(true)
+				} catch (error) {
+					return reject('socket 服务器连接超时')
+				}
+			}
+		})
+	}
+
+	private initWebSocket(eventName: string, retry?: boolean,) {
+		return new Promise(async(resolve, reject) => {
+			if (!this.wsMap[eventName] || retry) {
+				const accessToken = (await this.getLoginState())?.accessToken
+
+				if (!accessToken) {
+					return reject('未登录用户')
+				}
+
+				this.wsMap[eventName] = {
+					socket: new WebSocket(`${this.options.socketUri}/events/v1/authentication/sub?code=${eventName}&token=${accessToken}`),
+					timeConnect: retry ? this.wsMap[eventName].timeConnect : 0,
+					lockConnect: false
+				}
+
+				this.wsMap[eventName].socket.onopen = () => {
+					resolve(true)
+				}
+
+				this.postMessage(eventName)
+
+				try {
+					await this.connectError(eventName)
+					resolve(true)
+				} catch (error) {
+					reject(error)
+				}
+
+			} else {
+				resolve(true)
+			}
+		})
+	}
+
+	public sub(eventName: string, callback: (data: string) => any, errCallback?: (data: string) => any) {
+		/**
+     * 1. 判断是否连接 socket
+     * 2. 获取 socket 实例
+     * 3. 订阅
+     */
+		if (typeof eventName !== 'string') {
+			throw new Error('订阅事件名称为 string 类型！！！')
+		}
+
+		if (typeof callback !== 'function') {
+			throw new Error('订阅事件回调函数需要为 function 类型！！！')
+		}
+
+		if (!this.options.socketUri) {
+			throw new Error('订阅事件需要添加 socketUri 连接地址！！！')
+		}
+
+
+		this.initWebSocket(eventName).catch((e: string) => {
+			this.eventBus[eventName].forEach((item) => {
+				item[1]?.(e)
+			})
+		})
+
+		if (this.eventBus[eventName]) {
+			this.eventBus[eventName].push([callback, errCallback])
+		} else {
+			this.eventBus[eventName] = [[callback, errCallback]]
+		}
+	}
+
+	/**
+   * @summary 事件发布
+   * @description 客户调用发布事件到事件中心
+   * @returns
+   */
+	public async pub(eventName: string, data: string) {
+		if (typeof eventName !== 'string') {
+			throw new Error('事件名称为 string 类型！！！')
+		}
+
+		if (typeof data !== 'string') {
+			throw new Error('发布数据为 string 类型！！！')
+		}
+
+		const accessToken = (await this.getLoginState())?.accessToken
+
+		if (!accessToken) {
+			throw new Error('未登录用户')
+		}
+
+		return await axiosPost(`${this.domain}/api/v3/pub-userEvent`, {
+			eventType: eventName,
+			source: '@authing/web',
+			eventData: data
+		}, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'x-authing-userpool-id': this.options.userPoolId
+			}
+		})
+	}
+
 }

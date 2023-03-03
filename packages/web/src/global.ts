@@ -98,6 +98,12 @@ export interface AuthingSPAInitOptions {
    * 弹出窗口的高度
    */
   popupHeight?: number
+
+  // 事件订阅 socket 连接地址
+  socketUri?: string;
+
+  // 重试次数
+  retryTimes?: number;
 }
 
 export interface LoginState {

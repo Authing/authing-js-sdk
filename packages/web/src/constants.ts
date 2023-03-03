@@ -14,3 +14,6 @@ export const MSG_PENDING_AUTHZ =
   '另一个认证流程正在进行中，请不要同时发起多个认证'
 export const MSG_CROSS_ORIGIN_ISOLATED =
   '当前页面运行在隔离模式下, 无法进行此方式登录, 请使用 loginWithRedirect'
+
+export const DEFAULT_RETRY_TIMES = 5
+export const DEFAULT_SOCKET_URI = 'wss://events.authing.com'
