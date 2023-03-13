@@ -20,7 +20,8 @@ import {
 	UpdateUserInfo,
 	SimpleResponseData,
 	WxCodeAndPhoneLoginOptions,
-	LoginByPhoneOptions
+	LoginByPhoneOptions,
+	SendEmailCodeOptions
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -52,7 +53,7 @@ export class Authing {
 			const res = await this.storage.get(
 				getLoginStateKey(this.options.appId)
 			)
-  
+
 			const loginState: LoginState = res.data
 
 			if (loginState.expires_at > Date.now()) {
@@ -108,7 +109,7 @@ export class Authing {
 			if (error) {
 				return returnError(error)
 			}
-  
+
 			return returnSuccess(res[encryptType].publicKey)
 		} catch (e) {
 			return returnError({
@@ -332,6 +333,23 @@ export class Authing {
 		const [error, res] = await request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/send-sms`,
+			data,
+			header: {
+				'x-authing-userpool-id': this.options.userPoolId
+			}
+		})
+
+		if (error) {
+			return returnError(error)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async sendEmailCode(data: SendEmailCodeOptions): Promise<SDKResponse<SimpleResponseData>> {
+		const [error, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/send-email`,
 			data,
 			header: {
 				'x-authing-userpool-id': this.options.userPoolId

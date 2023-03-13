@@ -265,11 +265,11 @@ export interface UserInfo {
   departmentIds?: string[]
 }
 
-export type IdentityProvider = 'wechat' | 'qq' | 'wechatwork' | 'dingtalk' | 'weibo' 
-| 'github' | 'alipay' | 'baidu' | 'lark' 
-| 'welink' | 'yidun' | 'qingcloud' | 'google' 
-| 'gitlab' | 'gitee' | 'twitter' | 'facebook' 
-| 'slack' | 'linkedin' | 'instagram' | 'oidc' 
+export type IdentityProvider = 'wechat' | 'qq' | 'wechatwork' | 'dingtalk' | 'weibo'
+| 'github' | 'alipay' | 'baidu' | 'lark'
+| 'welink' | 'yidun' | 'qingcloud' | 'google'
+| 'gitlab' | 'gitee' | 'twitter' | 'facebook'
+| 'slack' | 'linkedin' | 'instagram' | 'oidc'
 | 'oauth2' | 'saml' | 'ldap' | 'ad' | 'cas' | 'azure-ad'
 
 export interface GetPhoneOptions {
@@ -295,6 +295,24 @@ export interface SendSmsOptions {
   channel: SmsChannel
   // 默认 +86，手机区号，中国大陆手机号可不填
   phoneCountryCode?: string
+}
+
+export type EmailChannel =
+  | 'CHANNEL_LOGIN'
+  | 'CHANNEL_REGISTER'
+  | 'CHANNEL_RESET_PASSWORD'
+  | 'CHANNEL_VERIFY_EMAIL_LINK'
+  | 'CHANNEL_UPDATE_EMAIL'
+  | 'CHANNEL_BIND_EMAIL'
+  | 'CHANNEL_UNBIND_EMAIL'
+  | 'CHANNEL_VERIFY_MFA'
+  | 'CHANNEL_UNLOCK_ACCOUNT'
+  | 'CHANNEL_COMPLETE_EMAIL'
+  | 'CHANNEL_DELETE_ACCOUNT'
+
+export interface SendEmailCodeOptions {
+  email: string,
+  channel: EmailChannel
 }
 
 export interface RefreshTokenOptions {
