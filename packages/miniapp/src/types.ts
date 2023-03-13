@@ -17,6 +17,8 @@ export interface EncryptFunction {
   (plainText: string, publicKey: string): string
 }
 
+export type PasswordEncryptType = 'none' | 'rsa' | 'sm2'
+
 export declare abstract class IStorageProvider {
 	get(key: string): Promise<GetStorageCallbackData>
 
@@ -126,7 +128,7 @@ export interface PasswordLoginOptions {
   }
   options?: {
     // 小程序端使用 none 和 rsa
-    passwordEncryptType?: 'none' | 'rsa' | 'sm2'
+    passwordEncryptType?: PasswordEncryptType
     // openid：必须包含
     // profile：返回 birthdate, family_name, gender, given_name, locale, middle_name, name, nickname, picture, preferred_username, profile, update_at, website, zoneinfo
     // username： 返回 username
@@ -162,7 +164,7 @@ export interface PassCodeLoginOptions {
   }
   options?: {
     // 小程序端使用 none 和 rsa
-    passwordEncryptType?: 'none' | 'rsa' | 'sm2'
+    passwordEncryptType?: PasswordEncryptType
     // openid：必须包含
     // profile：返回 birthdate, family_name, gender, given_name, locale, middle_name, name, nickname, picture, preferred_username, profile, update_at, website, zoneinfo
     // username： 返回 username
@@ -325,7 +327,7 @@ export interface UpdatePasswordOptions {
   newPassword: string
   oldPassword: string
   // 小程序端使用 none 和 rsa
-  passwordEncryptType?: 'none' | 'rsa' | 'sm2'
+  passwordEncryptType?: PasswordEncryptType
 }
 
 export interface ChangeQrcodeStatusOptions {
@@ -334,6 +336,63 @@ export interface ChangeQrcodeStatusOptions {
   // CONFIRM: 修改二维码状态为已授权，执行此操作前必须先执行 `SCAN 操作；
   // CANCEL: 修改二维码状态为已取消，执行此操作前必须先执行 `SCAN 操作；
   action: 'SCAN' | 'CONFIRM' | 'CANCEL'
+}
+
+export interface BindEmailOptions {
+  email: string
+  passCode: string
+}
+
+export type VerifyEmailMethod =
+  |'EMAIL_PASSCODE'
+
+export interface EmailPassCodePayload {
+  newEmail: string
+  newEmailPassCode: string
+  oldEmail?: string
+  oldEmailPassCode?: string
+}
+export interface UpdateEmailOptions {
+  verifyMethod: VerifyEmailMethod
+  emailPassCodePayload: EmailPassCodePayload
+}
+
+export interface BindPhoneOptions {
+  phoneNumber: string
+  passCode: string
+  phoneCountryCode?: string
+}
+
+export type VerifyPhoneMethod =
+  | 'PHONE_PASSCODE'
+
+export interface PhonePassCodePayload {
+  newPhoneNumber: string
+  newPhonePassCode: string
+  newPhoneCountryCode?: string
+  oldPhoneNumber?: string
+  oldPhonePassCode?: string
+  oldPhoneCountryCode?: string
+}
+
+export interface UpdatePhoneOptions {
+  verifyMethod: VerifyPhoneMethod
+  phonePassCodePayload: PhonePassCodePayload
+}
+
+export type DeleteAccountVerifyMethod =
+  | 'PHONE_PASSCODE'
+  | 'EMAIL_PASSCODE'
+  | 'PASSWORD'
+
+export interface DeleteAccountOptions {
+  verifyMethod: DeleteAccountVerifyMethod
+  phonePassCodePayload?: BindPhoneOptions
+  emailPassCodePayload?: BindEmailOptions
+  passwordPayload?: {
+    password: string
+    passwordEncryptType?: PasswordEncryptType
+  }
 }
 
 export interface LoginState {

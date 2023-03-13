@@ -21,7 +21,12 @@ import {
 	SimpleResponseData,
 	WxCodeAndPhoneLoginOptions,
 	LoginByPhoneOptions,
-	SendEmailCodeOptions
+	SendEmailCodeOptions,
+	BindEmailOptions,
+	UpdateEmailOptions,
+	BindPhoneOptions,
+	UpdatePhoneOptions,
+	DeleteAccountOptions
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -596,6 +601,176 @@ export class Authing {
 		return returnSuccess(updateProfileRes)
 	}
 
+	// 绑定邮箱
+	async bindEmail(data: BindEmailOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [bindError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/bind-email`,
+			data,
+			header: {
+				Authorization: access_token
+			}
+		})
+
+		if (bindError) {
+			return returnError(bindError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	// 修改邮箱
+	async updateEmail(data: UpdateEmailOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [updateError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/verify-update-email-request`,
+			data,
+			header: {
+				Authorization: access_token
+			}
+		})
+
+		if (updateError) {
+			return returnError(updateError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	// 绑定手机号
+	async bindPhone(data: BindPhoneOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [bindError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/bind-phone`,
+			data,
+			header: {
+				Authorization: access_token
+			}
+		})
+
+		if (bindError) {
+			return returnError(bindError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	// 修改手机号
+	async updatePhone(data: UpdatePhoneOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [updateError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/verify-update-phone-request`,
+			data,
+			header: {
+				Authorization: access_token
+			}
+		})
+
+		if (updateError) {
+			return returnError(updateError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	// 注销账号
+	async deleteAccount(data: DeleteAccountOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [deleteError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/verify-delete-account-request`,
+			data,
+			header: {
+				Authorization: access_token
+			}
+		})
+
+		if (deleteError) {
+			return returnError(deleteError)
+		}
+
+		return returnSuccess(res)
+	}
+
 	async getPhone(data: GetPhoneOptions): Promise<SDKResponse<GetUserPhoneResponseData>> {
 		const [getPhoneError, getPhoneRes] = await request({
 			method: 'POST',
@@ -616,4 +791,5 @@ export class Authing {
 
 		return returnError(getPhoneRes)
 	}
+
 }
