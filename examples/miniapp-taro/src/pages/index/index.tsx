@@ -41,6 +41,9 @@ export default class Index extends Component<PropsWithChildren> {
         <View>使用手机短信验证码登录</View>
         <Button onClick={() => this.loginByPassCode()}>loginByPassCode</Button>
 
+        <View>发送邮箱验证码</View>
+        <Button onClick={() => this.sendEmailCode()}>sendEmailCode</Button>
+
         <Button openType="getPhoneNumber"  onGetPhoneNumber={(e) => this.getPhone(e)}>getPhone</Button>
         <Button onClick={() => this.refreshToken()}>refreshToken</Button>
         <Button onClick={() => this.updatePassword()}>updatePassword</Button>
@@ -66,7 +69,7 @@ export default class Index extends Component<PropsWithChildren> {
 
   /**
    * 需要在真机上测试，微信开发者工具不会返回 code
-   * @param {*} e 
+   * @param {*} e
    */
   async loginByPhone (e) {
     const { code } = e.detail
@@ -86,7 +89,7 @@ export default class Index extends Component<PropsWithChildren> {
 
   /**
    * 需要在真机上测试，微信开发者工具不会返回 code
-   * @param {*} e 
+   * @param {*} e
    */
   async getPhone (e) {
     const { code } = e.detail
@@ -175,5 +178,14 @@ export default class Index extends Component<PropsWithChildren> {
     const res = await authing.getLoginState()
 
     console.log('authing.getLoginState res: ', res)
-  } 
+  }
+
+  async sendEmailCode () {
+    const res = await authing.sendEmailCode({
+      email: 'YOUR_EMAIL_ADDRESS',
+      channel: 'CHANNEL_LOGIN'
+    })
+
+    console.log('authing.sendEmailCode res: ', res)
+  }
 }

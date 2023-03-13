@@ -20,7 +20,7 @@ Page({
 
   /**
    * 需要在真机上测试，微信开发者工具不会返回 code
-   * @param {*} e 
+   * @param {*} e
    */
   async loginByPhone (e) {
     const { code } = e.detail
@@ -38,7 +38,7 @@ Page({
     console.log('authing.loginByPhone res: ', res)
   },
 
-  async loginByCode () {    
+  async loginByCode () {
     const res = await authing.loginByCode({
       extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
       options: {
@@ -51,7 +51,7 @@ Page({
 
   /**
    * 需要在真机上测试，微信开发者工具不会返回 code
-   * @param {*} e 
+   * @param {*} e
    */
   async getPhone (e) {
     const { code } = e.detail
@@ -151,5 +151,14 @@ Page({
   async clearLoginState () {
     const res = await authing.clearLoginState()
     console.log('authing.clearLoginState res: ', res)
+  },
+
+  async sendEmailCode () {
+    const res = await authing.sendEmailCode({
+      email: 'YOUR_EMAIL_ADDRESS',
+      channel: 'CHANNEL_LOGIN'
+    })
+    console.log('authing.sendEmailCode res: ', res)
+
   }
 })

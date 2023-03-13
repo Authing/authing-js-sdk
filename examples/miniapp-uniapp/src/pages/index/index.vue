@@ -12,6 +12,8 @@
 			<button @click="sendSms">sendSms</button>
 			<!-- 使用手机短信验证码登录 -->
 			<button @click="loginByPassCode">loginByPassCode</button>
+      <!-- 发送邮箱验证码 -->
+			<button @click="sendEmailCode">sendEmailCode</button>
 
 			<button @click="refreshToken">refreshToken</button>
 			<button @click="updatePassword">updatePassword</button>
@@ -53,7 +55,7 @@
 		methods: {
 			/**
 			 * 需要在真机上测试，微信开发者工具不会返回 code
-			 * @param {*} e 
+			 * @param {*} e
 			 */
 			async loginByPhone (e) {
 				const { code } = e.detail
@@ -71,7 +73,7 @@
 				console.log('authing.loginByPhone res: ', res)
 			},
 
-			async loginByCode () {		
+			async loginByCode () {
 				const res = await authing.loginByCode({
 					extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
 					options: {
@@ -84,7 +86,7 @@
 
 			/**
 			* 需要在真机上测试，微信开发者工具不会返回 code
-			* @param {*} e 
+			* @param {*} e
 			*/
 			async getPhone (e) {
 				const { code } = e.detail
@@ -179,7 +181,15 @@
 			async logout () {
 				const res = await authing.logout()
     		console.log('authing.logout res: ', res)
-			}
+			},
+
+      async sendEmailCode() {
+        const res = await authing.sendEmailCode({
+          email: 'YOUR_EMAIL_ADDRESS',
+          channel: 'CHANNEL_LOGIN'
+        })
+    		console.log('authing.sendEmailCode res: ', res)
+      }
 		}
 	}
 </script>

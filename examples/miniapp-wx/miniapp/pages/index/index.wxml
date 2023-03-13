@@ -7,6 +7,8 @@
 <button bindtap="sendSms">sendSms</button>
 <!-- 使用手机短信验证码登录 -->
 <button bindtap="loginByPassCode">loginByPassCode</button>
+<!-- 发送短信验证码 -->
+<button bindtap="sendEmailCode">sendEmailCode</button>
 
 <button bindtap="refreshToken">refreshToken</button>
 <button bindtap="updatePassword">updatePassword</button>
