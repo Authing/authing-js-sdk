@@ -13,7 +13,6 @@ const authing = new Authing({
   encryptFunction
 })
 
-console.log('authing: ', authing)
 
 Page({
   data: {},
@@ -159,6 +158,64 @@ Page({
       channel: 'CHANNEL_LOGIN'
     })
     console.log('authing.sendEmailCode res: ', res)
+  },
+
+  async bindEmail () {
+    const res = await authing.bindEmail({
+      email: '',
+      passCode: ''
+    })
+    console.log('authing.bindEmail res: ', res)
+
+
+  },
+
+  async updateEmail () {
+    const res = await authing.updateEmail({
+      verifyMethod: 'EMAIL_PASSCODE',
+      emailPassCodePayload: {
+        newEmail: '',
+        newEmailPassCode: ''
+      }
+    })
+    console.log('authing.updateEmail res: ', res)
+
+
+  },
+
+  async bindPhone () {
+    const res = await authing.bindPhone({
+      phoneNumber: '',
+      passCode: '',
+    })
+    console.log('authing.bindPhone res: ', res)
+
+
+  },
+
+  async updatePhone () {
+    const res = await authing.updatePhone({
+      verifyMethod:'PHONE_PASSCODE',
+      phonePassCodePayload: {
+        newPhoneNumber: '',
+        newPhonePassCode: ''
+      }
+    })
+    console.log('authing.updatePhone res: ', res)
+
+
+  },
+
+  async deleteAccount () {
+    const res = await authing.deleteAccount({
+      verifyMethod: 'EMAIL_PASSCODE',
+      emailPassCodePayload: {
+        email: '',
+        passCode: ''
+      }
+    })
+    console.log('authing.deleteAccount res: ', res)
+
 
   }
 })
