@@ -16,4 +16,4 @@ export const MSG_CROSS_ORIGIN_ISOLATED =
   '当前页面运行在隔离模式下, 无法进行此方式登录, 请使用 loginWithRedirect'
 
 export const DEFAULT_RETRY_TIMES = 5
-export const DEFAULT_SOCKET_URI = 'wss://events.authing.com'
+export const DEFAULT_SOCKET_URI = 'wss://events.authing.cn'
