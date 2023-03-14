@@ -80,9 +80,9 @@ Page({
   async sendSms () {
     // 指定 channel 为 CHANNEL_LOGIN，发送登录所用的验证码
     const res = await authing.sendSms({
-      phoneNumber: '13126919251',
+      phoneNumber: 'YOUR_PHONE_NUMBER',
       phoneCountryCode: '+86',
-      channel: 'CHANNEL_LOGIN'
+      channel: 'CHANNEL_UNBIND_PHONE'
     })
 
     console.log('authing.sendSms res: ', res)
@@ -162,60 +162,97 @@ Page({
 
   async bindEmail () {
     const res = await authing.bindEmail({
-      email: '',
+      email: 'YOUR_EMAIL_ADDRESS',
       passCode: ''
     })
     console.log('authing.bindEmail res: ', res)
+  },
 
+  // 用于修改邮箱发送短信验证码
+  async verifyOldEmail() {
+    const res = await authing.sendEmailCode({
+      email: 'YOUR_OLD_EMAIL_ADDRESS',
+      channel: 'CHANNEL_UPDATE_EMAIL'
+    })
+    console.log('authing.sendEmailCode res: ', res)
+  },
 
+  async verifyNewEmail() {
+    const res = await authing.sendEmailCode({
+      email: 'YOUR_NEW_EMAIL_ADDRESS',
+      channel: 'CHANNEL_UPDATE_EMAIL'
+    })
+    console.log('authing.sendEmailCode res: ', res)
   },
 
   async updateEmail () {
-    const res = await authing.updateEmail({
+    // 前置调用 verifyOldEmail verifyNewEmail 获取新旧邮箱验证码
+    // this.verifyOldEmail()
+    // this.verifyNewEmail()
+    const [_, res] = await authing.updateEmailRequest({
       verifyMethod: 'EMAIL_PASSCODE',
       emailPassCodePayload: {
-        newEmail: '',
-        newEmailPassCode: ''
+        newEmail: 'YOUR_EMAIL_ADDRESS',
+        newEmailPassCode: '',
+        oldEmail: 'YOUR_EMAIL_ADDRESS',
+        oldEmailPassCode: ''
       }
     })
-    console.log('authing.updateEmail res: ', res)
 
+    console.log('authing.updateEmailRequest res: ', res)
 
+    const updateRes = await authing.updateEmail({
+      updateEmailToken: res.updateEmailToken
+    })
+    console.log('authing.updateEmail res: ', updateRes)
   },
 
   async bindPhone () {
+    // 前置调用 sendSms 方法，channel: CHANNEL_BIND_PHONE
     const res = await authing.bindPhone({
-      phoneNumber: '',
+      phoneNumber: 'YOUR_PHONE_NUMBER',
       passCode: '',
     })
     console.log('authing.bindPhone res: ', res)
-
-
   },
 
+  // TODO 修改手机号 channel
   async updatePhone () {
-    const res = await authing.updatePhone({
+    const [_, res] = await authing.updatePhoneRequest({
       verifyMethod:'PHONE_PASSCODE',
       phonePassCodePayload: {
-        newPhoneNumber: '',
+        newPhoneNumber: 'YOUR_PHONE_NUMBER',
         newPhonePassCode: ''
       }
     })
     console.log('authing.updatePhone res: ', res)
 
+    if (res?.updatePhoneToken) {
+      await authing.updatePhone({
+        updatePhoneToken: res.updatePhoneToken
+      })
+    }
 
   },
 
   async deleteAccount () {
-    const res = await authing.deleteAccount({
+    /**
+     * 邮箱 EMAIL_PASSCODE: 前置调用发送邮件方法 channel: CHANNEL_DELETE_ACCOUNT
+     * 手机号 PHONE_PASSCODE: 前置调用发送短信方法 channel: CHANNEL_DELETE_ACCOUNT
+     * 密码 PASSWORD: 传入 password 参数
+     */
+    const [_, res] = await authing.deleteAccountRequest({
       verifyMethod: 'EMAIL_PASSCODE',
       emailPassCodePayload: {
-        email: '',
+        email: 'YOUR_EMAIL_ADDRESS',
         passCode: ''
       }
     })
     console.log('authing.deleteAccount res: ', res)
 
+    await authing.deleteAccount({
+      deleteAccountToken: res.deleteAccountToken
+    })
 
   }
 })
