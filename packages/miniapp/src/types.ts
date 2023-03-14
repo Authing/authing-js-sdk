@@ -352,9 +352,13 @@ export interface EmailPassCodePayload {
   oldEmail?: string
   oldEmailPassCode?: string
 }
-export interface UpdateEmailOptions {
+export interface UpdateEmailRequestOptions {
   verifyMethod: VerifyEmailMethod
   emailPassCodePayload: EmailPassCodePayload
+}
+
+export interface UpdateEmailOptions {
+  updateEmailToken: string
 }
 
 export interface BindPhoneOptions {
@@ -375,9 +379,13 @@ export interface PhonePassCodePayload {
   oldPhoneCountryCode?: string
 }
 
-export interface UpdatePhoneOptions {
+export interface UpdatePhoneRequestOptions {
   verifyMethod: VerifyPhoneMethod
   phonePassCodePayload: PhonePassCodePayload
+}
+
+export interface UpdatePhoneOptions {
+  updatePhoneToken: string
 }
 
 export type DeleteAccountVerifyMethod =
@@ -385,7 +393,7 @@ export type DeleteAccountVerifyMethod =
   | 'EMAIL_PASSCODE'
   | 'PASSWORD'
 
-export interface DeleteAccountOptions {
+export interface DeleteAccountRequestOptions {
   verifyMethod: DeleteAccountVerifyMethod
   phonePassCodePayload?: BindPhoneOptions
   emailPassCodePayload?: BindEmailOptions
@@ -393,6 +401,22 @@ export interface DeleteAccountOptions {
     password: string
     passwordEncryptType?: PasswordEncryptType
   }
+}
+
+export interface DeleteAccountOptions {
+  deleteAccountToken: string
+}
+
+export interface DecryptDataOptions {
+  extIdpConnidentifier: string
+  encryptedData: string
+  iv: string
+  code: string
+}
+
+export interface GetAccessTokenOptions {
+  appId: string
+  appSecret: string
 }
 
 export interface LoginState {

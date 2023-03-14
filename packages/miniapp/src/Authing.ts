@@ -26,7 +26,12 @@ import {
 	UpdateEmailOptions,
 	BindPhoneOptions,
 	UpdatePhoneOptions,
-	DeleteAccountOptions
+	DeleteAccountOptions,
+	DecryptDataOptions,
+	GetAccessTokenOptions,
+	UpdateEmailRequestOptions,
+	UpdatePhoneRequestOptions,
+	DeleteAccountRequestOptions
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -624,7 +629,8 @@ export class Authing {
 			url: `${this.options.host}/api/v3/bind-email`,
 			data,
 			header: {
-				Authorization: access_token
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
 			}
 		})
 
@@ -636,7 +642,7 @@ export class Authing {
 	}
 
 	// 修改邮箱
-	async updateEmail(data: UpdateEmailOptions) {
+	async updateEmailRequest(data: UpdateEmailRequestOptions) {
 		const [error, loginState] = await this.getLoginState()
 
 		if (error) {
@@ -658,7 +664,42 @@ export class Authing {
 			url: `${this.options.host}/api/v3/verify-update-email-request`,
 			data,
 			header: {
-				Authorization: access_token
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (updateError) {
+			return returnError(updateError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async updateEmail(data: UpdateEmailOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [updateError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/update-email`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
 			}
 		})
 
@@ -692,7 +733,8 @@ export class Authing {
 			url: `${this.options.host}/api/v3/bind-phone`,
 			data,
 			header: {
-				Authorization: access_token
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
 			}
 		})
 
@@ -704,7 +746,7 @@ export class Authing {
 	}
 
 	// 修改手机号
-	async updatePhone(data: UpdatePhoneOptions) {
+	async updatePhoneRequest(data: UpdatePhoneRequestOptions) {
 		const [error, loginState] = await this.getLoginState()
 
 		if (error) {
@@ -726,7 +768,42 @@ export class Authing {
 			url: `${this.options.host}/api/v3/verify-update-phone-request`,
 			data,
 			header: {
-				Authorization: access_token
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (updateError) {
+			return returnError(updateError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async updatePhone(data: UpdatePhoneOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [updateError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/update-phone`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
 			}
 		})
 
@@ -738,7 +815,7 @@ export class Authing {
 	}
 
 	// 注销账号
-	async deleteAccount(data: DeleteAccountOptions) {
+	async deleteAccountRequest(data: DeleteAccountRequestOptions) {
 		const [error, loginState] = await this.getLoginState()
 
 		if (error) {
@@ -760,7 +837,42 @@ export class Authing {
 			url: `${this.options.host}/api/v3/verify-delete-account-request`,
 			data,
 			header: {
-				Authorization: access_token
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (deleteError) {
+			return returnError(deleteError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async deleteAccount(data: DeleteAccountOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [deleteError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/delete-account`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
 			}
 		})
 
@@ -790,6 +902,72 @@ export class Authing {
 		}
 
 		return returnError(getPhoneRes)
+	}
+
+	async decryptData(data: DecryptDataOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [decryptError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/decrypt-wechat-miniprogram-data`,
+			data,
+			header: {
+				Authorization: access_token
+			}
+		})
+
+		if (decryptError) {
+			return returnError(decryptError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async getAccessToken (data: GetAccessTokenOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [getError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/get-wechat-access-token`,
+			data,
+			header: {
+				Authorization: access_token
+			}
+		})
+
+		if (getError) {
+			return returnError(getError)
+		}
+
+		return returnSuccess(res)
 	}
 
 }
