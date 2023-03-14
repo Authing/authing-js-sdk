@@ -254,5 +254,25 @@ Page({
       deleteAccountToken: res.deleteAccountToken
     })
 
+  },
+
+  async decryptData () {
+    const res = await authing.decryptData({
+      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      encryptedData: '',
+      iv: '',
+      code: ''
+    })
+
+    console.log('authing.decryptData res: ', res)
+  },
+
+  async getAccessToken () {
+    const res = await authing.getAccessToken({
+      appId: 'WX_APP_ID',
+      appSecret: 'WX_APP_SECRET'
+    })
+
+    console.log('authing.getAccessToken res: ', res)
   }
 })

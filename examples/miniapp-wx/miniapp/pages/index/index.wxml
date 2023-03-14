@@ -17,6 +17,10 @@
 <button bindtap="updateEmail">updateEmail</button>
 <button bindtap="deleteAccount">deleteAccount</button>
 
+<!-- 解密数据 -->
+<button bindtap="decryptData">decryptData</button>
+<button bindtap="getAccessToken">getAccessToken</button>
+
 
 <button bindtap="refreshToken">refreshToken</button>
 <button bindtap="updatePassword">updatePassword</button>

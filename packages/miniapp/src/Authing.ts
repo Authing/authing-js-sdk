@@ -926,7 +926,8 @@ export class Authing {
 			url: `${this.options.host}/api/v3/decrypt-wechat-miniprogram-data`,
 			data,
 			header: {
-				Authorization: access_token
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
 
@@ -959,7 +960,8 @@ export class Authing {
 			url: `${this.options.host}/api/v3/get-wechat-access-token`,
 			data,
 			header: {
-				Authorization: access_token
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
 
