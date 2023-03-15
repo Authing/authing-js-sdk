@@ -38,6 +38,7 @@ export default class Index extends Component<PropsWithChildren> {
 
         <View>发送手机短信验证码</View>
         <Button onClick={() => this.sendSms()}>sendSms</Button>
+        <Button onClick={() => this.bindPhone()}>bindPhone</Button>
         <View>使用手机短信验证码登录</View>
         <Button onClick={() => this.loginByPassCode()}>loginByPassCode</Button>
 
