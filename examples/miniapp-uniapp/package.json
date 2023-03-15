@@ -96,7 +96,7 @@
     "cross-env": "^7.0.2",
     "jest": "^25.4.0",
     "mini-types": "*",
-    "miniapp-api-typings": "*",
+    "miniprogram-api-typings": "*",
     "postcss-comment": "^2.0.0",
     "vue-template-compiler": "^2.6.11"
   },
