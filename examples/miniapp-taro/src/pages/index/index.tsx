@@ -33,7 +33,7 @@ export default class Index extends Component<PropsWithChildren> {
     return (
       <View className='index'>
         <Button onClick={() => this.loginByCode()}>loginByCode</Button>
-        <Button openType="getPhoneNumber"  onGetPhoneNumber={(e) => this.loginByPhone(e)}>loginByPhone</Button>
+        <Button openType='getPhoneNumber'  onGetPhoneNumber={(e) => this.loginByPhone(e)}>loginByPhone</Button>
         <Button onClick={() => this.loginByPassword()}>loginByPassword</Button>
 
         <View>发送手机短信验证码</View>
@@ -43,8 +43,11 @@ export default class Index extends Component<PropsWithChildren> {
 
         <View>发送邮箱验证码</View>
         <Button onClick={() => this.sendEmailCode()}>sendEmailCode</Button>
+        <Button onClick={() => this.bindEmail()}>bindEmail</Button>
+        <Button onClick={() => this.updateEmail()}>updateEmail</Button>
 
-        <Button openType="getPhoneNumber"  onGetPhoneNumber={(e) => this.getPhone(e)}>getPhone</Button>
+
+        <Button openType='getPhoneNumber'  onGetPhoneNumber={(e) => this.getPhone(e)}>getPhone</Button>
         <Button onClick={() => this.refreshToken()}>refreshToken</Button>
         <Button onClick={() => this.updatePassword()}>updatePassword</Button>
         <Button onClick={() => this.getUserInfo()}>getUserInfo</Button>
@@ -52,6 +55,12 @@ export default class Index extends Component<PropsWithChildren> {
         <Button onClick={() => this.updateUserInfo()}>updateUserInfo</Button>
 
         <Button onClick={() => this.getLoginState()}>getLoginState</Button>
+        <Button onClick={() => this.deleteAccount()}>deleteAccount</Button>
+
+
+        <Button onClick={() => this.decryptData()}>decryptData</Button>
+        <Button onClick={() => this.getAccessToken()}>getAccessToken</Button>
+
       </View>
     )
   }
@@ -187,5 +196,121 @@ export default class Index extends Component<PropsWithChildren> {
     })
 
     console.log('authing.sendEmailCode res: ', res)
+  }
+
+  async bindEmail () {
+    const res = await authing.bindEmail({
+      email: 'YOUR_EMAIL_ADDRESS',
+      passCode: ''
+    })
+    console.log('authing.bindEmail res: ', res)
+  }
+
+  // 用于修改邮箱发送短信验证码
+  async verifyOldEmail() {
+    const res = await authing.sendEmailCode({
+      email: 'YOUR_OLD_EMAIL_ADDRESS',
+      channel: 'CHANNEL_UPDATE_EMAIL'
+    })
+    console.log('authing.sendEmailCode res: ', res)
+  }
+
+  async verifyNewEmail() {
+    const res = await authing.sendEmailCode({
+      email: 'YOUR_NEW_EMAIL_ADDRESS',
+      channel: 'CHANNEL_UPDATE_EMAIL'
+    })
+    console.log('authing.sendEmailCode res: ', res)
+  }
+
+  async updateEmail () {
+    // 前置调用 verifyOldEmail verifyNewEmail 获取新旧邮箱验证码
+    // this.verifyOldEmail()
+    // this.verifyNewEmail()
+    const [_, res] = await authing.updateEmailRequest({
+      verifyMethod: 'EMAIL_PASSCODE',
+      emailPassCodePayload: {
+        newEmail: 'YOUR_EMAIL_ADDRESS',
+        newEmailPassCode: '',
+        oldEmail: 'YOUR_EMAIL_ADDRESS',
+        oldEmailPassCode: ''
+      }
+    })
+
+    console.log('authing.updateEmailRequest res: ', res)
+
+    const updateRes = await authing.updateEmail({
+      updateEmailToken: res.updateEmailToken
+    })
+    console.log('authing.updateEmail res: ', updateRes)
+  }
+
+  async bindPhone () {
+    // 前置调用 sendSms 方法，channel: CHANNEL_BIND_PHONE
+    const res = await authing.bindPhone({
+      phoneNumber: 'YOUR_PHONE_NUMBER',
+      passCode: '',
+    })
+    console.log('authing.bindPhone res: ', res)
+  }
+
+  // TODO 修改手机号 channel
+  async updatePhone () {
+    const [_, res] = await authing.updatePhoneRequest({
+      verifyMethod:'PHONE_PASSCODE',
+      phonePassCodePayload: {
+        newPhoneNumber: 'YOUR_PHONE_NUMBER',
+        newPhonePassCode: ''
+      }
+    })
+    console.log('authing.updatePhone res: ', res)
+
+    if (res?.updatePhoneToken) {
+      await authing.updatePhone({
+        updatePhoneToken: res.updatePhoneToken
+      })
+    }
+
+  }
+
+  async deleteAccount () {
+    /**
+     * 邮箱 EMAIL_PASSCODE: 前置调用发送邮件方法 channel: CHANNEL_DELETE_ACCOUNT
+     * 手机号 PHONE_PASSCODE: 前置调用发送短信方法 channel: CHANNEL_DELETE_ACCOUNT
+     * 密码 PASSWORD: 传入 password 参数
+     */
+    const [_, res] = await authing.deleteAccountRequest({
+      verifyMethod: 'EMAIL_PASSCODE',
+      emailPassCodePayload: {
+        email: 'YOUR_EMAIL_ADDRESS',
+        passCode: ''
+      }
+    })
+    console.log('authing.deleteAccount res: ', res)
+
+    await authing.deleteAccount({
+      deleteAccountToken: res.deleteAccountToken
+    })
+
+  }
+
+  async decryptData () {
+    const res = await authing.decryptData({
+      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      encryptedData: '',
+      iv: '',
+      code: ''
+    })
+
+    console.log('authing.decryptData res: ', res)
+  }
+
+  async getAccessToken () {
+    const res = await authing.getAccessToken({
+      appId: 'WX_APP_ID',
+      appSecret: 'WX_APP_SECRET'
+    })
+
+    console.log('authing.getAccessToken res: ', res)
   }
 }
