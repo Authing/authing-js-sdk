@@ -873,23 +873,14 @@ export class Authing {
 		})
 	}
 
-	// 消息通信
-	private postMessage(eventName: string) {
-		this.wsMap[eventName].socket.addEventListener('message', (event) => {
-			if (this.eventBus[eventName]) {
-				this.eventBus[eventName].forEach(callback => {
-					callback[0](event.data.toString('utf8'))
-				})
-			} else {
-				// 未订阅事件
-				console.warn('未订阅的事件：', eventName)
-			}
-		})
-	}
 
-	// 错误重连
-	private connectError(eventName: string) {
+	// 处理事件
+	private handleEvent(eventName: string) {
 		return new Promise((resolve, reject) => {
+			this.wsMap[eventName].socket.onopen = () => {
+				resolve(true)
+			}
+
 			this.wsMap[eventName].socket.addEventListener('error', async(e) => {
 				try {
 					await this.reconnect(eventName)
@@ -907,6 +898,17 @@ export class Authing {
 					return reject('socket 服务器连接超时')
 				}
 			}
+
+			this.wsMap[eventName].socket.addEventListener('message', (event) => {
+				if (this.eventBus[eventName]) {
+					this.eventBus[eventName].forEach(callback => {
+						callback[0](event.data.toString('utf8'))
+					})
+				} else {
+				  // 未订阅事件
+					console.warn('未订阅的事件：', eventName)
+				}
+			})
 		})
 	}
 
@@ -925,14 +927,8 @@ export class Authing {
 					lockConnect: false
 				}
 
-				this.wsMap[eventName].socket.onopen = () => {
-					resolve(true)
-				}
-
-				this.postMessage(eventName)
-
 				try {
-					await this.connectError(eventName)
+					await this.handleEvent(eventName)
 					resolve(true)
 				} catch (error) {
 					reject(error)
