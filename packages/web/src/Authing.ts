@@ -94,6 +94,11 @@ export class Authing {
 		options.scope = options.scope ?? DEFAULT_SCOPE
 		options.retryTimes = options.retryTimes ?? DEFAULT_RETRY_TIMES
 		options.socketUri = options.socketUri ?? DEFAULT_SOCKET_URI
+
+		// 关闭 socket 连接
+		window.onbeforeunload = () => {
+			this.closeAllSocket()
+		}
 	}
 
 	async getLoginStateWithRedirect() {
@@ -1002,6 +1007,18 @@ export class Authing {
 				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
+	}
+
+	public closeAllSocket() {
+		const keys = Object.keys(this.wsMap)
+
+		keys.forEach((key) => {
+			this.closeSocketByName(key)
+		})
+	}
+
+	public closeSocketByName(eventName: string) {
+		this.wsMap[eventName]?.socket?.close()
 	}
 
 }
