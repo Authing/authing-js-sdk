@@ -17,6 +17,8 @@ export interface EncryptFunction {
   (plainText: string, publicKey: string): string
 }
 
+export type PasswordEncryptType = 'none' | 'rsa' | 'sm2'
+
 export declare abstract class IStorageProvider {
 	get(key: string): Promise<GetStorageCallbackData>
 
@@ -126,7 +128,7 @@ export interface PasswordLoginOptions {
   }
   options?: {
     // 小程序端使用 none 和 rsa
-    passwordEncryptType?: 'none' | 'rsa' | 'sm2'
+    passwordEncryptType?: PasswordEncryptType
     // openid：必须包含
     // profile：返回 birthdate, family_name, gender, given_name, locale, middle_name, name, nickname, picture, preferred_username, profile, update_at, website, zoneinfo
     // username： 返回 username
@@ -162,7 +164,7 @@ export interface PassCodeLoginOptions {
   }
   options?: {
     // 小程序端使用 none 和 rsa
-    passwordEncryptType?: 'none' | 'rsa' | 'sm2'
+    passwordEncryptType?: PasswordEncryptType
     // openid：必须包含
     // profile：返回 birthdate, family_name, gender, given_name, locale, middle_name, name, nickname, picture, preferred_username, profile, update_at, website, zoneinfo
     // username： 返回 username
@@ -265,11 +267,11 @@ export interface UserInfo {
   departmentIds?: string[]
 }
 
-export type IdentityProvider = 'wechat' | 'qq' | 'wechatwork' | 'dingtalk' | 'weibo' 
-| 'github' | 'alipay' | 'baidu' | 'lark' 
-| 'welink' | 'yidun' | 'qingcloud' | 'google' 
-| 'gitlab' | 'gitee' | 'twitter' | 'facebook' 
-| 'slack' | 'linkedin' | 'instagram' | 'oidc' 
+export type IdentityProvider = 'wechat' | 'qq' | 'wechatwork' | 'dingtalk' | 'weibo'
+| 'github' | 'alipay' | 'baidu' | 'lark'
+| 'welink' | 'yidun' | 'qingcloud' | 'google'
+| 'gitlab' | 'gitee' | 'twitter' | 'facebook'
+| 'slack' | 'linkedin' | 'instagram' | 'oidc'
 | 'oauth2' | 'saml' | 'ldap' | 'ad' | 'cas' | 'azure-ad'
 
 export interface GetPhoneOptions {
@@ -297,6 +299,24 @@ export interface SendSmsOptions {
   phoneCountryCode?: string
 }
 
+export type EmailChannel =
+  | 'CHANNEL_LOGIN'
+  | 'CHANNEL_REGISTER'
+  | 'CHANNEL_RESET_PASSWORD'
+  | 'CHANNEL_VERIFY_EMAIL_LINK'
+  | 'CHANNEL_UPDATE_EMAIL'
+  | 'CHANNEL_BIND_EMAIL'
+  | 'CHANNEL_UNBIND_EMAIL'
+  | 'CHANNEL_VERIFY_MFA'
+  | 'CHANNEL_UNLOCK_ACCOUNT'
+  | 'CHANNEL_COMPLETE_EMAIL'
+  | 'CHANNEL_DELETE_ACCOUNT'
+
+export interface SendEmailCodeOptions {
+  email: string,
+  channel: EmailChannel
+}
+
 export interface RefreshTokenOptions {
   grant_type: 'refresh_token'
   redirect_uri: string
@@ -307,7 +327,7 @@ export interface UpdatePasswordOptions {
   newPassword: string
   oldPassword: string
   // 小程序端使用 none 和 rsa
-  passwordEncryptType?: 'none' | 'rsa' | 'sm2'
+  passwordEncryptType?: PasswordEncryptType
 }
 
 export interface ChangeQrcodeStatusOptions {
@@ -316,6 +336,87 @@ export interface ChangeQrcodeStatusOptions {
   // CONFIRM: 修改二维码状态为已授权，执行此操作前必须先执行 `SCAN 操作；
   // CANCEL: 修改二维码状态为已取消，执行此操作前必须先执行 `SCAN 操作；
   action: 'SCAN' | 'CONFIRM' | 'CANCEL'
+}
+
+export interface BindEmailOptions {
+  email: string
+  passCode: string
+}
+
+export type VerifyEmailMethod =
+  |'EMAIL_PASSCODE'
+
+export interface EmailPassCodePayload {
+  newEmail: string
+  newEmailPassCode: string
+  oldEmail?: string
+  oldEmailPassCode?: string
+}
+export interface UpdateEmailRequestOptions {
+  verifyMethod: VerifyEmailMethod
+  emailPassCodePayload: EmailPassCodePayload
+}
+
+export interface UpdateEmailOptions {
+  updateEmailToken: string
+}
+
+export interface BindPhoneOptions {
+  phoneNumber: string
+  passCode: string
+  phoneCountryCode?: string
+}
+
+export type VerifyPhoneMethod =
+  | 'PHONE_PASSCODE'
+
+export interface PhonePassCodePayload {
+  newPhoneNumber: string
+  newPhonePassCode: string
+  newPhoneCountryCode?: string
+  oldPhoneNumber?: string
+  oldPhonePassCode?: string
+  oldPhoneCountryCode?: string
+}
+
+export interface UpdatePhoneRequestOptions {
+  verifyMethod: VerifyPhoneMethod
+  phonePassCodePayload: PhonePassCodePayload
+}
+
+export interface UpdatePhoneOptions {
+  updatePhoneToken: string
+}
+
+export type DeleteAccountVerifyMethod =
+  | 'PHONE_PASSCODE'
+  | 'EMAIL_PASSCODE'
+  | 'PASSWORD'
+
+export interface DeleteAccountRequestOptions {
+  verifyMethod: DeleteAccountVerifyMethod
+  phonePassCodePayload?: BindPhoneOptions
+  emailPassCodePayload?: BindEmailOptions
+  passwordPayload?: {
+    password: string
+    passwordEncryptType?: PasswordEncryptType
+  }
+}
+
+export interface DeleteAccountOptions {
+  deleteAccountToken: string
+}
+
+export interface DecryptDataOptions {
+  extIdpConnidentifier: string
+  encryptedData: string
+  iv: string
+  code: string
+}
+
+export interface GetAccessTokenOptions {
+  appId: string
+  appSecret: string
 }
 
 export interface LoginState {

@@ -20,7 +20,18 @@ import {
 	UpdateUserInfo,
 	SimpleResponseData,
 	WxCodeAndPhoneLoginOptions,
-	LoginByPhoneOptions
+	LoginByPhoneOptions,
+	SendEmailCodeOptions,
+	BindEmailOptions,
+	UpdateEmailOptions,
+	BindPhoneOptions,
+	UpdatePhoneOptions,
+	DeleteAccountOptions,
+	DecryptDataOptions,
+	GetAccessTokenOptions,
+	UpdateEmailRequestOptions,
+	UpdatePhoneRequestOptions,
+	DeleteAccountRequestOptions
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -52,7 +63,7 @@ export class Authing {
 			const res = await this.storage.get(
 				getLoginStateKey(this.options.appId)
 			)
-  
+
 			const loginState: LoginState = res.data
 
 			if (loginState.expires_at > Date.now()) {
@@ -108,7 +119,7 @@ export class Authing {
 			if (error) {
 				return returnError(error)
 			}
-  
+
 			return returnSuccess(res[encryptType].publicKey)
 		} catch (e) {
 			return returnError({
@@ -332,6 +343,23 @@ export class Authing {
 		const [error, res] = await request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/send-sms`,
+			data,
+			header: {
+				'x-authing-userpool-id': this.options.userPoolId
+			}
+		})
+
+		if (error) {
+			return returnError(error)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async sendEmailCode(data: SendEmailCodeOptions): Promise<SDKResponse<SimpleResponseData>> {
+		const [error, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/send-email`,
 			data,
 			header: {
 				'x-authing-userpool-id': this.options.userPoolId
@@ -578,6 +606,283 @@ export class Authing {
 		return returnSuccess(updateProfileRes)
 	}
 
+	// 绑定邮箱
+	async bindEmail(data: BindEmailOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [bindError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/bind-email`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (bindError) {
+			return returnError(bindError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	// 修改邮箱
+	async updateEmailRequest(data: UpdateEmailRequestOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [updateError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/verify-update-email-request`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (updateError) {
+			return returnError(updateError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async updateEmail(data: UpdateEmailOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [updateError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/update-email`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (updateError) {
+			return returnError(updateError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	// 绑定手机号
+	async bindPhone(data: BindPhoneOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [bindError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/bind-phone`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (bindError) {
+			return returnError(bindError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	// 修改手机号
+	async updatePhoneRequest(data: UpdatePhoneRequestOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [updateError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/verify-update-phone-request`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (updateError) {
+			return returnError(updateError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async updatePhone(data: UpdatePhoneOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [updateError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/update-phone`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (updateError) {
+			return returnError(updateError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	// 注销账号
+	async deleteAccountRequest(data: DeleteAccountRequestOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [deleteError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/verify-delete-account-request`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (deleteError) {
+			return returnError(deleteError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async deleteAccount(data: DeleteAccountOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [deleteError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/delete-account`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId,
+			}
+		})
+
+		if (deleteError) {
+			return returnError(deleteError)
+		}
+
+		return returnSuccess(res)
+	}
+
 	async getPhone(data: GetPhoneOptions): Promise<SDKResponse<GetUserPhoneResponseData>> {
 		const [getPhoneError, getPhoneRes] = await request({
 			method: 'POST',
@@ -598,4 +903,73 @@ export class Authing {
 
 		return returnError(getPhoneRes)
 	}
+
+	async decryptData(data: DecryptDataOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [decryptError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/decrypt-wechat-miniprogram-data`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId
+			}
+		})
+
+		if (decryptError) {
+			return returnError(decryptError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async getAccessToken (data: GetAccessTokenOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [getError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/api/v3/get-wechat-access-token`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId
+			}
+		})
+
+		if (getError) {
+			return returnError(getError)
+		}
+
+		return returnSuccess(res)
+	}
+
 }

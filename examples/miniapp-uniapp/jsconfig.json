@@ -2,7 +2,7 @@
   "compilerOptions": {
     "types": [
       "@dcloudio/types",
-      "miniapp-api-typings",
+      "miniprogram-api-typings",
       "mini-types"
     ]
   }
