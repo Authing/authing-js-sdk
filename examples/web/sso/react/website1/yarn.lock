@@ -19,10 +19,10 @@
     "jsonpointer" "^5.0.0"
     "leven" "^3.1.0"
 
-"@authing/web@^5.1.3-alpha.2":
-  "integrity" "sha512-PIfWl4393gkFohoh5CytYtRBnmGsiL49oEXeIf1IfAQXXKEu5xKWBlMEIUKmJ50HAwVITxx2ZbrPNWUR730m4A=="
-  "resolved" "https://registry.npmjs.org/@authing/web/-/web-5.1.3-alpha.2.tgz"
-  "version" "5.1.3-alpha.2"
+"@authing/web@^5.1.6-alpha.2":
+  "integrity" "sha512-yL7pTmou4lqD0KSy+a2M7ULXNJE6xCUwMqjypnKk82JoEh2CmqqCZ5w8B2/0RBkAf6Qqb+QOAo8j81sbVBlZng=="
+  "resolved" "https://registry.npmjs.org/@authing/web/-/web-5.1.6-alpha.2.tgz"
+  "version" "5.1.6-alpha.2"
   dependencies:
     "axios" "^0.26.1"
 

@@ -69,11 +69,10 @@ export async function genPKCEPair(algorithm = 'SHA-256') {
 }
 
 export function domainC14n(domain: string) {
-	const domainExp =
-    /^((?:http)|(?:https):\/\/)?((?:[\w-_]+)(?:\.[\w-_]+)+)(?:\/.*)?$/
+	const domainExp = /^(((?:http)|(?:https)):\/\/)?((?:[\w-_]+)(?:\.[\w-_]+)+)(?:\/.*)?$/
 	const matchRes = domainExp.exec(domain)
-	if (matchRes && matchRes[2]) {
-		return `${matchRes[1] ?? 'https://'}${matchRes[2]}`
+	if (matchRes && matchRes[3]) {
+		return `${matchRes[1] ?? 'https://'}${matchRes[3]}`
 	}
 	throw Error(`无效的域名配置: ${domain}`)
 }
