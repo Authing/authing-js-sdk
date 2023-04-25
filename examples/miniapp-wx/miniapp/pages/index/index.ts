@@ -24,7 +24,7 @@ Page({
   async loginByPhone (e) {
     const { code } = e.detail
     const res = await authing.loginByPhone({
-      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
       wechatMiniProgramCodeAndPhonePayload: {
         wxPhoneInfo: {
           code
@@ -39,7 +39,7 @@ Page({
 
   async loginByCode () {
     const res = await authing.loginByCode({
-      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
       options: {
         scope: 'openid profile offline_access'
       }
@@ -56,7 +56,7 @@ Page({
     const { code } = e.detail
 
     const res = await authing.getPhone({
-      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
       code
     })
 
@@ -258,7 +258,7 @@ Page({
 
   async decryptData () {
     const res = await authing.decryptData({
-      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
       encryptedData: '',
       iv: '',
       code: ''
