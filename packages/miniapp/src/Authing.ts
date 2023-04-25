@@ -98,7 +98,7 @@ export class Authing {
 	): Promise<LoginState> {
 		const _loginState: LoginState = {
 			...loginState,
-			expires_at: loginState.expires_in * 1000 + Date.now() - 3600 * 1000 * 2
+			expires_at: loginState.expires_in * 1000 + Date.now()
 		}
 
 		await this.storage.set(
