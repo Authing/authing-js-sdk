@@ -79,3 +79,5 @@ Copyright (c) 2019 Authing
 - [Guard](https://github.com/Authing/guard)
 - [AuthingMove](https://github.com/authing/authingmove)
 - [authingmove-template](https://github.com/Authing/authingmove-template)
+- [authing-mfa-component](https://github.com/Authing/authing-mfa-component)
+- [eslint-plugin-authing-nestjs](https://github.com/Authing/eslint-plugin-authing-nestjs)
