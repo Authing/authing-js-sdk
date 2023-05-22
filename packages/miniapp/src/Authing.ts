@@ -905,28 +905,12 @@ export class Authing {
 	}
 
 	async decryptData(data: DecryptDataOptions) {
-		const [error, loginState] = await this.getLoginState()
-
-		if (error) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
-
-		const { access_token, expires_at } = loginState as LoginState
-
-		if (expires_at < Date.now()) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
 
 		const [decryptError, res] = await request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/decrypt-wechat-miniprogram-data`,
 			data,
 			header: {
-				Authorization: access_token,
 				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
@@ -971,5 +955,6 @@ export class Authing {
 
 		return returnSuccess(res)
 	}
+
 
 }
