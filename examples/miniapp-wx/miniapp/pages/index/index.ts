@@ -16,6 +16,27 @@ const authing = new Authing({
 
 Page({
   data: {},
+  onLoad() {
+    // 开启 shareTicket 用户分享获取群聊 id
+    wx.updateShareMenu({
+      withShareTicket: true,
+    })
+  },
+  onShareAppMessage() {
+    const promise = new Promise(resolve => {
+      setTimeout(() => {
+        resolve({
+          title: '自定义转发标题'
+        })
+      }, 2000)
+    })
+    return {
+      title: '自定义转发标题',
+      path: '/pages/index',
+      promise
+    }
+  },
+
 
   /**
    * 需要在真机上测试，微信开发者工具不会返回 code
@@ -257,11 +278,13 @@ Page({
   },
 
   async decryptData () {
+    const code = await authing.getLoginCode()
+
     const res = await authing.decryptData({
       extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
       encryptedData: '',
       iv: '',
-      code: ''
+      code
     })
 
     console.log('authing.decryptData res: ', res)
@@ -274,5 +297,30 @@ Page({
     })
 
     console.log('authing.getAccessToken res: ', res)
+  },
+
+  getShareInfo() {
+    const {shareTicket} = wx.getLaunchOptionsSync()
+
+    wx.getShareInfo({
+      shareTicket,
+      async success({encryptedData, iv}: any) {
+        // 公共方法获取 code
+        const code = await authing.getLoginCode()
+
+        // 解密数据
+        const res = await authing.decryptData({
+          extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
+          encryptedData,
+          iv,
+          code
+        })
+
+        console.log('authing.decryptData res: ', res)
+      },
+      fail(error: any) {
+        console.log("error: ", error);
+      }
+    })
   }
 })
