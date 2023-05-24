@@ -32,3 +32,5 @@
 
 <button bindtap="getLoginState">getLoginState</button>
 <button bindtap="clearLoginState">clearLoginState</button>
+
+<button bindtap="getShareInfo">getShareInfo</button>
