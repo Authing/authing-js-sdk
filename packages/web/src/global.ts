@@ -198,6 +198,7 @@ export interface IUserInfo {
   lastLogin?: string
   loginsCount?: number
   passwordLastSetAt?: string
+  phone?: string
   phoneCountryCode?: string
   phoneVerified?: boolean
   resetPasswordOnNextLogin?: boolean
