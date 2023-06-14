@@ -39,9 +39,9 @@
 	import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
 	const authing = new Authing({
-		appId: 'AUTHING_APP_ID',
-		host: 'AUTHING_HOST',
-		userPoolId: 'AUTHING_USER_POOL_ID',
+		appId: '630ed3137dd6f2fd7001da24',
+		host: 'https://core.authing.cn',
+		userPoolId: '62e221f85f5ac5cc47037a39',
 		encryptFunction
 	})
 
@@ -67,7 +67,7 @@
 			async loginByPhone (e) {
 				const { code } = e.detail
 				const res = await authing.loginByPhone({
-					extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
 					wechatMiniProgramCodeAndPhonePayload: {
 						wxPhoneInfo: {
 							code
@@ -82,7 +82,7 @@
 
 			async loginByCode () {
 				const res = await authing.loginByCode({
-					extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
 					options: {
 						scope: 'openid profile offline_access'
 					}
@@ -99,7 +99,7 @@
 				const { code } = e.detail
 
 				const res = await authing.getPhone({
-					extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+					extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
 					code
 				})
 
@@ -162,7 +162,11 @@
 			},
 
 			async getUserInfo () {
-				const res = await authing.getUserInfo()
+				const res = await authing.getUserInfo({
+					withCustomData: true,
+					withDepartmentIds: true,
+					withIdentities: true
+				})
 				console.log('authing.getUserInfo res: ', res)
 			},
 
@@ -296,7 +300,7 @@
 
       async decryptData () {
         const res = await authing.decryptData({
-          extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+          extIdpConnidentifier: 'authing-zhaoyiming-miniprogram',
           encryptedData: '',
           iv: '',
           code: ''
