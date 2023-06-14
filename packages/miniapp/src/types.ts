@@ -476,3 +476,9 @@ export interface ErrorData {
   statusCode?: number
   apiCode?: number
 }
+
+export interface GerUserInfo {
+  withDepartmentIds?: boolean
+  withCustomData?: boolean
+  withIdentities?: boolean
+}
