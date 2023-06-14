@@ -31,7 +31,8 @@ import {
 	GetAccessTokenOptions,
 	UpdateEmailRequestOptions,
 	UpdatePhoneRequestOptions,
-	DeleteAccountRequestOptions
+	DeleteAccountRequestOptions,
+	GerUserInfo
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -511,7 +512,11 @@ export class Authing {
 		return returnSuccess(updatePasswordRes)
 	}
 
-	async getUserInfo(): Promise<SDKResponse<UserInfo>> {
+	async getUserInfo(data: GerUserInfo = {
+		withCustomData: false,
+		withDepartmentIds: false,
+		withIdentities: false
+	}): Promise<SDKResponse<UserInfo>> {
 		const [error, loginState] = await this.getLoginState()
 
 		if (error) {
@@ -534,7 +539,8 @@ export class Authing {
 			header: {
 				'x-authing-userpool-id': this.options.userPoolId,
 				Authorization: access_token
-			}
+			},
+			data
 		})
 
 		if (getProfileError) {
