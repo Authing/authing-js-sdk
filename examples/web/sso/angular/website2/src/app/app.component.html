@@ -8,12 +8,6 @@
       }}</textarea>
     </p>
     <p>
-      User Info:<br />
-      <textarea cols="100" rows="15" readOnly>{{
-        userInfo
-      }}</textarea>
-    </p>
-    <p>
       Access Token Info:<br />
       <textarea v-if="loginState" cols="100" rows="15" readOnly>{{
         loginState?.parsedAccessToken | json
@@ -22,5 +16,6 @@
     <p>
       Expire At: <code>{{ loginState?.expireAt }}</code>
     </p>
+    <button (click)="logoutWithRedirect()">Logout With Redirect</button>
   </div>
 </div>

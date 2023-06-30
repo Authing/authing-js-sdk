@@ -82,9 +82,7 @@ export default defineComponent({
       }
     };
 
-    const logout = () => authing.logoutWithRedirect({
-      redirectUri: 'https://www.so.com'
-    })
+    const logout = () => authing.logoutWithRedirect()
 
     const getUserInfo = async () => {
       const userInfo = await authing.getUserInfo()
@@ -94,20 +92,27 @@ export default defineComponent({
     onMounted(() => {
       // 校验当前 url 是否是登录回调地址
       if (authing.isRedirectCallback()) {
-        console.log("redirect");
-
-        /**
-         * 以跳转方式打开 Authing 托管的登录页，认证成功后，需要配合 handleRedirectCallback，
-         * 在回调端点处理 Authing 发送的授权码或 token，获取用户登录态
-         */
-        authing.handleRedirectCallback().then((res) => {
-          state.loginState = res;
-          window.location.replace("/");
-        });
+        console.log('redirect')
+        authing.handleRedirectCallback().then(() => {
+          // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
+          // 处理 handleCallback 和最后 replace 的应该是两个不同的页面，这里模拟一下
+          window.location.replace('/?a=1')
+        })
       } else {
-        console.log("normal");
+        try {
+          const a = +window.location.search.split('?')[1].split('=')[1]
+          if (a === 1) {
+            getUserInfo()
+            getLoginState()
+            return
+          }
 
-        getLoginState();
+          console.log('normal')
+          authing.getLoginStateWithRedirect()
+        } catch (e) {
+          console.log('normal')
+          authing.getLoginStateWithRedirect()
+        }
       }
     });
 
