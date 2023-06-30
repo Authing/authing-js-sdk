@@ -14,67 +14,55 @@ var authing = new AuthingFactory.Authing({
 
 if (authing.isRedirectCallback()) {
   console.log('redirect')
-  authing.handleRedirectCallback().then((loginState) => {
-    console.log('loginState: ', loginState)
+  authing.handleRedirectCallback().then(() => {
     // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
-    window.location.replace('/')
+    // 处理 handleCallback 和最后 replace 的应该是两个不同的页面，这里模拟一下
+    window.location.replace('/?a=1')
   })
 } else {
-  authing.getLoginState().then(loginState => {
-    console.log('loginState: ', loginState)
-    if (!loginState) {
-      // 静默登录。取不到用户信息直接跳转到授权中心
-      authing.loginWithRedirect();
+  try {
+    const a = +window.location.search.split('?')[1].split('=')[1]
+    if (a === 1) {
+      getUserInfo()
+      getLoginState()
+    } else {
+      console.log('normal')
+      authing.loginWithRedirect()
     }
-  })
-}
-
-var loginWithPopup = document.querySelector('#loginWithPopup')
-var loginWithRedirect = document.querySelector('#loginWithRedirect')
-var logoutWithRedirect = document.querySelector('#logoutWithRedirect')
-var getUserInfo = document.querySelector('#getUserInfo')
-var getLoginState = document.querySelector('#getLoginState')
-
-loginWithPopup.onclick = function () {
-  const params = {
-    // 即使在用户已登录时也提示用户再次登录
-    forced: true
+  } catch (e) {
+    console.log('normal')
+    authing.loginWithRedirect()
   }
-  authing.loginWithPopup(params).then(loginState => {
-    console.log('loginState: ', loginState)
-  })
 }
 
-loginWithRedirect.onclick = function () {
-  const params = {
-    redirectUri: 'YOUR_REDIRECT_URL',
+var loginWithRedirectButton = document.querySelector('#loginWithRedirect')
+var logoutWithRedirectButton = document.querySelector('#logoutWithRedirect')
+var getUserInfoButton = document.querySelector('#getUserInfo')
+var getLoginStateButton = document.querySelector('#getLoginState')
 
-    // 发起登录的 URL，若设置了 redirectToOriginalUri 会在登录结束后重定向回到此页面，默认为当前 URL
-    originalUri: 'YOUR_ORIGINAL_URL',
-
-    // 即使在用户已登录时也提示用户再次登录
-    forced: true,
-
-    // 自定义的中间状态，会被传递到回调端点
-    customState: {}
-  }
-  authing.loginWithRedirect(params)
+loginWithRedirectButton.onclick = function () {
+  authing.loginWithRedirect()
 }
 
-logoutWithRedirect.onclick = function () {
-  authing.logoutWithRedirect({
-    // 可选项，如果传入此参数，需要在控制台配置【登出回调 URL】
-    redirectUri: 'YOUR_REDIRECT_URL'
-  })
+logoutWithRedirectButton.onclick = function () {
+  authing.logoutWithRedirect()
 }
 
-getUserInfo.onclick = function () {
+getUserInfoButton.onclick = function () {
+  getUserInfo()
+}
+
+getLoginStateButton.onclick = function () {
+  getLoginState()
+}
+
+function getUserInfo () {
   authing.getUserInfo().then(userInfo => {
     console.log('userInfo: ', userInfo)
   })
 }
 
-getLoginState.onclick = function () {
+function getLoginState () {
   authing.getLoginState().then(loginState => {
     console.log('loginState: ', loginState)
   })

@@ -27,11 +27,6 @@ export default function App() {
 
   const [userInfo, setUserInfo] = useState<IUserInfo | NormalError | null>(null)
 
-  const loginWithPopup = async () => {
-    const loginState = await authing.loginWithPopup()
-    setLoginState(loginState)
-  }
-
   const loginWithRedirect = () => {
     authing.loginWithRedirect()
   }
@@ -54,6 +49,10 @@ export default function App() {
 
   useEffect(() => {
     if (authing.isRedirectCallback()) {
+      /**
+       * 以跳转方式打开 Authing 托管的登录页，认证成功后需要配合 handleRedirectCallback 方法，
+       * 在回调端点处理 Authing 发送的授权码或 token，获取用户登录态
+       */
       authing.handleRedirectCallback().then(res => {
         setLoginState(res)
         // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
@@ -71,9 +70,6 @@ export default function App() {
         <a href="https://localhost:8001" rel="noreferrer" target="_blank">
           redirect to website2
         </a>
-      </p>
-      <p>
-        <button onClick={loginWithPopup}>Login With Popup</button>
       </p>
       <p>
         <button onClick={loginWithRedirect}>Login With Redirect</button>

@@ -1,17 +1,7 @@
 <template>
   <div id="app">
     <h2>Website 2</h2>
-    <div v-if="!loginState">Not Logged In</div>
-    <div v-else>
-      <p>
-        Access Token: <br />
-        <textarea
-          cols="100"
-          rows="10"
-          readOnly
-          :value="JSON.stringify(loginState.accessToken, null, 2)"
-        ></textarea>
-      </p>
+    <div>
       <p>
         User Info:<br />
         <textarea
@@ -32,23 +22,24 @@
         ></textarea>
       </p>
       <p>
-        Expire At: <code>{{ loginState.expireAt }}</code>
+        Expire At: <code v-if="loginState">{{ loginState.expireAt }}</code>
       </p>
+      <button @click="logout">Logout</button>
     </div>
   </div>
 </template>
 
 <script>
-import { Authing } from "@authing/web";
+import { Authing } from '@authing/web'
 
 export default {
-  name: "App",
+  name: 'App',
   data() {
     return {
       authing: null,
       loginState: null,
       userInfo: null
-    };
+    }
   },
   created() {
     this.authing = new Authing({
@@ -68,44 +59,45 @@ export default {
   mounted() {
     // 校验当前 url 是否是登录回调地址
     if (this.authing.isRedirectCallback()) {
-      console.log("redirect");
-
-      /**
-       * 以跳转方式打开 Authing 托管的登录页，认证成功后，需要配合 handleRedirectCallback，
-       * 在回调端点处理 Authing 发送的授权码或 token，获取用户登录态
-       */
-      this.authing.handleRedirectCallback().then((res) => {
-        this.loginState = res;
-        window.location.replace("/");
-      });
+      console.log('redirect')
+      this.authing.handleRedirectCallback().then(() => {
+        // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
+        // 处理 handleCallback 和最后 replace 的应该是两个不同的页面，这里模拟一下
+        window.location.replace('/?a=1')
+      })
     } else {
-      console.log("normal");
-      this.getLoginState();
+      try {
+        const a = +window.location.search.split('?')[1].split('=')[1]
+        if (a === 1) {
+          this.getUserInfo()
+          this.getLoginState()
+          return
+        }
+
+        console.log('normal')
+        this.authing.getLoginStateWithRedirect()
+      } catch (e) {
+        console.log('normal')
+        this.authing.getLoginStateWithRedirect()
+      }
     }
   },
   methods: {
-    async getLoginState() {
-      const res = await this.authing.getLoginState();
-      if (res) {
-        this.loginState = res;
-        this.getUserInfo();
-      } else {
-        // 静默登录。取不到用户信息直接跳转到授权中心
-        this.authing.loginWithRedirect();
-      }
+    logout() {
+      this.authing.logoutWithRedirect()
     },
-    async getUserInfo () {
-      if (!this.loginState) {
-        alert("用户未登录");
-        return;
-      }
-      const userInfo = await this.authing.getUserInfo({
-        accessToken: this.loginState.accessToken,
-      });
-      this.userInfo = userInfo;
+
+    async getUserInfo() {
+      const userInfo = await this.authing.getUserInfo()
+      this.userInfo = userInfo
+    },
+
+    async getLoginState () {
+      const loginState = await this.authing.getLoginState()
+      this.loginState = loginState
     }
-  },
-};
+  }
+}
 </script>
 
 <style>

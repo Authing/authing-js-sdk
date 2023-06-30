@@ -25,44 +25,18 @@ if (authing.isRedirectCallback()) {
   })
 }
 
-var loginWithPopup = document.querySelector('#loginWithPopup')
 var loginWithRedirect = document.querySelector('#loginWithRedirect')
 var logoutWithRedirect = document.querySelector('#logoutWithRedirect')
 var getUserInfo = document.querySelector('#getUserInfo')
 var getLoginState = document.querySelector('#getLoginState')
 
-loginWithPopup.onclick = function () {
-  const params = {
-    // 即使在用户已登录时也提示用户再次登录
-    forced: true
-  }
-  authing.loginWithPopup(params).then(loginState => {
-    console.log('loginState: ', loginState)
-  })
-}
-
 loginWithRedirect.onclick = function () {
-  const params = {
-    redirectUri: 'YOUR_REDIRECT_URL',
-
-    // 发起登录的 URL，若设置了 redirectToOriginalUri 会在登录结束后重定向回到此页面，默认为当前 URL
-    originalUri: 'YOUR_ORIGINAL_URL',
-
-    // 即使在用户已登录时也提示用户再次登录
-    forced: true,
-
-    // 自定义的中间状态，会被传递到回调端点
-    customState: {}
-  }
   // authing.loginWithRedirect(params)
   authing.loginWithRedirect()
 }
 
 logoutWithRedirect.onclick = function () {
-  authing.logoutWithRedirect({
-    // 可选项，如果传入此参数，需要在控制台配置【登出回调 URL】
-    redirectUri: 'YOUR_REDIRECT_URL'
-  })
+  authing.logoutWithRedirect()
 }
 
 getUserInfo.onclick = function () {

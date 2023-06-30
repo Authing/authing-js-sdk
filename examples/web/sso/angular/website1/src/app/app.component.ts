@@ -50,15 +50,6 @@ export class AppComponent {
   }
 
   /**
-   * 以弹窗方式打开 Authing 托管的登录页
-   */
-  async loginWithPopup() {
-    const loginState = await this.authing.loginWithPopup()
-    console.log('loginWithPopup loginState: ', loginState)
-    this.loginState = loginState
-  }
-
-  /**
    * 以跳转方式打开 Authing 托管的登录页
    */
   loginWithRedirect() {
@@ -89,8 +80,6 @@ export class AppComponent {
    * 登出
    */
   logoutWithRedirect() {
-    this.authing.logoutWithRedirect({
-      redirectUri: 'https://www.baidu.com'
-    })
+    this.authing.logoutWithRedirect()
   }
 }

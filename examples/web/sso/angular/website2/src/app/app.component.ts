@@ -33,31 +33,36 @@ export class AppComponent {
   ngOnInit() {
     // 校验当前 url 是否是登录回调地址
     if (this.authing.isRedirectCallback()) {
-      console.log('redirect');
-
-      /**
-       * 以跳转方式打开 Authing 托管的登录页，认证成功后，需要配合 handleRedirectCallback，
-       * 在回调端点处理 Authing 发送的授权码或 token，获取用户登录态
-       */
-      this.authing.handleRedirectCallback().then((res) => {
-        this.loginState = res;
-        window.location.replace('/');
-      });
+      console.log('redirect')
+      this.authing.handleRedirectCallback().then(() => {
+        // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
+        // 处理 handleCallback 和最后 replace 的应该是两个不同的页面，这里模拟一下
+        window.location.replace('/?a=1')
+      })
     } else {
-      console.log('normal');
+      try {
+        const a = +window.location.search.split('?')[1].split('=')[1]
+        if (a === 1) {
+          this.getLoginState()
+          return
+        }
 
-      this.getLoginState();
+        console.log('normal')
+        this.authing.getLoginStateWithRedirect()
+      } catch (e) {
+        console.log('normal')
+        this.authing.getLoginStateWithRedirect()
+      }
     }
   }
+
 
   /**
    * 获取用户的登录状态
    */
-  async getLoginState() {
+  async getLoginState () {
     const loginState = await this.authing.getLoginState()
-    console.log('loginState: ', loginState)
-
-    if (loginState) {
+      this.loginState = loginState
       this.loginState = loginState
       const userInfo = await this.authing.getUserInfo()
       this.userInfo = JSON.stringify(userInfo, null, 4)
@@ -65,6 +70,16 @@ export class AppComponent {
     } else {
       // 取不到用户信息直接跳转到授权中心
       this.authing.loginWithRedirect()
-    }
+    this.loginState = loginState
+      const userInfo = await this.authing.getUserInfo()
+      this.userInfo = JSON.stringify(userInfo, null, 4)
+      console.log('this.userInfo: ', this.userInfo)
+    } else {
+      // 取不到用户信息直接跳转到授权中心
+      this.authing.loginWithRedirect()
+  }
+
+  logoutWithRedirect () {
+    this.authing.logoutWithRedirect()
   }
 }

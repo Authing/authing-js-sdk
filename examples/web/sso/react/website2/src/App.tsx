@@ -31,7 +31,9 @@ function App() {
     if (authing.isRedirectCallback()) {
       console.log('redirect');
       authing.handleRedirectCallback().then((res) => {
-        // setLoginState(res);
+        setLoginState(res);
+        // 因 code 只能使用一次，所以这里需要将页面重定向到其他地址，这里以刷新当前页面为例：
+        // 处理 handleCallback 和最后 replace 的应该是两个不同的页面，这里模拟一下
         window.location.replace('/?a=1');
       });
     } else {

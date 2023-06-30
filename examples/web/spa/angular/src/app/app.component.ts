@@ -51,14 +51,6 @@ export class AppComponent {
   }
 
   /**
-   * 以弹窗方式打开 Authing 托管的登录页
-   */
-  async loginWithPopup() {
-    const res = await this.sdk.loginWithPopup();
-    this.loginState = res;
-  }
-
-  /**
    * 以跳转方式打开 Authing 托管的登录页
    */
   loginWithRedirect() {
