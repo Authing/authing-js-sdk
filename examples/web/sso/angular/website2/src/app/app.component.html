@@ -16,6 +16,12 @@
     <p>
       Expire At: <code>{{ loginState?.expireAt }}</code>
     </p>
+    <div>
+      <button (click)="getUserInfo()">getUserInfo</button>
+      <p>
+        userInfo: <textarea cols="100" rows="15" readOnly>{{ userInfo }}</textarea>
+      </p>
+    </div>
     <button (click)="logoutWithRedirect()">Logout With Redirect</button>
   </div>
 </div>

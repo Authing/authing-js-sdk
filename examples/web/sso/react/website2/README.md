@@ -27,8 +27,12 @@
 ``` shell
 
 # 安装依赖
-yarn install
+npm ci
 
 # 启动服务
-yarn start
+npm run dev
 ```
+
+## 开发教程
+
+开发教程请参考：[使用 Authing 实现单点登录](https://docs.authing.cn/v3/reference/sdk/web/quick.html)。
