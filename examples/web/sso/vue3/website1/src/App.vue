@@ -54,7 +54,7 @@ export default defineComponent({
 
       // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
       userPoolId: 'AUTHING_USER_POOL_ID'
-    });
+    })
 
     const state = reactive({
       loginState: null,

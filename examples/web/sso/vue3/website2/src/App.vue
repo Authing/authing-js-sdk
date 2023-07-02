@@ -43,11 +43,11 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import { Authing } from "@authing/web";
+import { defineComponent, onMounted, reactive, toRefs } from 'vue'
+import { Authing } from '@authing/web'
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   setup() {
     const authing = new Authing({
       // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
@@ -61,26 +61,26 @@ export default defineComponent({
 
       // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
       userPoolId: 'AUTHING_USER_POOL_ID'
-    });
+    })
 
     const state = reactive({
       loginState: null,
       userInfo: null
-    });
+    })
 
     /**
      * 获取用户的登录状态
      */
     const getLoginState = async () => {
-      const res = await authing.getLoginState();
-      state.loginState = res;
+      const res = await authing.getLoginState()
+      state.loginState = res
 
       if (!res) {
-        authing.loginWithRedirect();
+        authing.loginWithRedirect()
       } else {
         getUserInfo()
       }
-    };
+    }
 
     const logout = () => authing.logoutWithRedirect()
 
@@ -114,15 +114,15 @@ export default defineComponent({
           authing.getLoginStateWithRedirect()
         }
       }
-    });
+    })
 
     return {
       ...toRefs(state),
       logout,
       getUserInfo
-    };
-  },
-});
+    }
+  }
+})
 </script>
 
 <style>
