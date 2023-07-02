@@ -5,7 +5,7 @@
 
 ``` shell
 npm ci
-npm run start
+npm run dev
 ```
 
 2. 分别修改 `website1` 和 `website2` 中的 `app.component.ts` 中实例化 SDK 的配置：

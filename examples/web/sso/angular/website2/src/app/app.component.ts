@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Authing } from '@authing/web';
 import type {
   IUserInfo,
-  LoginState
+  LoginState,
+  NormalError
 } from '@authing/web/dist/typings/src/global';
 
 @Component({
@@ -11,23 +12,16 @@ import type {
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'website2';
+  title = 'website2'
 
-  loginState: LoginState | null = null;
-  userInfo: String = ''
+  loginState: LoginState | null = null
+  userInfo: IUserInfo | NormalError | string = ''
 
   private authing = new Authing({
-    // 控制台 -> 应用 -> 单点登录 SSO -> 配置 -> 应用面板地址，如：https://my-awesome-sso.authing.cn
-    domain: 'AUTHING_DOMAIN_URL',
-
-    // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 端点信息 -> APP ID
-    appId: 'AUTHING_APP_ID',
-
-    // 控制台 -> 自建应用 -> 点击进入相应的应用 -> 认证配置 -> 登录回调 URL
-    redirectUri: 'YOUR_REDIRECT_URL',
-
-    // 控制台 -> 设置 -> 基础设置 -> 基础信息 -> 用户池 ID
-    userPoolId: 'AUTHING_USER_POOL_ID'
+    domain: 'https://sdfsdfsdfsdfsdfsdfsdf.authing.cn',
+    appId: '632313cf2289a4e243b0ca1a',
+    redirectUri: 'https://localhost:8001',
+    userPoolId: '62e221f85f5ac5cc47037a39'
   });
 
   ngOnInit() {
@@ -61,22 +55,12 @@ export class AppComponent {
    * 获取用户的登录状态
    */
   async getLoginState () {
-    const loginState = await this.authing.getLoginState()
-      this.loginState = loginState
-      this.loginState = loginState
-      const userInfo = await this.authing.getUserInfo()
-      this.userInfo = JSON.stringify(userInfo, null, 4)
-      console.log('this.userInfo: ', this.userInfo)
-    } else {
-      // 取不到用户信息直接跳转到授权中心
-      this.authing.loginWithRedirect()
-    this.loginState = loginState
-      const userInfo = await this.authing.getUserInfo()
-      this.userInfo = JSON.stringify(userInfo, null, 4)
-      console.log('this.userInfo: ', this.userInfo)
-    } else {
-      // 取不到用户信息直接跳转到授权中心
-      this.authing.loginWithRedirect()
+    this.loginState = await this.authing.getLoginState()
+  }
+
+  async getUserInfo () {
+    const userInfo = await this.authing.getUserInfo()
+    this.userInfo = JSON.stringify(userInfo, null, 4)
   }
 
   logoutWithRedirect () {
