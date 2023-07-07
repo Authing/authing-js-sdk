@@ -81,3 +81,4 @@ Copyright (c) 2019 Authing
 - [authingmove-template](https://github.com/Authing/authingmove-template)
 - [authing-mfa-component](https://github.com/Authing/authing-mfa-component)
 - [eslint-plugin-authing-nestjs](https://github.com/Authing/eslint-plugin-authing-nestjs)
+- [authing-js-sdk-poc](https://github.com/authing/authing-js-sdk-poc)
