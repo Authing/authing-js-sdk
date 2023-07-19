@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@authing/miniapp-jsencrypt": "^5.1.0",
-    "@authing/miniapp-sm2encrypt": "^5.1.0",
-    "@authing/miniapp-wx": "^5.1.6-alpha.0"
+    "@authing/miniapp-jsencrypt": "^5.1.8",
+    "@authing/miniapp-sm2encrypt": "^5.1.8",
+    "@authing/miniapp-wx": "^5.1.8"
   }
 }
