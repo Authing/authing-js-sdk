@@ -223,16 +223,22 @@ export class Authing {
 			}
 
 			const [error, publicKey] = await this.getPublicKey(
-				data.options?.passwordEncryptType
+				data.options.passwordEncryptType
 			)
 
 			if (error) {
 				return returnError(error)
 			}
 
+			if (typeof publicKey !== 'string') {
+				return returnError({
+					message: `publicKey of ${data.options.passwordEncryptType} is not a string, please contact the administrator`
+				})
+			}
+
 			data.passwordPayload.password = this.encryptFunction(
 				data.passwordPayload.password,
-        publicKey as string
+				publicKey
 			)
 		}
 
