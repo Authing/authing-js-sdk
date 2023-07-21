@@ -290,15 +290,6 @@ Page({
     console.log('authing.decryptData res: ', res)
   },
 
-  async getAccessToken () {
-    const res = await authing.getAccessToken({
-      appId: 'WX_APP_ID',
-      appSecret: 'WX_APP_SECRET'
-    })
-
-    console.log('authing.getAccessToken res: ', res)
-  },
-
   getShareInfo() {
     const {shareTicket} = wx.getLaunchOptionsSync()
 
