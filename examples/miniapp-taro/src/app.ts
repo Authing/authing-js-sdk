@@ -11,6 +11,7 @@ class App extends Component<PropsWithChildren> {
 
   render () {
     // this.props.children 是将要会渲染的页面
+    console.log('this.props in App: ', this.props)
     return this.props.children
   }
 }
