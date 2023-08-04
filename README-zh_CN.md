@@ -23,9 +23,9 @@ Authing 帮助您在几分钟内构建登录、注册、单点登录、用户身
 |@authing/miniapp|[![npm version](https://badge.fury.io/js/@authing%2Fminiapp.svg)](https://www.npmjs.com/package/@authing/miniapp)|小程序 SDK 源码|
 |@authing/miniapp-jsencrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiapp-jsencrypt.svg)](https://www.npmjs.com/package/@authing/miniapp-jsencrypt)|适用于小程序的 JS rsa 加密包|
 |@authing/miniapp-sm2encrypt|[![npm version](https://badge.fury.io/js/@authing%2Fminiapp-sm2encrypt.svg)](https://www.npmjs.com/package/@authing/miniapp-sm2encrypt)|适用于小程序的 JS sm2 加密包|
-|@authing/miniapp-taro|[![npm version](https://badge.fury.io/js/@authing%2Fminiapp-taro.svg)](https://www.npmjs.com/package/@authing/miniapp-taro)|<a href="https://docs.authing.cn/v2/reference/sdk-for-weixin-miniapp.html" target="_blank">适配小程序框架 Taro</a>|
-|@authing/miniapp-uniapp|[![npm version](https://badge.fury.io/js/@authing%2Fminiapp-uniapp.svg)](https://www.npmjs.com/package/@authing/miniapp-uniapp)|<a href="https://docs.authing.cn/v2/reference/sdk-for-weixin-miniapp.html" target="_blank">适配小程序框架 uniapp</a>|
-|@authing/miniapp-wx|[![npm version](https://badge.fury.io/js/@authing%2Fminiapp-wx.svg)](https://www.npmjs.com/package/@authing/miniapp-wx)|<a href="https://docs.authing.cn/v2/reference/sdk-for-weixin-miniapp.html" target="_blank">适配原生微信小程序</a>|
+|@authing/miniapp-taro|[![npm version](https://badge.fury.io/js/@authing%2Fminiapp-taro.svg)](https://www.npmjs.com/package/@authing/miniapp-taro)|<a href="https://docs.authing.cn/v3/reference/sdk/miniapp/" target="_blank">适配小程序框架 Taro</a>|
+|@authing/miniapp-uniapp|[![npm version](https://badge.fury.io/js/@authing%2Fminiapp-uniapp.svg)](https://www.npmjs.com/package/@authing/miniapp-uniapp)|<a href="https://docs.authing.cn/v3/reference/sdk/miniapp/" target="_blank">适配小程序框架 uniapp</a>|
+|@authing/miniapp-wx|[![npm version](https://badge.fury.io/js/@authing%2Fminiapp-wx.svg)](https://www.npmjs.com/package/@authing/miniapp-wx)|<a href="https://docs.authing.cn/v3/reference/sdk/miniapp/" target="_blank">适配原生微信小程序</a>|
 |@authing/web|[![npm version](https://badge.fury.io/js/@authing%2Fweb.svg)](https://www.npmjs.com/package/@authing/web)|<a href="https://docs.authing.cn/v2/reference/sdk-for-sso-spa.html" target="_blank">快速为新开发的或已有的 Web 应用集成认证能力</a>|
 |@authing/weixin-official-account|[![npm version](https://badge.fury.io/js/@authing%2Fweixin-official-account.svg)](https://www.npmjs.com/package/@authing/weixin-official-account)|<a href="https://docs.authing.cn/v2/reference/sdk-for-weixin-official-account.html" target="_blank">适配微信公众号网页授权</a>|
 
