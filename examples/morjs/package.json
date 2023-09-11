@@ -1,0 +1,19 @@
+{
+  "name": "test-morjs",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "mor compile --watch",
+    "compile": "mor compile --production"
+    
+  },
+  "keywords": [],
+  "author": "zhaoyiming0803 <zhaoyiming0803@gmail.com>",
+  "license": "",
+  "dependencies": {
+    "@morjs/core": "*"
+  },
+  "devDependencies": {
+    "@morjs/cli": "*"
+  }
+}

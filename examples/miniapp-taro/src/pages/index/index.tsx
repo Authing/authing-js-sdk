@@ -1,5 +1,5 @@
 import { Component, PropsWithChildren } from 'react'
-import { View, Button } from '@tarojs/components'
+import { View, Button, Switch, Checkbox, Video } from '@tarojs/components'
 import './index.less'
 
 import Taro from '@tarojs/taro'
@@ -21,6 +21,12 @@ const authing = new Authing({
 
 export default class Index extends Component<PropsWithChildren> {
 
+  state = {
+    a: 100,
+    b: 200,
+    list: ['a', 'b', 'c', 'd']
+  }
+
   componentWillMount () { }
 
   componentDidMount () { }
@@ -36,6 +42,27 @@ export default class Index extends Component<PropsWithChildren> {
       <View className='index'>
         <Button onClick={() => this.loginByCode()}>loginByCode</Button>
         <Button onClick={() => this.getUserInfo()}>getUserInfo</Button>
+        <View>sum: {this.state.a + this.state.b}</View>
+        <Button onClick={() => {
+          this.setState((state) => {
+            // @ts-ignore
+            state.a += 1
+            return state
+          })
+        }}>a += 1</Button>
+        {this.state.a > this.state.b ? <Checkbox value='1'></Checkbox> : <Switch></Switch>}
+        <View>
+          {this.state.list.map(item => {
+            return <View>{item}</View>
+          })}
+        </View>
+        <Button onClick={() => {
+          this.setState((state) => {
+            // @ts-ignore
+            state.list = ['x', 'y']
+            return state
+          })
+        }}>change list</Button>
       </View>
     )
   }
