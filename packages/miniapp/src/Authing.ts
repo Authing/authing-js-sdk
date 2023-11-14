@@ -33,12 +33,17 @@ import {
 	UpdatePhoneRequestOptions,
 	DeleteAccountRequestOptions,
 	GerUserInfo,
-  BindWxByCodeOptions
+	BindWxByCodeOptions
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
 
-import { getLoginStateKey, getWxLoginCodeKey, request, StorageProvider } from './helpers'
+import {
+	getLoginStateKey,
+	getWxLoginCodeKey,
+	request,
+	StorageProvider
+} from './helpers'
 
 import { AuthingMove } from './AuthingMove'
 
@@ -62,9 +67,7 @@ export class Authing {
 
 	async getLoginState(): Promise<SDKResponse<LoginState>> {
 		try {
-			const res = await this.storage.get(
-				getLoginStateKey(this.options.appId)
-			)
+			const res = await this.storage.get(getLoginStateKey(this.options.appId))
 
 			const loginState: LoginState = res.data
 
@@ -84,9 +87,7 @@ export class Authing {
 
 	async clearLoginState(): Promise<SDKResponse<boolean>> {
 		try {
-			await this.storage.remove(
-				getLoginStateKey(this.options.appId)
-			)
+			await this.storage.remove(getLoginStateKey(this.options.appId))
 			return returnSuccess(true)
 		} catch (e) {
 			return returnError({
@@ -94,23 +95,18 @@ export class Authing {
 			})
 		}
 	}
-/**
- *
- * @param loginState 登录用户状态信息
- * @returns
- */
-	async saveLoginState(
-		loginState: LoginState
-	): Promise<LoginState> {
+	/**
+   *
+   * @param loginState 登录用户状态信息
+   * @returns
+   */
+	async saveLoginState(loginState: LoginState): Promise<LoginState> {
 		const _loginState: LoginState = {
 			...loginState,
 			expires_at: loginState.expires_in * 1000 + Date.now()
 		}
 
-		await this.storage.set(
-			getLoginStateKey(this.options.appId),
-			_loginState
-		)
+		await this.storage.set(getLoginStateKey(this.options.appId), _loginState)
 
 		return _loginState
 	}
@@ -134,7 +130,7 @@ export class Authing {
 		}
 	}
 
-	private async getCachedWxLoginCode (): Promise<string> {
+	private async getCachedWxLoginCode(): Promise<string> {
 		try {
 			const res = await this.storage.get(getWxLoginCodeKey(this.options.appId))
 			return res.data
@@ -143,7 +139,7 @@ export class Authing {
 		}
 	}
 
-	private async cacheWxLoginCode (code: string): Promise<string> {
+	private async cacheWxLoginCode(code: string): Promise<string> {
 		try {
 			await this.storage.set(getWxLoginCodeKey(this.options.appId), code)
 			return code
@@ -152,7 +148,7 @@ export class Authing {
 		}
 	}
 
-	private async resetWxLoginCode (): Promise<string> {
+	private async resetWxLoginCode(): Promise<string> {
 		const next = async () => {
 			try {
 				const wxLoginRes = await AuthingMove.login()
@@ -177,7 +173,7 @@ export class Authing {
 		}
 	}
 
-	async getLoginCode () {
+	async getLoginCode() {
 		return await this.resetWxLoginCode()
 	}
 
@@ -190,9 +186,14 @@ export class Authing {
 			return returnSuccess(loginState)
 		}
 
-		const { extIdpConnidentifier, connection, wechatMiniProgramCodePayload, options } = data
+		const {
+			extIdpConnidentifier,
+			connection,
+			wechatMiniProgramCodePayload,
+			options
+		} = data
 
-		const code  = await this.resetWxLoginCode()
+		const code = await this.resetWxLoginCode()
 
 		if (!code) {
 			return returnError({
@@ -223,7 +224,8 @@ export class Authing {
 		) {
 			if (!this.encryptFunction) {
 				return returnError({
-					message: 'encryptFunction is required, if passwordEncryptType is not "none"'
+					message:
+            'encryptFunction is required, if passwordEncryptType is not "none"'
 				})
 			}
 
@@ -271,14 +273,20 @@ export class Authing {
 		return await this.login(_data, 'passCode')
 	}
 
-	async loginByPhone (data: LoginByPhoneOptions): Promise<SDKResponse<LoginState>> {
+	async loginByPhone(
+		data: LoginByPhoneOptions
+	): Promise<SDKResponse<LoginState>> {
 		const [, loginState] = await this.getLoginState()
 
 		if (loginState && loginState.expires_at > Date.now()) {
 			return returnSuccess(loginState)
 		}
 
-		const { extIdpConnidentifier, wechatMiniProgramCodeAndPhonePayload, options } = data
+		const {
+			extIdpConnidentifier,
+			wechatMiniProgramCodeAndPhonePayload,
+			options
+		} = data
 
 		const { wxPhoneInfo } = wechatMiniProgramCodeAndPhonePayload
 
@@ -288,7 +296,7 @@ export class Authing {
 			})
 		}
 
-		const wxLoginCode  = await this.resetWxLoginCode()
+		const wxLoginCode = await this.resetWxLoginCode()
 
 		if (!wxLoginCode) {
 			return returnError({
@@ -302,7 +310,9 @@ export class Authing {
 			wechatMiniProgramCodeAndPhonePayload: {
 				wxPhoneInfo,
 				wxLoginInfo: {
-					encryptedData: wechatMiniProgramCodeAndPhonePayload?.wxLoginInfo?.encryptedData || '',
+					encryptedData:
+            wechatMiniProgramCodeAndPhonePayload?.wxLoginInfo?.encryptedData ||
+            '',
 					iv: wechatMiniProgramCodeAndPhonePayload?.wxLoginInfo?.iv || '',
 					code: wxLoginCode
 				}
@@ -314,7 +324,7 @@ export class Authing {
 	}
 
 	async logout(): Promise<SDKResponse<boolean>> {
-  	const [loginStateError, loginState] = await this.getLoginState()
+		const [loginStateError, loginState] = await this.getLoginState()
 
 		if (loginStateError) {
 			await this.clearLoginState()
@@ -349,7 +359,9 @@ export class Authing {
 		return returnSuccess(true)
 	}
 
-	async sendSms(data: SendSmsOptions): Promise<SDKResponse<SimpleResponseData>> {
+	async sendSms(
+		data: SendSmsOptions
+	): Promise<SDKResponse<SimpleResponseData>> {
 		data.phoneCountryCode = data.phoneCountryCode || '+86'
 
 		const [error, res] = await request({
@@ -368,7 +380,9 @@ export class Authing {
 		return returnSuccess(res)
 	}
 
-	async sendEmailCode(data: SendEmailCodeOptions): Promise<SDKResponse<SimpleResponseData>> {
+	async sendEmailCode(
+		data: SendEmailCodeOptions
+	): Promise<SDKResponse<SimpleResponseData>> {
 		const [error, res] = await request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/send-email`,
@@ -391,7 +405,7 @@ export class Authing {
       | WxPhoneLoginOptions
       | PasswordLoginOptions
       | PassCodeLoginOptions
-			| WxCodeAndPhoneLoginOptions,
+      | WxCodeAndPhoneLoginOptions,
 		type: string
 	): Promise<SDKResponse<LoginState>> {
 		const urlMap: Record<string, string> = {
@@ -493,17 +507,23 @@ export class Authing {
 		if (data.passwordEncryptType && data.passwordEncryptType !== 'none') {
 			if (!this.encryptFunction) {
 				return returnError({
-					message: 'encryptFunction is required, if passwordEncryptType is not "none"'
+					message:
+            'encryptFunction is required, if passwordEncryptType is not "none"'
 				})
 			}
 
-			const [publicKeyError, publicKey] = await this.getPublicKey(data.passwordEncryptType)
+			const [publicKeyError, publicKey] = await this.getPublicKey(
+				data.passwordEncryptType
+			)
 
 			if (publicKeyError) {
 				return returnError(publicKeyError)
 			}
 
-			data.newPassword = this.encryptFunction(data.newPassword, publicKey as string)
+			data.newPassword = this.encryptFunction(
+				data.newPassword,
+        publicKey as string
+			)
 		}
 
 		const [updatePasswordError, updatePasswordRes] = await request({
@@ -523,11 +543,13 @@ export class Authing {
 		return returnSuccess(updatePasswordRes)
 	}
 
-	async getUserInfo(data: GerUserInfo = {
-		withCustomData: false,
-		withDepartmentIds: false,
-		withIdentities: false
-	}): Promise<SDKResponse<UserInfo>> {
+	async getUserInfo(
+		data: GerUserInfo = {
+			withCustomData: false,
+			withDepartmentIds: false,
+			withIdentities: false
+		}
+	): Promise<SDKResponse<UserInfo>> {
 		const [error, loginState] = await this.getLoginState()
 
 		if (error) {
@@ -598,7 +620,7 @@ export class Authing {
 			})
 		}
 
-		const { access_token, expires_at }  = loginState as LoginState
+		const { access_token, expires_at } = loginState as LoginState
 
 		if (expires_at < Date.now()) {
 			return returnError({
@@ -621,10 +643,10 @@ export class Authing {
 		}
 
 		return returnSuccess(updateProfileRes)
-  }
+	}
 
-  async bindWxByCode(data:BindWxByCodeOptions) {
-    const [error, loginState] = await this.getLoginState()
+	async bindWxByCode(data: BindWxByCodeOptions) {
+		const [error, loginState] = await this.getLoginState()
 
 		if (error) {
 			return returnError({
@@ -632,15 +654,15 @@ export class Authing {
 			})
 		}
 
-		const { access_token, expires_at }  = loginState as LoginState
+		const { access_token, expires_at } = loginState as LoginState
 
 		if (expires_at < Date.now()) {
 			return returnError({
 				message: 'Token has expired, please login again'
 			})
-    }
+		}
 
-    const [err, res] = await request({
+		const [err, res] = await request({
 			method: 'POST',
 			url: `${this.options.host}/connections/social/wechat-miniprogram/bind`,
 			data,
@@ -655,10 +677,7 @@ export class Authing {
 		}
 
 		return returnSuccess(res)
-
-  }
-
-
+	}
 
 	// 绑定邮箱
 	async bindEmail(data: BindEmailOptions) {
@@ -684,7 +703,7 @@ export class Authing {
 			data,
 			header: {
 				Authorization: access_token,
-				'x-authing-userpool-id': this.options.userPoolId,
+				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
 
@@ -719,7 +738,7 @@ export class Authing {
 			data,
 			header: {
 				Authorization: access_token,
-				'x-authing-userpool-id': this.options.userPoolId,
+				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
 
@@ -753,7 +772,7 @@ export class Authing {
 			data,
 			header: {
 				Authorization: access_token,
-				'x-authing-userpool-id': this.options.userPoolId,
+				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
 
@@ -788,7 +807,7 @@ export class Authing {
 			data,
 			header: {
 				Authorization: access_token,
-				'x-authing-userpool-id': this.options.userPoolId,
+				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
 
@@ -823,7 +842,7 @@ export class Authing {
 			data,
 			header: {
 				Authorization: access_token,
-				'x-authing-userpool-id': this.options.userPoolId,
+				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
 
@@ -857,7 +876,7 @@ export class Authing {
 			data,
 			header: {
 				Authorization: access_token,
-				'x-authing-userpool-id': this.options.userPoolId,
+				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
 
@@ -892,7 +911,7 @@ export class Authing {
 			data,
 			header: {
 				Authorization: access_token,
-				'x-authing-userpool-id': this.options.userPoolId,
+				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
 
@@ -926,7 +945,7 @@ export class Authing {
 			data,
 			header: {
 				Authorization: access_token,
-				'x-authing-userpool-id': this.options.userPoolId,
+				'x-authing-userpool-id': this.options.userPoolId
 			}
 		})
 
@@ -937,7 +956,9 @@ export class Authing {
 		return returnSuccess(res)
 	}
 
-	async getPhone(data: GetPhoneOptions): Promise<SDKResponse<GetUserPhoneResponseData>> {
+	async getPhone(
+		data: GetPhoneOptions
+	): Promise<SDKResponse<GetUserPhoneResponseData>> {
 		const [getPhoneError, getPhoneRes] = await request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/get-wechat-miniprogram-phone`,
@@ -959,7 +980,6 @@ export class Authing {
 	}
 
 	async decryptData(data: DecryptDataOptions) {
-
 		const [decryptError, res] = await request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/decrypt-wechat-miniprogram-data`,
@@ -976,7 +996,7 @@ export class Authing {
 		return returnSuccess(res)
 	}
 
-	async getAccessToken (data: GetAccessTokenOptions) {
+	async getAccessToken(data: GetAccessTokenOptions) {
 		const [error, loginState] = await this.getLoginState()
 
 		if (error) {
@@ -1009,6 +1029,4 @@ export class Authing {
 
 		return returnSuccess(res)
 	}
-
-
 }
