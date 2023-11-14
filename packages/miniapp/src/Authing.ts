@@ -32,7 +32,8 @@ import {
 	UpdateEmailRequestOptions,
 	UpdatePhoneRequestOptions,
 	DeleteAccountRequestOptions,
-	GerUserInfo
+	GerUserInfo,
+  BindWxByCodeOptions
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -93,8 +94,12 @@ export class Authing {
 			})
 		}
 	}
-
-	private async saveLoginState(
+/**
+ *
+ * @param loginState 登录用户状态信息
+ * @returns
+ */
+	async saveLoginState(
 		loginState: LoginState
 	): Promise<LoginState> {
 		const _loginState: LoginState = {
@@ -616,7 +621,44 @@ export class Authing {
 		}
 
 		return returnSuccess(updateProfileRes)
-	}
+  }
+
+  async bindWxByCode(data:BindWxByCodeOptions) {
+    const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at }  = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+    }
+
+    const [err, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}/connections/social/wechat-miniprogram/bind`,
+			data,
+			header: {
+				'x-authing-userpool-id': this.options.userPoolId,
+				Authorization: access_token
+			}
+		})
+
+		if (err) {
+			return returnError(err)
+		}
+
+		return returnSuccess(res)
+
+  }
+
+
 
 	// 绑定邮箱
 	async bindEmail(data: BindEmailOptions) {

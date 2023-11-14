@@ -482,3 +482,13 @@ export interface GerUserInfo {
   withCustomData?: boolean
   withIdentities?: boolean
 }
+
+export interface BindWxByCodeOptions{
+  code: string,
+  options?: {
+    iv?: string;
+    encryptedData?: string;
+    // wx.getUserInfo 返回的 rawData, 里面包含了原始用户数据
+    rawData?: string;
+  }
+}
