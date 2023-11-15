@@ -92,7 +92,7 @@ export interface LoginByPhoneOptions {
     wxLoginInfo?: {
       encryptedData?: string
       iv?: string
-    },
+    }
     wxPhoneInfo: {
       code: string
     }
@@ -267,12 +267,34 @@ export interface UserInfo {
   departmentIds?: string[]
 }
 
-export type IdentityProvider = 'wechat' | 'qq' | 'wechatwork' | 'dingtalk' | 'weibo'
-| 'github' | 'alipay' | 'baidu' | 'lark'
-| 'welink' | 'yidun' | 'qingcloud' | 'google'
-| 'gitlab' | 'gitee' | 'twitter' | 'facebook'
-| 'slack' | 'linkedin' | 'instagram' | 'oidc'
-| 'oauth2' | 'saml' | 'ldap' | 'ad' | 'cas' | 'azure-ad'
+export type IdentityProvider =
+  | 'wechat'
+  | 'qq'
+  | 'wechatwork'
+  | 'dingtalk'
+  | 'weibo'
+  | 'github'
+  | 'alipay'
+  | 'baidu'
+  | 'lark'
+  | 'welink'
+  | 'yidun'
+  | 'qingcloud'
+  | 'google'
+  | 'gitlab'
+  | 'gitee'
+  | 'twitter'
+  | 'facebook'
+  | 'slack'
+  | 'linkedin'
+  | 'instagram'
+  | 'oidc'
+  | 'oauth2'
+  | 'saml'
+  | 'ldap'
+  | 'ad'
+  | 'cas'
+  | 'azure-ad'
 
 export interface GetPhoneOptions {
   extIdpConnidentifier: string
@@ -313,7 +335,7 @@ export type EmailChannel =
   | 'CHANNEL_DELETE_ACCOUNT'
 
 export interface SendEmailCodeOptions {
-  email: string,
+  email: string
   channel: EmailChannel
 }
 
@@ -343,8 +365,7 @@ export interface BindEmailOptions {
   passCode: string
 }
 
-export type VerifyEmailMethod =
-  |'EMAIL_PASSCODE'
+export type VerifyEmailMethod = 'EMAIL_PASSCODE'
 
 export interface EmailPassCodePayload {
   newEmail: string
@@ -367,8 +388,7 @@ export interface BindPhoneOptions {
   phoneCountryCode?: string
 }
 
-export type VerifyPhoneMethod =
-  | 'PHONE_PASSCODE'
+export type VerifyPhoneMethod = 'PHONE_PASSCODE'
 
 export interface PhonePassCodePayload {
   newPhoneNumber: string
@@ -483,12 +503,9 @@ export interface GerUserInfo {
   withIdentities?: boolean
 }
 
-export interface BindWxByCodeOptions{
-  code: string,
-  options?: {
-    iv?: string;
-    encryptedData?: string;
-    // wx.getUserInfo 返回的 rawData, 里面包含了原始用户数据
-    rawData?: string;
-  }
+export interface BindWxByCodeOptions {
+  iv?: string
+  encryptedData?: string
+  // wx.getUserInfo 返回的 rawData, 里面包含了原始用户数据
+  rawData?: string
 }

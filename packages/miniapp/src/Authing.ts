@@ -645,7 +645,7 @@ export class Authing {
 		return returnSuccess(updateProfileRes)
 	}
 
-	async bindWxByCode(data: BindWxByCodeOptions) {
+	async bindWxByCode(options: BindWxByCodeOptions) {
 		const [error, loginState] = await this.getLoginState()
 
 		if (error) {
@@ -662,10 +662,33 @@ export class Authing {
 			})
 		}
 
+		const code = await this.resetWxLoginCode()
+
+		if (!code) {
+			return returnError({
+				message: 'get wx login code error'
+			})
+		}
+
+		const _data: {
+      code: string
+      options?: BindWxByCodeOptions
+    } = {
+    	code
+    }
+
+		if (
+			options !== null &&
+      typeof options === 'object' &&
+      Object.keys(options).length > 0
+		) {
+			_data.options = options
+		}
+
 		const [err, res] = await request({
 			method: 'POST',
 			url: `${this.options.host}/connections/social/wechat-miniprogram/bind`,
-			data,
+			data: _data,
 			header: {
 				'x-authing-userpool-id': this.options.userPoolId,
 				Authorization: access_token
