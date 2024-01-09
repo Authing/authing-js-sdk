@@ -67,7 +67,7 @@ function interceptResponseData (url: string, data: any) {
 		{
 			test: /(\/oidc\/token\/revocation)$/,
 			validate () {
-				return data === ''
+				return true
 			}
 		}
 	]
