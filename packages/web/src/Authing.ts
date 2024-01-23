@@ -270,6 +270,7 @@ export class Authing {
       originalUri?: string
       forced?: boolean
       customState?: any
+      login_page_context?: string
     } = {}
 	): Promise<void> {
 		const redirectUri = options.redirectUri || this.options.redirectUri
@@ -287,10 +288,13 @@ export class Authing {
 				? this.options.implicitResponseType
 				: 'code',
 			client_id: this.options.appId,
-			...(options.forced && { prompt: 'login' }),
 			state,
 			nonce,
-			scope: this.options.scope
+			scope: this.options.scope,
+			...(options.forced && { prompt: 'login' }),
+			...(options.login_page_context && {
+				login_page_context: options.login_page_context
+			})
 		}
 
 		let codeVerifier: string | undefined
