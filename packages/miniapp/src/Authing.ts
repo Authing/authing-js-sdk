@@ -160,12 +160,15 @@ export class Authing {
 		}
 
 		try {
-			await AuthingMove.checkSession()
-			const code = await this.getCachedWxLoginCode()
-			if (!code) {
-				await next()
-			}
-		} catch (e) {
+			/** checkSession 并不能对 login 的 code 有效性进行 check
+       *  eg: Authing 实例化后会调用 login 返回 code 此时不进行操作 大概十分钟后调用接口 如 loginByCode 微信端返回 code 失效
+       */
+			// 	await AuthingMove.checkSession()
+			// 	const code = await this.getCachedWxLoginCode()
+			// 	if (!code) {
+			// 		await next()
+			// 	}
+			// } catch (e) {
 			this.storage.remove(getWxLoginCodeKey(this.options.appId))
 			await next()
 		} finally {

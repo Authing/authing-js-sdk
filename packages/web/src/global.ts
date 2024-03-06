@@ -103,6 +103,7 @@ export interface AuthingSPAInitOptions {
 export interface LoginState {
   accessToken?: string
   idToken?: string
+  refreshToken?:string
   parsedIdToken?: IDToken
   parsedAccessToken?: AccessToken
   expireAt?: number
@@ -247,4 +248,11 @@ export interface NormalError {
   apiCode: number
   message: string
   statusCode: number
+}
+
+
+declare global {
+  interface Window{
+    crossOriginIsolated?:boolean
+  }
 }
