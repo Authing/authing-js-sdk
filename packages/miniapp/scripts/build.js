@@ -13,6 +13,7 @@
 
 const rm = require('rimraf')
 const chalk = require('chalk')
+const fs = require('fs-extra')
 
 const webpack = require('webpack')
 
@@ -48,13 +49,36 @@ function readyGo () {
   return Promise.all(ret)
 }
 
-function build (config) {
+function copyFiles(platform) {
+  const _platform = platform === 'uni' ? 'uniapp' : platform
+
+  rm.sync(resolve(`../miniapp-${_platform}/dist`))
+
+  // copy bundle
+  fs.copySync(
+    resolve(`../miniapp/dist/bundle-${platform}.js`),
+    resolve(`../miniapp-${_platform}/dist/bundle-${_platform}.js`)
+  )
+
+  // copy typings
+  fs.copySync(
+    resolve('../miniapp/dist/typings'),
+    resolve(`../miniapp-${_platform}/dist/typings`)
+  )
+}
+
+function build(config) {
   if (watch) {
-    webpack(config).watch(undefined, callback)
+    webpack(config).watch(undefined, (error, stats) => {
+      const mode = config.output.filename.match(/bundle-(.*).js/)[1]
+      copyFiles(mode)
+      callback(error, stats)
+    })
   } else {
     webpack(config, callback)
   }
 }
+
 
 function callback (error, stats) {
   if (error) {
