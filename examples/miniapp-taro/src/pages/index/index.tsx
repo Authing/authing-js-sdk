@@ -11,11 +11,12 @@ import { Authing } from '@authing/miniapp-taro'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
 const authing = new Authing({
-  appId: 'AUTHING_APP_ID',
-  host: 'AUTHING_HOST',
-  userPoolId: 'AUTHING_USER_POOL_ID',
+  appId: '65e817bc434b729d058140a0',
+  host: 'https://minnappauthing.why.lixpng.top',
+  userPoolId: '6321a29180d12ab3a3e35306',
   encryptFunction
 })
+const EXT_IDP_CONNIDENTIFIER = "douyin-mini"
 
 export default class Index extends Component<PropsWithChildren> {
 
@@ -34,32 +35,35 @@ export default class Index extends Component<PropsWithChildren> {
       <View className='index'>
         <Button onClick={() => this.loginByCode()}>loginByCode</Button>
         <Button openType='getPhoneNumber'  onGetPhoneNumber={(e) => this.loginByPhone(e)}>loginByPhone</Button>
+        <Button openType='getPhoneNumber'  onGetPhoneNumber={(e) => this.getPhone(e)}>getPhone</Button>
         <Button onClick={() => this.loginByPassword()}>loginByPassword</Button>
 
         <View>发送手机短信验证码</View>
         <Button onClick={() => this.sendSms()}>sendSms</Button>
         <Button onClick={() => this.bindPhone()}>bindPhone</Button>
+        <Button onClick={() => this.updatePhone()}>updatePhone</Button>
         <View>使用手机短信验证码登录</View>
         <Button onClick={() => this.loginByPassCode()}>loginByPassCode</Button>
 
         <View>发送邮箱验证码</View>
+        {/* 绑定邮箱 */}
         <Button onClick={() => this.sendEmailCode()}>sendEmailCode</Button>
         <Button onClick={() => this.bindEmail()}>bindEmail</Button>
+        {/* 修改邮箱 */}
         <Button onClick={() => this.updateEmail()}>updateEmail</Button>
+        <Button onClick={() => this.deleteAccount()}>deleteAccount</Button>
+        <Button onClick={() => this.decryptData()}>decryptData</Button>
 
-
-        <Button openType='getPhoneNumber'  onGetPhoneNumber={(e) => this.getPhone(e)}>getPhone</Button>
         <Button onClick={() => this.refreshToken()}>refreshToken</Button>
         <Button onClick={() => this.updatePassword()}>updatePassword</Button>
         <Button onClick={() => this.getUserInfo()}>getUserInfo</Button>
         <Button onClick={() => this.updateAvatar()}>updateAvatar</Button>
         <Button onClick={() => this.updateUserInfo()}>updateUserInfo</Button>
+        <Button onClick={() => this.logout()}>logout</Button>
 
         <Button onClick={() => this.getLoginState()}>getLoginState</Button>
-        <Button onClick={() => this.deleteAccount()}>deleteAccount</Button>
+        <Button onClick={() => this.clearLoginState()}>clearLoginState</Button>
 
-
-        <Button onClick={() => this.decryptData()}>decryptData</Button>
         <Button onClick={() => this.getAccessToken()}>getAccessToken</Button>
 
       </View>
@@ -68,7 +72,8 @@ export default class Index extends Component<PropsWithChildren> {
 
   async loginByCode () {
     const res = await authing.loginByCode({
-      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
+      connection: "douyin_mini_program_code",
       options: {
         scope: 'openid profile offline_access'
       }
@@ -83,8 +88,9 @@ export default class Index extends Component<PropsWithChildren> {
    */
   async loginByPhone (e) {
     const { code } = e.detail
+
     const res = await authing.loginByPhone({
-      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
       wechatMiniProgramCodeAndPhonePayload: {
         wxPhoneInfo: {
           code
@@ -105,7 +111,7 @@ export default class Index extends Component<PropsWithChildren> {
     const { code } = e.detail
 
     const res = await authing.getPhone({
-      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
       code
     })
 
@@ -184,10 +190,21 @@ export default class Index extends Component<PropsWithChildren> {
     console.log('authing.updateUserInfo res: ', res)
   }
 
+  async logout () {
+    const res = await authing.logout()
+    console.log('authing.logout res: ', res)
+  }
+
+
   async getLoginState () {
     const res = await authing.getLoginState()
 
     console.log('authing.getLoginState res: ', res)
+  }
+
+  async clearLoginState () {
+    const res = await authing.clearLoginState()
+    console.log('authing.clearLoginState res: ', res)
   }
 
   async sendEmailCode () {
@@ -297,7 +314,7 @@ export default class Index extends Component<PropsWithChildren> {
 
   async decryptData () {
     const res = await authing.decryptData({
-      extIdpConnidentifier: 'EXT_IDP_CONNIDENTIFIER',
+      extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
       encryptedData: '',
       iv: '',
       code: ''
