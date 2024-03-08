@@ -11,7 +11,6 @@ import {
 	PassCodeLoginOptions,
 	SendSmsOptions,
 	GetPhoneOptions,
-	GetDouyinPhoneOptions,
 	GetUserPhoneResponseData,
 	UserInfo,
 	UpdatePasswordOptions,
@@ -71,9 +70,9 @@ export class Authing {
 	}
 
 	async getLoginState(): Promise<SDKResponse<LoginState>> {
+
 		try {
 			const res = await this.storage.get(getLoginStateKey(this.options.appId))
-
 			const loginState: LoginState = res.data
 
 			if (loginState.expires_at > Date.now()) {
@@ -143,31 +142,6 @@ export class Authing {
 				break
 		}
 		return code
-	}
-
-	/**
-   * 因为会有一下接口地址变更
-   * 涉及到的 api  接口地址
-   * */
-	private getApiUrlMapping(route: string): string {
-
-		let url = ''
-		switch (route) {
-			case 'getPhone':
-
-				 url = '/api/v3/get-wechat-miniprogram-phone'
-				switch (this.options.platform) {
-					case PlatformsMenu.tt:
-						url = '/api/v3/decrypt-douyin-miniprogram-phone'
-						break
-				}
-
-				break
-		}
-
-
-		return url
-
 	}
 
 	private getDefaultLoginByPhoneCodeConnection(): LoginByPhoneCodeConnection {
@@ -288,7 +262,6 @@ export class Authing {
 				}
 				break
 		}
-		console.log(_data,'loginByCode _data dft')
 		return await this.login(_data, 'code')
 	}
 
@@ -445,7 +418,6 @@ export class Authing {
 
 				break
 		}
-		console.log(_data,'loginByPhone _data dft')
 		return await this.login(_data, 'phone')
 	}
 
@@ -1107,42 +1079,12 @@ export class Authing {
 	}
 
 	async getPhone(
-		data: GetPhoneOptions | GetDouyinPhoneOptions
+		data: GetPhoneOptions
 	): Promise<SDKResponse<GetUserPhoneResponseData>> {
-
-
-		let _data: GetPhoneOptions | GetDouyinPhoneOptions = {
-			...data
-		}
-
-		switch (this.options.platform) {
-			case PlatformsMenu.wx:
-				if (!_data.code || !_data.extIdpConnidentifier) {
-					return returnError({
-						message: 'code or extIdpConnidentifier is required'
-					})
-				}
-				break
-			case PlatformsMenu.tt:
-				if (!_data.extIdpConnidentifier) {
-					return returnError({
-						message: 'extIdpConnidentifier is required'
-					})
-				}
-
-				const loginParamsCode = await this.resetPlatformLoginCode()
-				_data = {
-					..._data,
-					code:loginParamsCode
-				}
-
-				break
-		}
-
 		const [getPhoneError, getPhoneRes] = await request({
 			method: 'POST',
-			url: `${this.options.host}${this.getApiUrlMapping('getPhone')}`,
-			data:_data,
+			url: `${this.options.host}/api/v3/get-wechat-miniprogram-phone`,
+			data,
 			header: {
 				'x-authing-userpool-id': this.options.userPoolId
 			}
