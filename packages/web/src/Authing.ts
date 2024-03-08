@@ -410,7 +410,9 @@ export class Authing {
 		// implicit flow
 		const idToken = paramDict.id_token
 		const accessToken = paramDict.access_token
-		const refreshToken = paramDict.refresh_token
+		// implict 模式没有refresh_token
+		//  https://docs.authing.cn/v2/concepts/oidc/choose-flow.html#%E9%9A%90%E5%BC%8F%E6%A8%A1%E5%BC%8F
+		// const refreshToken = paramDict.refresh_token
 		const nonce = tx?.nonce
 
 		if (
@@ -680,7 +682,7 @@ export class Authing {
 		return
 	}
 	/**
-   * 
+   *
    * 使用内部维护的 refresh_token 刷新 access_token、id_token
    *
    */

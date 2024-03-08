@@ -648,7 +648,7 @@ export class Authing {
 		return returnSuccess(updateProfileRes)
 	}
 
-	async bindWxByCode(options: BindWxByCodeOptions) {
+	async bindWxByCode(data: BindWxByCodeOptions) {
 		const [error, loginState] = await this.getLoginState()
 
 		if (error) {
@@ -673,20 +673,11 @@ export class Authing {
 			})
 		}
 
-		const _data: {
-      code: string
-      options?: BindWxByCodeOptions
-    } = {
-    	code
-    }
-
-		if (
-			options !== null &&
-      typeof options === 'object' &&
-      Object.keys(options).length > 0
-		) {
-			_data.options = options
+		const _data: BindWxByCodeOptions = {
+    	code,
+			...data,
 		}
+
 
 		const [err, res] = await request({
 			method: 'POST',
