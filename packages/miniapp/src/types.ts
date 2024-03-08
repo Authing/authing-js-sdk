@@ -6,10 +6,28 @@ import {
 	SetStorageCallbackData
 } from '@authing/authingmove-core'
 
+
+// 平台类型
+
+/**
+ *  全部平台类型：'wx', 'ali', 'baidu', 'qq', 'tt', 'jd', 'ks', 'qa_webview', 'qa_ux', 'Mpx', 'Taro', 'uni'
+ *  目前仅执行 wx,tt
+ */
+
+
+export enum PlatformsMenu {
+  wx = 'wx',
+  tt = 'tt',
+}
+
+export type Platforms = 'wx' | 'tt'
+
+
 export interface AuthingOptions {
   appId: string
   userPoolId: string
   host?: string
+  platform?: Platforms
   encryptFunction?: EncryptFunction
 }
 
@@ -54,10 +72,28 @@ export interface LoginOptions {
   customData?: IObject
 }
 
-export interface WxCodeLoginOptions {
-  connection?: 'wechat_mini_program_code'
+// 登录 code
+export enum LoginByCodeConnection {
+  wechat_mini_program_code = 'wechat_mini_program_code',
+  douyin_mini_program_code = 'douyin_mini_program_code',
+}
+
+// 登录 手机号 code
+export enum LoginByPhoneCodeConnection {
+  wechat_mini_program_code_and_phone = 'wechat_mini_program_code_and_phone',
+  douyin_mini_program_code_and_phone = 'douyin_mini_program_code_and_phone',
+}
+
+
+export interface PlatformCodeLoginOptions {
+  connection?: LoginByCodeConnection
   extIdpConnidentifier: string
-  wechatMiniProgramCodePayload: {
+  wechatMiniProgramCodePayload?: {
+    encryptedData: string
+    iv: string
+    code: string
+  }
+  douyinMiniProgramCodePayload?: {
     encryptedData: string
     iv: string
     code: string
@@ -66,9 +102,13 @@ export interface WxCodeLoginOptions {
 }
 
 export interface LoginByCodeOptions {
-  connection?: 'wechat_mini_program_code'
+  connection?: LoginByCodeConnection
   extIdpConnidentifier: string
   wechatMiniProgramCodePayload?: {
+    encryptedData: string
+    iv: string
+  }
+  douyinMiniProgramCodePayload?: {
     encryptedData: string
     iv: string
   }
@@ -88,7 +128,7 @@ export interface WxPhoneLoginOptions {
 
 export interface LoginByPhoneOptions {
   extIdpConnidentifier: string
-  wechatMiniProgramCodeAndPhonePayload: {
+  wechatMiniProgramCodeAndPhonePayload?: {
     wxLoginInfo?: {
       encryptedData?: string
       iv?: string
@@ -97,13 +137,20 @@ export interface LoginByPhoneOptions {
       code: string
     }
   }
+  douyinMiniProgramCodeAndPhonePayload?: {
+    phoneParams: {
+      code: string
+      iv: string
+      encryptedData: string
+    }
+  }
   options?: LoginOptions
 }
 
-export interface WxCodeAndPhoneLoginOptions {
-  connection: 'wechat_mini_program_code_and_phone'
+export interface PlatformCodeAndPhoneLoginOptions {
+  connection: LoginByPhoneCodeConnection
   extIdpConnidentifier: string
-  wechatMiniProgramCodeAndPhonePayload: {
+  wechatMiniProgramCodeAndPhonePayload?: {
     wxLoginInfo: {
       encryptedData: string
       iv: string
@@ -111,6 +158,18 @@ export interface WxCodeAndPhoneLoginOptions {
     }
     wxPhoneInfo: {
       code: string
+    }
+  }
+  douyinMiniProgramCodeAndPhonePayload?: {
+    loginParams?: {
+      encryptedData?: string
+      signature?: string
+      iv?: string
+      code: string
+    }
+    phoneParams: {
+      iv: string
+      encryptedData: string
     }
   }
   options?: LoginOptions
@@ -298,6 +357,12 @@ export type IdentityProvider =
 
 export interface GetPhoneOptions {
   extIdpConnidentifier: string
+  code: string
+}
+export interface GetDouyinPhoneOptions {
+  extIdpConnidentifier: string
+  encryptedData: string
+  iv: string
   code: string
 }
 
@@ -503,7 +568,7 @@ export interface GerUserInfo {
   withIdentities?: boolean
 }
 
-export interface BindWxByCodeOptions {
+export interface BindPlatformByCodeOptions {
   iv?: string
   encryptedData?: string
   // wx.getUserInfo 返回的 rawData, 里面包含了原始用户数据

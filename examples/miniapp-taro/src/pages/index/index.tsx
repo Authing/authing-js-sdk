@@ -9,14 +9,17 @@ import { Authing } from '@authing/miniapp-taro'
 // import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
-
+const RUN_PLATFORM = 'tt';
+const EXT_IDP_CONNIDENTIFIER = "douyin-mini2"
 const authing = new Authing({
   appId: '65e817bc434b729d058140a0',
   host: 'https://minnappauthing.why.lixpng.top',
   userPoolId: '6321a29180d12ab3a3e35306',
+  platform: RUN_PLATFORM,
   encryptFunction
 })
-const EXT_IDP_CONNIDENTIFIER = "douyin-mini"
+
+
 
 export default class Index extends Component<PropsWithChildren> {
 
@@ -66,6 +69,10 @@ export default class Index extends Component<PropsWithChildren> {
 
         <Button onClick={() => this.getAccessToken()}>getAccessToken</Button>
 
+        <View>新增</View>
+        <Button onClick={() => this.saveLoginState()}>saveLoginState</Button>
+        <Button onClick={() => this.bindWxByCode()}>bindWxByCode</Button>
+
       </View>
     )
   }
@@ -73,9 +80,11 @@ export default class Index extends Component<PropsWithChildren> {
   async loginByCode () {
     const res = await authing.loginByCode({
       extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
-      connection: "douyin_mini_program_code",
       options: {
-        scope: 'openid profile offline_access'
+        customData: {
+          emp_id:'sadasdsa'
+        },
+        scope: 'openid profile offline_access',
       }
     })
 
@@ -86,17 +95,31 @@ export default class Index extends Component<PropsWithChildren> {
    * 需要在真机上测试，微信开发者工具不会返回 code
    * @param {*} e
    */
-  async loginByPhone (e) {
-    const { code } = e.detail
+  async loginByPhone(e) {
+    // const { code } = e.detail
+
+    console.log(e, 'e.detaile.detail dft')
+
+    const { code, iv, encryptedData } = e.detail;
 
     const res = await authing.loginByPhone({
       extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
+      douyinMiniProgramCodeAndPhonePayload: {
+        phoneParams: {
+          code, //这个 code 需要修改一下
+          encryptedData,
+          iv,
+        }
+      },
       wechatMiniProgramCodeAndPhonePayload: {
         wxPhoneInfo: {
           code
         }
       },
       options: {
+        customData: {
+          emp_id:'getPhone',
+        },
         scope: 'openid profile offline_access'
       }
     })
@@ -108,11 +131,13 @@ export default class Index extends Component<PropsWithChildren> {
    * @param {*} e
    */
   async getPhone (e) {
-    const { code } = e.detail
+    const { code, iv, encryptedData } = e.detail;
 
     const res = await authing.getPhone({
       extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
-      code
+      code,
+      encryptedData,
+      iv,
     })
 
     console.log('authing.getPhone res: ', res)
@@ -330,5 +355,27 @@ export default class Index extends Component<PropsWithChildren> {
     })
 
     console.log('authing.getAccessToken res: ', res)
+  }
+
+  async saveLoginState () {
+    const [, loginState] = await authing.getLoginState()
+
+    const res = await authing.saveLoginState({
+      access_token: '',
+      expires_in: 0,
+      expires_at: 0,
+      id_token: '',
+      scope: '',
+      token_type: '',
+      ...loginState
+    })
+    console.log('authing.saveLoginState res: ', res)
+  }
+
+  async bindWxByCode () {
+    // const loginState = await authing.getLoginState()
+
+    const res = await authing.bindWxByCode({ })
+    console.log('authing.saveLoginState res: ', res)
   }
 }
