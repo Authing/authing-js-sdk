@@ -425,7 +425,6 @@ export class Authing {
 		const result = await this.saveLoginState({
 			idToken,
 			accessToken,
-			refreshToken,
 			nonce
 		})
 
