@@ -35,13 +35,17 @@
 </template>
 
 <script>
-	import { Authing } from '@authing/miniapp-uniapp'
-	import { encryptFunction } from '@authing/miniapp-jsencrypt'
+	// import { Authing } from '@authing/miniapp-uniapp'
 
+	import { Authing } from '/Users/mac/Desktop/www/authing-js-sdk/packages/miniapp-uniapp/dist/bundle-uniapp'
+	import { encryptFunction } from '@authing/miniapp-jsencrypt'
+  const AUTHING_EXT_IDP_CONN_IDENTIFIER = "dfttest"
+  const RUN_PLATFORM = 'wx';
 	const authing = new Authing({
-		appId: 'AUTHING_APP_ID',
-		host: 'AUTHING_HOST',
-		userPoolId: 'AUTHING_USER_POOL_ID',
+    appId: '65dec78cef482170c526737d',
+    host: 'https://xiaochengxudft.authing.cn',
+    userPoolId: '65b0a5d8758cead74368b6bf',
+    platform: RUN_PLATFORM,
 		encryptFunction
 	})
 
@@ -66,8 +70,9 @@
 			 */
 			async loginByPhone (e) {
 				const { code } = e.detail
+        console.log('e: ', e)
 				const res = await authing.loginByPhone({
-					extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
+					extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
 					wechatMiniProgramCodeAndPhonePayload: {
 						wxPhoneInfo: {
 							code
@@ -82,7 +87,7 @@
 
 			async loginByCode () {
 				const res = await authing.loginByCode({
-					extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
+					extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
 					options: {
 						scope: 'openid profile offline_access'
 					}
@@ -99,7 +104,7 @@
 				const { code } = e.detail
 
 				const res = await authing.getPhone({
-					extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
+					extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
 					code
 				})
 
@@ -300,7 +305,7 @@
 
       async decryptData () {
         const res = await authing.decryptData({
-          extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
+          extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
           encryptedData: '',
           iv: '',
           code: ''

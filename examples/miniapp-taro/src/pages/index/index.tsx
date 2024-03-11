@@ -96,9 +96,6 @@ export default class Index extends Component<PropsWithChildren> {
    * @param {*} e
    */
   async loginByPhone(e) {
-    // const { code } = e.detail
-
-    console.log(e, 'e.detaile.detail dft')
 
     const { code, iv, encryptedData } = e.detail;
 
@@ -131,13 +128,11 @@ export default class Index extends Component<PropsWithChildren> {
    * @param {*} e
    */
   async getPhone (e) {
-    const { code, iv, encryptedData } = e.detail;
+    const { code } = e.detail
 
     const res = await authing.getPhone({
       extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
-      code,
-      encryptedData,
-      iv,
+      code
     })
 
     console.log('authing.getPhone res: ', res)
