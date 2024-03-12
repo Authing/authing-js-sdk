@@ -33,10 +33,12 @@ import {
 	UpdatePhoneRequestOptions,
 	DeleteAccountRequestOptions,
 	GerUserInfo,
+	BindWxByCodeOptions,
 	BindPlatformByCodeOptions,
 	LoginByCodeConnection,
 	LoginByPhoneCodeConnection,
 	PlatformsMenu,
+	GetDouyinPhoneOptions,
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -744,7 +746,7 @@ export class Authing {
 		return returnSuccess(updateProfileRes)
 	}
 
-	async bindWxByCode(options: BindPlatformByCodeOptions) {
+	async bindWxByCode(data: BindWxByCodeOptions) {
 		const [error, loginState] = await this.getLoginState()
 
 		if (error) {
@@ -769,24 +771,63 @@ export class Authing {
 			})
 		}
 
-		const _data: {
-      code: string
-      options?: BindPlatformByCodeOptions
-    } = {
-    	code
-    }
-
-		if (
-			options !== null &&
-      typeof options === 'object' &&
-      Object.keys(options).length > 0
-		) {
-			_data.options = options
+		const _data: BindWxByCodeOptions = {
+    	code,
+			...data,
 		}
+
 
 		const [err, res] = await request({
 			method: 'POST',
 			url: `${this.options.host}/connections/social/wechat-miniprogram/bind`,
+			data: _data,
+			header: {
+				'x-authing-userpool-id': this.options.userPoolId,
+				Authorization: access_token
+			}
+		})
+
+		if (err) {
+			return returnError(err)
+		}
+
+		return returnSuccess(res)
+	}
+
+	async bindPlatformByCode(data: BindPlatformByCodeOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const code = await this.resetPlatformLoginCode()
+
+		if (!code) {
+			return returnError({
+				message: 'get wx login code error'
+			})
+		}
+
+		const _data: BindPlatformByCodeOptions = {
+    	code,
+			...data,
+		}
+
+
+		const [err, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}${this.getApiUrlMapping('bindPlatformByCode')}`,
 			data: _data,
 			header: {
 				'x-authing-userpool-id': this.options.userPoolId,
@@ -1079,12 +1120,43 @@ export class Authing {
 	}
 
 	async getPhone(
-		data: GetPhoneOptions
+		data: GetPhoneOptions | GetDouyinPhoneOptions
 	): Promise<SDKResponse<GetUserPhoneResponseData>> {
+
+
+		let _data: GetPhoneOptions | GetDouyinPhoneOptions = {
+			...data
+		}
+
+		switch (this.options.platform) {
+			case PlatformsMenu.wx:
+				if (!_data.code || !_data.extIdpConnidentifier) {
+					return returnError({
+						message: 'code or extIdpConnidentifier is required'
+					})
+				}
+				break
+			case PlatformsMenu.tt:
+				if (!_data.extIdpConnidentifier) {
+					return returnError({
+						message: 'extIdpConnidentifier is required'
+					})
+				}
+
+				const loginParamsCode = await this.resetPlatformLoginCode()
+				_data = {
+					..._data,
+					code:loginParamsCode
+				}
+
+				break
+		}
+
+
 		const [getPhoneError, getPhoneRes] = await request({
 			method: 'POST',
-			url: `${this.options.host}/api/v3/get-wechat-miniprogram-phone`,
-			data,
+			url: `${this.options.host}${this.getApiUrlMapping('getPhone')}`,
+			data:_data,
 			header: {
 				'x-authing-userpool-id': this.options.userPoolId
 			}
@@ -1104,7 +1176,7 @@ export class Authing {
 	async decryptData(data: DecryptDataOptions) {
 		const [decryptError, res] = await request({
 			method: 'POST',
-			url: `${this.options.host}/api/v3/decrypt-wechat-miniprogram-data`,
+			url: `${this.options.host}${this.getApiUrlMapping('decryptData')}`,
 			data,
 			header: {
 				'x-authing-userpool-id': this.options.userPoolId
@@ -1121,6 +1193,11 @@ export class Authing {
 	async getAccessToken(data: GetAccessTokenOptions) {
 		const [error, loginState] = await this.getLoginState()
 
+		if (this.options.platform === PlatformsMenu.tt) {
+			return returnError({
+				message: 'getAccessToken is deprecated, please use getAccessTokenInfo'
+			})
+		}
 		if (error) {
 			return returnError({
 				message: 'Token has expired, please login again'
@@ -1150,5 +1227,88 @@ export class Authing {
 		}
 
 		return returnSuccess(res)
+	}
+
+	async getAccessTokenInfo(data: GetAccessTokenOptions) {
+		const [error, loginState] = await this.getLoginState()
+
+		if (error) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const { access_token, expires_at } = loginState as LoginState
+
+		if (expires_at < Date.now()) {
+			return returnError({
+				message: 'Token has expired, please login again'
+			})
+		}
+
+		const [getError, res] = await request({
+			method: 'POST',
+			url: `${this.options.host}${this.getApiUrlMapping('getAccessTokenInfo')}`,
+			data,
+			header: {
+				Authorization: access_token,
+				'x-authing-userpool-id': this.options.userPoolId
+			}
+		})
+
+		if (getError) {
+			return returnError(getError)
+		}
+
+		return returnSuccess(res)
+	}
+
+	/**
+   * 因为会有一下接口地址变更
+   * 涉及到的 api  接口地址
+   * */
+	private getApiUrlMapping(route: string): string {
+
+		let url = ''
+		switch (route) {
+
+			case 'getPhone':
+				 url = '/api/v3/get-wechat-miniprogram-phone'
+				switch (this.options.platform) {
+					case PlatformsMenu.tt:
+						url = '/api/v3/decrypt-douyin-miniprogram-phone'
+						break
+				}
+				break
+			case 'bindPlatformByCode':
+				 url = '/connections/social/wechat-miniprogram/bind'
+				switch (this.options.platform) {
+					case PlatformsMenu.tt:
+						url = '/connections/social/douyin-miniprogram/bind'
+						break
+				}
+				break
+
+			case 'decryptData':
+				 url = '/api/v3/decrypt-wechat-miniprogram-data'
+				switch (this.options.platform) {
+					case PlatformsMenu.tt:
+						url = '/api/v3/decrypt-douyin-miniprogram-data'
+						break
+				}
+				break
+			case 'getAccessTokenInfo':
+				 url = '/api/v3/get-wechat-access-token-info'
+				switch (this.options.platform) {
+					case PlatformsMenu.tt:
+						url = '/api/v3/get-douyin-access-token-info'
+						break
+				}
+				break
+		}
+
+
+		return url
+
 	}
 }

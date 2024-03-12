@@ -568,9 +568,22 @@ export interface GerUserInfo {
   withIdentities?: boolean
 }
 
-export interface BindPlatformByCodeOptions {
+export interface BindWxByCodeOptions {
+  code?:string,
   iv?: string
   encryptedData?: string
   // wx.getUserInfo 返回的 rawData, 里面包含了原始用户数据
   rawData?: string
+  /** 身份源唯一标识 */
+  extIdpConnidentifier?:string
+}
+
+export interface BindPlatformByCodeOptions {
+  code?:string,
+  iv?: string
+  encryptedData?: string
+  // wx.getUserInfo 返回的 rawData, 里面包含了原始用户数据
+  rawData?: string
+  /** 身份源唯一标识 */
+  extIdpConnidentifier?:string
 }
