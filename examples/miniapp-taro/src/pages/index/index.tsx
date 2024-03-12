@@ -9,12 +9,16 @@ import { Authing } from '@authing/miniapp-taro'
 // import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
-const RUN_PLATFORM = 'tt';
-const EXT_IDP_CONNIDENTIFIER = "douyin-mini2"
+const RUN_PLATFORM = 'wx'; //运行平台默认 wx
+const EXT_IDP_CONNIDENTIFIER = "EXT_IDP_CONNIDENTIFIER"
+
+const APP_SECRET = 'APP_SECRET';
+const APP_ID = 'APP_ID';
+
 const authing = new Authing({
-  appId: '65e817bc434b729d058140a0',
-  host: 'https://minnappauthing.why.lixpng.top',
-  userPoolId: '6321a29180d12ab3a3e35306',
+  appId: 'appId',
+  host: 'host',
+  userPoolId: 'userPoolId',
   platform: RUN_PLATFORM,
   encryptFunction
 })
@@ -40,7 +44,7 @@ export default class Index extends Component<PropsWithChildren> {
         <Button openType='getPhoneNumber'  onGetPhoneNumber={(e) => this.loginByPhone(e)}>loginByPhone</Button>
         <Button openType='getPhoneNumber'  onGetPhoneNumber={(e) => this.getPhone(e)}>getPhone</Button>
         <Button onClick={() => this.loginByPassword()}>loginByPassword</Button>
-
+        <Button onClick={() => this.updatePassword()}>updatePassword</Button>
         <View>发送手机短信验证码</View>
         <Button onClick={() => this.sendSms()}>sendSms</Button>
         <Button onClick={() => this.bindPhone()}>bindPhone</Button>
@@ -56,22 +60,20 @@ export default class Index extends Component<PropsWithChildren> {
         <Button onClick={() => this.updateEmail()}>updateEmail</Button>
         <Button onClick={() => this.deleteAccount()}>deleteAccount</Button>
         <Button onClick={() => this.decryptData()}>decryptData</Button>
-
-        <Button onClick={() => this.refreshToken()}>refreshToken</Button>
-        <Button onClick={() => this.updatePassword()}>updatePassword</Button>
         <Button onClick={() => this.getUserInfo()}>getUserInfo</Button>
         <Button onClick={() => this.updateAvatar()}>updateAvatar</Button>
         <Button onClick={() => this.updateUserInfo()}>updateUserInfo</Button>
-        <Button onClick={() => this.logout()}>logout</Button>
-
         <Button onClick={() => this.getLoginState()}>getLoginState</Button>
         <Button onClick={() => this.clearLoginState()}>clearLoginState</Button>
-
+        <Button onClick={() => this.refreshToken()}>refreshToken</Button>
         <Button onClick={() => this.getAccessToken()}>getAccessToken</Button>
+        <Button onClick={() => this.logout()}>logout</Button>
 
         <View>新增</View>
+        <Button onClick={() => this.getAccessTokenInfo()}>getAccessTokenInfo</Button>
         <Button onClick={() => this.saveLoginState()}>saveLoginState</Button>
         <Button onClick={() => this.bindWxByCode()}>bindWxByCode</Button>
+        <Button onClick={() => this.bindPlatformByCode()}>bindPlatformByCode</Button>
 
       </View>
     )
@@ -128,11 +130,13 @@ export default class Index extends Component<PropsWithChildren> {
    * @param {*} e
    */
   async getPhone (e) {
-    const { code } = e.detail
+    const { code,encryptedData,iv } = e.detail
 
     const res = await authing.getPhone({
       extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
-      code
+      code,
+      encryptedData,
+      iv,
     })
 
     console.log('authing.getPhone res: ', res)
@@ -333,23 +337,41 @@ export default class Index extends Component<PropsWithChildren> {
   }
 
   async decryptData () {
-    const res = await authing.decryptData({
-      extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
-      encryptedData: '',
-      iv: '',
-      code: ''
-    })
 
-    console.log('authing.decryptData res: ', res)
+    Taro.getUserProfile({
+      desc:'test',
+      success: async(result) => {
+        const encryptedData = result.encryptedData;
+        const iv = result.iv;
+        const code = await authing.getLoginCode()
+        const res = await authing.decryptData({
+          extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
+          encryptedData,
+          iv,
+          code,
+        })
+
+        console.log('authing.decryptData res: ', res)
+      }
+    })
   }
 
   async getAccessToken () {
     const res = await authing.getAccessToken({
-      appId: 'WX_APP_ID',
-      appSecret: 'WX_APP_SECRET'
+      appId: APP_ID,
+      appSecret: APP_SECRET
     })
 
     console.log('authing.getAccessToken res: ', res)
+  }
+
+  async getAccessTokenInfo () {
+    const res = await authing.getAccessTokenInfo({
+      appId: APP_ID,
+      appSecret: APP_SECRET
+    })
+
+    console.log('authing.getAccessTokenInfo res: ', res)
   }
 
   async saveLoginState () {
@@ -368,9 +390,14 @@ export default class Index extends Component<PropsWithChildren> {
   }
 
   async bindWxByCode () {
-    // const loginState = await authing.getLoginState()
 
-    const res = await authing.bindWxByCode({ })
-    console.log('authing.saveLoginState res: ', res)
+    const res = await authing.bindWxByCode({  extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER})
+    console.log('authing.bindWxByCode res: ', res)
+  }
+
+  async bindPlatformByCode () {
+
+    const res = await authing.bindPlatformByCode({  extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER})
+    console.log('authing.bindPlatformByCode res: ', res)
   }
 }

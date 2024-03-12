@@ -7,28 +7,33 @@
 			<button open-type="getPhoneNumber" @getphonenumber="loginByPhone">loginByPhone</button>
 			<button open-type="getPhoneNumber" @getphonenumber="getPhone">getPhone</button>
 			<button @click="loginByPassword">loginByPassword</button>
+			<button @click="updatePassword">updatePassword</button>
 
 			<!-- 发送手机短信验证码 -->
 			<button @click="sendSms">sendSms</button>
 			<button @click="bindPhone">bindPhone</button>
+			<button @click="updatePhone">updatePhone</button>
 			<!-- 使用手机短信验证码登录 -->
 			<button @click="loginByPassCode">loginByPassCode</button>
       <!-- 发送邮箱验证码 -->
 			<button @click="sendEmailCode">sendEmailCode</button>
 			<button @click="bindEmail">bindEmail</button>
 			<button @click="updateEmail">updateEmail</button>
-
-			<button @click="refreshToken">refreshToken</button>
-			<button @click="updatePassword">updatePassword</button>
+			<button @click="deleteAccount">deleteAccount</button>
+      <button @click="decryptData">decryptData</button>
 			<button @click="getUserInfo">getUserInfo</button>
 			<button @click="updateAvatar">updateAvatar</button>
 			<button @click="updateUserInfo">updateUserInfo</button>
-			<button @click="deleteAccount">deleteAccount</button>
-
 			<button @click="getLoginState">getLoginState</button>
-			<button @click="logout">logout</button>
-			<button @click="decryptData">decryptData</button>
+      <button @click="refreshToken">refreshToken</button>
 			<button @click="getAccessToken">getAccessToken</button>
+			<button @click="logout">logout</button>
+
+        <!-- 新增的 -->
+      <button @click="getAccessTokenInfo">getAccessTokenInfo</button>
+      <button @click="saveLoginState">saveLoginState</button>
+			<button @click="bindWxByCode">bindWxByCode</button>
+			<button @click="bindPlatformByCode">bindPlatformByCode</button>
 
 		</view>
 	</view>
@@ -39,12 +44,14 @@
 
 	import { Authing } from '/Users/mac/Desktop/www/authing-js-sdk/packages/miniapp-uniapp/dist/bundle-uniapp'
 	import { encryptFunction } from '@authing/miniapp-jsencrypt'
-  const AUTHING_EXT_IDP_CONN_IDENTIFIER = "dfttest"
-  const RUN_PLATFORM = 'wx';
+  const AUTHING_EXT_IDP_CONN_IDENTIFIER = "AUTHING_EXT_IDP_CONN_IDENTIFIER"
+  const RUN_PLATFORM = 'wx'; //运行平台默认抖音
+  const APP_SECRET = 'APP_SECRET';
+  const APP_ID = "APP_ID";
 	const authing = new Authing({
-    appId: '65dec78cef482170c526737d',
-    host: 'https://xiaochengxudft.authing.cn',
-    userPoolId: '65b0a5d8758cead74368b6bf',
+    appId: "appId",
+    host: 'host',
+    userPoolId: 'userPoolId',
     platform: RUN_PLATFORM,
 		encryptFunction
 	})
@@ -263,6 +270,20 @@
         console.log('authing.bindPhone res: ', res)
       },
 
+      async saveLoginState () {
+        const [, loginState] = await authing.getLoginState()
+        const res = await authing.saveLoginState({
+          access_token: '',
+          expires_in: 0,
+          expires_at: 0,
+          id_token: '',
+          scope: '',
+          token_type: '',
+          ...loginState
+        })
+        console.log('authing.saveLoginState res: ', res)
+      },
+
       // TODO 修改手机号 channel
       async updatePhone () {
         const [_, res] = await authing.updatePhoneRequest({
@@ -304,23 +325,52 @@
       },
 
       async decryptData () {
-        const res = await authing.decryptData({
-          extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
-          encryptedData: '',
-          iv: '',
-          code: ''
+
+        uni.getUserProfile({
+          desc:'test',
+          success: async(result) => {
+            const encryptedData = result.encryptedData;
+            const iv = result.iv;
+            const code = await authing.getLoginCode()
+            const res = await authing.decryptData({
+              extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
+              encryptedData,
+              iv,
+              code,
+            })
+
+            console.log('authing.decryptData res: ', res)
+          }
         })
 
-        console.log('authing.decryptData res: ', res)
+
       },
 
       async getAccessToken () {
         const res = await authing.getAccessToken({
-          appId: 'WX_APP_ID',
-          appSecret: 'WX_APP_SECRET'
+          appId: APP_ID,
+          appSecret: APP_SECRET
         })
 
         console.log('authing.getAccessToken res: ', res)
+      },
+      async getAccessTokenInfo () {
+        const res = await authing.getAccessTokenInfo({
+          appId: APP_ID,
+          appSecret: APP_SECRET
+        })
+
+        console.log('authing.getAccessTokenInfo res: ', res)
+      },
+      async bindWxByCode () {
+
+        const res = await authing.bindWxByCode({  extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER})
+        console.log('authing.bindWxByCode res: ', res)
+      },
+      async bindPlatformByCode () {
+
+        const res = await authing.bindPlatformByCode({  extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER})
+        console.log('authing.bindPlatformByCode res: ', res)
       }
 		}
 	}
