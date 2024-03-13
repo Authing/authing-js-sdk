@@ -45,14 +45,12 @@
 	import { Authing } from '/Users/mac/Desktop/www/authing-js-sdk/packages/miniapp-uniapp/dist/bundle-uniapp'
 	import { encryptFunction } from '@authing/miniapp-jsencrypt'
   const AUTHING_EXT_IDP_CONN_IDENTIFIER = "AUTHING_EXT_IDP_CONN_IDENTIFIER"
-  const RUN_PLATFORM = 'wx'; //运行平台默认抖音
   const APP_SECRET = 'APP_SECRET';
   const APP_ID = "APP_ID";
 	const authing = new Authing({
     appId: "appId",
     host: 'host',
     userPoolId: 'userPoolId',
-    platform: RUN_PLATFORM,
 		encryptFunction
 	})
 
@@ -71,26 +69,37 @@
 		},
 
 		methods: {
-			/**
-			 * 需要在真机上测试，微信开发者工具不会返回 code
-			 * @param {*} e
-			 */
-			async loginByPhone (e) {
-				const { code } = e.detail
-        console.log('e: ', e)
-				const res = await authing.loginByPhone({
-					extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
-					wechatMiniProgramCodeAndPhonePayload: {
-						wxPhoneInfo: {
-							code
-						}
+		/**
+		 * 需要在真机上测试，微信开发者工具不会返回 code
+		 * @param {*} e
+		 */
+     async loginByPhone(e) {
+			const { code, iv, encryptedData } = e.detail;
+			console.log('e: ', e)
+			const res = await authing.loginByPhone({
+				extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
+				// 之前的暂时保留
+				// wechatMiniProgramCodeAndPhonePayload: {
+				// 	wxPhoneInfo: {
+				// 		code
+				// 	}
+				// },
+				// 通用参数
+				miniProgramCodeAndPhonePayload: {
+					phoneParams: {
+						encryptedData,
+						iv,
 					},
-					options: {
-						scope: 'openid profile offline_access'
+					wxPhoneInfo: {
+						code
 					}
-				})
-				console.log('authing.loginByPhone res: ', res)
-			},
+				},
+				options: {
+					scope: 'openid profile offline_access'
+				}
+			})
+			console.log('authing.loginByPhone res: ', res)
+		},
 
 			async loginByCode () {
 				const res = await authing.loginByCode({

@@ -9,7 +9,6 @@ import { Authing } from '@authing/miniapp-taro'
 // import { encryptFunction } from '@authing/miniapp-jsencrypt'
 
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
-const RUN_PLATFORM = 'wx'; //运行平台默认 wx
 const EXT_IDP_CONNIDENTIFIER = "EXT_IDP_CONNIDENTIFIER"
 
 const APP_SECRET = 'APP_SECRET';
@@ -19,7 +18,6 @@ const authing = new Authing({
   appId: 'appId',
   host: 'host',
   userPoolId: 'userPoolId',
-  platform: RUN_PLATFORM,
   encryptFunction
 })
 
@@ -103,14 +101,18 @@ export default class Index extends Component<PropsWithChildren> {
 
     const res = await authing.loginByPhone({
       extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
-      douyinMiniProgramCodeAndPhonePayload: {
+      // 之前的暂时保留
+      wechatMiniProgramCodeAndPhonePayload: {
+      	wxPhoneInfo: {
+      		code
+      	}
+      },
+      // 通用参数
+      miniProgramCodeAndPhonePayload: {
         phoneParams: {
-          code, //这个 code 需要修改一下
           encryptedData,
           iv,
-        }
-      },
-      wechatMiniProgramCodeAndPhonePayload: {
+        },
         wxPhoneInfo: {
           code
         }

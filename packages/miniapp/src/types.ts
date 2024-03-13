@@ -137,11 +137,14 @@ export interface LoginByPhoneOptions {
       code: string
     }
   }
-  douyinMiniProgramCodeAndPhonePayload?: {
-    phoneParams: {
-      code: string
+  miniProgramCodeAndPhonePayload?: {
+    phoneParams?: {
+      code?: string
       iv: string
       encryptedData: string
+    }
+    wxPhoneInfo?: {
+      code: string
     }
   }
   options?: LoginOptions

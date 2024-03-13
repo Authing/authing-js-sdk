@@ -47,6 +47,7 @@ import {
 	getLoginStateKey,
 	getPlatformLoginCodeKey,
 	request,
+	getCurrentMiniProgram,
 	StorageProvider
 } from './helpers'
 
@@ -61,7 +62,7 @@ export class Authing {
 		this.options = {
 			...options,
 			host: options.host || 'https://core.authing.cn',
-			platform: options.platform || 'wx'
+			platform: options.platform || getCurrentMiniProgram() || 'wx'
 		}
 
 		this.storage = new StorageProvider()
@@ -335,7 +336,7 @@ export class Authing {
 		const {
 			extIdpConnidentifier,
 			wechatMiniProgramCodeAndPhonePayload,
-			douyinMiniProgramCodeAndPhonePayload,
+			miniProgramCodeAndPhonePayload,
 			options
 		} = data
 
@@ -350,8 +351,7 @@ export class Authing {
 		switch (this.options.platform) {
 			case PlatformsMenu.wx:
 
-				const wxPhoneInfo = wechatMiniProgramCodeAndPhonePayload?.wxPhoneInfo
-
+				const wxPhoneInfo = wechatMiniProgramCodeAndPhonePayload?.wxPhoneInfo || miniProgramCodeAndPhonePayload?.wxPhoneInfo
 				if (!wxPhoneInfo || !wxPhoneInfo.code) {
 					return returnError({
 						message: 'wxPhoneInfo.code is required'
@@ -384,7 +384,7 @@ export class Authing {
 				break
 			case PlatformsMenu.tt:
 
-				const phoneParams = douyinMiniProgramCodeAndPhonePayload?.phoneParams
+				const phoneParams = miniProgramCodeAndPhonePayload?.phoneParams
 
 				if (!phoneParams) {
 					return returnError({
@@ -397,7 +397,7 @@ export class Authing {
 
 				if (!loginParamsCode) {
 					return returnError({
-						message: 'get tt login params error'
+						message: 'get tt login params error ,please use the miniProgramCodeAndPhonePayload'
 					})
 				}
 
