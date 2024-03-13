@@ -1,0 +1,11 @@
+{
+  "name": "miniprogram-ts",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "@douyin-microapp/typings": "latest"
+  }
+}
