@@ -101,12 +101,12 @@ export default class Index extends Component<PropsWithChildren> {
 
     const res = await authing.loginByPhone({
       extIdpConnidentifier: EXT_IDP_CONNIDENTIFIER,
-      // 之前的暂时保留
-      wechatMiniProgramCodeAndPhonePayload: {
-      	wxPhoneInfo: {
-      		code
-      	}
-      },
+      // 之前的暂时保留 - 后期会停用
+      // wechatMiniProgramCodeAndPhonePayload: {
+      // 	wxPhoneInfo: {
+      // 		code
+      // 	}
+      // },
       // 通用参数
       miniProgramCodeAndPhonePayload: {
         phoneParams: {

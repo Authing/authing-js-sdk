@@ -78,7 +78,7 @@
 			console.log('e: ', e)
 			const res = await authing.loginByPhone({
 				extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
-				// 之前的暂时保留
+        // 之前的暂时保留 - 后期会停用
 				// wechatMiniProgramCodeAndPhonePayload: {
 				// 	wxPhoneInfo: {
 				// 		code
