@@ -5,10 +5,12 @@
   "keywords": [],
   "author": "",
   "license": "",
+  "dependencies": {
+    "@authing/miniapp-jsencrypt": "^5.1.16",
+    "@authing/miniapp-sm2encrypt": "^5.1.16",
+    "@authing/miniapp-tt": "^5.1.16-alpha.4"
+  },
   "devDependencies": {
-    "@authing/miniapp-jsencrypt": "^5.1.8",
-    "@authing/miniapp-sm2encrypt": "^5.1.8",
-    "@authing/miniapp-tt": "^5.1.16-alpha.3",
     "@douyin-microapp/typings": "latest"
   }
 }

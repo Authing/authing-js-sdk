@@ -11,6 +11,6 @@
   "dependencies": {
     "@authing/miniapp-jsencrypt": "^5.1.8",
     "@authing/miniapp-sm2encrypt": "^5.1.8",
-    "@authing/miniapp-wx": "^5.1.9-alpha.0"
+    "@authing/miniapp-wx": "^5.1.16-alpha.4"
   }
 }

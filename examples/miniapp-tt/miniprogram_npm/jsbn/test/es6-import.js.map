@@ -1,0 +1,1 @@
+{"version":3,"file":"node_modules/jsbn/test/es6-import.js","names":["BigInteger","console","log"],"sources":["node_modules/jsbn/test/es6-import.js"],"sourcesContent":["import {BigInteger} from '../';\n\nconsole.log(typeof BigInteger)\n"],"mappings":"OAAQA,eAAiB,MAEzBC,QAAQC,WAAWF"}

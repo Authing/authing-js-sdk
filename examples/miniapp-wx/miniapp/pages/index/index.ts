@@ -43,10 +43,14 @@ Page({
    * @param {*} e
    */
   async loginByPhone (e) {
-    const { code } = e.detail
+    const { code, iv, encryptedData } = e.detail;
     const res = await authing.loginByPhone({
       extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
-      wechatMiniProgramCodeAndPhonePayload: {
+      miniProgramCodeAndPhonePayload: {
+        phoneParams: {
+          encryptedData,
+          iv,
+        },
         wxPhoneInfo: {
           code
         }
