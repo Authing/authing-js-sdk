@@ -1,0 +1,33 @@
+<button bindtap="loginByCode">loginByCode</button>
+<button open-type="getPhoneNumber" bindgetphonenumber="loginByPhone">loginByPhone</button>
+<button open-type="getPhoneNumber" bindgetphonenumber="getPhone">getPhone</button>
+<button bindtap="loginByPassword">loginByPassword</button>
+<button bindtap="updatePassword">updatePassword</button>
+
+<!-- 发送手机短信验证码 -->
+<button bindtap="sendSms">sendSms</button>
+<button bindtap="bindPhone">bindPhone</button>
+<button bindtap="updatePhone">updatePhone</button>
+<!-- 使用手机短信验证码登录 -->
+<button bindtap="loginByPassCode">loginByPassCode</button>
+<!-- 发送邮箱验证码 -->
+<button bindtap="sendEmailCode">sendEmailCode</button>
+<!-- 绑定邮箱 -->
+<button bindtap="bindEmail">bindEmail</button>
+<!-- 修改邮箱 -->
+<button bindtap="updateEmail">updateEmail</button>
+<button bindtap="deleteAccount">deleteAccount</button>
+<!-- 解密数据 -->
+<button bindtap="decryptData">decryptData</button>
+<button bindtap="getUserInfo">getUserInfo</button>
+<button bindtap="updateAvatar">updateAvatar</button>
+<button bindtap="updateUserInfo">updateUserInfo</button>
+<button bindtap="getLoginState">getLoginState</button>
+<button bindtap="clearLoginState">clearLoginState</button>
+<button bindtap="refreshToken">refreshToken</button>
+<button bindtap="logout">logout</button>
+<!-- 新增 -->
+<button bindtap="getAccessTokenInfo">getAccessTokenInfo</button>
+<button bindtap="saveLoginState">saveLoginState</button>
+<button bindtap="bindPlatformByCode">bindPlatformByCode</button>
+

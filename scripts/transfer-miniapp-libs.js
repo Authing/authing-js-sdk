@@ -6,7 +6,7 @@ const resolve = (dir, file = '') =>{
   return path.resolve(__dirname, '../', dir, file)
 }
 
-const platforms = ['taro', 'uni', 'wx']
+const platforms = ['taro', 'uni', 'wx', 'tt']
 
 readyGo()
 
