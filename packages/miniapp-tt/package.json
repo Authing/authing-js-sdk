@@ -1,6 +1,6 @@
 {
   "name": "@authing/miniapp-tt",
-  "version": "5.1.16-alpha.3",
+  "version": "5.1.16-alpha.4",
   "description": "Authing miniapp JS SDK for TT",
   "main": "dist/bundle-tt.js",
   "types": "dist/typings/src/index.d.ts",
