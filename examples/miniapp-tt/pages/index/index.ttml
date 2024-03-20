@@ -27,7 +27,6 @@
 <button bindtap="refreshToken">refreshToken</button>
 <button bindtap="logout">logout</button>
 <!-- 新增 -->
-<button bindtap="getAccessTokenInfo">getAccessTokenInfo</button>
 <button bindtap="saveLoginState">saveLoginState</button>
 <button bindtap="bindPlatformByCode">bindPlatformByCode</button>
 

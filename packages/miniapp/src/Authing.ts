@@ -28,7 +28,6 @@ import {
 	UpdatePhoneOptions,
 	DeleteAccountOptions,
 	DecryptDataOptions,
-	GetAccessTokenOptions,
 	UpdateEmailRequestOptions,
 	UpdatePhoneRequestOptions,
 	DeleteAccountRequestOptions,
@@ -1190,78 +1189,6 @@ export class Authing {
 		return returnSuccess(res)
 	}
 
-	async getAccessToken(data: GetAccessTokenOptions) {
-		const [error, loginState] = await this.getLoginState()
-
-		if (this.options.platform === PlatformsMenu.tt) {
-			return returnError({
-				message: 'getAccessToken is deprecated, please use getAccessTokenInfo'
-			})
-		}
-		if (error) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
-
-		const { access_token, expires_at } = loginState as LoginState
-
-		if (expires_at < Date.now()) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
-
-		const [getError, res] = await request({
-			method: 'POST',
-			url: `${this.options.host}/api/v3/get-wechat-access-token`,
-			data,
-			header: {
-				Authorization: access_token,
-				'x-authing-userpool-id': this.options.userPoolId
-			}
-		})
-
-		if (getError) {
-			return returnError(getError)
-		}
-
-		return returnSuccess(res)
-	}
-
-	async getAccessTokenInfo(data: GetAccessTokenOptions) {
-		const [error, loginState] = await this.getLoginState()
-
-		if (error) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
-
-		const { access_token, expires_at } = loginState as LoginState
-
-		if (expires_at < Date.now()) {
-			return returnError({
-				message: 'Token has expired, please login again'
-			})
-		}
-
-		const [getError, res] = await request({
-			method: 'POST',
-			url: `${this.options.host}${this.getApiUrlMapping('getAccessTokenInfo')}`,
-			data,
-			header: {
-				Authorization: access_token,
-				'x-authing-userpool-id': this.options.userPoolId
-			}
-		})
-
-		if (getError) {
-			return returnError(getError)
-		}
-
-		return returnSuccess(res)
-	}
 
 	/**
    * 因为会有一下接口地址变更

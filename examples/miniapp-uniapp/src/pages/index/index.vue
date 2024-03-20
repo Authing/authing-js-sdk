@@ -26,11 +26,9 @@
 			<button @click="updateUserInfo">updateUserInfo</button>
 			<button @click="getLoginState">getLoginState</button>
       <button @click="refreshToken">refreshToken</button>
-			<button @click="getAccessToken">getAccessToken</button>
 			<button @click="logout">logout</button>
 
         <!-- 新增的 -->
-      <button @click="getAccessTokenInfo">getAccessTokenInfo</button>
       <button @click="saveLoginState">saveLoginState</button>
 			<button @click="bindWxByCode">bindWxByCode</button>
 			<button @click="bindPlatformByCode">bindPlatformByCode</button>
@@ -45,8 +43,6 @@
 	import { Authing } from '/Users/mac/Desktop/www/authing-js-sdk/packages/miniapp-uniapp/dist/bundle-uniapp'
 	import { encryptFunction } from '@authing/miniapp-jsencrypt'
   const AUTHING_EXT_IDP_CONN_IDENTIFIER = "AUTHING_EXT_IDP_CONN_IDENTIFIER"
-  const APP_SECRET = 'APP_SECRET';
-  const APP_ID = "APP_ID";
 	const authing = new Authing({
     appId: "appId",
     host: 'host',
@@ -355,22 +351,6 @@
 
       },
 
-      async getAccessToken () {
-        const res = await authing.getAccessToken({
-          appId: APP_ID,
-          appSecret: APP_SECRET
-        })
-
-        console.log('authing.getAccessToken res: ', res)
-      },
-      async getAccessTokenInfo () {
-        const res = await authing.getAccessTokenInfo({
-          appId: APP_ID,
-          appSecret: APP_SECRET
-        })
-
-        console.log('authing.getAccessTokenInfo res: ', res)
-      },
       async bindWxByCode () {
 
         const res = await authing.bindWxByCode({  extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER})

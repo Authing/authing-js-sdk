@@ -11,9 +11,6 @@ import { Authing } from '@authing/miniapp-taro'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 const EXT_IDP_CONNIDENTIFIER = "EXT_IDP_CONNIDENTIFIER"
 
-const APP_SECRET = 'APP_SECRET';
-const APP_ID = 'APP_ID';
-
 const authing = new Authing({
   appId: 'appId',
   host: 'host',
@@ -64,11 +61,8 @@ export default class Index extends Component<PropsWithChildren> {
         <Button onClick={() => this.getLoginState()}>getLoginState</Button>
         <Button onClick={() => this.clearLoginState()}>clearLoginState</Button>
         <Button onClick={() => this.refreshToken()}>refreshToken</Button>
-        <Button onClick={() => this.getAccessToken()}>getAccessToken</Button>
         <Button onClick={() => this.logout()}>logout</Button>
 
-        <View>新增</View>
-        <Button onClick={() => this.getAccessTokenInfo()}>getAccessTokenInfo</Button>
         <Button onClick={() => this.saveLoginState()}>saveLoginState</Button>
         <Button onClick={() => this.bindWxByCode()}>bindWxByCode</Button>
         <Button onClick={() => this.bindPlatformByCode()}>bindPlatformByCode</Button>
@@ -358,23 +352,6 @@ export default class Index extends Component<PropsWithChildren> {
     })
   }
 
-  async getAccessToken () {
-    const res = await authing.getAccessToken({
-      appId: APP_ID,
-      appSecret: APP_SECRET
-    })
-
-    console.log('authing.getAccessToken res: ', res)
-  }
-
-  async getAccessTokenInfo () {
-    const res = await authing.getAccessTokenInfo({
-      appId: APP_ID,
-      appSecret: APP_SECRET
-    })
-
-    console.log('authing.getAccessTokenInfo res: ', res)
-  }
 
   async saveLoginState () {
     const [, loginState] = await authing.getLoginState()

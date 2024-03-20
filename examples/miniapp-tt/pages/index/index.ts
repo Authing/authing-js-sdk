@@ -6,9 +6,6 @@ import { Authing } from '@authing/miniapp-tt'
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 const EXT_IDP_CONNIDENTIFIER = "EXT_IDP_CONNIDENTIFIER"
 
-const APP_SECRET = 'APP_SECRET';
-const APP_ID = 'APP_ID';
-
 const authing = new Authing({
   appId: 'appId',
   host: 'host',
@@ -120,14 +117,6 @@ Page({
     console.log('authing.refreshToken res: ', res)
   },
 
-  async getAccessTokenInfo () {
-    const res = await authing.getAccessTokenInfo({
-      appId: APP_ID,
-      appSecret: APP_SECRET
-    })
-
-    console.log('authing.getAccessTokenInfo res: ', res)
-  },
   async saveLoginState () {
     const [, loginState] = await authing.getLoginState()
 
