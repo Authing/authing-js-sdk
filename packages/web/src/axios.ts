@@ -11,8 +11,9 @@ async function axiosPromiseWrapper(p: Promise<any>) {
 		return await p
 	} catch (e) {
 		if (isAxiosError(e)) {
-			if (e.response?.data?.error) {
-				const { error, error_description } = e.response.data
+			if ((e.response?.data as any)?.error) {
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				const { error, error_description } = e.response!.data as any
 				throw new Error(`认证服务器返回错误 ${error}: ${error_description}`)
 			}
 		}
