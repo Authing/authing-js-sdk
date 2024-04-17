@@ -21,7 +21,7 @@
     "release:alpha": "npm publish --verbose --tag=alpha --access public"
   },
   "dependencies": {
-    "axios": "^0.28.0"
+    "axios": "^1.6.4"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.1",
