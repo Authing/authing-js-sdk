@@ -694,34 +694,31 @@ export class Authing {
 				'获取 refresh_token 失败，请检查相关协议配置，是否开启 refresh_token 相关功能'
 			)
 		}
-		if (state && state.expireAt && state.expireAt > Date.now()) {
-			const data = {
-				grant_type: 'refresh_token',
-				redirect_uri: '',
-				refresh_token: state.refreshToken
-			}
-
-			const { data: tokenRes } = (await axiosPost(
-				`${this.domain}/oidc/token`,
-				createQueryParams(data),
-				{
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-						'x-authing-app-id': this.options.appId
-					}
-				}
-			)) as { data: OIDCTokenResponse }
-
-			// 清掉旧的登录态
-			await this.loginStateProvider.delete(loginStateKey(this.options.appId))
-
-			return this.saveLoginState({
-				idToken: tokenRes.id_token,
-				accessToken: tokenRes.access_token,
-				refreshToken: tokenRes.refresh_token
-			})
+		const data = {
+			grant_type: 'refresh_token',
+			redirect_uri: '',
+			refresh_token: state.refreshToken
 		}
-		return null
+
+		const { data: tokenRes } = (await axiosPost(
+			`${this.domain}/oidc/token`,
+			createQueryParams(data),
+			{
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+					'x-authing-app-id': this.options.appId
+				}
+			}
+		)) as { data: OIDCTokenResponse }
+
+		// 清掉旧的登录态
+		await this.loginStateProvider.delete(loginStateKey(this.options.appId))
+
+		return this.saveLoginState({
+			idToken: tokenRes.id_token,
+			accessToken: tokenRes.access_token,
+			refreshToken: tokenRes.refresh_token
+		})
 	}
 
 	private async listenToPostMessage(state: string) {
