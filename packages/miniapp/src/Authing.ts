@@ -37,7 +37,7 @@ import {
 	LoginByCodeConnection,
 	LoginByPhoneCodeConnection,
 	PlatformsMenu,
-	GetDouyinPhoneOptions,
+	GetDouyinPhoneOptions
 } from './types'
 
 import { returnSuccess, returnError } from './helpers/return'
@@ -72,7 +72,6 @@ export class Authing {
 	}
 
 	async getLoginState(): Promise<SDKResponse<LoginState>> {
-
 		try {
 			const res = await this.storage.get(getLoginStateKey(this.options.appId))
 			const loginState: LoginState = res.data
@@ -175,14 +174,27 @@ export class Authing {
 		}
 	}
 
-	private async resetPlatformLoginCode(): Promise<string> {
+	private async resetPlatformLoginCode(): Promise<SDKResponse<string>> {
 		const next = async () => {
 			try {
 				const platformLoginRes = await AuthingMove.login()
 				await this.cachePlatformLoginCode(platformLoginRes.code)
-				return true
+				if (platformLoginRes.code) {
+					return {
+						status: true,
+						result: platformLoginRes
+					}
+				} else {
+					return {
+						status: false,
+						error: platformLoginRes
+					}
+				}
 			} catch (e) {
-				return false
+				return {
+					status: false,
+					error: e
+				}
 			}
 		}
 
@@ -196,10 +208,17 @@ export class Authing {
 			// 		await next()
 			// 	}
 			// } catch (e) {
-			this.storage.remove(getPlatformLoginCodeKey(this.options.appId,this.options.platform))
-			await next()
-		} finally {
-			return await this.getCachedPlatformLoginCode()
+			this.storage.remove(
+				getPlatformLoginCodeKey(this.options.appId, this.options.platform)
+			)
+			const res = await next()
+			if (res.status) {
+				return returnSuccess(await this.getCachedPlatformLoginCode())
+			} else {
+				return returnError(res.error)
+			}
+		} catch (e) {
+			return returnError(e)
 		}
 	}
 
@@ -224,27 +243,33 @@ export class Authing {
 			options
 		} = data
 
-		const code = await this.resetPlatformLoginCode()
+		const [error,code] = await this.resetPlatformLoginCode()
 
 		if (!code) {
 			return returnError({
-				message: 'get wx login code error'
+				message: 'get wx login code error' + JSON.stringify(error)
 			})
 		}
 
 		const _data: PlatformCodeLoginOptions = {
 			connection: connection || this.getDefaultLoginByCodeConnection(),
 			extIdpConnidentifier,
-			wechatMiniProgramCodePayload: PlatformsMenu.wx == this.options.platform ? {
-				encryptedData: wechatMiniProgramCodePayload?.encryptedData || '',
-				iv: wechatMiniProgramCodePayload?.iv || '',
-				code
-			} : undefined,
-			douyinMiniProgramCodePayload: PlatformsMenu.tt == this.options.platform ? {
-				encryptedData: douyinMiniProgramCodePayload?.encryptedData || '',
-				iv: douyinMiniProgramCodePayload?.iv || '',
-				code
-			} : undefined,
+			wechatMiniProgramCodePayload:
+        PlatformsMenu.wx == this.options.platform
+        	? {
+        		encryptedData: wechatMiniProgramCodePayload?.encryptedData || '',
+        		iv: wechatMiniProgramCodePayload?.iv || '',
+        		code
+        	}
+        	: undefined,
+			douyinMiniProgramCodePayload:
+        PlatformsMenu.tt == this.options.platform
+        	? {
+        		encryptedData: douyinMiniProgramCodePayload?.encryptedData || '',
+        		iv: douyinMiniProgramCodePayload?.iv || '',
+        		code
+        	}
+        	: undefined,
 			options
 		}
 
@@ -349,40 +374,40 @@ export class Authing {
 
 		switch (this.options.platform) {
 			case PlatformsMenu.wx:
-
-				const wxPhoneInfo = wechatMiniProgramCodeAndPhonePayload?.wxPhoneInfo || miniProgramCodeAndPhonePayload?.wxPhoneInfo
+				const wxPhoneInfo =
+          wechatMiniProgramCodeAndPhonePayload?.wxPhoneInfo ||
+          miniProgramCodeAndPhonePayload?.wxPhoneInfo
 				if (!wxPhoneInfo || !wxPhoneInfo.code) {
 					return returnError({
 						message: 'wxPhoneInfo.code is required'
 					})
 				}
 
-				const wxLoginCode = await this.resetPlatformLoginCode()
+				const [error,code] = await this.resetPlatformLoginCode()
 
-				if (!wxLoginCode) {
+				if (!code) {
 					return returnError({
-						message: 'get wx login code error'
+						message: 'get wx login code error' + JSON.stringify(error)
 					})
 				}
 
-				 _data = {
-					connection:this.getDefaultLoginByPhoneCodeConnection(),
+				_data = {
+					connection: this.getDefaultLoginByPhoneCodeConnection(),
 					extIdpConnidentifier,
 					wechatMiniProgramCodeAndPhonePayload: {
 						wxPhoneInfo,
 						wxLoginInfo: {
 							encryptedData:
-                wechatMiniProgramCodeAndPhonePayload?.wxLoginInfo?.encryptedData ||
-                '',
+                wechatMiniProgramCodeAndPhonePayload?.wxLoginInfo
+                	?.encryptedData || '',
 							iv: wechatMiniProgramCodeAndPhonePayload?.wxLoginInfo?.iv || '',
-							code: wxLoginCode
+							code
 						}
 					},
 					options
 				}
 				break
 			case PlatformsMenu.tt:
-
 				const phoneParams = miniProgramCodeAndPhonePayload?.phoneParams
 
 				if (!phoneParams) {
@@ -391,27 +416,26 @@ export class Authing {
 					})
 				}
 
-
-				const loginParamsCode = await this.resetPlatformLoginCode()
+				const [resetError,loginParamsCode] = await this.resetPlatformLoginCode()
 
 				if (!loginParamsCode) {
 					return returnError({
-						message: 'get tt login params error ,please use the miniProgramCodeAndPhonePayload'
+						message: 'get tt login code error' + JSON.stringify(resetError)
 					})
 				}
 
 				_data = {
-					connection:this.getDefaultLoginByPhoneCodeConnection(),
+					connection: this.getDefaultLoginByPhoneCodeConnection(),
 					extIdpConnidentifier,
 					douyinMiniProgramCodeAndPhonePayload: {
-						loginParams:{
+						loginParams: {
 							encryptedData: '',
 							iv: '',
 							code: loginParamsCode
 						},
 						phoneParams: {
-							encryptedData: phoneParams?.encryptedData || '' ,
-							iv: phoneParams?.iv ||'',
+							encryptedData: phoneParams?.encryptedData || '',
+							iv: phoneParams?.iv || ''
 						}
 					},
 					options
@@ -421,7 +445,6 @@ export class Authing {
 		}
 		return await this.login(_data, 'phone')
 	}
-
 
 	async logout(): Promise<SDKResponse<boolean>> {
 		const [loginStateError, loginState] = await this.getLoginState()
@@ -762,19 +785,18 @@ export class Authing {
 			})
 		}
 
-		const code = await this.resetPlatformLoginCode()
+		const [resetError,code] = await this.resetPlatformLoginCode()
 
 		if (!code) {
 			return returnError({
-				message: 'get wx login code error'
+				message: 'get wx login code error' + JSON.stringify(resetError)
 			})
 		}
 
 		const _data: BindWxByCodeOptions = {
-    	code,
-			...data,
+			code,
+			...data
 		}
-
 
 		const [err, res] = await request({
 			method: 'POST',
@@ -809,20 +831,18 @@ export class Authing {
 				message: 'Token has expired, please login again'
 			})
 		}
-
-		const code = await this.resetPlatformLoginCode()
+		const [resetError,code] = await this.resetPlatformLoginCode()
 
 		if (!code) {
 			return returnError({
-				message: 'get wx login code error'
+				message: 'get wx login code error' + JSON.stringify(resetError)
 			})
 		}
 
 		const _data: BindPlatformByCodeOptions = {
-    	code,
-			...data,
+			code,
+			...data
 		}
-
 
 		const [err, res] = await request({
 			method: 'POST',
@@ -1121,8 +1141,6 @@ export class Authing {
 	async getPhone(
 		data: GetPhoneOptions | GetDouyinPhoneOptions
 	): Promise<SDKResponse<GetUserPhoneResponseData>> {
-
-
 		let _data: GetPhoneOptions | GetDouyinPhoneOptions = {
 			...data
 		}
@@ -1142,20 +1160,25 @@ export class Authing {
 					})
 				}
 
-				const loginParamsCode = await this.resetPlatformLoginCode()
+				const [resetError, loginParamsCode] = await this.resetPlatformLoginCode()
+
+				if (!loginParamsCode) {
+					return returnError({
+						message: 'get tt login code error' + JSON.stringify(resetError)
+					})
+				}
 				_data = {
 					..._data,
-					code:loginParamsCode
+					code: loginParamsCode
 				}
 
 				break
 		}
 
-
 		const [getPhoneError, getPhoneRes] = await request({
 			method: 'POST',
 			url: `${this.options.host}${this.getApiUrlMapping('getPhone')}`,
-			data:_data,
+			data: _data,
 			header: {
 				'x-authing-userpool-id': this.options.userPoolId
 			}
@@ -1189,18 +1212,15 @@ export class Authing {
 		return returnSuccess(res)
 	}
 
-
 	/**
    * 因为会有一下接口地址变更
    * 涉及到的 api  接口地址
    * */
 	private getApiUrlMapping(route: string): string {
-
 		let url = ''
 		switch (route) {
-
 			case 'getPhone':
-				 url = '/api/v3/get-wechat-miniprogram-phone'
+				url = '/api/v3/get-wechat-miniprogram-phone'
 				switch (this.options.platform) {
 					case PlatformsMenu.tt:
 						url = '/api/v3/decrypt-douyin-miniprogram-phone'
@@ -1208,7 +1228,7 @@ export class Authing {
 				}
 				break
 			case 'bindPlatformByCode':
-				 url = '/connections/social/wechat-miniprogram/bind'
+				url = '/connections/social/wechat-miniprogram/bind'
 				switch (this.options.platform) {
 					case PlatformsMenu.tt:
 						url = '/connections/social/douyin-miniprogram/bind'
@@ -1217,7 +1237,7 @@ export class Authing {
 				break
 
 			case 'decryptData':
-				 url = '/api/v3/decrypt-wechat-miniprogram-data'
+				url = '/api/v3/decrypt-wechat-miniprogram-data'
 				switch (this.options.platform) {
 					case PlatformsMenu.tt:
 						url = '/api/v3/decrypt-douyin-miniprogram-data'
@@ -1225,7 +1245,7 @@ export class Authing {
 				}
 				break
 			case 'getAccessTokenInfo':
-				 url = '/api/v3/get-wechat-access-token-info'
+				url = '/api/v3/get-wechat-access-token-info'
 				switch (this.options.platform) {
 					case PlatformsMenu.tt:
 						url = '/api/v3/get-douyin-access-token-info'
@@ -1234,8 +1254,6 @@ export class Authing {
 				break
 		}
 
-
 		return url
-
 	}
 }
