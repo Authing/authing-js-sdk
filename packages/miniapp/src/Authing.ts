@@ -177,9 +177,21 @@ export class Authing {
 	private async resetPlatformLoginCode(): Promise<SDKResponse<string>> {
 		const next = async () => {
 			try {
-				const platformLoginRes = await AuthingMove.login()
-				await this.cachePlatformLoginCode(platformLoginRes.code)
+			  const platformLoginRes:any = await new Promise((resolve, reject) => {
+					AuthingMove.login({
+						success: res => {
+							resolve(res)
+						},
+						fail: res => {
+							// 在这里抛出错误
+							reject(
+								new Error(`微信登录失败: ${JSON.stringify(res) || '未知错误'}`)
+							)
+						}
+					})
+				})
 				if (platformLoginRes.code) {
+					await this.cachePlatformLoginCode(platformLoginRes.code)
 					return {
 						status: true,
 						result: platformLoginRes
@@ -187,7 +199,7 @@ export class Authing {
 				} else {
 					return {
 						status: false,
-						error: platformLoginRes
+						error: JSON.stringify(platformLoginRes)
 					}
 				}
 			} catch (e) {
