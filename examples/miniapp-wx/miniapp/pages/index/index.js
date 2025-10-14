@@ -6,6 +6,8 @@ import { Authing } from '@authing/miniapp-wx'
 
 import { encryptFunction } from '@authing/miniapp-sm2encrypt'
 
+const AUTHING_EXT_IDP_CONN_IDENTIFIER = 'test-minigram'
+
 const authing = new Authing({
   appId: 'AUTHING_APP_ID',
   host: 'AUTHING_HOST',
@@ -13,13 +15,12 @@ const authing = new Authing({
   encryptFunction
 })
 
-
 Page({
   data: {},
   onLoad() {
     // 开启 shareTicket 用户分享获取群聊 id
     wx.updateShareMenu({
-      withShareTicket: true,
+      withShareTicket: true
     })
   },
   onShareAppMessage() {
@@ -37,19 +38,18 @@ Page({
     }
   },
 
-
   /**
    * 需要在真机上测试，微信开发者工具不会返回 code
    * @param {*} e
    */
-  async loginByPhone (e) {
-    const { code, iv, encryptedData } = e.detail;
+  async loginByPhone(e) {
+    const { code, iv, encryptedData } = e.detail
     const res = await authing.loginByPhone({
-      extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
+      extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
       miniProgramCodeAndPhonePayload: {
         phoneParams: {
           encryptedData,
-          iv,
+          iv
         },
         wxPhoneInfo: {
           code
@@ -62,9 +62,10 @@ Page({
     console.log('authing.loginByPhone res: ', res)
   },
 
-  async loginByCode () {
+  async loginByCode() {
+    console.log('loginByCode')
     const res = await authing.loginByCode({
-      extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
+      extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
       options: {
         scope: 'openid profile offline_access'
       }
@@ -77,18 +78,18 @@ Page({
    * 需要在真机上测试，微信开发者工具不会返回 code
    * @param {*} e
    */
-  async getPhone (e) {
+  async getPhone(e) {
     const { code } = e.detail
 
     const res = await authing.getPhone({
-      extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
+      extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
       code
     })
 
     console.log('authing.getPhone res: ', res)
   },
 
-  async loginByPassword () {
+  async loginByPassword() {
     const res = await authing.loginByPassword({
       passwordPayload: {
         password: '123',
@@ -102,7 +103,7 @@ Page({
     console.log('authing.loginByPassword res: ', res)
   },
 
-  async sendSms () {
+  async sendSms() {
     // 指定 channel 为 CHANNEL_LOGIN，发送登录所用的验证码
     const res = await authing.sendSms({
       phoneNumber: 'YOUR_PHONE_NUMBER',
@@ -113,7 +114,7 @@ Page({
     console.log('authing.sendSms res: ', res)
   },
 
-  async loginByPassCode () {
+  async loginByPassCode() {
     const res = await authing.loginByPassCode({
       passCodePayload: {
         // 手机收到的短信验证码
@@ -129,12 +130,12 @@ Page({
     console.log('authing.loginByPassCode: ', res)
   },
 
-  async refreshToken () {
+  async refreshToken() {
     const res = await authing.refreshToken()
     console.log('authing.refreshToken res: ', res)
   },
 
-  async updatePassword () {
+  async updatePassword() {
     const res = await authing.updatePassword({
       newPassword: '123',
       oldPassword: '123',
@@ -144,17 +145,17 @@ Page({
     console.log('authing.updatePassword res: ', res)
   },
 
-  async getUserInfo () {
+  async getUserInfo() {
     const res = await authing.getUserInfo()
     console.log('authing.getUserInfo res: ', res)
   },
 
-  async updateAvatar () {
+  async updateAvatar() {
     const res = await authing.updateAvatar()
     console.log('authing.updateAvatar res: ', res)
   },
 
-  async updateUserInfo () {
+  async updateUserInfo() {
     const res = await authing.updateUserInfo({
       address: 'Hello world 12'
     })
@@ -162,22 +163,22 @@ Page({
     console.log('authing.updateUserInfo res: ', res)
   },
 
-  async logout () {
+  async logout() {
     const res = await authing.logout()
     console.log('authing.logout res: ', res)
   },
 
-  async getLoginState () {
+  async getLoginState() {
     const res = await authing.getLoginState()
     console.log('authing.getLoginState res: ', res)
   },
 
-  async clearLoginState () {
+  async clearLoginState() {
     const res = await authing.clearLoginState()
     console.log('authing.clearLoginState res: ', res)
   },
 
-  async sendEmailCode () {
+  async sendEmailCode() {
     const res = await authing.sendEmailCode({
       email: 'YOUR_EMAIL_ADDRESS',
       channel: 'CHANNEL_LOGIN'
@@ -185,7 +186,7 @@ Page({
     console.log('authing.sendEmailCode res: ', res)
   },
 
-  async bindEmail () {
+  async bindEmail() {
     const res = await authing.bindEmail({
       email: 'YOUR_EMAIL_ADDRESS',
       passCode: ''
@@ -210,7 +211,7 @@ Page({
     console.log('authing.sendEmailCode res: ', res)
   },
 
-  async updateEmail () {
+  async updateEmail() {
     // 前置调用 verifyOldEmail verifyNewEmail 获取新旧邮箱验证码
     // this.verifyOldEmail()
     // this.verifyNewEmail()
@@ -232,19 +233,19 @@ Page({
     console.log('authing.updateEmail res: ', updateRes)
   },
 
-  async bindPhone () {
+  async bindPhone() {
     // 前置调用 sendSms 方法，channel: CHANNEL_BIND_PHONE
     const res = await authing.bindPhone({
       phoneNumber: 'YOUR_PHONE_NUMBER',
-      passCode: '',
+      passCode: ''
     })
     console.log('authing.bindPhone res: ', res)
   },
 
   // TODO 修改手机号 channel
-  async updatePhone () {
+  async updatePhone() {
     const [_, res] = await authing.updatePhoneRequest({
-      verifyMethod:'PHONE_PASSCODE',
+      verifyMethod: 'PHONE_PASSCODE',
       phonePassCodePayload: {
         newPhoneNumber: 'YOUR_PHONE_NUMBER',
         newPhonePassCode: ''
@@ -257,10 +258,9 @@ Page({
         updatePhoneToken: res.updatePhoneToken
       })
     }
-
   },
 
-  async deleteAccount () {
+  async deleteAccount() {
     /**
      * 邮箱 EMAIL_PASSCODE: 前置调用发送邮件方法 channel: CHANNEL_DELETE_ACCOUNT
      * 手机号 PHONE_PASSCODE: 前置调用发送短信方法 channel: CHANNEL_DELETE_ACCOUNT
@@ -278,14 +278,13 @@ Page({
     await authing.deleteAccount({
       deleteAccountToken: res.deleteAccountToken
     })
-
   },
 
-  async decryptData () {
+  async decryptData() {
     const code = await authing.getLoginCode()
 
     const res = await authing.decryptData({
-      extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
+      extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
       encryptedData: '',
       iv: '',
       code
@@ -295,17 +294,17 @@ Page({
   },
 
   getShareInfo() {
-    const {shareTicket} = wx.getLaunchOptionsSync()
+    const { shareTicket } = wx.getLaunchOptionsSync()
 
     wx.getShareInfo({
       shareTicket,
-      async success({encryptedData, iv}: any) {
+      async success({ encryptedData, iv }) {
         // 公共方法获取 code
         const code = await authing.getLoginCode()
 
         // 解密数据
         const res = await authing.decryptData({
-          extIdpConnidentifier: 'AUTHING_EXT_IDP_CONN_IDENTIFIER',
+          extIdpConnidentifier: AUTHING_EXT_IDP_CONN_IDENTIFIER,
           encryptedData,
           iv,
           code
@@ -313,8 +312,8 @@ Page({
 
         console.log('authing.decryptData res: ', res)
       },
-      fail(error: any) {
-        console.log("error: ", error);
+      fail(error) {
+        console.log('error: ', error)
       }
     })
   }
