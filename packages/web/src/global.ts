@@ -98,6 +98,15 @@ export interface AuthingSPAInitOptions {
    * 弹出窗口的高度
    */
   popupHeight?: number
+
+  /**
+   * 加密函数 @authing/miniapp-sm2encrypt
+   */
+  encryptFunction?: EncryptFunction
+}
+
+export interface EncryptFunction {
+  (plainText: string, publicKey: string): string
 }
 
 export interface LoginState {

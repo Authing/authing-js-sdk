@@ -27,7 +27,7 @@ import { StorageProvider } from './storage/interface'
 import { LocalStorageProvider } from './storage/LocalStorageProvider'
 import { NullStorageProvider } from './storage/NullStorageProvider'
 import { SessionStorageProvider } from './storage/SessionStorageProvider'
-import { MsgListener, StrDict } from './types'
+import { EncryptType, MsgListener, PassCodeLoginOptions, PasswordLoginOptions, StrDict } from './types'
 import {
 	createQueryParams,
 	createRandomString,
@@ -888,4 +888,91 @@ export class Authing {
 
 		return paramDict
 	}
+
+
+
+	private async login(
+		data: | PasswordLoginOptions
+      | PassCodeLoginOptions,
+		type: string
+	): Promise<LoginState> {
+		const urlMap: Record<string, string> = {
+			code: '/api/v3/signin-by-mobile',
+			phone: '/api/v3/signin-by-mobile',
+			password: '/api/v3/signin',
+			passCode: '/api/v3/signin'
+		}
+		try {
+			const {data:response} = await axiosPost(
+				this.domain + urlMap[type],
+				data,
+				{
+					headers: {
+						'x-authing-app-id': this.options.appId
+					}
+				}
+			)
+			if (response.data?.access_token || response.data?.id_token) {
+				const loginState = await this.saveLoginState({
+					accessToken: response.data?.access_token,
+					idToken: response.data?.id_token,
+					refreshToken: response.data?.refresh_token,
+					...response.data
+				})
+				return loginState
+			} else {
+				await this.loginStateProvider.delete(loginStateKey(this.options.appId))
+				throw new Error(response)
+			}
+		} catch (e) {
+			throw new Error('login error: ' + JSON.stringify(e))
+		}
+	}
+
+
+	async getPublicKey(encryptType: EncryptType): Promise<string> {
+		try {
+			const { data }= await axiosGet(`${this.domain}/api/v3/system`)
+
+			return data?.[encryptType]?.publicKey
+		} catch (e) {
+			throw new Error('get public key error: ' + JSON.stringify(e))
+		}
+	}
+
+	async loginByEmail(
+		data: PasswordLoginOptions
+	): Promise<LoginState> {
+
+		if (
+			data.options?.passwordEncryptType &&
+        data.options?.passwordEncryptType !== 'none'
+		) {
+			if (!this.options.encryptFunction) {
+				throw new Error(
+					'encrypFunction is required, if passwordEncryptType is not "none"'
+				)
+			}
+
+			const publicKey = await this.getPublicKey(
+				data.options.passwordEncryptType
+			)
+
+			if (typeof publicKey !== 'string') {
+				throw new Error(`publicKey of ${data.options.passwordEncryptType} is not a string, please contact the administrator`  )
+			}
+
+			data.passwordPayload.password = this.options.encryptFunction(
+				data.passwordPayload.password,
+				publicKey
+			)
+		}
+
+		const _data: PasswordLoginOptions = {
+			...data,
+			connection: 'PASSWORD'
+		}
+		return await this.login(_data, 'password')
+	}
+
 }
