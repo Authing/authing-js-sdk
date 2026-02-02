@@ -3,9 +3,9 @@ import { Authing } from "@authing/web";
 import type {
   IUserInfo,
   NormalError,
-  LoginState
+  LoginState,
 } from "@authing/web/dist/typings/src/global";
-
+import { encryptFunction } from "@authing/miniapp-sm2encrypt";
 function App() {
   const sdk = useMemo(() => {
     return new Authing({
@@ -19,7 +19,8 @@ function App() {
       redirectUri: process.env.REACT_APP_SDK_REDIRECT_URI as string,
       scope: process.env.REACT_APP_SDK_SCOPE,
       // 用户池 ID
-      userPoolId: process.env.USER_POOL_ID as string
+      userPoolId: process.env.USER_POOL_ID as string,
+      encryptFunction: encryptFunction,
     });
   }, []);
 
@@ -46,8 +47,10 @@ function App() {
    * 获取用户的登录状态
    */
   const getLoginState = useCallback(async () => {
-    const state = await sdk.getLoginState();
-    console.log('loginState: ', state)
+    const state = await sdk.getLoginState({
+      ignoreCache: true,
+    });
+    console.log("loginState: ", state);
     setLoginState(state);
   }, [sdk]);
 
@@ -65,12 +68,24 @@ function App() {
     setUserInfo(userInfo);
   };
 
+  const login = async () => {
+    const res = await sdk.loginByEmail({
+      passwordPayload: {
+        email: "****",
+        password: "*****",
+      },
+      options: {
+        // import { encryptFunction } from "@authing/miniapp-sm2encrypt";
+        // passwordEncryptType: "sm2",
+      },
+    });
+  };
   /**
    * 登出
    */
   const logout = async () => {
     await sdk.logoutWithRedirect({
-      redirectUri: 'https://authing.cn'
+      redirectUri: "https://authing.cn",
     });
   };
 
@@ -95,6 +110,7 @@ function App() {
         <button onClick={logout}>logout</button>
         <button onClick={getLoginState}>getLoginState</button>
         <button onClick={getUserInfo}>getUserInfo</button>
+        <button onClick={login}>loginByEmail</button>
       </p>
       <p>
         {loginState && (

@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@authing/web": "^5.0.2-alpha.12",
+    "@authing/miniapp-sm2encrypt": "^5.1.21-alpha.3",
+    "@authing/web": "^5.1.21",
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",

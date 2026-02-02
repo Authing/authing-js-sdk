@@ -27,7 +27,7 @@ import { StorageProvider } from './storage/interface'
 import { LocalStorageProvider } from './storage/LocalStorageProvider'
 import { NullStorageProvider } from './storage/NullStorageProvider'
 import { SessionStorageProvider } from './storage/SessionStorageProvider'
-import { EncryptType, MsgListener, PassCodeLoginOptions, PasswordLoginOptions, StrDict } from './types'
+import {  EncryptType, MsgListener, PassCodeLoginOptions, PasswordLoginOptions, ResetPasswordOptions, SendEmailCodeOptions, SendSmsOptions, SimpleResponseData, StrDict, VerifyResetPasswordRequestOptions } from './types'
 import {
 	createQueryParams,
 	createRandomString,
@@ -974,5 +974,115 @@ export class Authing {
 		}
 		return await this.login(_data, 'password')
 	}
+
+	async sendSms(
+		data: SendSmsOptions
+	): Promise<SimpleResponseData> {
+		data.phoneCountryCode = data.phoneCountryCode || '+86'
+		const res= axiosPost(`${this.domain}/api/v3/send-sms`,data,{
+			headers: {
+				'x-authing-userpool-id': this.options.userPoolId
+			}
+		})
+
+		return res
+	}
+
+	async sendEmailCode(
+		data: SendEmailCodeOptions
+	): Promise<SimpleResponseData> {
+		const res=axiosPost(`${this.domain}/api/v3/send-email`,data,{
+			headers: {
+				'x-authing-userpool-id': this.options.userPoolId
+			}
+		})
+		return res
+	}
+
+	async verifyResetPasswordRequest(
+		options: VerifyResetPasswordRequestOptions
+	): Promise<SimpleResponseData> {
+		const accessToken = options.accessToken || (await this.getLoginState())?.accessToken
+		if (!accessToken) {
+			throw new Error('access token 不存在，请重新登录')
+		}
+
+
+		const payload: VerifyResetPasswordRequestOptions = {
+			verifyMethod: options.verifyMethod,
+		}
+
+		if (options.verifyMethod === 'EMAIL_PASSCODE') {
+			payload.emailPassCodePayload = options.emailPassCodePayload
+		} else if (options.verifyMethod === 'PHONE_PASSCODE') {
+			payload.phonePassCodePayload = options.phonePassCodePayload
+		}
+
+		const res = axiosPost(`${this.domain}/api/v3/verify-reset-password-request`, payload,{
+			headers: {
+				'x-authing-userpool-id': this.options.userPoolId,
+				'authorization': `Bearer ${accessToken}`
+
+			}
+		})
+		return res
+	}
+
+	/**
+   *
+   * @param passwordResetToken 密码重置 token 你需要先调用 verify-reset-password-request 接口发送重置密码邮件
+   * @param password 新密码
+   * @param passwordEncryptType 密码加密类型
+   * @returns
+   */
+	async resetPassword(options:ResetPasswordOptions) {
+		const accessToken = options.accessToken || (await this.getLoginState())?.accessToken
+
+		let encryptedPassword = options.password
+
+
+		if (!accessToken) {
+			throw new Error('access token 不存在，请重新登录')
+		}
+		if (
+			options.passwordEncryptType &&
+        options.passwordEncryptType !== 'none'
+		) {
+			if (!this.options.encryptFunction) {
+				throw new Error(
+					'encrypFunction is required, if passwordEncryptType is not "none"'
+				)
+			}
+
+			const publicKey = await this.getPublicKey(
+				options.passwordEncryptType
+			)
+
+
+
+			if (typeof publicKey !== 'string') {
+				throw new Error(`publicKey of ${options.passwordEncryptType} is not a string, please contact the administrator`  )
+			}
+
+			encryptedPassword = this.options.encryptFunction(
+				options.password,
+				publicKey
+			)
+		}
+
+
+		const res = axiosPost(`${this.domain}/api/v3/reset-password`, {
+			passwordResetToken: options.passwordResetToken,
+			password:encryptedPassword,
+			passwordEncryptType: options.passwordEncryptType || 'none'
+		},{
+			headers: {
+				'x-authing-userpool-id': this.options.userPoolId,
+				'authorization': `Bearer ${accessToken}`
+			}
+		})
+		return res
+	}
+
 
 }

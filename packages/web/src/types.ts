@@ -12,6 +12,11 @@ export type PasswordEncryptType = 'none' | 'rsa' | 'sm2'
 
 export type EncryptType = 'rsa' | 'sm2'
 
+export interface SimpleResponseData {
+  message: string
+  statusCode: number
+}
+
 interface CommonLoginOptions {
     // 小程序端使用 none 和 rsa
     passwordEncryptType?: PasswordEncryptType
@@ -57,4 +62,69 @@ export interface PassCodeLoginOptions {
     phoneCountryCode?: string
   }
   options?:CommonLoginOptions
+}
+
+
+
+export type SmsChannel =
+  | 'CHANNEL_LOGIN'
+  | 'CHANNEL_REGISTER'
+  | 'CHANNEL_RESET_PASSWORD'
+  | 'CHANNEL_BIND_PHONE'
+  | 'CHANNEL_UNBIND_PHONE'
+  | 'CHANNEL_BIND_MFA'
+  | 'CHANNEL_VERIFY_MFA'
+  | 'CHANNEL_UNBIND_MFA'
+  | 'CHANNEL_COMPLETE_PHONE'
+  | 'CHANNEL_IDENTITY_VERIFICATION'
+  | 'CHANNEL_DELETE_ACCOUNT'
+
+export interface SendSmsOptions {
+  phoneNumber: string
+  channel: SmsChannel
+  // 默认 +86，手机区号，中国大陆手机号可不填
+  phoneCountryCode?: string
+}
+
+export type EmailChannel =
+  | 'CHANNEL_LOGIN'
+  | 'CHANNEL_REGISTER'
+  | 'CHANNEL_RESET_PASSWORD'
+  | 'CHANNEL_VERIFY_EMAIL_LINK'
+  | 'CHANNEL_UPDATE_EMAIL'
+  | 'CHANNEL_BIND_EMAIL'
+  | 'CHANNEL_UNBIND_EMAIL'
+  | 'CHANNEL_VERIFY_MFA'
+  | 'CHANNEL_UNLOCK_ACCOUNT'
+  | 'CHANNEL_COMPLETE_EMAIL'
+  | 'CHANNEL_DELETE_ACCOUNT'
+
+export interface SendEmailCodeOptions {
+  email: string
+  channel: EmailChannel
+}
+
+export interface VerifyResetPasswordRequestOptions {
+  verifyMethod: 'EMAIL_PASSCODE' | 'PHONE_PASSCODE',
+  phonePassCodePayload?: {
+    passCode: string
+    phoneNumber: string
+    // 默认 +86,手机区号，中国大陆手机号可不填
+    phoneCountryCode?: string
+  },
+  emailPassCodePayload?: {
+    email: string
+    passCode: string
+  },
+  accessToken?: string
+}
+
+export interface ResetPasswordOptions {
+  /**
+   * 密码重置 token，verifyResetPasswordRequest
+   */
+  passwordResetToken: string
+  password: string
+  passwordEncryptType?: PasswordEncryptType
+  accessToken?: string
 }
