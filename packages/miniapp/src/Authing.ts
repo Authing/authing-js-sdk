@@ -51,6 +51,7 @@ import {
 } from './helpers'
 
 import { AuthingMove } from './AuthingMove'
+import { WxRequestConfig } from '@authing/authingmove-core'
 
 export class Authing {
 	private storage: IStorageProvider
@@ -69,6 +70,19 @@ export class Authing {
 		this.encryptFunction = options.encryptFunction
 
 		this.resetPlatformLoginCode()
+	}
+
+	private request(options: WxRequestConfig) {
+		if (this.options.platform !== PlatformsMenu.wx) {
+			return request(options)
+		}
+
+		const { enableHttpDNS, httpDNSServiceId } = this.options
+		return request({
+			...options,
+			...(enableHttpDNS !== undefined ? { enableHttpDNS } : {}),
+			...(httpDNSServiceId !== undefined ? { httpDNSServiceId } : {})
+		})
 	}
 
 	async getLoginState(): Promise<SDKResponse<LoginState>> {
@@ -119,7 +133,7 @@ export class Authing {
 
 	async getPublicKey(encryptType: EncryptType): Promise<SDKResponse<string>> {
 		try {
-			const [error, res] = await request({
+			const [error, res] = await this.request({
 				method: 'GET',
 				url: `${this.options.host}/api/v3/system`
 			})
@@ -438,7 +452,7 @@ export class Authing {
 			return returnSuccess(true)
 		}
 
-		const [logoutError] = await request({
+		const [logoutError] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/oidc/token/revocation`,
 			data: {
@@ -464,7 +478,7 @@ export class Authing {
 	): Promise<SDKResponse<SimpleResponseData>> {
 		data.phoneCountryCode = data.phoneCountryCode || '+86'
 
-		const [error, res] = await request({
+		const [error, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/send-sms`,
 			data,
@@ -483,7 +497,7 @@ export class Authing {
 	async sendEmailCode(
 		data: SendEmailCodeOptions
 	): Promise<SDKResponse<SimpleResponseData>> {
-		const [error, res] = await request({
+		const [error, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/send-email`,
 			data,
@@ -515,7 +529,7 @@ export class Authing {
 			passCode: '/api/v3/signin'
 		}
 
-		const [error, res] = await request({
+		const [error, res] = await this.request({
 			method: 'POST',
 			url: this.options.host + urlMap[type],
 			data,
@@ -567,7 +581,7 @@ export class Authing {
 			refresh_token
 		}
 
-		const [refreshTokenError, refreshTokenRes] = await request({
+		const [refreshTokenError, refreshTokenRes] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/oidc/token`,
 			data,
@@ -626,7 +640,7 @@ export class Authing {
 			)
 		}
 
-		const [updatePasswordError, updatePasswordRes] = await request({
+		const [updatePasswordError, updatePasswordRes] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/update-password`,
 			data,
@@ -666,7 +680,7 @@ export class Authing {
 			})
 		}
 
-		const [getProfileError, getProfileRes] = await request({
+		const [getProfileError, getProfileRes] = await this.request({
 			method: 'GET',
 			url: `${this.options.host}/api/v3/get-profile`,
 			header: {
@@ -728,7 +742,7 @@ export class Authing {
 			})
 		}
 
-		const [updateProfileError, updateProfileRes] = await request({
+		const [updateProfileError, updateProfileRes] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/update-profile`,
 			data,
@@ -776,7 +790,7 @@ export class Authing {
 		}
 
 
-		const [err, res] = await request({
+		const [err, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/connections/social/wechat-miniprogram/bind`,
 			data: _data,
@@ -824,7 +838,7 @@ export class Authing {
 		}
 
 
-		const [err, res] = await request({
+		const [err, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}${this.getApiUrlMapping('bindPlatformByCode')}`,
 			data: _data,
@@ -859,7 +873,7 @@ export class Authing {
 			})
 		}
 
-		const [bindError, res] = await request({
+		const [bindError, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/bind-email`,
 			data,
@@ -894,7 +908,7 @@ export class Authing {
 			})
 		}
 
-		const [updateError, res] = await request({
+		const [updateError, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/verify-update-email-request`,
 			data,
@@ -928,7 +942,7 @@ export class Authing {
 			})
 		}
 
-		const [updateError, res] = await request({
+		const [updateError, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/update-email`,
 			data,
@@ -963,7 +977,7 @@ export class Authing {
 			})
 		}
 
-		const [bindError, res] = await request({
+		const [bindError, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/bind-phone`,
 			data,
@@ -998,7 +1012,7 @@ export class Authing {
 			})
 		}
 
-		const [updateError, res] = await request({
+		const [updateError, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/verify-update-phone-request`,
 			data,
@@ -1032,7 +1046,7 @@ export class Authing {
 			})
 		}
 
-		const [updateError, res] = await request({
+		const [updateError, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/update-phone`,
 			data,
@@ -1067,7 +1081,7 @@ export class Authing {
 			})
 		}
 
-		const [deleteError, res] = await request({
+		const [deleteError, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/verify-delete-account-request`,
 			data,
@@ -1101,7 +1115,7 @@ export class Authing {
 			})
 		}
 
-		const [deleteError, res] = await request({
+		const [deleteError, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}/api/v3/delete-account`,
 			data,
@@ -1152,7 +1166,7 @@ export class Authing {
 		}
 
 
-		const [getPhoneError, getPhoneRes] = await request({
+		const [getPhoneError, getPhoneRes] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}${this.getApiUrlMapping('getPhone')}`,
 			data:_data,
@@ -1173,7 +1187,7 @@ export class Authing {
 	}
 
 	async decryptData(data: DecryptDataOptions) {
-		const [decryptError, res] = await request({
+		const [decryptError, res] = await this.request({
 			method: 'POST',
 			url: `${this.options.host}${this.getApiUrlMapping('decryptData')}`,
 			data,

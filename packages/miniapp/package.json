@@ -8,6 +8,7 @@
     "autoinstall": "npm ci",
     "dev": "node ./scripts/build.js watch",
     "build": "node ./scripts/build.js",
+    "test:httpdns": "node ./scripts/build.js modes=wx,tt && node ./tests/httpdns.cjs",
     "release:official": "npm publish --verbose --access public",
     "release:alpha": "npm publish --verbose --tag=alpha --access public"
   },

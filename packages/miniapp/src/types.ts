@@ -29,6 +29,10 @@ export interface AuthingOptions {
   host?: string
   platform?: Platforms
   encryptFunction?: EncryptFunction
+  /** 微信小程序请求是否启用 HTTPDNS，默认使用微信的默认解析方式。 */
+  enableHttpDNS?: boolean
+  /** 微信服务市场中已开通的 HTTPDNS 服务商 Service ID，仅用于微信小程序请求。 */
+  httpDNSServiceId?: string
 }
 
 export interface EncryptFunction {
